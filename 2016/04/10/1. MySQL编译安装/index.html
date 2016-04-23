@@ -1,0 +1,641 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="MySQL," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="大白的碎碎念" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="摘要: 这是一篇关于MySQL的文章，主要介绍1. MySQL编译安装">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1. MySQL编译安装.md">
+<meta property="og:url" content="http://yoursite.com/2016/04/10/1. MySQL编译安装/index.html">
+<meta property="og:site_name" content="大白的碎碎念">
+<meta property="og:description" content="摘要: 这是一篇关于MySQL的文章，主要介绍1. MySQL编译安装">
+<meta property="og:updated_time" content="2016-04-23T11:47:10.466Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="1. MySQL编译安装.md">
+<meta name="twitter:description" content="摘要: 这是一篇关于MySQL的文章，主要介绍1. MySQL编译安装">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 1. MySQL编译安装.md | 大白的碎碎念 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/bwangel23"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></img></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">大白的碎碎念</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                1. MySQL编译安装.md
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-10T10:56:54+08:00" content="2016-04-10">
+              2016-04-10
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>摘要</strong>: 这是一篇关于MySQL的文章，主要介绍1. MySQL编译安装<br><a id="more"></a></p>
+<h1 id="MySQL编译安装"><a href="#MySQL编译安装" class="headerlink" title="MySQL编译安装"></a>MySQL编译安装</h1><h2 id="0-环境准备"><a href="#0-环境准备" class="headerlink" title="0. 环境准备"></a>0. 环境准备</h2><ul>
+<li>安装依赖包</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum -y remove mysql mysql-server</span><br><span class="line">rm /etc/my.cnf</span><br><span class="line">yum install ncurses-devel openssl-devel bison gcc make</span><br></pre></td></tr></table></figure>
+<ul>
+<li>编译安装CMake</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf cmake-3.5.0-rc3.tar.gz</span><br><span class="line"><span class="built_in">cd</span> cmake-3.5.0-rc3</span><br><span class="line">./configure</span><br><span class="line">gmake</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<h2 id="1-编译安装MySQL"><a href="#1-编译安装MySQL" class="headerlink" title="1. 编译安装MySQL"></a>1. 编译安装MySQL</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">groupadd mysql</span><br><span class="line"><span class="comment"># -M 表示不创建Home目录</span></span><br><span class="line">useradd -M -g mysql <span class="_">-s</span> /sbin/nologin mysql</span><br><span class="line"></span><br><span class="line">tar -xvf mysql-5.6.28.tar.gz</span><br><span class="line"><span class="built_in">cd</span> mysql-5.6.28</span><br><span class="line">cmake \</span><br><span class="line"></span><br><span class="line">cmake \</span><br><span class="line">-DCMAKE_INSTALL_PREFIX=/usr/<span class="built_in">local</span>/mysql \</span><br><span class="line">-DSYSCONFDIR=/etc/ \ <span class="comment"># 配置文件目录</span></span><br><span class="line">-DMYSQL_DATADIR=/usr/<span class="built_in">local</span>/mysql/data \  <span class="comment"># 数据库文件位置</span></span><br><span class="line">-DMYSQL_TCP_PORT=3306 \</span><br><span class="line">-DMYSQL_UNIX_ADDR=/tmp/mysql.sock \ <span class="comment"># 本地套接字位置</span></span><br><span class="line">-DWITH_INNOBASE_STORAGE_ENGINE=1 \</span><br><span class="line">-DENABLED_LOCAL_INFILE=1 \</span><br><span class="line">-DWITH_EMBEDDED_SERVER=1 \</span><br><span class="line">-DWITH_SSL=system \</span><br><span class="line">-DWITH_READLINE=1 \</span><br><span class="line">-DDEFAULT_COLLATION=utf8_general_ci \ <span class="comment"># 字符集</span></span><br><span class="line">-DEXTRA_CHARSETS=all \</span><br><span class="line">-DDEFAULT_CHARSET=utf8 <span class="comment"># 字符</span></span><br><span class="line"></span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<h2 id="2-配置MySQL"><a href="#2-配置MySQL" class="headerlink" title="2. 配置MySQL"></a>2. 配置MySQL</h2><ul>
+<li>/usr/local/mysql/ 目录查看</li>
+</ul>
+<p>sql-bench 基本测试工具</p>
+<ul>
+<li>初始化</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/mysql/</span><br><span class="line">chown -R mysql:mysql /usr/<span class="built_in">local</span>/mysql/</span><br><span class="line">./srcipts/mysql_install_db --user=mysql --datadir=/usr/<span class="built_in">local</span>/mysql/data/ <span class="comment"># 初始化脚本</span></span><br><span class="line"><span class="comment"># 初始化完成后data下目录就会多出MySQL,performance_shcema目录</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>配置文件和启动脚本安装</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cp support-files/my-huge.cnf /etc/my.cnf</span><br><span class="line">cp support-files/mysql.server /etc/init.d/mysqld</span><br><span class="line">chmod 755 /etc/init.d/mysqld</span><br><span class="line">chkconfig -add mysqld</span><br><span class="line">chkconfig mysqld on</span><br><span class="line">service mysqld start</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看MySQL进程</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mysql]<span class="comment"># ps aufx | grep mysql</span></span><br><span class="line">root      91734  0.1  0.1  11340  1372 pts/1    S    06:57   0:00</span><br><span class="line">      /bin/sh /usr/<span class="built_in">local</span>/mysql/bin/mysqld_safe</span><br><span class="line">                            --datadir=/usr/<span class="built_in">local</span>/mysql/data</span><br><span class="line">                            --pid-file=/usr/<span class="built_in">local</span>/mysql/data/localhost.localdomain.pid</span><br><span class="line">mysql     91837  7.8 44.9 1034904 452048 pts/1  Sl   06:57   0:00</span><br><span class="line">      \_ /usr/<span class="built_in">local</span>/mysql/bin/mysqld --basedir=/usr/<span class="built_in">local</span>/mysql</span><br><span class="line">                                     --datadir=/usr/<span class="built_in">local</span>/mysql/data</span><br><span class="line">                                     --plugin-dir=/usr/<span class="built_in">local</span>/mysql/lib/plugin</span><br><span class="line">                                     --user=mysql</span><br><span class="line">                                     <span class="comment">#错误日志文件位置 !!</span></span><br><span class="line">                                     --log-error=/usr/<span class="built_in">local</span>/mysql/data/localhost.localdomain.err</span><br><span class="line">                                     --pid-file=/usr/<span class="built_in">local</span>/mysql/data/localhost.localdomain.pid</span><br></pre></td></tr></table></figure>
+<ul>
+<li>配置PATH</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile</span><br><span class="line"></span><br><span class="line"><span class="comment"># Path manipulation</span></span><br><span class="line"><span class="comment"># 给所有用户添加上MySQL的执行文件</span></span><br><span class="line">pathmunge /usr/<span class="built_in">local</span>/mysql/bin after <span class="comment">#此句是我们添加的语句</span></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$EUID</span>"</span> = <span class="string">"0"</span> ]; <span class="keyword">then</span></span><br><span class="line">    pathmunge /sbin</span><br><span class="line">    pathmunge /usr/sbin</span><br><span class="line">    pathmunge /usr/<span class="built_in">local</span>/sbin</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    pathmunge /usr/<span class="built_in">local</span>/sbin after</span><br><span class="line">    pathmunge /usr/sbin after</span><br><span class="line">    pathmunge /sbin after</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+<h2 id="3-登陆MySQL"><a href="#3-登陆MySQL" class="headerlink" title="3. 登陆MySQL"></a>3. 登陆MySQL</h2><ul>
+<li>指定登陆密码并登陆</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysqladmin -uroot password <span class="string">'passwd'</span></span><br><span class="line">mysql -u root -p</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>图形登陆工具</p>
+<ul>
+<li>MySQL WorkBench</li>
+<li>SQLyog</li>
+</ul>
+</li>
+<li><p>授权账号进行远程连接</p>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; grant all on *.* to xff@'%' identified by '123';</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select user, password, host from mysql.user;</span><br><span class="line">+------+-------------------------------------------+-----------------------+</span><br><span class="line">| user | password                                  | host                  |</span><br><span class="line">+------+-------------------------------------------+-----------------------+</span><br><span class="line">| root | *59C70DA2F3E3A5BDF46B68F5C8B8F25762BCCEF0 | localhost             |</span><br><span class="line">| root |                                           | localhost.localdomain |</span><br><span class="line">| root |                                           | 127.0.0.1             |</span><br><span class="line">| root |                                           | ::1                   |</span><br><span class="line">|      |                                           | localhost             |</span><br><span class="line">|      |                                           | localhost.localdomain |</span><br><span class="line">| xff  | *23AE809DDACAF96AF0FD78ED04B6A265E05AA257 | %                     |</span><br><span class="line">+------+-------------------------------------------+-----------------------+</span><br><span class="line">7 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MySQL/" rel="tag">#MySQL</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/10/11. MySQL多表查询/" rel="next" title="11. MySQL多表查询.md">
+                <i class="fa fa-chevron-left"></i> 11. MySQL多表查询.md
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/10/9. MySQL触发器/" rel="prev" title="9. MySQL触发器.md">
+                9. MySQL触发器.md <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="被欺负的大白" />
+          <p class="site-author-name" itemprop="name">被欺负的大白</p>
+          <p class="site-description motion-element" itemprop="description">我站在城楼看风景，耳听得城外乱纷纷。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">42</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/bwangel23/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-GitHub"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://v2ex.com/member/bwangel" target="_blank" title="V2EX">
+                  
+                    <i class="fa fa-V2EX"></i>
+                  
+                  V2EX
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/michael-tsui" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-zhihu"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://stackoverflow.com/users/5161084/yundong-xu" target="_blank" title="stackoverflow">
+                  
+                    <i class="fa fa-stackoverflow"></i>
+                  
+                  stackoverflow
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL编译安装"><span class="nav-number">1.</span> <span class="nav-text">MySQL编译安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-环境准备"><span class="nav-number">1.1.</span> <span class="nav-text">0. 环境准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-编译安装MySQL"><span class="nav-number">1.2.</span> <span class="nav-text">1. 编译安装MySQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-配置MySQL"><span class="nav-number">1.3.</span> <span class="nav-text">2. 配置MySQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-登陆MySQL"><span class="nav-number">1.4.</span> <span class="nav-text">3. 登陆MySQL</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">被欺负的大白</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
