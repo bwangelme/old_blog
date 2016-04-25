@@ -1,0 +1,57 @@
+---
+title: 'python参数.md'
+date: 2016-04-10 10:56:54
+tags: IntermediatePython
+---
+
+__摘要__: 这是一篇关于IntermediatePython的文章，主要介绍python参数
+<!-- more -->
+
+# args和kwargs
+
+`*args`表示非键值对可变数量的参数列表
+`**kwargs`表示传递参数为不定长度的键值对
+
+## 三种参数的使用顺序
+
+```
+some_func(fargs, *args, **kwargs)
+```
+
+调用的时候，关键字参数必须放在最后，否则会报错(参见下边的实例代码)。
+
+猴子补丁: 在程序运行时修改某些代码
+
+```
+import someclass
+
+def get_info(self, *args):
+    return "Test Data"
+    
+someclass.get_info = get_info
+```
+
+
+```python
+def show_args(arg1, arg2, *args, **kwargs):
+    print("arg1 == {0}".format(arg1))
+    print("arg2 == {0}".format(arg2))
+    for item in args:
+        print("arg == {0}".format(item))
+    for key, value in kwargs.items():
+        print("{0} == {1}".format(key, value))
+
+show_args("1", "2", "3", myarg="4")
+# show_args("1", "2", myarg="4", "3")  # 会报错的代码
+```
+
+    arg1 == 1
+    arg2 == 2
+    arg == 3
+    myarg == 4
+
+
+
+```python
+
+```
