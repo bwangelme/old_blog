@@ -70,7 +70,7 @@ layout: post
   > * 公司项目, 利用Django, rq, Jupyter Notebook, MongoDB实现的机器学习相关练习的OJ平台
   > * 利用Nginx, Supervisor, Gunicorn, Anaconda, Jekins部署
   > * 个人负责后台代码的编写, 线上服务器维护及线上BUG解决
-  > * 解决过MySQL指令帧过长和~~Web跨域问题(CSP)~~
+  > * 解决过MySQL指令帧过长和~~Web跨域(CSP)~~的BUG
 
 # Learning
 
