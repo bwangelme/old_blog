@@ -1,6 +1,5 @@
 ---
-title: Ubuntu locale
-date: 2016-04-24 10:57:12
+title: Ubuntu-locale
 tags: Ubuntu
 ---
 
