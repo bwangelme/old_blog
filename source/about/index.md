@@ -51,7 +51,9 @@ layout: post
 ## Delelpoment Tools
 
 > + vim: 改过[k-vim](https://github.com/bwangel23/k-vim), 读过[vim实用技巧](https://book.douban.com/subject/25869486/)
-> + git: [git-flow](http://danielkummer.github.io/git-flow-cheatsheet/index.zh_CN.html), [github-flow](https://guides.github.com/introduction/flow/)
+> + git:
+  + [git-flow](http://danielkummer.github.io/git-flow-cheatsheet/index.zh_CN.html), [github-flow](https://guides.github.com/introduction/flow/)
+  + [Anjular Commit message规范](http://www.ruanyifeng.com/blog/2016/01/commit_message_change_log.html), [Commitizen](https://github.com/commitizen/cz-cli)
 > + Markdown: 读过[WowUbuntu Markdown语法说明](http://www.appinn.com/markdown/), 会用[Python Markdown](https://pypi.python.org/pypi/Markdown/)
 > + make: [跟我一起写makefile](http://blog.csdn.net/haoel/article/details/2886/)
 > + gdb: [用gdb调试程序](http://blog.csdn.net/haoel/article/details/2879)
