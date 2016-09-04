@@ -32,4 +32,4 @@ git submodule add origin:/submd/repos/lib2.git libs/lib2 # 添加远端origin上
 ## Git 子模块的移除
 
 1. 手动删除子模块仓库
-2. 删除`.gitmodules`和`.git/config`配置文件中的相应记录
+2. 删除`.gitmodules`和`.git/config`，`.git/modules/`配置文件中的相应记录
