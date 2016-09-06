@@ -25,6 +25,7 @@ layout: post
 
 # Blog Logs
 
++ 2016年9月6日：迁移博客至VPS，使用github的webhook进行更新
 + 2016年9月4日：更改主题为[yelee](https://github.com/MOxFIVE/hexo-theme-yelee)
 + 2016年8月3号：更改了about页面，努力提供有价值的信息
 + 2016年4月25号: 使用了[CloudFlare](https://www.cloudflare.com/)CDN加速和它的免费Https，将博客配置和博客文件整合到一个[仓库](https://github.com/bwangel23/bwangel23.github.io)中。
