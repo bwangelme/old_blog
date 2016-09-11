@@ -11,12 +11,7 @@ __摘要__:
 
 <!-- more -->
 
-# args和kwargs
-
-`*args`表示非键值对可变数量的参数列表
-`**kwargs`表示传递参数为不定长度的键值对
-
-## 猴子补丁
+# 猴子补丁
 
 猴子补丁: 在程序运行时修改某些代码，例如下面这样：
 
@@ -29,7 +24,11 @@ def get_info(self, *args):
 someclass.get_info = get_info
 ```
 
-## 三种参数的使用顺序
+# Python的三种参数
+
+`*args`表示非键值对可变数量的参数列表
+`**kwargs`表示传递参数为不定长度的键值对
+`fargs`表示普通的位置参数
 
 ```
 some_func(fargs, *args, **kwargs)
