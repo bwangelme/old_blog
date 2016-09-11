@@ -1,15 +1,19 @@
 ---
-title: 'component.md'
+title: 'Vue.js关于组件的笔记'
 date: 2016-04-10 10:56:54
 tags: Vue.js
 ---
 
-__摘要__: 这是一篇关于Vue.js的文章，主要介绍component
+__摘要__:
+
+> 学习Vue.js官方教程的笔记
+
 <!-- more -->
+
 组件
 ===
 
-##1. 定义组件的步骤
+## 定义组件的步骤
 
 1. 利用`extend`定义组件
 2. 利用`component`注册组件
@@ -21,18 +25,18 @@ Vue.component('my-component'{
     })
 ```
 
-## 2. 注意事项
+## 注意事项
 
 1. 使用函数注册data
     data: function() { return {a:1} }
 
-## 3. 杂项
+## 杂项
 
 1. 资源命名约定
 
 vue支持驼峰命名法
 
-## 4. 疑问
+## 疑问
 
 1. 动态语法和bind是否相同
 
