@@ -20,7 +20,7 @@ __摘要__:
 
 有了这个问题以后，我就去StackOverflow上面搜索解决的办法，找到了这个相似的问题：[Python unittesting: run tests in another module](http://stackoverflow.com/questions/15334042/python-unittesting-run-tests-in-another-module)。然后我就按着rparent的答案来编写我的测试代码，如下所示：
 
-```
+```python
 if __name__ == '__main__':
     args = parser.parse_args()
     # 下面这条语句用来判定第二个位置参数是不是run
@@ -38,9 +38,9 @@ if __name__ == '__main__':
 
 ## 遇到新的错误
 
-但是照着上面的代码编写了以后，发现程序并不能正确地执行，它报出了一下的错误：
+但是照着上面的代码编写了以后，发现程序并不能正确地执行，它报出了以下的错误：
 
-``
+```shell
 E
 ======================================================================
 ERROR: test (unittest.loader._FailedTest)
@@ -51,7 +51,7 @@ AttributeError: module '__main__' has no attribute 'test'
 Ran 1 test in 0.000s
 
 FAILED (errors=1)
-``
+```
 
 这里错误是`unittest.loader._FailedTest`中抛出的`AttributeErro`，说在模块`__main__`中找不到属性`test`,到了这里我又不知道该咋办了，然后继续去网上搜索原因，也没发现相应的答案。
 
@@ -61,7 +61,7 @@ FAILED (errors=1)
 
 首先，从异常入手，异常是在`unittest.loader._FailedTest`中抛出来的，我就沿着这个调用栈向上走，最终还原出调用栈为：
 
-``
+```python
 6 unittest.loader._FailedTest
 5 unittest.loader._make_failed_test
 4 unittest.loader.TestLoader.loadTestFromName
@@ -69,7 +69,7 @@ FAILED (errors=1)
 2 unittest.main.TestProgram.createTests
 1 unittest.main.TestProgram.parseArgs
 0 unittest.main()
-``
+```
 
 通过查看这个函数调用栈，最终发现错误的原因就出在`unittest.main.TestProgram.createTests`中。
 
@@ -77,7 +77,7 @@ FAILED (errors=1)
 
 在`unittest.main.TestProgram.createTests`中，它的代码是这样的
 
-```
+```python
 def createTests(self):
     if self.testNames is None:
         self.test = self.testLoader.loadTestsFromModule(self.module)
@@ -108,7 +108,7 @@ python exam.py TestStringMethods
 
 最终解决其实也很简单，我们只需要将argv改变就好。其中，`unittest.main`函数含有一个参数`argv`，如果这个参数为空，就会使用`sys.argv`，所以，我们只需要传入这个参数即可，不需要改变`sys.argv`。最终代码如下：
 
-```
+```python
 if __name__ == '__main__':
     args = parser.parse_args()
     # 下面这条语句用来判定第二个位置参数是不是run
@@ -148,12 +148,18 @@ if __name__ == '__main__':
 
 #### 心慌
 
-感觉自己遇到问题还是会心慌，为了解决问题，也不思考问题的具体原因，就去网上找原因，然后瞎试，完全靠运气来解决问题。感觉这种心态很不好，这其实是最浪费时间的做法。究其原因，还是因为内心焦急，总是想着我晚上应该完成什么什么功能的，怎么又遇到这么一个该死的问题，怎么才能快点解决啊，拜托快点啊，我还要赶着写接下来的功能呢。遇到这种心态呢，如果是在工作中呢，我也不知道咋办，快到deadline，然后遇到问题了，不心急才怪，但还是要努力安慰自己，因为越心急，越解决不了。
+感觉自己遇到问题还是会心慌，为了解决问题，也不思考问题的具体原因，就去网上找原因，然后瞎试，完全靠运气来解决问题。感觉这种心态很不好，而这种做法其实是最浪费时间的做法。
+
+究其原因，还是因为内心焦急，总是想着我晚上应该完成什么什么功能的，怎么又遇到这么一个该死的问题，怎么才能快点解决啊，拜托快点啊，我还要赶着写接下来的功能呢。遇到这种心态呢，如果是在工作中呢，我也不知道咋办，快到deadline，然后遇到问题了，不心急才怪，但还是要努力安慰自己，因为越心急，越解决不了。
 
 如果在平常个人项目中遇到了，我就觉得可以这样想，自己做项目为了什么，不就是为了学习吗，遇到问题了，不正是学习的良机吗？应该把握这个大好机会，把这个问题解决透彻，这样才是真正学习了啊。如果一点问题都没遇到，那才是失败的，因为你只不过是把自己以前做过的工作重复了一遍而已。
 
 #### 没有很好地利用工具
 
-这里我跟踪函数调用栈的办法，还是用的非常笨的办法，就是自己手动去差，首先查到异常在哪里抛出，然后沿着调用栈往上，这个方法是被那个方法调用的，下一个方法是被哪个方法调用的。其实还有更好的办法，我们完全可以让Python自己打印出函数调用栈来啊。
+这里我跟踪函数调用栈的办法，还是用的非常笨的办法，就是自己手动去查。
+首先查到异常在哪里抛出，然后沿着调用栈往上，这个方法是被那个方法调用的，下一个方法是被哪个方法调用的。
+但其实还有更好的办法，我们完全可以让 Python 自己打印出函数调用栈。
 
-这里我用的方法是利用[traceback](https://docs.python.org/3/library/traceback.html)标准库，在代码中抛出一个异常，然后利用 traceback 打印出调用栈。具体使用方法可以参考官方文档给出的[例子](https://docs.python.org/3/library/traceback.html#traceback-examples)。
+我们可以利用[ traceback ](https://docs.python.org/3/library/traceback.html)标准库，
+在代码中抛出一个异常，然后利用 traceback 打印出调用栈。
+具体使用方法可以参考官方文档给出的[例子](https://docs.python.org/3/library/traceback.html#traceback-examples)。
