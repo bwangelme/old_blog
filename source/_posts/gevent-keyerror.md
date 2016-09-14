@@ -1,18 +1,18 @@
 ---
-title: Gevent的 KeyError
+title: Gevent 的 KeyError
 date: 2016-09-14 15:21:40
 tags: [python, gevent, stackoverflow, 翻译]
 ---
 
 __摘要__:
-> 1. 本文翻译自StackOverFlow上的一篇[答案](http://stackoverflow.com/questions/8774958/keyerror-in-module-threading-after-a-successful-py-test-run)
-> 2. 本文主要解释了gevent的猴子补丁和一个`KeyError`之间的关系
+> 1. 本文翻译自 StackOverFlow 上的一篇[答案](http://stackoverflow.com/questions/8774958/keyerror-in-module-threading-after-a-successful-py-test-run)
+> 2. 本文主要解释了`gevent`的猴子补丁和一个`KeyError`之间的关系
 
 <!-- more -->
 
 ## 错误描述
 
-在包含有`gevent.monkey.patch_thread()`(gevent的猴子补丁)的程序中，运行时会报出下面的错误：
+在包含有`gevent.monkey.patch_thread()`( gevent 的猴子补丁)的程序中，运行时会报出下面的错误：
 
 ```
 Exception KeyError: KeyError(140468381321488,) in <module 'threading' from '/usr/lib/python2.7/threading.pyc'> ignored
