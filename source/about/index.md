@@ -25,7 +25,7 @@ layout: post
 
 # Blog Logs
 
-+ 2016年9月14日: 添加了Disque评论功能
++ 2016年9月14日: 添加了[Disqus](https://disqus.com/)评论功能
 + 2016年9月7日: 全站使用HTTPS进行访问，采用了[Let's Encrypt](https://letsencrypt.org/)的证书
 + 2016年9月6日：迁移博客至VPS，使用[Webhook](https://developer.github.com/webhooks/)进行更新
 + 2016年9月4日：更改主题为[yelee](https://github.com/MOxFIVE/hexo-theme-yelee)
