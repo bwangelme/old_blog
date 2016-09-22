@@ -1,10 +1,12 @@
 ---
-title: 'mysql存储引擎.md'
+title: 'MySQL存储引擎'
 date: 2016-04-10 10:56:54
 tags: MySQL
 ---
 
-__摘要__: 这是一篇关于MySQL的文章，主要介绍mysql存储引擎
+__摘要__:
+> 这是一篇关于MySQL的文章，主要介绍mysql存储引擎
+
 <!-- more -->
 ## 存储引擎
 

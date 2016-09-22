@@ -1,10 +1,12 @@
 ---
-title: 'mysql索引.md'
+title: 'MySQL索引'
 date: 2016-04-10 10:56:54
 tags: MySQL
 ---
 
-__摘要__: 这是一篇关于MySQL的文章，主要介绍mysql索引
+__摘要__:
+> 这是一篇关于MySQL的文章，主要介绍MySQL索引
+
 <!-- more -->
 MySQL索引
 =========

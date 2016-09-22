@@ -1,10 +1,12 @@
 ---
-title: 'mysql技术架构.md'
+title: 'MySQL技术架构'
 date: 2016-04-10 10:56:54
 tags: MySQL
 ---
 
-__摘要__: 这是一篇关于MySQL的文章，主要介绍mysql技术架构
+__摘要__:
+> 这是一篇关于MySQL的文章，主要介绍mysql技术架构
+
 <!-- more -->
 MySQL逻辑架构
 =============

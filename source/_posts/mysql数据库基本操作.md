@@ -1,10 +1,12 @@
 ---
-title: 'mysql数据库基本操作.md'
+title: 'MySQL数据库基本操作'
 date: 2016-04-10 10:56:54
 tags: MySQL
 ---
 
-__摘要__: 这是一篇关于MySQL的文章，主要介绍mysql数据库基本操作
+__摘要__:
+> 这是一篇关于MySQL的文章，主要介绍MySQL数据库基本操作
+
 <!-- more -->
 ## 初识SQL语言
 

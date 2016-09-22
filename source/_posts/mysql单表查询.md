@@ -1,10 +1,12 @@
 ---
-title: '10. mysql单表查询.md'
+title: 'mysql单表查询'
 date: 2016-04-10 10:56:54
 tags: MySQL
 ---
 
-__摘要__: 这是一篇关于MySQL的文章，主要介绍10. mysql单表查询
+__摘要__:
+> 这是一篇关于MySQL的文章，主要介绍MySQL单表查询
+
 <!-- more -->
 MySQL单表查询
 =============
