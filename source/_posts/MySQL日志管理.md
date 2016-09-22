@@ -1,10 +1,11 @@
 ---
-title: '17. MySQL日志管理.md'
+title: 'MySQL日志管理'
 date: 2016-04-10 10:56:54
 tags: MySQL
 ---
 
-__摘要__: 这是一篇关于MySQL的文章，主要介绍17. MySQL日志管理
+__摘要__:
+> 这是一篇关于MySQL的文章，主要介绍 MySQL 日志管理
 <!-- more -->
 MySQL日志管理
 =============

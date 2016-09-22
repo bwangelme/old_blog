@@ -1,10 +1,12 @@
 ---
-title: '15. LNMP环境搭建.md'
+title: ' [失败]LNMP环境搭建 '
 date: 2016-04-10 10:56:54
-tags: MySQL
+tags: [MySQL, Nginx]
 ---
 
-__摘要__: 这是一篇关于MySQL的文章，主要介绍15. LNMP环境搭建
+__摘要__:
+> 这是一篇关于MySQL的文章，主要介绍LNMP环境搭建
+
 <!-- more -->
 LNMP环境搭建
 ============

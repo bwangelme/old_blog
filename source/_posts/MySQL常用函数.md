@@ -1,10 +1,11 @@
 ---
-title: '13. MySQL常用函数.md'
+title: 'MySQL常用函数'
 date: 2016-04-10 10:56:54
 tags: MySQL
 ---
 
-__摘要__: 这是一篇关于MySQL的文章，主要介绍13. MySQL常用函数
+__摘要__:
+> 这是一篇关于MySQL的文章，主要介绍 MySQL 常用函数
 <!-- more -->
 MySQL常用函数
 =============

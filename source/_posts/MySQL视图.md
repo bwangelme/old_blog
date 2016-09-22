@@ -1,10 +1,12 @@
 ---
-title: 'MySQL视图.md'
+title: 'MySQL视图'
 date: 2016-04-10 10:56:54
 tags: MySQL
 ---
 
-__摘要__: 这是一篇关于MySQL的文章，主要介绍MySQL视图
+__摘要__:
+> 这是一篇关于MySQL的文章，主要介绍MySQL视图
+
 <!-- more -->
 MySQL视图
 =========

@@ -1,10 +1,11 @@
 ---
-title: '16. MySQL安全机制.md'
+title: 'MySQL安全机制'
 date: 2016-04-10 10:56:54
 tags: MySQL
 ---
 
-__摘要__: 这是一篇关于MySQL的文章，主要介绍16. MySQL安全机制
+__摘要__:
+> 这是一篇关于MySQL的文章，主要介绍 MySQL 安全机制
 <!-- more -->
 MySQL安全机制
 =============

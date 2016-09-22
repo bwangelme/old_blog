@@ -1,10 +1,11 @@
 ---
-title: '14. MySQL存储过程.md'
+title: 'MySQL存储过程'
 date: 2016-04-10 10:56:54
 tags: MySQL
 ---
 
-__摘要__: 这是一篇关于MySQL的文章，主要介绍14. MySQL存储过程
+__摘要__:
+> 这是一篇关于MySQL的文章，主要介绍 MySQL 存储过程
 <!-- more -->
 MySQL存储过程
 =============
