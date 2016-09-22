@@ -1,10 +1,14 @@
 ---
-title: 'emmet.md'
+title: 'Emmet学习笔记'
 date: 2016-04-10 10:56:54
 tags: 工具
 ---
 
-__摘要__: 这是一篇关于工具的文章，主要介绍emmet
+__摘要__:
+
+> 1. 学习地址：[前端开发必备！Emmet使用手册](http://www.w3cplus.com/tools/emmet-cheat-sheet.html)
+> 2. 记录Emmet的一些语法
+
 <!-- more -->
 emmet学习笔记
 =============

@@ -1,13 +1,13 @@
 ---
-title: 'sublime_text.md'
+title: 'Sublime小记'
 date: 2016-04-10 10:56:54
 tags: 工具
 ---
 
-__摘要__: 这是一篇关于工具的文章，主要介绍sublime_text
+__摘要__:
+> 关于Sublime Text的一些小记
+
 <!-- more -->
-Sublime Text 技巧小集
-=====================
 
 ##Goto Anything
 
