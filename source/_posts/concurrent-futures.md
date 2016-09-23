@@ -1,5 +1,5 @@
 ---
-title: "Python concurrent.futures 文档翻译"
+title: "[未完成]Python concurrent.futures 文档翻译"
 date: 2016-09-23 11:19:16
 tags: [Python, 翻译]
 ---
@@ -22,7 +22,7 @@ concurrent.futures 模块为异步执行可调用的对象提供了一个高级�
 > `submit(fn, *args, **kwargs)`
 >> 可调用对象的调度器，`fn`参数将会以`fn(*args, **kwargs)`的形式来调用，同时返回一个 Future 对象代表了可调用对象的执行情况。
 
->> ```
+>> ```python
 with ThreadPoolExecutor(max_workers=1) as executor:
      future = executor.submit(pow, 323, 1235)
      print(future.result())
@@ -43,11 +43,83 @@ with ThreadPoolExecutor(max_workers=1) as executor:
 
 >> 通过`with`语句，可以避免明确地来调用这个方法，它在执行完以后将会自动关闭`Executor`。(调用 Executor.shutdown() 时`wait`会被设置为True，这将会等待所有 future 执行完毕)
 
->> ```
+>> ```python
 import shutil
 with ThreadPoolExecutor(max_workers=4) as e:
     e.submit(shutil.copy, 'src1.txt', 'dest1.txt')
     e.submit(shutil.copy, 'src2.txt', 'dest2.txt')
     e.submit(shutil.copy, 'src3.txt', 'dest3.txt')
     e.submit(shutil.copy, 'src4.txt', 'dest4.txt')
+```
+
+## ThreadPoolExecutor 对象
+
+`ThreadPoolExecutor`是`Executor`的子类，使用一个线程池去异步地执行调用。
+
+当一个 Future 关联的调用等待另外一个 Future 的执行结果的时候，死锁就有可能发生，例如下面的例子：
+
+```python
+import time
+
+def wait_on_b():
+    time.sleep(5)
+    print(b.result())  # b 永远不会完成，因为它等待着 a 的结果
+    return 5
+
+def wait_on_a():
+    time.sleep(5)
+    print(a.result()) # a 永远不会完成，因为它等待着 b 的结果
+    return 6
+
+executor = ThreadPoolExecutor(max_workers=2)
+a = executor.submit(wait_on_b)
+b = executor.submit(wait_on_a)
+```
+
+和这个例子：
+
+```python
+def wait_on_future():
+    f = executor.submit(pow, 5, 2)
+    # 这个也永远不会完成，因为线程池里面最多只能有一个线程，而它现在正在执行着这个函数。
+    print(f.result())
+
+executor = ThreadPoolExecutor(max_workers=1)
+executor.submit(wait_on_future)
+```
+
+> `class concurrent.futures.ThreadPoolExecutor(max_workers=None)`
+
+>> 一个`Executor`的子类，使用线程池中最多`max_workers`个线程去异步地执行回调。
+>> Python 3.5中的改变：如果`max_workers`参数为None或者没有给定，那么它将会被默认设置成为机器的CPU核数乘5。这里假设`ThreadPoolExecutor`经常被用来执行IO密集型的工作而不是CPU密集型的工作，工作者的个数应该比`ProcessPoolExecutor`的工作者的个数要多。
+
+### ThreadPoolExecutor 例子
+
+```python
+import concurrent.futures
+import urllib.request
+
+URLS = ['http://www.foxnews.com/',
+        'http://www.cnn.com/',
+        'http://europe.wsj.com/',
+        'http://www.bbc.co.uk/',
+        'http://some-made-up-domain.com/']
+
+# 获取一个单页，同时报告URL和内容
+def load_url(url, timeout):
+    with urllib.request.urlopen(url, timeout=timeout) as conn:
+        return conn.read()
+
+# 我们可以通过with语句来确保线程能够被及时地清理
+with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+    # Start the load operations and mark each future with its URL
+    future_to_url = {executor.submit(load_url, url, 60): url for url in URLS}
+    for future in concurrent.futures.as_completed(future_to_url):
+        url = future_to_url[future]
+        try:
+            data = future.result()
+        except Exception as exc:
+            print('%r generated an exception: %s' % (url, exc))
+        else:
+            print('%r page is %d bytes' % (url, len(data)))
 ```
