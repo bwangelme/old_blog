@@ -10,27 +10,10 @@ __摘要__:
 
 <!-- more -->
 
-## MySQL 层次结构
+## MySQL 逻辑架构
 
-#### 连接层
-
-支持不同的语言接口
-
-### 核心层
-
-连接池，SQL解析，SQL接口，优化器，缓存和Buffer
-
-### 存储引擎(可插拔)
-
-存储引擎下面是文件系统
-
-## MYSQL连接
-
-服务器为每个连接打开一个线程，线程会进行缓存，不一定每次连接都会创建和销毁线程
-
-## 优化与执行
-
-利用关键字，请求优化器来查看优化决策，从而重新构建优化查询
+<iframe id="embed_dom" name="embed_dom" frameborder="0" style="border:1px solid #000;display:block;width:500px; height:400px;" src="https://www.processon.com/embed/57e696f4e4b091465ae113e0">
+</iframe>
 
 ## MySQL锁机制
 
