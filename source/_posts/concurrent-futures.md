@@ -52,7 +52,7 @@ with ThreadPoolExecutor(max_workers=4) as e:
     e.submit(shutil.copy, 'src4.txt', 'dest4.txt')
 ```
 
-## ThreadPoolExecutor 对象
+## ThreadPoolExecutor
 
 `ThreadPoolExecutor`是`Executor`的子类，使用一个线程池去异步地执行调用。
 
@@ -123,3 +123,101 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
         else:
             print('%r page is %d bytes' % (url, len(data)))
 ```
+
+## ProcessPoolExecutor
+
+`ProcessPoolExecutor` 类是`Executor`的一个子类，它使用一个进程池来异步地执行调用。`ProcessPoolExecutor`使用`multiprocessing`模块，它允许去避免全局解释器锁，但同时也意味着仅仅只有`pickable`(译者注：这里这个单词的含义我还没理解)对象能够被执行和返回。
+
+`__main__`模块必须能够被作为工作者的子模块导入。这意味着`ProcessPoolExecutor`将不会在交互式的解释器中工作。
+
+从一个已添加到Executor中的可调用对象中调用`Executor`或者`Future`的方法将会导致死锁。
+
+> `class concurrent.futures.ProcessPoolExecutor(max_workers=None)`
+
+>> 一个`Executor`的子类来异步地执行调用，最多将会使用进程池中`max_workers`个工作进程。如果`max_workers`是`None`或者没有给出的话。它默认将会使用机器CPU的个数来作为最大进程数的值。如果`max_workers`小于或者等于0，那么将会抛出一个`ValueError`
+>> 3.3版本中的改变：当一个工作进程被突然终止了后，将会抛出一个`BrokenProcessPool`的错误。以前的情况是，行为是未定义的但是 Executor 上的操作或者他自己的 future 将会被冻结或者导致死锁。
+
+### ProcessPoolExecutor 的例子
+
+```python
+import concurrent.futures
+import math
+
+PRIMES = [
+    112272535095293,
+    112582705942171,
+    112272535095293,
+    115280095190773,
+    115797848077099,
+    1099726899285419]
+
+def is_prime(n):
+    """(译者注) 判断素数的程序
+
+    这里对 sqrt_n 做一点解释：
+
+    假设 n 不是素数，那么有 n = x * y( x != 1 and y != 1)
+    因为 n = x * y， 所以 x <= sqrt(n) or y <= sqrt(n)
+    所以 i in [2, sqrt(n)]; i表示能够被 n 整除的数
+    所以如果 i not in [2, sqrt(n)]; 那么n是素数
+
+    在这个程序中我们在一开始就判断过2，所以循环从3开始，且跳过所有偶数
+    """
+    if n % 2 == 0:
+        return False
+
+    sqrt_n = int(math.floor(math.sqrt(n)))
+    for i in range(3, sqrt_n + 1, 2):
+        if n % i == 0:
+            return False
+    return True
+
+def main():
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        for number, prime in zip(PRIMES, executor.map(is_prime, PRIMES)):
+            print('%d is prime: %s' % (number, prime))
+
+if __name__ == '__main__':
+    main()
+```
+
+## Future 对象
+
+Future 类封装了一个可调用对象的异步执行过程，Future 对象是通过`Executor.submit()`函数来创建的。
+
+> `class concurrent.futures.Future`
+
+>>  封装了一个可调用对象的异步执行过程。Future 实例是通过`Executor.submit()`方法来创建的，而且不应该被直接创建，除非用来测试。
+
+>> `cancel()`
+>>> 尝试去取消相关回调，如果这个回调正在被执行，而且不能被取消，那么这个方法将会返回`False`，否则这个方法将会取消相应的回调并且返回`True`
+
+>> `cancelled()`
+>>> 如果相关回调被成功取消了，那么这个方法将会返回`True`
+
+>> `running()`
+>>> 如果相关回调当前正在被执行而且无法取消，那么将会返回`True`
+
+>> `done()`
+>>> 如果相关的回调被成功地取消或者已经运行完毕那么将返回`True`
+
+>> `result(timeout=None)`
+>>> 返回由相关回调产生的结果。如果这个回调还没有被完成那么这个方法将会等待`timeout`秒。如果这个回调在`timeout`秒内还没有返回，一个`concurrent.futures.TimeoutError`的异常将会被抛出。`timeout`能够被设置成一个整数或者一个浮点数。如果`timeout`没有被设置或者其值为`None`，那么等待时间将没有限制。
+
+>>> 如果这个 future 在完成之前被取消了，那么将会抛出一个`CancelledError`的异常。
+>>> 如果相关的回调抛出了一个异常，那么这个方法也会相应地抛出这个异常。
+
+>> `exception(timeout=None)`
+>>> 返回由相关回调抛出的异常。如果相关回调还没有被完成那么这个方法将会等待`timeout`秒。如果相关回调在`timeout`秒内还没有被完成，那么将会抛出一个`concurrent.futures.TimeoutError`的异常。`timeout`能够被设置成一个整数或者一个浮点数。如果`timeout`没有被设置或者其值为`None`，那么等待时间将没有限制。
+
+>>> 如果这个 future 在完成之前被取消了，那么将会抛出一个`CancelledError`的异常。
+>>> 如果相关回调被完成了且没有抛出异常，None将会被返回。
+
+>> `add_done_callback(fn)`
+>>> 将可调用对象`fn`连接到这个 future 上，`fn`将会在 future 被取消或者结束运行时被调用，而且仅有相关 future 这一个参数。
+>>> 添加的可调用对象将会以它们被添加的顺序来调用，而且总是在添加它们的那个进程的所属的线程中调用(译者注，可以参考[这段代码](https://gist.github.com/bwangel23/8c4bd585f6e54c6ec6de336dd73abbe3))。如果相关调用`fn`抛出了一个`Exception`子类的异常，它将会被记录和忽略。如果相关调用`fn`抛出了一个`BaseException`子类的异常，那么行为是未定义的。
+>>> 如果相关的 future 已经被完成了或者取消了，`fn`将会被立刻调用。
+
+>> 如下的`Future`方法意味着可以在单元测试或者`Exectuor`的实现中使用。
+
+>> `set_running_or_notify_cancel()`
