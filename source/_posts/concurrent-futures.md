@@ -1,5 +1,5 @@
 ---
-title: "[未完成]Python concurrent.futures 文档翻译"
+title: "Python concurrent.futures 文档翻译"
 date: 2016-09-23 11:19:16
 tags: [Python, 翻译]
 ---
@@ -126,11 +126,11 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
 
 ## ProcessPoolExecutor
 
-`ProcessPoolExecutor` 类是`Executor`的一个子类，它使用一个进程池来异步地执行调用。`ProcessPoolExecutor`使用`multiprocessing`模块，它允许去避免全局解释器锁，但同时也意味着仅仅只有`pickable`(译者注：这里这个单词的含义我还没理解)对象能够被执行和返回。
+`ProcessPoolExecutor` 类是`Executor`的一个子类，它使用一个进程池来异步地执行调用。`ProcessPoolExecutor`使用`multiprocessing`模块，它允许去避免全局解释器锁，但同时也意味着仅仅只有`pickable`(TODO译者注：这里这个单词的含义我还没理解)对象能够被执行和返回。
 
 `__main__`模块必须能够被作为工作者的子模块导入。这意味着`ProcessPoolExecutor`将不会在交互式的解释器中工作。
 
-从一个已添加到Executor中的可调用对象中调用`Executor`或者`Future`的方法将会导致死锁。
+从一个已添加到Executor中的可调用对象中调用`Executor`或者`Future`的方法将会导致死锁(TODO译者注：有待实践操作)。
 
 > `class concurrent.futures.ProcessPoolExecutor(max_workers=None)`
 
@@ -221,3 +221,46 @@ Future 类封装了一个可调用对象的异步执行过程，Future 对象是
 >> 如下的`Future`方法意味着可以在单元测试或者`Exectuor`的实现中使用。
 
 >> `set_running_or_notify_cancel()`
+>>> 这个方法应该仅能够被`Exectuor`的实现(在执行和`Future`相关的工作之前调用)和单元测试调用。
+>>> 如果这个方法返回`False`，那么相关的Future被取消了。即`Future.cancel()`被调用了而且返回`True`。任何等待 Future 完成的线程(即通过`as_completed`或者`wait()`方法等待)都会被唤醒。
+>>> 这个方法仅能被调用一次，而且不能在`Future.set_result()`或者`Future.set_exception()`被调用了之后调用。
+
+>> `set_result(result)`
+>>> 将 future 相关的工作的结果设置成`result`
+>>> 这个方法仅仅应该被`Exectuor`实现的时候和单元测试来调用。
+
+>> `set_exception(exception)`
+>>> 将 future 相关的工作的结果设置成异常`exception`
+>>> 这个方法仅仅应该被`Exectuor`实现的时候和单元测试来调用。
+
+## 模块方法
+
+> `concurrent.futures.wait(fs, timeout=None, return_when=ALL_COMPLETED)`
+>> 等待由`fs`(译者注：这里这个`fs`表示 futures 的意思)给出的 future 实例(可能由不同的 Exectuor 实例创建的)去完成。返回一个命名二元组的集合。在第一个集合元素中，命名为`done`，包含着那些在`wait`函数完成之前就已经完成(被完成或者被取消)的 future。第二个集合元素命名为`not_done`，包含那些未完成的 future。
+>> `timeout`用来控制`wait`函数在返回之前等待的最大秒数。`timeout`能够被设置成整数或者浮点数。如果`timeout`没有被设置或者值为`None`，那么等待时间将没有限制。
+>> `return_when`代表了函数应该在什么时候返回，它必须被设置成如下值中的一个：
+
+>> Constant|Description
+--------|-----------
+FIRST_COMPLETED|当任何 future 结束或者被取消的时候，这个函数就会返回
+FIRST_EXCEPTION|当任何 future 通过抛出异常来结束的时候，这个函数就会返回，如果没有任何函数抛出异常，那么它等价与`ALL_COMPLETED`
+ALL_COMPLETED|当所有的 future 都已结束或者被取消的时候，这个函数就会返回。
+
+> `concurrent.futures.as_completed(fs, timeout=None)`
+>> 返回一个在由`fs`给出的 future 实例(可能由不同的Executor创建的)上的迭代器，当 future 完成的时候(结束或者被取消)，就把这个 future `yield`回去。如果`fs`中给出的 future 重复了，那么将仅会被返回一次。任何在`as_completed`函数调用之前就已经完成或者被取消的 future, 将会首先`yield`回来。如果`__next__()`被调用，在`timeout`秒后结果依然不可达，那么返回的迭代器将会从原始的调用向`as_completed`抛出一个`concurrent.futures.TimeoutError`异常。`timeout`可以被设置成整数或者浮点数。如果`timeout`没有被指定或者其值为`None`，那么等待的时间将没有限制。
+
+>>> See also:
+>>> [PEP 3148](https://www.python.org/dev/peps/pep-3148) - futures - 执行异步计算
+>>>    这个提案描述了包含在 Python 标准库中的这个特性。
+
+## 异常类
+
+> exception `concurrent.futures.CancelledError`
+>> 当 future 被取消的时候抛出这个异常。
+
+> exception `concurrent.futures.TimeoutError`
+>> 当 future 的操作超出给定的`timeout`时间的时候抛出这个异常。
+
+> exception `concurrent.futures.process.BrokenProcessPool`
+>> 派生自`RuntimeError`，当`ProcessPoolExecutor`中的一个工作进程以不干净的方式(例如，它是从外部被杀死的)结束的时候，这个异常将会抛出。
+>> Python 3.3 后的新特性
