@@ -25,6 +25,7 @@ layout: post
 
 # Blog Logs
 
++ 2016年9月27日：删除了~~[Github Page](http://bwangel23.github.io)~~
 + 2016年9月14日: 添加了[Disqus](https://disqus.com/)评论功能
 + 2016年9月7日: 全站使用HTTPS进行访问，采用了[Let's Encrypt](https://letsencrypt.org/)的证书
 + 2016年9月6日：迁移博客至VPS，使用[Webhook](https://developer.github.com/webhooks/)进行更新
