@@ -74,3 +74,50 @@ readFile("example.txt", function(err, contents){
     });
 });
 ```
+
+在上面的代码中，`readFile()`的一个成功回调引起了另外一个异步回调，这次是对于`writeFile()`函数。注意两个函数都有同样的基础的错误检查模式。当`readFile()`完成的时候，它添加了一个任务到任务队列，使得`writeFile()`被调用(假设没有错误的话)。然后，当`writeFile()`完成的时候，它也添加了一个工作到任务队列。
+
+这个模式相当的好，但是你很快就会发现自己处于*回调地狱*中，当你使用了太多回调的时候，就会产生回调地狱，比如下面这样：
+
+```js
+method1(function(err, result) {
+    if(err) {
+        throw err;
+    }
+    method3(function(err, result) {
+        if(err) {
+            throw err;
+        }
+
+        method4(function(err, result) {
+            if(err) {
+                throw err;
+            }
+
+            method5(result);
+        });
+    });
+});
+```
+
+在上面的例子中，嵌套多个回调方法创造了一种紊乱的 web 代码，而且很难理解和调试。当你想要实现更复杂的功能的时候，回调也显示出了一些问题。例如，当你想要两个异步操作同时运行，当它们都完成的时候提醒你，该如何去做？或者你想在某一时刻开启两个异步操作，但是仅仅想要获取先完成的那个任务的操作结果，又该怎么做呢？
+
+在上面的情况中，你需要去跟踪多个回调和函数和清除操作，但是 promises 极大地改善了这种情况。
+
+## Promise 基础
+
+一个 Promise 是一个异步操作结果的占位符，比起注册一个事件回调和传递一个回调到一个函数中，函数能够返回一个 Promise 对象，比如像下面这样：
+
+```
+// readFile promise 代表了在未来某些点完成的操作。
+let promise = readFile("example.txt")
+```
+
+### Promise 生命周期
+
+每个 Promise 穿过一个很短的生命周期然后就开始了 *pending* 状态，那表示着异步操作还没有被完成。一个阻塞的 promise 可以被认为是 *unsettled*。在上面例子中的 Promise ，当`readFile()`函数立刻返回它的时候是阻塞状态。一旦异步操作完成了，Promise 就被认为是 *settled* 的了，将会进入下面两种可能的状态之一：
+
+> 1. *Fullfiled*: Promise 的异步操作已经被成功完成了。
+> 2. *Rejected*: Promise 的异步操作没有成功完成，由于产生了一个错误或者其他的某种情况。
+
+一个内部的`[[PromiseState]]`属性将会被设置成`"pending"`，`"Fullfiled"`，`"rejected"`来反映 Promise 的状态。
