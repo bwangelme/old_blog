@@ -120,4 +120,48 @@ let promise = readFile("example.txt")
 > 1. *Fullfiled*: Promise 的异步操作已经被成功完成了。
 > 2. *Rejected*: Promise 的异步操作没有成功完成，由于产生了一个错误或者其他的某种情况。
 
-一个内部的`[[PromiseState]]`属性将会被设置成`"pending"`，`"Fullfiled"`，`"rejected"`来反映 Promise 的状态。
+一个内部的`[[PromiseState]]`属性将会被设置成`"pending"`，`"Fullfiled"`，`"rejected"`来反映 Promise 的状态。这个属性没有被 Promise 对象暴露出来，所以你在编程的时候不能确定 Promise 对象的状态。但是你可以通过`then()`方法，在 Promise 的状态改变的时候，执行一个指定的动作。
+
+`then()`存在于所有的 promise 对象并且它有两个参数。第一个参数是当 Promise 完成的时候调用的函数。任何和这个异步操作相关的额外数据都被传递给了这个完成函数。第二个参数是当这个 Promise 被拒绝时执行的函数。和完成函数相似，拒绝函数也被传递了和这个拒绝相关的额外数据。
+
+> 所以实现了`then()`函数的对象都被称为 *thenable* 的。所有 Promise 都是 thenable 的，但并不是所有 thenable 的对象都是 Promise。
+
+`then()`函数的两个参数都是可选的，所以你可以监听任何完成和拒绝的组合。例如，请思考下面的一组`then()`的调用：
+
+```js
+let promise = readFile("example.txt");
+
+primise.then(function(contents) {
+    console.log(contents);
+    }, function(err) {
+        console.error(err.messages);
+        });
+
+primise.then(function(contents) {
+    console.log(contents);
+    });
+
+primise.then(null, function(err) {
+    console.error(err.messages);
+    });
+```
+
+上面三个`then()`调用都在同一个 Promise 上操作。第一个调用监听完成和拒绝事件。第二个调用仅仅监听完成事件，错误不会被报告。第三个调用仅仅监听拒绝事件，不会报告成功。
+
+Promise 也有`catch()`方法并表现地和`then()`调用仅有一个拒绝事件的回调传入时一样。例如，在下面的例子中，`catch()`例子和`then()`例子在功能上是等同的。
+
+```js
+promise.catch(function(err) {
+    //rejection
+    console.err(err.message);
+    });
+
+// is same as
+
+promise.then(null, function(err) {
+    //rejection
+    console.err(err.message);
+    });
+```
+
+`then()`和`catch()`背后的意图是为了你能够结合使用它们来正确地处理异步操作的结果。这个系统比事件和回调都要好，因为它使得一个操作是成功还是失败变得全然清晰起来(当有错误触发的时候，事件往往不会触发。同时，在回调函数中你需要时刻记住检查error参数。)。只需要知道的是当你不想为 promise 绑定一个拒绝事件处理器的时候，所有的错误都是静默发生的。记得一定要绑定一个拒绝事件处理器，哪怕仅仅是记录错误也可以。
