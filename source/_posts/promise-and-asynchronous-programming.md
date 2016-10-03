@@ -1,6 +1,6 @@
 ---
 title: "[未完成]Promise and Asynchronous Programming"
-tags: [JavaScript, Promise]
+tags: [JavaScript, Promise, 翻译]
 ---
 
 __摘要__:
