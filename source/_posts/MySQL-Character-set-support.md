@@ -94,3 +94,30 @@ MySQL 服务器支持多种字符集。使用__INFORMATION\_SCHEMA.CHARACTER_SET
 当一个字符集有多个排序规则的时候，对于一个给定的应用程序来说哪个排序规则是最适合的可能并不清晰。为了避免选择一个不合适的排序规则，请使用一些代表数据值来执行一些比较，来确认给定的排序规则将值排序的方式是否符合你的期望。
 
 [Collation-Charts.Org](http://www.collation-charts.org/)是一个很有用的网站，用来展示一个排序规则和另外一个排序规则的比较信息。
+
+## 排序规则命名规范
+
+MySQL 排序规则的命名遵循如下的规范：
+
++ 一个排序规则的名字使用和它相关联的那个字符集的名字作为开始，后面跟着一个或者多个后缀表示排序规则的其他特性。例如，*utf8_general_ci* 和 *latin1_swedish_ci* 分别是 *utf8* 和 *latin1* 字符集的排序规则。
++ 某个语言特定的排序规则包括了语言名。例如，*utf8_turkish_ci* 和 *utf8_hungarian_ci* 分别使用土耳其和匈牙利的的规则来为 *utf8* 字符集排序字符。
++ 一个排序规则可能是区分大小写或者不区分大小写的，也有可能是二进制排序的。对于二进制排序的排序规则，字符比较基于字符的二进制编码值。下面的表格表示了这些排序特性使用的后缀。
+
+> __表格 11.1 排序规则大小写区分的后缀__
+
+> Suffix | Meaning
+> -------|--------
+> _ai | 不区分口音
+> _as | 区分口音
+> _ci | 不区分大小写
+> _cs | 区分大小写
+> _bin | 二进制排序
+
+> 对于没有指定口音的非二进制排序规则，它是由区分大小写来决定的。那就意味着，如果一个排序规则名字中没有包含 *_ai* 或者 *_as* ，名字中的 *_ci* 就暗示着 *_ai*，而 *_cs* 就暗示着 *_as*。
+
+> 例如，*latin1_general_ci* 是不区分大小写的(同时也暗示着不区分口音)。*latin1_general_cs* 是区分大小写的(同时也暗示着区分口音), *latin1_bin* 使用二进制编码的值。
+
++ 对于 Unicode 字符集，排序规则名字中可能包含着一个版本号，用来表示这个排序规则基于的 UCA(Unicode Collation Algorithm) 的版本。基于 UCA 的排序规则的名字中没有版本号的话，意味着使用了 UCA 加权键 4.0.0 版本。例如：
+  + *utf8_unicode_520_ci* 是基于 [UCA 5.2.0 加权键](http://www.unicode.org/Public/UCA/5.2.0/allkeys.txt)。
+  + *utf8_unicode_ci* (名字中不含版本号) 是基于 [UCA 4.0.0 加权键](http://www.unicode.org/Public/UCA/4.0.0/allkeys-4.0.0.txt)。
++ 对于 Unicode 字符集来说，*xxx_general_mysql500_ci* 排序规则保留了5.1.24之前的的原始排序规则 *xxx_general_ci* ，同时也允许 MySQL 5.1.24 之前创建的表进行升级。想要了解更多信息，请参考 [ Section 2.11.3, “Checking Whether Tables or Indexes Must Be Rebuilt” ](http://dev.mysql.com/doc/refman/5.7/en/checking-table-incompatibilities.html) 和 [ Section 2.11.4, “Rebuilding or Repairing Tables or Indexes” ](http://dev.mysql.com/doc/refman/5.7/en/rebuilding-tables.html)
