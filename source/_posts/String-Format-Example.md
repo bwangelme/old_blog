@@ -1,7 +1,7 @@
 ---
 title: Python字符串Format方法示例
 date: 2016-08-31 15:45:41
-tags: [python, 翻译]
+tags: [Python, 翻译]
 ---
 
 __摘要__:

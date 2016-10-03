@@ -1,7 +1,7 @@
 ---
 title: 'TDD with python 第六章笔记'
 date: 2016-04-10 10:56:54
-tags: [python, tdd]
+tags: [Python, tdd]
 ---
 
 __摘要__:

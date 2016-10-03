@@ -1,7 +1,7 @@
 ---
 title: "Python unittesting: run tests in another module"
 date: 2016-09-11 11:46:43
-tags: [python, unittest]
+tags: [Python, unittest]
 ---
 
 __摘要__:
