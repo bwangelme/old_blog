@@ -2,6 +2,7 @@
 title: Python的命名空间解析
 date: 2016-08-03 22:29:41
 tags: Python
+top: 4
 ---
 
 __摘要__:
@@ -19,13 +20,12 @@ __摘要__:
 
 ```python
 import sys
-
+   
 m = sys.modules[__name__]
-
+   
 print(m.__dict__ is globals())
-
 a = 3
-
+   
 globals().get('a')
 ```
 
@@ -43,23 +43,23 @@ globals().get('a')
 
 ```python
 import sys
-
+   
 main_module = sys.modules[__name__]
-
+   
 module_member = 'module'
 class C:
     class_member = 'class'
-
+   
 c = C()
 c.instance_member = 'instance'
-
+    
 def func():
     func_member = 'function'
     fls = sys._getframe(0).f_locals
     # fls = locals()
     print('fls and locals() are same object? %s' % (fls is locals()))
     print(fls['func_member'])
-
+    
 print(main_module.__dict__['module_member'])
 print(C.__dict__['class_member'])
 print(c.__dict__['instance_member'])
@@ -92,7 +92,7 @@ def test():
     print(x)
     print(y)
     print(s)
-
+    
 test()
 ```
 
@@ -113,31 +113,30 @@ x = 1234
 def test():
     print(x)
     x = 'abc'
-
+    
 test()
 ```
 
 
     ---------------------------------------------------------------------------
-
+    
     UnboundLocalError                         Traceback (most recent call last)
-
+    
     <ipython-input-45-9f45a812fe7a> in <module>()
           4     x = 'abc'
           5
     ----> 6 test()
-
-
+    
+    
     <ipython-input-45-9f45a812fe7a> in test()
           1 x = 1234
           2 def test():
     ----> 3     print(x)
           4     x = 'abc'
           5
-
-
+    
+    
     UnboundLocalError: local variable 'x' referenced before assignment
-
 
 在上面的函数中，我们要打印一个name`x`，它首先会去local本地命名空间中查找，没有找到。然后去当前函数`test`的作用域中查找，找到了。此时Python解释器就会发现`x`这个name还没有添加到local本地命名空间中，就被引用了。所以就会抛出一个异常，说`x`还未被赋值就被引用了。如果我们把代码改成下面这种形式，发现就可以正常运行了：
 
@@ -146,7 +145,7 @@ test()
 x = 1234
 def test():
     print(x)
-
+    
 test()
 ```
 
@@ -159,20 +158,20 @@ test()
 
 ```python
 import dis
-
+    
 x = 1234
 def test_right():
     print(x)
-
+    
 dis.dis(test_right)
-
+    
 print('-' * 20)
-
+    
 x = 1234
 def test_error():
     print(x)
     x = 'abc'
-
+    
 dis.dis(test_error)
 ```
 
@@ -187,11 +186,11 @@ dis.dis(test_error)
                   3 LOAD_FAST                0 (x)
                   6 CALL_FUNCTION            1 (1 positional, 0 keyword pair)
                   9 POP_TOP
-
+    
      14          10 LOAD_CONST               1 ('abc')
                  13 STORE_FAST               0 (x)
                  16 LOAD_CONST               0 (None)
                  19 RETURN_VALUE
-
+    
 
 通过查看这两个函数的反汇编出来的代码可以看到，这两个访问x的时候，一个是通过`LOAD_GLOBAL`指令，访问的全局命名空间，另外一个则是通过`LOAD_FAST`指令访问的本地命名空间。通过这个，可以部分地证明我们上面的猜想。
