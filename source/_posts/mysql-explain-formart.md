@@ -6,8 +6,8 @@ tags: [翻译, MySQL]
 
 __摘要__:
 
-1. MySQL EXPALIN 输出格式
-2. 本文参考了 [EXPLAIN Output Format](http://dev.mysql.com/doc/refman/5.7/en/explain-output.html#explain_filtered)
+> 1. MySQL EXPALIN 输出格式
+> 2. 本文参考了 [EXPLAIN Output Format](http://dev.mysql.com/doc/refman/5.7/en/explain-output.html#explain_filtered)
 <!-- more -->
 
 ## 输出列说明
