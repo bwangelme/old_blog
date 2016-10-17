@@ -9,7 +9,7 @@ __摘要__:
 
 <!-- more -->
 
-##Goto Anything
+## Goto Anything
 
 `Ctrl + p`输入文件名或者文件路径来打开文件
 

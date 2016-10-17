@@ -6,30 +6,27 @@ tags: 工具
 
 __摘要__:
 
-> 1. 学习地址：[前端开发必备！Emmet使用手册](http://www.w3cplus.com/tools/emmet-cheat-sheet.html)
+> 1. 参考文章：[前端开发必备！Emmet使用手册](http://www.w3cplus.com/tools/emmet-cheat-sheet.html)
 > 2. 记录Emmet的一些语法
 
 <!-- more -->
-emmet学习笔记
-=============
+## 语法
 
-##1. 资源地址
+__注意__:
 
-[前端开发必备！Emmet使用手册](http://www.w3cplus.com/tools/emmet-cheat-sheet.html)
-[Emmet官方文档](http://docs.emmet.io/cheat-sheet/)
+> `Emmet`符号前后不要有空格
 
-##2. 语法
+### 兄弟
 
-###0. 注意`Emmet`符号前后不要有空格
-###1. 兄弟：`+` 类似于css中的兄弟
-###2. 上级：`^` 设置上一级的节点,`^^`连着向上返回两级
+`+` 类似于css中的兄弟
 
-```emmet
-div+div>p>span+em^bq
-```
-生成的html代码如下
+### 上级
+
+`^` 设置上一级的节点,`^^`连着向上返回两级
+
 ```html
-
+div+div>p>span+em^bq
+-------------------
 <div></div>
 <div>
 	<p><span></span><em></em></p>
@@ -39,13 +36,21 @@ div+div>p>span+em^bq
 
 可以理解是一层一层地进入`>`，然后在这层建立兄弟`+`，或者返回上级`^`
 
-###3. 分组：`()`将括号内的元素变成一个代码块
-###4. 乘法：`*`将某个元素重复几次
-###5. 自增符号：`$`，一个`$`代表一位数字，`@`可以设置倒序和起始数字
+### 分组
+
+`()`将括号内的元素变成一个代码块
+
+### 乘法
+
+`*`将某个元素重复几次
+
+### 自增符号
+
+`$`，一个`$`代表一位数字，`@`可以设置倒序和起始数字
 
 ```html
 ul>li.item$$$*5
-
+---------------
 <ul>
 	<li class="item001"></li>
 	<li class="item002"></li>
@@ -57,7 +62,7 @@ ul>li.item$$$*5
 
 ```html
 h$[title=item$]{Header $}*3
-
+---------------------------
 <h1 title="item1">Header 1</h1>
 <h2 title="item2">Header 2</h2>
 <h3 title="item3">Header 3</h3>
@@ -65,7 +70,7 @@ h$[title=item$]{Header $}*3
 
 ```html
 ul>li.item$@-3*5
-
+----------------
 <ul>
 	<li class="item7"></li>
 	<li class="item6"></li>
@@ -73,27 +78,24 @@ ul>li.item$@-3*5
 	<li class="item4"></li>
 	<li class="item3"></li>
 </ul>
-
-<!--
-@后的-代表是倒序，3表示从3开始，顺序不可颠倒。
--->
+<!-- @后的-代表是倒序，3表示从3开始，顺序不可颠倒。 -->
 ```
 
-###6. 文本
+### 文本
 
 ```html
 p>{Click }+a{here}+{ to continue}
-
+---------------------------------
 <p>click<a href="">here</a>to continue</p>
 ```
 
-###7. 生成隐式标签
+### 生成隐式标签
 
 不用强记，系统会自动判断生成，准确率却不知道啦。
 
 ```
 table>.row>.col
-
+---------------
 <table>
 	<tr class="row">
 		<td class="col"></td>
@@ -101,48 +103,66 @@ table>.row>.col
 </table>
 ```
 
-##3. 缩写
+## 缩写
 
-###1. `!`生成h5的首部
+### h5的首部
 
-###2. CSS链接
+```html
+!
+--------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+  
+</body>
+</html>
+```
+
+### CSS链接
 
 ```
 link:css
-
+--------
 <link rel="stylesheet" href="style.css">
 ```
-###3. favicon的链接
+### favicon的链接
 
 ```
 link:favicon
-
+------------
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 ```
 
-###4. 设置字符编码
+### 设置字符编码
 
 ```
 meta:utf
-
+--------
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 ```
 
-###5. 表单
+### 表单
 
 ```
 form:get
-
+--------
 <form action="" method="get"></form>
 ```
 
-###6. input
+### input
 
 ```html
-<!--
-text,search,radio等type都可以通过类似的方法
--->
+<!-- text,search,radio等type都可以通过类似的方法 -->
 input:hidden
-
+------------
 <input type="hidden" name="">
 ```
+
+## 参考资料
+
+[前端开发必备！Emmet使用手册](http://www.w3cplus.com/tools/emmet-cheat-sheet.html)
+[Emmet官方文档](http://docs.emmet.io/cheat-sheet/)

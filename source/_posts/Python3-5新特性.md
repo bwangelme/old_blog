@@ -1,7 +1,7 @@
 ---
-title: Python3.5新特性
+title: "Python3.5新特性"
 date: 2016-05-08 14:27:17
-tags: [python, 翻译]
+tags: [Python, 翻译]
 ---
 
 __摘要__:

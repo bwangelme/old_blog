@@ -1,7 +1,7 @@
 ---
-title: 'python参数.md'
+title: 'Python参数'
 date: 2016-04-10 10:56:54
-tags: IntermediatePython
+tags: [IntermediatePython, Python]
 ---
 
 __摘要__:
@@ -11,7 +11,7 @@ __摘要__:
 
 <!-- more -->
 
-# 猴子补丁
+## 猴子补丁
 
 猴子补丁: 在程序运行时修改某些代码，例如下面这样：
 
@@ -24,7 +24,7 @@ def get_info(self, *args):
 someclass.get_info = get_info
 ```
 
-# Python的三种参数
+## Python的三种参数
 
 `*args`表示非键值对可变数量的参数列表
 `**kwargs`表示传递参数为不定长度的键值对

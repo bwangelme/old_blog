@@ -1,7 +1,7 @@
 ---
 title: "PEP 343: Python的with语句"
 date: 2016-04-25 21:04:33
-tags: [python, 翻译]
+tags: [Python, 翻译]
 ---
 
 __摘要__:
