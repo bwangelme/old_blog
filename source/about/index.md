@@ -11,6 +11,14 @@ layout: post
 > * 经常看豆瓣上top250的电影，看完基本不写影评！
 > * __努力追求简洁且美的东西！__
 
+# 文档翻译
+
+> + 个人翻译官方文档的仓库：[Translate](https://github.com/bwangel23/Translate)
+> + 随意翻译的一些，不为给别人参考，仅为自我学习。
+> + 目前正在进行的：
+>   + Redis Pub/Sub
+>   + Collectd 配置文件
+
 # Delelpoment Tools
 
 > + vim: 改过[k-vim](https://github.com/bwangel23/k-vim), 读过[vim实用技巧](https://book.douban.com/subject/25869486/)
@@ -25,6 +33,7 @@ layout: post
 
 # Blog Logs
 
++ 2016年10月30日：将文档翻译移动到了[Github 仓库](https://github.com/bwangel23/Translate)，博客用来发表原创文章
 + 2016年9月27日：删除了~~[Github Page](http://bwangel23.github.io)~~
 + 2016年9月14日: 添加了[Disqus](https://disqus.com/)评论功能
 + 2016年9月7日: 全站使用HTTPS进行访问，采用了[Let's Encrypt](https://letsencrypt.org/)的证书
