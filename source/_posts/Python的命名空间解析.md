@@ -2,7 +2,6 @@
 title: Python的命名空间解析
 date: 2016-08-03 22:29:41
 tags: Python
-top: 4
 ---
 
 __摘要__:

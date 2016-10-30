@@ -2,7 +2,6 @@
 title: "Python concurrent.futures 文档翻译"
 date: 2016-09-23 11:19:16
 tags: [Python, 翻译]
-top: 1
 ---
 
 __摘要__:
