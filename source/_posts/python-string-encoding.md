@@ -5,9 +5,9 @@ tags: ['python']
 ---
 
 __摘要:__
-> 1. Python2 中的字符串
-> 2. Python3 中的字符串
-> 3. Python2 中的一个经典问题
+> + Python3 中的字符串
+> + Python2 中的字符串
+> + Python2 中的一个经典编码问题
 
 <!-- more -->
 
@@ -25,9 +25,9 @@ Python3 中正式将这两个概念区分开了，Str 表示的是字符串，�
 
 ### 指定编码和实际编码
 
-好吧，`制定编码`和`实际编码`这两个术语是否存在我也不确定，这是我自创的，但是我这不是瞎创造新名字，是为了和大家解释其中的概念。
+好吧，`指定编码`和`实际编码`这两个术语是否存在我也不确定，这是我自创的，但是我这不是瞎创造新名字， 而是为了和大家解释其中的概念。
 
-当我们创建一个新的字符串的时候，字符串会有一个`指定编码`，既 Python 认为这个字符串是以什么编码来存储的，这个指定编码我们可以用`sys.getdefaultencoding()`函数来获取到，比如下面这样：
+当我们创建一个新的字符串的时候，字符串会有一个`指定编码`，既 Python 认为这个字符串是以什么编码来存储的，Python 默认的指定编码我们可以用`sys.getdefaultencoding()`函数来获取到，比如下面这样：
 
 ```py
 In [5]: import sys
@@ -40,10 +40,8 @@ Out[6]: 'utf-8' # 可以看出 Python3 中字符串的指定编码是utf-8
 
 ```py
 In [7]: import locale
-
 In [8]: locale.getdefaultlocale()
 Out[8]: ('en_US', 'UTF-8')
-
 ```
 
 这里可以看出，我的 Ubuntu 中，默认语言是`en_US`，默认的编码是`UTF-8`。
@@ -54,7 +52,7 @@ Out[8]: ('en_US', 'UTF-8')
 
 Python2 中的字符串也有指定编码和实际编码，和上文中的一样，这里就不在赘述。
 
-不过有一点需要大家注意，Python2 中默认的指定编码是`ascii`，而系统的默认编码通常都不会是这个(比如我的 Linux 是`utf-8`)，Python2 在这里就默默地挖下了一个大坑了。
+不过有一点需要大家注意，Python2 中默认的指定编码是`ascii`，而系统的默认编码通常都不会是这个(比如我的 Ubuntu 是`utf-8`)，Python2 在这里就默默地挖下了一个大坑了。
 
 ### Str 和 Unicode
 
@@ -85,7 +83,7 @@ Traceback (most recent call last):
 UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-3: ordinal not in range(128)
 ```
 
-这里它会抛出一个`UnicodeEncodeError`错误，这是因为第二条语句返回的是一个`str`对象，它的编码类型取`sys.getdefaultencoding()`，这个编码默认为`ascii`，而`ascii`编码类型是不支持中文的，所以就会抛出一个编码错误。
+这里它会抛出一个`UnicodeEncodeError`错误，这是因为第二条语句返回的是一个`str`对象，它的编码类型取`sys.getdefaultencoding()`，默认值为`ascii`，而`ascii`编码类型是不支持中文的，所以就会抛出一个编码错误。
 
 #### decode() 函数
 
@@ -142,7 +140,6 @@ with open("./file.txt", 'w') as fd:
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')     # setdefaultencoding  在被初始化的时被 site.py 掉了
-   
    
 data = u"中国汉字"
    
