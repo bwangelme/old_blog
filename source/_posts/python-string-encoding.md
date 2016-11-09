@@ -166,4 +166,4 @@ with open("./file.txt", 'w') as fd:
 
 ## 最后的废话
 
-至此，大家可以看到 Python2 中的字符串搞得是有多坑爹，连 Python 官方自己都看不下去了， 2020年就要彻底抛弃它了。所以大家还是踊跃的投入 Python3 的怀抱吧！到此，文章正文就结束了，由于我的水平也一般，文中难免也有错漏之处，欢迎大家踊跃打脸，但是借用鸟哥的一句话，[类似“太烂了！”这样无聊中伤的意见我看还是算了](https://github.com/openresty/nginx-tutorials/blob/master/zh-cn/00-Foreword01.tut#L51-L52)。
+至此，大家可以看到 Python2 中的字符串搞得是有多坑爹，连 Python 官方自己都看不下去了， 2020年就要彻底抛弃它了。所以大家还是踊跃的投入 Python3 的怀抱吧！到此，文章正文就结束了，由于我的水平也一般，文中难免也有错漏之处，欢迎大家踊跃打脸，但是借用春哥的一句话，[类似“太烂了！”这样无聊中伤的意见我看还是算了](https://github.com/openresty/nginx-tutorials/blob/master/zh-cn/00-Foreword01.tut#L51-L52)。
