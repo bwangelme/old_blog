@@ -7,6 +7,8 @@ tags: [Python, 翻译]
 __摘要__:
 
 > 本文主要是对 Python3 标准库 [concurrent.futures](https://docs.python.org/3/library/concurrent.futures.html) 文档的翻译
+
+
 <!-- more -->
 
 concurrent.futures 模块为异步执行可调用的对象提供了一个高级的接口。

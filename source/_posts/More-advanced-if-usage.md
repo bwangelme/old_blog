@@ -9,6 +9,7 @@ __摘要__:
 > 1. 本文是对[More advanced if usage](http://tldp.org/LDP/Bash-Beginners-Guide/html/sect_07_02.html)的翻译
 > 2. 主要讲述了 Bash 中 if 的一些高级用法
 
+
 <!-- more -->
 
 ## if/then/else 结构体

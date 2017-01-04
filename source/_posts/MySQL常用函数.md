@@ -6,6 +6,7 @@ tags: MySQL
 
 __摘要__:
 > 这是一篇关于MySQL的文章，主要介绍 MySQL 常用函数
+
 <!-- more -->
 MySQL常用函数
 =============

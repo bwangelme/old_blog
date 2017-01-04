@@ -1,7 +1,7 @@
 ---
 title: 关于我
 date: 2016-04-22 11:45:52
-layout: post
+layout: page
 ---
 
 # Introduction
@@ -33,6 +33,7 @@ layout: post
 
 # Blog Logs
 
++ 2017年01月04日：更换博客主题为 [even](https://github.com/ahonn/hexo-theme-even)
 + 2016年10月30日：将文档翻译移动到了[Github 仓库](https://github.com/bwangel23/Translate)，博客用来发表原创文章
 + 2016年9月27日：删除了~~[Github Page](http://bwangel23.github.io)~~
 + 2016年9月14日: 添加了[Disqus](https://disqus.com/)评论功能

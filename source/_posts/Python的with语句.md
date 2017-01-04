@@ -10,6 +10,7 @@ __摘要__:
 > 2. 如何自己写一个上下文管理器对象，如何利用`contextlib`来写一个上下文管理器对象
 > 3. 原文地址: [PEP 343: The 'with' statement](https://docs.python.org/release/2.5/whatsnew/pep-343.html)
 
+
 <!-- more -->
 
 ## With语句的通常用法

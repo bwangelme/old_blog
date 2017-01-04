@@ -4,7 +4,10 @@ date: 2016-04-22 11:18:06
 tags: MongoDB
 ---
 
-__摘要__: 本文主要讲述MongoDB分片的原理以及MongDB如何配置分片服务，设置ChunkSize大小。
+__摘要__:
+
+> 本文主要讲述MongoDB分片的原理以及MongDB如何配置分片服务，设置ChunkSize大小。
+
 <!-- more -->
 
 ## MongoDB分片原理概述

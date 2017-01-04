@@ -4,7 +4,10 @@ date: 2016-04-11 07:18:43
 tags: git
 ---
 
-__摘要__: git`submodule`就是git主仓库在本仓库的配置中记录着子模块仓库对应的名字，路径，远端url，然后创建一个特殊文件去记录子模块仓库目前的`commit-id`，每次更新子模块就是通过远端路径和`commit-id`来进行更新
+__摘要__:
+
+> + `git submodule`就是git主仓库在本仓库的配置中记录着子模块仓库对应的名字，路径，远端url，然后创建一个特殊文件去记录子模块仓库目前的`commit-id`，每次更新子模块就是通过远端路径和`commit-id`来进行更新
+
 <!-- more -->
 ## 参考文章
 [Git Submodule使用完整教程 - 咖啡兔 - HenryYan](http://www.kafeitu.me/git/2012/03/27/git-submodule.html)

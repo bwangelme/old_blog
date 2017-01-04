@@ -8,6 +8,7 @@ __摘要__:
 > 本文翻译自Python3文档[6.1.3.2. Format examples](https://docs.python.org/3/library/string.html#format-examples)
 > 主要讲述了Python`str.format()`的一些使用方法
 
+
 <!-- more -->
 
 
