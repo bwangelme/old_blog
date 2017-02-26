@@ -87,7 +87,7 @@ abc
 Hello, World!
 ```
 
-在上面的代码中，x 是`builtins`命名空间中的名字，y是`local`命名空间中的名字，s是`Global`命名空间中的名字，它们都能够被正确找到并打印出来。
+在上面的代码中，s 是`builtins`命名空间中的名字，y 是`local`命名空间中的名字，x 是`Global`命名空间中的名字，它们都能够被正确找到并打印出来。
 
 ## 分析一个UnboundLocalError例子
 
