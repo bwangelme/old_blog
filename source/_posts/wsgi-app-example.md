@@ -1,7 +1,7 @@
 ---
 title: Werkzeug 的 wsgi-app 说明
 date: 2017-01-23 17:31:00
-tags: [python, Werkzeug]
+tags: [Python, Werkzeug]
 ---
 
 > 1. 简要说明了一下WSGI
