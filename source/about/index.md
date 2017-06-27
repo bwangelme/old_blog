@@ -4,31 +4,34 @@ date: 2016-04-22 11:45:52
 layout: page
 ---
 
-# Introduction
+# 个人配置
 
-> * C/C++，Liunx，Vim，Python，Web前后端都爱折腾一点，啥也折腾不好！
-> * 金庸，古龙，温瑞安，初级武侠迷！
-> * 经常看豆瓣上top250的电影，看完基本不写影评！
-> * __努力追求简洁且美的东西！__
+## Vim
 
-# 文档翻译
++ [dotvim](https://github.com/bwangel23/dotvim)
++ Fork 自[wklken/k-vim](https://github.com/wklken/k-vim)，并做了大量改动
+
+## Zsh
+
++ [dotzsh](https://github.com/bwangel23/dotzsh)
++ Fork 自[lilydjwg/dotzsh](https://github.com/lilydjwg/dotzsh)
+
+# 项目
+
+## 文档翻译
 
 > + 个人翻译官方文档的仓库：[Translate](https://github.com/bwangel23/Translate)
 > + 随意翻译的一些，不为给别人参考，仅为自我学习。
-> + 目前正在进行的：
->   + [I don't understand Python's Asyncio](http://lucumr.pocoo.org/2016/10/30/i-dont-understand-asyncio/)
 
-# Delelpoment Tools
+# 正在读的书
 
-> + vim: 改过[k-vim](https://github.com/bwangel23/k-vim), 读过[vim实用技巧](https://book.douban.com/subject/25869486/)
-> + git:
-  + [git-flow](http://danielkummer.github.io/git-flow-cheatsheet/index.zh_CN.html), [github-flow](https://guides.github.com/introduction/flow/)
-  + [Anjular Commit message规范](http://www.ruanyifeng.com/blog/2016/01/commit_message_change_log.html), [Commitizen](https://github.com/commitizen/cz-cli)
-> + make: [跟我一起写makefile](http://blog.csdn.net/haoel/article/details/2886/)
-> + gdb: [用gdb调试程序](http://blog.csdn.net/haoel/article/details/2879)
-> + oh-my-zsh: [我的ohz配置](https://github.com/bwangel23/oh-my-zsh)
-> + tcpdump: [A tcpdump Primer with Examples](https://danielmiessler.com/study/tcpdump/)
-> + wireshare: [Wireshark User's Guide](https://www.wireshark.org/docs/wsug_html_chunked/index.html)
+## 技术书籍
+
++ [Docker——容器与容器云](https://book.douban.com/subject/26593175/)
+
+## 非技术书籍
+
++ [言论的边界](https://book.douban.com/subject/4850629/)
 
 # Blog Logs
 
