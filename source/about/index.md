@@ -27,11 +27,13 @@ layout: page
 
 ## 技术书籍
 
++ [TCP/IP 详解：卷1](https://book.douban.com/subject/1088054/)
 + [Docker——容器与容器云](https://book.douban.com/subject/26593175/)
 
 ## 非技术书籍
 
-+ [言论的边界](https://book.douban.com/subject/4850629/)
++ [中国近代史](https://book.douban.com/subject/2376486/)
++ ~~[言论的边界](https://book.douban.com/subject/4850629/)~~
 
 # Blog Logs
 
