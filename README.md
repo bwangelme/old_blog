@@ -3,6 +3,6 @@ My Blog
 
 This is my [blog](http://www.bwangel.me/)!
 
-It is powered by [Hexo](https://github.com/hexojs/hexo), and uses the [even theme](https://github.com/ahonn/hexo-theme-even)
+It is powered by [Hugo](https://gohugo.io/), and uses the theme [hugo-nuo](https://github.com/laozhu/hugo-nuo)
 
-And you can view it on [http://www.bwangel.me/](http://www.bwangel.me/)
+It was deployed on the [http://www.bwangel.me/](http://www.bwangel.me/)

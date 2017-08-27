@@ -23,8 +23,8 @@ weight: 40
 
 ### 文档翻译
 
-> + 个人翻译官方文档的仓库：[Translate](https://github.com/bwangel23/Translate)
-> + 随意翻译的一些，不为给别人参考，仅为自我学习。
++ 个人翻译官方文档的仓库：[Translate](https://github.com/bwangel23/Translate)
++ 随意翻译的一些，不为给别人参考，仅为自我学习。
 
 ## 正在读的书
 
@@ -40,6 +40,7 @@ weight: 40
 
 ## Blog Logs
 
++ 2017年08月27日: 将博客从 Hexo 迁移到了 [Hugo](https://gohugo.io/)
 + 2017年01月04日：更换博客主题为 [even](https://github.com/ahonn/hexo-theme-even)
 + 2016年12月10日: 博客仓库重命名为[blog](https://github.com/bwangel23/blog)
 + 2016年10月30日：将文档翻译移动到了[Github 仓库](https://github.com/bwangel23/Translate)，博客用来发表原创文章
