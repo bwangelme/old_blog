@@ -7,9 +7,6 @@ tags: [MySQL]
 __摘要:__
 
 > 1. MySQL 语句中 from 部分的子查询
-> 2. 参考链接：
->> + [Select last N rows from MySQL](http://stackoverflow.com/questions/12125904/select-last-n-rows-from-mysql/12125925#12125925)
->> + [Subqueries in the FROM Clause](http://dev.mysql.com/doc/refman/5.7/en/from-clause-subqueries.html)
 
 
 <!--more-->
@@ -81,3 +78,8 @@ SELECT AVG(sum_column1)
 ```
 
 这里需要注意的是，在子查询中使用的`sum_column1`列在外部查询中也可以被识别出来。
+
+## 参考链接：
+
++ [Select last N rows from MySQL](http://stackoverflow.com/questions/12125904/select-last-n-rows-from-mysql/12125925#12125925)
++ [Subqueries in the FROM Clause](http://dev.mysql.com/doc/refman/5.7/en/from-clause-subqueries.html)
