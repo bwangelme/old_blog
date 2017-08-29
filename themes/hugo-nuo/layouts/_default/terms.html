@@ -1,0 +1,21 @@
+{{ define "title" }}
+  {{ if isset .Site.Params "seotitle" }}{{ .Site.Params.seotitle }}{{ else }}{{ .Site.Title }}{{ end }}
+  → Tags
+{{ end }}
+
+{{ define "main" }}
+  {{ partial "header.html" . }}
+  <section class="main post-list">
+    <header class="list-header offscreen">
+      <h2 class="list-label">Tags List</h2>
+    </header>
+    {{ $data := .Data }}
+
+    {{ range $key,$value := .Data.Terms.ByCount }}
+      <h2>
+        <a href="/{{ $data.Plural }}/{{ $value.Name | urlize }}"> {{ $value.Name }} </a> {{ $value.Count }}
+      </h2>
+    {{ end }}
+  </section>
+  {{ partial "footer.html" . }}
+{{ end }}

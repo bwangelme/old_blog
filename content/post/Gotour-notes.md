@@ -1,6 +1,6 @@
 ---
 title: Gotour学习笔记
-date: 2017-08-13 13:54:25
+date: 2017-08-29 08:32:02
 tags: [Golang, ]
 ---
 
@@ -9,6 +9,93 @@ tags: [Golang, ]
 > 1. Gotour的学习笔记
 
 <!--more-->
+
+## 字符串
+
+### 字符串的格式化
+
+```go
+package main
+
+import "fmt"
+import "os"
+
+type point struct {
+	x, y int
+}
+
+func main() {
+	p := point{1, 2}
+
+	// 输出结构体的值
+	fmt.Printf("%v\n", p)
+
+	// 输出结构体的变量名和值
+	fmt.Printf("%+v\n", p)
+
+	// 输出变量的 Go 语法表示
+	fmt.Printf("%#v\n", p)
+
+	// 输出变量的类型
+	fmt.Printf("%T\n", p)
+
+	// 直接格式化布尔值
+	fmt.Printf("%t\n", true)
+
+	// 输出数值
+	fmt.Printf("%d\n", 123)
+
+	// 输出数字的二进制表示
+	fmt.Printf("%b\n", 14)
+
+	// 输出数字编码所对应的字符
+	fmt.Printf("%c\n", 33)
+
+	// 输出数字的十六进制表示
+	fmt.Printf("%x\n", 456)
+
+	// 输出浮点数
+	fmt.Printf("%f\n", 78.9)
+
+	// 输出数字的科学计数法，使用e
+	fmt.Printf("%e\n", 123400000.0)
+
+	// 输出数字的科学计数法，使用E
+	fmt.Printf("%E\n", 123400000.0)
+
+	// 输出字符串
+	fmt.Printf("%s\n", "\"string\"")
+
+	// 输出原始未转义的字符串
+	fmt.Printf("%q\n", "\"string\"")
+
+	// 输出字符串的十六进制表示
+	fmt.Printf("%x\n", "hex this")
+
+	// 输出指针的表示
+	fmt.Printf("%p\n", &p)
+
+	// 控制输出长度
+	fmt.Printf("|%6d|%6d|\n", 12, 345)
+
+	// 控制小数点后的总位数，6表示输出长度
+	fmt.Printf("|%6.2f|%6.2f|\n", 1.2, 3.45)
+
+	// 用-进行左对齐
+	fmt.Printf("|%-6.2f|%-6.2f|\n", 1.2, 3.45)
+
+	// 控制字符串的输出长度和对齐方式
+	fmt.Printf("|%6s|%6s|\n", "foo", "b")
+	fmt.Printf("|%-6s|%-6s|\n", "foo", "b")
+
+	// 将字符串输出到字符串中
+	s := fmt.Sprintf("a %s", "string")
+	fmt.Println(s)
+
+	// 将字符串输出到IO流中
+	fmt.Fprintf(os.Stderr, "an %s\n", "error")
+}
+```
 
 ## 包，变量，和函数
 
