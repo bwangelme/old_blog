@@ -42,3 +42,28 @@ tags: ["Network", "Notes"]
 + PUSH 标记
   + 发送方通知接收方的 TCP 立即将接收到的数据发送给应用程序，这些数据包括 PSH 标记携带的数据和所有 TCP 为这个应用程序接收的数据。
 + 许多 TCP 实现在窗口大小增加了两个最大报文段长度，或者窗口大小增加到最大可能窗口的50%后，会向对端发送窗口更新报文。
+
+### 慢启动
+
+发送方设置一个拥塞窗口(Congestion Window)cwnd。
+
+1. 连接建立后 cwnd = 1， 表明可以传发送方网络链路一个 MSS 大小的数据。
+2. 每收到一个 ACK，cwnd++
+3. 每经过一个 RTT，cwnd = cwnd * 2
+4. 当`cwnd >= ssthresh(slow start threshold)`时，就会进入拥塞避免算法
+
+Linux 3.0以后根据 Google 一篇论文[《An Argument for Increasing TCP’s Initial CongestionWindow》](http://static.googleusercontent.com/media/research.google.com/zh-CN//pubs/archive/36640.pdf)的建议，将 cwnd 初始化为10个 MSS。在 Linux 3.0之前，比如2.6，Linux 则采用了 [RFC3390](http://www.rfc-editor.org/rfc/rfc3390.txt)，cwnd 是根据 MSS 的值变化的，变化方式如下所示：
+
+```
+if MSS < 1095 {
+  cwnd = 4
+} else if MSS > 2190 {
+  cwnd = 2
+} else {
+  cwnd = 3
+}
+```
+
+## 参考文章
+
+1. [TCP 的那些事（下）](https://coolshell.cn/articles/11609.html)
