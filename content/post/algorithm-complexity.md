@@ -1,9 +1,13 @@
 ---
 title: "算法复杂度小记"
 date: 2017-09-08T00:24:12+08:00
-tags: [Algorithm, ]
+tags: [Algorithm, Notes]
 draft: false
 ---
+
+本文主要书写了本人对于算法复杂度的一些理解，并辅以一些例子进行说明
+
+<!--more-->
 
 ## 算法复杂度的概念
 
