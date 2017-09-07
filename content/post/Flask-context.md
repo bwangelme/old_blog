@@ -2,6 +2,7 @@
 title: 简单聊聊Flask中的request,g
 date: 2017-01-22 23:40:08
 tags: [Python, Flask]
+draft: true
 ---
 
 > 简单说了一下Flask中的应用上下文，请求上下文，以及 request,g 和 session 这三个变量。

@@ -1,7 +1,8 @@
 ---
-title: "[未完成]More advanced if usage"
+title: "More advanced if usage"
 date: 2016-10-03 09:52:51
 tags: [翻译, Bash]
+draft: true
 ---
 
 __摘要__:

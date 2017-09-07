@@ -1,7 +1,7 @@
 ---
-title: Gotour学习笔记
+title: Golang 学习笔记
 date: 2017-08-29 08:32:02
-tags: [Golang, ]
+tags: [Golang, Notes]
 ---
 
 > __摘要__:

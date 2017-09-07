@@ -1,7 +1,7 @@
 ---
 title: "【流水账】利用闲置笔记本搭建自己的开发服务器"
 date: 2017-03-27 16:41:36
-tags: [Ubuntu, DNS]
+tags: [Ubuntu, DNS, 折腾]
 ---
 
 1. 对Ubuntu服务器进行基础配置
