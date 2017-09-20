@@ -117,6 +117,76 @@ func deferPrint() {
 
 `add`函数会在`fmt.Println("Good night")`语句之前调用并返回8，实际执行的`defer`调用`fmt.Println(8)`则会在`deferPrint`函数退出的时候调用。
 
+
+### 闭包
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func initSeq(i int) func() int {
+	// 这里i一直保存的是历史的值
+	return func() int {
+		i++
+		return i
+	}
+}
+
+func closure(x int) func(int) int {
+	return func(y int) int {
+		// 这里打印出来的两个地址是相同的，说明x引用的是自外部函数的值
+		return x + y
+	}
+}
+
+func closureFor() {
+	for i := 0; i < 10; i++ {
+		go func() {
+			// 它引用的是外部i变量的指针，并没有将i的值复制，所有反映的是i实时的值
+			fmt.Println(i)
+		}()
+	}
+}
+
+func main() {
+	seq := initSeq(5)
+
+	fmt.Println(seq())
+	fmt.Println(seq())
+	fmt.Println(seq())
+
+	add3 := closure(3)
+	fmt.Println("add3:", add3(4))
+
+	closureFor()
+
+	time.Sleep(2 * time.Second)
+
+}
+// 程序输出结果
+// >>> go run closures.go                                                                           20:27:32 (09-20)
+// 6
+// 7
+// 8
+// 0xc42006e1d0
+// 0xc42006e1d0
+// add3: 7
+// 4
+// 10
+// 10
+// 10
+// 10
+// 10
+// 10
+// 10
+// 10
+// 10
+```
+
 ## 接口
 
 ### 接口的基础定义
