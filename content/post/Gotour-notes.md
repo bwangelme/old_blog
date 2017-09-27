@@ -10,6 +10,133 @@ tags: [Go, Notes]
 
 <!--more-->
 
+## 控制结构
+
+### for 循环
+
+`range`分句能够迭代数组，切片，字符串，map，或者 channel 等多种数据结构。它会返回两个值，分别代表【索引，值】（数组，切片，字符串），【键，值】（map），【值，是否关闭】（channel）等多种情况。
+
+如果你只想要取 range 返回的第一个值，可以直接丢掉第二个：
+```go
+for key := range map[string]string{"Name": "bwangel"} {
+  fmt.Println(key)
+}
+```
+
+如果你想获取 range 返回的第二个值，需要使用空白标识符`_`来丢弃第一个:
+```go
+for _, value := range []int{1, 2, 3} {
+  fmt.Println(value)
+}
+```
+
+对于字符串，range 分句做了很多事情，它通过解析 UTF-8 编码将字符串按照独立的码点分割开来。对于无效的编码，它认为其是一个独立的字节，并将其转换成了 rune U+FFFD 的形式。其中 rune 是 Go 语言中的一个术语，用来表示单个 Unicode 码点。下面的循环:
+```go
+for pos, char := range "中国\x80汉字" {
+  fmt.Printf("%d: %#U\n", pos, char)
+}
+```
+将会打印:
+```bash
+0: U+4E2D '中'
+3: U+56FD '国'
+6: U+FFFD '�'
+7: U+6C49 '汉'
+10: U+5B57 '字'
+```
+
+最后，Go 将没有逗号的操作符和`++`，`--`视作语句而不是表达式，意味着`i++`无法成为右值进行赋值。如果你想要累加一个数字并进行赋值，可以考虑使用并行赋值(这样就杜绝了`++`和`--`的赋值):
+```go
+// Reverse a
+for i, j := 0, len(a)-1; i < j; i, j = i+1, j-1 {
+    a[i], a[j] = a[j], a[i]
+}
+```
+
+### switch 语句
+
+在 Go 语言中，并不需要使用`break`语句来跳出 switch 语句块，它碰到匹配的 case 子句并运行其中的代码后，就会自动退出。但是可以使用`break`语句来跳出外层的 for 循环。
+```go
+for i:= 0; i < 100; i++ {
+  switch i {
+  case 10:
+    fmt.Println(i)
+    break
+  }
+}
+```
+
+同时，`break`语句也可以跳到一个指定的标签上，
+```go
+//TODO: 下面这段代码还需要去理解一下
+Loop:
+	for n := 0; n < len(src); n += size {
+		switch {
+		case src[n] < sizeOne:
+			if validateOnly {
+				break
+			}
+			size = 1
+			update(src[n])
+
+		case src[n] < sizeTwo:
+			if n+1 >= len(src) {
+				err = errShortInput
+				break Loop
+			}
+			if validateOnly {
+				break
+			}
+			size = 2
+			update(src[n] + src[n+1]<<shift)
+		}
+	}
+```
+
+最后，我们使用一个比较 byte 切片的函数来结束这一小节，
+
+```go
+func Compare(a, b []byte) int {
+	for i := 0; i < len(a) && i < len(b); i++ {
+		switch {
+		case a[i] > b[i]:
+			return 1
+		case a[i] < b[i]:
+			return -1
+		}
+	}
+
+	switch {
+	case len(a) > len(b):
+		return 1
+	case len(a) < len(b):
+		return -1
+	}
+
+	return 0
+}
+```
+
+### 类型 switch
+
+我们可以使用`v.(type)`来判断一个空接口类型变量的动态类型，当在`switch`的表达式内声明了一个变量，这个变量将会拥有合适的类型。
+```go
+var t interface{}
+t = functionGetSomeType()
+switch t := t.(type) {
+default:
+    fmt.Printf("unexpected type %T\n", t)     // %T prints whatever type t has
+case bool:
+    fmt.Printf("boolean %t\n", t)             // t has type bool
+case int:
+    fmt.Printf("integer %d\n", t)             // t has type int
+case *bool:
+    fmt.Printf("pointer to boolean %t\n", *t) // t has type *bool
+case *int:
+    fmt.Printf("pointer to integer %d\n", *t) // t has type *int
+}
+```
+
 ## 字符串
 
 ### 字符串的格式化
