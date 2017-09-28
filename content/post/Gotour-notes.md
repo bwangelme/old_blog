@@ -314,6 +314,25 @@ func main() {
 // 10
 ```
 
+### 命名返回值
+
+Go 函数中的结果参数可以被命名，命名后就会像参数一样当做一个普通变量来对待。当函数初始化的时候，它们被初始化成对应类型的零值，当函数执行`return`语句的时候，结果参数的当前值就会被当做返回值。__注意，当函数签名声明了返回值以后，函数必须要调用`return`语句进行返回__。
+
+结果参数的名字并不是强制的，但是它可以让代码变得更加清晰。有一版本的`io.ReadFull`就是这样做的的:
+```go
+// 注意传入的 buf 是一个数组，这个函数将会最多阅读 len(buf) 个字节到buf中
+func ReadFull(r Reader, buf []byte) (n int, err error) {
+    for len(buf) > 0 && err == nil {
+        var nr int
+        nr, err = r.Read(buf)
+        n += nr
+        // 刚开始 buf 是数组，这条语句调用后 buf 就变成切片了
+        buf = buf[nr:]
+    }
+    return
+}
+```
+
 ## 接口
 
 ### 接口的基础定义
