@@ -228,21 +228,52 @@ func main() {
 
 ### defer
 
-`defer`进行延迟调用的参数会立刻生成，但是在上层函数返回前defer指定的函数都不会被调用，例如下面的代码:
++ `defer`进行延迟调用的参数会立刻生成，但是在上层函数返回前defer指定的函数都不会被调用。
++ 如果有多个`defer`函数，它们的执行顺序是按照 LIFO 顺序来执行的。
 
 ```go
-func add(x, y int) int {
-    fmt.Println("add")
-    return x + y
+package main
+
+import (
+	"fmt"
+)
+
+func trace(s string) string {
+	fmt.Println("entering:", s)
+	return s
 }
 
-func deferPrint() {
-    defer fmt.Println(add(3, 5))
-    fmt.Println("Good night")
+func un(s string) {
+	fmt.Println("leaving:", s)
 }
+
+func a() {
+	defer un(trace("a"))
+	fmt.Println("in a")
+}
+
+func b() {
+	// 在函数进入的时候参数首先就被求值了
+	defer un(trace("b"))
+	// 这里的两个`defer`语句，b函数退出的时候会先执行`secondb` 再执行`b`，按照 LIFO 顺序
+	defer un(trace("second b"))
+	fmt.Println("in b")
+	a()
+}
+
+func main() {
+	b()
+}
+
+// entering: b
+// entering: second b
+// in b
+// entering: a
+// in a
+// leaving: a
+// leaving: second b
+// leaving: b
 ```
-
-`add`函数会在`fmt.Println("Good night")`语句之前调用并返回8，实际执行的`defer`调用`fmt.Println(8)`则会在`deferPrint`函数退出的时候调用。
 
 
 ### 闭包
@@ -331,6 +362,258 @@ func ReadFull(r Reader, buf []byte) (n int, err error) {
     }
     return
 }
+```
+
+## 数据
+
+### 使用`new`分配
+
+```go
+func new(Type) *Type
+```
+
+`new`将会生成一个`Type`的实例，这个实例将会被初始化成对应的0值。`sync.Mutex`类型的0值是一个未锁定的`mutex`
+
+### 构造器和复合字面值
+
+有时候我们要初始化一个复合类型，但是它的值我们需要初始化成0值以外的其他值，例如当我们创建一个文件的时候:
+
+```go
+func NewFile(fd int, name string) *File {
+	if fd < 0 {
+		return nil
+	}
+	f := new(File)
+	f.fd = fd
+	f.name = name
+	f.dirinfo = nil
+	f.nepipe = 0
+	return f
+}
+```
+
+上面很多赋值语句显得很冗余，我们可以使用复合字面值来初始化一个复合类型的实例:
+
+```go
+func NewFile(fd int, name string) *File {
+	if fd < 0 {
+		return nil
+	}
+	return &File{fd, name, nil, 0}
+}
+```
+
+需要注意的是，Go 和 C 不同，它可以返回一个局部变量的地址，和这个值相关的存储空间在函数返回以后继续存在。
+事实上，获取一个复合字面值声明的地址每回在它求值的时候将会生成一个新的实例。
+
+复合字面值的声明我们除了可以按照上面的方式声明外，我们也可以按照键值对的方式来声明:
+
+```go
+return &File{fd: fd, name: name}
+```
+
+没有传入的字段将会被初始化成对应的0值，如何它一个字段也没有传入，将会声明一个0值的类型。`&File{}`等价于`new(File)`。
+
+复合字面值也可以用来声明切片，数组和 map。它可以把字段名当做索引或者 map 的键。
+
+```go
+package main
+
+import "fmt"
+
+const (
+	Enone = iota
+	Eio
+	Einval
+)
+
+func main() {
+
+	a := [...]string{Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
+	s := []string{Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
+	m := map[int]string{Enone: "no error", Eio: "Eio", Einval: "invalid argument"}
+
+	fmt.Println(a)
+	fmt.Println(s)
+	fmt.Println(m)
+}
+
+// [no error Eio invalid argument]
+// [no error Eio invalid argument]
+// map[0:no error 1:Eio 2:invalid argument]
+```
+
+### 使用 make 分配空间
+
+`slice`是一个三元组描述器，它们是一个指向数据的指针，长度和容量，在这三个元素被初始化之前，`slice`都是`nil`。
+`make`仅仅用来创建`slice`，`map`和`channel`，`make`函数初始化好它们内部的数据结构，并准备好初始化的值。
+
+下面的例子展示了制造`slice`时`make`和`new`的不同，
+
+```go
+// p 是一个指向切片的指针，不过这个切片的三元组描述器都没初始化，所以 *p == nil
+var p *[]int = new([]int)       // 很少用到
+// v 是一个切片，它的三元组描述器被初始化了，它指向一个容量为100的 int 数组
+var v  []int = make([]int, 100)
+
+// 不必要的复杂步骤
+var p *[]int = new([]int)
+*p = make([]int, 100, 100)
+
+// 常用的初始化切片的方法
+v := make([]int, 100)
+```
+
+### 数组
+
+Go 中数组的一些特点:
+
+1. 数组是值，将一个数组赋值给另外一个会拷贝它的所有元素
+2. 如何你给一个函数传递一个数组参数，函数将会接收数组的拷贝，而不是指向数组的指针
+3. 数组的长度是它类型的一部分，`[10]int`和`[20]int`是不同的类型
+
+### 切片
+
+`append`向切片中添加元素，如果添加元素的长度超出了切片的容量(切片的容量可由cap函数获取)，那么就会重新分配一个切片。`append`函数会将原始的或者新分配的切片返回。
+
+```go
+func main() {
+	s := make([]int, 10, 11)
+	fmt.Printf("s: %p\n", &s[0])
+	s = append(s, 20)
+	fmt.Printf("s: %p\n", &s[0])
+	s = append(s, 20)
+	// 这里可以看到s[0]的地址变了，说明切片指向的数组进行了重新分配，变成了另外一个数组
+	fmt.Printf("s: %p\n", &s[0])
+
+	// s: 0xc4200180c0
+	// s: 0xc4200180c0
+	// s: 0xc420076000
+}
+```
+
+### 二维切片
+
+```go
+type Transform [3][3]float64  // 一个3x3的二维数组
+type LinesOfText [][]byte     // 一个二维切片
+```
+
+因为切片的长度是由变量确定的(数组的长度是由类型确定的)，所以二维切片的每个内部切片都可以有不同的长度，就像我们声明的`LinesOfText`类型，它内部的每个切片的长度都是不同的。
+
+```go
+l := LinesOfText {
+	[]byte("竹杖芒鞋轻胜马"),
+	[]byte("一蓑烟雨任平生"),
+}
+```
+
+二维切片可以每次单独分配，也可以更有效的一次分配。
+
+每次单独分配耗时会更多，但是每个内部的一维切片相互独立，不会相互影响。
+
+```go
+// Allocate the top-level slice.
+picture := make([][]uint8, YSize) // One row per unit of y.
+// 在图片上循环，在每一行上分配一个表示当前行像素点的切片
+for i := range picture {
+	picture[i] = make([]uint8, XSize)
+}
+
+// 这种分配方式，每行的像素点存在一个数组中
+```
+
+一次分配耗时会更短，但是内部的每个一维切片不能增加或缩短，否则可能会影响到相邻的一维切片。
+
+```go
+// Allocate the top-level slice
+picture := make([][]uint8, YSize) // One row per unit of y.
+// 一次地分配好图片上所有的像素点
+pixels := make([]uint8, XSize*YSize)
+// 在每一行上循环，每次将总的像素点前面的元素分配到图片的每一行上
+for i := range picture {
+	picture[i], pixels = pixels[:XSize], pixels[XSize:]
+}
+
+// 这种分配方式，所有的像素点都存在同一个数组中
+```
+
+### map
+
+任何定义了相等操作符的类型都可以是`map`的`key`。整数，浮点数，复数，字符串，指针，接口（只要这个指针对应的动态类型定义了相等操作符），结构体和数组等都可以是`map`的`key`。
+切片不能是`map`的`key`，因为切片没有定义相等操作符。
+
+`map`可以使用复合字面值的语法进行声明，使用冒号来分割键和值:
+
+```go
+var timeZone = map[string]int{
+	"UTC": 0 * 60 * 60,
+	"EST": -5 * 60 * 60,
+	"CST": -6 * 60 * 60,
+	"MST": -7 * 60 * 60,
+	"PST": -8 * 60 * 60,
+}
+```
+
+如果通过一个不存在的`key`从`map`中获取值的时候，`map`将会返回它的值的零值。`timeZone["NOT_EXIST"] == 0`。我们可以通过这个特性来实现`set`类型。
+
+```go
+attended := map[string]bool{
+	"Ann": true,
+	"Joe": true,
+}
+
+// key 不存在的时候默认返回的是 bool 的零值也就是 false
+if attended[person] {
+	fmt.Println(person, "was at the meeting")
+}
+```
+
+有时候我们需要区分`map`中的一个`key`是不存在还是它的值就是零值，我们可以使用`map[key]`返回的第二个返回值进行区分。
+
+```go
+func main() {
+	var timeZone = map[string]int{
+		"UTC": 0 * 60 * 60,
+		"EST": -5 * 60 * 60,
+		"CST": -6 * 60 * 60,
+		"MST": -7 * 60 * 60,
+		"PST": -8 * 60 * 60,
+	}
+
+	seconds, ok := timeZone["UTC"] // ok == true
+	seconds, ok = timeZone["UTF"] // ok == false
+}
+```
+
+像上面这种写法我们称之为"comma ok"方言，它可以和`if`语句一起组成一种优雅的写法:
+
+```go
+func offset(tz string) int {
+	var timeZone = map[string]int{
+		"UTC": 0 * 60 * 60,
+		"EST": -5 * 60 * 60,
+		"CST": -6 * 60 * 60,
+		"MST": -7 * 60 * 60,
+		"PST": -8 * 60 * 60,
+	}
+	if seconds, ok := timeZone[tz]; ok {
+		return seconds
+	}
+	log.Println("unknown time zone:", tz)
+	return 0
+}
+```
+
+如果只想查看某个`key`是否在`map`中存在而不关心它的值的话，我们可以使用`_`忽略掉值:
+
+```go
+_, present := timeZone[tz]
+```
+如果想要删除掉`map`中的某个`key`，我们可以使用`delte`內建函数，如果要删除的`key`在`map`中不存在的话，它也不会抛出任何异常。
+
+```go
+delete(timeZone, "PDT")  // 要删除的 key 不存在
 ```
 
 ## 接口
