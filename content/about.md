@@ -9,34 +9,10 @@ weight: 40
 
 ## 个人配置
 
-### Vim
-
-+ [dotvim](https://github.com/bwangel23/dotvim)
-+ Fork 自[wklken/k-vim](https://github.com/wklken/k-vim)，并做了大量改动
-
-### Zsh
-
-+ [dotzsh](https://github.com/bwangel23/dotzsh)
-+ Fork 自[lilydjwg/dotzsh](https://github.com/lilydjwg/dotzsh)
-
-## 项目
-
-### 文档翻译
-
-+ 个人翻译官方文档的仓库：[Translate](https://github.com/bwangel23/Translate)
-+ 随意翻译的一些，不为给别人参考，仅为自我学习。
-
-## 正在读的书
-
-### 技术书籍
-
-+ [TCP/IP 详解：卷1](https://book.douban.com/subject/1088054/)
-+ [Docker——容器与容器云](https://book.douban.com/subject/26593175/)
-
-### 非技术书籍
-
-+ [中国近代史](https://book.douban.com/subject/2376486/)
-+ ~~[言论的边界](https://book.douban.com/subject/4850629/)~~
+名字|描述
+---|---
+[dotvim](https://github.com/bwangel23/dotvim) | Fork 自[wklken/k-vim](https://github.com/wklken/k-vim)，并做了大量改动
+[dotzsh](https://github.com/bwangel23/dotzsh) | Fork 自[lilydjwg/dotzsh](https://github.com/lilydjwg/dotzsh)
 
 ## Blog Logs
 

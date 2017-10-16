@@ -137,93 +137,6 @@ case *int:
 }
 ```
 
-## 字符串
-
-### 字符串的格式化
-
-```go
-package main
-
-import "fmt"
-import "os"
-
-type point struct {
-    x, y int
-}
-
-func main() {
-    p := point{1, 2}
-
-    // 输出结构体的值
-    fmt.Printf("%v\n", p)
-
-    // 输出结构体的变量名和值
-    fmt.Printf("%+v\n", p)
-
-    // 输出变量的 Go 语法表示
-    fmt.Printf("%#v\n", p)
-
-    // 输出变量的类型
-    fmt.Printf("%T\n", p)
-
-    // 直接格式化布尔值
-    fmt.Printf("%t\n", true)
-
-    // 输出数值
-    fmt.Printf("%d\n", 123)
-
-    // 输出数字的二进制表示
-    fmt.Printf("%b\n", 14)
-
-    // 输出数字编码所对应的字符
-    fmt.Printf("%c\n", 33)
-
-    // 输出数字的十六进制表示
-    fmt.Printf("%x\n", 456)
-
-    // 输出浮点数
-    fmt.Printf("%f\n", 78.9)
-
-    // 输出数字的科学计数法，使用e
-    fmt.Printf("%e\n", 123400000.0)
-
-    // 输出数字的科学计数法，使用E
-    fmt.Printf("%E\n", 123400000.0)
-
-    // 输出字符串
-    fmt.Printf("%s\n", "\"string\"")
-
-    // 输出原始未转义的字符串
-    fmt.Printf("%q\n", "\"string\"")
-
-    // 输出字符串的十六进制表示
-    fmt.Printf("%x\n", "hex this")
-
-    // 输出指针的表示
-    fmt.Printf("%p\n", &p)
-
-    // 控制输出长度
-    fmt.Printf("|%6d|%6d|\n", 12, 345)
-
-    // 控制小数点后的总位数，6表示输出长度
-    fmt.Printf("|%6.2f|%6.2f|\n", 1.2, 3.45)
-
-    // 用-进行左对齐
-    fmt.Printf("|%-6.2f|%-6.2f|\n", 1.2, 3.45)
-
-    // 控制字符串的输出长度和对齐方式
-    fmt.Printf("|%6s|%6s|\n", "foo", "b")
-    fmt.Printf("|%-6s|%-6s|\n", "foo", "b")
-
-    // 将字符串输出到字符串中
-    s := fmt.Sprintf("a %s", "string")
-    fmt.Println(s)
-
-    // 将字符串输出到IO流中
-    fmt.Fprintf(os.Stderr, "an %s\n", "error")
-}
-```
-
 ## 函数
 
 ### defer
@@ -616,6 +529,449 @@ _, present := timeZone[tz]
 delete(timeZone, "PDT")  // 要删除的 key 不存在
 ```
 
+### 打印
+
+`Println`系列的函数会将每个逗号都变成空格，并且会在输出的结尾加上换行符
+
+`Print`系列函数仅仅会将两边都不是字符串的逗号变成空格。
+
+```go
+fmt.Print(23, "hello world", 42, true) // `23hello world42 true`
+```
+
+`Fprint`系列的函数的第一个参数是实现了`io.Writer`接口的对象，变量`os.Stdout`和`os.Stderr`都是实现了这个接口的对象。
+
+在 Go 中，格式化数字的字符串（例如%d）并不会向C语言那样传递是否有符号的标记，或者长度的标记（`%u`, `%lu`），它是根据参数的类型来输出对应的结果。
+
+```go
+var x uint64 = 1<<64 - 1 // x 为64位无符号整数的最大值
+fmt.Printf("%d %x, %d %x\n", x, x, int64(x), int64(x)) // 将 x 转换成 int64 类型整数将会溢出
+
+// 18446744073709551615 ffffffffffffffff, -1 -1
+```
+
+关于其他的格式化字符串，说明如下：
+
+```go
+type point struct {
+	x, y int
+}
+
+func main() {
+	p := point{1, 2}
+
+	// 输出结构体的值或者其他任意类型的值
+	// Print 和Println 函数默认使用的就是这个格式化字符串
+	fmt.Printf("%v\n", p)
+
+	// 输出结构体的变量名和值
+	fmt.Printf("%+v\n", p)
+
+	// 输出变量的 Go 语法表示
+	fmt.Printf("%#v\n", p)
+
+	// 输出变量的类型
+	fmt.Printf("%T\n", p)
+
+	// 直接格式化布尔值
+	fmt.Printf("%t\n", true)
+
+	// 输出数值
+	fmt.Printf("%d\n", 123)
+
+	// 输出数字的二进制表示
+	fmt.Printf("%b\n", 14)
+
+	// 输出数字编码所对应的字符
+	fmt.Printf("%c\n", 33)
+
+	// 输出数字的十六进制表示
+	fmt.Printf("%x\n", 456)
+
+	// 输出浮点数
+	fmt.Printf("%f\n", 78.9)
+
+	// 输出数字的科学计数法，使用e
+	fmt.Printf("%e\n", 123400000.0)
+
+	// 输出数字的科学计数法，使用E
+	fmt.Printf("%E\n", 123400000.0)
+
+	// 输出字符串
+	fmt.Printf("%s\n", "\"string\"") // "string"
+
+	// 输出原始未转义的字符串
+	fmt.Printf("%q\n", "\"string\"") // "\"string\""
+
+	// 输出不带转义符号的原始字符串
+	fmt.Printf("%#q\n", "\"string\"") // `"string"`
+
+	// 输出数字的单引号表示
+	fmt.Printf("%q\n", 3) // '\x03'
+
+	// 输出字符串的十六进制表示
+	fmt.Printf("%x\n", "hex this") // 6865782074686973
+
+	// 在输出的字节中添加上空格
+	fmt.Printf("%x\n", "hex this") // 68 65 78 20 74 68 69 73
+
+	// 输出指针的表示
+	fmt.Printf("%p\n", &p)
+
+	// 控制输出长度
+	fmt.Printf("|%6d|%6d|\n", 12, 345)
+
+	// 控制小数点后的总位数，6表示输出长度
+	fmt.Printf("|%6.2f|%6.2f|\n", 1.2, 3.45)
+
+	// 用-进行左对齐
+	fmt.Printf("|%-6.2f|%-6.2f|\n", 1.2, 3.45)
+
+	// 控制字符串的输出长度和对齐方式
+	fmt.Printf("|%6s|%6s|\n", "foo", "b")
+	fmt.Printf("|%-6s|%-6s|\n", "foo", "b")
+
+	// 将字符串输出到字符串中
+	s := fmt.Sprintf("a %s", "string")
+	fmt.Println(s)
+
+	// 将字符串输出到IO流中
+	fmt.Fprintf(os.Stderr, "an %s\n", "error")
+}
+```
+
+如果你想要更改自定义类型的默认字符串格式，只需要给这个类型实现`String() string`方法即可。
+注意如果想要更改某个类型的值及其指针的打印方式，应该讲传入的类型变量设置成值传入
+
+```go
+// Point 是二维坐标中的一个点
+type Point struct {
+	x, y int
+}
+
+// 这个方法只会改变 *p 的格式化字符串
+func (p *Point) String() string {
+	return fmt.Sprintf("[%d, %d]", p.x, p.y)
+}
+
+// 这个方法会改变 p 和 *p 的格式化字符串
+func (p Point) String() string {
+	return fmt.Sprintf("[%d, %d]", p.x, p.y)
+}
+
+func main() {
+	p := &Point{2, 3}
+	fmt.Println(p)
+}
+```
+
+注意在`String() string`方法中不要再来通过`Printf`系列的函数打印类型`p`本身，以免产生递归调用`String() string`方法的情况。
+
+```go
+type MyString string
+
+func (m MyString) String() string {
+    return fmt.Sprintf("MyString=%s", m) // 这里将会产生递归调用的错误
+}
+```
+
+如果想要避免上述的错误，只需要将类型`MyString`转换成基类就可以了
+
+```go
+type MyString string
+
+func (m MyString) String() string {
+    return fmt.Sprintf("MyString=%s", string(m)) // 这里将不再会产生递归调用的错误
+}
+```
+
+我们还可以自定义传递任意个参数的打印函数，我们可以通过`v ...Type`声明一个类型是`Type`的参数v，表示这个参数有任意个。然后通过`v...`的方式将这个参数传递到可以接收任意个参数的函数中，`v...`表示v是多个参数，而不是单个切片参数。如果我们将`v`的类型声明成`interface{}`，那么就表示这个参数`v`可以是任意类型。
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+type User struct {
+	nickname string
+	age      int
+	gender   bool
+}
+
+func Println(v ...interface{}) {
+	os.Stderr.WriteString(fmt.Sprintln(v...))
+}
+
+func main() {
+	u := User{
+		nickname: "bwangel",
+		age:      23,
+		gender:   false,
+	}
+	Println("xff", 2, u)
+}
+```
+
+同时，我们也可以直接把切片当做`v...`传递进入函数中,下面这个获取最小值的整数，我们直接将整个切片传入进去，再返回其中的最小值。
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func min(a ...int) int {
+	// 将0取反再右移一位，会得到最大的有符号整数
+	minValue := int(^uint(0) >> 1) // 首先将 minValue 声明成最大的整数
+
+	for _, value := range a {
+		if value < minValue {
+			minValue = value
+		}
+	}
+
+	return minValue
+}
+
+func main() {
+	a := []int{2, 3, -4, 0}
+	fmt.Println(min(a...))
+}
+```
+
+### 整数
+
+Go 中获取整数最大值和最小值的方法：
+
+```go
+const MaxUint = ^uint(0)
+const MinUint = 0
+const MaxInt = int(MaxUint >> 1)
+const MinInt = -MaxInt - 1
+```
+
+整数的取值范围如下:
+
+```
+uint8  : 0 to 255
+uint16 : 0 to 65535
+uint32 : 0 to 4294967295
+uint64 : 0 to 18446744073709551615
+int8   : -128 to 127
+int16  : -32768 to 32767
+int32  : -2147483648 to 2147483647
+int64  : -9223372036854775808 to 9223372036854775807
+```
+
+Go 中将一个数值赋值给一个整型变量的时候，数值不能超出这个整型变量的范围。
+
+```go
+var b int8 = int8(255)
+// 抛出panic，constant 255 overflows int8
+```
+
+上面的代码中将255类型强转了，但255并没有溢出转换成-1，而是抛出 panic 。
+
+### Append 函数
+
+Go 內建的`append`函数签名如下:
+
+```go
+func append(slice []T, elements ...T) []T
+```
+
+其中`T`是一个表示任意类型的占位符，你无法用 Go 语言实现这样一个`T`由调用者确定的函数，`append`的实现得到了编译器的支持，所以它是一个內建函数。
+
+当我们想把两个切片合并的时候，只需要向上面那样通过`s...`的方式传递切片函数即可，
+```go
+func main() {
+	x := []int{1, 2, 3}
+	y := []int{4, 5, 6}
+
+	x = append(x, y...)
+	fmt.Println(x)
+}
+```
+
+如果直接使用`append(x, y)`的话，程序将会抛出异常，因为`y`和`x`的元素的类型`int`不匹配。
+
+
+## 初始化
+
+### 常量
+
+Go 中的常量是在编译的时候由编译器创建的，它仅可以是数字，字符(runes)，字符串和布尔值。因为其在编译期创建的缘故，所以如果将一个表达式赋值给常量，这个表达式必须是可以被编译器求值的。例如`1 << 3`就是可以被编译器求值的，而`math.Sin(math.Pi/4)`就不可以，因为函数的调用发生在运行时期。
+
+使用`iota`枚举器可以生成若干个枚举的常量。
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+// ByteSize 表示字节类型
+type ByteSize float64
+
+// 一些常用的字节单位常量
+const (
+	_           = iota // 初始值 0 被忽略掉了
+	KB ByteSize = 1 << (10 * iota)
+	MB
+	GB
+	TB
+	PB
+	EB
+	ZB
+	YB
+)
+
+// 返回 ByteSize 的字符串表示
+// 注意 fmt.Sprintf("%.2f", b)不会产生递归调用，
+//	因为只有当Sprintf想要获取某个类型对应的字符串表示的时候，其才会调用这个类型对应的String函数
+//	这里使用 %f 进行格式化，只需要 ByteSize 类型的浮点数表示，所以不会调用 String 函数
+func (b ByteSize) String() string {
+	switch {
+	case b >= YB:
+		return fmt.Sprintf("%.2fYB", b/YB)
+	case b >= ZB:
+		return fmt.Sprintf("%.2fZB", b/ZB)
+	case b >= EB:
+		return fmt.Sprintf("%.2fEB", b/EB)
+	case b >= PB:
+		return fmt.Sprintf("%.2fPB", b/PB)
+	case b >= TB:
+		return fmt.Sprintf("%.2fTB", b/TB)
+	case b >= GB:
+		return fmt.Sprintf("%.2fGB", b/GB)
+	case b >= MB:
+		return fmt.Sprintf("%.2fMB", b/MB)
+	case b >= KB:
+		return fmt.Sprintf("%.2fKB", b/KB)
+	}
+	return fmt.Sprintf("%.2fb", b)
+}
+
+func main() {
+	fmt.Println(ByteSize(YB))
+}
+```
+
+### 变量
+
+变量可以像常量一样初始化，不过它们可以使用在运行时计算值的表达式。
+
+```go
+var (
+	home   = os.Getenv("HOME")
+	user   = os.Getenv("USER")
+	gopath = os.Getenv("GOPATH")
+)
+```
+
+### init 函数
+
++ 每个文件都可以包含`init`函数，`init`函数会在文件内所有的变量都被求值以后再执行，而变量求值会在所有导入文件都被执行以后再执行。
++ `init`函数可以有多个，它们会按顺序执行。
+
+```go
+package main
+
+import (
+	"flag"
+	"fmt"
+	"log"
+	"os"
+)
+
+var (
+	home = os.Getenv("HOME")
+	user = os.Getenv("USER")
+)
+
+var gopath string
+
+func init() {
+	if user == "" {
+		log.Fatal("$USER not set")
+	}
+	if home == "" {
+		home = "/home/" + user
+	}
+	if gopath == "" {
+		gopath = home + "/go"
+	}
+	// 在init函数中完成了命令行参数的绑定，flag包用来解析命令行参数
+	// gopath may be overridden by --gopath flag on command line.
+	flag.StringVar(&gopath, "gopath", gopath, "override default GOPATH")
+}
+
+func main() {
+	flag.Parse()
+	fmt.Println(home, user, gopath)
+}
+```
+
+## 方法
+
+### 指针 VS  值
+
+在一个类型上实现的方法可以细分为__指针类型方法__和__值类型方法__。
+
+```go
+// ByteSlice 字节切片
+type ByteSlice []byte
+
+// Append 向 ByteSlice 中添加元素
+func (p *ByteSlice) Write(data []byte) (n int, err error) {
+	slice := *p
+	l := len(slice)
+	if l+len(data) > cap(slice) { // reallocate
+		// Allocate double what's needed, for future growth.
+		newSlice := make([]byte, (l+len(data))*2)
+		// The copy function is predeclared and works for any slice type.
+		copy(newSlice, slice)
+		slice = newSlice
+	}
+	slice = slice[0 : l+len(data)]
+	for i, c := range data {
+		slice[l+i] = c
+	}
+	*p = slice
+
+	return len(data), nil
+}
+
+// 返回 ByteSlice 变量的长度
+func (b ByteSlice) String() string {
+	return fmt.Sprintf("%d", len(b))
+}
+
+func main() {
+	var b ByteSlice
+
+	// Fprintf函数使用指针的原因是， io.Write 接口 Write 是指针类型方法
+	// 值类型方法可以被 *ByteSlice 和 ByteSlice 类型的变量调用，但是指针类型方法只可以被 *ByteSlice 类型的变量调用
+	fmt.Fprintf(&b, "hello, %s", "golang")
+	fmt.Printf("%s", b)
+}
+```
+
+上面的代码中，Write 是指针类型方法，String 是值类型方法。
+
+两者的调用规则是:
+
++ 值类型变量和指针类型变量都可以调用值类型方法
++ 只有指针类型变量能够调用指针类型方法
++ 使用值类型变量之间调用指针类型方法的时候，Go 编译器会自动插入取地址符。(b.Write -> &b.Write)
+
+这么规定的原因是指针类型方法传入的 receiver 是指针，它可以改变原始变量的值。如果值类型变量能够调用指针类型方法的话，那么传递给指针类型方法的 receiver 就是值的拷贝（值类型变量传递给其类型方法时一般是先拷贝，再传递）。这样导致对于变量的修改无效，所以规定__只有指针类型变量能够调用指针类型方法__。
+
 ## 接口
 
 ### 接口的基础定义
@@ -631,7 +987,7 @@ delete(timeZone, "PDT")  // 要删除的 key 不存在
 
 例如下面这段代码中:
 
-```
+```go
 var r io.Reader
 tty, err := os.OpenFile("/dev/tty", os.O_RDWR, 0)
 r = tyy
