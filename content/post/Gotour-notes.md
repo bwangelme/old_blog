@@ -137,6 +137,35 @@ case *int:
 }
 ```
 
+如果我们只关心一种类型，可以使用从 switch 语法分句那借来的语法进行类型判断。
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+// getString 如果 o 是 string 类型，解析的结果 str 会被转换成字符串类型，否则 str 会变成空字符串
+func getString(o interface{}) (string, bool) {
+	str, ok := o.(string)
+	fmt.Printf("Type of %v: %T\n", str, str)
+
+	return str, ok
+}
+
+func main() {
+	fmt.Println(getString(3))
+	fmt.Println(getString("233"))
+
+	// Type of : string
+	//  false
+	// Type of 233: string
+	// 233 true
+
+}
+```
+
 ## 函数
 
 ### defer
@@ -968,9 +997,10 @@ func main() {
 
 + 值类型变量和指针类型变量都可以调用值类型方法
 + 只有指针类型变量能够调用指针类型方法
-+ 使用值类型变量之间调用指针类型方法的时候，Go 编译器会自动插入取地址符。(b.Write -> &b.Write)
++ 使用值类型变量直接调用指针类型方法的时候，Go 编译器会自动插入取地址符。(b.Write -> &b.Write)
++ 指针类型变量调用值类型方法是先通过引用获取到值，再传递给值类型方法，即实际传递的是一个新的值的拷贝
 
-这么规定的原因是指针类型方法传入的 receiver 是指针，它可以改变原始变量的值。如果值类型变量能够调用指针类型方法的话，那么传递给指针类型方法的 receiver 就是值的拷贝（值类型变量传递给其类型方法时一般是先拷贝，再传递）。这样导致对于变量的修改无效，所以规定__只有指针类型变量能够调用指针类型方法__。
+这么规定的原因是指针类型方法传入的 receiver 是指针，它可以改变原始变量的值。如果值类型变量能够调用指针类型方法的话，那么传递给指针类型方法的 receiver 就是值的拷贝（例如当做函数参数的时候传入的是值的拷贝，再调用指针类型方法，改变的实际是函数的参数，而不是我们传入的值）。这样导致对于变量的修改无效，所以规定__只有指针类型变量能够调用指针类型方法__。
 
 ## 接口
 
@@ -1112,6 +1142,133 @@ func main() {
 ```
 
 在上面的代码中我们可以看到，实现`USB`接口需要实现两个方法，`Name() string`和`Connect()`，而`TVConnector`类型就只实现了一个方法，所以它不能被转换成`USB`类型的变量。
+
+### 例子
+
+一个类型只要实现了`sort.Sort`规定的接口（即实现，Len, Less, Swap 这三个方法），就可以被`sort.Sort`函数调用。
+
+```go
+package main
+
+import (
+	"fmt"
+	"sort"
+)
+
+// Sequence 整型序列类型
+type Sequence []int
+
+// Len 获取 Sequence 的长度
+func (s Sequence) Len() int {
+	return len(s)
+}
+
+// Less 比较 Sequence 中两个元素的大小
+func (s Sequence) Less(i, j int) bool {
+	return s[i] < s[j]
+}
+
+// Swap 交换 Sequence 中的两个元素
+func (s Sequence) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
+
+// String 打印 Sequence 中的元素
+func (s Sequence) String() string {
+	str := "["
+	for i, v := range s {
+		if i > 0 {
+			str += ", "
+		}
+		str += fmt.Sprintf("%v", v)
+	}
+	str += "]"
+
+	return str
+}
+
+func main() {
+	var s Sequence = []int{2, 3, 5, 9, -1, 0, 1e10}
+
+	fmt.Println("Before sort:", s)
+	// 只要一个类型实现了 Len, Less, Swap 这三个方法，他就可以被 sort 函数调用
+	// sort.Sort(s)
+	// 也可以将 Sequence 类型转换成 []int 类型然后调用 []int 类型的方法进行排序
+	sort.IntSlice(s).Sort()
+	fmt.Println("After sort:", s)
+
+	// Before sort: [2, 3, 5, 9, -1, 0, 10000000000]
+	// After sort: [-1, 0, 2, 3, 5, 9, 10000000000]
+}
+```
+
+创建 HTTP 服务器。
+
+HTTP 服务器的`ListenAndServe`第二个参数为实现了`http.Handler`接口的实例（即实现了`ServeHTTP(ResponseWriter, *Request)`方法），至于是如何实现的，它并不关心，所以它的第二个参数可以是结构体，布尔类型，甚至是函数。
+
+当`ListenAndServe`方法的第二个参数是函数的时候，需要使用`http.HandlerFunc`做一层代理，即`http.HandlerFunc`实现了`ServeHTTP`方法，它在`ServeHTTP`方法中，再将请求和响应交给传入的函数进行处理。
+
+```go
+package main
+
+import (
+	"os"
+	"fmt"
+	"log"
+	"net/http"
+)
+
+// Counter 页面访问次数统计
+type Counter struct {
+	n  int
+	ch chan *http.Request
+}
+
+// ServerHTTP 可以作为一个 HTTP Handler
+func (ctr *Counter) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	ctr.ch <- r
+	ctr.n++
+	log.Println(ctr.n)
+	fmt.Fprintln(w, "notifiction sent")
+}
+
+var counter Counter
+
+// Receiver 接收请求的回调
+func Receiver() {
+	request := <-counter.ch
+	log.Println("Receiver: request url is ", request.URL)
+}
+
+func init() {
+	counter = Counter{
+		1, make(chan *http.Request, 1),
+	}
+}
+
+func ArgServer(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, os.Args)
+}
+
+func main() {
+
+	go func() {
+		for {
+			Receiver()
+		}
+	}()
+
+	// 指针类型调用值类型方法的时候是先通过引用获得值，再进行赋值传递
+	log.Println("Server PV Service on 0.0.0.0:8000")
+
+	server := http.NewServeMux()
+	server.Handle("/args", http.HandlerFunc(ArgServer))
+	server.Handle("/", &counter)
+
+	http.ListenAndServe(":8000", server)
+}
+```
+
 
 ## 错误
 
