@@ -1269,6 +1269,62 @@ func main() {
 }
 ```
 
+## 空白标识符
+
+### 未使用的包和变量
+
+当我们在开发程序的时候，有时候程序写到一半，需要编译一下验证一下错误。但是这时可能存在一些导入了没有使用的包或者一些定义了但没有使用的变量。为了编译通过，我们通常会把这些包和变量先删除掉，编译过后再添加上，但这样显得太繁琐了，我们可以使用空白标识符来解决这个问题。
+
+```go
+package main
+
+import (
+    "fmt"
+	"os"
+	"io"
+	"log"
+)
+
+var _ io.ByteReader // delete when done
+
+func main() {
+	path := "/tmp/"
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		fmt.Printf("%s does not exist", path)
+	} else {
+		fd, err := os.Open("/tmp/abcd")
+		if err != nil {
+			log.Fatal(err)
+		}
+		_ = fd
+	}
+
+}
+```
+
+上面的代码中我们的`io`包和变量`fd`都暂时没有使用，我们可以将他们用空白标识符声明，这一就可以编译通过了，同时我们应该写上注释，在完成后将这些语句删除。
+
+### 使用包的初始化功能
+
+```go
+package main
+
+import (
+	"log"
+	"net/http"
+	_ "net/http/pprof"
+)
+
+func main() {
+	log.Fatal(http.ListenAndServe(":8000", nil))
+}
+```
+
+`net/http/pprof`包在初始化函数中在默认的`ServerMux`上注册了几个 Handler，我们仅仅需要使用这些默认的 Handler，而不需要使用`net/http/pprof`包中的功能。
+
+在这种情况下，我们可以使用`import _ "net/http/pprof"`语句，这样我们的程序默认只运行了`net/http/pprof`的初始化程序，但是不会导致有导入包未使用的编译错误。
+
+### TODO Interface checks
 
 ## 错误
 
