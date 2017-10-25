@@ -1330,6 +1330,49 @@ func main() {
 
 + 当我们想要重写嵌入类型的某个方法时，我们可以直接在外部类型上重写这个方法，然后方法内再调用这个内部类型的实例。
 
+## 并发编程
+
+### 缓冲区的复用
+
+```go
+var freeList = make(chan *Buffer, 100)
+var serverChan = make(chan *Buffer)
+
+func client() {
+    for {
+        var b *Buffer
+        // Grab a buffer if available; allocate if not.
+        select {
+        case b = <-freeList:
+            // Got one; nothing more to do.
+        default:
+            // None free, so allocate a new one.
+            b = new(Buffer)
+        }
+        load(b)              // Read next message from the net.
+        serverChan <- b      // Send to server.
+    }
+}
+```
+
+```go
+func server() {
+    for {
+        b := <-serverChan    // Wait for work.
+        process(b)
+        // Reuse buffer if there's room.
+        select {
+        case freeList <- b:
+            // Buffer on free list; nothing more to do.
+        default:
+            // Free list full, just carry on.
+        }
+    }
+}
+```
+
+上面的代码实现了缓冲区的复用，服务端每次处理完 buffer 中的数据后，就将这个缓冲区返回给客户端。客户端接收到缓冲区后继续使用，如果客户端接收不到缓冲区，则申请新的缓冲区来使用。服务端发现缓冲区队列写满了之后，会将无用的 Buffer 直接丢弃掉，重新从客户端那里读取（gc 会将其自动回收）。
+
 ## 错误
 
 + 当一个自定义类型实现了`error`接口，那么当使用`fmt.Println`函数打印这个类型的时候，就会调用这个类型的`Error`函数，获取这个类型的错误信息。
@@ -1417,3 +1460,63 @@ func main() {
     io.Copy(os.Stdout, &r)
 }
 ```
+
+## Web 服务器
+
+```go
+package main
+
+import (
+	"flag"
+	"fmt"
+	"html/template"
+	"log"
+	"net/http"
+)
+
+var addr = flag.String("addr", ":8888", "server listen address")
+var templ = template.Must(template.New("qr").Parse(templateStr))
+
+func main() {
+	flag.Parse()
+
+	http.HandleFunc("/", Chart)
+	err := http.ListenAndServe(*addr, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+// Chart 根路径的处理函数
+// 将输入的内容更通过Google API 转换成二维码
+func Chart(w http.ResponseWriter, r *http.Request) {
+	data := map[string]string{
+		"content": r.FormValue("qr_content"),
+	}
+	fmt.Println(data)
+	templ.Execute(w, data)
+}
+
+var templateStr = `
+<html>
+<head>
+<title>QR Link Generator</title>
+</head>
+<body>
+{{if .content}}
+<img src="http://chart.apis.google.com/chart?chs=300x300&cht=qr&choe=UTF-8&chl={{.}}" />
+<br>
+{{ .content }}
+<br>
+<br>
+{{end}}
+<form action="/" name=f method="POST">
+	<input maxLength=1024 size=70 name=qr_content value="" title="Text to QR Encode">
+	<input type=submit value="Show QR" name=qr>
+</form>
+</body>
+</html>
+`
+```
+
+上面的代码创造了一个二维码生成网站，在网站上输入内容，即可通过 Google 的 API 生成相应地代码。
