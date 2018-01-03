@@ -177,7 +177,7 @@ func main() {
 
 这里的内容比较绕，理解起来可能不太容易，大家可以参考下面的图进行理解：
 
-![golang-reflect](https://imgs.bwangel.me/2017-09-16-1505538303474.jpg)
+![golang-reflect](http://owcwlb3jm.bkt.clouddn.com/2017-09-16-1505538303474.jpg)
 
 
 ## 反射的示例
