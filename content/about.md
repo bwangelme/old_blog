@@ -16,6 +16,7 @@ weight: 40
 
 ## Blog Logs
 
++ 2018年01月12日：博客文章全部迁移到CSDN，原 GitHub 仓库作为备份，[新地址](http://blog.csdn.net/u012291393)
 + 2017年08月27日: 将博客从 Hexo 迁移到了 [Hugo](https://gohugo.io/)
 + 2017年01月04日：更换博客主题为 [even](https://github.com/ahonn/hexo-theme-even)
 + 2016年12月10日: 博客仓库重命名为[blog](https://github.com/bwangel23/blog)

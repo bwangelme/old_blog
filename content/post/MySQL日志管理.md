@@ -1,5 +1,13 @@
-MySQL日志管理
-=============
+---
+title: "MySQL 日志管理"
+date: 2018-01-01T10:34:15+08:00
+draft: false
+tags: [MySQL, ]
+---
+
+__简介__: 讲述了MySQL中的二进制日志
+
+<!--more-->
 
 
 ## 1. MySQL日志分类
