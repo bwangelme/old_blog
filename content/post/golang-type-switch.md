@@ -161,3 +161,7 @@ func main() {
 		}
 	}
 ```
+
+## 参考链接
+
++ [The Go Programming Language Specification](https://golang.org/ref/spec#Type_switches)
