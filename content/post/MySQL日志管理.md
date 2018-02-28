@@ -5,7 +5,7 @@ draft: false
 tags: [MySQL, ]
 ---
 
-__简介__: 讲述了MySQL中的二进制日志
+__简介__: 讲述了MySQL中的日志及配置方式
 
 <!--more-->
 
@@ -18,7 +18,7 @@ __简介__: 讲述了MySQL中的二进制日志
 + 慢查询日志: 记录执行时间超过指定时间的操作
 + 中继日志: 备库将主库的日志复制到自己的中继日志中
 + 通用日志: 审计哪个账号、在哪个时段、做了哪些事情
-+ 事务日志或称redo日志: 记录InnoDB事务相关如事务执行时间，检查点等
++ 事务日志或称redo日志: 记录InnoDB事务相关的内容如事务执行时间，检查点等
 
 ## 2. 二进制日志
 
@@ -61,11 +61,10 @@ MIXED 格式默认使用 STATEMENT 格式来记录，但是在某些情况下会
 
 + 每台 MySQL 服务器只能设定自己的二进制日志格式，主服务器更改了日志格式后，并不会影响从服务器。
 + 如果使用的是 InnoDB 存储引擎，且事务隔离级别是`读提交`或`读未提交`的时候，只能设置日志格式为`ROW`。此时你也可以将二进制日志格式改成`STATEMENT`，但是此时 MySQL 会快速地报很多错误，因为 InnoDB 不能够再执行插入操作了。
-+ 不建议在运行时切换 MySQL 复制的格式，因为临时表仅仅可以通过`ROW`格式的复制来记录，`STATEMENT`格式的复制并不会记录临时表。
-+ 当使用`MIXED`的复制时，临时表通常都会记录，但是当使用了用户自定义函数或使用了`UUID()`函数就不会记录了。
++ 不建议在运行时切换 MySQL 复制的格式，因为运行过程中有临时表的存在。临时表在`STATEMENT`格式下会被记录，但当它在`ROW`格式下的时候就不会被记录了。当处于`MIXED`格式的时候，临时表通常都会记录，但是当使用了用户自定义函数或使用了`UUID()`函数就不会记录了。
 + 我们通常可以使用`ROW`日志格式来获得更好的可靠性，但是`ROW`日志格式会导致二进制日志文件非常大。
 
-### 2.4 启用
+### 2.4 启用二进制日志
 
 ```sh
 # 编辑 MySQL 配置文件，添加以下的选项
@@ -99,17 +98,17 @@ mysql> SET SQL_LOG_BIN=0;
 mysql> SET SQL_LOG_BIN=1;
 ```
 
-### 2.6 查看日志
+### 2.6 查看二进制日志
 
 ```sh
 # 查看MySQL二进制的日志
 
-pwd
+> pwd
 /usr/local/mysql/data
-mysqlbinlog mysql-bin.000002
+> mysqlbinlog mysql-bin.000002
 
-# at 120 表名从第120个字节开始
-# 下面这句表名了执行时间(年月日 时分秒)和服务器id
+# at 120 # 表明从第120个字节开始
+# 下面这句表明了执行时间(年月日 时分秒)和服务器id
 #160314  2:07:47 server id 1  end_log_pos 214 CRC32 0xa10bdfa4 	Query	thread_id=1	exec_time=0	error_code=0
 SET TIMESTAMP=1457892467/*!*/;
 SET @@session.pseudo_thread_id=1/*!*/;
@@ -120,8 +119,17 @@ SET @@session.auto_increment_increment=1, @@session.auto_increment_offset=1/*!*/
 SET @@session.character_set_client=33,@@session.collation_connection=33,@@session.collation_server=33/*!*/;
 SET @@session.lc_time_names=0/*!*/;
 SET @@session.collation_database=DEFAULT/*!*/;
-create database xff1
+create database xff1  # 这里是创建数据库的语句
 /*!*/;
 DELIMITER ;
 # End of log file
 ```
+
+## 3 慢查询日志
+
+和慢查询日志相关的配置有如下几个:
+
++ `slow_query_log` 表示是否开启慢查询日志，可选值为`ON`和`OFF`
++ `long_query_time` 表示如果一条语句的查询时间超出了这个值，这条语句就会被记录到慢查询日志中。在MySQL中，语句的查询时间是实际时间而不是CPU时间，所以同一条SQL语句在负载高的系统中的查询时长可能比在负载低的系统中的查询时长要大。`long_query_time`值可以是浮点数，它可以精确到微秒。
++ `slow_query_log_file` 表示慢查询日志文件的路径
++ `log_queries_not_using_indexes` 表示会将没有使用索引的查询语句记录到慢查询日志中
