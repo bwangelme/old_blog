@@ -1,7 +1,7 @@
 ---
 title: "InnoDB 行记录格式"
 date: 2018-01-30T12:51:59+08:00
-draft: false
+draft: true
 tags: [MySQL, ]
 ---
 
@@ -18,7 +18,7 @@ InnoDB 是 MySQL 的一种面向行(row-oriented)存储引擎，即在其中数�
 
 从 InnoDB 的逻辑存储结构上看，所有的数据都被存储在一个空间中，这个空间就叫做表空间，表空间又是由段(segment)，区(extent)和页(Page)组成的，页在某些文档中也被称为块(block)。它们之间的关系可以用下图表示:
 
-![](http://imgs.bwangel.me/2018-01-11-InnoDB%20%E9%80%BB%E8%BE%91%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84.png)
+![](https://imgs.bwangel.me/2018-01-11-InnoDB%20%E9%80%BB%E8%BE%91%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84.png)
 
 ### 表空间
 
