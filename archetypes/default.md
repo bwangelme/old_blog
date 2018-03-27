@@ -2,6 +2,7 @@
 title: "{{ replace .TranslationBaseName "-" " " | title }}"
 date: {{ .Date }}
 draft: true
-tags: [Golang, ]
+tags: [Tag, ]
 ---
 
+<!--more-->

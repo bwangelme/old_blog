@@ -7,6 +7,8 @@ tags: [Redis, C语言]
 
 本文主要介绍了 Redis 的基础数据结构 dict 的实现，并描述了其渐进式 rehash 的操作
 
+__注意__: 本文基于 Redis 3.0.0 的代码进行分析的。
+
 <!--more-->
 
 ## dict 介绍
