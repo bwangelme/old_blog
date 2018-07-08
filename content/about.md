@@ -7,7 +7,12 @@ menu: "main"
 weight: 40
 ---
 
-## 个人配置
+## 博客目的
+
++ 我在学习知识的过程中，总觉得看过书了，写过代码了，并非真的懂了，非得将所学写成一篇文章，才算学会了。并且写的这些文章，在后来也常常会帮助到我。
++ 故有此博客，望能伴我余生。
+
+## 个人开发环境配置项目
 
 名字|描述
 ---|---
@@ -16,6 +21,7 @@ weight: 40
 
 ## Blog Logs
 
++ 2018年07月08日: 将博客迁移到了 [Github Page](http://bwangel23.github.io)
 + 2018年01月12日：博客文章全部迁移到CSDN，原 GitHub 仓库作为备份，[新地址](http://blog.csdn.net/u012291393)
 + 2017年08月27日: 将博客从 Hexo 迁移到了 [Hugo](https://gohugo.io/)
 + 2017年01月04日：更换博客主题为 [even](https://github.com/ahonn/hexo-theme-even)

@@ -7,7 +7,7 @@ tags: [Redis, C语言]
 
 本文主要介绍了 Redis 的基础数据结构 dict 的实现，并描述了其渐进式 rehash 的操作
 
-__注意__: 本文基于 Redis 3.0.0 的代码进行分析的。
+__注意__: 本文基于 Redis 3.0.0 的代码进行分析的
 
 <!--more-->
 
@@ -78,7 +78,7 @@ typedef struct dictIterator {
 
 他们之间的关系如图1所示:
 
-![图1](https://imgs.bwangel.me/2018-03-10-054715.png)
+![图1](https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-03-10-054715.png)
 
 __图1__
 
@@ -109,7 +109,7 @@ dict 按照使用方式的不同，所采取的哈希算法也不同。Redis目�
 
 当出现键冲突的时候，dict会将两个键值对存放在同一个哈希表的同一个索引下，它们通过单链表的形式组合起来，如图2所示：
 
-![图2](https://imgs.bwangel.me/2018-03-13-155621.jpg)
+![图2](https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-03-13-155621.jpg)
 
 __图2__
 
@@ -190,3 +190,4 @@ def iter_table(table):
 而对于非安全迭代器，Redis 规定在非安全迭代器的生命周期内只能执行`dictNext()`操作，不能执行其他操作，从而避免了 rehash 操作。
 
 同时 Redis 在创建非安全迭代器的时候会获取 dict 的指纹，在释放非安全迭代器的时候重新获取指纹，检查两次指纹是否相同。如果不同，证明 dict 被修改过，Redis 就会抛出异常。
+

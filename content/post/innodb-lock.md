@@ -1,5 +1,5 @@
 ---
-title: "Innodb 锁机制"
+title: "InnoDB 锁机制"
 date: 2018-03-04T13:22:46+08:00
 draft: false
 tags: [MySQL, ]
@@ -193,7 +193,7 @@ IS|Conflict|Compatible|Compatible|Compatible
 
 一致性非锁定读是指 InnoDB 存储引擎通过行多版本控制(multi version)的方式来读取当前执行时间数据库中行的数据。具体来说就是如果一个事务读取的行正在被锁定，那么它就会去读取这行数据之前的快照数据，而不会等待这行数据上的锁释放。这个读取流程如图1所示:
 
-![图1](https://imgs.bwangel.me/2018-03-06-052802.png)
+![图1](https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-03-06-052802.png)
 
 行的快照数据是通过undo段来实现的，而undo段用来回滚事务，所以快照数据本身没有额外的开销。此外，读取快照数据时不需要上锁的，因为没有事务会对快照数据进行更改。
 
@@ -585,4 +585,4 @@ Time: 0.007s
 2. https://dev.mysql.com/doc/refman/5.7/en/lock-tables.html
 3. https://www.percona.com/blog/2012/07/31/innodb-table-locks/
 4. http://hedengcheng.com/?p=771#_Toc374698309
-5. 《MySQL 技术内幕 -- InnoDB 存储引擎》第二版，第六章
+5. 《MySQL 技术内幕 -- InnoDB 存储引擎》 第二版，第六章
