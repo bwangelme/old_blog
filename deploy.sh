@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm -rf public/ && rm -rf .deploy_git/*
 hugo
 cp -r public/* .deploy_git/
 cd .deploy_git
