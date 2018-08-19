@@ -51,7 +51,7 @@ with transaction.atomic():
 
 我看了一下`get_or_create`的实现，它的执行过程应该是这样的:
 
-![](http://passage-1253400711.cos.ap-beijing.myqcloud.com/2017-12-15-065033.jpg)
+![](https://passage-1253400711.cos.ap-beijing.myqcloud.com/2017-12-15-065033.jpg)
 
 由于`get_or_create`实际上执行了三个事务，如果我们没有手动地把它放在一个事务中的话，它应该是不会抛出`IntegrityError`异常的。如果我们手动地把它放在一个事务中的话，而数据库的隔离级别又是可重复读的话，那么就很容易出现 @LeoJay 所说的情况，数据取又取不出来，存又存不进去。
 
