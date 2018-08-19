@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>MySQL索引</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍MySQL索引
+ 
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="MySQL索引" />
+    <meta name="twitter:description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍MySQL索引
+ 
+" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="MySQL索引" />
+  <meta property="og:description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍MySQL索引
+ 
+" />
+  <meta property="og:url" content="/2016/04/10/mysql%E7%B4%A2%E5%BC%95/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2016/04/10/mysql%E7%B4%A2%E5%BC%95/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">MySQL索引</h1>
+      <p class="post-meta">@BWANGEL · Apr 10, 2016 · 2 min read</p>
+    </header>
+    <article class="post-content"><p><strong>摘要</strong>:</p>
+
+<blockquote>
+<p>这是一篇关于MySQL的文章，主要介绍MySQL索引</p>
+</blockquote>
+
+<p></p>
+
+<h1 id="mysql索引">MySQL索引</h1>
+
+<p>##1. 索引简介</p>
+
+<p>索引在MySQL中也叫作键，是存储引擎用于快速找到记录的一种数据结构</p>
+
+<p>索引优化应该是对查询性能优化最有效的手段了</p>
+
+<p>相当于字典中的音序表，如果没有音序表，则需要一页一页去查</p>
+
+<p>##2. 索引分类</p>
+
+<p>|说明|普通索引|唯一索引|全文索引|单列索引|多列索引|空间索引|
+|&ndash;|&ndash;|&ndash;|&ndash;|&ndash;|&ndash;|&ndash;|
+|存储引擎|所有存储引擎支持(同样的索引，不同存储类型，实现不同)|只有Memory支持|5.5及之前前仅MyISAM支持| | | |
+|特点|允许字段重复|不允许字段重复|针对<code>varchar</code>类型支持| |select语句条件有第一个字段时才会使用多列索引| | |</p>
+
+<p>##3. 测试</p>
+
+<p>###利用存储过程插入数据</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delimiter</span> <span class="err">$$</span> <span class="c1">--设置分隔符为$$
+</span><span class="c1">-- 定义一个存储过程
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">procedure</span> <span class="n">autoinsert1</span><span class="p">()</span>
+    <span class="o">-&gt;</span> <span class="k">BEGIN</span>
+    <span class="o">-&gt;</span> <span class="k">declare</span> <span class="n">i</span> <span class="nb">int</span> <span class="k">default</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="o">-&gt;</span> <span class="n">while</span><span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">20000</span><span class="p">)</span><span class="k">do</span>
+    <span class="o">-&gt;</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">school</span><span class="p">.</span><span class="n">t2</span> <span class="k">values</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;xff&#39;</span><span class="p">);</span>
+    <span class="o">-&gt;</span> <span class="k">set</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+    <span class="o">-&gt;</span> <span class="k">end</span> <span class="n">while</span><span class="p">;</span>
+    <span class="o">-&gt;</span> <span class="k">END</span><span class="err">$$</span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delimiter</span> <span class="p">;</span> <span class="c1">--还原分隔符为;
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">call</span> <span class="n">autoinsert1</span><span class="p">();</span> <span class="c1">--调用存储过程</span></code></pre></div>
+<p>创建存储过程要选择对应数据库，否则可能会报错</p>
+
+<p>###创建索引</p>
+
+<p>####1. 在创建表的时候创建索引</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">table</span> <span class="k">table_name</span><span class="p">(</span>
+<span class="err">字段名</span><span class="mi">1</span> <span class="err">数据类型</span> <span class="p">[</span><span class="err">完整性约束条件</span><span class="p">],</span>
+<span class="err">字段名</span><span class="mi">2</span> <span class="err">数据类型</span> <span class="p">[</span><span class="err">完整性约束条件</span><span class="p">],</span>
+<span class="p">[</span><span class="k">UNIQUE</span><span class="o">|</span><span class="n">FULLTEXT</span><span class="o">|</span><span class="n">SPATIAL</span><span class="p">]</span> <span class="k">INDEX</span><span class="o">|</span><span class="k">KEY</span>
+<span class="p">[</span><span class="err">索引名</span><span class="p">]</span> <span class="p">(</span><span class="err">字段名</span><span class="p">[(</span><span class="err">长度</span><span class="p">)]</span> <span class="p">[</span><span class="k">ASC</span><span class="o">|</span><span class="k">DESC</span><span class="p">])</span> <span class="c1">--ASC|DESC表示对索引进行排序
+</span><span class="c1">--字段名后的长度针对varchar类型
+</span><span class="c1"></span><span class="p">);</span></code></pre></div>
+<p>####2. 创建多列索引</p>
+
+<p>select在条件中使用第一个字段时才会使用索引</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">--创建表
+</span><span class="c1">--这里第一个字段为dept_name
+</span><span class="c1"></span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">show</span> <span class="k">create</span> <span class="k">table</span> <span class="n">dept4</span><span class="err">\</span><span class="k">G</span>
+<span class="o">***************************</span> <span class="mi">1</span><span class="p">.</span> <span class="k">row</span> <span class="o">***************************</span>
+       <span class="k">Table</span><span class="p">:</span> <span class="n">dept4</span>
+<span class="k">Create</span> <span class="k">Table</span><span class="p">:</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">dept4</span><span class="o">`</span> <span class="p">(</span>
+  <span class="o">`</span><span class="n">dept_id</span><span class="o">`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+  <span class="o">`</span><span class="n">dept_name</span><span class="o">`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+  <span class="o">`</span><span class="k">comment</span><span class="o">`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">dept_id</span><span class="o">`</span><span class="p">),</span>
+  <span class="k">KEY</span> <span class="o">`</span><span class="n">index_dept_name</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">dept_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="k">comment</span><span class="o">`</span><span class="p">)</span>
+<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">latin1</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 使用了索引
+</span><span class="c1">-- explain 解释这句如何执行，但是并不实际执行
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">explain</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">dept4</span> <span class="k">where</span> <span class="n">dept_name</span><span class="o">=</span><span class="s1">&#39;sale&#39;</span><span class="err">\</span><span class="k">G</span>
+<span class="o">***************************</span> <span class="mi">1</span><span class="p">.</span> <span class="k">row</span> <span class="o">***************************</span>
+           <span class="n">id</span><span class="p">:</span> <span class="mi">1</span>
+  <span class="n">select_type</span><span class="p">:</span> <span class="k">SIMPLE</span>
+        <span class="k">table</span><span class="p">:</span> <span class="n">dept4</span>
+         <span class="k">type</span><span class="p">:</span> <span class="k">ref</span>
+<span class="n">possible_keys</span><span class="p">:</span> <span class="n">index_dept_name</span>  <span class="c1">--这句表示使用了的索引的名字
+</span><span class="c1"></span>          <span class="k">key</span><span class="p">:</span> <span class="n">index_dept_name</span>
+      <span class="n">key_len</span><span class="p">:</span> <span class="mi">33</span>
+          <span class="k">ref</span><span class="p">:</span> <span class="n">const</span>
+         <span class="k">rows</span><span class="p">:</span> <span class="mi">1</span>                <span class="c1">-- 一共查询了多少行
+</span><span class="c1"></span>        <span class="n">Extra</span><span class="p">:</span> <span class="k">Using</span> <span class="k">where</span><span class="p">;</span> <span class="k">Using</span> <span class="k">index</span>
+<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">explain</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">dept4</span> <span class="k">where</span> <span class="k">comment</span><span class="o">=</span><span class="s1">&#39;sale001&#39;</span><span class="err">\</span><span class="k">G</span>
+<span class="o">***************************</span> <span class="mi">1</span><span class="p">.</span> <span class="k">row</span> <span class="o">***************************</span>
+           <span class="n">id</span><span class="p">:</span> <span class="mi">1</span>
+  <span class="n">select_type</span><span class="p">:</span> <span class="k">SIMPLE</span>
+        <span class="k">table</span><span class="p">:</span> <span class="n">dept4</span>
+         <span class="k">type</span><span class="p">:</span> <span class="k">index</span>
+<span class="n">possible_keys</span><span class="p">:</span> <span class="k">NULL</span>           <span class="c1">-- 这句表示没有使用索引
+</span><span class="c1"></span>          <span class="k">key</span><span class="p">:</span> <span class="n">index_dept_name</span>
+      <span class="n">key_len</span><span class="p">:</span> <span class="mi">86</span>
+          <span class="k">ref</span><span class="p">:</span> <span class="k">NULL</span>
+         <span class="k">rows</span><span class="p">:</span> <span class="mi">4</span>              <span class="c1">-- 一共查询了多少行
+</span><span class="c1"></span>        <span class="n">Extra</span><span class="p">:</span> <span class="k">Using</span> <span class="k">where</span><span class="p">;</span> <span class="k">Using</span> <span class="k">index</span>
+<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<p>####3. 在已存在的表上创建索引</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="p">[</span><span class="k">UNIQUE</span><span class="o">|</span><span class="n">FULLTEXT</span><span class="o">|</span><span class="n">SPATIAL</span><span class="p">]</span> <span class="k">INDEX</span> <span class="err">索引名</span>
+    <span class="k">ON</span> <span class="err">表名</span><span class="p">(</span><span class="err">字段名</span><span class="p">[(</span><span class="err">长度</span><span class="p">)]</span> <span class="p">[</span><span class="k">ASC</span><span class="o">|</span><span class="k">DESC</span><span class="p">]);</span>
+
+<span class="k">alter</span> <span class="k">table</span> <span class="err">表名</span> <span class="k">ADD</span> <span class="p">[</span><span class="k">UNIQUE</span><span class="o">|</span><span class="n">FULLTEXT</span><span class="o">|</span><span class="n">SPATIAL</span><span class="p">]</span> <span class="k">INDEX</span> <span class="err">索引名</span><span class="p">(</span><span class="err">字段名</span><span class="p">[(</span><span class="err">长度</span><span class="p">)]</span> <span class="p">[</span><span class="k">ASC</span><span class="o">|</span><span class="k">DESC</span><span class="p">]);</span></code></pre></div>
+<p>复制表</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 复制了表的内容和结构，但是没有复制表的key(约束)
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">t3</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">t2</span><span class="p">;</span>
+
+<span class="c1">-- 下面两条，复制了表的结构，但是没有内容，也没有复制表的key(约束)
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">t4</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">t2</span> <span class="k">where</span> <span class="mi">1</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">t5</span> <span class="k">like</span> <span class="n">t2</span><span class="p">;</span></code></pre></div>
+<p>##4. 管理索引</p>
+
+<p>查看索引
+<code>show create table 表名\G</code></p>
+
+<p>测试示例
+<code>explain select * from t2 where id = 1;</code>
+查看查询优化器做了哪些操作</p>
+
+<p><code>DROP INDEX 索引名 ON 表名</code>
+删除索引</p>
+
+<p>##5. 扩展</p>
+
+<p><a href="http://zh-sphinx-doc.readthedocs.org/en/latest/contents.html">Sphinx</a> 一个全文检索引擎，但是不支持中文。
+<a href="http://www.coreseek.cn/">Coreseek</a> 是一个可供企业使用的，基于Sphinx(可独立于Sphinx原始版本运行)的中文全文检索引擎</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/mysql"><span class="tag">MySQL</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>860</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2016/04/10/mysql%E7%B4%A2%E5%BC%95/");
+    var page_uniqueid = "eb6cf260d322fce3dfd74f3521a0057f";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

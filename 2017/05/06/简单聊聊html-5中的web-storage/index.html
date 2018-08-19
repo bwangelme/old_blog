@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>简单聊聊HTML 5中的Web Storage</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="  针对HTML5中的 Web Storage进行了介绍 主要介绍了存取API，有效周期，可用性检测等   
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="简单聊聊HTML 5中的Web Storage" />
+    <meta name="twitter:description" content="  针对HTML5中的 Web Storage进行了介绍 主要介绍了存取API，有效周期，可用性检测等   
+" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="简单聊聊HTML 5中的Web Storage" />
+  <meta property="og:description" content="  针对HTML5中的 Web Storage进行了介绍 主要介绍了存取API，有效周期，可用性检测等   
+" />
+  <meta property="og:url" content="/2017/05/06/%E7%AE%80%E5%8D%95%E8%81%8A%E8%81%8Ahtml-5%E4%B8%AD%E7%9A%84web-storage/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2017/05/06/%E7%AE%80%E5%8D%95%E8%81%8A%E8%81%8Ahtml-5%E4%B8%AD%E7%9A%84web-storage/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">简单聊聊HTML 5中的Web Storage</h1>
+      <p class="post-meta">@BWANGEL · May 6, 2017 · 1 min read</p>
+    </header>
+    <article class="post-content"><blockquote>
+<ol>
+<li>针对HTML5中的 Web Storage进行了介绍</li>
+<li>主要介绍了存取API，有效周期，可用性检测等</li>
+</ol>
+</blockquote>
+
+<p></p>
+
+<h2 id="基础概念">基础概念</h2>
+
+<p>存储对象是在客户端进行简单的键值对存储的对象，它们有一下特点。</p>
+
+<ol>
+<li>存储对象分为 localStorage 和 sessionStorage</li>
+<li>存储对象会在页面载入的时候完好地加载进来</li>
+<li>它们存储的都是键值对，就像对象一样</li>
+<li>存储对象的键和值都是<strong>字符串</strong>，数字的键和值会被自动转义成字符串</li>
+<li>可以使用以下的方式来访问 Web Storage</li>
+</ol>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">localStorage</span><span class="p">.</span><span class="nx">colorSetting</span> <span class="o">=</span> <span class="s1">&#39;#a4509b&#39;</span><span class="p">;</span>
+<span class="nx">localStorage</span><span class="p">[</span><span class="s1">&#39;colorSetting&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;#a4509b&#39;</span><span class="p">;</span>
+<span class="nx">localStorage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span><span class="s1">&#39;colorSetting&#39;</span><span class="p">,</span> <span class="s1">&#39;#a4509b&#39;</span><span class="p">);</span>
+</code></pre></div>
+<blockquote>
+<p>不过建议使用 Web Storage API (setItem, getItem, removeItem, key, length)来访问数据，为了防止使用明文对象作为键值存储时的<a href="http://www.2ality.com/2012/01/objects-as-maps.html">陷阱</a>。</p>
+</blockquote>
+
+<h2 id="分类">分类</h2>
+
+<h3 id="sessionstorage">sessionStorage</h3>
+
+<p>sessionStorage 为每个源 (域名) 分别维护了一个存储区域，有效期为整个页面会话。</p>
+
+<p>页面会话有效的情形:</p>
+
+<blockquote>
+<ol>
+<li>页面刷新</li>
+<li>页面通过前进或者后退回到这个页面</li>
+<li>页面关闭后通过<code>command + shift + T</code>恢复过来</li>
+</ol>
+</blockquote>
+
+<p>页面会话的失效的情形:</p>
+
+<blockquote>
+<ol>
+<li>页面关闭后重新打开</li>
+<li>另外打开一个页面，域名和本页面域名相同。</li>
+</ol>
+</blockquote>
+
+<p>以上有效和失效情形都是我在 Chrome 和 Firefox 中测试的，<strong>文档中并没有详细说明</strong>，如果有不对的地方，还望指正。</p>
+
+<h3 id="localstorage">localStorage</h3>
+
+<p>localStorage 也是为每个域名提供了一个类对象的存储区域，不过它是持久存储的，就算浏览器关闭并重新打开，它也不会失效。</p>
+
+<h3 id="注意">注意</h3>
+
+<p>浏览器为每个源都提供了两个不同的 localStorage 和 sessionStorage 对象，它们是相互独立的。</p>
+
+<h2 id="localstorage-的可用性检测">localStorage 的可用性检测</h2>
+
+<p>如果在一个浏览器中 localStorage 是可用的，那么就会存在一个对象<code>window.localStorage</code>来代表本地存储区域。但是由于各种情况，在一个页面中，localStorage 不一定是可用的。例如在 Safari 浏览器的隐身模式下，<code>window.localStorage</code>就是一个空对象，而且分配给它的容量是0。</p>
+
+<p>下面这个代码片段就展示了如何检测 localStorage 和 sessionStorage 是否可用？</p>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">storageAvailable</span><span class="p">(</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">try</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nb">window</span><span class="p">[</span><span class="nx">type</span><span class="p">],</span>
+			<span class="nx">x</span> <span class="o">=</span> <span class="s1">&#39;__storage_test__&#39;</span><span class="p">;</span>
+		<span class="nx">storage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">x</span><span class="p">);</span>
+		<span class="nx">storage</span><span class="p">.</span><span class="nx">removeItem</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+		<span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nx">storageAvailable</span><span class="p">(</span><span class="s1">&#39;localStorage&#39;</span><span class="p">))</span> <span class="p">{</span>
+	<span class="c1">// 其中这个&#39;localStorage&#39; 可以替换成 &#39;sessionStorage&#39;
+</span><span class="c1"></span>	<span class="c1">// Yippee! We can use localStorage awesomeness
+</span><span class="c1"></span><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+	<span class="c1">// Too bad, no localStorage for us
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div>
+<p>关于检测 localStorage 的代码的演化历史，可以参考 <a href="https://gist.github.com/paulirish/5558557">A brief history of detecting local storage</a>。</p>
+
+<h2 id="web-storage-api">Web Storage API</h2>
+
+<h3 id="增删改查-api">增删改查 API</h3>
+
+<p><code>localStorage.getItem(key)</code> &ndash; 获取一个键的值
+<code>localStorage.setItem(key, value)</code> &ndash; 创建或者更新(当这个键已经存在的时候)一个键值对
+<code>localStorage.clear()</code> &ndash; 清空当前域名下的所有键值对
+<code>localStorage.removeItem(key)</code> &ndash; 删除当前域名下由key所指定的那个数据项</p>
+
+<h3 id="事件监听">事件监听</h3>
+<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;storage&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.my-key&#39;</span><span class="p">).</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span><span class="p">;</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.my-old&#39;</span><span class="p">).</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">oldValue</span><span class="p">;</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.my-new&#39;</span><span class="p">).</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">newValue</span><span class="p">;</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.my-url&#39;</span><span class="p">).</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">url</span><span class="p">;</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.my-storage&#39;</span><span class="p">).</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">storageArea</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>上述代码展示了向 localStorage 添加事件监听器的方法，当 localStorage 改变的时候，会传入一个事件，其中各个字段意义如下:</p>
+
+<ul>
+<li><code>key</code>: 被改变的key</li>
+<li><code>oldValue</code>: 旧的值</li>
+<li><code>newValue</code>: 新的值</li>
+<li><code>url</code>: 改变这个key的页面的地址</li>
+<li><code>storageArea</code>: 被影响到的存储对象</li>
+</ul>
+
+<p>更多内容请参考 <a href="https://github.com/mdn/dom-examples/tree/master/web-storage">web-storage-code</a> 和 <a href="https://developer.mozilla.org/en-US/docs/Web/Events/storage">storage</a> 。</p>
+
+<h2 id="浏览器兼容性">浏览器兼容性</h2>
+
+<p>所有的浏览器对于 localStorage 和 sessionStorage 支持的容量都一直在变化，可以参考 <a href="http://dev-test.nemikor.com/web-storage/support-test/">Web Storage Support Test</a> 获取详细的信息。</p>
+
+<h2 id="其他参考链接">其他参考链接</h2>
+
+<ol>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API">Using the Web Storage API</a></li>
+<li><a href="https://mdn.github.io/dom-examples/web-storage/">web-storage</a></li>
+</ol></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/html"><span class="tag">Html</span></a></li>
+        
+          <li><a href="/tags/%E5%89%8D%E7%AB%AF"><span class="tag">前端</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>470</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2017/05/06/%E7%AE%80%E5%8D%95%E8%81%8A%E8%81%8Ahtml-5%E4%B8%AD%E7%9A%84web-storage/");
+    var page_uniqueid = "d0f4e882db32b78cf2cb5a2ae54cbbea";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

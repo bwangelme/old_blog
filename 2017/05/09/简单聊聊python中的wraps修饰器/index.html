@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>简单聊聊Python中的wraps修饰器</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="摘要:
+ Python 中的wraps修饰器分析
+ 
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="简单聊聊Python中的wraps修饰器" />
+    <meta name="twitter:description" content="摘要:
+ Python 中的wraps修饰器分析
+ 
+" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="简单聊聊Python中的wraps修饰器" />
+  <meta property="og:description" content="摘要:
+ Python 中的wraps修饰器分析
+ 
+" />
+  <meta property="og:url" content="/2017/05/09/%E7%AE%80%E5%8D%95%E8%81%8A%E8%81%8Apython%E4%B8%AD%E7%9A%84wraps%E4%BF%AE%E9%A5%B0%E5%99%A8/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2017/05/09/%E7%AE%80%E5%8D%95%E8%81%8A%E8%81%8Apython%E4%B8%AD%E7%9A%84wraps%E4%BF%AE%E9%A5%B0%E5%99%A8/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">简单聊聊Python中的wraps修饰器</h1>
+      <p class="post-meta">@BWANGEL · May 9, 2017 · 2 min read</p>
+    </header>
+    <article class="post-content"><p><strong>摘要</strong>:</p>
+
+<blockquote>
+<p>Python 中的wraps修饰器分析</p>
+</blockquote>
+
+<p></p>
+
+<h1 id="预备知识">预备知识</h1>
+
+<p>在了解<code>wraps</code>修饰器之前，我们首先要了解<code>partial</code>和<code>update_wrapper</code>这两个函数，因为在<code>wraps</code>的代码中，用到了这两个函数。</p>
+
+<h2 id="partial">partial</h2>
+
+<p>首先说<code>partial</code>函数，在<a href="https://docs.python.org/3/library/functools.html#functools.partial">官方文档</a>的描述中，这个函数的声明如下：<code>functools.partial(func, *args, **keywords)</code>。它的作用就是返回一个<code>partial</code>对象，当这个<code>partial</code>对象被调用的时候，就像通过<code>func(*args, **kwargs)</code>的形式来调用<code>func</code>函数一样。如果有额外的<strong>位置参数(*args)</strong>或者<strong>关键字参数(**kwargs)</strong>被传给了这个<code>partial</code>对象，那它们也都会被传递给<code>func</code>函数，如果一个参数被多次传入，那么后面的值会覆盖前面的值。</p>
+
+<p>个人感觉这个函数很像C++中的<code>bind</code>函数，都是把某个函数的某个参数固定，从而构造出一个新的函数来。比如下面这个例子：</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="nb">int</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span>
+
+<span class="c1"># 这里创造了一个新的函数add2，只接受一个整型参数，然后将这个参数统一加上2</span>
+<span class="n">add2</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">add</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">add2</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># 这里将会输出5</span></code></pre></div>
+<p>这个函数是使用C而不是Python实现的，但是官方文档中给出了Python实现的代码，如下所示，大家可以进行参考：</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">partial</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">keywords</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">newfunc</span><span class="p">(</span><span class="o">*</span><span class="n">fargs</span><span class="p">,</span> <span class="o">**</span><span class="n">fkeywords</span><span class="p">):</span>
+        <span class="n">newkeywords</span> <span class="o">=</span> <span class="n">keywords</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">newkeywords</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">fkeywords</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">*</span><span class="n">fargs</span><span class="p">,</span> <span class="o">**</span><span class="n">newkeywords</span><span class="p">)</span>
+    <span class="n">newfunc</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
+    <span class="n">newfunc</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+    <span class="n">newfunc</span><span class="o">.</span><span class="n">keywords</span> <span class="o">=</span> <span class="n">keywords</span>
+    <span class="k">return</span> <span class="n">newfunc</span></code></pre></div>
+<h2 id="update-wrapper">update_wrapper</h2>
+
+<p>接下来，我们再来聊一聊<code>update_wrapper</code>这个函数，顾名思义，这个函数就是用来更新修饰器函数的，具体更新些什么呢，我们可以直接把它的源码搬过来看一下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">WRAPPER_ASSIGNMENTS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;__module__&#39;</span><span class="p">,</span> <span class="s1">&#39;__name__&#39;</span><span class="p">,</span> <span class="s1">&#39;__qualname__&#39;</span><span class="p">,</span> <span class="s1">&#39;__doc__&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;__annotations__&#39;</span><span class="p">)</span>
+<span class="n">WRAPPER_UPDATES</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;__dict__&#39;</span><span class="p">,)</span>
+<span class="k">def</span> <span class="nf">update_wrapper</span><span class="p">(</span><span class="n">wrapper</span><span class="p">,</span>
+                   <span class="n">wrapped</span><span class="p">,</span>
+                   <span class="n">assigned</span> <span class="o">=</span> <span class="n">WRAPPER_ASSIGNMENTS</span><span class="p">,</span>
+                   <span class="n">updated</span> <span class="o">=</span> <span class="n">WRAPPER_UPDATES</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">assigned</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">wrapper</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">updated</span><span class="p">:</span>
+        <span class="nb">getattr</span><span class="p">(</span><span class="n">wrapper</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="p">{}))</span>
+    <span class="n">wrapper</span><span class="o">.</span><span class="n">__wrapped__</span> <span class="o">=</span> <span class="n">wrapped</span>
+    <span class="k">return</span> <span class="n">wrapper</span></code></pre></div>
+<p>大家可以发现，这个函数的作用就是从<strong>被修饰的函数(wrapped)</strong>中取出一些属性值来，赋值给<strong>修饰器函数(wrapper)</strong>。为什么要这么做呢，我们看下面这个例子。</p>
+
+<h3 id="自定义修饰器v1">自定义修饰器v1</h3>
+
+<p>首先我们写个自定义的修饰器，没有任何的功能，仅有文档字符串，如下所示：</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;这个是修饰函数&#34;&#34;&#34;</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper_function</span>
+
+<span class="nd">@wrapper</span>
+<span class="k">def</span> <span class="nf">wrapped</span><span class="p">():</span>
+    <span class="s2">&#34;&#34;&#34;这个是被修饰的函数&#34;&#34;&#34;</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;wrapped&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">wrapped</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>  <span class="c1"># 输出`这个是修饰函数`</span>
+<span class="k">print</span><span class="p">(</span><span class="n">wrapped</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>  <span class="c1"># 输出`wrapper_function`</span></code></pre></div>
+<p>从上面的例子我们可以看到，我想要获取<code>wrapped</code>这个被修饰函数的文档字符串，但是却获取成了<code>wrapper_function</code>的文档字符串，<code>wrapped</code>函数的名字也变成了<code>wrapper_function</code>函数的名字。这是因为给<code>wrapped</code>添加上<code>@wrapper</code>修饰器相当于执行了一句<code>wrapped = wrapper(wrapped)</code>，执行完这条语句之后，<code>wrapped</code>函数就变成了<code>wrapper_function</code>函数。遇到这种情况该怎么办呢，首先我们可以手动地在<code>wrapper</code>函数中更改<code>wrapper_function</code>的<code>__doc__</code>和<code>__name__</code>属性，但聪明的你肯定也想到了，我们可以直接用<code>update_wrapper</code>函数来实现这个功能。</p>
+
+<h3 id="自定义修饰器v2">自定义修饰器v2</h3>
+
+<p>我们对上面定义的修饰器稍作修改，添加了一句<code>update_wrapper(wrapper_function, f)</code>。</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">update_wrapper</span>
+
+<span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;这个是修饰函数&#34;&#34;&#34;</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">update_wrapper</span><span class="p">(</span><span class="n">wrapper_function</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>  <span class="c1"># &lt;&lt;  添加了这条语句</span>
+    <span class="k">return</span> <span class="n">wrapper_function</span>
+
+<span class="nd">@wrapper</span>
+<span class="k">def</span> <span class="nf">wrapped</span><span class="p">():</span>
+    <span class="s2">&#34;&#34;&#34;这个是被修饰的函数&#34;&#34;&#34;</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;wrapped&#39;</span><span class="p">)</span>
+
+
+<span class="k">print</span><span class="p">(</span><span class="n">wrapped</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>  <span class="c1"># 输出`这个是被修饰的函数`</span>
+<span class="k">print</span><span class="p">(</span><span class="n">wrapped</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>  <span class="c1"># 输出`wrapped`</span></code></pre></div>
+<p>此时我们可以发现，<code>__doc__</code>和<code>__name__</code>属性已经能够按我们预想的那样显示了，除此之外，<code>update_wrapper</code>函数也对<code>__module__</code>和<code>__dict__</code>等属性进行了更改和更新。</p>
+
+<h1 id="wraps修饰器">wraps修饰器</h1>
+
+<p>OK，至此，我们已经了解了<code>partial</code>和<code>update_wrapper</code>这两个函数的功能，接下来我们翻出<code>wraps</code>修饰器的源码：</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">WRAPPER_ASSIGNMENTS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;__module__&#39;</span><span class="p">,</span> <span class="s1">&#39;__name__&#39;</span><span class="p">,</span> <span class="s1">&#39;__qualname__&#39;</span><span class="p">,</span> <span class="s1">&#39;__doc__&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;__annotations__&#39;</span><span class="p">)</span>
+<span class="n">WRAPPER_UPDATES</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;__dict__&#39;</span><span class="p">,)</span>
+<span class="k">def</span> <span class="nf">wraps</span><span class="p">(</span><span class="n">wrapped</span><span class="p">,</span>
+          <span class="n">assigned</span> <span class="o">=</span> <span class="n">WRAPPER_ASSIGNMENTS</span><span class="p">,</span>
+          <span class="n">updated</span> <span class="o">=</span> <span class="n">WRAPPER_UPDATES</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">update_wrapper</span><span class="p">,</span> <span class="n">wrapped</span><span class="o">=</span><span class="n">wrapped</span><span class="p">,</span>
+                   <span class="n">assigned</span><span class="o">=</span><span class="n">assigned</span><span class="p">,</span> <span class="n">updated</span><span class="o">=</span><span class="n">updated</span><span class="p">)</span></code></pre></div>
+<p>没错，就是这么的简单，只有这么一句，我们可以看出，<code>wraps</code>函数其实就是一个修饰器版的<code>update_wrapper</code>函数，它的功能和<code>update_wrapper</code>是一模一样的。我们可以修改我们上面的自定义修饰器的例子，做出一个更方便阅读的版本。</p>
+
+<h2 id="自定义修饰器v3">自定义修饰器v3</h2>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;这个是修饰函数&#34;&#34;&#34;</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper_function</span>
+
+<span class="nd">@wrapper</span>
+<span class="k">def</span> <span class="nf">wrapped</span><span class="p">():</span>
+    <span class="s2">&#34;&#34;&#34;这个是被修饰的函数
+</span><span class="s2">    &#34;&#34;&#34;</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;wrapped&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">wrapped</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>  <span class="c1"># 输出`这个是被修饰的函数`</span>
+<span class="k">print</span><span class="p">(</span><span class="n">wrapped</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>  <span class="c1"># 输出`wrapped`</span></code></pre></div>
+<p>至此，我想大家应该明白<code>wraps</code>这个修饰器的作用了吧，就是将<strong>被修饰的函数(wrapped)</strong>的一些属性值赋值给<strong>修饰器函数(wrapper)</strong>，最终让属性的显示更符合我们的直觉。</p>
+
+<h1 id="参考链接">参考链接</h1>
+
+<ol>
+<li><a href="https://docs.python.org/3/library/functools.html#functools.wraps">python3 functools.wraps</a></li>
+<li><a href="http://blog.jkey.lu/2013/03/15/python-decorator-and-functools-module/">python装饰器和functools模块</a></li>
+<li><a href="https://github.com/python/cpython/blob/6f0eb93183519024cb360162bdd81b9faec97ba6/Lib/functools.py">Github - cpython functools源码</a></li>
+</ol></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/python"><span class="tag">Python</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>467</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2017/05/09/%E7%AE%80%E5%8D%95%E8%81%8A%E8%81%8Apython%E4%B8%AD%E7%9A%84wraps%E4%BF%AE%E9%A5%B0%E5%99%A8/");
+    var page_uniqueid = "d913c746d30c31abfb1f340794e0c6cc";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

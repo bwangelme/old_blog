@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>MySQL数据类型-字符串类型</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍MySQL数据类型-字符串类型
+ 
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="MySQL数据类型-字符串类型" />
+    <meta name="twitter:description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍MySQL数据类型-字符串类型
+ 
+" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="MySQL数据类型-字符串类型" />
+  <meta property="og:description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍MySQL数据类型-字符串类型
+ 
+" />
+  <meta property="og:url" content="/2016/04/10/mysql%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2016/04/10/mysql%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">MySQL数据类型-字符串类型</h1>
+      <p class="post-meta">@BWANGEL · Apr 10, 2016 · 1 min read</p>
+    </header>
+    <article class="post-content"><p><strong>摘要</strong>:</p>
+
+<blockquote>
+<p>这是一篇关于MySQL的文章，主要介绍MySQL数据类型-字符串类型</p>
+</blockquote>
+
+<p></p>
+
+<h1 id="字符串类型">字符串类型</h1>
+
+<h2 id="1-char字符串系列">1. char字符串系列</h2>
+
+<p>存储用户的姓名，家庭住址，爱好，发布的文章等。</p>
+
+<table>
+<thead>
+<tr>
+<th>Char字符串系列</th>
+<th>字节</th>
+<th>描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>char(M)</code></td>
+<td>M</td>
+<td>M为0~255之间的整数</td>
+</tr>
+
+<tr>
+<td><code>varchar(M)</code></td>
+<td>M</td>
+<td>M为0~65535之间的整数</td>
+</tr>
+
+<tr>
+<td>注：汉字占两个字节</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li><code>char</code>会占用定长字节的空间来进行存储,检索时会自动删除尾部空格</li>
+<li><code>varchar</code>会灵活地根据存储的值的长度来分配存储空间,检索时不会删除尾部空格。</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">table</span> <span class="n">c_v</span><span class="p">(</span>
+    <span class="n">v</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+    <span class="k">c</span> <span class="nb">char</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="p">);</span>
+
+<span class="k">insert</span> <span class="k">into</span> <span class="n">c_v</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;ab  &#39;</span><span class="p">,</span> <span class="s1">&#39;ab  &#39;</span><span class="p">)</span>
+
+<span class="k">select</span> <span class="k">length</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="k">length</span><span class="p">(</span><span class="k">c</span><span class="p">)</span> <span class="k">from</span> <span class="n">c_v</span><span class="p">;</span>
+<span class="cm">/* 结果会显示v和c字段长度的不同，char会自动忽略尾部的空格。*/</span>
+
+<span class="k">select</span> <span class="n">concat</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s1">&#39;xff&#39;</span><span class="p">),</span> <span class="n">concat</span><span class="p">(</span><span class="k">c</span><span class="p">,</span> <span class="s1">&#39;xff&#39;</span><span class="p">)</span> <span class="k">from</span> <span class="n">test10</span><span class="p">;</span>
+<span class="cm">/* concat是连接函数，从结果可以看到c后面没有空格。*/</span></code></pre></div>
+<h2 id="2-text系列字符串类型">2. TEXT系列字符串类型</h2>
+
+<table>
+<thead>
+<tr>
+<th>Text系列字符串类型</th>
+<th>字节</th>
+<th>描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>TINYTEXT</td>
+<td>0~255</td>
+<td>值的长度+2个字节</td>
+</tr>
+
+<tr>
+<td>TEXT</td>
+<td>0~65525</td>
+<td>值的长度+2个字节</td>
+</tr>
+
+<tr>
+<td>MEIDUMTEXT</td>
+<td>0~16772150</td>
+<td>值的长度+3个字节</td>
+</tr>
+
+<tr>
+<td>LONGTEXT</td>
+<td>0~4294967285</td>
+<td>值的长度+4个字节</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="3-binary系列字符串类型">3. BINARY系列字符串类型</h2>
+
+<table>
+<thead>
+<tr>
+<th>BINARY系列字符串类型</th>
+<th>字节</th>
+<th>描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>BINARY(M)</td>
+<td>M</td>
+<td>允许长度为0~M</td>
+</tr>
+
+<tr>
+<td>VARBINARY(M)</td>
+<td>M</td>
+<td>允许长度为0~M</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="4-blob系列字符串类型">4. BLOB系列字符串类型</h2>
+
+<p>|BLOB系列字符串类型|字节|
+|TINYBLOB|0~255|
+|BLOB|0~2^16|
+|MEDIUMBLOB|0~2^24|
+|LONGBLOB|0~2^32|</p>
+
+<h2 id="5-枚举类型和集合类型">5. 枚举类型和集合类型</h2>
+
+<p>枚举类型ENUM 单选</p>
+
+<p>集合类型SET 多选</p>
+
+<p>示例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">student3</span><span class="p">(</span>
+    <span class="o">-&gt;</span> <span class="n">name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
+    <span class="o">-&gt;</span> <span class="n">sex</span> <span class="n">enum</span><span class="p">(</span><span class="s1">&#39;male&#39;</span><span class="p">,</span> <span class="s1">&#39;female&#39;</span><span class="p">),</span>
+    <span class="o">-&gt;</span> <span class="n">hobby</span> <span class="k">set</span><span class="p">(</span><span class="s1">&#39;music&#39;</span><span class="p">,</span> <span class="s1">&#39;book&#39;</span><span class="p">,</span> <span class="s1">&#39;game&#39;</span><span class="p">,</span> <span class="s1">&#39;dance&#39;</span><span class="p">)</span>
+    <span class="o">-&gt;</span> <span class="p">);</span>
+
+<span class="k">insert</span> <span class="k">into</span> <span class="n">student3</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;xff&#39;</span><span class="p">,</span> <span class="s1">&#39;female&#39;</span><span class="p">,</span> <span class="s1">&#39;book,game&#39;</span><span class="p">);</span></code></pre></div>
+<h2 id="6-建议">6. 建议</h2>
+
+<p><strong>为了优化存储，任何情况下均应该使用最精确的类型</strong></p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/mysql"><span class="tag">MySQL</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>860</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2016/04/10/mysql%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B/");
+    var page_uniqueid = "c8ace063a7c978fbd0e62c74bc8cf13d";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

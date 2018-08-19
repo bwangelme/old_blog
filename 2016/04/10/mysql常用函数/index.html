@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>MySQL常用函数</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍 MySQL 常用函数
+ 
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="MySQL常用函数" />
+    <meta name="twitter:description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍 MySQL 常用函数
+ 
+" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="MySQL常用函数" />
+  <meta property="og:description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍 MySQL 常用函数
+ 
+" />
+  <meta property="og:url" content="/2016/04/10/mysql%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2016/04/10/mysql%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">MySQL常用函数</h1>
+      <p class="post-meta">@BWANGEL · Apr 10, 2016 · 3 min read</p>
+    </header>
+    <article class="post-content"><p><strong>摘要</strong>:</p>
+
+<blockquote>
+<p>这是一篇关于MySQL的文章，主要介绍 MySQL 常用函数</p>
+</blockquote>
+
+<p></p>
+
+<h1 id="mysql常用函数">MySQL常用函数</h1>
+
+<h2 id="1-字符串函数">1. 字符串函数</h2>
+
+<ul>
+<li>合并字符串函数: <code>CONCAT()</code></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">concat</span><span class="p">(</span><span class="s1">&#39;love&#39;</span><span class="p">,</span> <span class="s1">&#39; xff&#39;</span><span class="p">);</span>
+<span class="o">+</span><span class="c1">------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">concat</span><span class="p">(</span><span class="s1">&#39;love&#39;</span><span class="p">,</span> <span class="s1">&#39; xff&#39;</span><span class="p">)</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">love</span> <span class="n">xff</span>               <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------------------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="c1">-- 遇到空值，整个结果为NULL
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">concat</span><span class="p">(</span><span class="s1">&#39;love&#39;</span><span class="p">,</span> <span class="s1">&#39; xff&#39;</span><span class="p">,</span> <span class="k">NULL</span><span class="p">);</span>
+<span class="o">+</span><span class="c1">------------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">concat</span><span class="p">(</span><span class="s1">&#39;love&#39;</span><span class="p">,</span> <span class="s1">&#39; xff&#39;</span><span class="p">,</span> <span class="k">NULL</span><span class="p">)</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="k">NULL</span>                         <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------------------------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<ul>
+<li>合并字符串函数: <code>CONCAT_WS()</code>,可以指定分隔符</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 第一个参数为分隔符
+</span><span class="c1"></span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">concat_WS</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;love&#39;</span><span class="p">,</span> <span class="s1">&#39;xff&#39;</span><span class="p">);</span>
+<span class="o">+</span><span class="c1">-------------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">concat_WS</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;love&#39;</span><span class="p">,</span> <span class="s1">&#39;xff&#39;</span><span class="p">)</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">-------------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">love</span><span class="o">-</span><span class="n">xff</span>                      <span class="o">|</span>
+<span class="o">+</span><span class="c1">-------------------------------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<ul>
+<li>字符串比较函数: <code>STRCMP()</code></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">STRCMP</span><span class="p">(</span><span class="s1">&#39;ab&#39;</span><span class="p">,</span> <span class="s1">&#39;aa&#39;</span><span class="p">),</span>        <span class="n">STRCMP</span><span class="p">(</span><span class="s1">&#39;ab&#39;</span><span class="p">,</span> <span class="s1">&#39;ab&#39;</span><span class="p">),</span>        <span class="n">STRCMP</span><span class="p">(</span><span class="s1">&#39;ab&#39;</span><span class="p">,</span> <span class="s1">&#39;ac&#39;</span><span class="p">);</span>
+<span class="o">+</span><span class="c1">--------------------+--------------------+--------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">STRCMP</span><span class="p">(</span><span class="s1">&#39;ab&#39;</span><span class="p">,</span> <span class="s1">&#39;aa&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="n">STRCMP</span><span class="p">(</span><span class="s1">&#39;ab&#39;</span><span class="p">,</span> <span class="s1">&#39;ab&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="n">STRCMP</span><span class="p">(</span><span class="s1">&#39;ab&#39;</span><span class="p">,</span> <span class="s1">&#39;ac&#39;</span><span class="p">)</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------------------+--------------------+--------------------+
+</span><span class="c1"></span><span class="o">|</span>                  <span class="mi">1</span> <span class="o">|</span>                  <span class="mi">0</span> <span class="o">|</span>                 <span class="o">-</span><span class="mi">1</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------------------+--------------------+--------------------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<ul>
+<li>获取字符串长度: <code>LENGTH()</code></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span>  <span class="k">select</span> <span class="k">length</span><span class="p">(</span><span class="s1">&#39;xff&#39;</span><span class="p">);</span>
+<span class="o">+</span><span class="c1">---------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="k">length</span><span class="p">(</span><span class="s1">&#39;xff&#39;</span><span class="p">)</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">---------------+
+</span><span class="c1"></span><span class="o">|</span>             <span class="mi">3</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">---------------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<ul>
+<li>大小写转换: <code>UPPER(), LOWER()</code></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="k">UPPER</span><span class="p">(</span><span class="s1">&#39;xff&#39;</span><span class="p">),</span> <span class="k">LOWER</span><span class="p">(</span><span class="s1">&#39;XFF&#39;</span><span class="p">);</span>
+<span class="o">+</span><span class="c1">--------------+--------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="k">UPPER</span><span class="p">(</span><span class="s1">&#39;xff&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="k">LOWER</span><span class="p">(</span><span class="s1">&#39;XFF&#39;</span><span class="p">)</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------------+--------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">XFF</span>          <span class="o">|</span> <span class="n">xff</span>          <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------------+--------------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<ul>
+<li>字符串位置查找: <code>FIND_IN_SET()</code></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">FIND_IN_SET</span><span class="p">(</span><span class="s1">&#39;BEIJING&#39;</span><span class="p">,</span> <span class="s1">&#39;HONGKANG,BEIJING&#39;</span><span class="p">);</span>
+<span class="o">+</span><span class="c1">--------------------------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">FIND_IN_SET</span><span class="p">(</span><span class="s1">&#39;BEIJING&#39;</span><span class="p">,</span> <span class="s1">&#39;HONGKANG,BEIJING&#39;</span><span class="p">)</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------------------------------------------+
+</span><span class="c1"></span><span class="o">|</span>                                          <span class="mi">2</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------------------------------------------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<ul>
+<li>截取字符串函数: <code>LEFT()</code>, <code>RIGHT()</code>, <code>SUBSTRING()</code>, <code>MID()</code></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="k">left</span><span class="p">(</span><span class="s1">&#39;beijing&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="k">right</span><span class="p">(</span><span class="s1">&#39;beijing&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">mid</span><span class="p">(</span><span class="s1">&#39;beijing welcome you&#39;</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">);</span>
+<span class="o">+</span><span class="c1">--------------------+---------------------+----------------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="k">left</span><span class="p">(</span><span class="s1">&#39;beijing&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">|</span> <span class="k">right</span><span class="p">(</span><span class="s1">&#39;beijing&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">|</span> <span class="n">mid</span><span class="p">(</span><span class="s1">&#39;beijing welcome you&#39;</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------------------+---------------------+----------------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">bei</span>                <span class="o">|</span> <span class="n">jing</span>                <span class="o">|</span> <span class="n">welcome</span>                          <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------------------+---------------------+----------------------------------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="c1">-- SUBSTRING函数和MID函数相同</span></code></pre></div>
+<ul>
+<li>字符串去除空格函数: <code>LTRIM</code>, <code>RTRIM</code>, <code>TRIM</code></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 三个函数分别为去除左边空格，右边空格和两边空格
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">concat</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">LTRIM</span><span class="p">(</span><span class="s1">&#39;     xff        &#39;</span><span class="p">),</span> <span class="s1">&#39;|&#39;</span><span class="p">),</span>
+    <span class="o">-&gt;</span>        <span class="n">concat</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">RTRIM</span><span class="p">(</span><span class="s1">&#39;     xff        &#39;</span><span class="p">),</span> <span class="s1">&#39;|&#39;</span><span class="p">),</span>
+    <span class="o">-&gt;</span>        <span class="n">concat</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="k">TRIM</span><span class="p">(</span><span class="s1">&#39;     xff        &#39;</span><span class="p">),</span> <span class="s1">&#39;|&#39;</span><span class="p">)</span><span class="err">\</span><span class="k">G</span>
+<span class="o">***************************</span> <span class="mi">1</span><span class="p">.</span> <span class="k">row</span> <span class="o">***************************</span>
+<span class="n">concat</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">LTRIM</span><span class="p">(</span><span class="s1">&#39;     xff        &#39;</span><span class="p">),</span> <span class="s1">&#39;|&#39;</span><span class="p">):</span> <span class="o">|</span><span class="n">xff</span>        <span class="o">|</span>
+<span class="n">concat</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">RTRIM</span><span class="p">(</span><span class="s1">&#39;     xff        &#39;</span><span class="p">),</span> <span class="s1">&#39;|&#39;</span><span class="p">):</span> <span class="o">|</span>     <span class="n">xff</span><span class="o">|</span>
+ <span class="n">concat</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="k">TRIM</span><span class="p">(</span><span class="s1">&#39;     xff        &#39;</span><span class="p">),</span> <span class="s1">&#39;|&#39;</span><span class="p">):</span> <span class="o">|</span><span class="n">xff</span><span class="o">|</span>
+<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<ul>
+<li>字符串替换函数: <code>REPLACE</code></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="k">replace</span><span class="p">(</span><span class="s1">&#39;Beijing welcome you&#39;</span><span class="p">,</span> <span class="s1">&#39;Beijing&#39;</span><span class="p">,</span> <span class="s1">&#39;MySQL&#39;</span><span class="p">);</span>
+<span class="o">+</span><span class="c1">----------------------------------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="k">replace</span><span class="p">(</span><span class="s1">&#39;Beijing welcome you&#39;</span><span class="p">,</span> <span class="s1">&#39;Beijing&#39;</span><span class="p">,</span> <span class="s1">&#39;MySQL&#39;</span><span class="p">)</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----------------------------------------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">MySQL</span> <span class="n">welcome</span> <span class="n">you</span>                                  <span class="o">|</span>
+<span class="o">+</span><span class="c1">----------------------------------------------------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<h2 id="2-数值函数">2. 数值函数</h2>
+
+<ul>
+<li>获取随机数: <code>RAND()</code></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 返回0 ~ 1之间的随机数
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">RAND</span><span class="p">();</span>
+<span class="o">+</span><span class="c1">---------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">RAND</span><span class="p">()</span>              <span class="o">|</span>
+<span class="o">+</span><span class="c1">---------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="mi">0</span><span class="p">.</span><span class="mi">25700983522181386</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">---------------------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<ul>
+<li>四舍五入函数(圆整): <code>ROUND()</code></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 第二个参数为精度，如果没有指定精度则返回的是整数
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">ROUND</span><span class="p">(</span><span class="mi">3</span><span class="p">.</span><span class="mi">14159</span><span class="p">),</span> <span class="n">ROUND</span><span class="p">(</span><span class="mi">3</span><span class="p">.</span><span class="mi">145927</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+<span class="o">+</span><span class="c1">----------------+--------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">ROUND</span><span class="p">(</span><span class="mi">3</span><span class="p">.</span><span class="mi">14159</span><span class="p">)</span> <span class="o">|</span> <span class="n">ROUND</span><span class="p">(</span><span class="mi">3</span><span class="p">.</span><span class="mi">145927</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----------------+--------------------+
+</span><span class="c1"></span><span class="o">|</span>              <span class="mi">3</span> <span class="o">|</span>              <span class="mi">3</span><span class="p">.</span><span class="mi">146</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----------------+--------------------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<h2 id="3-时间和日期函数">3. 时间和日期函数</h2>
+
+<ul>
+<li>当前时间和日期</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 分别为获取当前日期，时间，日期和时间
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">CURDATE</span><span class="p">(),</span> <span class="n">CURTIME</span><span class="p">(),</span> <span class="n">NOW</span><span class="p">();</span>
+<span class="o">+</span><span class="c1">------------+-----------+---------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">CURDATE</span><span class="p">()</span>  <span class="o">|</span> <span class="n">CURTIME</span><span class="p">()</span> <span class="o">|</span> <span class="n">NOW</span><span class="p">()</span>               <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------+-----------+---------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">26</span> <span class="o">|</span> <span class="mi">08</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span><span class="mi">05</span>  <span class="o">|</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">26</span> <span class="mi">08</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span><span class="mi">05</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------+-----------+---------------------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<ul>
+<li>获取时间和日期各部分</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 顾名思义
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span>  <span class="n">now</span><span class="p">(),</span>
+               <span class="k">year</span><span class="p">(</span><span class="n">now</span><span class="p">()),</span>
+               <span class="n">quarter</span><span class="p">(</span><span class="n">now</span><span class="p">()),</span> <span class="c1">-- 季度
+</span><span class="c1"></span>               <span class="k">month</span><span class="p">(</span><span class="n">now</span><span class="p">()),</span>
+               <span class="n">week</span><span class="p">(</span><span class="n">now</span><span class="p">()),</span>    <span class="c1">-- 第几周
+</span><span class="c1"></span>               <span class="n">dayofmonth</span><span class="p">(</span><span class="n">now</span><span class="p">()),</span>
+               <span class="n">hour</span><span class="p">(</span><span class="n">now</span><span class="p">()),</span>
+               <span class="k">minute</span><span class="p">(</span><span class="n">now</span><span class="p">()),</span>
+               <span class="k">second</span><span class="p">(</span><span class="n">now</span><span class="p">())</span><span class="err">\</span><span class="k">G</span>
+<span class="o">***************************</span> <span class="mi">1</span><span class="p">.</span> <span class="k">row</span> <span class="o">***************************</span>
+            <span class="n">now</span><span class="p">():</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">26</span> <span class="mi">08</span><span class="p">:</span><span class="mi">17</span><span class="p">:</span><span class="mi">02</span>
+      <span class="k">year</span><span class="p">(</span><span class="n">now</span><span class="p">()):</span> <span class="mi">2016</span>
+   <span class="n">quarter</span><span class="p">(</span><span class="n">now</span><span class="p">()):</span> <span class="mi">1</span>
+     <span class="k">month</span><span class="p">(</span><span class="n">now</span><span class="p">()):</span> <span class="mi">2</span>
+      <span class="n">week</span><span class="p">(</span><span class="n">now</span><span class="p">()):</span> <span class="mi">8</span>
+<span class="n">dayofmonth</span><span class="p">(</span><span class="n">now</span><span class="p">()):</span> <span class="mi">26</span>
+      <span class="n">hour</span><span class="p">(</span><span class="n">now</span><span class="p">()):</span> <span class="mi">8</span>
+    <span class="k">minute</span><span class="p">(</span><span class="n">now</span><span class="p">()):</span> <span class="mi">17</span>
+    <span class="k">second</span><span class="p">(</span><span class="n">now</span><span class="p">()):</span> <span class="mi">2</span>
+<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<h2 id="4-系统信息函数">4. 系统信息函数</h2>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="k">version</span><span class="p">(),</span>
+    <span class="o">-&gt;</span>        <span class="k">database</span><span class="p">(),</span>
+    <span class="o">-&gt;</span>        <span class="k">user</span><span class="p">(),</span>
+    <span class="o">-&gt;</span>        <span class="n">last_insert_id</span><span class="p">();</span> <span class="c1">--最近一次auto_increment的数值
+</span><span class="c1"></span><span class="o">+</span><span class="c1">-------------------------+------------+----------------+------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="k">version</span><span class="p">()</span>               <span class="o">|</span> <span class="k">database</span><span class="p">()</span> <span class="o">|</span> <span class="k">user</span><span class="p">()</span>         <span class="o">|</span> <span class="n">last_insert_id</span><span class="p">()</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">-------------------------+------------+----------------+------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="mi">5</span><span class="p">.</span><span class="mi">6</span><span class="p">.</span><span class="mi">28</span><span class="o">-</span><span class="mi">0</span><span class="n">ubuntu0</span><span class="p">.</span><span class="mi">14</span><span class="p">.</span><span class="mi">04</span><span class="p">.</span><span class="mi">1</span> <span class="o">|</span> <span class="k">NULL</span>       <span class="o">|</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span> <span class="o">|</span>                <span class="mi">0</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">-------------------------+------------+----------------+------------------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/mysql"><span class="tag">MySQL</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>860</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2016/04/10/mysql%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/");
+    var page_uniqueid = "b3a689757f4e45694efb0230c892d552";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

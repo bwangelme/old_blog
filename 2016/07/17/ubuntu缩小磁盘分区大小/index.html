@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Ubuntu缩小磁盘分区大小</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="摘要:
+  通过resize2fs调整文件系统大小 通过parted调整磁盘分区大小   
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Ubuntu缩小磁盘分区大小" />
+    <meta name="twitter:description" content="摘要:
+  通过resize2fs调整文件系统大小 通过parted调整磁盘分区大小   
+" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Ubuntu缩小磁盘分区大小" />
+  <meta property="og:description" content="摘要:
+  通过resize2fs调整文件系统大小 通过parted调整磁盘分区大小   
+" />
+  <meta property="og:url" content="/2016/07/17/ubuntu%E7%BC%A9%E5%B0%8F%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA%E5%A4%A7%E5%B0%8F/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2016/07/17/ubuntu%E7%BC%A9%E5%B0%8F%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA%E5%A4%A7%E5%B0%8F/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Ubuntu缩小磁盘分区大小</h1>
+      <p class="post-meta">@BWANGEL · Jul 17, 2016 · 2 min read</p>
+    </header>
+    <article class="post-content"><p><strong>摘要</strong>:</p>
+
+<blockquote>
+<ol>
+<li>通过resize2fs调整文件系统大小</li>
+<li>通过parted调整磁盘分区大小</li>
+</ol>
+</blockquote>
+
+<p></p>
+
+<p>我在刚开始装系统的时候，没有考虑到以后的扩展，直接把所有的空间都给使用了，后来发现需要新的分区的时候，已经没有可用的空间了，这时候就需要将一个分区的空间给缩小，后来折腾了半天，终于成功了！下面我以虚拟机中装的Ubuntu 16.04为例子，和大家分享一下。</p>
+
+<p>首先查看一下目前的磁盘分区</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">michale@vv2x:~$ lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      <span class="m">8</span>:0    <span class="m">0</span>   32G  <span class="m">0</span> disk
+├─sda1   <span class="m">8</span>:1    <span class="m">0</span>  190M  <span class="m">0</span> part /boot
+├─sda2   <span class="m">8</span>:2    <span class="m">0</span>    1K  <span class="m">0</span> part
+├─sda5   <span class="m">8</span>:5    <span class="m">0</span>  <span class="m">7</span>.6G  <span class="m">0</span> part /home
+├─sda6   <span class="m">8</span>:6    <span class="m">0</span>  487M  <span class="m">0</span> part <span class="o">[</span>SWAP<span class="o">]</span>
+└─sda7   <span class="m">8</span>:7    <span class="m">0</span> <span class="m">23</span>.7G  <span class="m">0</span> part /
+sr0     <span class="m">11</span>:0    <span class="m">1</span> 1024M  <span class="m">0</span> rom</code></pre></div>
+<p>这个虚拟机上只有一块硬盘sda，sda分成了5个分区，其中sda2是扩展分区，现在，我想将/home分区的大小缩小为4G，这样可以多出一部分空间来新建一个分区，那该如何做呢，且听我慢慢道来。</p>
+
+<h2 id="卸载-home分区">卸载/home分区</h2>
+
+<p>首先，我们需要以root登陆进去，用<code>umount /home</code>命令卸载/home分区。注意，此时其他用户必须已经退出了，否则就会显示/home分区是busy的，无法卸载。如果卸载时发现/home分区busy无法卸载，可以通过<code>lsof +d /home</code>命令来查看哪些进程在使用/home分区。</p>
+
+<h2 id="缩小-home分区的文件系统大小">缩小/home分区的文件系统大小</h2>
+
+<p>第二步，通过<code>resize2fs</code>命令来缩小/home分区的<strong>文件系统大小</strong>。（注意：文件系统大小和磁盘分区大小是两个不同的概念。我的理解是，文件系统大小表示的是文件系统实际可用的大小，而磁盘分区大小则是文件系统所安装的磁盘分区的真实大小。通过<code>df -h</code>命令我们可以查看文件系统大小，通过<code>lsblk</code>或者<code>fdisk</code>命令可以查看磁盘分区大小。）</p>
+
+<p>在这里，我将我的/home分区大小变成了4G，结果如下所示（需要注意的是，在缩小之前，首先要对文件系统进行检查）：</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">root@vv2x:~# e2fsck -f /dev/sda5
+<span class="c1"># 上面这条命令强制对/dev/sda5的文件系统进行了检查
+</span><span class="c1"></span>e2fsck <span class="m">1</span>.42.13 <span class="o">(</span><span class="m">17</span>-May-2015<span class="o">)</span>
+Pass <span class="m">1</span>: Checking inodes, blocks, and sizes
+Pass <span class="m">2</span>: Checking directory structure
+Pass <span class="m">3</span>: Checking directory connectivity
+Pass <span class="m">4</span>: Checking reference counts
+Pass <span class="m">5</span>: Checking group summary information
+/dev/sda5: <span class="m">220</span>/499968 files <span class="o">(</span><span class="m">3</span>.6% non-contiguous<span class="o">)</span>, <span class="m">69132</span>/1999872 blocks
+root@vv2x:~# resize2fs /dev/sda5 4G
+resize2fs <span class="m">1</span>.42.13 <span class="o">(</span><span class="m">17</span>-May-2015<span class="o">)</span>
+Resizing the filesystem on /dev/sda5 to <span class="m">1048576</span> <span class="o">(</span>4k<span class="o">)</span> blocks.
+The filesystem on /dev/sda5 is now <span class="m">1048576</span> <span class="o">(</span>4k<span class="o">)</span> blocks long.</code></pre></div>
+<h2 id="缩小-home分区的磁盘分区大小">缩小/home分区的磁盘分区大小</h2>
+
+<p>调整好文件系统大小以后，我们就需要来调整磁盘分区大小了，这里我们通过<code>parted</code>命令中的<code>resizepart</code>命令来调整分区大小。用法如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="o">(</span>parted<span class="o">)</span> <span class="nb">help</span> resizepart
+  resizepart NUMBER END                    resize partition NUMBER
+
+NUMBER is the partition number used by Linux.  On MS-DOS disk labels, the primary
+partitions number from <span class="m">1</span> to <span class="m">4</span>, logical partitions from <span class="m">5</span> onwards.
+
+END is disk location, such as 4GB or <span class="m">10</span>%.  Negative value counts from the end of the
+disk.  For example, -1s specifies exactly the last sector.</code></pre></div>
+<p>其中NUMBER代表的是分区号，这里我们的/home分区为5，END代表的是结束的位置，我们可以用4GB来表示。（注意：<strong>parted的分区大小计算方式和lsblk不同</strong>，所以我们多留一些空间，防止数据丢失）</p>
+
+<p>运行结果如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">root@vv2x:~# parted /dev/sda
+GNU Parted <span class="m">3</span>.2
+Using /dev/sda
+Welcome to GNU Parted! Type <span class="s1">&#39;help&#39;</span> to view a list of commands.
+<span class="o">(</span>parted<span class="o">)</span> resizepart <span class="m">5</span> 5G
+Warning: Shrinking a partition can cause data loss, are you sure you want to <span class="k">continue</span>?
+Yes/No? Yes
+<span class="o">(</span>parted<span class="o">)</span>
+Information: You may need to update /etc/fstab.</code></pre></div>
+<h2 id="调整-home分区的文件系统大小并重新挂载">调整/home分区的文件系统大小并重新挂载</h2>
+
+<p>在第三步中，为了防止数据丢失，我们多留出了一些空间。在这里我们需要相应地调整文件系统大小，让其和磁盘空间大小匹配，这里我们通过<code>resize2fs</code>命令来完成这一步。</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">root@vv2x:~# resize2fs /dev/sda7
+<span class="c1"># resize2fs如果没有指定大小，那么/dev/sda7的文件系统大小默认和磁盘分区大小相同
+</span><span class="c1"></span>resize2fs <span class="m">1</span>.42.13 <span class="o">(</span><span class="m">17</span>-May-2015<span class="o">)</span>
+Resizing the filesystem on /dev/sda7 to <span class="m">1171295</span> <span class="o">(</span>4k<span class="o">)</span> blocks.
+The filesystem on /dev/sda7 is now <span class="m">1171295</span> <span class="o">(</span>4k<span class="o">)</span> blocks long.</code></pre></div>
+<p>最后我们重新把/home分区挂载上就可以了。</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">root@vv2x:~# mount -a
+<span class="c1"># 这条命令默认挂载/etc/fstab文件中所有指定的分区
+</span><span class="c1"></span>root@vv2x:~# lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      <span class="m">8</span>:0    <span class="m">0</span>   32G  <span class="m">0</span> disk
+├─sda1   <span class="m">8</span>:1    <span class="m">0</span>  190M  <span class="m">0</span> part /boot
+├─sda5   <span class="m">8</span>:5    <span class="m">0</span>  487M  <span class="m">0</span> part <span class="o">[</span>SWAP<span class="o">]</span>
+├─sda6   <span class="m">8</span>:6    <span class="m">0</span> <span class="m">23</span>.7G  <span class="m">0</span> part /
+└─sda7   <span class="m">8</span>:7    <span class="m">0</span>  <span class="m">4</span>.5G  <span class="m">0</span> part /home
+sr0     <span class="m">11</span>:0    <span class="m">1</span> 1024M  <span class="m">0</span> rom</code></pre></div>
+<h2 id="注意">注意</h2>
+
+<p>最后需要注意的是调整磁盘分区大小以后，磁盘分区的UUID可能会改变，<code>mount -a</code>命令可能会失败，此时我们需要通过<code>blkid</code>命令来查看/home分区的大小，并相应地更改<code>/etc/fstab</code>配置文件中指定的/home分区的UUID。</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/%E8%BF%90%E7%BB%B4"><span class="tag">运维</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>762</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2016/07/17/ubuntu%E7%BC%A9%E5%B0%8F%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA%E5%A4%A7%E5%B0%8F/");
+    var page_uniqueid = "81057eabaf30a164142d66c83f92aeeb";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

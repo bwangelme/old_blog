@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>MySQL触发器</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍9. MySQL触发器
+ 
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="MySQL触发器" />
+    <meta name="twitter:description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍9. MySQL触发器
+ 
+" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="MySQL触发器" />
+  <meta property="og:description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍9. MySQL触发器
+ 
+" />
+  <meta property="og:url" content="/2016/04/10/mysql%E8%A7%A6%E5%8F%91%E5%99%A8/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2016/04/10/mysql%E8%A7%A6%E5%8F%91%E5%99%A8/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">MySQL触发器</h1>
+      <p class="post-meta">@BWANGEL · Apr 10, 2016 · 3 min read</p>
+    </header>
+    <article class="post-content"><p><strong>摘要</strong>:</p>
+
+<blockquote>
+<p>这是一篇关于MySQL的文章，主要介绍9. MySQL触发器</p>
+</blockquote>
+
+<p></p>
+
+<h1 id="mysql触发器">MySQL触发器</h1>
+
+<p>##1. 概念</p>
+
+<p>触发器(Trigger)是一个特殊的存储过程，它的执行不是由程序调用，也不是手工启动，而是由事件触发。
+触发器经常用于加强数据的完整性约束和业务规则等。</p>
+
+<p>##2. 语法</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TRIGGER</span> <span class="err">触发器名称</span> <span class="k">BEFORE</span><span class="o">|</span><span class="k">AFTER</span> <span class="err">触发事件</span>
+  <span class="k">ON</span> <span class="err">表名</span> <span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span>
+  <span class="k">BEGIN</span>
+    <span class="err">触发器程序体</span>
+  <span class="k">END</span>
+
+<span class="c1">-- 触发器名称，它和MySQL中其他对象的命名方式
+</span><span class="c1">-- {BEFORE|AFTER} 触发器触发的时机
+</span><span class="c1">-- {INSERT|UPDATE|DELETE} 触发器事件
+</span><span class="c1">-- FOR EACH ROW 子句通知触发器每隔一行执行一次动作，而不是对整个表执行一次。
+</span><span class="c1">--   (针对insert和delete语句，每一行都触发)</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">desc</span> <span class="n">student</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">-------+------------------+------+-----+---------+----------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">Field</span> <span class="o">|</span> <span class="k">Type</span>             <span class="o">|</span> <span class="k">Null</span> <span class="o">|</span> <span class="k">Key</span> <span class="o">|</span> <span class="k">Default</span> <span class="o">|</span> <span class="n">Extra</span>          <span class="o">|</span>
+<span class="o">+</span><span class="c1">-------+------------------+------+-----+---------+----------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">id</span>    <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="n">unsigned</span> <span class="o">|</span> <span class="k">NO</span>   <span class="o">|</span> <span class="n">PRI</span> <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span> <span class="n">auto_increment</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">name</span>  <span class="o">|</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>      <span class="o">|</span> <span class="n">YES</span>  <span class="o">|</span>     <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
+<span class="o">+</span><span class="c1">-------+------------------+------+-----+---------+----------------+
+</span><span class="c1"></span><span class="mi">2</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">02</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">desc</span> <span class="n">student_total</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">-------+---------+------+-----+---------+-------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">Field</span> <span class="o">|</span> <span class="k">Type</span>    <span class="o">|</span> <span class="k">Null</span> <span class="o">|</span> <span class="k">Key</span> <span class="o">|</span> <span class="k">Default</span> <span class="o">|</span> <span class="n">Extra</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">-------+---------+------+-----+---------+-------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">total</span> <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="o">|</span> <span class="n">YES</span>  <span class="o">|</span>     <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span>       <span class="o">|</span>
+<span class="o">+</span><span class="c1">-------+---------+------+-----+---------+-------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delimiter</span> <span class="o">&amp;&amp;</span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">trigger</span> <span class="n">student_insert_trigger</span> <span class="k">after</span> <span class="k">insert</span>
+    <span class="o">-&gt;</span> <span class="k">on</span> <span class="n">student</span> <span class="k">for</span> <span class="k">each</span> <span class="k">row</span>
+    <span class="o">-&gt;</span> <span class="k">BEGIN</span>
+    <span class="o">-&gt;</span>   <span class="k">update</span> <span class="n">student_total</span> <span class="k">set</span> <span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+    <span class="o">-&gt;</span> <span class="k">END</span><span class="o">&amp;&amp;</span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delimiter</span> <span class="p">;</span></code></pre></div>
+<p>##3. 查看触发器</p>
+
+<p>通过show语句查看</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span> <span class="n">triggers</span><span class="err">\</span><span class="k">G</span></code></pre></div>
+<p>通过系统表查看</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">use</span> <span class="n">information_shcema</span><span class="p">;</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">tirggers</span><span class="err">\</span><span class="k">G</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">triggers</span> <span class="k">where</span> <span class="k">TRIGGER_NAME</span> <span class="o">=</span> <span class="s1">&#39;触发器名称&#39;</span><span class="err">\</span><span class="k">G</span></code></pre></div>
+<p>##4. 删除触发器</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">drop</span> <span class="k">trigger</span> <span class="err">触发器名称</span></code></pre></div>
+<p>##5. 触发器示例</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">--安全地删除表
+</span><span class="c1"></span>
+<span class="k">drop</span> <span class="k">table</span> <span class="k">if</span> <span class="k">exists</span> <span class="n">tab1</span><span class="p">;</span></code></pre></div>
+<p>###5.1 增加tab1表记录后自动将记录添加到tab2中</p>
+
+<p>####5.1.1表结构</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">desc</span> <span class="n">tab1</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">Field</span>   <span class="o">|</span> <span class="k">Type</span>        <span class="o">|</span> <span class="k">Null</span> <span class="o">|</span> <span class="k">Key</span> <span class="o">|</span> <span class="k">Default</span> <span class="o">|</span> <span class="n">Extra</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">tab1_id</span> <span class="o">|</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="o">|</span> <span class="n">YES</span>  <span class="o">|</span>     <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span>       <span class="o">|</span>
+<span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">02</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">desc</span> <span class="n">tab2</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">Field</span>   <span class="o">|</span> <span class="k">Type</span>        <span class="o">|</span> <span class="k">Null</span> <span class="o">|</span> <span class="k">Key</span> <span class="o">|</span> <span class="k">Default</span> <span class="o">|</span> <span class="n">Extra</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">tab2_id</span> <span class="o">|</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="o">|</span> <span class="n">YES</span>  <span class="o">|</span>     <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span>       <span class="o">|</span>
+<span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<p>####5.1.2 创建触发器</p>
+
+<p>触发器中<code>new</code>和<code>old</code>的作用</p>
+
+<ol>
+<li>针对update操作，<code>new</code>表示的是更新后的值，<code>old</code>表示的是原来的数据。</li>
+<li>针对insert操作，<code>new</code>表示的是插入的值。</li>
+<li>针对delete操作，<code>old</code>表示的是删除后的值。</li>
+</ol>
+
+<p>触发器命名规范</p>
+
+<p>表名_触发时机_动作</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 插入触发器
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delimiter</span> <span class="err">$$</span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">trigger</span> <span class="n">tab1_after_insert</span> <span class="k">after</span> <span class="k">insert</span>
+    <span class="o">-&gt;</span> <span class="k">on</span> <span class="n">tab1</span> <span class="k">for</span> <span class="k">each</span> <span class="k">row</span>
+    <span class="o">-&gt;</span> <span class="k">BEGIN</span>
+    <span class="o">-&gt;</span>   <span class="k">insert</span> <span class="k">into</span> <span class="n">tab2</span><span class="p">(</span><span class="n">tab2_id</span><span class="p">)</span> <span class="k">values</span><span class="p">(</span><span class="k">new</span><span class="p">.</span><span class="n">tab1_id</span><span class="p">);</span>
+    <span class="o">-&gt;</span> <span class="k">END</span>
+    <span class="o">-&gt;</span> <span class="err">$$</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">02</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delimiter</span> <span class="p">;</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 删除触发器
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delimiter</span> <span class="err">$$</span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">trigger</span> <span class="n">tab1_delete_after</span> <span class="k">after</span> <span class="k">delete</span>
+    <span class="o">-&gt;</span> <span class="k">on</span> <span class="n">tab1</span> <span class="k">for</span> <span class="k">each</span> <span class="k">rows</span>
+    <span class="o">-&gt;</span> <span class="k">BEGIN</span>
+    <span class="o">-&gt;</span>   <span class="k">delete</span> <span class="k">from</span> <span class="n">tab2</span> <span class="k">where</span> <span class="n">tab2_id</span> <span class="o">=</span> <span class="k">old</span><span class="p">.</span><span class="n">tab1_id</span><span class="p">;</span>
+    <span class="o">-&gt;</span> <span class="k">END</span>
+    <span class="o">-&gt;</span> <span class="err">$$</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delimiter</span> <span class="p">;</span></code></pre></div>
+<p>###5.2 记录学生表的更新</p>
+
+<p>####5.2.1 表结构</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 学生表
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">desc</span> <span class="n">student1</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">--------------+-----------------------+------+-----+---------+----------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">Field</span>        <span class="o">|</span> <span class="k">Type</span>                  <span class="o">|</span> <span class="k">Null</span> <span class="o">|</span> <span class="k">Key</span> <span class="o">|</span> <span class="k">Default</span> <span class="o">|</span> <span class="n">Extra</span>          <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------------+-----------------------+------+-----+---------+----------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">student_id</span>   <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>               <span class="o">|</span> <span class="k">NO</span>   <span class="o">|</span> <span class="n">PRI</span> <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span> <span class="n">auto_increment</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">student_name</span> <span class="o">|</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>           <span class="o">|</span> <span class="k">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
+<span class="o">|</span> <span class="n">student_sex</span>  <span class="o">|</span> <span class="n">enum</span><span class="p">(</span><span class="s1">&#39;male&#39;</span><span class="p">,</span><span class="s1">&#39;female&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="n">YES</span>  <span class="o">|</span>     <span class="o">|</span> <span class="n">male</span>    <span class="o">|</span>                <span class="o">|</span>
+<span class="o">+</span><span class="c1">--------------+-----------------------+------+-----+---------+----------------+
+</span><span class="c1"></span><span class="mi">3</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="c1">-- 更新记录表
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">desc</span> <span class="n">update_student1</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">---------------+---------+------+-----+---------+----------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">Field</span>         <span class="o">|</span> <span class="k">Type</span>    <span class="o">|</span> <span class="k">Null</span> <span class="o">|</span> <span class="k">Key</span> <span class="o">|</span> <span class="k">Default</span> <span class="o">|</span> <span class="n">Extra</span>          <span class="o">|</span>
+<span class="o">+</span><span class="c1">---------------+---------+------+-----+---------+----------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">update_record</span> <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="o">|</span> <span class="k">NO</span>   <span class="o">|</span> <span class="n">PRI</span> <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span> <span class="n">auto_increment</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">student_id</span>    <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="o">|</span> <span class="k">NO</span>   <span class="o">|</span>     <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
+<span class="o">|</span> <span class="n">update_date</span>   <span class="o">|</span> <span class="nb">date</span>    <span class="o">|</span> <span class="n">YES</span>  <span class="o">|</span>     <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
+<span class="o">+</span><span class="c1">---------------+---------+------+-----+---------+----------------+
+</span><span class="c1"></span><span class="mi">3</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<p>####5.2.2 创建触发器</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 更新学生表的同时也更新记录表
+</span><span class="c1"></span><span class="k">delimiter</span> <span class="err">$$</span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">trigger</span> <span class="n">student1_update_after</span> <span class="k">after</span> <span class="k">update</span>
+    <span class="o">-&gt;</span> <span class="k">on</span> <span class="n">student1</span> <span class="k">for</span> <span class="k">each</span> <span class="k">row</span>
+    <span class="o">-&gt;</span> <span class="k">BEGIN</span>
+    <span class="o">-&gt;</span>  <span class="k">if</span> <span class="k">new</span><span class="p">.</span><span class="n">student_id</span> <span class="o">!=</span> <span class="k">old</span><span class="p">.</span><span class="n">student_id</span> <span class="k">then</span>
+    <span class="o">-&gt;</span>   <span class="k">update</span> <span class="n">update_student1</span> <span class="k">set</span> <span class="n">student_id</span> <span class="o">=</span> <span class="k">new</span><span class="p">.</span><span class="n">student_id</span><span class="p">,</span> <span class="n">update_date</span> <span class="o">=</span> <span class="n">now</span><span class="p">()</span>
+    <span class="o">-&gt;</span>   <span class="k">where</span> <span class="n">student_id</span> <span class="o">=</span> <span class="k">old</span><span class="p">.</span><span class="n">student_id</span><span class="p">;</span>
+    <span class="o">-&gt;</span>  <span class="k">end</span> <span class="k">if</span><span class="p">;</span>
+    <span class="o">-&gt;</span> <span class="k">END</span>
+    <span class="o">-&gt;</span> <span class="err">$$</span>
+<span class="k">delimiter</span> <span class="p">;</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 删除学生表的时候也删除记录表
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delimiter</span> <span class="err">$$</span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">trigger</span> <span class="n">student1_delete_before</span> <span class="k">before</span> <span class="k">delete</span>
+    <span class="o">-&gt;</span> <span class="k">on</span> <span class="n">student1</span> <span class="k">for</span> <span class="k">each</span> <span class="k">row</span>
+    <span class="o">-&gt;</span> <span class="k">BEGIN</span>
+    <span class="o">-&gt;</span>  <span class="k">delete</span> <span class="k">from</span> <span class="n">update_student1</span>
+    <span class="o">-&gt;</span>  <span class="k">where</span> <span class="n">student_id</span> <span class="o">=</span> <span class="k">old</span><span class="p">.</span><span class="n">student_id</span><span class="p">;</span>
+    <span class="o">-&gt;</span> <span class="k">END</span>
+    <span class="o">-&gt;</span> <span class="err">$$</span>
+<span class="k">delimiter</span> <span class="p">;</span></code></pre></div></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/mysql"><span class="tag">MySQL</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>860</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2016/04/10/mysql%E8%A7%A6%E5%8F%91%E5%99%A8/");
+    var page_uniqueid = "af80679389215357639b92b1b335111f";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

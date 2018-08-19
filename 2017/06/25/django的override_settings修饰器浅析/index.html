@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Django的override_settings修饰器浅析</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="  Django的Settings模块代码说明 Django的override_settings修饰器分析   
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Django的override_settings修饰器浅析" />
+    <meta name="twitter:description" content="  Django的Settings模块代码说明 Django的override_settings修饰器分析   
+" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Django的override_settings修饰器浅析" />
+  <meta property="og:description" content="  Django的Settings模块代码说明 Django的override_settings修饰器分析   
+" />
+  <meta property="og:url" content="/2017/06/25/django%E7%9A%84override_settings%E4%BF%AE%E9%A5%B0%E5%99%A8%E6%B5%85%E6%9E%90/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2017/06/25/django%E7%9A%84override_settings%E4%BF%AE%E9%A5%B0%E5%99%A8%E6%B5%85%E6%9E%90/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Django的override_settings修饰器浅析</h1>
+      <p class="post-meta">@BWANGEL · Jun 25, 2017 · 2 min read</p>
+    </header>
+    <article class="post-content"><blockquote>
+<ol>
+<li>Django的Settings模块代码说明</li>
+<li>Django的<code>override_settings</code>修饰器分析</li>
+</ol>
+</blockquote>
+
+<p></p>
+
+<h2 id="前言">前言</h2>
+
+<p>前两天刚刚看了Django settings的实现，今天又发现了测试工具中有个<code>override_settings</code>修饰器，于是就想从它下手来分析一下Django的<code>settings</code>。</p>
+
+<p>本篇文章主要分析的是<code>override_settings</code>作为修饰器的实现，其作为上下文管理器的部分并未详细分析。</p>
+
+<h2 id="django的settings说明">Django的settings说明</h2>
+
+<p>在分析这个修饰器之前，我们先来了解一下Django的<code>settings</code>是如何实现的， Django的<code>settings</code>的代码存放在<code>django/conf/__init__.py</code>中，其中主要有三个类，<code>LazySettings</code>，<code>Settings</code>和<code>UserSettingsHolder</code>。</p>
+
+<h3 id="settings">Settings</h3>
+
+<p><code>Settings</code>类实现了Django配置的载入和存储功能，在它的<code>__init__</code>函数中，首先从<code>django/conf/global_settings.py</code>文件中导入Django默认的配置，然后再从<code>DJANGO_SETTINGS_MODULE</code>环境变量所指定的配置文件中导入我们项目自定义的配置，然后逐项地检查并添加配置。</p>
+
+<p>需要注意的是，<code>Settings</code>会把我们自定义的配置的名称存放到<code>Settings._explicit_settings</code>集合中，<code>Settings.is_overriden</code>函数就是通过检查<code>Settings._explicit_settings</code>集合，来查看某项配置是否被我们自定义的配置给覆盖掉了。</p>
+
+<h3 id="lazysettings">LazySettings</h3>
+
+<p><code>LazySettings</code>是<code>Settings</code>类的一个代理，或者可以认为是对<code>Settings</code>的一层包裹，它的主要功能就是<code>Lazy</code>，或者叫做懒载入。它把<code>Settings</code>类的实例存放在它的私有变量<code>_wrapped</code>中，初始化的时候，它默认将<code>_wrapped</code>设置为空，只有当从<code>LazySettings</code>中取值的时候(会调用<code>LazySettings.__getattr__</code>函数)，它才会调用<code>_setup</code>函数，实例化一个<code>Settings</code>对象，并从中取出对应的配置项。</p>
+
+<p>我们平常在代码中使用的<code>django.conf.settings</code>对象，就是这个类的实例。</p>
+
+<h3 id="usersettingsholder">UserSettingsHolder</h3>
+
+<p><code>UserSettingsHolder</code>类和上面两个类有些不同，它也是用来存储用户的配置项的，只不过它并不会从<code>django/conf/global_settings.py</code>文件中读取Django默认的配置，它只是单纯地将用户传入的配置存储起来，以供读取。</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_settings</span><span class="p">):</span>
+    <span class="s2">&#34;&#34;&#34;
+</span><span class="s2">    Requests for configuration variables not in this class are satisfied
+</span><span class="s2">    from the module specified in default_settings (if possible).
+</span><span class="s2">    &#34;&#34;&#34;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;_deleted&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">default_settings</span> <span class="o">=</span> <span class="n">default_settings</span></code></pre></div>
+<p>上面就是<code>UserSettingsHolder</code>构造函数，从中我们可以看到，它接收一个<code>default_settings</code>参数，它主要就是从这个参数中获取并存储用户要设置的配置，并不存储Django默认的配置。</p>
+
+<h2 id="override-settings修饰器的分析">override_settings修饰器的分析</h2>
+
+<p>了解完Django的<code>settings</code>的实现以后，我们再来看一下<code>override_settings</code>修饰器。</p>
+
+<p>我们在使用<code>override_settings</code>作为修饰器的时候，通常的形式是这样的:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="nd">@override_settings</span><span class="p">(</span><span class="n">DEBUG</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_some_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">pass</span></code></pre></div>
+<p>上面的代码中修饰器的部分，我们可以使用下面这种方式来理解它:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">test_some_feature</span> <span class="o">=</span> <span class="n">override_settings</span><span class="p">(</span><span class="n">DEBUG</span><span class="o">=</span><span class="bp">False</span><span class="p">)(</span><span class="n">test_some_feature</span><span class="p">)</span></code></pre></div>
+<p>从上面的形式可以看出，修饰器语法真正调用的是<code>override_settings</code>类的<code>__call__</code>方法，所以我们需要去关注一下<code>override_settings</code>的<code>__call__</code>方法。但是这个方法在<code>override_settings</code>类中并没有实现，它是在它的父类<code>TestContextDecorator</code>中实现的。</p>
+
+<h3 id="testcontextdecorator">TestContextDecorator</h3>
+
+<h4 id="call-方法"><code>__call__</code>方法</h4>
+
+<p><code>TestContextDecorator</code>类的<code>__call__</code>方法如下所示:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">decorated</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">decorated</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decorate_class</span><span class="p">(</span><span class="n">decorated</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">callable</span><span class="p">(</span><span class="n">decorated</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decorate_callable</span><span class="p">(</span><span class="n">decorated</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Cannot decorate object of type </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">decorated</span><span class="p">))</span></code></pre></div>
+<p>从代码中我们可以看出，这个函数的功能主要就是对被修饰的对象进行了一下鉴别，如果修饰的是类，则调用<code>decorate_class</code>函数，如果修饰的是其他的可调用对象，则调用<code>decorate_callable</code>函数。</p>
+
+<h4 id="decorate-class">decorate_class</h4>
+
+<p>接着我们来看一下<code>decorate_class</code>函数，它的代码如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">decorate_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">TestCase</span><span class="p">):</span>
+        <span class="n">decorated_setUp</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">setUp</span>
+        <span class="n">decorated_tearDown</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">tearDown</span>
+
+        <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="n">inner_self</span><span class="p">):</span>
+            <span class="o">-&gt;</span> <span class="n">context</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+            <span class="o">-&gt;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">attr_name</span><span class="p">:</span>
+            <span class="o">-&gt;</span>     <span class="nb">setattr</span><span class="p">(</span><span class="n">inner_self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attr_name</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+            <span class="n">decorated_setUp</span><span class="p">(</span><span class="n">inner_self</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="n">inner_self</span><span class="p">):</span>
+            <span class="n">decorated_tearDown</span><span class="p">(</span><span class="n">inner_self</span><span class="p">)</span>
+            <span class="o">-&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">setUp</span> <span class="o">=</span> <span class="n">setUp</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">tearDown</span> <span class="o">=</span> <span class="n">tearDown</span>
+        <span class="k">return</span> <span class="bp">cls</span>
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Can only decorate subclasses of unittest.TestCase&#39;</span><span class="p">)</span></code></pre></div>
+<p>从上面的代码可以看出，<code>decorate_class</code>函数的针对<code>TestCase</code>类的<code>setUp</code>和<code>tearDown</code>函数添加了一些额外的代码，即我用<code>-&gt;</code>符号标记的部分。</p>
+
+<p>这些代码的主要功能就是在<code>TestCase</code>类初始化的时候调用<code>TestContextDecorator.enable</code>函数，再以<code>self.attr_name</code>的值作为名称，把<code>enable</code>函数的返回值插入到<code>TestCase</code>类的实例中。同时在<code>TestCase</code>类销毁的时候调用<code>TestContextDecorator.disable</code>函数。</p>
+
+<p>我们接着再去查看<code>TestContextDecorator.enable</code>和<code>TestContextDecorator.disable</code>函数，我们发现它们是在<code>override_settings</code>子类中实现的，那我们对于<code>decorate_class</code>的分析就到这里，<code>enable</code>和<code>disable</code>函数在后面分析到<code>override_settings</code>子类的时候会继续分析。</p>
+
+<h4 id="decorate-callable">decorate_callable</h4>
+
+<blockquote>
+<p><strong>注意</strong>:
+这个函数的代码涉及到了Python的上下文管理器(<code>with</code>语句)的部分知识，如果你可以自己动手写一个上下文管理器的话，继续阅读即可。
+如果你对于上下文管理器还有些疑问的话，请参考我的另一篇文章: <a href="https://www.bwangel.me/2016/04/25/Python%E7%9A%84with%E8%AF%AD%E5%8F%A5/">PEP 343: Python的with语句</a></p>
+</blockquote>
+
+<p>分析完了<code>decorate_class</code>函数，我们接着回到<code>TestContextDecorator.__call__</code>方法，接着分析被修饰对象是可调用对象的那一种情况，也就是<code>TestContextDecorator.decorate_callable</code>函数。<code>decorate_callable</code>函数的代码如下所示:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">decorate_callable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">inner</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span> <span class="k">as</span> <span class="n">context</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwarg_name</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">kwarg_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">context</span>
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">inner</span></code></pre></div>
+<p>可以看到，<code>decorate_callable</code>函数其实就是一个修饰器，它的主要功能就是将<code>TestContextDecorator</code>的实例作为一个上下文管理器进行了调用，需要注意的是，<code>return</code>语句是被包裹在<code>with</code>语句内的，也就是说，被修饰的函数执行完了以后，才会接着执行上下文管理器的<code>__exit__</code>函数。同时，它还会使用<code>self.kwarg_name</code>的值作为参数名字，将上下文管理器的返回值(也就是<code>__enter__</code>函数的返回值)传入被修饰的函数中。</p>
+
+<p>既然<code>decorate_callable</code>将<code>TestContextDecorator</code>当做一个上下文管理器来使用，我们就需要关注一下它的<code>__enter__</code>和<code>__exit__</code>函数，这两个函数的代码如下所示:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span></code></pre></div>
+<p>可以看到，这两个函数的功能，基本上也是调用<code>enable</code>和<code>disable</code>函数。</p>
+
+<h3 id="override-settings">override_settings</h3>
+
+<p>分析完了<code>override_settings</code>的父类，我们接着来分析这个类本身。从上面的分析中我们可以看到，<code>override_settings</code>对于被修饰的类或者函数基本上就是做两件事，类或者函数初始化之前调用<code>enable</code>函数，并将<code>enable</code>函数的返回值传递到被修饰的类或者函数中。然后再在被修饰的类或者函数退出的时候调用<code>disable</code>函数。所以，我们将关注点集中到<code>override_settings</code>类的<code>enable</code>和<code>disable</code>函数上就好了。</p>
+
+<p>首先来说<code>override_settings.enable</code>函数，它的代码如下所示:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">enable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1"># Keep this code at the beginning to leave the settings unchanged</span>
+    <span class="c1"># in case it raises an exception because INSTALLED_APPS is invalid.</span>
+    <span class="c1"># 注意self.options其实就是`override_settings`类的构造函数中传入的关键字参数kwargs</span>
+    <span class="k">if</span> <span class="s1">&#39;INSTALLED_APPS&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">apps</span><span class="o">.</span><span class="n">set_installed_apps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;INSTALLED_APPS&#39;</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">apps</span><span class="o">.</span><span class="n">unset_installed_apps</span><span class="p">()</span>
+            <span class="k">raise</span>
+    <span class="c1"># 这个settings._wrapped就是真实保存的设置</span>
+    <span class="c1"># UserSettingsHolder就是</span>
+    <span class="n">override</span> <span class="o">=</span> <span class="n">UserSettingsHolder</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">_wrapped</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">new_value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">override</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">new_value</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">_wrapped</span>
+    <span class="n">settings</span><span class="o">.</span><span class="n">_wrapped</span> <span class="o">=</span> <span class="n">override</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">new_value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">setting_changed</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">_wrapped</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span>
+                              <span class="n">setting</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">new_value</span><span class="p">,</span> <span class="n">enter</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></code></pre></div>
+<p>可以看到<code>enable</code>函数的功能就是在原有的<code>settings</code>配置上，用我们在<code>options</code>中传入的配置覆盖掉原来的配置，并针对修改的配置项发出信号。同时将原来的配置保存到<code>self.wrapped</code>变量中。</p>
+
+<p>接着我们再来看<code>override_settings.disable</code>函数，它的代码如下:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">disable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="s1">&#39;INSTALLED_APPS&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">:</span>
+        <span class="n">apps</span><span class="o">.</span><span class="n">unset_installed_apps</span><span class="p">()</span>
+    <span class="n">settings</span><span class="o">.</span><span class="n">_wrapped</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span>
+    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">:</span>
+        <span class="n">new_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">setting_changed</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">_wrapped</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span>
+                              <span class="n">setting</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">new_value</span><span class="p">,</span> <span class="n">enter</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span></code></pre></div>
+<p>这个函数的功能也很简单，将<code>self.wrapped</code>中保存的配置还原，并针对更改的配置发出信号。</p>
+
+<h2 id="总结">总结</h2>
+
+<p>OK，至此，对于<code>override_settings</code>的分析就结束了，它的功能也比较简单，就是在一个作用域中修改配置，并在这个作用域结束的时候将配置还原，如果它修饰的作用域是一个函数的话，由于函数不像类有构造和析构函数，它就使用Python的上下文管理器来实现类的构造和析构函数的功能。</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/python"><span class="tag">Python</span></a></li>
+        
+          <li><a href="/tags/django"><span class="tag">Django</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>419</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2017/06/25/django%E7%9A%84override_settings%E4%BF%AE%E9%A5%B0%E5%99%A8%E6%B5%85%E6%9E%90/");
+    var page_uniqueid = "84c7dcad30e2cdee6d1a5aaa306e34a4";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

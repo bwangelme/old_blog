@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>MySQL 外键分析</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="本文主要介绍了 MySQL 外键的一些特性 " />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="MySQL 外键分析" />
+    <meta name="twitter:description" content="本文主要介绍了 MySQL 外键的一些特性 " />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="MySQL 外键分析" />
+  <meta property="og:description" content="本文主要介绍了 MySQL 外键的一些特性 " />
+  <meta property="og:url" content="/2018/03/05/mysql-%E5%A4%96%E9%94%AE%E5%88%86%E6%9E%90/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2018/03/05/mysql-%E5%A4%96%E9%94%AE%E5%88%86%E6%9E%90/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">MySQL 外键分析</h1>
+      <p class="post-meta">@BWANGEL · Mar 5, 2018 · 1 min read</p>
+    </header>
+    <article class="post-content"><p>本文主要介绍了 MySQL 外键的一些特性
+</p>
+
+<h2 id="定义">定义</h2>
+
+<p>外键用来保证参照完整性，MySQL 数据库的 MyISAM 存储引擎本身并不支持外键，对于外键的定义只是起一个注释的作用，而 InnoDB 存储引擎则完整支持外键约束。</p>
+
+<p>外键的定义如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="p">[</span><span class="k">CONSTRAINT</span> <span class="p">[</span><span class="n">symbol</span><span class="p">]]</span> <span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="p">[</span><span class="n">index_name</span><span class="p">]</span> <span class="p">(</span><span class="n">index_col_name</span><span class="p">,...)</span>
+<span class="k">REFERENCES</span> <span class="n">tbl_name</span> <span class="p">(</span><span class="n">index_col_name</span><span class="p">,...)</span>
+  <span class="p">[</span><span class="k">MATCH</span> <span class="k">FULL</span> <span class="o">|</span> <span class="k">MATCH</span> <span class="k">PARTIAL</span> <span class="o">|</span> <span class="k">MATCH</span> <span class="k">SIMPLE</span><span class="p">]</span>
+  <span class="p">[</span><span class="k">ON</span> <span class="k">DELETE</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">CASCADE</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">DEFAULT</span><span class="p">]</span>
+  <span class="p">[</span><span class="k">ON</span> <span class="k">UPDATE</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">CASCADE</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">DEFAULT</span><span class="p">]</span></code></pre></div>
+<h2 id="reference-option">REFERENCE OPTION</h2>
+
+<p>一般来说，将被引用的表称为父表，将引用的表称为子表。当我们创建外键约束时，可以使用<code>ON UPDATE</code>和<code>ON DELETE</code>定义当父表发生<code>UPDATE</code>或者<code>DELETE</code>时，对子表做的操作。</p>
+
+<ul>
+<li><code>CASCADE</code>表示当父表进行<code>DELETE</code>或<code>UPDATE</code>操作时，对相应的子表中的数据也进行<code>DELETE</code>或<code>UPDATE</code>操作</li>
+<li><code>SET NULL</code>表示当父表发生<code>DELETE</code>或<code>UPDATE</code>操作时，相应的子表中的数据被设置称为了<code>NULLL</code>值，但是子表中相对应的列必须允许设置为<code>NULL</code>值</li>
+<li><code>NO ACTION</code>和<code>RESTRICT</code>表示当父表发生<code>DELETE</code>或<code>UPDATE</code>操作时，抛出错误，不允许这类操作发生</li>
+<li><code>SET DEFAULT</code>选项能够被 MySQL 解析器识别，但是 InnoDB 不支持在外键定义中使用<code>SET DEFAULT</code>选项</li>
+</ul>
+
+<p>在其他数据库中，如 Oracle 数据库，有一种称为延时检查的外键约束，即检查在SQL语句运行完成后再执行。而目前 MySQL 数据库的外键约束都是即时检查，因此从上面的定义中可以看出在 MySQL 数据库中<code>NO ACTION</code>和<code>RESTRICT</code>的功能是相同的。</p>
+
+<h2 id="外键和索引">外键和索引</h2>
+
+<p>在 Oracle 数据库中，如果创建了外键以后，没有在外键上添加索引。那么当更新父表时，会锁定子表，对子表进行全表扫描来进行一次更新，当父表有多个操作同时进行时，频繁对子表上表锁，容易造成死锁。
+在 InnoDB 存储引擎中，创建外键时会自动地对外键列添加索引，从而避免了外键列上无索引导致的死锁问题。</p>
+
+<h2 id="忽略外键检查">忽略外键检查</h2>
+
+<p>对于参照完整性约束，外键能够起到非常好的作用，但是对于数据库的导入操作，外键往往导致在外键检查上花费大量的时间，因此我们可以设定 MySQL 在导入外键时忽略外键检查的选项。</p>
+
+<pre><code>mysql&gt; set foreign_key_checks = 0;
+mysql&gt; LOAD DATA...
+mysql&gt; set foreign_key_checks = 1;
+</code></pre>
+
+<h2 id="参考资料">参考资料</h2>
+
+<ol>
+<li><a href="https://dev.mysql.com/doc/refman/5.5/en/create-table-foreign-keys.html">MySQL 文档: 13.1.17.6 Using FOREIGN KEY Constraints</a></li>
+<li><a href="https://book.douban.com/subject/24708143/">MySQL 技术内幕: 4.6.7节</a></li>
+<li><a href="http://tivan.iteye.com/blog/1184187">Oracle 外键引起的死锁</a></li>
+<li><a href="https://yemengying.com/2017/09/04/oracle-foreignkey-lock/">Oracle 中的外键与锁</a></li>
+</ol></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/mysql"><span class="tag">MySQL</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>166</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2018/03/05/mysql-%E5%A4%96%E9%94%AE%E5%88%86%E6%9E%90/");
+    var page_uniqueid = "caa196a47b2a3476e55181cf1634d4db";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

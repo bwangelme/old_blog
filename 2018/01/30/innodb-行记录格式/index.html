@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>InnoDB 行记录格式</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="简介: 本文主要讲述了 InnoDB 的行如何在数据文件中进行存储的，同时简单分析了 InnoDB 的逻辑存储结构
+
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="InnoDB 行记录格式" />
+    <meta name="twitter:description" content="简介: 本文主要讲述了 InnoDB 的行如何在数据文件中进行存储的，同时简单分析了 InnoDB 的逻辑存储结构
+
+" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="InnoDB 行记录格式" />
+  <meta property="og:description" content="简介: 本文主要讲述了 InnoDB 的行如何在数据文件中进行存储的，同时简单分析了 InnoDB 的逻辑存储结构
+
+" />
+  <meta property="og:url" content="/2018/01/30/innodb-%E8%A1%8C%E8%AE%B0%E5%BD%95%E6%A0%BC%E5%BC%8F/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2018/01/30/innodb-%E8%A1%8C%E8%AE%B0%E5%BD%95%E6%A0%BC%E5%BC%8F/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">InnoDB 行记录格式</h1>
+      <p class="post-meta">@BWANGEL · Jan 30, 2018 · 2 min read</p>
+    </header>
+    <article class="post-content"><p><strong>简介</strong>: 本文主要讲述了 InnoDB 的行如何在数据文件中进行存储的，同时简单分析了 InnoDB 的逻辑存储结构</p>
+
+<p></p>
+
+<h2 id="前言">前言</h2>
+
+<p>InnoDB 是 MySQL 的一种面向行(row-oriented)存储引擎，即在其中数据是按照行的形式存储的，那么行又是如何组织的呢？在了解 InnoDB 的行格式之前，我们先简单了解一下 InnoDB 的逻辑存储结构。</p>
+
+<h2 id="innodb-逻辑存储结构">InnoDB 逻辑存储结构</h2>
+
+<p>从 InnoDB 的逻辑存储结构上看，所有的数据都被存储在一个空间中，这个空间就叫做表空间，表空间又是由段(segment)，区(extent)和页(Page)组成的，页在某些文档中也被称为块(block)。它们之间的关系可以用下图表示:</p>
+
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-01-11-InnoDB%20%E9%80%BB%E8%BE%91%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84.png" alt="" /></p>
+
+<h3 id="表空间">表空间</h3>
+
+<p>表空间是 InnoDB 逻辑存储的最高层，所有的数据都放在表空间中。当我们创建一个数据库的时候，它会产生后缀为<code>idb</code>和<code>frm</code>的文件，其中<code>frm</code>文件是MySQL的表和视图结构定义文件，<code>idb</code>文件是MySQL表的数据文件，我们说的表空间就存储在<code>idb</code>文件中。</p>
+
+<p>当我们开启了<code>innodb_file_per_table</code>配置项后，InnoDB 会为每个表分配一个<strong>独立表空间文件</strong>，但是这个文件只存储该表的数据，索引，插入缓存BITMAP等信息，其余信息还存放在<strong>共享表空间文件</strong>中。</p>
+
+<p>关于<code>idb</code>和<code>frm</code>文件之间的关系可以用下图来表示:</p>
+
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-01-03-122727.jpg" alt="" /></p>
+
+<h3 id="段">段</h3>
+
+<p>InnoDB 的表空间是由各种段组成的，包括数据段，索引段和回滚段等。因为 InnoDB 存储引擎表是索引组织(index organized)的，因此数据段即为B+树的叶子节点，索引段即为B+树的非叶子节点。</p>
+
+<h3 id="区">区</h3>
+
+<p>区的大小为1M</p>
+
+<p>MySQL创建表空间的时候，不先申请一整个区，而是先申请一些碎片页(33个)。如果表的空间持续增加，用完所有碎片页以后，才会去申请区，此时表空间文件(tablename.idb)的大小就会1M，1M地增加。</p>
+
+<p>如果通过区申请空间，那么就会有很多空闲页(<code>&lt;Freshly Allocated Page&gt;</code>)。</p>
+
+<h3 id="页">页</h3>
+
+<p>InnoDB 的区是由页组成的，页主要有以下几种类型:</p>
+
+<table>
+<thead>
+<tr>
+<th>InnoDB存储引擎中页的类型</th>
+<th>十六进制</th>
+<th>解释</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>FIL_PAGE_INDEX</code></td>
+<td>0x45BF</td>
+<td>B+树叶节点</td>
+</tr>
+
+<tr>
+<td><code>FIL_PAGE_UNDO_LOG</code></td>
+<td>0x0002</td>
+<td>Undo Log 页</td>
+</tr>
+
+<tr>
+<td><code>FIL_PAGE_INODE</code></td>
+<td>0x0003</td>
+<td>索引节点</td>
+</tr>
+
+<tr>
+<td><code>FIL_PAGE_IBUF_FREE_LIST</code></td>
+<td>0x0004</td>
+<td>Insert Buffer 空闲列表</td>
+</tr>
+
+<tr>
+<td><code>FIL_PAGE_TYPE_ALLOCATED</code></td>
+<td>0x0000</td>
+<td>该页为最新分配</td>
+</tr>
+
+<tr>
+<td><code>FIL_PAGE_IBUF_BITMAP</code></td>
+<td>0x0005</td>
+<td>Insert Buffer 位图</td>
+</tr>
+
+<tr>
+<td><code>FIL_PAGE_TYPE_SYS</code></td>
+<td>0x0006</td>
+<td>系统页</td>
+</tr>
+
+<tr>
+<td><code>FIL_PAGE_TYPE_TRX_SYS</code></td>
+<td>0x0007</td>
+<td>事务系统数据</td>
+</tr>
+
+<tr>
+<td><code>FIL_PAGE_TYPE_FSP_HDR</code></td>
+<td>0x0008</td>
+<td>File Space Header</td>
+</tr>
+
+<tr>
+<td><code>FIL_PAGE_TYPE_XDES</code></td>
+<td>0x0009</td>
+<td>扩展描述页</td>
+</tr>
+
+<tr>
+<td><code>FIL_PAGE_TYPE_BLOB</code></td>
+<td>0x000A</td>
+<td>BLOB页</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="innodb-行">InnoDB 行</h2>
+
+<h3 id="char-的行存储结构">Char 的行存储结构</h3>
+
+<p>从 MySQL 4.1版本开始，<code>char(N)</code>类型中的<code>N</code>表示的就是字符的长度，而不是字符串的长度。</p>
+
+<p>举个例子，我们创建如下的表:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">test_char</span><span class="p">(</span>
+    <span class="o">-&gt;</span> <span class="n">c1</span> <span class="nb">char</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="o">-&gt;</span> <span class="p">)</span><span class="n">charset</span><span class="o">=</span><span class="s1">&#39;gbk&#39;</span><span class="p">;</span></code></pre></div>
+<p>然后向其中插入数据，并查看其中的数据:</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">insert</span> <span class="k">into</span> <span class="n">test_char</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;我们&#39;</span><span class="p">);</span>
+<span class="k">insert</span> <span class="k">into</span> <span class="n">test_char</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;abc&#39;</span><span class="p">);</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="k">length</span><span class="p">(</span><span class="n">c1</span><span class="p">),</span> <span class="k">character_length</span><span class="p">(</span><span class="n">c1</span><span class="p">),</span> <span class="n">c1</span> <span class="k">from</span> <span class="n">test_char</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">------------+----------------------+--------+
+</span><span class="c1"></span><span class="o">|</span> <span class="k">length</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span> <span class="o">|</span> <span class="k">character_length</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span> <span class="o">|</span> <span class="n">c1</span>     <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------+----------------------+--------+
+</span><span class="c1"></span><span class="o">|</span>          <span class="mi">3</span> <span class="o">|</span>                    <span class="mi">3</span> <span class="o">|</span> <span class="n">abc</span>    <span class="o">|</span>
+<span class="o">|</span>          <span class="mi">6</span> <span class="o">|</span>                    <span class="mi">3</span> <span class="o">|</span> <span class="err">我们</span>    <span class="o">|</span>
+<span class="o">+</span><span class="c1">------------+----------------------+--------+</span></code></pre></div>
+<p>我们可以看到，<code>我们</code>和<code>abc</code>的字符长度都是3，但是它们的字节长度是不同的。这也就意味着，在数据文件中存储的时候，<code>char</code>类型的字段也是被当做变长字段来存储的。</p>
+
+<p>我们可以通过<code>hexdump</code>命令来查看<code>test_char</code>表对应的数据文件，具体命令如下:</p>
+
+<pre><code>hexdump -C -v /usr/local/var/mysql/hp/test_char.ibd |less
+</code></pre>
+
+<p><strong>注意</strong>: 我的 MySQL 开启了<code>innodb_file_per_table</code>选项，所以每个表都会有自己单独的数据文件。上述命令中的<code>/usr/local/var/mysql/hp/test_char.ibd</code>文件是<code>hp</code>数据库中的<code>test_char</code>表的数据文件。</p>
+
+<pre><code>0000c090  01 10 61 62 20 20 06 00  00 00 18 00 20 00 00 00  |..ab  ...... ...|
+0000c0a0  00 06 08 00 00 00 1f 43  fb ba 00 00 01 2f 01 10  |.......C...../..|
+0000c0b0  e6 88 91 e4 bb ac 04 00  00 00 20 ff b3 00 00 00  |.......... .....|
+0000c0c0  00 06 09 00 00 00 1f 44  00 bd 00 00 01 35 01 10  |.......D.....5..|
+0000c0d0  61 62 63 20 00 00 00 00  00 00 00 00 00 00 00 00  |abc ............|
+</code></pre>
+
+<p>在上面的二进制数据中，<code>c096 - c0b5</code>代表的是<code>c1=我们</code>这一行的数据，它的具体内容如下:</p>
+
+<ul>
+<li><code>c1=我们</code>行数据</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>二进制内容</th>
+<th>具体含义</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>06</td>
+<td>变长字段c1的长度</td>
+</tr>
+
+<tr>
+<td>00</td>
+<td>NULL标志位</td>
+</tr>
+
+<tr>
+<td>00 00 18 00 20</td>
+<td>Record Header</td>
+</tr>
+
+<tr>
+<td>00 00 00 00 06 08</td>
+<td>隐式创建的行 ID</td>
+</tr>
+
+<tr>
+<td>00 00 00 1f 43 fb</td>
+<td>事务ID</td>
+</tr>
+
+<tr>
+<td>ba 00 00 01 2f 01 10</td>
+<td>回滚指针</td>
+</tr>
+
+<tr>
+<td>e6 88 91 e4 BB AC</td>
+<td>列数据字符串&rsquo;我们&rsquo;</td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li><code>c1=abc</code>行数据</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>二进制内容</th>
+<th>具体含义</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>04</td>
+<td>变长字段c1的长度</td>
+</tr>
+
+<tr>
+<td>00</td>
+<td>NULL标志位</td>
+</tr>
+
+<tr>
+<td>00 00 20 ff b3</td>
+<td>Record Header</td>
+</tr>
+
+<tr>
+<td>00 00 00 00 06 09</td>
+<td>隐式创建的行ID</td>
+</tr>
+
+<tr>
+<td>00 00 00 1f 44 00</td>
+<td>事务ID</td>
+</tr>
+
+<tr>
+<td>bd 00 00 01 35 01 10</td>
+<td>回滚指针</td>
+</tr>
+
+<tr>
+<td>61 62 63 20</td>
+<td>列数据字符串&rsquo;abc&rsquo;，另外加上补全4字符的空格</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>疑惑</strong>: 这里<code>CHAR</code>类型补全空格的规则是什么（例如中文什么时候会补全？），我还不太了解，如有了解的同学，希望可以指出</p>
+
+<p>从上面的例子分析中，我们可以看到。MySQL 4.1 之后，<code>CHAR(N)</code>类型中的长度N表示的就是字符的长度，所以底层存储的字符数据实际上是变长的，MySQL也是将它按照变长数据的类型来处理的。</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/mysql"><span class="tag">MySQL</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>201</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2018/01/30/innodb-%E8%A1%8C%E8%AE%B0%E5%BD%95%E6%A0%BC%E5%BC%8F/");
+    var page_uniqueid = "3b45f4e62715e5b39d827ffdac212217";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

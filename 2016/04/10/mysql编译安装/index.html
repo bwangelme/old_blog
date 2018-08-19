@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>MySQL编译安装</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍 MySQL 编译安装
+ 
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="MySQL编译安装" />
+    <meta name="twitter:description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍 MySQL 编译安装
+ 
+" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="MySQL编译安装" />
+  <meta property="og:description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍 MySQL 编译安装
+ 
+" />
+  <meta property="og:url" content="/2016/04/10/mysql%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2016/04/10/mysql%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">MySQL编译安装</h1>
+      <p class="post-meta">@BWANGEL · Apr 10, 2016 · 2 min read</p>
+    </header>
+    <article class="post-content"><p><strong>摘要</strong>:</p>
+
+<blockquote>
+<p>这是一篇关于MySQL的文章，主要介绍 MySQL 编译安装</p>
+</blockquote>
+
+<p></p>
+
+<h1 id="mysql编译安装">MySQL编译安装</h1>
+
+<h2 id="0-环境准备">0. 环境准备</h2>
+
+<ul>
+<li>安装依赖包</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">yum -y remove mysql mysql-server
+rm /etc/my.cnf
+yum install ncurses-devel openssl-devel bison gcc make</code></pre></div>
+<ul>
+<li>编译安装CMake</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">tar -xvf cmake-3.5.0-rc3.tar.gz
+<span class="nb">cd</span> cmake-3.5.0-rc3
+./configure
+gmake
+make
+make install</code></pre></div>
+<h2 id="1-编译安装mysql">1. 编译安装MySQL</h2>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">groupadd mysql
+<span class="c1"># -M 表示不创建Home目录
+</span><span class="c1"></span>useradd -M -g mysql -s /sbin/nologin mysql
+
+tar -xvf mysql-5.6.28.tar.gz
+<span class="nb">cd</span> mysql-5.6.28
+cmake <span class="se">\
+</span><span class="se"></span>
+cmake <span class="se">\
+</span><span class="se"></span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span>/usr/local/mysql <span class="se">\
+</span><span class="se"></span>-DSYSCONFDIR<span class="o">=</span>/etc/ <span class="se">\ </span><span class="c1"># 配置文件目录
+</span><span class="c1"></span>-DMYSQL_DATADIR<span class="o">=</span>/usr/local/mysql/data <span class="se">\ </span> <span class="c1"># 数据库文件位置
+</span><span class="c1"></span>-DMYSQL_TCP_PORT<span class="o">=</span><span class="m">3306</span> <span class="se">\
+</span><span class="se"></span>-DMYSQL_UNIX_ADDR<span class="o">=</span>/tmp/mysql.sock <span class="se">\ </span><span class="c1"># 本地套接字位置
+</span><span class="c1"></span>-DWITH_INNOBASE_STORAGE_ENGINE<span class="o">=</span><span class="m">1</span> <span class="se">\
+</span><span class="se"></span>-DENABLED_LOCAL_INFILE<span class="o">=</span><span class="m">1</span> <span class="se">\
+</span><span class="se"></span>-DWITH_EMBEDDED_SERVER<span class="o">=</span><span class="m">1</span> <span class="se">\
+</span><span class="se"></span>-DWITH_SSL<span class="o">=</span>system <span class="se">\
+</span><span class="se"></span>-DWITH_READLINE<span class="o">=</span><span class="m">1</span> <span class="se">\
+</span><span class="se"></span>-DDEFAULT_COLLATION<span class="o">=</span>utf8_general_ci <span class="se">\ </span><span class="c1"># 字符集
+</span><span class="c1"></span>-DEXTRA_CHARSETS<span class="o">=</span>all <span class="se">\
+</span><span class="se"></span>-DDEFAULT_CHARSET<span class="o">=</span>utf8 <span class="c1"># 字符
+</span><span class="c1"></span>
+make
+make install</code></pre></div>
+<h2 id="2-配置mysql">2. 配置MySQL</h2>
+
+<ul>
+<li>/usr/local/mysql/ 目录查看</li>
+</ul>
+
+<p>sql-bench 基本测试工具</p>
+
+<ul>
+<li>初始化</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> /usr/local/mysql/
+chown -R mysql:mysql /usr/local/mysql/
+./srcipts/mysql_install_db --user<span class="o">=</span>mysql --datadir<span class="o">=</span>/usr/local/mysql/data/ <span class="c1"># 初始化脚本
+</span><span class="c1"></span># 初始化完成后data下目录就会多出MySQL,performance_shcema目录</code></pre></div>
+<ul>
+<li>配置文件和启动脚本安装</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">cp support-files/my-huge.cnf /etc/my.cnf
+cp support-files/mysql.server /etc/init.d/mysqld
+chmod <span class="m">755</span> /etc/init.d/mysqld
+chkconfig -add mysqld
+chkconfig mysqld on
+service mysqld start</code></pre></div>
+<ul>
+<li>查看MySQL进程</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>root@localhost mysql<span class="o">]</span><span class="c1"># ps aufx | grep mysql
+</span><span class="c1"></span>root      <span class="m">91734</span>  <span class="m">0</span>.1  <span class="m">0</span>.1  <span class="m">11340</span>  <span class="m">1372</span> pts/1    S    <span class="m">06</span>:57   <span class="m">0</span>:00
+      /bin/sh /usr/local/mysql/bin/mysqld_safe
+                            --datadir<span class="o">=</span>/usr/local/mysql/data
+                            --pid-file<span class="o">=</span>/usr/local/mysql/data/localhost.localdomain.pid
+mysql     <span class="m">91837</span>  <span class="m">7</span>.8 <span class="m">44</span>.9 <span class="m">1034904</span> <span class="m">452048</span> pts/1  Sl   <span class="m">06</span>:57   <span class="m">0</span>:00
+      <span class="se">\_</span> /usr/local/mysql/bin/mysqld --basedir<span class="o">=</span>/usr/local/mysql
+                                     --datadir<span class="o">=</span>/usr/local/mysql/data
+                                     --plugin-dir<span class="o">=</span>/usr/local/mysql/lib/plugin
+                                     --user<span class="o">=</span>mysql
+                                     <span class="c1">#错误日志文件位置 !!
+</span><span class="c1"></span>                                     --log-error<span class="o">=</span>/usr/local/mysql/data/localhost.localdomain.err
+                                     --pid-file<span class="o">=</span>/usr/local/mysql/data/localhost.localdomain.pid</code></pre></div>
+<ul>
+<li>配置PATH</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">vim /etc/profile
+
+<span class="c1"># Path manipulation
+</span><span class="c1"># 给所有用户添加上MySQL的执行文件
+</span><span class="c1"></span>pathmunge /usr/local/mysql/bin after <span class="c1">#此句是我们添加的语句
+</span><span class="c1"></span><span class="k">if</span> <span class="o">[</span> <span class="s2">&#34;</span><span class="nv">$EUID</span><span class="s2">&#34;</span> <span class="o">=</span> <span class="s2">&#34;0&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    pathmunge /sbin
+    pathmunge /usr/sbin
+    pathmunge /usr/local/sbin
+<span class="k">else</span>
+    pathmunge /usr/local/sbin after
+    pathmunge /usr/sbin after
+    pathmunge /sbin after
+<span class="k">fi</span>
+
+<span class="nb">source</span> /etc/profile</code></pre></div>
+<h2 id="3-登陆mysql">3. 登陆MySQL</h2>
+
+<ul>
+<li>指定登陆密码并登陆</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mysqladmin -uroot password <span class="s1">&#39;passwd&#39;</span>
+mysql -u root -p</code></pre></div>
+<ul>
+<li><p>图形登陆工具</p>
+
+<ul>
+<li>MySQL WorkBench</li>
+<li>SQLyog</li>
+</ul></li>
+
+<li><p>授权账号进行远程连接</p></li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">grant</span> <span class="k">all</span> <span class="k">on</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">to</span> <span class="n">xff</span><span class="o">@</span><span class="s1">&#39;%&#39;</span> <span class="n">identified</span> <span class="k">by</span> <span class="s1">&#39;123&#39;</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="k">user</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="k">host</span> <span class="k">from</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">------+-------------------------------------------+-----------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="k">user</span> <span class="o">|</span> <span class="n">password</span>                                  <span class="o">|</span> <span class="k">host</span>                  <span class="o">|</span>
+<span class="o">+</span><span class="c1">------+-------------------------------------------+-----------------------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">root</span> <span class="o">|</span> <span class="o">*</span><span class="mi">59</span><span class="n">C70DA2F3E3A5BDF46B68F5C8B8F25762BCCEF0</span> <span class="o">|</span> <span class="n">localhost</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">root</span> <span class="o">|</span>                                           <span class="o">|</span> <span class="n">localhost</span><span class="p">.</span><span class="n">localdomain</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">root</span> <span class="o">|</span>                                           <span class="o">|</span> <span class="mi">127</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span>             <span class="o">|</span>
+<span class="o">|</span> <span class="n">root</span> <span class="o">|</span>                                           <span class="o">|</span> <span class="p">::</span><span class="mi">1</span>                   <span class="o">|</span>
+<span class="o">|</span>      <span class="o">|</span>                                           <span class="o">|</span> <span class="n">localhost</span>             <span class="o">|</span>
+<span class="o">|</span>      <span class="o">|</span>                                           <span class="o">|</span> <span class="n">localhost</span><span class="p">.</span><span class="n">localdomain</span> <span class="o">|</span>
+<span class="o">|</span> <span class="n">xff</span>  <span class="o">|</span> <span class="o">*</span><span class="mi">23</span><span class="n">AE809DDACAF96AF0FD78ED04B6A265E05AA257</span> <span class="o">|</span> <span class="o">%</span>                     <span class="o">|</span>
+<span class="o">+</span><span class="c1">------+-------------------------------------------+-----------------------+
+</span><span class="c1"></span><span class="mi">7</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/mysql"><span class="tag">MySQL</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>860</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2016/04/10/mysql%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/");
+    var page_uniqueid = "a0da79a20ec8c51e840f67b154aeca6a";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Go与数据结构之二叉搜索树</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="简介: 利用Go语言实现二叉搜索树并为其编写单元测试
+
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Go与数据结构之二叉搜索树" />
+    <meta name="twitter:description" content="简介: 利用Go语言实现二叉搜索树并为其编写单元测试
+
+" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Go与数据结构之二叉搜索树" />
+  <meta property="og:description" content="简介: 利用Go语言实现二叉搜索树并为其编写单元测试
+
+" />
+  <meta property="og:url" content="/2018/03/01/go%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B9%8B%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2018/03/01/go%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B9%8B%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Go与数据结构之二叉搜索树</h1>
+      <p class="post-meta">@BWANGEL · Mar 1, 2018 · 3 min read</p>
+    </header>
+    <article class="post-content"><p><strong>简介</strong>: 利用Go语言实现二叉搜索树并为其编写单元测试</p>
+
+<p></p>
+
+<h2 id="说明">说明</h2>
+
+<p>本文是我读了<a href="https://book.douban.com/subject/1139426/">《数据结构与算法分析 - C语言描述》</a>后总结的二叉搜索树的实现，在本文中涉及到的代码都可以在我的Github仓库 <a href="https://github.com/bwangel23/LeetCode/tree/daic/4chapter/searchtree">bwangel23/LeetCode</a> 中找到。</p>
+
+<h2 id="描述">描述</h2>
+
+<p>对于二叉树中的任意节点X，它的左子树中所有关键字的值小于X的关键字值，而它的右子树中所有关键字值大于X的关键字值，那么这棵树就是一颗二叉搜索树。这也意味着二叉搜索树中的所有节点都可以按照某种方式来排序。</p>
+
+<p>二叉查找树树的平均深度是$O(log N)$</p>
+
+<h2 id="定义">定义</h2>
+
+<p>通过上面的描述，我们了解了二叉搜索树的概念，接下来我们使用 Go 语言来定义二叉搜索树及其上的操作。</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">TreeNode</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">elem</span>  <span class="kt">int</span>
+	<span class="nx">left</span>  <span class="o">*</span><span class="nx">TreeNode</span>
+	<span class="nx">right</span> <span class="o">*</span><span class="nx">TreeNode</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nx">MakeEmpty</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="c1">// 清空一棵树或者创造一棵空树
+</span><span class="c1"></span><span class="kd">func</span> <span class="nx">FindMin</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span>   <span class="c1">// 查找树中最小的节点
+</span><span class="c1"></span><span class="kd">func</span> <span class="nx">FindMax</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span>   <span class="c1">// 查找树中最大的节点
+</span><span class="c1"></span><span class="kd">func</span> <span class="nx">Find</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span>  <span class="c1">// 查找树中某个特定的节点
+</span><span class="c1"></span><span class="kd">func</span> <span class="nx">Insert</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span>  <span class="c1">// 向树中插入节点
+</span><span class="c1"></span><span class="kd">func</span> <span class="nx">Delete</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span>  <span class="o">//</span> <span class="nx">从树中删除节点</span></code></pre></div>
+<p>从上面的定义中我们可以看到，二叉搜索树中的节点是通过<code>TreeNode</code>结构体来定义的，其中<code>elem</code>表示存储在这个树节点中的关键字值，<code>left</code>和<code>right</code>分别代表左右子树。</p>
+
+<h2 id="实现">实现</h2>
+
+<p>在二叉搜索树上我们一共定义了六个操作，接下来我们分别讨论它们的实现</p>
+
+<h3 id="makeempty">MakeEmpty</h3>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 创造一棵空树，或者将一棵搜索树清空
+</span><span class="c1"></span><span class="kd">func</span> <span class="nx">MakeEmpty</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">tree</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">MakeEmpty</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span>
+		<span class="nx">tree</span><span class="p">.</span><span class="nx">left</span> <span class="p">=</span> <span class="kc">nil</span>
+		<span class="nx">MakeEmpty</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
+		<span class="nx">tree</span><span class="p">.</span><span class="nx">right</span> <span class="p">=</span> <span class="kc">nil</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="kc">nil</span>
+<span class="p">}</span></code></pre></div>
+<p><code>MakeEmpty</code>的功能说明:</p>
+
+<ul>
+<li><p>创建一棵空树: 不像其他一些数据结构中通过一个结构体来定义一棵空树，我们直接通过空指针来定义一棵空树，所以在<code>MakeEmpty</code>尾部我们直接返回了空指针来代表一棵空树。</p></li>
+
+<li><p>清空一棵树: <code>MakeEmpty</code>函数还可以清空一棵树，由于Go语言中并不需要我们手动管理内存空间，所以删除树节点并不需要释放空间，只需要将指向树节点的指针置为<code>nil</code>即可。</p></li>
+</ul>
+
+<h3 id="findmin">FindMin</h3>
+
+<p>二叉搜索树的<code>FindMin</code>操作的实现如下所示：</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">FindMin</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">tree</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">nil</span>
+	<span class="p">}</span>
+
+	<span class="k">for</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">left</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">tree</span> <span class="p">=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">left</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="nx">tree</span>
+<span class="p">}</span></code></pre></div>
+<p>这部分功能我们是通过迭代来实现的，由于二叉搜索树中某个树节点的左子树的关键字始终小于这个树节点的关键字值，所以我们只需要一直遍历，找到<strong>最左</strong>的那个树节点，它就是整个树中最小的节点。</p>
+
+<h3 id="findmax">FindMax</h3>
+
+<p>二叉搜索树的<code>FindMax</code>操作的实现如下:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">FindMax</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">tree</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">nil</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">right</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">tree</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="nx">FindMax</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
+<span class="p">}</span></code></pre></div>
+<p><code>FindMax</code>的功能我们是通过递归来实现的，从二叉搜索树的特性可知，树节点的右子树中的值始终要比当前节点的值大。所以我们判断只要当前节点有右子树，就去寻找它右子树中的最大值，这样就可以找到二叉搜索树中的最大节点了。</p>
+
+<h3 id="find">Find</h3>
+
+<p>二叉搜索树的<code>Find</code>操作的实现如下:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">Find</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">tree</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="kc">nil</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">elem</span> <span class="o">==</span> <span class="nx">elem</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">tree</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">elem</span> <span class="p">&gt;</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">elem</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">Find</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="c1">// 查找节点比当前树节点要小
+</span><span class="c1"></span>		<span class="k">return</span> <span class="nx">Find</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+<p><code>Find</code>操作的功能是通过递归来实现的。判断当前树节点是否是要查找的节点，如果是则返回当前节点。否则，根据目标关键字的值的是否小于当前节点的关键字值分别去当前节点的左子树或右子树中去查找目标节点。</p>
+
+<h3 id="insert">Insert</h3>
+
+<p>二叉搜索树的<code>Insert</code>操作的实现如下:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">Insert</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">tree</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">tree</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">TreeNode</span><span class="p">{}</span>
+		<span class="nx">tree</span><span class="p">.</span><span class="nx">left</span> <span class="p">=</span> <span class="kc">nil</span>
+		<span class="nx">tree</span><span class="p">.</span><span class="nx">right</span> <span class="p">=</span> <span class="kc">nil</span>
+		<span class="nx">tree</span><span class="p">.</span><span class="nx">elem</span> <span class="p">=</span> <span class="nx">elem</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">elem</span> <span class="p">&lt;</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">elem</span> <span class="p">{</span>
+		<span class="nx">tree</span><span class="p">.</span><span class="nx">left</span> <span class="p">=</span> <span class="nx">Insert</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">elem</span> <span class="p">&gt;</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">elem</span> <span class="p">{</span>
+		<span class="nx">tree</span><span class="p">.</span><span class="nx">right</span> <span class="p">=</span> <span class="nx">Insert</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="c1">// 该节点已经在这颗树中了，我们什么也不做
+</span><span class="c1"></span>	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="nx">tree</span>
+<span class="p">}</span></code></pre></div>
+<p>从树的根节点开始，判断要插入的值是否比当前节点的要大，如果是的话，插入到当前节点的右子树，否则插入到当前节点的左子树。如果当前节点是一棵空树的话，我们就把目标值插入到当前节点上。</p>
+
+<p><strong>注意</strong>，如果要插入的值已经在树中存在的话，我们什么也不做，我们不会在树中保存两个相同的值。</p>
+
+<h3 id="insert-测试">Insert 测试</h3>
+
+<p>为了验证我们的<code>Insert</code>操作的实现是否正确，我们可以利用 Go 的单元测试来为<code>Insert</code>操作编写测试代码，如下所示:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">TestInsert</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">=</span> <span class="kc">nil</span>
+
+	<span class="nx">tree</span> <span class="p">=</span> <span class="nx">Insert</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nx">tree</span><span class="p">)</span>
+	<span class="nx">tree</span> <span class="p">=</span> <span class="nx">Insert</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nx">tree</span><span class="p">)</span>
+	<span class="nx">tree</span> <span class="p">=</span> <span class="nx">Insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">tree</span><span class="p">)</span>
+	<span class="nx">tree</span> <span class="p">=</span> <span class="nx">Insert</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nx">tree</span><span class="p">)</span>
+
+	<span class="c1">// 构造出来的树
+</span><span class="c1"></span>	<span class="c1">//    3
+</span><span class="c1"></span>	<span class="c1">//   / \
+</span><span class="c1"></span>	<span class="c1">//   1  4
+</span><span class="c1"></span>	<span class="c1">//    \
+</span><span class="c1"></span>	<span class="c1">//     2
+</span><span class="c1"></span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nx">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">FindMax</span><span class="p">(</span><span class="nx">tree</span><span class="p">).</span><span class="nx">elem</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nx">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">FindMin</span><span class="p">(</span><span class="nx">tree</span><span class="p">).</span><span class="nx">elem</span><span class="p">)</span>
+
+	<span class="nx">assert</span><span class="p">.</span><span class="nx">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">Find</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nx">tree</span><span class="p">).</span><span class="nx">left</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nx">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">Find</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nx">tree</span><span class="p">).</span><span class="nx">right</span><span class="p">)</span>
+<span class="p">}</span></code></pre></div>
+<p>我们按顺序向树中插入<code>3, 4, 2, 1</code>四个节点，最终构造出来的树如下图所示:</p>
+
+<p><strong>树1</strong> <img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-03-01-searchtree.png" alt="树1" /></p>
+
+<p>为了验证我们构造出来的树是否正确，我们使用<code>FindMax</code>和<code>FindMin</code>方法检验树中的最大值和最小值是否是4和1。
+同时，我们也判断了树节点4的左右子树是否都为空。</p>
+
+<h3 id="delete">Delete</h3>
+
+<p>二叉搜索树的删除操作比较复杂，我们需要分情况来讨论:</p>
+
+<ul>
+<li><p>如果被删除的节点有0个子节点，那我们直接将它删除就好了</p></li>
+
+<li><p>如果被删除的节点有1个子树，那么我们需要将它的子树移动到当前节点，再将当前节点删除</p></li>
+</ul>
+
+<p>例如有这样的一棵树2，我们要删除其中的节点3，那么我们需要将其存在的右子树移动到3节点所在的位置，再删除3节点。</p>
+
+<p><strong>树2</strong> <img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-03-01-152637.png" alt="树2" /></p>
+
+<p>删除3节点后的树如树3所示</p>
+
+<p><strong>树3</strong> <img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-03-01-153332.png" alt="树3" /></p>
+
+<ul>
+<li>如果被删除的节点有两个子树，我们首先要将其右子树中的最小的节点移动到当前节点，然后再删除当前节点。</li>
+</ul>
+
+<p>例如上面提到的树2，如果我们要删除2节点，我们首先需要找出其右子树中最小的节点3，将节点3放到节点2所在的位置，如树4所示：</p>
+
+<p><strong>树4</strong> <img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-03-01-153658.png" alt="树4" /></p>
+
+<p>然后再将原来节点2的右子树中的节点3删除，节点3的删除规则依然准遵循这里讨论的删除规则。由于这里节点3只有一个子树，所以只需要将其右子树移动到节点3所在的位置即可，如树5所示:</p>
+
+<p><strong>树5</strong> <img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-03-01-153916.png" alt="树5" /></p>
+
+<p>至此，我们就从树2中成功删除了节点2。</p>
+
+<p><code>Delete</code>操作的实现如下所示:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">Delete</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">tree</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nx">Fatalf</span><span class="p">(</span><span class="s">&#34;Cannot find element %v in tree %v\n&#34;</span><span class="p">,</span> <span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="nx">elem</span> <span class="p">&lt;</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">elem</span> <span class="p">{</span>
+		<span class="nx">tree</span><span class="p">.</span><span class="nx">left</span> <span class="p">=</span> <span class="nx">Delete</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">elem</span> <span class="p">&gt;</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">elem</span> <span class="p">{</span>
+		<span class="nx">tree</span><span class="p">.</span><span class="nx">right</span> <span class="p">=</span> <span class="nx">Delete</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="c1">// 被删除的就是当前节点
+</span><span class="c1"></span>
+		<span class="k">if</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">left</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="o">&amp;&amp;</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">right</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="c1">// 被删除的节点有两个子节点
+</span><span class="c1"></span>			<span class="nx">tmpNode</span> <span class="o">:=</span> <span class="nx">FindMin</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
+			<span class="nx">tree</span><span class="p">.</span><span class="nx">elem</span> <span class="p">=</span> <span class="nx">tmpNode</span><span class="p">.</span><span class="nx">elem</span>
+			<span class="nx">tree</span><span class="p">.</span><span class="nx">right</span> <span class="p">=</span> <span class="nx">Delete</span><span class="p">(</span><span class="nx">tmpNode</span><span class="p">.</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="c1">// 被删除的节点有0个或者1个子节点
+</span><span class="c1"></span>			<span class="k">if</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">left</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+				<span class="nx">tree</span> <span class="p">=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">right</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">right</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+				<span class="nx">tree</span> <span class="p">=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">left</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+				<span class="nx">tree</span> <span class="p">=</span> <span class="kc">nil</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="nx">tree</span>
+<span class="p">}</span></code></pre></div>
+<h3 id="delete-测试">Delete 测试</h3>
+
+<p>我为<code>Delete</code>操作编写了两个单元测试，分别测试删除只有有右子树的节点，和删除有两个子树的节点，测试代码如下:</p>
+
+<pre><code>func TestDeleteRight(t *testing.T) {
+	var tree *TreeNode = nil
+
+	// 构造出来的树
+	//     6
+	//    / \
+	//   2  8
+	//  /\
+	// 1 4
+	//   \
+	//    5
+	tree = Insert(6, tree)
+	tree = Insert(2, tree)
+	tree = Insert(8, tree)
+	tree = Insert(1, tree)
+	tree = Insert(4, tree)
+	tree = Insert(5, tree)
+
+	// 删除了节点4之后的树
+	//     6
+	//    / \
+	//   2  8
+	//  /\
+	// 1 5
+	tree = Delete(4, tree)
+
+	assert.Equal(t, 5, Find(2, tree).right.elem)
+}
+
+func TestDeleteTwoChild(t *testing.T) {
+	var tree *TreeNode = nil
+
+	// 删除之前的树
+	//     6
+	//    / \
+	//   2  8
+	//  /\
+	// 1 5
+	//  /
+	// 3
+	// \
+	//  4
+	tree = Insert(6, tree)
+	tree = Insert(2, tree)
+	tree = Insert(8, tree)
+	tree = Insert(1, tree)
+	tree = Insert(5, tree)
+	tree = Insert(3, tree)
+	tree = Insert(4, tree)
+
+	// 删除节点2之后的树
+	//     6
+	//    / \
+	//   3  8
+	//  /\
+	// 1 5
+	//  /
+	// 4
+	tree = Delete(2, tree)
+
+	node := Find(3, tree)
+	assert.Equal(t, 1, node.left.elem)
+	assert.Equal(t, 5, node.right.elem)
+}
+</code></pre></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/golang"><span class="tag">Golang</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>170</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2018/03/01/go%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B9%8B%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/");
+    var page_uniqueid = "2f5d2231f08e79d07c6fb0b32a9062e5";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

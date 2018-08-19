@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Python的collections模块小结</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content=" 摘要:
+ 本文章的目标是逐步总结Python中collection模块的用法，会不定期进行更新。 目前总结了Counter类的用法   
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Python的collections模块小结" />
+    <meta name="twitter:description" content=" 摘要:
+ 本文章的目标是逐步总结Python中collection模块的用法，会不定期进行更新。 目前总结了Counter类的用法   
+" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Python的collections模块小结" />
+  <meta property="og:description" content=" 摘要:
+ 本文章的目标是逐步总结Python中collection模块的用法，会不定期进行更新。 目前总结了Counter类的用法   
+" />
+  <meta property="og:url" content="/2017/08/13/python%E7%9A%84collections%E6%A8%A1%E5%9D%97%E5%B0%8F%E7%BB%93/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2017/08/13/python%E7%9A%84collections%E6%A8%A1%E5%9D%97%E5%B0%8F%E7%BB%93/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Python的collections模块小结</h1>
+      <p class="post-meta">@BWANGEL · Aug 13, 2017 · 2 min read</p>
+    </header>
+    <article class="post-content"><blockquote>
+<p><strong>摘要</strong>:</p>
+
+<ol>
+<li>本文章的目标是逐步总结Python中<a href="http://devdocs.io/python~3.6/library/collections">collection</a>模块的用法，会不定期进行更新。</li>
+<li>目前总结了Counter类的用法</li>
+</ol>
+</blockquote>
+
+<p></p>
+
+<h2 id="chainmap">ChainMap</h2>
+
+<h2 id="counter">Counter</h2>
+
+<h3 id="counter的说明">Counter的说明</h3>
+
+<p><code>Counter</code>是<code>dict</code>的子类，用来统计可哈希的对象。它本身是一个无序集合，使用对象来当做字典的key，对象的次数当做字典的值，它的值可以是0或者负数以内的任何整数。<code>Counter</code>类的功能类似于其他语言中的<code>bags</code>或者<code>multisets</code>类型。</p>
+
+<h3 id="counter的常用方法">Counter的常用方法</h3>
+
+<h4 id="elements">elements()</h4>
+
+<p><code>elements</code>方法用户迭代地展示<code>Counter</code>内的所有元素，按元素的计数重复该元素，如果该元素的计数小于1，那么Counter就会忽略该元素，不进行展示。</p>
+
+<pre><code>In [1]: from collections import Counter
+
+In [2]: c = Counter({'a': 1, 'b': 2, 'c': 0, 'd': -2})
+
+# elements()函数返回的是一个可迭代对象
+In [3]: c.elements()
+Out[3]: &lt;itertools.chain at 0x106063b70&gt;
+
+In [4]: list(c.elements())
+Out[4]: ['a', 'b', 'b']
+</code></pre>
+
+<h4 id="most-common-n">most_common([n])</h4>
+
+<p><code>most_common</code>函数返回<code>Counter</code>中次数最多的N个元素，如果N没有提供或者是<code>None</code>，那么就会返回所有元素。</p>
+
+<pre><code>&gt;&gt;&gt; from collections import Counter
+&gt;&gt;&gt; c = Counter({'a': 1, 'b': 2, 'c': 0, 'd': -2})
+&gt;&gt;&gt; c.most_common()
+[('b', 2), ('a', 1), ('c', 0), ('d', -2)]
+&gt;&gt;&gt; c.most_common(2)
+[('b', 2), ('a', 1)]
+</code></pre>
+
+<h4 id="subtract-iterable-or-mapping">subtract([iterable-or-mapping])</h4>
+
+<p><code>substract</code>方法接收一个可迭代或者可映射的对象，针对每个元素减去参数中的元素对应的次数。</p>
+
+<pre><code>&gt;&gt;&gt; from collections import Counter
+&gt;&gt;&gt; c = Counter({'a': 1, 'b': 3, 'c': -2, 'd': 0})
+&gt;&gt;&gt; c.subtract(['a', 'a', 'b', 'b', 'b', 'b'])
+&gt;&gt;&gt; c
+Counter({'d': 0, 'a': -1, 'b': -1, 'c': -2})
+# 注意这里减去一个负的次数相当于加上一个正的次数
+&gt;&gt;&gt; c.subtract({'d': -3})
+&gt;&gt;&gt; c
+Counter({'d': 3, 'a': -1, 'b': -1, 'c': -2})
+</code></pre>
+
+<h4 id="update-iterable-or-mapping">update([iterable-or-mapping])</h4>
+
+<p><code>update</code>方法的功能和<code>substract</code>方法的功能正好相反，它接收一个可迭代或者可映射的对象，针对每个元素加上参数中的元素对应的次数。</p>
+
+<pre><code>&gt;&gt;&gt; from collections import Counter
+&gt;&gt;&gt; c = Counter({'a': 1, 'b': 3, 'c': -2, 'd': 0})
+&gt;&gt;&gt; c.update({'a': 2, 'c': 5, 'd': 3})
+&gt;&gt;&gt; c
+Counter({'a': 3, 'b': 3, 'c': 3, 'd': 3})
+</code></pre>
+
+<h3 id="counter的其他工作模式">Counter的其他工作模式</h3>
+
+<p>除了上面提到的方法外，<code>Counter</code>类还提供了一些其他的通用模式，让我们可以更方面地进行操作。</p>
+
+<p><strong>说明</strong>：下面代码中全部省略了导入<code>Counter</code>类的过程</p>
+
+<ul>
+<li>统计所有元素的次数之和</li>
+</ul>
+
+<pre><code>&gt;&gt;&gt; c = Counter(a=1, b=-2, c=3, d=4)
+&gt;&gt;&gt; sum(c.values())
+6
+</code></pre>
+
+<ul>
+<li>清除所有元素的统计次数</li>
+</ul>
+
+<pre><code>&gt;&gt;&gt; c = Counter(a=1, b=-2, c=3, d=4)
+&gt;&gt;&gt; c.clear()
+&gt;&gt;&gt; c
+Counter()
+&gt;&gt;&gt; c = Counter(a=1, b=-2, c=3, d=4)
+</code></pre>
+
+<ul>
+<li>列出所有元素</li>
+</ul>
+
+<pre><code>&gt;&gt;&gt; c = Counter(a=1, b=-2, c=3, d=4, f=0)
+&gt;&gt;&gt; list(c)
+['a', 'b', 'c', 'd', 'f']
+&gt;&gt;&gt; set(c)  # 这里将所有元素以集合的方式来展现
+{'b', 'c', 'a', 'd', 'f'}
+</code></pre>
+
+<ul>
+<li>获取Counter中(元素，次数)的元祖</li>
+</ul>
+
+<pre><code>&gt;&gt;&gt; c = Counter(a=1, b=-2, c=3, d=4, f=0)
+&gt;&gt;&gt; dict(c)  # 将Counter转换成一个字典
+{'a': 1, 'b': -2, 'c': 3, 'd': 4, 'f': 0}
+&gt;&gt;&gt; c.items()  # 获取Counter中(元素，次数)的元祖
+dict_items([('a', 1), ('b', -2), ('c', 3), ('d', 4), ('f', 0)])
+# 将一个(元素，次数)元祖列表转换成Counter
+&gt;&gt;&gt; Counter(dict([('a', 1), ('b', 2), ('c', 3)]))
+Counter({'c': 3, 'b': 2, 'a': 1})
+</code></pre>
+
+<ul>
+<li>获取N个次数最少的元素</li>
+</ul>
+
+<pre><code>&gt;&gt;&gt; c = Counter(a=1, b=-2, c=3, d=4, f=0)
+&gt;&gt;&gt; c.most_common()[:2:-1]
+[('b', -2), ('f', 0)]
+</code></pre>
+
+<ul>
+<li>删除掉所有次数小于等于0的元素</li>
+</ul>
+
+<pre><code>&gt;&gt;&gt; c = Counter(a=1, b=-2, c=3, d=4, f=0)
+&gt;&gt;&gt; +c
+Counter({'d': 4, 'c': 3, 'a': 1})
+</code></pre>
+
+<h3 id="counter上的数学运算">Counter上的数学运算</h3>
+
+<p>Counter之间还能进行数学运算，<strong>在数学运算的结果中，次数小于等于0的元素将会被删除掉</strong>。</p>
+
+<pre><code>&gt;&gt;&gt; c = Counter(a=3, b=1)
+&gt;&gt;&gt; d = Counter(a=1, b=2)
+&gt;&gt;&gt; c + d  # 将元素的次数进行相加
+Counter({'a': 4, 'b': 3})
+&gt;&gt;&gt; c - d  # 将元素的次数进行相减
+Counter({'a': 2})
+&gt;&gt;&gt; f = Counter(a=3, b=2, c=1)
+&gt;&gt;&gt; c &amp; f  # 两个Counter的元素取交集，并且元素的次数取较小的那个
+Counter({'a': 3, 'b': 1})
+&gt;&gt;&gt; c | f  # 两个Counter的元素取并集，并且元素的次数取较大的那个
+Counter({'a': 3, 'b': 2, 'c': 1})
+</code></pre>
+
+<ul>
+<li>单目运算符<code>+</code>或者<code>-</code></li>
+</ul>
+
+<pre><code>&gt;&gt;&gt; c = Counter(a=2, b=-4)
+&gt;&gt;&gt; +c
+Counter({'a': 2})
+&gt;&gt;&gt; -c
+Counter({'b': 4})
+</code></pre>
+
+<h3 id="注意事项">注意事项</h3>
+
+<ul>
+<li><p><code>Counter</code>类是字典的子类，它的键和值都没有限制，值一般是一个数字用来表示某个元素出现的次数，但是它可以是任何值</p></li>
+
+<li><p><code>Counter</code>类的<code>most_common</code>方法需要<code>Counter</code>的值是可排序的</p></li>
+
+<li><p>一些便捷操作，比如<code>c[key] += 1</code>仅仅需要值是支持加或者减操作，所以<code>Counter</code>的值支持整型，浮点数，负数等，同样<code>update</code>和<code>subtract</code>方法的输入和输出也支持负数和0。</p></li>
+
+<li><p>集合运算仅仅支持正数，负数和0都会被忽略掉，集合运算理论上对于值没有限制，只要支持加，减，比较操作就可以。</p></li>
+
+<li><p><code>elements()</code>方法需要正数，负数和0将会被忽略掉。</p></li>
+</ul></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/python"><span class="tag">Python</span></a></li>
+        
+          <li><a href="/tags/python%E6%A0%87%E5%87%86%E5%BA%93"><span class="tag">Python标准库</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>370</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2017/08/13/python%E7%9A%84collections%E6%A8%A1%E5%9D%97%E5%B0%8F%E7%BB%93/");
+    var page_uniqueid = "6166e2c8e67c08c176f92cdb5b05dd91";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

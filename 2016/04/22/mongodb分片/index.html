@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>MongoDB分片</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="摘要:
+ 本文主要讲述MongoDB分片的原理以及MongDB如何配置分片服务，设置ChunkSize大小。
+ 
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="MongoDB分片" />
+    <meta name="twitter:description" content="摘要:
+ 本文主要讲述MongoDB分片的原理以及MongDB如何配置分片服务，设置ChunkSize大小。
+ 
+" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="MongoDB分片" />
+  <meta property="og:description" content="摘要:
+ 本文主要讲述MongoDB分片的原理以及MongDB如何配置分片服务，设置ChunkSize大小。
+ 
+" />
+  <meta property="og:url" content="/2016/04/22/mongodb%E5%88%86%E7%89%87/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2016/04/22/mongodb%E5%88%86%E7%89%87/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">MongoDB分片</h1>
+      <p class="post-meta">@BWANGEL · Apr 22, 2016 · 1 min read</p>
+    </header>
+    <article class="post-content"><p><strong>摘要</strong>:</p>
+
+<blockquote>
+<p>本文主要讲述MongoDB分片的原理以及MongDB如何配置分片服务，设置ChunkSize大小。</p>
+</blockquote>
+
+<p></p>
+
+<h2 id="mongodb分片原理概述">MongoDB分片原理概述</h2>
+
+<p>分片需要如下要素:</p>
+
+<ol>
+<li>要有N个MongoD服务器存储数据做片节点</li>
+<li>要有Config Server维护meta信息</li>
+<li>要启动MongoS做路由</li>
+<li>要设定好数据的分片规则(Config Server才能维护)</li>
+</ol>
+
+<p>如下图所示</p>
+
+<p><img src="/images/MongoDB_shard_1.png" alt="原理图" /></p>
+
+<h2 id="启动过程">启动过程</h2>
+
+<h3 id="启动两台shard实例">启动两台shard实例</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mongod --dbpath /home/m17/ --logpath /home/mlog/m17.log --fork --port <span class="m">27017</span> --smallfiles
+mongod --dbpath /home/m18/ --logpath /home/mlog/m18.log --fork --port <span class="m">27018</span> --smallfiles</code></pre></div>
+<h3 id="启动config-server服务器">启动Config Server服务器</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mongod --dbpath /home/m20/ --logpath /home/mlog/m20.log --fork --port <span class="m">27020</span> --configsvr</code></pre></div>
+<h3 id="启动mongos服务器">启动MongoS服务器</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mongos --logpath /home/mlog/m30.log --port <span class="m">30000</span> --configdb <span class="m">192</span>.168.21.130:27020 --fork</code></pre></div>
+<h3 id="为config-server添加分片节点">为COnfig Server添加分片节点</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@vv2x:/home/michael# mongo --port <span class="m">30000</span>
+MongoDB shell version: <span class="m">3</span>.2.0
+connecting to: <span class="m">127</span>.0.0.1:30000/test
+Welcome to the MongoDB shell.
+mongos&gt; sh.addShard<span class="o">(</span><span class="s1">&#39;192.168.21.130:27017&#39;</span><span class="o">)</span><span class="p">;</span>
+<span class="o">{</span> <span class="s2">&#34;shardAdded&#34;</span> : <span class="s2">&#34;shard0000&#34;</span>, <span class="s2">&#34;ok&#34;</span> : <span class="m">1</span> <span class="o">}</span>
+mongos&gt; sh.addShard<span class="o">(</span><span class="s1">&#39;192.168.21.130:27018&#39;</span><span class="o">)</span><span class="p">;</span>
+<span class="o">{</span> <span class="s2">&#34;shardAdded&#34;</span> : <span class="s2">&#34;shard0001&#34;</span>, <span class="s2">&#34;ok&#34;</span> : <span class="m">1</span> <span class="o">}</span>
+mongos&gt; sh.sta
+mongos&gt; sh.status<span class="o">()</span><span class="p">;</span>
+--- Sharding Status ---
+  sharding version: <span class="o">{</span>
+    <span class="s2">&#34;_id&#34;</span> : <span class="m">1</span>,
+    <span class="s2">&#34;minCompatibleVersion&#34;</span> : <span class="m">5</span>,
+    <span class="s2">&#34;currentVersion&#34;</span> : <span class="m">6</span>,
+    <span class="s2">&#34;clusterId&#34;</span> : ObjectId<span class="o">(</span><span class="s2">&#34;57198ba481bf26385e2a2bc1&#34;</span><span class="o">)</span>
+<span class="o">}</span>
+  shards:
+    <span class="o">{</span>  <span class="s2">&#34;_id&#34;</span> : <span class="s2">&#34;shard0000&#34;</span>,  <span class="s2">&#34;host&#34;</span> : <span class="s2">&#34;192.168.21.130:27017&#34;</span> <span class="o">}</span>
+    <span class="o">{</span>  <span class="s2">&#34;_id&#34;</span> : <span class="s2">&#34;shard0001&#34;</span>,  <span class="s2">&#34;host&#34;</span> : <span class="s2">&#34;192.168.21.130:27018&#34;</span> <span class="o">}</span>
+  active mongoses:
+    <span class="s2">&#34;3.2.0&#34;</span> : <span class="m">1</span>
+  balancer:
+    Currently enabled:  yes
+    Currently running:  no
+    Failed balancer rounds in last <span class="m">5</span> attempts:  <span class="m">0</span>
+    Migration Results <span class="k">for</span> the last <span class="m">24</span> hours:
+        No recent migrations
+  databases:</code></pre></div>
+<h3 id="为config-server设置分片规则">为Config Server设置分片规则</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mongos&gt; sh.enableSharding<span class="o">(</span><span class="s1">&#39;shop&#39;</span><span class="o">)</span><span class="p">;</span> <span class="c1">#设置某个数据库开启分片
+</span><span class="c1"></span><span class="o">{</span> <span class="s2">&#34;ok&#34;</span> : <span class="m">1</span> <span class="o">}</span>
+mongos&gt; sh.shardCollection<span class="o">(</span><span class="s1">&#39;shop.goods&#39;</span>, <span class="o">{</span>goods_id: <span class="m">1</span><span class="o">})</span><span class="p">;</span>
+<span class="c1"># 设置某个collection的分片规则，依据goods_id分片, goods_id为片键
+</span><span class="c1"></span><span class="o">{</span> <span class="s2">&#34;collectionsharded&#34;</span> : <span class="s2">&#34;shop.goods&#34;</span>, <span class="s2">&#34;ok&#34;</span> : <span class="m">1</span> <span class="o">}</span></code></pre></div>
+<h2 id="mongodb-chunk规则">MongoDB chunk规则</h2>
+
+<ul>
+<li>N篇文档形成一个块<code>Chunk</code>， 优先放在某个片上。</li>
+<li>当这片上的chunk，与另一个片的chunk，区别比较大时，(&gt;=3)，会把本片上的chunk，移到另一个片上。</li>
+<li>以chunk为单位，维护片之间的平衡。</li>
+</ul>
+
+<p>更改<code>ChunkSize</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 登陆到MongoS服务器
+</span><span class="c1"></span>use config<span class="p">;</span>
+db.settings.save<span class="o">({</span>_id: <span class="s1">&#39;chunksize&#39;</span>, value: <span class="m">1</span><span class="o">})</span><span class="p">;</span> # 单位为M</code></pre></div></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/mongodb"><span class="tag">MongoDB</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>848</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2016/04/22/mongodb%E5%88%86%E7%89%87/");
+    var page_uniqueid = "c4aa48b26eb98c6fec6ba8d6f51bf0de";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

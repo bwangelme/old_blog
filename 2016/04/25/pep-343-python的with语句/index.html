@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>PEP 343: Python的with语句</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="摘要:
+  Python的with语句用法以及相关的上下文管理协议 如何自己写一个上下文管理器对象，如何利用contextlib来写一个上下文管理器对象 原文地址: PEP 343: The &amp;lsquo;with&amp;rsquo; statement   
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="PEP 343: Python的with语句" />
+    <meta name="twitter:description" content="摘要:
+  Python的with语句用法以及相关的上下文管理协议 如何自己写一个上下文管理器对象，如何利用contextlib来写一个上下文管理器对象 原文地址: PEP 343: The &amp;lsquo;with&amp;rsquo; statement   
+" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="PEP 343: Python的with语句" />
+  <meta property="og:description" content="摘要:
+  Python的with语句用法以及相关的上下文管理协议 如何自己写一个上下文管理器对象，如何利用contextlib来写一个上下文管理器对象 原文地址: PEP 343: The &amp;lsquo;with&amp;rsquo; statement   
+" />
+  <meta property="og:url" content="/2016/04/25/pep-343-python%E7%9A%84with%E8%AF%AD%E5%8F%A5/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2016/04/25/pep-343-python%E7%9A%84with%E8%AF%AD%E5%8F%A5/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">PEP 343: Python的with语句</h1>
+      <p class="post-meta">@BWANGEL · Apr 25, 2016 · 2 min read</p>
+    </header>
+    <article class="post-content"><p><strong>摘要</strong>:</p>
+
+<blockquote>
+<ol>
+<li>Python的with语句用法以及相关的上下文管理协议</li>
+<li>如何自己写一个上下文管理器对象，如何利用<code>contextlib</code>来写一个上下文管理器对象</li>
+<li>原文地址: <a href="https://docs.python.org/release/2.5/whatsnew/pep-343.html">PEP 343: The &lsquo;with&rsquo; statement</a></li>
+</ol>
+</blockquote>
+
+<p></p>
+
+<h2 id="with语句的通常用法">With语句的通常用法</h2>
+
+<p>with语句是一个新的控制流结构, 它的基本结构如下:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">with</span> <span class="n">expression</span> <span class="p">[</span><span class="k">as</span> <span class="n">variable</span><span class="p">]:</span>
+    <span class="k">with</span><span class="o">-</span><span class="n">block</span></code></pre></div>
+<p><code>expression</code>应该是可求值的，而且它的求值结果应该是一个支持上下文管理协议的对象。</p>
+
+<p>这个对象可能返回一个值，这个值可以绑定到一个命名变量variable（注意variable并不是表达式结果的赋值）。</p>
+
+<p><code>variable</code>能够在<code>with-block</code>语句执行前运行一些构造代码，且在<code>with-block</code>语句执行后运行一些析构代码，甚至就算<code>with-block</code>语句抛出异常了，析构代码一样能够运行。</p>
+
+<p>一些Python标准对象已经支持上下文管理协议，且能够和<code>with</code>一起使用，例如<code>File</code>对象:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/etc/passwd&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">print</span> <span class="n">line</span>
+        <span class="o">...</span> <span class="n">more</span> <span class="n">processing</span> <span class="n">code</span> <span class="o">...</span></code></pre></div>
+<p>在这个语句执行后，文件对象f将会是关闭状态，就算for循环抛出了一个一场，只是部分执行了<code>with-block</code>的代码。</p>
+
+<p><code>threading</code>模块的锁和条件变量也支持<code>with</code>语句:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+    <span class="c1"># 原子操作的代码</span>
+    <span class="o">...</span></code></pre></div>
+<p>这个锁在<code>with-block</code>代码执行之前被锁定，而且在<code>with-block</code>语句执行完以后总是被释放。</p>
+
+<p><code>decimal</code>中新的<code>localcontext()</code>函数使保存和重置当前十进制环境变得很容易，它封装了计算所需的精度和圆整度:</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">Context</span><span class="p">,</span> <span class="n">localcontext</span>
+
+<span class="c1"># 显示默认的28位精度</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;578&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">sqrt</span><span class="p">())</span>
+
+<span class="k">with</span> <span class="n">localcontext</span><span class="p">(</span><span class="n">Context</span><span class="p">(</span><span class="n">prec</span><span class="o">=</span><span class="mi">16</span><span class="p">)):</span>
+    <span class="c1"># 这个块中的所有代码都会是16位的精度</span>
+    <span class="c1"># 在这个代码块结束以后，原始的精度将会被重置回来</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">sqrt</span><span class="p">())</span></code></pre></div>
+<h2 id="自己动手写一个上下文管理器">自己动手写一个上下文管理器</h2>
+
+<p>在底层实现上, <code>with</code>语句还是相当复杂的，大多数人仅仅在公司中和已存在的对象一起使用<code>with</code>语句, 且不需要知道这些实际细节。
+所以如果你喜欢的话，可以跳过这节剩下的部分。
+如果需要写一个新的对象，且需要理解底层实现的细节，那么就应该继续阅读下去。</p>
+
+<p>关于上下文管理协议在高等级的角度上来解释就是:</p>
+
+<ul>
+<li>表达式是可求值的，而且应该返回一个对象叫做上下文管理器(<code>context manager</code>)。上下文管理器必须有<code>__enter__()</code>和<code>__exit__()</code>方法。</li>
+<li>上下文管理器的<code>__enter__()</code>方法是可调用的。这个方法的返回值被赋值给<code>VAR</code>。如果语句后面没有跟随<code>as VAR</code>的话，这个值会被简单的丢弃。</li>
+<li>在<code>BLOCK</code>中的代码将会被执行。</li>
+<li>如果<code>BLOCK</code>中的代码抛出一个异常，<code>__exit__(type, value, traceback)</code>方法将会被调用，并且异常的细节将会被当作参数传入进去，这里的异常细节和<code>sys.exc_info()</code>返回的值一样。方法的返回值控制着异常是否会被重新抛出：任何<code>False</code>的返回值将会导致异常重新抛出，而<code>True</code>返回值使异常不会重新抛出。你将不会想要重新抛出异常，因为如果你在自己的代码中使用<code>with</code>语句的话，将不会意识到有任何的出错情况。</li>
+<li>如果<code>BLOCK</code>代码中没有抛出异常，那么<code>__exit__()</code>方法仍然会被调用，只不过<code>type</code>,<code>value</code>, <code>traceback</code>参数将都会是<code>None</code></li>
+</ul>
+
+<p>让我们来看一个例子。我不会给出所有的细节代码，仅仅会给出一些必要的代码来表示一个支持事务功能的数据库对象。</p>
+
+<p>(对于不熟悉数据库的人们来说，事务就是一组数据库的改变打包到了一起，事务可以是<code>committed</code>，代表着所有的更改都被写入到了数据库中，也可以是<code>rolled back</code>, 代表所有的更改都被丢弃，数据库没有变化. 关于更多关于事务的信息可以参看任何数据库相关的书籍。)</p>
+
+<p>让我们假设这里有一个对象代表了数据库连接，我们的目标是让用户能够以下面的方式来写代码:</p>
+
+<pre><code>db_connection = DatabaseConnection()
+with db_connection as cursor:
+    cursor.execute('insert into ...')
+    cursor.execute('delete from')
+    # ... more operations ...
+</code></pre>
+
+<p>如果with块中的代码被完美地执行了的话，事务应该被提交，否则如果with块中的代码抛出异常的话，事务应该被回滚。</p>
+
+<p>我假设<code>DatabaseConnection</code>对象应该有如下的基础接口。</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">class</span> <span class="nc">DatabaseConnection</span><span class="p">:</span>
+    <span class="c1"># Database interface</span>
+    <span class="k">def</span> <span class="nf">cursor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;返回一个cursor对象，而且开启一个新的事务
+</span><span class="s2">        &#34;&#34;&#34;</span>
+    <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;提交当前事务
+</span><span class="s2">        &#34;&#34;&#34;</span>
+    <span class="k">def</span> <span class="nf">rollback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;回滚当前事务
+</span><span class="s2">        &#34;&#34;&#34;</span></code></pre></div>
+<p><code>__enter__()</code>方法是很容易写的，仅仅需要开启一个新的事物。对于这个应用程序游标结果对象应该是一个有用的接口，所以这个方法应该返回它，用户能够增加一个游标到with语句块中，并绑定到一个变量上。</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">class</span> <span class="nc">DatabaseConnection</span><span class="p">:</span>
+    <span class="o">...</span>
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># code to start a new transaction</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">cursor</span></code></pre></div>
+<p><code>__exit__()</code>方法是最复杂的，因为这里需要做大部分的工作。这个方法必须去检查是否有异常发生。如果没有异常的话，事务被提交，如果有异常的话，事务被回滚。</p>
+
+<p>在如下的代码中，异常将会放在函数的末尾，返回默认值<code>None</code>. <code>None</code>就是<code>False</code>,所以异常就会被自动重新抛出。如果你希望的话，你可以做的更精确，在标记的位置添加一条return语句。</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">class</span> <span class="nc">DatabaseConnection</span><span class="p">:</span>
+    <span class="o">...</span>
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tb</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c1"># No execption, so commit</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Exception occurred, so rollback</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+            <span class="c1"># return False</span></code></pre></div>
+<h2 id="contextlib模块">contextlib模块</h2>
+
+<p>新的<code>contextlib</code>模块提供了一些有用的方法和修饰器去写能够和<code>with</code>语句一起使用的对象。</p>
+
+<p>这个叫做<code>contextmanager</code>的修饰器, 它允许你去写一个生成器函数而不是定义一个新的类。这个生成器应该精确地<code>yield</code>一个值，在<code>yield</code>之前的代码将会被当作<code>__enter__()</code>函数执行，且yield的返回值将会被当作<code>__enter__()</code>函数的返回值，将会被绑定到<code>with</code>语句后<code>as</code>后的变量上(如果as后这个变量存在的话)。yield之后的代码将会被当作<code>__exit__()</code>函数来执行，任何抛出的异常将会由<code>yield</code>语句来重新抛出。</p>
+
+<p>我们上一节的数据库例子可以使用这个修饰器，以如下的方式来写：</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">db_transaction</span><span class="p">(</span><span class="n">connection</span><span class="p">):</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">cursor</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">connection</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">raise</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="n">db</span> <span class="o">=</span> <span class="n">DatabaseConnection</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">db_transaction</span><span class="p">(</span><span class="n">db</span><span class="p">)</span> <span class="k">as</span> <span class="n">cursor</span><span class="p">:</span>
+    <span class="o">...</span></code></pre></div>
+<p><code>contextlib</code>模块也有一个<code>nested(mgr1, mgr2, ...)</code>函数来绑定许多个上下文管理器，这样的话你就不需要写嵌套的<code>with</code>语句了。在下面这个例子中，单个with语句获得了线程锁，并且开启了一个事务。</p>
+
+<pre><code>lock = threading.Lock()
+with nested (db_transaction(db), lock) as (cursor, locked):
+</code></pre>
+
+<p>最后，closing函数返回了一个对象，它能够绑定到一个变量上，在函数块的末尾，自动调用<code>object.close()</code>方法</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="kn">import</span> <span class="nn">urllib</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">closing</span>
+
+<span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s1">&#39;http://www.baidu.com&#39;</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></code></pre></div>
+<h2 id="参考">参考</h2>
+
+<p><a href="http://www.python.org/peps/pep-0343.html">PEP 343, The &lsquo;with&rsquo; statement</a>
+<a href="https://docs.python.org/release/2.5/lib/module-contextlib.html">contextlib文档</a></p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/python"><span class="tag">Python</span></a></li>
+        
+          <li><a href="/tags/%E7%BF%BB%E8%AF%91"><span class="tag">翻译</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>845</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2016/04/25/pep-343-python%E7%9A%84with%E8%AF%AD%E5%8F%A5/");
+    var page_uniqueid = "d79ba2705535290e20421b99aeae188b";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

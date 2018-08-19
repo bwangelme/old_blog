@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>MySQL安全机制</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍 MySQL 安全机制
+ 
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="MySQL安全机制" />
+    <meta name="twitter:description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍 MySQL 安全机制
+ 
+" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="MySQL安全机制" />
+  <meta property="og:description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍 MySQL 安全机制
+ 
+" />
+  <meta property="og:url" content="/2016/04/10/mysql%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2016/04/10/mysql%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">MySQL安全机制</h1>
+      <p class="post-meta">@BWANGEL · Apr 10, 2016 · 2 min read</p>
+    </header>
+    <article class="post-content"><p><strong>摘要</strong>:</p>
+
+<blockquote>
+<p>这是一篇关于MySQL的文章，主要介绍 MySQL 安全机制</p>
+</blockquote>
+
+<p></p>
+
+<h1 id="mysql安全机制">MySQL安全机制</h1>
+
+<h2 id="1-权限表">1. 权限表</h2>
+
+<p>mysql数据库中的表</p>
+
+<ul>
+<li>mysql.user</li>
+</ul>
+
+<p>用户字段: Host, User, Password
+权限字段: _priv结尾的字段
+安全字段: ssl x509字段
+资源控制字段: max_开头的字段</p>
+
+<ul>
+<li>mysql.db</li>
+</ul>
+
+<p>用户字段: Host, User, Db
+权限字段: 剩下的_priv结尾的字段</p>
+
+<ul>
+<li>mysql.tables_priv, mysql.columns_priv, procs_priv</li>
+</ul>
+
+<p>授权表</p>
+
+<ul>
+<li>授权级别排列</li>
+</ul>
+
+<p>mysql.user # 全局授权
+mysql.db  # 数据库级别授权
+其他  # 表级，列级授权</p>
+
+<h2 id="2-用户管理">2. 用户管理</h2>
+
+<h3 id="2-1-登陆和退出mysql">2.1 登陆和退出MySQL</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span> <span class="o">-</span><span class="n">h</span> <span class="k">host</span> <span class="o">-</span><span class="n">p</span> <span class="n">port</span> <span class="o">-</span><span class="n">u</span> <span class="k">user</span> <span class="o">-</span><span class="n">ppassword</span> <span class="o">-</span><span class="n">e</span> <span class="s1">&#39;SQL语句&#39;</span></code></pre></div>
+<p>mysql.user表中授权什么主机的什么用户可以登陆</p>
+
+<h3 id="2-2-创建用户">2.2 创建用户</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 刷新授权表
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="n">flush</span> <span class="k">privileges</span><span class="p">;</span></code></pre></div>
+<ul>
+<li>创建用户</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">user</span> <span class="n">xff</span><span class="o">@</span><span class="s1">&#39;%&#39;</span> <span class="n">identified</span> <span class="k">by</span> <span class="s1">&#39;123456&#39;</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="c1">-- 查看权限基本为空
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span> <span class="k">where</span> <span class="k">user</span><span class="o">=</span><span class="s1">&#39;xff&#39;</span><span class="err">\</span><span class="k">G</span>
+<span class="o">***************************</span> <span class="mi">1</span><span class="p">.</span> <span class="k">row</span> <span class="o">***************************</span>
+                  <span class="k">Host</span><span class="p">:</span> <span class="o">%</span>
+                  <span class="k">User</span><span class="p">:</span> <span class="n">xff</span>
+              <span class="n">Password</span><span class="p">:</span> <span class="o">*</span><span class="mi">6</span><span class="n">BB4837EB74329105EE4568DDA7DC67ED2CA2AD9</span>
+           <span class="n">Select_priv</span><span class="p">:</span> <span class="n">N</span>
+           <span class="n">Insert_priv</span><span class="p">:</span> <span class="n">N</span>
+           <span class="n">Update_priv</span><span class="p">:</span> <span class="n">N</span>
+           <span class="n">Delete_priv</span><span class="p">:</span> <span class="n">N</span>
+           <span class="n">Create_priv</span><span class="p">:</span> <span class="n">N</span>
+             <span class="n">Drop_priv</span><span class="p">:</span> <span class="n">N</span>
+           <span class="n">Reload_priv</span><span class="p">:</span> <span class="n">N</span>
+         <span class="n">Shutdown_priv</span><span class="p">:</span> <span class="n">N</span>
+          <span class="n">Process_priv</span><span class="p">:</span> <span class="n">N</span>
+             <span class="n">File_priv</span><span class="p">:</span> <span class="n">N</span>
+            <span class="n">Grant_priv</span><span class="p">:</span> <span class="n">N</span>
+       <span class="n">References_priv</span><span class="p">:</span> <span class="n">N</span>
+            <span class="n">Index_priv</span><span class="p">:</span> <span class="n">N</span>
+            <span class="n">Alter_priv</span><span class="p">:</span> <span class="n">N</span>
+          <span class="n">Show_db_priv</span><span class="p">:</span> <span class="n">N</span>
+            <span class="n">Super_priv</span><span class="p">:</span> <span class="n">N</span>
+ <span class="n">Create_tmp_table_priv</span><span class="p">:</span> <span class="n">N</span>
+      <span class="n">Lock_tables_priv</span><span class="p">:</span> <span class="n">N</span>
+          <span class="n">Execute_priv</span><span class="p">:</span> <span class="n">N</span>
+       <span class="n">Repl_slave_priv</span><span class="p">:</span> <span class="n">N</span>
+      <span class="n">Repl_client_priv</span><span class="p">:</span> <span class="n">N</span>
+      <span class="n">Create_view_priv</span><span class="p">:</span> <span class="n">N</span>
+        <span class="n">Show_view_priv</span><span class="p">:</span> <span class="n">N</span>
+   <span class="n">Create_routine_priv</span><span class="p">:</span> <span class="n">N</span>
+    <span class="n">Alter_routine_priv</span><span class="p">:</span> <span class="n">N</span>
+      <span class="n">Create_user_priv</span><span class="p">:</span> <span class="n">N</span>
+            <span class="n">Event_priv</span><span class="p">:</span> <span class="n">N</span>
+          <span class="n">Trigger_priv</span><span class="p">:</span> <span class="n">N</span>
+<span class="n">Create_tablespace_priv</span><span class="p">:</span> <span class="n">N</span>
+              <span class="n">ssl_type</span><span class="p">:</span> 
+            <span class="n">ssl_cipher</span><span class="p">:</span> 
+           <span class="n">x509_issuer</span><span class="p">:</span> 
+          <span class="n">x509_subject</span><span class="p">:</span> 
+         <span class="n">max_questions</span><span class="p">:</span> <span class="mi">0</span>
+           <span class="n">max_updates</span><span class="p">:</span> <span class="mi">0</span>
+       <span class="n">max_connections</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="n">max_user_connections</span><span class="p">:</span> <span class="mi">0</span>
+                <span class="n">plugin</span><span class="p">:</span> <span class="n">mysql_native_password</span>
+ <span class="n">authentication_string</span><span class="p">:</span> 
+      <span class="n">password_expired</span><span class="p">:</span> <span class="n">N</span>
+<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span> <span class="n">sec</span><span class="p">)</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 创建用户并且授权
+</span><span class="c1"></span><span class="k">grant</span> <span class="k">select</span> <span class="k">on</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">to</span> <span class="n">user3</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span> <span class="n">identified</span> <span class="k">by</span> <span class="s1">&#39;123456&#39;</span><span class="p">;</span></code></pre></div>
+<ul>
+<li>删除用户</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">drop</span> <span class="k">user</span> <span class="n">xff</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delete</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="k">user</span><span class="o">=</span><span class="s1">&#39;user3&#39;</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">1</span> <span class="k">row</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="n">flush</span> <span class="k">privileges</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<ul>
+<li><p>修改密码</p>
+
+<ol>
+<li><code>mysqladmin -u root -ppasswd password 'passwd'</code>
+2.
+```sql
+&ndash; 普通用户对于user表没有权限的话，只能修改自己的密码
+mysql&gt; set password for username@&lsquo;localhost&rsquo;=password(&lsquo;mysql123&rsquo;);
+Query OK, 0 rows affected (0.00 sec)</li>
+</ol>
+
+<p>mysql&gt; flush privileges;
+Query OK, 0 rows affected (0.00 sec)</p>
+
+<pre><code>3.
+```sql
+mysql&gt; update user set password = password('passwd') where user='root';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+mysql&gt; flush privileges;
+Query OK, 0 rows affected (0.01 sec)
+</code></pre></li>
+</ul>
+
+<h2 id="3-权限管理">3. 权限管理</h2>
+
+<h3 id="3-1-权限应用的顺序">3.1 权限应用的顺序</h3>
+
+<p>user(Y|N) &gt;= db &gt;= tables_priv &gt;= columns_priv</p>
+
+<p>相应权限对于的表为:</p>
+
+<p>mysql.user &gt;= mysql.db &gt;= mysql.tables_priv &gt;= mysql.columns_priv</p>
+
+<p>一个用户对一个数据库有权限则可以创建，删除这个数据库</p>
+
+<h3 id="3-2-语法格式">3.2 语法格式</h3>
+
+<p>grant 权限列表 on 库名.表名 to &lsquo;用户名&rsquo;@&lsquo;客户端主机&rsquo; [identified by &lsquo;密码&rsquo; with grant option];</p>
+
+<ul>
+<li>权限列表</li>
+</ul>
+
+<p>all &lt;==&gt; 所有权限(不包括授权权限，如果有了grant语句最后有grant option则有了授权权限)
+select(列1, 列2, &hellip;), update</p>
+
+<ul>
+<li>数据库.表名</li>
+</ul>
+
+<p>|参数|说明|
+|&ndash;|&ndash;|
+|<em>.</em>|所有库的所有表|</p>
+
+<ul>
+<li>客户端主机</li>
+</ul>
+
+<p>|参数|说明|
+|&ndash;|&ndash;|
+|%|所有主机|
+|192.168.1.%|192.168.2.0网段的所有主机|
+|192.168.2.1|某个特定的主机|</p>
+
+<ul>
+<li>with_option 参数</li>
+</ul>
+
+<p>|参数|说明|
+|&ndash;|&ndash;|
+|GRANT OPTION|授权选项|
+|MAX_QUERIES_PER_HOUR|允许每小时执行的查询数|
+|MAX_UPDATES_PER_HOUR|允许每小时执行的更新数|
+|MAX_CONNECTIONS_PER_HOUR|允许每小时可以建立连接数|
+|MAX_USER_CONNECTIONS|定义单个用户同时可以建立的连接数|</p>
+
+<h3 id="3-3-查看权限">3.3 查看权限</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 查看当前用户所有授权
+</span><span class="c1"></span><span class="k">show</span> <span class="n">grants</span><span class="err">\</span><span class="k">G</span>
+
+<span class="c1">-- 管理员查看其它用户权限
+</span><span class="c1"></span><span class="k">show</span> <span class="n">grants</span> <span class="k">for</span> <span class="n">username</span><span class="err">\</span><span class="k">G</span></code></pre></div>
+<h3 id="3-4-权限的回收">3.4 权限的回收</h3>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 不会删除用户
+</span><span class="c1"></span><span class="k">revoke</span> <span class="err">权限列表</span> <span class="k">on</span> <span class="err">数据库名</span> <span class="k">from</span> <span class="err">用户名</span><span class="o">@</span><span class="s1">&#39;客户端主机&#39;</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">revoke</span> <span class="k">delete</span> <span class="k">on</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">from</span> <span class="n">admin1</span><span class="o">@</span><span class="s1">&#39;%&#39;</span><span class="p">;</span> <span class="c1">-- 回收删除权限
+</span><span class="c1"></span><span class="k">revoke</span> <span class="k">grant</span> <span class="k">option</span> <span class="k">on</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">from</span> <span class="n">admin1</span><span class="o">@</span><span class="s1">&#39;%&#39;</span><span class="p">;</span> <span class="c1">-- 取消授权权限
+</span><span class="c1">-- 删除用户
+</span><span class="c1"></span><span class="k">delete</span> <span class="k">from</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span> <span class="k">where</span> <span class="k">user</span><span class="o">=</span><span class="s1">&#39;admin1&#39;</span>
+<span class="n">flush</span> <span class="k">privileges</span></code></pre></div></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/mysql"><span class="tag">MySQL</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>860</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2016/04/10/mysql%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6/");
+    var page_uniqueid = "41e0fff6d5bf2f53f40a9fc6a965c9f7";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

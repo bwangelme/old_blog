@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Werkzeug 的 wsgi-app 说明</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="  简要说明了一下WSGI 分析了Werkzeug的一个官方例子" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Werkzeug 的 wsgi-app 说明" />
+    <meta name="twitter:description" content="  简要说明了一下WSGI 分析了Werkzeug的一个官方例子" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Werkzeug 的 wsgi-app 说明" />
+  <meta property="og:description" content="  简要说明了一下WSGI 分析了Werkzeug的一个官方例子" />
+  <meta property="og:url" content="/2017/01/23/werkzeug-%E7%9A%84-wsgi-app-%E8%AF%B4%E6%98%8E/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2017/01/23/werkzeug-%E7%9A%84-wsgi-app-%E8%AF%B4%E6%98%8E/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Werkzeug 的 wsgi-app 说明</h1>
+      <p class="post-meta">@BWANGEL · Jan 23, 2017 · 2 min read</p>
+    </header>
+    <article class="post-content"><blockquote>
+<ol>
+<li>简要说明了一下WSGI</li>
+<li>分析了Werkzeug的一个官方例子
+</li>
+</ol>
+</blockquote>
+
+<h2 id="wsgi">WSGI</h2>
+
+<p>为了简化 Web 程序的开发，我们把 Web 程序分成了『Web服务器』，『中间件』和『Web应用程序』三部分。把一些枯燥，重复的工作(例如，解析 HTTP 请求，构造 HTTP 响应)交给 Web 服务器去做，把业务逻辑相关的工作放到 Web 应用程序中（例如判断表单是否合法，将表单输入存入数据库等），而中间件则是针对 Web 应用程序的装饰器，可以让我们在 Web 应用程序之外对 Web 请求或者响应做一些特殊的处理。</p>
+
+<p>WSGI（Python Web Server Gateway Interface）是一种协议，规定了『Web服务器』，『Web应用程序』，『中间件』这三者之间进行通信的方式。</p>
+
+<p>在 WSGI 中， Web 服务器会得到一个可调用的 app 参数(即 Web 应用程序)。每次它接收到这个 HTTP 请求以后就会调用一次这个 app ，然后将返回值作为 HTTP 响应体输出出去。在 WSGI 中，Web 应用程序是这样定义的：</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">simple_app</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
+    <span class="s2">&#34;&#34;&#34;Simplest possible application object
+</span><span class="s2">
+</span><span class="s2">    environ: 包含了 HTTP 请求的相关信息
+</span><span class="s2">    start_response: 一个用来发送 HTTP 响应包头部的函数
+</span><span class="s2">    return: HTTP 响应包的包体
+</span><span class="s2">    &#34;&#34;&#34;</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;200 OK&#39;</span>
+    <span class="n">response_headers</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;Content-type&#39;</span><span class="p">,</span> <span class="s1">&#39;text/plain&#39;</span><span class="p">)]</span>
+    <span class="n">start_response</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">response_headers</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;Hello world!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">]</span></code></pre></div>
+<h2 id="werkzeug">Werkzeug</h2>
+
+<p>Werkzeug 是一个 WSGI 实用程序库，它实现了 Web 服务器的功能，定义了一些通用的中间件，并对一些常用功能进行了封装，让我们可以在它的基础上定义自己的 Web 应用程序。</p>
+
+<h2 id="简单分析一个官方例子">简单分析一个官方例子</h2>
+
+<p>OK，说完了 Werkzeug，我们再来看用 Werkzeug 编写 Web 应用程序的一个官方例子。这个例子的代码可以在<a href="https://github.com/pallets/werkzeug/tree/master/examples/shortly">Github</a>上找到，所以我们这里并不会贴出全部代码，只分析其中的关键部分。</p>
+
+<p>首先来从它的主函数入手，我们可以看到这里的 app ，就相当于是我们的 Web 应用程序，而 werkzeug 的<code>run_simple</code>函数则为我们提供了 Web 服务器的功能。在这里， Web 服务器每收到一个 Web 请求，就会调用一次 app ，并从中获取 HTTP 响应并输出。</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">werkzeug.serving</span> <span class="kn">import</span> <span class="n">run_simple</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">create_app</span><span class="p">()</span>
+    <span class="n">run_simple</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">use_debugger</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">use_reloader</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></code></pre></div>
+<p>接着我们来看一下这个<code>app</code>调用的时候发生了什么，</p>
+<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">class</span> <span class="nc">Shortly</span><span class="p">:</span>
+    <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">dispatch_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">adapter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_map</span><span class="o">.</span><span class="n">bind_to_environ</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">endpoint</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">adapter</span><span class="o">.</span><span class="n">match</span><span class="p">()</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;on_&#39;</span> <span class="o">+</span> <span class="n">endpoint</span><span class="p">)(</span><span class="n">request</span><span class="p">,</span> <span class="o">**</span><span class="n">values</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">NotFound</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_404</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">HTTPException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">e</span>
+
+    <span class="k">def</span> <span class="nf">wsgi_app</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">environ</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dispatch_request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wsgi_app</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">create_app</span><span class="p">(</span><span class="n">redis_host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">redis_port</span><span class="o">=</span><span class="mi">6379</span><span class="p">,</span> <span class="n">with_static</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">Shortly</span><span class="p">({</span>
+        <span class="s1">&#39;redis_host&#39;</span><span class="p">:</span>       <span class="n">redis_host</span><span class="p">,</span>
+        <span class="s1">&#39;redis_port&#39;</span><span class="p">:</span>       <span class="n">redis_port</span>
+    <span class="p">})</span>
+    <span class="k">if</span> <span class="n">with_static</span><span class="p">:</span>
+        <span class="n">app</span><span class="o">.</span><span class="n">wsgi_app</span> <span class="o">=</span> <span class="n">SharedDataMiddleware</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">wsgi_app</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s1">&#39;/static&#39;</span><span class="p">:</span>  <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;static&#39;</span><span class="p">)</span>
+        <span class="p">})</span>
+    <span class="k">return</span> <span class="n">app</span></code></pre></div>
+<p>从上面可以看出，<code>app</code>调用的时候，基本上就在调用<code>wsgi_app</code>函数，这个函数具体的工作流程如下:</p>
+
+<ul>
+<li>首先将 Web 服务器传过来的<code>environ</code>变量封装成请求对象，然后根据这个请求对象去分发请求。</li>
+<li>请求分发
+
+<ul>
+<li>就是根据URL路由map去定位这个请求对应的<code>endpoint</code>（<code>endpoint</code>相当于flask中的视图函数）</li>
+<li>调用这个<code>endpoint</code>去获取响应对象。</li>
+</ul></li>
+<li>最后在<code>wsgi_app</code>函数中，调用响应对象，此时 HTTP 响应才真正从Web应用程序发送到了Web服务器。</li>
+</ul>
+
+<p>此外，我们还可以看到，<code>app</code>创建好了以后，还调用了一个<code>SharedDataMiddleware</code>中间件，从中间件的调用方式可以看出，它接收一个可调用对象的参数，返回一个可调用对象，这就相当于就是一个装饰器，对『Web应用程序』进行装饰。
+而<code>SharedDataMiddleware</code>这个中间件的功能就是检查请求的URL，如果请求的URL符合<code>/static</code>的模式，直接返回一个文件作为响应，不再将这个请求传递给Web应用程序。</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/python"><span class="tag">Python</span></a></li>
+        
+          <li><a href="/tags/werkzeug"><span class="tag">Werkzeug</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>572</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2017/01/23/werkzeug-%E7%9A%84-wsgi-app-%E8%AF%B4%E6%98%8E/");
+    var page_uniqueid = "ba9c2a425edb1569553529f730ee9fcf";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

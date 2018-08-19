@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>简单聊聊Vim中的自定义快捷键</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="摘要:
+  Vim中几个Map命令的区别 分享几个自定义的快捷键   
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="简单聊聊Vim中的自定义快捷键" />
+    <meta name="twitter:description" content="摘要:
+  Vim中几个Map命令的区别 分享几个自定义的快捷键   
+" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="简单聊聊Vim中的自定义快捷键" />
+  <meta property="og:description" content="摘要:
+  Vim中几个Map命令的区别 分享几个自定义的快捷键   
+" />
+  <meta property="og:url" content="/2017/03/26/%E7%AE%80%E5%8D%95%E8%81%8A%E8%81%8Avim%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BF%AB%E6%8D%B7%E9%94%AE/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2017/03/26/%E7%AE%80%E5%8D%95%E8%81%8A%E8%81%8Avim%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BF%AB%E6%8D%B7%E9%94%AE/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">简单聊聊Vim中的自定义快捷键</h1>
+      <p class="post-meta">@BWANGEL · Mar 26, 2017 · 1 min read</p>
+    </header>
+    <article class="post-content"><p><strong>摘要</strong>:</p>
+
+<blockquote>
+<ol>
+<li>Vim中几个<code>Map</code>命令的区别</li>
+<li>分享几个自定义的快捷键</li>
+</ol>
+</blockquote>
+
+<p></p>
+
+<h2 id="前言">前言</h2>
+
+<p>平常在Vim中自定义快捷键，使用的都是<code>map</code>命令，但最近发现自定义快捷键命令还有好多，如<code>noremap</code>， <code>nmap</code>，<code>vmap</code>等等。所以就想写一篇关于Vim中自定义快捷键的文章，来总结一些Vim中的自定义快捷键的命令和他们的命名方式。</p>
+
+<h2 id="与自定义快捷键相关的四个系列命令">与自定义快捷键相关的四个系列命令</h2>
+
+<h3 id="map系列命令">map系列命令</h3>
+
+<p>这个命令的声明如下: <code>:map {lhs} {rhs}</code>。这个命令就是将<code>{lhs}</code>代表的按键映射成<code>{rhs}</code>所代表的按键。例如<code>map L $</code>就是将<code>$</code>键映射成<code>L</code>。此外需要注意的是<code>map</code>命令定义的快捷键是可以嵌套的，例如下面这样的命令:</p>
+<div class="highlight"><pre class="chroma"><code class="language-vim" data-lang="vim"><span class="nx">map</span> <span class="nx">L</span> $<span class="err">
+</span><span class="err"></span><span class="nx">map</span> <span class="nx">Y</span> <span class="nx">yL</span></code></pre></div>
+<p>就是将<code>Y</code>按键映射成了<code>y$</code>按键。</p>
+
+<h3 id="noremap系列命令">noremap系列命令</h3>
+
+<p>这个命令的声明如下: <code>:no[remap]  {lhs} {rhs}</code>，顾名思义，就是不可以重新映射的命令。这个命令和<code>map</code>命令类似，不过它所定义的命令不可以被重新映射，例如下面的例子:</p>
+<div class="highlight"><pre class="chroma"><code class="language-vim" data-lang="vim"><span class="nx">map</span> <span class="nx">L</span> $<span class="err">
+</span><span class="err"></span><span class="nx">map</span> <span class="nx">Y</span> <span class="nx">yL</span></code></pre></div>
+<p>此时我们映射的<code>Y</code>按键的效果就不会和<code>y$</code>按键的效果相同了。此命令的主要作用是为了防止按键重新定义时出现冲突，所以一般推荐使用此命令来映射快捷键。</p>
+
+<h3 id="unmap系列命令">unmap系列命令</h3>
+
+<p><code>unmap</code>，顾名思义，就是用来取消<strong>所在模式</strong>下快捷键的定义(关于<strong>模式</strong>我们下一小结会将)。</p>
+
+<h3 id="mapclear系命令">mapclear系命令</h3>
+
+<p><code>mapclear</code>，清除所在模式下定义的所有快捷键。</p>
+
+<h2 id="自定义快捷键相关的六种模式">自定义快捷键相关的六种模式</h2>
+
+<p>在Vim中，共有六种模式，不同的定义快捷键的命令生效的模式不同，这六种模式如下：</p>
+
+<ul>
+<li><strong>N</strong>ormal Mode: 即Vim的普通模式，我们打开Vim后进入的第一个模式即此模式。</li>
+<li><strong>V</strong>isual Mode: 即Vim的<code>Visual</code>模式，我们在选中了一定的文本之后(通过<code>v</code>或者<code>V</code>命令)即进入此模式。</li>
+<li><strong>S</strong>elect Mode: 这种模式和<code>Visual</code>模式相似，不过输入的文本都会替换选中的文本。在普通模式下，通过鼠标选中或者使用<code>gH</code>命令都可以进入此模式。</li>
+<li><strong>O</strong>perator-pending Mode: 当我们输入一个<a href="http://vimdoc.sourceforge.net/htmldoc/motion.html#operator">操作符</a>后(例如，<code>d</code>，<code>y</code>，<code>c</code>等等)，就会进入此模式。</li>
+<li><strong>I</strong>nsert Mode: 即Vim的插入模式，普通模式下我们输入<code>i</code>(或者<code>s</code>,<code>a</code>等等)就会进入此模式。</li>
+<li><strong>C</strong>ommand-line Mode: 命令行模式，我们在普通模式下输入<code>:</code>或者<code>/</code>等就会进入此模式。</li>
+</ul>
+
+<h3 id="命令模式对应表">命令模式对应表</h3>
+
+<p>下表表示了每个自定义快捷键的命令和其对应的生效模式，需要注意的是<code>Lang-Arg</code>并不是一种新的模式，而是表示了这样一种情况。当我们键入一个字符的时候，它是缓冲区中文本的一部分，而不是一个Vim命令。上面这句话我翻译自Vim文档，我感觉自己也没有很是搞懂，所以还是把原文贴出了吧(参见<code>:help language-mapping</code>)：</p>
+
+<blockquote>
+<p>Generally: Whenever a character is to be typed that is part of the text in the
+buffer, not a Vim command character.  &ldquo;Lang-Arg&rdquo; isn&rsquo;t really another mode,
+it&rsquo;s just used here for this situation.</p>
+</blockquote>
+
+<p>| <code>map</code>系命令|<code>noremap</code>系命令|<code>unmap</code>系命令|<code>mapclear</code>系命令|生效模式
+| &mdash;-|&mdash;-|&mdash;-|&mdash;-|&mdash;-|&mdash;-
+| :map |:noremap |:unmap |:mapc[lear] |Normal, Visual, Select, Operator-pending
+| :nmap|:nnoremap|:nunmap|:nmapc[lear]|Normal
+| :vmap|:vnoremap|:vunmap|:vmapc[lear]|Visual and Select
+| :smap|:snoremap|:sunmap|:smapc[lear]|Select
+| :xmap|:xnoremap|:xunmap|:xmapc[lear]|Visual
+| :omap|:onoremap|:ounmap|:omapc[lear]|Operator-pending
+| :map!|:noremap!|:unmap!|:mapc[lear]!|Insert and Command-line
+| :imap|:inoremap|:iunmap|:imapc[lear]|Insert
+| :lmap|:lnoremap|:lunmap|:lmapc[lear]|Insert, Command-line, Lang-Arg
+| :cmap|:cnoremap|:cunmap|:cmapc[lear]|Command-line</p>
+
+<p>通过观察上面这些命令的前缀，我们可以发现，命令前缀和生效的模式有关。例如，<code>v</code>表示<code>Visual和Select</code>模式，<code>s</code>表示<code>Select</code>模式，<code>c</code>表示<code>Command-line</code>模式，等等。</p>
+
+<h2 id="分享两个我自己定义的快捷键">分享两个我自己定义的快捷键</h2>
+
+<p>Ok，扯了那么多和自定义快捷键相关的东西，接下来我和大家分享几个我自定义的快捷键吧，感觉用起来很爽，希望对大家有帮助。</p>
+
+<h3 id="tab键映射成搜索"><del>Tab键映射成搜索</del></h3>
+
+<p><del>搜索无疑是一个使用频率非常高的快捷键，但在原始的Vim中使用的却是<code>/</code>或者<code>?</code>，当要使用搜索功能的时候，我的右手要离开HomeRow(就是<strong>爱上对方过后就哭了</strong>那一行)，然后使用中指或者食指去按<code>/</code>，感觉虽然也可以用右手小拇指去按<code>/</code>，但实在是太费劲。</del></p>
+
+<p><del>所以我就把<code>/</code>映射成了<code>&lt;Tab&gt;</code>，<code>&lt;Tab&gt;</code>键在普通模式下基本用不到，同时左手小拇指又非常容易按到，感觉一下子方便了许多。映射命令如下：</del></p>
+<div class="highlight"><pre class="chroma"><code class="language-vim" data-lang="vim"><span class="c">&#34; 映射/为&lt;Tab&gt;</span><span class="err">
+</span><span class="err"></span><span class="nx">noremap</span> <span class="p">&lt;</span><span class="nx">Tab</span><span class="p">&gt;</span> /</code></pre></div>
+<p><del>大家可以看到，我这里使用的是<code>noremap</code>映射的(防止以后再来映射和<code>&lt;Tab&gt;</code>键相关的组合键时出现错误)，同时，这个命令生效的模式是<code>Normal</code>，<code>Visual</code>，<code>Select</code>，<code>Operator-pending</code>。这样我不仅可以在普通模式下搜索，也可以在选择文本(Visual)，删除文本(通过<code>d</code>命令)时进行搜索。</del></p>
+
+<p>后来我才发现，<code>&lt;Tab&gt;</code>和<code>&lt;C-i&gt;</code>的keycode是一样的，<a href="http://stackoverflow.com/questions/14641942/how-to-unmap-tab-and-do-not-make-ctrl-i-invalid-in-vim">无法分别映射</a>，所以将<code>&lt;Tab&gt;</code>映射为搜索按键会影响到<code>&lt;C-i&gt;</code>的功能，所以还是先删除掉吧。</p>
+
+<h3 id="快速定位当前文件">快速定位当前文件</h3>
+
+<p>这条映射是我在<a href="https://book.douban.com/subject/25869486/">《VIM 实用技巧》</a>中看到的，感觉很好用，特意来分享给大家。此映射命令如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-vim" data-lang="vim"><span class="c">&#34; 将%:h映射为%%，%:h的功能是显示当前缓冲区文件的相对路径</span><span class="err">
+</span><span class="err"></span><span class="nx">cnoremap</span> <span class="p">&lt;</span><span class="nx">expr</span><span class="p">&gt;</span> %% <span class="nx">getcmdtype</span><span class="p">()</span> <span class="p">==</span> <span class="s1">&#39;:&#39;</span> ? <span class="nx">expand</span><span class="p">(</span><span class="s1">&#39;%:h&#39;</span><span class="p">)</span>.<span class="s1">&#39;/&#39;</span> <span class="p">:</span> <span class="s1">&#39;%%&#39;</span></code></pre></div>
+<p>这条命令比较复杂，首先<code>cnoremap</code>表示在命令行模式下进行映射，<code>&lt;expr&gt;</code>表示将映射命令的右边的参数当做一个表达式来对待(详见: <code>:help :map-&lt;expr&gt;</code>)。</p>
+
+<p><code>%%</code>就是我们定义的快捷键，<code>getcmdtype() == ':' ? expand('%:h').'/' : '%%'</code>就是我们要执行的表达式，此命令的含义就是每当我们在命令行模式下输入<code>%%</code>，就会得到表达式<code>getcmdtype() == ':' ? expand('%:h').'/' : '%%'</code>运算的结果。</p>
+
+<p>接着我们再来分析一下这个表达式，<code>getcmdtype() == ':' ? expand('%:h').'/' : '%%'</code>。</p>
+
+<p>首先来看调用的两个函数，<code>getcmdtype</code>表示获取当前命令行模式的类型，<code>:</code>表示是Ex-Mode，就是在普通模式下输入<code>:</code>进入的模式，此外其他的返回结果参见<code>:help getcmdtype()</code>。
+<code>expand()</code>函数表示对通配符进行扩展，其中传入的参数为<code>%</code>和<code>:h</code>，<code>%</code>表示当前缓冲区文件，<code>:h</code>相当于一个函数，传入一个文件参数，返回文件所在的文件夹(相当于Python中的<code>os.path.dirname()</code>)，我们可以看到<code>expand('%:h')</code>函数的功能就是返回当前缓冲区文件所在的路径。</p>
+
+<p>整体来看这个表达式的话，就是一个三元运算符，如果当前模式是Ex-Mode的话，返回当前缓冲区文件所在的文件夹，否则的话返回<code>%%</code>。</p>
+
+<h2 id="有待考证和完善之处">有待考证和完善之处</h2>
+
+<p>写文章之前，我觉得我应该已经了解了Vim的<code>map</code>相关的命令，但是写完以后，发现还是有很多疑问，写到最后发现还有新东西自己没有涉及，这里先记录下来，以待以后完善：</p>
+
+<ol>
+<li><code>map</code>的递归定义的用法。我看到<code>:help :map</code>文档中说，<strong>This allows for nested and recursive use of mappings.</strong>也就是说<code>map</code>可以进行递归定义的，只是不知道怎么用，递归出口在哪？</li>
+<li><code>map</code>命令还有一个<code>map-&lt;expr&gt;</code>的用法，这次还没有将，以后加上。</li>
+<li>关于文档中<code>Lang-arg</code>还不是很懂。</li>
+</ol></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/vim"><span class="tag">Vim</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>510</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2017/03/26/%E7%AE%80%E5%8D%95%E8%81%8A%E8%81%8Avim%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BF%AB%E6%8D%B7%E9%94%AE/");
+    var page_uniqueid = "6b2fe16945b156739c75d1458ca0396d";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>

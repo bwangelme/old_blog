@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>MySQL数据类型_数值类型</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="BWANGEL" />
+  <meta name="description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍MySQL数据类型_数值类型
+ 
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="MySQL数据类型_数值类型" />
+    <meta name="twitter:description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍MySQL数据类型_数值类型
+ 
+" />
+    <meta name="twitter:image" content="/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="MySQL数据类型_数值类型" />
+  <meta property="og:description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍MySQL数据类型_数值类型
+ 
+" />
+  <meta property="og:url" content="/2016/04/10/mysql%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B_%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B/" />
+  <meta property="og:image" content="/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<link rel="canonical" href="/2016/04/10/mysql%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B_%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
+<meta name="msapplication-tooltip" content="Keep Foolish" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="/css/bundle.bfaa7ffd11.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">Keep Foolish</h2>
+  
+  <p class="subtitle">闻道百，以为莫己若者，我之谓也。</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="/">首页</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/tags">标签</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="/about/">关于</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">MySQL数据类型_数值类型</h1>
+      <p class="post-meta">@BWANGEL · Apr 10, 2016 · 1 min read</p>
+    </header>
+    <article class="post-content"><p><strong>摘要</strong>:</p>
+
+<blockquote>
+<p>这是一篇关于MySQL的文章，主要介绍MySQL数据类型_数值类型</p>
+</blockquote>
+
+<p></p>
+
+<h2 id="1-整数类型">1. 整数类型</h2>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>mysql自带</th>
+<th>字节数</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>TINYINT</td>
+<td>YES</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>SMALLINT</td>
+<td></td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>MEDIUMINT</td>
+<td>YES</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>INT或者INTEGER</td>
+<td></td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>BGIINT</td>
+<td>YES</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span> <span class="n">warnings</span><span class="p">;</span> <span class="o">#</span> <span class="err">查看警告</span>
+
+<span class="o">#</span> <span class="err">创建无符号整数字段</span><span class="p">,</span> <span class="err">默认是有符号的</span>
+<span class="k">create</span> <span class="k">table</span> <span class="n">test2</span><span class="p">(</span>
+    <span class="n">tinyint_test</span> <span class="n">tinyint</span> <span class="n">unsigned</span><span class="p">,</span>
+    <span class="n">int_test</span> <span class="nb">int</span> <span class="n">unsigned</span>
+    <span class="p">);</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">test4</span><span class="p">(</span>
+    <span class="o">-&gt;</span> <span class="n">id1</span> <span class="nb">int</span> <span class="n">zerofill</span><span class="p">,</span>
+    <span class="o">-&gt;</span> <span class="n">id2</span> <span class="nb">int</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="n">zerofill</span><span class="p">)</span>
+    <span class="o">-&gt;</span> <span class="p">;</span>
+
+<span class="o">#</span> <span class="err">如果不够显示字段，自动补充</span><span class="mi">0</span><span class="err">，由于是以</span><span class="mi">0</span><span class="err">开始，所以默认会是</span><span class="n">unsigned的</span></code></pre></div>
+<h2 id="2-浮点数类型">2. 浮点数类型</h2>
+
+<p>|类型|字节|
+|Float|4|
+|Double|8|</p>
+
+<p>也有精度和标度的概念,超过精度会四舍五入</p>
+
+<p><strong>错误示例</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">table</span> <span class="n">test5</span><span class="p">(</span><span class="n">float_test</span> <span class="nb">float</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+
+<span class="k">insert</span> <span class="k">into</span> <span class="n">test5</span> <span class="k">values</span><span class="p">(</span><span class="mi">1111</span><span class="p">.</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="o">#</span> <span class="err">最终存入的会是</span><span class="mi">999</span><span class="p">.</span><span class="mi">99</span><span class="p">,</span><span class="err">因为已经超出整数位了</span><span class="p">(</span><span class="err">三位</span><span class="p">)</span></code></pre></div>
+<h2 id="3-定点数类型">3. 定点数类型</h2>
+
+<p>在MySQL内部以字符串存储,精度比浮点数更高。</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="nb">DEC</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+
+<span class="o">#</span> <span class="n">M</span><span class="p">:</span> <span class="err">精度，一共的位数</span>
+<span class="o">#</span> <span class="n">D</span><span class="p">:</span> <span class="err">标度，小数点后的位数</span>
+
+<span class="err">默认情况下，</span><span class="n">M</span><span class="o">=</span><span class="mi">10</span><span class="err">，</span><span class="n">D</span><span class="o">=</span><span class="mi">0</span><span class="err">，不能存储小数。</span></code></pre></div>
+<h2 id="4-位类型">4. 位类型</h2>
+
+<p>多位二进制数，范围是1-64二进制数，默认是一位</p>
+
+<p>字节是1 - 8</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">table</span> <span class="n">test6</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="nb">bit</span><span class="p">(</span><span class="err">位数</span><span class="p">))</span>
+
+<span class="o">#</span> <span class="n">id是一个bit类型的整型</span><span class="err">，表示一个二进制数，括号里面跟位数，默认是</span><span class="mi">1</span>
+
+<span class="k">select</span> <span class="n">bin</span><span class="p">(</span><span class="n">id</span><span class="p">),</span> <span class="n">oct</span><span class="p">(</span><span class="n">id</span><span class="p">),</span> <span class="n">hex</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="k">from</span> <span class="n">test6</span><span class="p">;</span>
+
+<span class="o">#</span> <span class="err">将二进制数</span><span class="n">id</span><span class="err">，以二进制，八进制，十六进制的数字字符串的形式来显示。</span></code></pre></div>
+<h2 id="5-日期和时间类型">5. 日期和时间类型</h2>
+
+<p>日期和时间类型|字节|最大值|最小值
+&mdash;-|&mdash;-|
+DATE|4|
+DATETIME|8|1000-01-01 00:00:00|9999-12-31 23:59:59|
+TIMESTAMP|4|19700101080001|2038年的某个时刻|
+TIME|3|-835:59:59|838:59:59|
+YEAR|1|1901|2155</p>
+
+<pre><code>YEAR &lt;=69 会以20开头，&gt;=70会以19开头
+</code></pre>
+
+<h2 id="6-建议">6. 建议</h2>
+
+<h3 id="1-浮点数">1. 浮点数</h3>
+
+<p>用户身高，体重，薪水等。</p>
+
+<h3 id="2-定点数">2. 定点数</h3>
+
+<p>存储货币等高精度要求的数据。</p>
+
+<h3 id="3-位类型">3. 位类型</h3>
+
+<p>注意使用相应函数<code>bin oct hex</code>去查看相应的数据。</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="/tags/mysql"><span class="tag">MySQL</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！This post was published <strong>860</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="gitment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  (function() {
+    var page_url = decodeURI("/2016/04/10/mysql%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B_%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B/");
+    var page_uniqueid = "89a98947a131da64b8522680dbf87db5";
+
+    if (page_url.length >= 50) {
+      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
+      comment_id = page_uniqueid
+    } else {
+      comment_id = page_url
+    }
+
+    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+      console.log(comment_id, comment_id.length);
+      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
+    } else {
+      var gitment = new Gitment({
+        id: comment_id,
+        owner: "bwangelme",
+        repo: "blog-comment",
+        oauth: {
+          client_id: "57954aa9925858cd8b32",
+          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
+        },
+      })
+      gitment.render('gitment-container');
+    }
+  })();
+</script>
+
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2018 Keep Foolish</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="/js/bundle.4830e45d80.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-89788711-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+  </body>
+</html>
