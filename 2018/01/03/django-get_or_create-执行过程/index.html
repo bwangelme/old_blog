@@ -267,7 +267,7 @@ with transaction.atomic():
 
 <p>我看了一下<code>get_or_create</code>的实现，它的执行过程应该是这样的:</p>
 
-<p><img src="http://passage-1253400711.cos.ap-beijing.myqcloud.com/2017-12-15-065033.jpg" alt="" /></p>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2017-12-15-065033.jpg" alt="" /></p>
 
 <p>由于<code>get_or_create</code>实际上执行了三个事务，如果我们没有手动地把它放在一个事务中的话，它应该是不会抛出<code>IntegrityError</code>异常的。如果我们手动地把它放在一个事务中的话，而数据库的隔离级别又是可重复读的话，那么就很容易出现 @LeoJay 所说的情况，数据取又取不出来，存又存不进去。</p>
 
