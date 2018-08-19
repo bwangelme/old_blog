@@ -5,6 +5,10 @@ draft: true
 tags: [Python, ]
 ---
 
+Python 面试题集合
+
+<!--more-->
+
 ## Python 语法
 
 + 描述一下 type 与 object 的关系。
