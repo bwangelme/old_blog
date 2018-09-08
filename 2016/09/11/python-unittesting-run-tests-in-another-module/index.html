@@ -301,10 +301,7 @@ FAILED <span class="o">(</span><span class="nv">errors</span><span class="o">=</
 <p>至此，我终于明白了错误是出在哪里了。</p>
 
 <p>python的unittest是可以接受命令行参数的，比如下面这样：</p>
-
-<pre><code>python exam.py TestStringMethods
-</code></pre>
-
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">python</span> <span class="n">exam</span><span class="o">.</span><span class="n">py</span> <span class="n">TestStringMethods</span></code></pre></div>
 <p>其中<code>examp.py</code>是<a href="https://docs.python.org/3/library/unittest.html#basic-example">Python官方文档给出的例子</a>，在这个例子中有一个测试样例<code>TestStringMethods</code>类。上面的调用语句的意思就是说去<code>exam.py</code>模块中寻找<code>TestStringMethods</code>测试样例，并运行这个测试样例。其实上面的测试方法就是将<code>TestStringMethods</code>存放在<code>sys.argv</code>中，而unittest.main会根据<code>sys.argv</code>中的名字来查找相应的测试样例。</p>
 
 <p>而我调用的方式是<code>python manage.py test</code>，这里在<code>sys.argv</code>中添加了一个参数<code>test</code>，而<code>unittest</code>认为这个<code>test</code>是一个测试样例，会去执行的模块中寻找这个<code>test</code>属性，但是又找不到，最终就会抛出一开始的属性异常：<code>module '__main__' has no attribute 'test'</code></p>
@@ -331,7 +328,7 @@ FAILED <span class="o">(</span><span class="nv">errors</span><span class="o">=</
 
 <p>事先声明，这一部分完全和技术编程无关，不感兴趣的读者可以直接跳过。</p>
 
-<p>写到这里，我不禁想起了那个德国工程师的故事（也不知道是真是假）。就是话说有家工厂机器坏了，然后厂子里面的人怎么修也修不好，于是就去请了一个德国老外来修。老外来了，研究了三天，然后告诉厂子里面的人，打开这个地方，里面有个线圈，减少十圈就可以了。然后就修好了，然后老外就要好多好多钱，厂子里面的人就觉得不值，就一个线圈而已，干嘛要这么多钱。然后老外就说，线圈不值钱，找到问题所在却很值钱。</p>
+<p>写到这里，我不禁想起了那个德国工程师的故事（也不知道是真是假）。故事是这样的: 话说有家工厂机器坏了，厂子里面的人怎么修也修不好，于是就去请了一个德国老外来修。老外来了，研究了三天，告诉厂子里面的人，打开这个地方，里面有个线圈，减少十圈就可以了。厂里的人照着做就修好了。然后老外就要好多好多钱，厂子里面的人就觉得不值，就一个线圈而已，干嘛要这么多钱。老外就说，线圈不值钱，找到问题所在却很值钱。</p>
 
 <p>我感觉我的解决问题的经历很相似啊，解决起来很简单，多传一个参数就可以了，但是为了找到这个问题，我花了一下午和一晚上的时间，来跟踪调用栈，查看源代码。</p>
 
@@ -339,7 +336,7 @@ FAILED <span class="o">(</span><span class="nv">errors</span><span class="o">=</
 
 <h3 id="工具很重要">工具很重要</h3>
 
-<p>首先，真的感觉工具很重要。我用的是 IPython 中集成的 ipdb 来跟踪调用栈，然后利用 PyCharm 来查看源代码。不得不说，虽然平常一直用 vim 来编写代码。但是真的觉得 PyCharm 在查找定义和查找引用方面，真的是完爆 vim ，毕竟 vim 不是 IDE 。我突然觉得，所有的 vim 教程其实在一开始都得加上一句话，** vim 不是 IDE ，该用 IDE 的时候就要用 IDE 。**感觉这比整天声明 vim 是编辑器之神要实用的多。</p>
+<p>首先，真的感觉工具很重要。我用的是 IPython 中集成的 ipdb 来跟踪调用栈，然后利用 PyCharm 来查看源代码。不得不说，虽然平常一直用 vim 来编写代码。但是真的觉得 PyCharm 在查找定义和查找引用方面，真的是完爆 vim ，毕竟 vim 不是 IDE 。我突然觉得，所有的 vim 教程其实在一开始都得加上一句话，<em>vim 不是 IDE ，该用 IDE 的时候就要用 IDE。</em> 感觉这比整天强调 vim 是编辑器之神要实用的多。</p>
 
 <p>除了 PyCharm ，还发现 IPython 真是个好东西，可以调用 ipdb ，还可以方便地查看 Python 文档。</p>
 
