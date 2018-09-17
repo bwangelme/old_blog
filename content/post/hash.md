@@ -54,6 +54,7 @@ $$
 #### 相关定理：
 
 + $(a+b) \mod n = (a \mod n + b \mod n) \mod n$
++ $(a \mod n) \mod n = a \mod n$
 
 #### 定理说明
 
@@ -94,7 +95,7 @@ $$
 (Hash(x) + i^2) \mod ts = (Hash(y) + j^2) \mod ts
 $$
 $$
-[Hash(x) + i^2] \mod ts - [Hash(y) + j^2] \mod ts = 0 \mod ts
+(Hash(x) + i^2) \mod ts - (Hash(y) + j^2) \mod ts = 0 \mod ts
 $$
 $$
 (Hash(x) + i^2 - Hash(y) - j^2) \mod ts = 0
