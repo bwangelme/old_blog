@@ -119,9 +119,3 @@ $$
 + 额外说明
 
 根据 $K^2 \cdot [(ts - 1)^2 - (ts - 2)^2] < ts$可得$ K < \frac{\sqrt{3} \cdot ts}{3}$，`i, j`更精确的范围是$0 < i, j < \frac{\sqrt{3} \cdot ts}{3}$。
-
-
-
-
-
-
