@@ -9,97 +9,114 @@
 
   
   
+<link href="//cdn.jsdelivr.net" rel="dns-prefetch">
+<link href="//at.alicdn.com" rel="dns-prefetch">
+<link href="//fonts.googleapis.com" rel="dns-prefetch">
+<link href="//fonts.gstatic.com" rel="dns-prefetch">
+
+
+
+<link href="//www.google-analytics.com" rel="dns-prefetch">
 
 
 
 
 
-  
-  <meta name="author" content="BWANGEL" />
-  <meta name="description" content="摘要:
+
+<meta name="description" content="摘要:
  这是一篇关于MongoDB的文章，主要介绍深入查询表达式
-" />
+">
 
-  
-  
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="@gohugoio" />
-    <meta name="twitter:title" content="深入查询表达式" />
-    <meta name="twitter:description" content="摘要:
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@gohugoio">
+<meta name="twitter:title" content="深入查询表达式">
+<meta name="twitter:description" content="摘要:
  这是一篇关于MongoDB的文章，主要介绍深入查询表达式
-" />
-    <meta name="twitter:image" content="/img/avatar.jpg" />
-  
+">
+<meta name="twitter:image" content="/images/avatar.jpg">
 
-  
-  <meta property="og:type" content="article" />
-  <meta property="og:title" content="深入查询表达式" />
-  <meta property="og:description" content="摘要:
+
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入查询表达式">
+<meta property="og:description" content="摘要:
  这是一篇关于MongoDB的文章，主要介绍深入查询表达式
-" />
-  <meta property="og:url" content="/2016/04/10/%E6%B7%B1%E5%85%A5%E6%9F%A5%E8%AF%A2%E8%A1%A8%E8%BE%BE%E5%BC%8F/" />
-  <meta property="og:image" content="/img/avatar.jpg" />
+">
+<meta property="og:url" content="/2016/04/10/%E6%B7%B1%E5%85%A5%E6%9F%A5%E8%AF%A2%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
+<meta property="og:image" content="/images/avatar.jpg">
 
 
 
 
-<meta name="generator" content="Hugo 0.49" />
+<meta name="generator" content="Hugo 0.51">
 
 
-<link rel="canonical" href="/2016/04/10/%E6%B7%B1%E5%85%A5%E6%9F%A5%E8%AF%A2%E8%A1%A8%E8%BE%BE%E5%BC%8F/" />
+<link rel="canonical" href="/2016/04/10/%E6%B7%B1%E5%85%A5%E6%9F%A5%E8%AF%A2%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
 
-<meta name="renderer" content="webkit" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="format-detection" content="telephone=no,email=no,adress=no" />
-<meta http-equiv="Cache-Control" content="no-transform" />
-
-
-<meta name="robots" content="index,follow" />
-<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no,email=no,adress=no">
+<meta http-equiv="Cache-Control" content="no-transform">
 
 
-
+<meta name="robots" content="index,follow">
+<meta name="referrer" content="origin-when-cross-origin">
 
 
 
 
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
-<meta name="msapplication-tooltip" content="Keep Foolish" />
-<meta name='msapplication-navbutton-color' content="#5fbf5e" />
-<meta name="msapplication-TileColor" content="#5fbf5e" />
-<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
-<link rel="icon" href="/img/favicon.ico" />
-<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
-<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
-<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
-<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
-<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
 
 
 
-<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Keep Foolish">
+<meta name="msapplication-tooltip" content="Keep Foolish">
+<meta name='msapplication-navbutton-color' content="#5fbf5e">
+<meta name="msapplication-TileColor" content="#5fbf5e">
+<meta name="msapplication-TileImage" content="/images/tile-image-windows.png">
+<link rel="icon" href="/images/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+<link rel="icon" sizes="192x192" href="/images/touch-icon-android.png">
+<link rel="apple-touch-icon" href="/images/touch-icon-apple.png">
 
-<link rel="stylesheet" href="/css/bundle.css" />
+
+<link rel="preload" href="/styles/main.min.css" as="style">
+<link rel="preload" href="https://fonts.googleapis.com/css?family=Lobster" as="style">
+<link rel="preload" href="/images/avatar.jpg" as="image">
+<link rel="preload" href="/images/grey-prism.svg" as="image">
+
+
+<style>
+  body {
+    background: rgb(244, 243, 241) url('/images/grey-prism.svg') repeat fixed;
+  }
+</style>
+<link rel="stylesheet" href="/styles/main.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/video.js@7.3.0/dist/video-js.min.css">
 
 
   
-  <!--[if lt IE 9]>
-    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
-  <![endif]-->
+  
+<!--[if lte IE 8]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/videojs-ie8@1.1.2/dist/videojs-ie8.min.js"></script>
+<![endif]-->
 
-<!--[if lte IE 11]>
-    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
-  <![endif]-->
-
-
-<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+<!--[if lte IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/eligrey-classlist-js-polyfill@1.2.20180112/classList.min.js"></script>
+<![endif]-->
 
 
-<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"></script>
 
 
 </head>
@@ -109,14 +126,14 @@
       <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
       
         
-        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        <a title="Go to comments" class="to-comment" href="#utterances-container"><span class="icon icon-comment"></span></a>
         
       
     </div>
     
     
   <header class="site-header">
-  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  <img class="avatar" src="/images/avatar.jpg" alt="Avatar">
   
   <h2 class="title">Keep Foolish</h2>
   
@@ -158,63 +175,7 @@
   </nav>
   <nav class="social-menu collapsed">
     <h2 class="offscreen">Social Networks</h2>
-    <ul class="social-list">
-
-      
-      <li class="social-item">
-        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
-      </li>
-
-      
-      <li class="social-item">
-        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
-      </li>
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      <li class="social-item">
-        <a href="//weibo.com/3093227873" title="Weibo"><span class="icon icon-weibo"></span></a>
-      </li>
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      <li class="social-item">
-        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
-      </li>
-
-    </ul>
+    <ul class="social-list"><li class="social-item"><a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a></li><li class="social-item"><a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a></li><li class="social-item"><a href="//weibo.com/3093227873" title="Weibo"><span class="icon icon-weibo"></span></a></li></ul>
   </nav>
 </header>
 
@@ -229,8 +190,7 @@
 <p>这是一篇关于MongoDB的文章，主要介绍深入查询表达式</p>
 </blockquote>
 
-<p>
-<code>$where</code></p>
+<p><code>$where</code></p>
 
 <p>将每个文档数据转换成JSON对象，然后再这个JSON对象上执行$where跟着的js语句</p>
 
@@ -252,43 +212,13 @@
       </p>
     </footer>
     
-      <div id="gitment-container"></div>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitment/style/default.min.css">
-<script src="https://cdn.jsdelivr.net/npm/gitment/dist/gitment.browser.min.js"></script>
-<script>
-  (function() {
-    var page_url = decodeURI("/2016/04/10/%E6%B7%B1%E5%85%A5%E6%9F%A5%E8%AF%A2%E8%A1%A8%E8%BE%BE%E5%BC%8F/");
-    var page_uniqueid = "d47a6d77e171cecbf017a7cb03b7e717";
-
-    if (page_url.length >= 50) {
-      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
-      comment_id = page_uniqueid
-    } else {
-      comment_id = page_url
-    }
-
-    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-      console.log(comment_id, comment_id.length);
-      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
-    } else {
-      var gitment = new Gitment({
-        id: comment_id,
-        owner: "bwangelme",
-        repo: "blog-comment",
-        oauth: {
-          client_id: "57954aa9925858cd8b32",
-          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
-        },
-      })
-      gitment.render('gitment-container');
-    }
-  })();
-</script>
-
       
     
   </section>
-  <footer class="site-footer">
+  
+
+
+<footer class="site-footer">
   <p>© 2017-2018 Keep Foolish</p>
   <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
   
@@ -296,8 +226,12 @@
 
 
 
-<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
-<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script async src="https://cdn.jsdelivr.net/npm/video.js@7.3.0/dist/video.min.js"></script>
+
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.min.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     tex2jax: {
@@ -308,7 +242,7 @@
       skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
       TeX: { equationNumbers: { autoNumber: "AMS" },
       extensions: ["AMSmath.js", "AMSsymbols.js"] }
-    }
+    },
   });
 </script>
 <script type="text/x-mathjax-config">
@@ -320,7 +254,11 @@
   });
 </script>
 
-<script src="/js/bundle.js"></script>
+
+
+<script src="/scripts/index.min.js"></script>
+
+
 
 
 <script type="application/javascript">
@@ -333,6 +271,8 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
 
 
 

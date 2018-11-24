@@ -9,97 +9,111 @@
 
   
   
+<link href="//cdn.jsdelivr.net" rel="dns-prefetch">
+<link href="//at.alicdn.com" rel="dns-prefetch">
+<link href="//fonts.googleapis.com" rel="dns-prefetch">
+<link href="//fonts.gstatic.com" rel="dns-prefetch">
 
 
 
+<link href="//www.google-analytics.com" rel="dns-prefetch">
+
+
+
+
+
+
+<meta name="description" content="简介: 利用Go语言实现二叉搜索树并为其编写单元测试
+">
+
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@gohugoio">
+<meta name="twitter:title" content="Go与数据结构之二叉搜索树">
+<meta name="twitter:description" content="简介: 利用Go语言实现二叉搜索树并为其编写单元测试
+">
+<meta name="twitter:image" content="/images/avatar.jpg">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go与数据结构之二叉搜索树">
+<meta property="og:description" content="简介: 利用Go语言实现二叉搜索树并为其编写单元测试
+">
+<meta property="og:url" content="/2018/03/01/go%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B9%8B%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/">
+<meta property="og:image" content="/images/avatar.jpg">
+
+
+
+
+<meta name="generator" content="Hugo 0.51">
+
+
+<link rel="canonical" href="/2018/03/01/go%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B9%8B%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/">
+
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no,email=no,adress=no">
+<meta http-equiv="Cache-Control" content="no-transform">
+
+
+<meta name="robots" content="index,follow">
+<meta name="referrer" content="origin-when-cross-origin">
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Keep Foolish">
+<meta name="msapplication-tooltip" content="Keep Foolish">
+<meta name='msapplication-navbutton-color' content="#5fbf5e">
+<meta name="msapplication-TileColor" content="#5fbf5e">
+<meta name="msapplication-TileImage" content="/images/tile-image-windows.png">
+<link rel="icon" href="/images/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+<link rel="icon" sizes="192x192" href="/images/touch-icon-android.png">
+<link rel="apple-touch-icon" href="/images/touch-icon-apple.png">
+
+
+<link rel="preload" href="/styles/main.min.css" as="style">
+<link rel="preload" href="https://fonts.googleapis.com/css?family=Lobster" as="style">
+<link rel="preload" href="/images/avatar.jpg" as="image">
+<link rel="preload" href="/images/grey-prism.svg" as="image">
+
+
+<style>
+  body {
+    background: rgb(244, 243, 241) url('/images/grey-prism.svg') repeat fixed;
+  }
+</style>
+<link rel="stylesheet" href="/styles/main.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/video.js@7.3.0/dist/video-js.min.css">
 
 
   
-  <meta name="author" content="BWANGEL" />
-  <meta name="description" content="简介: 利用Go语言实现二叉搜索树并为其编写单元测试
-
-" />
-
   
-  
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="@gohugoio" />
-    <meta name="twitter:title" content="Go与数据结构之二叉搜索树" />
-    <meta name="twitter:description" content="简介: 利用Go语言实现二叉搜索树并为其编写单元测试
+<!--[if lte IE 8]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/videojs-ie8@1.1.2/dist/videojs-ie8.min.js"></script>
+<![endif]-->
 
-" />
-    <meta name="twitter:image" content="/img/avatar.jpg" />
-  
-
-  
-  <meta property="og:type" content="article" />
-  <meta property="og:title" content="Go与数据结构之二叉搜索树" />
-  <meta property="og:description" content="简介: 利用Go语言实现二叉搜索树并为其编写单元测试
-
-" />
-  <meta property="og:url" content="/2018/03/01/go%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B9%8B%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/" />
-  <meta property="og:image" content="/img/avatar.jpg" />
+<!--[if lte IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/eligrey-classlist-js-polyfill@1.2.20180112/classList.min.js"></script>
+<![endif]-->
 
 
-
-
-<meta name="generator" content="Hugo 0.49" />
-
-
-<link rel="canonical" href="/2018/03/01/go%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B9%8B%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/" />
-
-<meta name="renderer" content="webkit" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="format-detection" content="telephone=no,email=no,adress=no" />
-<meta http-equiv="Cache-Control" content="no-transform" />
-
-
-<meta name="robots" content="index,follow" />
-<meta name="referrer" content="origin-when-cross-origin" />
-
-
-
-
-
-
-
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
-<meta name="msapplication-tooltip" content="Keep Foolish" />
-<meta name='msapplication-navbutton-color' content="#5fbf5e" />
-<meta name="msapplication-TileColor" content="#5fbf5e" />
-<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
-<link rel="icon" href="/img/favicon.ico" />
-<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
-<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
-<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
-<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
-<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
-
-
-
-<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
-
-<link rel="stylesheet" href="/css/bundle.css" />
-
-
-  
-  <!--[if lt IE 9]>
-    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
-  <![endif]-->
-
-<!--[if lte IE 11]>
-    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
-  <![endif]-->
-
-
-<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
-
-
-<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"></script>
 
 
 </head>
@@ -109,14 +123,14 @@
       <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
       
         
-        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        <a title="Go to comments" class="to-comment" href="#utterances-container"><span class="icon icon-comment"></span></a>
         
       
     </div>
     
     
   <header class="site-header">
-  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  <img class="avatar" src="/images/avatar.jpg" alt="Avatar">
   
   <h2 class="title">Keep Foolish</h2>
   
@@ -158,63 +172,7 @@
   </nav>
   <nav class="social-menu collapsed">
     <h2 class="offscreen">Social Networks</h2>
-    <ul class="social-list">
-
-      
-      <li class="social-item">
-        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
-      </li>
-
-      
-      <li class="social-item">
-        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
-      </li>
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      <li class="social-item">
-        <a href="//weibo.com/3093227873" title="Weibo"><span class="icon icon-weibo"></span></a>
-      </li>
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      <li class="social-item">
-        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
-      </li>
-
-    </ul>
+    <ul class="social-list"><li class="social-item"><a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a></li><li class="social-item"><a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a></li><li class="social-item"><a href="//weibo.com/3093227873" title="Weibo"><span class="icon icon-weibo"></span></a></li></ul>
   </nav>
 </header>
 
@@ -224,8 +182,6 @@
       <p class="post-meta">@BWANGEL · 发表于 2018年3月1日 · 3 min read</p>
     </header>
     <article class="post-content"><p><strong>简介</strong>: 利用Go语言实现二叉搜索树并为其编写单元测试</p>
-
-<p></p>
 
 <h2 id="说明">说明</h2>
 
@@ -246,12 +202,12 @@
 	<span class="nx">right</span> <span class="o">*</span><span class="nx">TreeNode</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="nx">MakeEmpty</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="c1">// 清空一棵树或者创造一棵空树
-</span><span class="c1"></span><span class="kd">func</span> <span class="nx">FindMin</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span>   <span class="c1">// 查找树中最小的节点
-</span><span class="c1"></span><span class="kd">func</span> <span class="nx">FindMax</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span>   <span class="c1">// 查找树中最大的节点
-</span><span class="c1"></span><span class="kd">func</span> <span class="nx">Find</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span>  <span class="c1">// 查找树中某个特定的节点
-</span><span class="c1"></span><span class="kd">func</span> <span class="nx">Insert</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span>  <span class="c1">// 向树中插入节点
-</span><span class="c1"></span><span class="kd">func</span> <span class="nx">Delete</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span>  <span class="o">//</span> <span class="nx">从树中删除节点</span></code></pre></div>
+<span class="kd">func</span> <span class="nf">MakeEmpty</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="c1">// 清空一棵树或者创造一棵空树
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">FindMin</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span>   <span class="c1">// 查找树中最小的节点
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">FindMax</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span>   <span class="c1">// 查找树中最大的节点
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">Find</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span>  <span class="c1">// 查找树中某个特定的节点
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">Insert</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span>  <span class="c1">// 向树中插入节点
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">Delete</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span>  <span class="o">//</span> <span class="nx">从树中删除节点</span></code></pre></div>
 <p>从上面的定义中我们可以看到，二叉搜索树中的节点是通过<code>TreeNode</code>结构体来定义的，其中<code>elem</code>表示存储在这个树节点中的关键字值，<code>left</code>和<code>right</code>分别代表左右子树。</p>
 
 <h2 id="实现">实现</h2>
@@ -260,11 +216,11 @@
 
 <h3 id="makeempty">MakeEmpty</h3>
 <div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 创造一棵空树，或者将一棵搜索树清空
-</span><span class="c1"></span><span class="kd">func</span> <span class="nx">MakeEmpty</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">MakeEmpty</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
 	<span class="k">if</span> <span class="nx">tree</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">MakeEmpty</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span>
+		<span class="nf">MakeEmpty</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span>
 		<span class="nx">tree</span><span class="p">.</span><span class="nx">left</span> <span class="p">=</span> <span class="kc">nil</span>
-		<span class="nx">MakeEmpty</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
+		<span class="nf">MakeEmpty</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
 		<span class="nx">tree</span><span class="p">.</span><span class="nx">right</span> <span class="p">=</span> <span class="kc">nil</span>
 	<span class="p">}</span>
 
@@ -281,7 +237,7 @@
 <h3 id="findmin">FindMin</h3>
 
 <p>二叉搜索树的<code>FindMin</code>操作的实现如下所示：</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">FindMin</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">FindMin</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
 	<span class="k">if</span> <span class="nx">tree</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="k">return</span> <span class="kc">nil</span>
 	<span class="p">}</span>
@@ -297,7 +253,7 @@
 <h3 id="findmax">FindMax</h3>
 
 <p>二叉搜索树的<code>FindMax</code>操作的实现如下:</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">FindMax</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">FindMax</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
 	<span class="k">if</span> <span class="nx">tree</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="k">return</span> <span class="kc">nil</span>
 	<span class="p">}</span>
@@ -306,14 +262,14 @@
 		<span class="k">return</span> <span class="nx">tree</span>
 	<span class="p">}</span>
 
-	<span class="k">return</span> <span class="nx">FindMax</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nf">FindMax</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
 <span class="p">}</span></code></pre></div>
 <p><code>FindMax</code>的功能我们是通过递归来实现的，从二叉搜索树的特性可知，树节点的右子树中的值始终要比当前节点的值大。所以我们判断只要当前节点有右子树，就去寻找它右子树中的最大值，这样就可以找到二叉搜索树中的最大节点了。</p>
 
 <h3 id="find">Find</h3>
 
 <p>二叉搜索树的<code>Find</code>操作的实现如下:</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">Find</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Find</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
 	<span class="k">if</span> <span class="nx">tree</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="k">return</span> <span class="kc">nil</span>
 	<span class="p">}</span>
@@ -321,10 +277,10 @@
 	<span class="k">if</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">elem</span> <span class="o">==</span> <span class="nx">elem</span> <span class="p">{</span>
 		<span class="k">return</span> <span class="nx">tree</span>
 	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">elem</span> <span class="p">&gt;</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">elem</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">Find</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
+		<span class="k">return</span> <span class="nf">Find</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
 	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
 		<span class="c1">// 查找节点比当前树节点要小
-</span><span class="c1"></span>		<span class="k">return</span> <span class="nx">Find</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span>
+</span><span class="c1"></span>		<span class="k">return</span> <span class="nf">Find</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span>
 	<span class="p">}</span>
 <span class="p">}</span></code></pre></div>
 <p><code>Find</code>操作的功能是通过递归来实现的。判断当前树节点是否是要查找的节点，如果是则返回当前节点。否则，根据目标关键字的值的是否小于当前节点的关键字值分别去当前节点的左子树或右子树中去查找目标节点。</p>
@@ -332,16 +288,16 @@
 <h3 id="insert">Insert</h3>
 
 <p>二叉搜索树的<code>Insert</code>操作的实现如下:</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">Insert</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Insert</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
 	<span class="k">if</span> <span class="nx">tree</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="nx">tree</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">TreeNode</span><span class="p">{}</span>
 		<span class="nx">tree</span><span class="p">.</span><span class="nx">left</span> <span class="p">=</span> <span class="kc">nil</span>
 		<span class="nx">tree</span><span class="p">.</span><span class="nx">right</span> <span class="p">=</span> <span class="kc">nil</span>
 		<span class="nx">tree</span><span class="p">.</span><span class="nx">elem</span> <span class="p">=</span> <span class="nx">elem</span>
 	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">elem</span> <span class="p">&lt;</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">elem</span> <span class="p">{</span>
-		<span class="nx">tree</span><span class="p">.</span><span class="nx">left</span> <span class="p">=</span> <span class="nx">Insert</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span>
+		<span class="nx">tree</span><span class="p">.</span><span class="nx">left</span> <span class="p">=</span> <span class="nf">Insert</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span>
 	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">elem</span> <span class="p">&gt;</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">elem</span> <span class="p">{</span>
-		<span class="nx">tree</span><span class="p">.</span><span class="nx">right</span> <span class="p">=</span> <span class="nx">Insert</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
+		<span class="nx">tree</span><span class="p">.</span><span class="nx">right</span> <span class="p">=</span> <span class="nf">Insert</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
 	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
 		<span class="c1">// 该节点已经在这颗树中了，我们什么也不做
 </span><span class="c1"></span>	<span class="p">}</span>
@@ -355,13 +311,13 @@
 <h3 id="insert-测试">Insert 测试</h3>
 
 <p>为了验证我们的<code>Insert</code>操作的实现是否正确，我们可以利用 Go 的单元测试来为<code>Insert</code>操作编写测试代码，如下所示:</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">TestInsert</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestInsert</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
 	<span class="kd">var</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">=</span> <span class="kc">nil</span>
 
-	<span class="nx">tree</span> <span class="p">=</span> <span class="nx">Insert</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nx">tree</span><span class="p">)</span>
-	<span class="nx">tree</span> <span class="p">=</span> <span class="nx">Insert</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nx">tree</span><span class="p">)</span>
-	<span class="nx">tree</span> <span class="p">=</span> <span class="nx">Insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">tree</span><span class="p">)</span>
-	<span class="nx">tree</span> <span class="p">=</span> <span class="nx">Insert</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nx">tree</span><span class="p">)</span>
+	<span class="nx">tree</span> <span class="p">=</span> <span class="nf">Insert</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nx">tree</span><span class="p">)</span>
+	<span class="nx">tree</span> <span class="p">=</span> <span class="nf">Insert</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nx">tree</span><span class="p">)</span>
+	<span class="nx">tree</span> <span class="p">=</span> <span class="nf">Insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">tree</span><span class="p">)</span>
+	<span class="nx">tree</span> <span class="p">=</span> <span class="nf">Insert</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nx">tree</span><span class="p">)</span>
 
 	<span class="c1">// 构造出来的树
 </span><span class="c1"></span>	<span class="c1">//    3
@@ -370,11 +326,11 @@
 </span><span class="c1"></span>	<span class="c1">//    \
 </span><span class="c1"></span>	<span class="c1">//     2
 </span><span class="c1"></span>
-	<span class="nx">assert</span><span class="p">.</span><span class="nx">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">FindMax</span><span class="p">(</span><span class="nx">tree</span><span class="p">).</span><span class="nx">elem</span><span class="p">)</span>
-	<span class="nx">assert</span><span class="p">.</span><span class="nx">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">FindMin</span><span class="p">(</span><span class="nx">tree</span><span class="p">).</span><span class="nx">elem</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="nf">FindMax</span><span class="p">(</span><span class="nx">tree</span><span class="p">).</span><span class="nx">elem</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nf">FindMin</span><span class="p">(</span><span class="nx">tree</span><span class="p">).</span><span class="nx">elem</span><span class="p">)</span>
 
-	<span class="nx">assert</span><span class="p">.</span><span class="nx">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">Find</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nx">tree</span><span class="p">).</span><span class="nx">left</span><span class="p">)</span>
-	<span class="nx">assert</span><span class="p">.</span><span class="nx">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">Find</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nx">tree</span><span class="p">).</span><span class="nx">right</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">Find</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nx">tree</span><span class="p">).</span><span class="nx">left</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">Find</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nx">tree</span><span class="p">).</span><span class="nx">right</span><span class="p">)</span>
 <span class="p">}</span></code></pre></div>
 <p>我们按顺序向树中插入<code>3, 4, 2, 1</code>四个节点，最终构造出来的树如下图所示:</p>
 
@@ -416,23 +372,23 @@
 <p>至此，我们就从树2中成功删除了节点2。</p>
 
 <p><code>Delete</code>操作的实现如下所示:</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">Delete</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Delete</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
 	<span class="k">if</span> <span class="nx">tree</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">log</span><span class="p">.</span><span class="nx">Fatalf</span><span class="p">(</span><span class="s">&#34;Cannot find element %v in tree %v\n&#34;</span><span class="p">,</span> <span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">)</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalf</span><span class="p">(</span><span class="s">&#34;Cannot find element %v in tree %v\n&#34;</span><span class="p">,</span> <span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">)</span>
 	<span class="p">}</span>
 
 	<span class="k">if</span> <span class="nx">elem</span> <span class="p">&lt;</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">elem</span> <span class="p">{</span>
-		<span class="nx">tree</span><span class="p">.</span><span class="nx">left</span> <span class="p">=</span> <span class="nx">Delete</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span>
+		<span class="nx">tree</span><span class="p">.</span><span class="nx">left</span> <span class="p">=</span> <span class="nf">Delete</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span>
 	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">elem</span> <span class="p">&gt;</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">elem</span> <span class="p">{</span>
-		<span class="nx">tree</span><span class="p">.</span><span class="nx">right</span> <span class="p">=</span> <span class="nx">Delete</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
+		<span class="nx">tree</span><span class="p">.</span><span class="nx">right</span> <span class="p">=</span> <span class="nf">Delete</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
 	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
 		<span class="c1">// 被删除的就是当前节点
 </span><span class="c1"></span>
 		<span class="k">if</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">left</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="o">&amp;&amp;</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">right</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 			<span class="c1">// 被删除的节点有两个子节点
-</span><span class="c1"></span>			<span class="nx">tmpNode</span> <span class="o">:=</span> <span class="nx">FindMin</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
+</span><span class="c1"></span>			<span class="nx">tmpNode</span> <span class="o">:=</span> <span class="nf">FindMin</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
 			<span class="nx">tree</span><span class="p">.</span><span class="nx">elem</span> <span class="p">=</span> <span class="nx">tmpNode</span><span class="p">.</span><span class="nx">elem</span>
-			<span class="nx">tree</span><span class="p">.</span><span class="nx">right</span> <span class="p">=</span> <span class="nx">Delete</span><span class="p">(</span><span class="nx">tmpNode</span><span class="p">.</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
+			<span class="nx">tree</span><span class="p">.</span><span class="nx">right</span> <span class="p">=</span> <span class="nf">Delete</span><span class="p">(</span><span class="nx">tmpNode</span><span class="p">.</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">right</span><span class="p">)</span>
 		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
 			<span class="c1">// 被删除的节点有0个或者1个子节点
 </span><span class="c1"></span>			<span class="k">if</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">left</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
@@ -529,43 +485,13 @@ func TestDeleteTwoChild(t *testing.T) {
       </p>
     </footer>
     
-      <div id="gitment-container"></div>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitment/style/default.min.css">
-<script src="https://cdn.jsdelivr.net/npm/gitment/dist/gitment.browser.min.js"></script>
-<script>
-  (function() {
-    var page_url = decodeURI("/2018/03/01/go%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B9%8B%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/");
-    var page_uniqueid = "2f5d2231f08e79d07c6fb0b32a9062e5";
-
-    if (page_url.length >= 50) {
-      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
-      comment_id = page_uniqueid
-    } else {
-      comment_id = page_url
-    }
-
-    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-      console.log(comment_id, comment_id.length);
-      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
-    } else {
-      var gitment = new Gitment({
-        id: comment_id,
-        owner: "bwangelme",
-        repo: "blog-comment",
-        oauth: {
-          client_id: "57954aa9925858cd8b32",
-          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
-        },
-      })
-      gitment.render('gitment-container');
-    }
-  })();
-</script>
-
       
     
   </section>
-  <footer class="site-footer">
+  
+
+
+<footer class="site-footer">
   <p>© 2017-2018 Keep Foolish</p>
   <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
   
@@ -573,8 +499,12 @@ func TestDeleteTwoChild(t *testing.T) {
 
 
 
-<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
-<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script async src="https://cdn.jsdelivr.net/npm/video.js@7.3.0/dist/video.min.js"></script>
+
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.min.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     tex2jax: {
@@ -585,7 +515,7 @@ func TestDeleteTwoChild(t *testing.T) {
       skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
       TeX: { equationNumbers: { autoNumber: "AMS" },
       extensions: ["AMSmath.js", "AMSsymbols.js"] }
-    }
+    },
   });
 </script>
 <script type="text/x-mathjax-config">
@@ -597,7 +527,11 @@ func TestDeleteTwoChild(t *testing.T) {
   });
 </script>
 
-<script src="/js/bundle.js"></script>
+
+
+<script src="/scripts/index.min.js"></script>
+
+
 
 
 <script type="application/javascript">
@@ -610,6 +544,8 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
 
 
 

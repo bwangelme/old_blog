@@ -9,91 +9,111 @@
 
   
   
+<link href="//cdn.jsdelivr.net" rel="dns-prefetch">
+<link href="//at.alicdn.com" rel="dns-prefetch">
+<link href="//fonts.googleapis.com" rel="dns-prefetch">
+<link href="//fonts.gstatic.com" rel="dns-prefetch">
 
 
 
+<link href="//www.google-analytics.com" rel="dns-prefetch">
+
+
+
+
+
+
+<meta name="description" content="讲述了Go语言中 Type Swith 的用法以及获取对应变量的一些特殊情况。
+">
+
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@gohugoio">
+<meta name="twitter:title" content="Go 语言的 Type Switch 语句解析">
+<meta name="twitter:description" content="讲述了Go语言中 Type Swith 的用法以及获取对应变量的一些特殊情况。
+">
+<meta name="twitter:image" content="/images/avatar.jpg">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go 语言的 Type Switch 语句解析">
+<meta property="og:description" content="讲述了Go语言中 Type Swith 的用法以及获取对应变量的一些特殊情况。
+">
+<meta property="og:url" content="/2018/02/03/go-%E8%AF%AD%E8%A8%80%E7%9A%84-type-switch-%E8%AF%AD%E5%8F%A5%E8%A7%A3%E6%9E%90/">
+<meta property="og:image" content="/images/avatar.jpg">
+
+
+
+
+<meta name="generator" content="Hugo 0.51">
+
+
+<link rel="canonical" href="/2018/02/03/go-%E8%AF%AD%E8%A8%80%E7%9A%84-type-switch-%E8%AF%AD%E5%8F%A5%E8%A7%A3%E6%9E%90/">
+
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no,email=no,adress=no">
+<meta http-equiv="Cache-Control" content="no-transform">
+
+
+<meta name="robots" content="index,follow">
+<meta name="referrer" content="origin-when-cross-origin">
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Keep Foolish">
+<meta name="msapplication-tooltip" content="Keep Foolish">
+<meta name='msapplication-navbutton-color' content="#5fbf5e">
+<meta name="msapplication-TileColor" content="#5fbf5e">
+<meta name="msapplication-TileImage" content="/images/tile-image-windows.png">
+<link rel="icon" href="/images/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+<link rel="icon" sizes="192x192" href="/images/touch-icon-android.png">
+<link rel="apple-touch-icon" href="/images/touch-icon-apple.png">
+
+
+<link rel="preload" href="/styles/main.min.css" as="style">
+<link rel="preload" href="https://fonts.googleapis.com/css?family=Lobster" as="style">
+<link rel="preload" href="/images/avatar.jpg" as="image">
+<link rel="preload" href="/images/grey-prism.svg" as="image">
+
+
+<style>
+  body {
+    background: rgb(244, 243, 241) url('/images/grey-prism.svg') repeat fixed;
+  }
+</style>
+<link rel="stylesheet" href="/styles/main.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/video.js@7.3.0/dist/video-js.min.css">
 
 
   
-  <meta name="author" content="BWANGEL" />
-  <meta name="description" content="讲述了Go语言中 Type Swith 的用法以及获取对应变量的一些特殊情况。 " />
-
   
-  
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="@gohugoio" />
-    <meta name="twitter:title" content="Go 语言的 Type Switch 语句解析" />
-    <meta name="twitter:description" content="讲述了Go语言中 Type Swith 的用法以及获取对应变量的一些特殊情况。 " />
-    <meta name="twitter:image" content="/img/avatar.jpg" />
-  
+<!--[if lte IE 8]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/videojs-ie8@1.1.2/dist/videojs-ie8.min.js"></script>
+<![endif]-->
 
-  
-  <meta property="og:type" content="article" />
-  <meta property="og:title" content="Go 语言的 Type Switch 语句解析" />
-  <meta property="og:description" content="讲述了Go语言中 Type Swith 的用法以及获取对应变量的一些特殊情况。 " />
-  <meta property="og:url" content="/2018/02/03/go-%E8%AF%AD%E8%A8%80%E7%9A%84-type-switch-%E8%AF%AD%E5%8F%A5%E8%A7%A3%E6%9E%90/" />
-  <meta property="og:image" content="/img/avatar.jpg" />
+<!--[if lte IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/eligrey-classlist-js-polyfill@1.2.20180112/classList.min.js"></script>
+<![endif]-->
 
 
-
-
-<meta name="generator" content="Hugo 0.49" />
-
-
-<link rel="canonical" href="/2018/02/03/go-%E8%AF%AD%E8%A8%80%E7%9A%84-type-switch-%E8%AF%AD%E5%8F%A5%E8%A7%A3%E6%9E%90/" />
-
-<meta name="renderer" content="webkit" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="format-detection" content="telephone=no,email=no,adress=no" />
-<meta http-equiv="Cache-Control" content="no-transform" />
-
-
-<meta name="robots" content="index,follow" />
-<meta name="referrer" content="origin-when-cross-origin" />
-
-
-
-
-
-
-
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
-<meta name="msapplication-tooltip" content="Keep Foolish" />
-<meta name='msapplication-navbutton-color' content="#5fbf5e" />
-<meta name="msapplication-TileColor" content="#5fbf5e" />
-<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
-<link rel="icon" href="/img/favicon.ico" />
-<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
-<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
-<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
-<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
-<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
-
-
-
-<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
-
-<link rel="stylesheet" href="/css/bundle.css" />
-
-
-  
-  <!--[if lt IE 9]>
-    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
-  <![endif]-->
-
-<!--[if lte IE 11]>
-    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
-  <![endif]-->
-
-
-<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
-
-
-<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"></script>
 
 
 </head>
@@ -103,14 +123,14 @@
       <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
       
         
-        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        <a title="Go to comments" class="to-comment" href="#utterances-container"><span class="icon icon-comment"></span></a>
         
       
     </div>
     
     
   <header class="site-header">
-  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  <img class="avatar" src="/images/avatar.jpg" alt="Avatar">
   
   <h2 class="title">Keep Foolish</h2>
   
@@ -152,63 +172,7 @@
   </nav>
   <nav class="social-menu collapsed">
     <h2 class="offscreen">Social Networks</h2>
-    <ul class="social-list">
-
-      
-      <li class="social-item">
-        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
-      </li>
-
-      
-      <li class="social-item">
-        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
-      </li>
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      <li class="social-item">
-        <a href="//weibo.com/3093227873" title="Weibo"><span class="icon icon-weibo"></span></a>
-      </li>
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      <li class="social-item">
-        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
-      </li>
-
-    </ul>
+    <ul class="social-list"><li class="social-item"><a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a></li><li class="social-item"><a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a></li><li class="social-item"><a href="//weibo.com/3093227873" title="Weibo"><span class="icon icon-weibo"></span></a></li></ul>
   </nav>
 </header>
 
@@ -217,8 +181,7 @@
       <h1 class="post-title">Go 语言的 Type Switch 语句解析</h1>
       <p class="post-meta">@BWANGEL · 发表于 2018年2月3日 · 2 min read</p>
     </header>
-    <article class="post-content"><p>讲述了Go语言中 Type Swith 的用法以及获取对应变量的一些特殊情况。
-</p>
+    <article class="post-content"><p>讲述了Go语言中 Type Swith 的用法以及获取对应变量的一些特殊情况。</p>
 
 <h2 id="type-switch-的基本用法">Type Switch 的基本用法</h2>
 
@@ -227,11 +190,11 @@
 <p>它的用法如下。</p>
 <div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="k">switch</span> <span class="nx">x</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
 <span class="k">case</span> <span class="nx">Type1</span><span class="p">:</span>
-	<span class="nx">doSomeThingWithType1</span><span class="p">()</span>
+	<span class="nf">doSomeThingWithType1</span><span class="p">()</span>
 <span class="k">case</span> <span class="nx">Type2</span><span class="p">:</span>
-	<span class="nx">doSomeThingWithType2</span><span class="p">()</span>
+	<span class="nf">doSomeThingWithType2</span><span class="p">()</span>
 <span class="k">default</span><span class="p">:</span>
-	<span class="nx">doSomeDefaultThing</span><span class="p">()</span>
+	<span class="nf">doSomeDefaultThing</span><span class="p">()</span>
 <span class="p">}</span></code></pre></div>
 <p>其中，<code>x</code>必须是一个接口类型的变量，而所有的<code>case</code>语句后面跟的类型必须实现了<code>x</code>的接口类型。</p>
 
@@ -244,29 +207,29 @@
 <span class="p">)</span>
 
 <span class="kd">type</span> <span class="nx">Animal</span> <span class="kd">interface</span> <span class="p">{</span>
-    <span class="nx">shout</span><span class="p">()</span> <span class="kt">string</span>
+    <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span>
 <span class="p">}</span>
 
 <span class="kd">type</span> <span class="nx">Dog</span> <span class="kd">struct</span> <span class="p">{}</span>
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Dog</span><span class="p">)</span> <span class="nx">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&#34;wang wang&#34;</span><span class="p">)</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Dog</span><span class="p">)</span> <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;wang wang&#34;</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="kd">type</span> <span class="nx">Cat</span> <span class="kd">struct</span> <span class="p">{}</span>
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Cat</span><span class="p">)</span> <span class="nx">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&#34;miao miao&#34;</span><span class="p">)</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Cat</span><span class="p">)</span> <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;miao miao&#34;</span><span class="p">)</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">animal</span> <span class="nx">Animal</span> <span class="p">=</span> <span class="nx">Dog</span><span class="p">{}</span>
 
     <span class="k">switch</span> <span class="nx">animal</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">case</span> <span class="nx">Dog</span><span class="p">:</span>
-        <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;animal&#39;type is Dog&#34;</span><span class="p">)</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;animal&#39;type is Dog&#34;</span><span class="p">)</span>
     <span class="k">case</span> <span class="nx">Cat</span><span class="p">:</span>
-        <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;animal&#39;type is Cat&#34;</span><span class="p">)</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;animal&#39;type is Cat&#34;</span><span class="p">)</span>
     <span class="p">}</span>
 <span class="p">}</span></code></pre></div>
 <p>在上面的例子中，<code>Cat</code>和<code>Dog</code>类型都实现了接口<code>Animal</code>，所以它们可以跟在<code>case</code>语句后面，判断接口变量<code>animal</code>是否是对应的类型。</p>
@@ -284,34 +247,34 @@
 <span class="p">)</span>
 
 <span class="kd">type</span> <span class="nx">Animal</span> <span class="kd">interface</span> <span class="p">{</span>
-	<span class="nx">shout</span><span class="p">()</span> <span class="kt">string</span>
+	<span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span>
 <span class="p">}</span>
 
 <span class="kd">type</span> <span class="nx">Dog</span> <span class="kd">struct</span> <span class="p">{</span>
 	<span class="nx">name</span> <span class="kt">string</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Dog</span><span class="p">)</span> <span class="nx">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&#34;wang wang&#34;</span><span class="p">)</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Dog</span><span class="p">)</span> <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;wang wang&#34;</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="kd">type</span> <span class="nx">Cat</span> <span class="kd">struct</span> <span class="p">{</span>
 	<span class="nx">name</span> <span class="kt">string</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Cat</span><span class="p">)</span> <span class="nx">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&#34;miao miao&#34;</span><span class="p">)</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Cat</span><span class="p">)</span> <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;miao miao&#34;</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="kd">type</span> <span class="nx">Tiger</span> <span class="kd">struct</span> <span class="p">{</span>
 	<span class="nx">name</span> <span class="kt">string</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Tiger</span><span class="p">)</span> <span class="nx">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&#34;hou hou&#34;</span><span class="p">)</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Tiger</span><span class="p">)</span> <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;hou hou&#34;</span><span class="p">)</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 	<span class="c1">// var animal Animal = Tiger{}
 </span><span class="c1"></span>	<span class="c1">// var animal Animal  // 验证 case nil
 </span><span class="c1"></span>	<span class="c1">// var animal Animal = Wolf{} // 验证 default
@@ -319,14 +282,14 @@
 
 	<span class="k">switch</span> <span class="nx">a</span> <span class="o">:=</span> <span class="nx">animal</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
 	<span class="k">case</span> <span class="kc">nil</span><span class="p">:</span> <span class="c1">// a的类型是 Animal
-</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;nil&#34;</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span>
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;nil&#34;</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span>
 	<span class="k">case</span> <span class="nx">Dog</span><span class="p">,</span> <span class="nx">Cat</span><span class="p">:</span> <span class="c1">// a的类型是 Animal
-</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span> <span class="c1">// 输出 {}
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span> <span class="c1">// 输出 {}
 </span><span class="c1"></span>		<span class="c1">// fmt.Println(a.name) 这里会报错，因为 Animal 类型没有成员name
 </span><span class="c1"></span>	<span class="k">case</span> <span class="nx">Tiger</span><span class="p">:</span> <span class="c1">// a的类型是 Tiger
-</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">shout</span><span class="p">(),</span> <span class="nx">a</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="c1">// 这里可以直接取出 name 成员
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nf">shout</span><span class="p">(),</span> <span class="nx">a</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="c1">// 这里可以直接取出 name 成员
 </span><span class="c1"></span>	<span class="k">default</span><span class="p">:</span> <span class="c1">// a的类型是 Animal
-</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;default&#34;</span><span class="p">,</span> <span class="nx">reflect</span><span class="p">.</span><span class="nx">TypeOf</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span> <span class="nx">a</span><span class="p">)</span>
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;default&#34;</span><span class="p">,</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span> <span class="nx">a</span><span class="p">)</span>
 	<span class="p">}</span>
 <span class="p">}</span></code></pre></div>
 <p>在上述代码中，我们可以看到<code>a := animal.(type)</code>语句隐式地为每个<code>case</code>子句声明了一个变量<code>a</code>。</p>
@@ -344,19 +307,19 @@
 <div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go">	<span class="nx">v</span> <span class="o">:=</span> <span class="nx">animal</span>   <span class="c1">// animal 只会被求值一次
 </span><span class="c1"></span>	<span class="k">if</span> <span class="nx">v</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span> <span class="c1">// case nil 子句
 </span><span class="c1"></span>		<span class="nx">a</span> <span class="o">:=</span> <span class="nx">v</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;nil&#34;</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;nil&#34;</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span>
 	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">isTiger</span> <span class="o">:=</span> <span class="nx">v</span><span class="p">.(</span><span class="nx">Tiger</span><span class="p">);</span> <span class="nx">isTiger</span> <span class="p">{</span> <span class="c1">// case Tiger 子句
-</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">shout</span><span class="p">(),</span> <span class="nx">a</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span>
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nf">shout</span><span class="p">(),</span> <span class="nx">a</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span>
 	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
 		<span class="nx">_</span><span class="p">,</span> <span class="nx">isDog</span> <span class="o">:=</span> <span class="nx">v</span><span class="p">.(</span><span class="nx">Dog</span><span class="p">)</span>
 		<span class="nx">_</span><span class="p">,</span> <span class="nx">isCat</span> <span class="o">:=</span> <span class="nx">v</span><span class="p">.(</span><span class="nx">Cat</span><span class="p">)</span>
 		<span class="k">if</span> <span class="nx">isDog</span> <span class="o">||</span> <span class="nx">isCat</span> <span class="p">{</span> <span class="c1">// case Dog, Cat 子句
 </span><span class="c1"></span>			<span class="nx">a</span> <span class="o">:=</span> <span class="nx">v</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span>
 			<span class="c1">// fmt.Println(a.name)
 </span><span class="c1"></span>		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="c1">// default 子句
 </span><span class="c1"></span>			<span class="nx">a</span> <span class="o">:=</span> <span class="nx">v</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;default&#34;</span><span class="p">,</span> <span class="nx">reflect</span><span class="p">.</span><span class="nx">TypeOf</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span> <span class="nx">a</span><span class="p">)</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;default&#34;</span><span class="p">,</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span> <span class="nx">a</span><span class="p">)</span>
 		<span class="p">}</span>
 	<span class="p">}</span></code></pre></div>
 <h2 id="参考链接">参考链接</h2>
@@ -377,43 +340,13 @@
       </p>
     </footer>
     
-      <div id="gitment-container"></div>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitment/style/default.min.css">
-<script src="https://cdn.jsdelivr.net/npm/gitment/dist/gitment.browser.min.js"></script>
-<script>
-  (function() {
-    var page_url = decodeURI("/2018/02/03/go-%E8%AF%AD%E8%A8%80%E7%9A%84-type-switch-%E8%AF%AD%E5%8F%A5%E8%A7%A3%E6%9E%90/");
-    var page_uniqueid = "37599914b2151ef4aabf99779b275522";
-
-    if (page_url.length >= 50) {
-      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
-      comment_id = page_uniqueid
-    } else {
-      comment_id = page_url
-    }
-
-    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-      console.log(comment_id, comment_id.length);
-      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
-    } else {
-      var gitment = new Gitment({
-        id: comment_id,
-        owner: "bwangelme",
-        repo: "blog-comment",
-        oauth: {
-          client_id: "57954aa9925858cd8b32",
-          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
-        },
-      })
-      gitment.render('gitment-container');
-    }
-  })();
-</script>
-
       
     
   </section>
-  <footer class="site-footer">
+  
+
+
+<footer class="site-footer">
   <p>© 2017-2018 Keep Foolish</p>
   <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
   
@@ -421,8 +354,12 @@
 
 
 
-<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
-<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script async src="https://cdn.jsdelivr.net/npm/video.js@7.3.0/dist/video.min.js"></script>
+
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.min.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     tex2jax: {
@@ -433,7 +370,7 @@
       skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
       TeX: { equationNumbers: { autoNumber: "AMS" },
       extensions: ["AMSmath.js", "AMSsymbols.js"] }
-    }
+    },
   });
 </script>
 <script type="text/x-mathjax-config">
@@ -445,7 +382,11 @@
   });
 </script>
 
-<script src="/js/bundle.js"></script>
+
+
+<script src="/scripts/index.min.js"></script>
+
+
 
 
 <script type="application/javascript">
@@ -458,6 +399,8 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
 
 
 

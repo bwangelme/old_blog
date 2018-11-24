@@ -9,91 +9,111 @@
 
   
   
+<link href="//cdn.jsdelivr.net" rel="dns-prefetch">
+<link href="//at.alicdn.com" rel="dns-prefetch">
+<link href="//fonts.googleapis.com" rel="dns-prefetch">
+<link href="//fonts.gstatic.com" rel="dns-prefetch">
 
 
 
+<link href="//www.google-analytics.com" rel="dns-prefetch">
+
+
+
+
+
+
+<meta name="description" content="简述了 Go 中的 goroutine，channel 和 WaitGroup，并通过例子来展示了这些功能的用法
+">
+
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@gohugoio">
+<meta name="twitter:title" content="Go的并发编程简述">
+<meta name="twitter:description" content="简述了 Go 中的 goroutine，channel 和 WaitGroup，并通过例子来展示了这些功能的用法
+">
+<meta name="twitter:image" content="/images/avatar.jpg">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go的并发编程简述">
+<meta property="og:description" content="简述了 Go 中的 goroutine，channel 和 WaitGroup，并通过例子来展示了这些功能的用法
+">
+<meta property="og:url" content="/2017/09/19/go-concurrency/">
+<meta property="og:image" content="/images/avatar.jpg">
+
+
+
+
+<meta name="generator" content="Hugo 0.51">
+
+
+<link rel="canonical" href="/2017/09/19/go-concurrency/">
+
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no,email=no,adress=no">
+<meta http-equiv="Cache-Control" content="no-transform">
+
+
+<meta name="robots" content="index,follow">
+<meta name="referrer" content="origin-when-cross-origin">
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Keep Foolish">
+<meta name="msapplication-tooltip" content="Keep Foolish">
+<meta name='msapplication-navbutton-color' content="#5fbf5e">
+<meta name="msapplication-TileColor" content="#5fbf5e">
+<meta name="msapplication-TileImage" content="/images/tile-image-windows.png">
+<link rel="icon" href="/images/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+<link rel="icon" sizes="192x192" href="/images/touch-icon-android.png">
+<link rel="apple-touch-icon" href="/images/touch-icon-apple.png">
+
+
+<link rel="preload" href="/styles/main.min.css" as="style">
+<link rel="preload" href="https://fonts.googleapis.com/css?family=Lobster" as="style">
+<link rel="preload" href="/images/avatar.jpg" as="image">
+<link rel="preload" href="/images/grey-prism.svg" as="image">
+
+
+<style>
+  body {
+    background: rgb(244, 243, 241) url('/images/grey-prism.svg') repeat fixed;
+  }
+</style>
+<link rel="stylesheet" href="/styles/main.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/video.js@7.3.0/dist/video-js.min.css">
 
 
   
-  <meta name="author" content="BWANGEL" />
-  <meta name="description" content="简述了 Go 中的 goroutine，channel 和 WaitGroup，并通过例子来展示了这些功能的用法 " />
-
   
-  
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="@gohugoio" />
-    <meta name="twitter:title" content="Go的并发编程简述" />
-    <meta name="twitter:description" content="简述了 Go 中的 goroutine，channel 和 WaitGroup，并通过例子来展示了这些功能的用法 " />
-    <meta name="twitter:image" content="/img/avatar.jpg" />
-  
+<!--[if lte IE 8]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/videojs-ie8@1.1.2/dist/videojs-ie8.min.js"></script>
+<![endif]-->
 
-  
-  <meta property="og:type" content="article" />
-  <meta property="og:title" content="Go的并发编程简述" />
-  <meta property="og:description" content="简述了 Go 中的 goroutine，channel 和 WaitGroup，并通过例子来展示了这些功能的用法 " />
-  <meta property="og:url" content="/2017/09/19/go-concurrency/" />
-  <meta property="og:image" content="/img/avatar.jpg" />
+<!--[if lte IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/eligrey-classlist-js-polyfill@1.2.20180112/classList.min.js"></script>
+<![endif]-->
 
 
-
-
-<meta name="generator" content="Hugo 0.49" />
-
-
-<link rel="canonical" href="/2017/09/19/go-concurrency/" />
-
-<meta name="renderer" content="webkit" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="format-detection" content="telephone=no,email=no,adress=no" />
-<meta http-equiv="Cache-Control" content="no-transform" />
-
-
-<meta name="robots" content="index,follow" />
-<meta name="referrer" content="origin-when-cross-origin" />
-
-
-
-
-
-
-
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
-<meta name="msapplication-tooltip" content="Keep Foolish" />
-<meta name='msapplication-navbutton-color' content="#5fbf5e" />
-<meta name="msapplication-TileColor" content="#5fbf5e" />
-<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
-<link rel="icon" href="/img/favicon.ico" />
-<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
-<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
-<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
-<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
-<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
-
-
-
-<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
-
-<link rel="stylesheet" href="/css/bundle.css" />
-
-
-  
-  <!--[if lt IE 9]>
-    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
-  <![endif]-->
-
-<!--[if lte IE 11]>
-    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
-  <![endif]-->
-
-
-<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
-
-
-<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"></script>
 
 
 </head>
@@ -103,14 +123,14 @@
       <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
       
         
-        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        <a title="Go to comments" class="to-comment" href="#utterances-container"><span class="icon icon-comment"></span></a>
         
       
     </div>
     
     
   <header class="site-header">
-  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  <img class="avatar" src="/images/avatar.jpg" alt="Avatar">
   
   <h2 class="title">Keep Foolish</h2>
   
@@ -152,63 +172,7 @@
   </nav>
   <nav class="social-menu collapsed">
     <h2 class="offscreen">Social Networks</h2>
-    <ul class="social-list">
-
-      
-      <li class="social-item">
-        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
-      </li>
-
-      
-      <li class="social-item">
-        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
-      </li>
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      <li class="social-item">
-        <a href="//weibo.com/3093227873" title="Weibo"><span class="icon icon-weibo"></span></a>
-      </li>
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      <li class="social-item">
-        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
-      </li>
-
-    </ul>
+    <ul class="social-list"><li class="social-item"><a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a></li><li class="social-item"><a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a></li><li class="social-item"><a href="//weibo.com/3093227873" title="Weibo"><span class="icon icon-weibo"></span></a></li></ul>
   </nav>
 </header>
 
@@ -217,8 +181,7 @@
       <h1 class="post-title">Go的并发编程简述</h1>
       <p class="post-meta">@BWANGEL · 发表于 2017年9月19日 · 4 min read</p>
     </header>
-    <article class="post-content"><p>简述了 Go 中的 goroutine，channel 和 WaitGroup，并通过例子来展示了这些功能的用法
-</p>
+    <article class="post-content"><p>简述了 Go 中的 goroutine，channel 和 WaitGroup，并通过例子来展示了这些功能的用法</p>
 
 <h2 id="goroutine-简述">Goroutine 简述</h2>
 
@@ -231,25 +194,25 @@
 	<span class="s">&#34;time&#34;</span>
 <span class="p">)</span>
 
-<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 	<span class="c1">// 这里设置同时执行程序的最大CPU数为逻辑CPU的数量
-</span><span class="c1"></span>	<span class="nx">runtime</span><span class="p">.</span><span class="nx">GOMAXPROCS</span><span class="p">(</span><span class="nx">runtime</span><span class="p">.</span><span class="nx">NumCPU</span><span class="p">())</span>
+</span><span class="c1"></span>	<span class="nx">runtime</span><span class="p">.</span><span class="nf">GOMAXPROCS</span><span class="p">(</span><span class="nx">runtime</span><span class="p">.</span><span class="nf">NumCPU</span><span class="p">())</span>
 	<span class="nx">number</span> <span class="o">:=</span> <span class="mi">10</span>
 
 	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">number</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-		<span class="k">go</span> <span class="nx">Count</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
+		<span class="k">go</span> <span class="nf">Count</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
 	<span class="p">}</span>
 
-	<span class="nx">time</span><span class="p">.</span><span class="nx">Sleep</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="nx">Count</span><span class="p">(</span><span class="nx">index</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">Count</span><span class="p">(</span><span class="nx">index</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
 	<span class="kd">var</span> <span class="nx">sum</span> <span class="kt">int64</span>
 	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">1000000000</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
 		<span class="nx">sum</span> <span class="o">+=</span> <span class="nb">int64</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
 	<span class="p">}</span>
 
-	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">sum</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">sum</span><span class="p">)</span>
 <span class="p">}</span>
 
 <span class="c1">// 程序的输出结果
@@ -297,9 +260,9 @@
 	<span class="s">&#34;runtime&#34;</span>
 <span class="p">)</span>
 
-<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 	<span class="c1">// 这里设置同时执行程序的最大CPU数为逻辑CPU的数量
-</span><span class="c1"></span>	<span class="nx">runtime</span><span class="p">.</span><span class="nx">GOMAXPROCS</span><span class="p">(</span><span class="nx">runtime</span><span class="p">.</span><span class="nx">NumCPU</span><span class="p">())</span>
+</span><span class="c1"></span>	<span class="nx">runtime</span><span class="p">.</span><span class="nf">GOMAXPROCS</span><span class="p">(</span><span class="nx">runtime</span><span class="p">.</span><span class="nf">NumCPU</span><span class="p">())</span>
 	<span class="nx">number</span> <span class="o">:=</span> <span class="mi">10</span>
 
 	<span class="c1">// 在这里创建的一个 channel，channel 的缓存大小为我们需要运行的 goroutine 的数量
@@ -307,7 +270,7 @@
 </span><span class="c1"></span>	<span class="nx">c</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">bool</span><span class="p">,</span> <span class="nx">number</span><span class="p">)</span>
 
 	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">number</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-		<span class="k">go</span> <span class="nx">Count</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">c</span><span class="p">)</span>
+		<span class="k">go</span> <span class="nf">Count</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">c</span><span class="p">)</span>
 	<span class="p">}</span>
 	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">number</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
 		<span class="c1">// 主程序在这里会从 channel 中读取 number 个值，所有的值都被读取成功之后，主程序才会结束
@@ -316,7 +279,7 @@
 
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="nx">Count</span><span class="p">(</span><span class="nx">index</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">c</span> <span class="kd">chan</span> <span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">Count</span><span class="p">(</span><span class="nx">index</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">c</span> <span class="kd">chan</span> <span class="kt">bool</span><span class="p">)</span> <span class="p">{</span>
 	<span class="c1">// 这里需要注意，尽管我们没有显示地声明，但是 channel 传递给函数的时候，是通过引用的方式传递的，
 </span><span class="c1"></span>	<span class="c1">// 因为如果是通过值传递的话， goroutine 中对 channel 写入的数据就无法通知到主程序了。
 </span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">sum</span> <span class="kt">int64</span>
@@ -324,7 +287,7 @@
 		<span class="nx">sum</span> <span class="o">+=</span> <span class="nb">int64</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
 	<span class="p">}</span>
 
-	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">sum</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">sum</span><span class="p">)</span>
 	<span class="c1">// goroutine 在这里向 channel 中写入数据
 </span><span class="c1"></span>	<span class="nx">c</span> <span class="o">&lt;-</span> <span class="kc">true</span>
 <span class="p">}</span>
@@ -355,9 +318,9 @@
 	<span class="s">&#34;sync&#34;</span>
 <span class="p">)</span>
 
-<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 	<span class="c1">// 这里设置同时执行程序的最大CPU数为逻辑CPU的数量
-</span><span class="c1"></span>	<span class="nx">runtime</span><span class="p">.</span><span class="nx">GOMAXPROCS</span><span class="p">(</span><span class="nx">runtime</span><span class="p">.</span><span class="nx">NumCPU</span><span class="p">())</span>
+</span><span class="c1"></span>	<span class="nx">runtime</span><span class="p">.</span><span class="nf">GOMAXPROCS</span><span class="p">(</span><span class="nx">runtime</span><span class="p">.</span><span class="nf">NumCPU</span><span class="p">())</span>
 	<span class="nx">number</span> <span class="o">:=</span> <span class="mi">10</span>
 
 	<span class="c1">// 这里使用了一个WaitGroup来演示程序的并发效果
@@ -367,23 +330,23 @@
 </span><span class="c1"></span>
 	<span class="c1">// 需要注意的是wg传递给函数的时候，需要传递指针类型
 </span><span class="c1"></span>	<span class="nx">wg</span> <span class="o">:=</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">{}</span>
-	<span class="nx">wg</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="nx">number</span><span class="p">)</span>
+	<span class="nx">wg</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="nx">number</span><span class="p">)</span>
 
 	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">number</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-		<span class="k">go</span> <span class="nx">Count</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span>
+		<span class="k">go</span> <span class="nf">Count</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">wg</span><span class="p">)</span>
 	<span class="p">}</span>
 
-	<span class="nx">wg</span><span class="p">.</span><span class="nx">Wait</span><span class="p">()</span>
+	<span class="nx">wg</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="nx">Count</span><span class="p">(</span><span class="nx">index</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">wg</span> <span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">Count</span><span class="p">(</span><span class="nx">index</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">wg</span> <span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span><span class="p">)</span> <span class="p">{</span>
 	<span class="kd">var</span> <span class="nx">sum</span> <span class="kt">int64</span>
 	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">1000000000</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
 		<span class="nx">sum</span> <span class="o">+=</span> <span class="nb">int64</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
 	<span class="p">}</span>
 
-	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">sum</span><span class="p">)</span>
-	<span class="nx">wg</span><span class="p">.</span><span class="nx">Done</span><span class="p">()</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">sum</span><span class="p">)</span>
+	<span class="nx">wg</span><span class="p">.</span><span class="nf">Done</span><span class="p">()</span>
 <span class="p">}</span>
 
 <span class="c1">// 程序的输出结果
@@ -410,7 +373,7 @@
 
 <span class="c1">// 一下的程序演示了通过select语句动态地检查channel
 </span><span class="c1"></span>
-<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 	<span class="c1">// 这里创建了两个 channel c1和c2
 </span><span class="c1"></span>	<span class="nx">c1</span><span class="p">,</span> <span class="nx">c2</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">),</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">string</span><span class="p">)</span>
 	<span class="c1">// 这里创建了一个判断结束的 channel o
@@ -430,7 +393,7 @@
 						<span class="nx">c1Close</span> <span class="p">=</span> <span class="kc">true</span>
 					<span class="p">}</span>
 				<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-					<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;c1:&#34;</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span>
+					<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;c1:&#34;</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span>
 				<span class="p">}</span>
 			<span class="k">case</span> <span class="nx">v</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">c2</span><span class="p">:</span>
 				<span class="k">if</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
@@ -439,12 +402,12 @@
 						<span class="nx">c2Close</span> <span class="p">=</span> <span class="kc">true</span>
 					<span class="p">}</span>
 				<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-					<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;c2:&#34;</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span>
+					<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;c2:&#34;</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span>
 				<span class="p">}</span>
 			<span class="p">}</span>
 			<span class="c1">// 只有当两个channel 都关闭的时候，goroutine 才会退出
 </span><span class="c1"></span>			<span class="k">if</span> <span class="nx">c1Close</span> <span class="o">&amp;&amp;</span> <span class="nx">c2Close</span> <span class="p">{</span>
-				<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;c1:&#34;</span><span class="p">,</span> <span class="nx">c1Close</span><span class="p">,</span> <span class="s">&#34;c2:&#34;</span><span class="p">,</span> <span class="nx">c2Close</span><span class="p">)</span>
+				<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;c1:&#34;</span><span class="p">,</span> <span class="nx">c1Close</span><span class="p">,</span> <span class="s">&#34;c2:&#34;</span><span class="p">,</span> <span class="nx">c2Close</span><span class="p">)</span>
 				<span class="k">break</span>
 			<span class="p">}</span>
 		<span class="p">}</span>
@@ -461,10 +424,10 @@
 	<span class="nb">close</span><span class="p">(</span><span class="nx">c2</span><span class="p">)</span>
 
 	<span class="c1">// 等待 goroutine 的退出
-</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;Close&#34;</span><span class="p">)</span>
+</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Close&#34;</span><span class="p">)</span>
 	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
 		<span class="nx">v</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">o</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">v</span><span class="p">)</span>
 	<span class="p">}</span>
 <span class="p">}</span>
 
@@ -497,20 +460,20 @@
 	<span class="nx">hits</span> <span class="kt">int</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 	<span class="nx">table</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="o">*</span><span class="nx">ball</span><span class="p">)</span>
-	<span class="k">go</span> <span class="nx">player</span><span class="p">(</span><span class="s">&#34;ping&#34;</span><span class="p">,</span> <span class="nx">table</span><span class="p">)</span>
-	<span class="k">go</span> <span class="nx">player</span><span class="p">(</span><span class="s">&#34;pong&#34;</span><span class="p">,</span> <span class="nx">table</span><span class="p">)</span>
+	<span class="k">go</span> <span class="nf">player</span><span class="p">(</span><span class="s">&#34;ping&#34;</span><span class="p">,</span> <span class="nx">table</span><span class="p">)</span>
+	<span class="k">go</span> <span class="nf">player</span><span class="p">(</span><span class="s">&#34;pong&#34;</span><span class="p">,</span> <span class="nx">table</span><span class="p">)</span>
 
 	<span class="nx">table</span> <span class="o">&lt;-</span> <span class="nb">new</span><span class="p">(</span><span class="nx">ball</span><span class="p">)</span>
-	<span class="nx">time</span><span class="p">.</span><span class="nx">Sleep</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+	<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
 	<span class="nx">ball</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">table</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;hits:&#34;</span><span class="p">,</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">hits</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;hits:&#34;</span><span class="p">,</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">hits</span><span class="p">)</span>
 
 	<span class="nb">close</span><span class="p">(</span><span class="nx">table</span><span class="p">)</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="nx">player</span><span class="p">(</span><span class="nx">name</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">table</span> <span class="kd">chan</span> <span class="o">*</span><span class="nx">ball</span><span class="p">)</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">player</span><span class="p">(</span><span class="nx">name</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">table</span> <span class="kd">chan</span> <span class="o">*</span><span class="nx">ball</span><span class="p">)</span> <span class="p">{</span>
 	<span class="c1">// 注意这里数据写到管道里以后，
 </span><span class="c1"></span>	<span class="k">for</span> <span class="p">{</span>
 		<span class="nx">ball</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">table</span>
@@ -518,8 +481,8 @@
 			<span class="k">break</span>
 		<span class="p">}</span>
 		<span class="nx">ball</span><span class="p">.</span><span class="nx">hits</span><span class="o">++</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="s">&#34;total hits:&#34;</span><span class="p">,</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">hits</span><span class="p">)</span>
-		<span class="nx">time</span><span class="p">.</span><span class="nx">Sleep</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="s">&#34;total hits:&#34;</span><span class="p">,</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">hits</span><span class="p">)</span>
+		<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">)</span>
 		<span class="c1">// 由于创建的chan缓存大小为0，这里的写操作会阻塞，直到有另一个goroutine来读
 </span><span class="c1"></span>		<span class="nx">table</span> <span class="o">&lt;-</span> <span class="nx">ball</span>
 	<span class="p">}</span>
@@ -546,43 +509,13 @@
       </p>
     </footer>
     
-      <div id="gitment-container"></div>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitment/style/default.min.css">
-<script src="https://cdn.jsdelivr.net/npm/gitment/dist/gitment.browser.min.js"></script>
-<script>
-  (function() {
-    var page_url = decodeURI("/2017/09/19/go-concurrency/");
-    var page_uniqueid = "5dd79c29be198da386bb0a2c3e1120c9";
-
-    if (page_url.length >= 50) {
-      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
-      comment_id = page_uniqueid
-    } else {
-      comment_id = page_url
-    }
-
-    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-      console.log(comment_id, comment_id.length);
-      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
-    } else {
-      var gitment = new Gitment({
-        id: comment_id,
-        owner: "bwangelme",
-        repo: "blog-comment",
-        oauth: {
-          client_id: "57954aa9925858cd8b32",
-          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
-        },
-      })
-      gitment.render('gitment-container');
-    }
-  })();
-</script>
-
       
     
   </section>
-  <footer class="site-footer">
+  
+
+
+<footer class="site-footer">
   <p>© 2017-2018 Keep Foolish</p>
   <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
   
@@ -590,8 +523,12 @@
 
 
 
-<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
-<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script async src="https://cdn.jsdelivr.net/npm/video.js@7.3.0/dist/video.min.js"></script>
+
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.min.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     tex2jax: {
@@ -602,7 +539,7 @@
       skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
       TeX: { equationNumbers: { autoNumber: "AMS" },
       extensions: ["AMSmath.js", "AMSsymbols.js"] }
-    }
+    },
   });
 </script>
 <script type="text/x-mathjax-config">
@@ -614,7 +551,11 @@
   });
 </script>
 
-<script src="/js/bundle.js"></script>
+
+
+<script src="/scripts/index.min.js"></script>
+
+
 
 
 <script type="application/javascript">
@@ -627,6 +568,8 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
 
 
 

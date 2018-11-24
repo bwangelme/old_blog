@@ -9,97 +9,112 @@
 
   
   
+<link href="//cdn.jsdelivr.net" rel="dns-prefetch">
+<link href="//at.alicdn.com" rel="dns-prefetch">
+<link href="//fonts.googleapis.com" rel="dns-prefetch">
+<link href="//fonts.gstatic.com" rel="dns-prefetch">
 
 
 
+<link href="//www.google-analytics.com" rel="dns-prefetch">
+
+
+
+
+
+
+<meta name="author" content="bwangel">
+<meta name="description" content="关于 Go 模板的笔记
+">
+
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@gohugoio">
+<meta name="twitter:title" content="Go 模板">
+<meta name="twitter:description" content="关于 Go 模板的笔记
+">
+<meta name="twitter:image" content="/images/avatar.jpg">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go 模板">
+<meta property="og:description" content="关于 Go 模板的笔记
+">
+<meta property="og:url" content="/2018/10/18/go-%E6%A8%A1%E6%9D%BF/">
+<meta property="og:image" content="/images/avatar.jpg">
+
+
+
+
+<meta name="generator" content="Hugo 0.51">
+
+
+<link rel="canonical" href="/2018/10/18/go-%E6%A8%A1%E6%9D%BF/">
+
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no,email=no,adress=no">
+<meta http-equiv="Cache-Control" content="no-transform">
+
+
+<meta name="robots" content="index,follow">
+<meta name="referrer" content="origin-when-cross-origin">
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Keep Foolish">
+<meta name="msapplication-tooltip" content="Keep Foolish">
+<meta name='msapplication-navbutton-color' content="#5fbf5e">
+<meta name="msapplication-TileColor" content="#5fbf5e">
+<meta name="msapplication-TileImage" content="/images/tile-image-windows.png">
+<link rel="icon" href="/images/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+<link rel="icon" sizes="192x192" href="/images/touch-icon-android.png">
+<link rel="apple-touch-icon" href="/images/touch-icon-apple.png">
+
+
+<link rel="preload" href="/styles/main.min.css" as="style">
+<link rel="preload" href="https://fonts.googleapis.com/css?family=Lobster" as="style">
+<link rel="preload" href="/images/avatar.jpg" as="image">
+<link rel="preload" href="/images/grey-prism.svg" as="image">
+
+
+<style>
+  body {
+    background: rgb(244, 243, 241) url('/images/grey-prism.svg') repeat fixed;
+  }
+</style>
+<link rel="stylesheet" href="/styles/main.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/video.js@7.3.0/dist/video-js.min.css">
 
 
   
-  <meta name="author" content="bwangel" />
-  <meta name="description" content="关于 Go 模板的笔记
-
-" />
-
   
-  
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="@gohugoio" />
-    <meta name="twitter:title" content="Go 模板" />
-    <meta name="twitter:description" content="关于 Go 模板的笔记
+<!--[if lte IE 8]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/videojs-ie8@1.1.2/dist/videojs-ie8.min.js"></script>
+<![endif]-->
 
-" />
-    <meta name="twitter:image" content="/img/avatar.jpg" />
-  
-
-  
-  <meta property="og:type" content="article" />
-  <meta property="og:title" content="Go 模板" />
-  <meta property="og:description" content="关于 Go 模板的笔记
-
-" />
-  <meta property="og:url" content="/2018/10/18/go-%E6%A8%A1%E6%9D%BF/" />
-  <meta property="og:image" content="/img/avatar.jpg" />
+<!--[if lte IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/eligrey-classlist-js-polyfill@1.2.20180112/classList.min.js"></script>
+<![endif]-->
 
 
-
-
-<meta name="generator" content="Hugo 0.49" />
-
-
-<link rel="canonical" href="/2018/10/18/go-%E6%A8%A1%E6%9D%BF/" />
-
-<meta name="renderer" content="webkit" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="format-detection" content="telephone=no,email=no,adress=no" />
-<meta http-equiv="Cache-Control" content="no-transform" />
-
-
-<meta name="robots" content="index,follow" />
-<meta name="referrer" content="origin-when-cross-origin" />
-
-
-
-
-
-
-
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
-<meta name="msapplication-tooltip" content="Keep Foolish" />
-<meta name='msapplication-navbutton-color' content="#5fbf5e" />
-<meta name="msapplication-TileColor" content="#5fbf5e" />
-<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
-<link rel="icon" href="/img/favicon.ico" />
-<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
-<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
-<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
-<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
-<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
-
-
-
-<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
-
-<link rel="stylesheet" href="/css/bundle.css" />
-
-
-  
-  <!--[if lt IE 9]>
-    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
-  <![endif]-->
-
-<!--[if lte IE 11]>
-    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
-  <![endif]-->
-
-
-<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
-
-
-<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"></script>
 
 
 </head>
@@ -109,14 +124,14 @@
       <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
       
         
-        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        <a title="Go to comments" class="to-comment" href="#utterances-container"><span class="icon icon-comment"></span></a>
         
       
     </div>
     
     
   <header class="site-header">
-  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  <img class="avatar" src="/images/avatar.jpg" alt="Avatar">
   
   <h2 class="title">Keep Foolish</h2>
   
@@ -158,63 +173,7 @@
   </nav>
   <nav class="social-menu collapsed">
     <h2 class="offscreen">Social Networks</h2>
-    <ul class="social-list">
-
-      
-      <li class="social-item">
-        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
-      </li>
-
-      
-      <li class="social-item">
-        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
-      </li>
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      <li class="social-item">
-        <a href="//weibo.com/3093227873" title="Weibo"><span class="icon icon-weibo"></span></a>
-      </li>
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      <li class="social-item">
-        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
-      </li>
-
-    </ul>
+    <ul class="social-list"><li class="social-item"><a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a></li><li class="social-item"><a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a></li><li class="social-item"><a href="//weibo.com/3093227873" title="Weibo"><span class="icon icon-weibo"></span></a></li></ul>
   </nav>
 </header>
 
@@ -224,8 +183,6 @@
       <p class="post-meta">@bwangel · 发表于 2018年10月18日 · 3 min read</p>
     </header>
     <article class="post-content"><p>关于 Go 模板的笔记</p>
-
-<p></p>
 
 <h2 id="字段操作">字段操作</h2>
 
@@ -240,12 +197,12 @@
 <h2 id="输出嵌套内容">输出嵌套内容</h2>
 
 <p><code>with</code>操作可以更改当前<code>{{ . }}</code>所指向的对象。</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">t</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&#34;test_with&#34;</span><span class="p">)</span>
-    <span class="nx">t</span><span class="p">.</span><span class="nx">Parse</span><span class="p">(</span><span class="s">`</span><span class="cp">{{</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="na">.Env</span><span class="w"> </span><span class="cp">}}{{</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">$key</span><span class="err">,</span><span class="w"> </span><span class="nx">$val</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="na">.</span><span class="w"> </span><span class="cp">}}</span><span class="s">
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">t</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;test_with&#34;</span><span class="p">)</span>
+    <span class="nx">t</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="s">`</span><span class="cp">{{</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="na">.Env</span><span class="w"> </span><span class="cp">}}{{</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">$key</span><span class="err">,</span><span class="w"> </span><span class="nx">$val</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="na">.</span><span class="w"> </span><span class="cp">}}</span><span class="s">
 </span><span class="s">    </span><span class="cp">{{</span><span class="w"> </span><span class="nx">$key</span><span class="w"> </span><span class="cp">}}</span><span class="s">: </span><span class="cp">{{</span><span class="w"> </span><span class="nx">$val</span><span class="w"> </span><span class="cp">}}</span><span class="s">
 </span><span class="s">    </span><span class="cp">{{</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="cp">}}{{</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="cp">}}</span><span class="s">`</span><span class="p">)</span>
-    <span class="nx">t</span><span class="p">.</span><span class="nx">Execute</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">t</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="kd">struct</span> <span class="p">{</span>
         <span class="nx">Env</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span>
     <span class="p">}{</span>
         <span class="nx">Env</span><span class="p">:</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
@@ -281,17 +238,17 @@
     <span class="nx">Friends</span>  <span class="p">[]</span><span class="o">*</span><span class="nx">Friend</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="nx">EmailDealWith</span><span class="p">(</span><span class="nx">args</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="kt">string</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">EmailDealWith</span><span class="p">(</span><span class="nx">args</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="kt">string</span> <span class="p">{</span>
     <span class="nx">ok</span> <span class="o">:=</span> <span class="kc">false</span>
     <span class="kd">var</span> <span class="nx">s</span> <span class="kt">string</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
         <span class="nx">s</span><span class="p">,</span> <span class="nx">ok</span> <span class="p">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">].(</span><span class="kt">string</span><span class="p">)</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
-        <span class="nx">s</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprint</span><span class="p">(</span><span class="nx">args</span><span class="o">...</span><span class="p">)</span>
+        <span class="nx">s</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprint</span><span class="p">(</span><span class="nx">args</span><span class="o">...</span><span class="p">)</span>
     <span class="p">}</span>
     <span class="c1">// find the @ symbol
-</span><span class="c1"></span>    <span class="nx">substrs</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">Split</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="s">&#34;@&#34;</span><span class="p">)</span>
+</span><span class="c1"></span>    <span class="nx">substrs</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="s">&#34;@&#34;</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">substrs</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">{</span>
         <span class="k">return</span> <span class="nx">s</span>
     <span class="p">}</span>
@@ -299,30 +256,30 @@
 </span><span class="c1"></span>    <span class="k">return</span> <span class="p">(</span><span class="nx">substrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#34; at &#34;</span> <span class="o">+</span> <span class="nx">substrs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="nx">Upper</span><span class="p">(</span><span class="nx">args</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="kt">string</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">Upper</span><span class="p">(</span><span class="nx">args</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="kt">string</span> <span class="p">{</span>
     <span class="nx">ok</span> <span class="o">:=</span> <span class="kc">false</span>
     <span class="kd">var</span> <span class="nx">s</span> <span class="kt">string</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
         <span class="nx">s</span><span class="p">,</span> <span class="nx">ok</span> <span class="p">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">].(</span><span class="kt">string</span><span class="p">)</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
-        <span class="nx">s</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprint</span><span class="p">(</span><span class="nx">args</span><span class="o">...</span><span class="p">)</span>
+        <span class="nx">s</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprint</span><span class="p">(</span><span class="nx">args</span><span class="o">...</span><span class="p">)</span>
     <span class="p">}</span>
 
-    <span class="k">return</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">ToUpper</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">ToUpper</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">EmailDealWith</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">,</span> <span class="s">&#34;@&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">))</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nf">EmailDealWith</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">,</span> <span class="s">&#34;@&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">))</span>
 
     <span class="nx">f1</span> <span class="o">:=</span> <span class="nx">Friend</span><span class="p">{</span><span class="nx">Fname</span><span class="p">:</span> <span class="s">&#34;minux.ma&#34;</span><span class="p">}</span>
     <span class="nx">f2</span> <span class="o">:=</span> <span class="nx">Friend</span><span class="p">{</span><span class="nx">Fname</span><span class="p">:</span> <span class="s">&#34;xushiwei&#34;</span><span class="p">}</span>
-    <span class="nx">t</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&#34;fieldname example&#34;</span><span class="p">)</span>
-    <span class="nx">t</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Funcs</span><span class="p">(</span><span class="nx">template</span><span class="p">.</span><span class="nx">FuncMap</span><span class="p">{</span>
+    <span class="nx">t</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;fieldname example&#34;</span><span class="p">)</span>
+    <span class="nx">t</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nf">Funcs</span><span class="p">(</span><span class="nx">template</span><span class="p">.</span><span class="nx">FuncMap</span><span class="p">{</span>
         <span class="s">&#34;emailDeal&#34;</span><span class="p">:</span> <span class="nx">EmailDealWith</span><span class="p">,</span>
         <span class="s">&#34;upper&#34;</span><span class="p">:</span>     <span class="nx">Upper</span><span class="p">,</span>
     <span class="p">})</span>
-    <span class="nx">t</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Parse</span><span class="p">(</span><span class="s">`hello </span><span class="cp">{{</span><span class="na">.UserName</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">upper</span><span class="cp">}}</span><span class="s">!
+    <span class="nx">t</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="s">`hello </span><span class="cp">{{</span><span class="na">.UserName</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">upper</span><span class="cp">}}</span><span class="s">!
 </span><span class="s">                </span><span class="cp">{{</span><span class="k">range</span><span class="w"> </span><span class="na">.Emails</span><span class="cp">}}</span><span class="s">
 </span><span class="s">                    an emails </span><span class="cp">{{</span><span class="na">.</span><span class="o">|</span><span class="nx">emailDeal</span><span class="cp">}}</span><span class="s">
 </span><span class="s">                </span><span class="cp">{{</span><span class="k">end</span><span class="cp">}}</span><span class="s">
@@ -335,7 +292,7 @@
     <span class="nx">p</span> <span class="o">:=</span> <span class="nx">Person</span><span class="p">{</span><span class="nx">UserName</span><span class="p">:</span> <span class="s">&#34;Astaxie&#34;</span><span class="p">,</span>
         <span class="nx">Emails</span><span class="p">:</span>  <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;astaxie@beego.me&#34;</span><span class="p">,</span> <span class="s">&#34;astaxie@gmail.com&#34;</span><span class="p">},</span>
         <span class="nx">Friends</span><span class="p">:</span> <span class="p">[]</span><span class="o">*</span><span class="nx">Friend</span><span class="p">{</span><span class="o">&amp;</span><span class="nx">f1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">f2</span><span class="p">}}</span>
-    <span class="nx">t</span><span class="p">.</span><span class="nx">Execute</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="nx">p</span><span class="p">)</span>
+    <span class="nx">t</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="nx">p</span><span class="p">)</span>
 <span class="p">}</span></code></pre></div>
 <ul>
 <li>Go 模板包中还提供了许多自定义函数，<a href="https://golang.org/pkg/text/template/#hdr-Functions">相关文档</a></li>
@@ -344,9 +301,9 @@
 <h2 id="must">Must</h2>
 
 <p><code>Must</code>是一个 helper 函数，用来检查模板编译是否正确，如果不正确就会panic。</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">tErr</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&#34;terr&#34;</span><span class="p">)</span>
-	<span class="nx">template</span><span class="p">.</span><span class="nx">Must</span><span class="p">(</span><span class="nx">tErr</span><span class="p">.</span><span class="nx">Parse</span><span class="p">(</span><span class="s">`some error </span><span class="cp">{{</span><span class="nx">text</span><span class="err">}</span><span class="s">`</span><span class="p">))</span>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">tErr</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;terr&#34;</span><span class="p">)</span>
+	<span class="nx">template</span><span class="p">.</span><span class="nf">Must</span><span class="p">(</span><span class="nx">tErr</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="s">`some error </span><span class="cp">{{</span><span class="nx">text</span><span class="err">}</span><span class="s">`</span><span class="p">))</span>
 <span class="p">}</span>
 <span class="o">//</span> <span class="nx">panic</span><span class="p">:</span> <span class="nx">template</span><span class="p">:</span> <span class="nx">terr</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span> <span class="nx">function</span> <span class="s">&#34;text&#34;</span> <span class="nx">not</span> <span class="nx">defined</span></code></pre></div>
 <h2 id="模板嵌套">模板嵌套</h2>
@@ -383,17 +340,17 @@
 	<span class="s">&#34;text/template&#34;</span>
 <span class="p">)</span>
 
-<span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">t</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nx">ParseFiles</span><span class="p">(</span><span class="s">&#34;header.html&#34;</span><span class="p">,</span> <span class="s">&#34;body.html&#34;</span><span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">t</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nf">ParseFiles</span><span class="p">(</span><span class="s">&#34;header.html&#34;</span><span class="p">,</span> <span class="s">&#34;body.html&#34;</span><span class="p">)</span>
 	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">log</span><span class="p">.</span><span class="nx">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
 	<span class="p">}</span>
 
 	<span class="nx">env</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
 		<span class="s">&#34;Home&#34;</span><span class="p">:</span>  <span class="s">&#34;/Users/michaletsui&#34;</span><span class="p">,</span>
 		<span class="s">&#34;Shell&#34;</span><span class="p">:</span> <span class="s">&#34;/bin/bash&#34;</span><span class="p">,</span>
 	<span class="p">}</span>
-	<span class="nx">err</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">Execute</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">err</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="kd">struct</span> <span class="p">{</span>
 		<span class="nx">Env</span>   <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span>
 		<span class="nx">Title</span> <span class="kt">string</span>
 	<span class="p">}{</span>
@@ -402,7 +359,7 @@
 	<span class="p">})</span>
 
 	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">log</span><span class="p">.</span><span class="nx">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
 	<span class="p">}</span>
 <span class="p">}</span></code></pre></div>
 <ul>
@@ -413,10 +370,10 @@
 <li><code>template.ParseFiles</code>将第一个文件作为主模板</li>
 <li><code>t.ExecuteTemplate</code>可以指定要执行的主模板</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">t</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nx">ParseFiles</span><span class="p">(</span><span class="s">&#34;body.html&#34;</span><span class="p">,</span> <span class="s">&#34;header.html&#34;</span><span class="p">)</span>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">t</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nf">ParseFiles</span><span class="p">(</span><span class="s">&#34;body.html&#34;</span><span class="p">,</span> <span class="s">&#34;header.html&#34;</span><span class="p">)</span>
     <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-        <span class="nx">log</span><span class="p">.</span><span class="nx">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
     <span class="p">}</span>
 
     <span class="nx">env</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
@@ -437,10 +394,10 @@
 </span><span class="c1"></span>    <span class="c1">// 也可以通过下面的方式
 </span><span class="c1"></span>    <span class="c1">// t = t.Lookup(&#34;header.html&#34;)
 </span><span class="c1"></span>    <span class="c1">// err = t.Execute(os.Stdout, data)
-</span><span class="c1"></span>    <span class="nx">err</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">ExecuteTemplate</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="s">&#34;header.html&#34;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
+</span><span class="c1"></span>    <span class="nx">err</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nf">ExecuteTemplate</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="s">&#34;header.html&#34;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-        <span class="nx">log</span><span class="p">.</span><span class="nx">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
     <span class="p">}</span>
 <span class="p">}</span></code></pre></div>
 <h2 id="参考链接">参考链接</h2>
@@ -466,43 +423,13 @@
       </p>
     </footer>
     
-      <div id="gitment-container"></div>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitment/style/default.min.css">
-<script src="https://cdn.jsdelivr.net/npm/gitment/dist/gitment.browser.min.js"></script>
-<script>
-  (function() {
-    var page_url = decodeURI("/2018/10/18/go-%E6%A8%A1%E6%9D%BF/");
-    var page_uniqueid = "c5c0570e7af3e11599621deab3353ddb";
-
-    if (page_url.length >= 50) {
-      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
-      comment_id = page_uniqueid
-    } else {
-      comment_id = page_url
-    }
-
-    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-      console.log(comment_id, comment_id.length);
-      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
-    } else {
-      var gitment = new Gitment({
-        id: comment_id,
-        owner: "bwangelme",
-        repo: "blog-comment",
-        oauth: {
-          client_id: "57954aa9925858cd8b32",
-          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
-        },
-      })
-      gitment.render('gitment-container');
-    }
-  })();
-</script>
-
       
     
   </section>
-  <footer class="site-footer">
+  
+
+
+<footer class="site-footer">
   <p>© 2017-2018 Keep Foolish</p>
   <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
   
@@ -510,8 +437,12 @@
 
 
 
-<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
-<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script async src="https://cdn.jsdelivr.net/npm/video.js@7.3.0/dist/video.min.js"></script>
+
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.min.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     tex2jax: {
@@ -522,7 +453,7 @@
       skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
       TeX: { equationNumbers: { autoNumber: "AMS" },
       extensions: ["AMSmath.js", "AMSsymbols.js"] }
-    }
+    },
   });
 </script>
 <script type="text/x-mathjax-config">
@@ -534,7 +465,11 @@
   });
 </script>
 
-<script src="/js/bundle.js"></script>
+
+
+<script src="/scripts/index.min.js"></script>
+
+
 
 
 <script type="application/javascript">
@@ -547,6 +482,8 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
 
 
 

@@ -9,97 +9,111 @@
 
   
   
+<link href="//cdn.jsdelivr.net" rel="dns-prefetch">
+<link href="//at.alicdn.com" rel="dns-prefetch">
+<link href="//fonts.googleapis.com" rel="dns-prefetch">
+<link href="//fonts.gstatic.com" rel="dns-prefetch">
 
 
 
+<link href="//www.google-analytics.com" rel="dns-prefetch">
+
+
+
+
+
+
+<meta name="description" content="摘要:
+  通过resize2fs调整文件系统大小 通过parted调整磁盘分区大小  ">
+
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@gohugoio">
+<meta name="twitter:title" content="Ubuntu缩小磁盘分区大小">
+<meta name="twitter:description" content="摘要:
+  通过resize2fs调整文件系统大小 通过parted调整磁盘分区大小  ">
+<meta name="twitter:image" content="/images/avatar.jpg">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu缩小磁盘分区大小">
+<meta property="og:description" content="摘要:
+  通过resize2fs调整文件系统大小 通过parted调整磁盘分区大小  ">
+<meta property="og:url" content="/2016/07/17/ubuntu%E7%BC%A9%E5%B0%8F%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA%E5%A4%A7%E5%B0%8F/">
+<meta property="og:image" content="/images/avatar.jpg">
+
+
+
+
+<meta name="generator" content="Hugo 0.51">
+
+
+<link rel="canonical" href="/2016/07/17/ubuntu%E7%BC%A9%E5%B0%8F%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA%E5%A4%A7%E5%B0%8F/">
+
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no,email=no,adress=no">
+<meta http-equiv="Cache-Control" content="no-transform">
+
+
+<meta name="robots" content="index,follow">
+<meta name="referrer" content="origin-when-cross-origin">
+
+
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Keep Foolish">
+<meta name="msapplication-tooltip" content="Keep Foolish">
+<meta name='msapplication-navbutton-color' content="#5fbf5e">
+<meta name="msapplication-TileColor" content="#5fbf5e">
+<meta name="msapplication-TileImage" content="/images/tile-image-windows.png">
+<link rel="icon" href="/images/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+<link rel="icon" sizes="192x192" href="/images/touch-icon-android.png">
+<link rel="apple-touch-icon" href="/images/touch-icon-apple.png">
+
+
+<link rel="preload" href="/styles/main.min.css" as="style">
+<link rel="preload" href="https://fonts.googleapis.com/css?family=Lobster" as="style">
+<link rel="preload" href="/images/avatar.jpg" as="image">
+<link rel="preload" href="/images/grey-prism.svg" as="image">
+
+
+<style>
+  body {
+    background: rgb(244, 243, 241) url('/images/grey-prism.svg') repeat fixed;
+  }
+</style>
+<link rel="stylesheet" href="/styles/main.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/video.js@7.3.0/dist/video-js.min.css">
 
 
   
-  <meta name="author" content="BWANGEL" />
-  <meta name="description" content="摘要:
-  通过resize2fs调整文件系统大小 通过parted调整磁盘分区大小   
-" />
-
   
-  
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="@gohugoio" />
-    <meta name="twitter:title" content="Ubuntu缩小磁盘分区大小" />
-    <meta name="twitter:description" content="摘要:
-  通过resize2fs调整文件系统大小 通过parted调整磁盘分区大小   
-" />
-    <meta name="twitter:image" content="/img/avatar.jpg" />
-  
+<!--[if lte IE 8]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/videojs-ie8@1.1.2/dist/videojs-ie8.min.js"></script>
+<![endif]-->
 
-  
-  <meta property="og:type" content="article" />
-  <meta property="og:title" content="Ubuntu缩小磁盘分区大小" />
-  <meta property="og:description" content="摘要:
-  通过resize2fs调整文件系统大小 通过parted调整磁盘分区大小   
-" />
-  <meta property="og:url" content="/2016/07/17/ubuntu%E7%BC%A9%E5%B0%8F%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA%E5%A4%A7%E5%B0%8F/" />
-  <meta property="og:image" content="/img/avatar.jpg" />
+<!--[if lte IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/eligrey-classlist-js-polyfill@1.2.20180112/classList.min.js"></script>
+<![endif]-->
 
 
-
-
-<meta name="generator" content="Hugo 0.49" />
-
-
-<link rel="canonical" href="/2016/07/17/ubuntu%E7%BC%A9%E5%B0%8F%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA%E5%A4%A7%E5%B0%8F/" />
-
-<meta name="renderer" content="webkit" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="format-detection" content="telephone=no,email=no,adress=no" />
-<meta http-equiv="Cache-Control" content="no-transform" />
-
-
-<meta name="robots" content="index,follow" />
-<meta name="referrer" content="origin-when-cross-origin" />
-
-
-
-
-
-
-
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Keep Foolish" />
-<meta name="msapplication-tooltip" content="Keep Foolish" />
-<meta name='msapplication-navbutton-color' content="#5fbf5e" />
-<meta name="msapplication-TileColor" content="#5fbf5e" />
-<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
-<link rel="icon" href="/img/favicon.ico" />
-<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png" />
-<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png" />
-<link rel="icon" sizes="192x192" href="/img/touch-icon-android.png" />
-<link rel="apple-touch-icon" href="/img/touch-icon-apple.png" />
-<link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#5fbf5e" />
-
-
-
-<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
-
-<link rel="stylesheet" href="/css/bundle.css" />
-
-
-  
-  <!--[if lt IE 9]>
-    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
-  <![endif]-->
-
-<!--[if lte IE 11]>
-    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
-  <![endif]-->
-
-
-<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
-
-
-<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"></script>
 
 
 </head>
@@ -109,14 +123,14 @@
       <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
       
         
-        <a title="Go to comments" class="to-comment" href="#gitment-container"><span class="icon icon-comment"></span></a>
+        <a title="Go to comments" class="to-comment" href="#utterances-container"><span class="icon icon-comment"></span></a>
         
       
     </div>
     
     
   <header class="site-header">
-  <img class="avatar" src="/img/avatar.jpg" alt="Avatar">
+  <img class="avatar" src="/images/avatar.jpg" alt="Avatar">
   
   <h2 class="title">Keep Foolish</h2>
   
@@ -158,63 +172,7 @@
   </nav>
   <nav class="social-menu collapsed">
     <h2 class="offscreen">Social Networks</h2>
-    <ul class="social-list">
-
-      
-      <li class="social-item">
-        <a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a>
-      </li>
-
-      
-      <li class="social-item">
-        <a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a>
-      </li>
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      <li class="social-item">
-        <a href="//weibo.com/3093227873" title="Weibo"><span class="icon icon-weibo"></span></a>
-      </li>
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      <li class="social-item">
-        <a rel="alternate" type="application/rss+xml" href="/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
-      </li>
-
-    </ul>
+    <ul class="social-list"><li class="social-item"><a href="mailto:bwangel.me@gmail.com" title="Email"><span class="icon icon-email"></span></a></li><li class="social-item"><a href="//github.com/bwangelme" title="GitHub"><span class="icon icon-github"></span></a></li><li class="social-item"><a href="//weibo.com/3093227873" title="Weibo"><span class="icon icon-weibo"></span></a></li></ul>
   </nav>
 </header>
 
@@ -231,8 +189,6 @@
 <li>通过parted调整磁盘分区大小</li>
 </ol>
 </blockquote>
-
-<p></p>
 
 <p>我在刚开始装系统的时候，没有考虑到以后的扩展，直接把所有的空间都给使用了，后来发现需要新的分区的时候，已经没有可用的空间了，这时候就需要将一个分区的空间给缩小，后来折腾了半天，终于成功了！下面我以虚拟机中装的Ubuntu 16.04为例子，和大家分享一下。</p>
 
@@ -258,8 +214,8 @@ sr0     <span class="m">11</span>:0    <span class="m">1</span> 1024M  <span cla
 
 <p>在这里，我将我的/home分区大小变成了4G，结果如下所示（需要注意的是，在缩小之前，首先要对文件系统进行检查）：</p>
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">root@vv2x:~# e2fsck -f /dev/sda5
-<span class="c1"># 上面这条命令强制对/dev/sda5的文件系统进行了检查
-</span><span class="c1"></span>e2fsck <span class="m">1</span>.42.13 <span class="o">(</span><span class="m">17</span>-May-2015<span class="o">)</span>
+<span class="c1"># 上面这条命令强制对/dev/sda5的文件系统进行了检查</span>
+e2fsck <span class="m">1</span>.42.13 <span class="o">(</span><span class="m">17</span>-May-2015<span class="o">)</span>
 Pass <span class="m">1</span>: Checking inodes, blocks, and sizes
 Pass <span class="m">2</span>: Checking directory structure
 Pass <span class="m">3</span>: Checking directory connectivity
@@ -297,14 +253,14 @@ Information: You may need to update /etc/fstab.</code></pre></div>
 
 <p>在第三步中，为了防止数据丢失，我们多留出了一些空间。在这里我们需要相应地调整文件系统大小，让其和磁盘空间大小匹配，这里我们通过<code>resize2fs</code>命令来完成这一步。</p>
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">root@vv2x:~# resize2fs /dev/sda7
-<span class="c1"># resize2fs如果没有指定大小，那么/dev/sda7的文件系统大小默认和磁盘分区大小相同
-</span><span class="c1"></span>resize2fs <span class="m">1</span>.42.13 <span class="o">(</span><span class="m">17</span>-May-2015<span class="o">)</span>
+<span class="c1"># resize2fs如果没有指定大小，那么/dev/sda7的文件系统大小默认和磁盘分区大小相同</span>
+resize2fs <span class="m">1</span>.42.13 <span class="o">(</span><span class="m">17</span>-May-2015<span class="o">)</span>
 Resizing the filesystem on /dev/sda7 to <span class="m">1171295</span> <span class="o">(</span>4k<span class="o">)</span> blocks.
 The filesystem on /dev/sda7 is now <span class="m">1171295</span> <span class="o">(</span>4k<span class="o">)</span> blocks long.</code></pre></div>
 <p>最后我们重新把/home分区挂载上就可以了。</p>
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">root@vv2x:~# mount -a
-<span class="c1"># 这条命令默认挂载/etc/fstab文件中所有指定的分区
-</span><span class="c1"></span>root@vv2x:~# lsblk
+<span class="c1"># 这条命令默认挂载/etc/fstab文件中所有指定的分区</span>
+root@vv2x:~# lsblk
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
 sda      <span class="m">8</span>:0    <span class="m">0</span>   32G  <span class="m">0</span> disk
 ├─sda1   <span class="m">8</span>:1    <span class="m">0</span>  190M  <span class="m">0</span> part /boot
@@ -328,43 +284,13 @@ sr0     <span class="m">11</span>:0    <span class="m">1</span> 1024M  <span cla
       </p>
     </footer>
     
-      <div id="gitment-container"></div>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitment/style/default.min.css">
-<script src="https://cdn.jsdelivr.net/npm/gitment/dist/gitment.browser.min.js"></script>
-<script>
-  (function() {
-    var page_url = decodeURI("/2016/07/17/ubuntu%E7%BC%A9%E5%B0%8F%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA%E5%A4%A7%E5%B0%8F/");
-    var page_uniqueid = "81057eabaf30a164142d66c83f92aeeb";
-
-    if (page_url.length >= 50) {
-      console.log("文章的路径", "[" + page_url + "]:" + page_url.length, "超过了50个字符，使用 UniqueID 设置评论ID");
-      comment_id = page_uniqueid
-    } else {
-      comment_id = page_url
-    }
-
-    if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-      console.log(comment_id, comment_id.length);
-      document.getElementById('gitment-container').innerHTML = 'Gitment comments not available by default when the website is previewed locally.';
-    } else {
-      var gitment = new Gitment({
-        id: comment_id,
-        owner: "bwangelme",
-        repo: "blog-comment",
-        oauth: {
-          client_id: "57954aa9925858cd8b32",
-          client_secret: "1bfbecbae2fe6a1d288a56198b112cf44912cec7",
-        },
-      })
-      gitment.render('gitment-container');
-    }
-  })();
-</script>
-
       
     
   </section>
-  <footer class="site-footer">
+  
+
+
+<footer class="site-footer">
   <p>© 2017-2018 Keep Foolish</p>
   <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
   
@@ -372,8 +298,12 @@ sr0     <span class="m">11</span>:0    <span class="m">1</span> 1024M  <span cla
 
 
 
-<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
-<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script async src="https://cdn.jsdelivr.net/npm/video.js@7.3.0/dist/video.min.js"></script>
+
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.min.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     tex2jax: {
@@ -384,7 +314,7 @@ sr0     <span class="m">11</span>:0    <span class="m">1</span> 1024M  <span cla
       skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
       TeX: { equationNumbers: { autoNumber: "AMS" },
       extensions: ["AMSmath.js", "AMSsymbols.js"] }
-    }
+    },
   });
 </script>
 <script type="text/x-mathjax-config">
@@ -396,7 +326,11 @@ sr0     <span class="m">11</span>:0    <span class="m">1</span> 1024M  <span cla
   });
 </script>
 
-<script src="/js/bundle.js"></script>
+
+
+<script src="/scripts/index.min.js"></script>
+
+
 
 
 <script type="application/javascript">
@@ -409,6 +343,8 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
 
 
 
