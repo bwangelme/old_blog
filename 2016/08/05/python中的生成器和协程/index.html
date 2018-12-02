@@ -215,20 +215,20 @@
 <h3 id="协程的启动">协程的启动</h3>
 
 <p>先举个例子，比如下面这个模拟Unix grep的协程:</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> re
 
 
-<span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
-    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="p">(</span><span class="k">yield</span><span class="p">)</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">grep</span>(pattern):
+    pattern <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>compile(pattern)
+    <span style="color:#66d9ef">while</span> True:
+        line <span style="color:#f92672">=</span> (<span style="color:#66d9ef">yield</span>)
+        m <span style="color:#f92672">=</span> pattern<span style="color:#f92672">.</span>search(line)
+        <span style="color:#66d9ef">if</span> m:
+            <span style="color:#66d9ef">print</span>(m<span style="color:#f92672">.</span>string)
 
 
-<span class="n">g</span> <span class="o">=</span> <span class="n">grep</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^abcd&#39;</span><span class="p">)</span>
-<span class="n">g</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;abcd&#39;</span><span class="p">)</span></code></pre></div>
+g <span style="color:#f92672">=</span> grep(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;^abcd&#39;</span>)
+g<span style="color:#f92672">.</span>send(<span style="color:#e6db74">&#39;abcd&#39;</span>)</code></pre></div>
 <pre><code>---------------------------------------------------------------------------
 
 TypeError                                 Traceback (most recent call last)
@@ -247,60 +247,60 @@ TypeError: can't send non-None value to a just-started generator
 <p>那么如何启动协程呢，其实也很简单，只需要执行<code>next(g)</code>或者<code>g.send(None)</code>就可以了。</p>
 
 <p>但是，每次都这样手动地去启动协程，太容易忘掉了，我们可以去写一个装饰器，加到协程函数上，让其自动启动，代码如下所示:</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> re
 
 
-<span class="k">def</span> <span class="nf">coroutine</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">cr</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="nb">next</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">cr</span>
-    <span class="k">return</span> <span class="n">start</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">coroutine</span>(func):
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">start</span>(<span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs):
+        cr <span style="color:#f92672">=</span> func(<span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs)
+        next(cr)
+        <span style="color:#66d9ef">return</span> cr
+    <span style="color:#66d9ef">return</span> start
 
 
-<span class="nd">@coroutine</span>
-<span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
-    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="p">(</span><span class="k">yield</span><span class="p">)</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+<span style="color:#a6e22e">@coroutine</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">grep</span>(pattern):
+    pattern <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>compile(pattern)
+    <span style="color:#66d9ef">while</span> True:
+        line <span style="color:#f92672">=</span> (<span style="color:#66d9ef">yield</span>)
+        m <span style="color:#f92672">=</span> pattern<span style="color:#f92672">.</span>search(line)
+        <span style="color:#66d9ef">if</span> m:
+            <span style="color:#66d9ef">print</span>(m<span style="color:#f92672">.</span>string)
 
-<span class="n">g</span> <span class="o">=</span> <span class="n">grep</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^abcd&#39;</span><span class="p">)</span>
+g <span style="color:#f92672">=</span> grep(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;^abcd&#39;</span>)
 
-<span class="n">g</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;abcd&#39;</span><span class="p">)</span>  <span class="c1"># True</span>
-<span class="n">g</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;1234abcd&#39;</span><span class="p">)</span> <span class="c1"># False</span></code></pre></div>
+g<span style="color:#f92672">.</span>send(<span style="color:#e6db74">&#39;abcd&#39;</span>)  <span style="color:#75715e"># True</span>
+g<span style="color:#f92672">.</span>send(<span style="color:#e6db74">&#39;1234abcd&#39;</span>) <span style="color:#75715e"># False</span></code></pre></div>
 <pre><code>abcd
 </code></pre>
 
 <h3 id="协程的关闭">协程的关闭</h3>
 
 <p>接下来我们再来说说协程的关闭，还以上面的那个<code>grep</code>协程为例子，由于它的<code>yield</code>语句是写在一个死循环里面的，所以只要我们一直<code>send</code>，这个协程就会一直运行下去，那么该如何停止这个协程呢，其实也很简单，只要调用协程的<code>close</code>函数即可，如下所示：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> re
 
 
-<span class="k">def</span> <span class="nf">coroutine</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">cr</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="nb">next</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">cr</span>
-    <span class="k">return</span> <span class="n">start</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">coroutine</span>(func):
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">start</span>(<span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs):
+        cr <span style="color:#f92672">=</span> func(<span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs)
+        next(cr)
+        <span style="color:#66d9ef">return</span> cr
+    <span style="color:#66d9ef">return</span> start
 
 
-<span class="nd">@coroutine</span>
-<span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
-    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="p">(</span><span class="k">yield</span><span class="p">)</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+<span style="color:#a6e22e">@coroutine</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">grep</span>(pattern):
+    pattern <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>compile(pattern)
+    <span style="color:#66d9ef">while</span> True:
+        line <span style="color:#f92672">=</span> (<span style="color:#66d9ef">yield</span>)
+        m <span style="color:#f92672">=</span> pattern<span style="color:#f92672">.</span>search(line)
+        <span style="color:#66d9ef">if</span> m:
+            <span style="color:#66d9ef">print</span>(m<span style="color:#f92672">.</span>string)
 
-<span class="n">g</span> <span class="o">=</span> <span class="n">grep</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^abcd&#39;</span><span class="p">)</span>
-<span class="n">g</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;abcd&#39;</span><span class="p">)</span>
-<span class="n">g</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="n">g</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;1abcd&#39;</span><span class="p">)</span></code></pre></div>
+g <span style="color:#f92672">=</span> grep(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;^abcd&#39;</span>)
+g<span style="color:#f92672">.</span>send(<span style="color:#e6db74">&#39;abcd&#39;</span>)
+g<span style="color:#f92672">.</span>close()
+g<span style="color:#f92672">.</span>send(<span style="color:#e6db74">&#39;1abcd&#39;</span>)</code></pre></div>
 <pre><code>abcd
 
 
@@ -325,33 +325,33 @@ StopIteration:
 <h3 id="向协程抛出异常">向协程抛出异常</h3>
 
 <p>除了可以向协程中发送值以外，也可以通过<code>throw</code>函数向协程中抛出异常，而这个异常像普通的异常一样，也可以通过<code>try-except</code>来捕获，请看下面这段代码:</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> re
 
 
-<span class="k">def</span> <span class="nf">coroutine</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">cr</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="nb">next</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">cr</span>
-    <span class="k">return</span> <span class="n">start</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">coroutine</span>(func):
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">start</span>(<span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs):
+        cr <span style="color:#f92672">=</span> func(<span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs)
+        next(cr)
+        <span style="color:#66d9ef">return</span> cr
+    <span style="color:#66d9ef">return</span> start
 
 
-<span class="nd">@coroutine</span>
-<span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
-    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
-    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">line</span> <span class="o">=</span> <span class="p">(</span><span class="k">yield</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;I catch you |</span><span class="si">%s</span><span class="s1">| haha!&#39;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
-            <span class="k">continue</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+<span style="color:#a6e22e">@coroutine</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">grep</span>(pattern):
+    pattern <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>compile(pattern)
+    <span style="color:#66d9ef">while</span> True:
+        <span style="color:#66d9ef">try</span>:
+            line <span style="color:#f92672">=</span> (<span style="color:#66d9ef">yield</span>)
+        <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">RuntimeError</span> <span style="color:#66d9ef">as</span> e:
+            <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;I catch you |</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">| haha!&#39;</span> <span style="color:#f92672">%</span> e)
+            <span style="color:#66d9ef">continue</span>
+        m <span style="color:#f92672">=</span> pattern<span style="color:#f92672">.</span>search(line)
+        <span style="color:#66d9ef">if</span> m:
+            <span style="color:#66d9ef">print</span>(m<span style="color:#f92672">.</span>string)
 
-<span class="n">g</span> <span class="o">=</span> <span class="n">grep</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^abcd&#39;</span><span class="p">)</span>
-<span class="n">g</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;abcd&#39;</span><span class="p">)</span>
-<span class="n">g</span><span class="o">.</span><span class="n">throw</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">,</span> <span class="s2">&#34;You can&#39;t catch me!&#34;</span><span class="p">)</span></code></pre></div>
+g <span style="color:#f92672">=</span> grep(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;^abcd&#39;</span>)
+g<span style="color:#f92672">.</span>send(<span style="color:#e6db74">&#39;abcd&#39;</span>)
+g<span style="color:#f92672">.</span>throw(<span style="color:#a6e22e">RuntimeError</span>, <span style="color:#e6db74">&#34;You can&#39;t catch me!&#34;</span>)</code></pre></div>
 <pre><code>abcd
 I catch you |You can't catch me!| haha!
 </code></pre>
@@ -403,6 +403,29 @@ I catch you |You can't catch me!| haha!
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

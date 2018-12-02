@@ -191,39 +191,33 @@
 <h2 id="猴子补丁">猴子补丁</h2>
 
 <p>猴子补丁: 在程序运行时修改某些代码，例如下面这样：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> someclass
 
-<pre><code>import someclass
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_info</span>(self, <span style="color:#f92672">*</span>args):
+    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;Test Data&#34;</span>
 
-def get_info(self, *args):
-    return &quot;Test Data&quot;
-
-someclass.get_info = get_info
-</code></pre>
-
+someclass<span style="color:#f92672">.</span>get_info <span style="color:#f92672">=</span> get_info</code></pre></div>
 <h2 id="python的三种参数">Python的三种参数</h2>
 
 <p><code>*args</code>表示非键值对可变数量的参数列表
 <code>**kwargs</code>表示传递参数为不定长度的键值对
 <code>fargs</code>表示普通的位置参数</p>
-
-<pre><code>some_func(fargs, *args, **kwargs)
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">some_func(fargs, <span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs)</code></pre></div>
 <p>调用的时候，关键字参数必须放在最后，否则会报错(参见下边的实例)。</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="k">def</span> <span class="nf">show_args</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="s2">&#34;arg1 == {0}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arg1</span><span class="p">))</span>
-<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="s2">&#34;arg2 == {0}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">arg2</span><span class="p">))</span>
-<span class="o">...</span>     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-<span class="o">...</span>         <span class="k">print</span><span class="p">(</span><span class="s2">&#34;arg == {0}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
-<span class="o">...</span>     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<span class="o">...</span>         <span class="k">print</span><span class="p">(</span><span class="s2">&#34;{0} == {1}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
-<span class="o">...</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="c1"># show_args(&#34;1&#34;, &#34;2&#34;, myarg=&#34;4&#34;, &#34;3&#34;)  # 会报错的代码</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">show_args</span><span class="p">(</span><span class="s2">&#34;1&#34;</span><span class="p">,</span> <span class="s2">&#34;2&#34;</span><span class="p">,</span> <span class="s2">&#34;3&#34;</span><span class="p">,</span> <span class="n">myarg</span><span class="o">=</span><span class="s2">&#34;4&#34;</span><span class="p">)</span>
-<span class="n">arg1</span> <span class="o">==</span> <span class="mi">1</span>
-<span class="n">arg2</span> <span class="o">==</span> <span class="mi">2</span>
-<span class="n">arg</span> <span class="o">==</span> <span class="mi">3</span>
-<span class="n">myarg</span> <span class="o">==</span> <span class="mi">4</span></code></pre></div></article>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">show_args</span>(arg1, arg2, <span style="color:#f92672">*</span>args, <span style="color:#f92672">**</span>kwargs):
+<span style="color:#f92672">...</span>     <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;arg1 == {0}&#34;</span><span style="color:#f92672">.</span>format(arg1))
+<span style="color:#f92672">...</span>     <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;arg2 == {0}&#34;</span><span style="color:#f92672">.</span>format(arg2))
+<span style="color:#f92672">...</span>     <span style="color:#66d9ef">for</span> item <span style="color:#f92672">in</span> args:
+<span style="color:#f92672">...</span>         <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;arg == {0}&#34;</span><span style="color:#f92672">.</span>format(item))
+<span style="color:#f92672">...</span>     <span style="color:#66d9ef">for</span> key, value <span style="color:#f92672">in</span> kwargs<span style="color:#f92672">.</span>items():
+<span style="color:#f92672">...</span>         <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;{0} == {1}&#34;</span><span style="color:#f92672">.</span>format(key, value))
+<span style="color:#f92672">...</span>
+<span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#75715e"># show_args(&#34;1&#34;, &#34;2&#34;, myarg=&#34;4&#34;, &#34;3&#34;)  # 会报错的代码</span>
+<span style="color:#f92672">&gt;&gt;&gt;</span> show_args(<span style="color:#e6db74">&#34;1&#34;</span>, <span style="color:#e6db74">&#34;2&#34;</span>, <span style="color:#e6db74">&#34;3&#34;</span>, myarg<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;4&#34;</span>)
+arg1 <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>
+arg2 <span style="color:#f92672">==</span> <span style="color:#ae81ff">2</span>
+arg <span style="color:#f92672">==</span> <span style="color:#ae81ff">3</span>
+myarg <span style="color:#f92672">==</span> <span style="color:#ae81ff">4</span></code></pre></div></article>
     <footer class="post-footer">
       
       <ul class="post-tags">
@@ -265,6 +259,29 @@ someclass.get_info = get_info
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

@@ -218,10 +218,10 @@
 </ul>
 
 <p>在Golang中，一个依赖可以同时存在两个主版本不同的<code>import</code>。</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">import</span> <span class="p">(</span>
-    <span class="s">&#34;github.com/user/repo&#34;</span>
-    <span class="nx">repov2</span> <span class="s">&#34;github.com/user/repo/v2&#34;</span>
-<span class="p">)</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">import</span> (
+    <span style="color:#e6db74">&#34;github.com/user/repo&#34;</span>
+    <span style="color:#a6e22e">repov2</span> <span style="color:#e6db74">&#34;github.com/user/repo/v2&#34;</span>
+)</code></pre></div>
 <p>故当一个仓库需要升级某个依赖的主版本时，其代码导入路径要随之改变。如果依赖的API变了，那么仓库也要进行相应的更改。</p>
 
 <h3 id="清除依赖">清除依赖</h3>
@@ -238,8 +238,7 @@
 <h3 id="其他说明">其他说明</h3>
 
 <p>Go 将依赖安装在<code>GOPATH/pkg/mod</code>中，并且依赖的每个版本会分开安装</p>
-
-<pre><code>&gt;&gt;&gt; tree $GOPATH/pkg/mod/github.com/bwangelme/                         08:42:57 (10-11)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">&gt;&gt;&gt; tree $GOPATH/pkg/mod/github.com/bwangelme/                         <span style="color:#ae81ff">08</span>:42:57 <span style="color:#f92672">(</span><span style="color:#ae81ff">10</span>-11<span style="color:#f92672">)</span>
 /Users/michaeltsui/go/pkg/mod/github.com/bwangelme/
 ├── testmod
 │   └── v2@v2.0.0
@@ -253,8 +252,7 @@
 └── testmod@v1.0.1
     ├── README.md
     ├── go.mod
-    └── testmod.go
-</code></pre></article>
+    └── testmod.go</code></pre></div></article>
     <footer class="post-footer">
       
       <ul class="post-tags">
@@ -296,6 +294,29 @@
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

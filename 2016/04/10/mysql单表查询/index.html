@@ -191,21 +191,21 @@
 <h1 id="mysql单表查询">MySQL单表查询</h1>
 
 <h2 id="0-试验表">0. 试验表</h2>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">desc</span> <span class="n">employee</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">-----------------+-----------------------+------+-----+---------+----------------+
-</span><span class="c1"></span><span class="o">|</span> <span class="n">Field</span>           <span class="o">|</span> <span class="k">Type</span>                  <span class="o">|</span> <span class="k">Null</span> <span class="o">|</span> <span class="k">Key</span> <span class="o">|</span> <span class="k">Default</span> <span class="o">|</span> <span class="n">Extra</span>          <span class="o">|</span>
-<span class="o">+</span><span class="c1">-----------------+-----------------------+------+-----+---------+----------------+
-</span><span class="c1"></span><span class="o">|</span> <span class="n">emp_id</span>          <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>               <span class="o">|</span> <span class="k">NO</span>   <span class="o">|</span> <span class="n">PRI</span> <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span> <span class="n">auto_increment</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">emp_name</span>        <span class="o">|</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>           <span class="o">|</span> <span class="n">YES</span>  <span class="o">|</span>     <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">sex</span>             <span class="o">|</span> <span class="n">enum</span><span class="p">(</span><span class="s1">&#39;male&#39;</span><span class="p">,</span><span class="s1">&#39;female&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="n">YES</span>  <span class="o">|</span>     <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">hire_date</span>       <span class="o">|</span> <span class="nb">date</span>                  <span class="o">|</span> <span class="n">YES</span>  <span class="o">|</span>     <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">post</span>            <span class="o">|</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>           <span class="o">|</span> <span class="n">YES</span>  <span class="o">|</span>     <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">job_description</span> <span class="o">|</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>          <span class="o">|</span> <span class="n">YES</span>  <span class="o">|</span>     <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">salary</span>          <span class="o">|</span> <span class="n">double</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>          <span class="o">|</span> <span class="n">YES</span>  <span class="o">|</span>     <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">office</span>          <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>               <span class="o">|</span> <span class="n">YES</span>  <span class="o">|</span>     <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">|</span> <span class="n">dep_id</span>          <span class="o">|</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span>               <span class="o">|</span> <span class="n">YES</span>  <span class="o">|</span>     <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span>                <span class="o">|</span>
-<span class="o">+</span><span class="c1">-----------------+-----------------------+------+-----+---------+----------------+
-</span><span class="c1"></span><span class="mi">9</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">06</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">desc</span> employee;
+<span style="color:#f92672">+</span><span style="color:#75715e">-----------------+-----------------------+------+-----+---------+----------------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> Field           <span style="color:#f92672">|</span> <span style="color:#66d9ef">Type</span>                  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Null</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">Key</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">Default</span> <span style="color:#f92672">|</span> Extra          <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">-----------------+-----------------------+------+-----+---------+----------------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> emp_id          <span style="color:#f92672">|</span> int(<span style="color:#ae81ff">11</span>)               <span style="color:#f92672">|</span> <span style="color:#66d9ef">NO</span>   <span style="color:#f92672">|</span> PRI <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>    <span style="color:#f92672">|</span> auto_increment <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> emp_name        <span style="color:#f92672">|</span> varchar(<span style="color:#ae81ff">30</span>)           <span style="color:#f92672">|</span> YES  <span style="color:#f92672">|</span>     <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>    <span style="color:#f92672">|</span>                <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> sex             <span style="color:#f92672">|</span> enum(<span style="color:#e6db74">&#39;male&#39;</span>,<span style="color:#e6db74">&#39;female&#39;</span>) <span style="color:#f92672">|</span> YES  <span style="color:#f92672">|</span>     <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>    <span style="color:#f92672">|</span>                <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> hire_date       <span style="color:#f92672">|</span> date                  <span style="color:#f92672">|</span> YES  <span style="color:#f92672">|</span>     <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>    <span style="color:#f92672">|</span>                <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> post            <span style="color:#f92672">|</span> varchar(<span style="color:#ae81ff">50</span>)           <span style="color:#f92672">|</span> YES  <span style="color:#f92672">|</span>     <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>    <span style="color:#f92672">|</span>                <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> job_description <span style="color:#f92672">|</span> varchar(<span style="color:#ae81ff">100</span>)          <span style="color:#f92672">|</span> YES  <span style="color:#f92672">|</span>     <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>    <span style="color:#f92672">|</span>                <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> salary          <span style="color:#f92672">|</span> double(<span style="color:#ae81ff">15</span>,<span style="color:#ae81ff">2</span>)          <span style="color:#f92672">|</span> YES  <span style="color:#f92672">|</span>     <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>    <span style="color:#f92672">|</span>                <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> office          <span style="color:#f92672">|</span> int(<span style="color:#ae81ff">11</span>)               <span style="color:#f92672">|</span> YES  <span style="color:#f92672">|</span>     <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>    <span style="color:#f92672">|</span>                <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> dep_id          <span style="color:#f92672">|</span> int(<span style="color:#ae81ff">11</span>)               <span style="color:#f92672">|</span> YES  <span style="color:#f92672">|</span>     <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>    <span style="color:#f92672">|</span>                <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">-----------------+-----------------------+------+-----+---------+----------------+
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">9</span> <span style="color:#66d9ef">rows</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">06</span> sec)</code></pre></div>
 <h2 id="1-简单查询">1. 简单查询</h2>
 
 <ul>
@@ -217,14 +217,14 @@
 
 <li><p>使用AS产生新字段</p></li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="mi">1</span><span class="p">.</span> <span class="k">select</span> <span class="n">post</span><span class="p">,</span> <span class="n">salary</span><span class="o">*</span><span class="mi">12</span> <span class="k">AS</span> <span class="n">Annual_Salary</span> <span class="k">from</span> <span class="n">employee</span><span class="p">;</span>
-<span class="mi">2</span><span class="p">.</span> <span class="k">select</span> <span class="n">post</span><span class="p">,</span> <span class="n">salary</span><span class="o">*</span><span class="mi">12</span> <span class="n">Annual_Salary</span> <span class="k">from</span> <span class="n">employee</span><span class="p">;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#ae81ff">1</span>. <span style="color:#66d9ef">select</span> post, salary<span style="color:#f92672">*</span><span style="color:#ae81ff">12</span> <span style="color:#66d9ef">AS</span> Annual_Salary <span style="color:#66d9ef">from</span> employee;
+<span style="color:#ae81ff">2</span>. <span style="color:#66d9ef">select</span> post, salary<span style="color:#f92672">*</span><span style="color:#ae81ff">12</span> Annual_Salary <span style="color:#66d9ef">from</span> employee;</code></pre></div>
 <ul>
 <li>定义显示格式</li>
 </ul>
 
 <p><code>CONCAT</code>函数用于连接字符串</p>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span> <span class="n">concat</span><span class="p">(</span><span class="n">emp_name</span><span class="p">,</span> <span class="s1">&#39; annual_salary: &#39;</span><span class="p">,</span> <span class="n">salary</span> <span class="o">*</span> <span class="mi">12</span><span class="p">)</span> <span class="k">AS</span> <span class="n">annual_salary</span> <span class="k">from</span> <span class="n">employee</span><span class="p">;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> concat(emp_name, <span style="color:#e6db74">&#39; annual_salary: &#39;</span>, salary <span style="color:#f92672">*</span> <span style="color:#ae81ff">12</span>) <span style="color:#66d9ef">AS</span> annual_salary <span style="color:#66d9ef">from</span> employee;</code></pre></div>
 <h2 id="2-通过条件查询">2. 通过条件查询</h2>
 
 <ul>
@@ -240,12 +240,9 @@
 <ul>
 <li>语法格式</li>
 </ul>
-
-<pre><code>SELECT 字段1，字段2..
-  FROM 表名
-  WHERE CONDITION[AND CONDITION];
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">SELECT</span> <span style="color:#960050;background-color:#1e0010">字段</span><span style="color:#ae81ff">1</span><span style="color:#960050;background-color:#1e0010">，字段</span><span style="color:#ae81ff">2</span>..
+  <span style="color:#66d9ef">FROM</span> <span style="color:#960050;background-color:#1e0010">表名</span>
+  <span style="color:#66d9ef">WHERE</span> CONDITION[<span style="color:#66d9ef">AND</span> CONDITION];</code></pre></div>
 <ul>
 <li>关键字BETWEEN</li>
 </ul>
@@ -263,18 +260,18 @@
 <ul>
 <li>关键字<code>IN</code>集合查询</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">emp_name</span><span class="p">,</span> <span class="n">salary</span> <span class="k">from</span> <span class="n">employee</span>
-    <span class="o">-&gt;</span> <span class="k">where</span> <span class="n">salary</span> <span class="k">in</span> <span class="p">(</span><span class="mi">4000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="mi">6000</span><span class="p">,</span> <span class="mi">9000</span><span class="p">);</span>
-<span class="o">+</span><span class="c1">----------+---------+
-</span><span class="c1"></span><span class="o">|</span> <span class="n">emp_name</span> <span class="o">|</span> <span class="n">salary</span>  <span class="o">|</span>
-<span class="o">+</span><span class="c1">----------+---------+
-</span><span class="c1"></span><span class="o">|</span> <span class="n">jack</span>     <span class="o">|</span> <span class="mi">5000</span><span class="p">.</span><span class="mi">00</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">----------+---------+
-</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> emp_name, salary <span style="color:#66d9ef">from</span> employee
+    <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">where</span> salary <span style="color:#66d9ef">in</span> (<span style="color:#ae81ff">4000</span>, <span style="color:#ae81ff">5000</span>, <span style="color:#ae81ff">6000</span>, <span style="color:#ae81ff">9000</span>);
+<span style="color:#f92672">+</span><span style="color:#75715e">----------+---------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> emp_name <span style="color:#f92672">|</span> salary  <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">----------+---------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> jack     <span style="color:#f92672">|</span> <span style="color:#ae81ff">5000</span>.<span style="color:#ae81ff">00</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">----------+---------+
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">1</span> <span style="color:#66d9ef">row</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> sec)
 
-<span class="c1">-- 以上语句等价于如下语句
-</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">emp_name</span><span class="p">,</span> <span class="n">salary</span> <span class="k">from</span> <span class="n">employee</span>
-<span class="k">where</span> <span class="n">salary</span> <span class="o">=</span> <span class="mi">4000</span> <span class="k">or</span> <span class="n">salary</span> <span class="o">=</span> <span class="mi">5000</span> <span class="k">or</span> <span class="n">salary</span> <span class="o">=</span> <span class="mi">6000</span> <span class="k">or</span> <span class="n">salary</span> <span class="o">=</span> <span class="mi">9000</span><span class="p">;</span></code></pre></div>
+<span style="color:#75715e">-- 以上语句等价于如下语句
+</span><span style="color:#75715e"></span>mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> emp_name, salary <span style="color:#66d9ef">from</span> employee
+<span style="color:#66d9ef">where</span> salary <span style="color:#f92672">=</span> <span style="color:#ae81ff">4000</span> <span style="color:#66d9ef">or</span> salary <span style="color:#f92672">=</span> <span style="color:#ae81ff">5000</span> <span style="color:#66d9ef">or</span> salary <span style="color:#f92672">=</span> <span style="color:#ae81ff">6000</span> <span style="color:#66d9ef">or</span> salary <span style="color:#f92672">=</span> <span style="color:#ae81ff">9000</span>;</code></pre></div>
 <ul>
 <li>关键字<code>LIKE</code>进行模糊查询</li>
 </ul>
@@ -286,30 +283,30 @@
 <p><code>_</code>代表的是一个字符</p>
 
 <h2 id="3-查询排序">3. 查询排序</h2>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 通过salary来进行升序排序，再根据入职日期按照降序排列。
-</span><span class="c1">-- 即如果salary相同，再来比较hire_date
-</span><span class="c1"></span>
-<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">emp_name</span><span class="p">,</span> <span class="n">salary</span><span class="p">,</span> <span class="n">hire_date</span> <span class="k">from</span> <span class="n">employee</span> <span class="k">order</span> <span class="k">by</span> <span class="n">salary</span> <span class="k">ASC</span><span class="p">,</span> <span class="n">hire_date</span> <span class="k">DESC</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">-----------+-----------+------------+
-</span><span class="c1"></span><span class="o">|</span> <span class="n">emp_name</span>  <span class="o">|</span> <span class="n">salary</span>    <span class="o">|</span> <span class="n">hire_date</span>  <span class="o">|</span>
-<span class="o">+</span><span class="c1">-----------+-----------+------------+
-</span><span class="c1"></span><span class="o">|</span> <span class="n">xff</span>       <span class="o">|</span>      <span class="k">NULL</span> <span class="o">|</span> <span class="k">NULL</span>       <span class="o">|</span>
-<span class="o">|</span> <span class="n">tianyun</span>   <span class="o">|</span>    <span class="mi">600</span><span class="p">.</span><span class="mi">00</span> <span class="o">|</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">22</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">christine</span> <span class="o">|</span>   <span class="mi">2200</span><span class="p">.</span><span class="mi">00</span> <span class="o">|</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">26</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">jack</span>      <span class="o">|</span>   <span class="mi">5000</span><span class="p">.</span><span class="mi">00</span> <span class="o">|</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">22</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">tom</span>       <span class="o">|</span>   <span class="mi">5500</span><span class="p">.</span><span class="mi">00</span> <span class="o">|</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">22</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">alice</span>     <span class="o">|</span>   <span class="mi">7200</span><span class="p">.</span><span class="mi">00</span> <span class="o">|</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">23</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">robin</span>     <span class="o">|</span>   <span class="mi">8000</span><span class="p">.</span><span class="mi">00</span> <span class="o">|</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">22</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">harry</span>     <span class="o">|</span>  <span class="mi">60000</span><span class="p">.</span><span class="mi">00</span> <span class="o">|</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">22</span> <span class="o">|</span>
-<span class="o">|</span> <span class="n">emma</span>      <span class="o">|</span> <span class="mi">200000</span><span class="p">.</span><span class="mi">00</span> <span class="o">|</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">22</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">-----------+-----------+------------+
-</span><span class="c1"></span><span class="mi">9</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 通过salary来进行升序排序，再根据入职日期按照降序排列。
+</span><span style="color:#75715e">-- 即如果salary相同，再来比较hire_date
+</span><span style="color:#75715e"></span>
+mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> emp_name, salary, hire_date <span style="color:#66d9ef">from</span> employee <span style="color:#66d9ef">order</span> <span style="color:#66d9ef">by</span> salary <span style="color:#66d9ef">ASC</span>, hire_date <span style="color:#66d9ef">DESC</span>;
+<span style="color:#f92672">+</span><span style="color:#75715e">-----------+-----------+------------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> emp_name  <span style="color:#f92672">|</span> salary    <span style="color:#f92672">|</span> hire_date  <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">-----------+-----------+------------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> xff       <span style="color:#f92672">|</span>      <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>       <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> tianyun   <span style="color:#f92672">|</span>    <span style="color:#ae81ff">600</span>.<span style="color:#ae81ff">00</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">2016</span><span style="color:#f92672">-</span><span style="color:#ae81ff">02</span><span style="color:#f92672">-</span><span style="color:#ae81ff">22</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> christine <span style="color:#f92672">|</span>   <span style="color:#ae81ff">2200</span>.<span style="color:#ae81ff">00</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">2016</span><span style="color:#f92672">-</span><span style="color:#ae81ff">02</span><span style="color:#f92672">-</span><span style="color:#ae81ff">26</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> jack      <span style="color:#f92672">|</span>   <span style="color:#ae81ff">5000</span>.<span style="color:#ae81ff">00</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">2016</span><span style="color:#f92672">-</span><span style="color:#ae81ff">02</span><span style="color:#f92672">-</span><span style="color:#ae81ff">22</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> tom       <span style="color:#f92672">|</span>   <span style="color:#ae81ff">5500</span>.<span style="color:#ae81ff">00</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">2016</span><span style="color:#f92672">-</span><span style="color:#ae81ff">02</span><span style="color:#f92672">-</span><span style="color:#ae81ff">22</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> alice     <span style="color:#f92672">|</span>   <span style="color:#ae81ff">7200</span>.<span style="color:#ae81ff">00</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">2016</span><span style="color:#f92672">-</span><span style="color:#ae81ff">02</span><span style="color:#f92672">-</span><span style="color:#ae81ff">23</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> robin     <span style="color:#f92672">|</span>   <span style="color:#ae81ff">8000</span>.<span style="color:#ae81ff">00</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">2016</span><span style="color:#f92672">-</span><span style="color:#ae81ff">02</span><span style="color:#f92672">-</span><span style="color:#ae81ff">22</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> harry     <span style="color:#f92672">|</span>  <span style="color:#ae81ff">60000</span>.<span style="color:#ae81ff">00</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">2016</span><span style="color:#f92672">-</span><span style="color:#ae81ff">02</span><span style="color:#f92672">-</span><span style="color:#ae81ff">22</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> emma      <span style="color:#f92672">|</span> <span style="color:#ae81ff">200000</span>.<span style="color:#ae81ff">00</span> <span style="color:#f92672">|</span> <span style="color:#ae81ff">2016</span><span style="color:#f92672">-</span><span style="color:#ae81ff">02</span><span style="color:#f92672">-</span><span style="color:#ae81ff">22</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">-----------+-----------+------------+
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">9</span> <span style="color:#66d9ef">rows</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> sec)</code></pre></div>
 <h2 id="4-限制查询记录数">4. 限制查询记录数</h2>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 限制输出两个
-</span><span class="c1">-- 从第三条开始输出，输出两条
-</span><span class="c1"></span><span class="k">select</span> <span class="n">emp_name</span><span class="p">,</span> <span class="n">dep_id</span> <span class="k">from</span> <span class="n">employee</span> <span class="k">where</span> <span class="n">dep_id</span> <span class="o">=</span> <span class="mi">100</span> <span class="k">LIMIT</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">;</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 限制输出两个
+</span><span style="color:#75715e">-- 从第三条开始输出，输出两条
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">select</span> emp_name, dep_id <span style="color:#66d9ef">from</span> employee <span style="color:#66d9ef">where</span> dep_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span> <span style="color:#66d9ef">LIMIT</span> <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>;
 
-<span class="c1">-- LIMIT的起始位置从0开始</span></code></pre></div>
+<span style="color:#75715e">-- LIMIT的起始位置从0开始</span></code></pre></div>
 <h2 id="5-使用集合函数">5. 使用集合函数</h2>
 
 <ul>
@@ -329,69 +326,69 @@
 <ul>
 <li><code>GROUP BY</code>单独使用显示每个分组的第一个员工</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">emp_id</span><span class="p">,</span> <span class="n">dep_id</span> <span class="k">from</span> <span class="n">employee</span> <span class="k">group</span> <span class="k">by</span> <span class="n">dep_id</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">--------+--------+
-</span><span class="c1"></span><span class="o">|</span> <span class="n">emp_id</span> <span class="o">|</span> <span class="n">dep_id</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">--------+--------+
-</span><span class="c1"></span><span class="o">|</span>      <span class="mi">9</span> <span class="o">|</span>   <span class="k">NULL</span> <span class="o">|</span>
-<span class="o">|</span>      <span class="mi">1</span> <span class="o">|</span>    <span class="mi">100</span> <span class="o">|</span>
-<span class="o">|</span>      <span class="mi">5</span> <span class="o">|</span>    <span class="mi">101</span> <span class="o">|</span>
-<span class="o">|</span>      <span class="mi">7</span> <span class="o">|</span>    <span class="mi">102</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">--------+--------+
-</span><span class="c1"></span><span class="mi">4</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> emp_id, dep_id <span style="color:#66d9ef">from</span> employee <span style="color:#66d9ef">group</span> <span style="color:#66d9ef">by</span> dep_id;
+<span style="color:#f92672">+</span><span style="color:#75715e">--------+--------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> emp_id <span style="color:#f92672">|</span> dep_id <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">--------+--------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>      <span style="color:#ae81ff">9</span> <span style="color:#f92672">|</span>   <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>      <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>    <span style="color:#ae81ff">100</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>      <span style="color:#ae81ff">5</span> <span style="color:#f92672">|</span>    <span style="color:#ae81ff">101</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>      <span style="color:#ae81ff">7</span> <span style="color:#f92672">|</span>    <span style="color:#ae81ff">102</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">--------+--------+
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">4</span> <span style="color:#66d9ef">rows</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> sec)</code></pre></div>
 <ul>
 <li><code>GROUP BY</code>和<code>GROUP_CONCAT</code>一起使用</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 将每个分组(dep_id)的对应字段(emp_name)连接起来
-</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">dep_id</span><span class="p">,</span><span class="n">group_concat</span><span class="p">(</span><span class="n">emp_name</span><span class="p">)</span> <span class="k">from</span> <span class="n">employee</span> <span class="k">group</span> <span class="k">by</span> <span class="n">dep_id</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">--------+------------------------+
-</span><span class="c1"></span><span class="o">|</span> <span class="n">dep_id</span> <span class="o">|</span> <span class="n">group_concat</span><span class="p">(</span><span class="n">emp_name</span><span class="p">)</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">--------+------------------------+
-</span><span class="c1"></span><span class="o">|</span>   <span class="k">NULL</span> <span class="o">|</span> <span class="n">xff</span>                    <span class="o">|</span>
-<span class="o">|</span>    <span class="mi">100</span> <span class="o">|</span> <span class="n">jack</span><span class="p">,</span><span class="n">tom</span><span class="p">,</span><span class="n">robin</span><span class="p">,</span><span class="n">alice</span>   <span class="o">|</span>
-<span class="o">|</span>    <span class="mi">101</span> <span class="o">|</span> <span class="n">tianyun</span><span class="p">,</span><span class="n">harry</span>          <span class="o">|</span>
-<span class="o">|</span>    <span class="mi">102</span> <span class="o">|</span> <span class="n">emma</span><span class="p">,</span><span class="n">christine</span>         <span class="o">|</span>
-<span class="o">+</span><span class="c1">--------+------------------------+
-</span><span class="c1"></span><span class="mi">4</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 将每个分组(dep_id)的对应字段(emp_name)连接起来
+</span><span style="color:#75715e"></span>mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> dep_id,group_concat(emp_name) <span style="color:#66d9ef">from</span> employee <span style="color:#66d9ef">group</span> <span style="color:#66d9ef">by</span> dep_id;
+<span style="color:#f92672">+</span><span style="color:#75715e">--------+------------------------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> dep_id <span style="color:#f92672">|</span> group_concat(emp_name) <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">--------+------------------------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> xff                    <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>    <span style="color:#ae81ff">100</span> <span style="color:#f92672">|</span> jack,tom,robin,alice   <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>    <span style="color:#ae81ff">101</span> <span style="color:#f92672">|</span> tianyun,harry          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>    <span style="color:#ae81ff">102</span> <span style="color:#f92672">|</span> emma,christine         <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">--------+------------------------+
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">4</span> <span style="color:#66d9ef">rows</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> sec)</code></pre></div>
 <ul>
 <li><code>GROUP BY</code>和集合函数一起使用</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 对每个分组(dep_id)的相应字段(emp_name)进行count统计
-</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">dep_id</span><span class="p">,</span><span class="k">count</span><span class="p">(</span><span class="n">emp_name</span><span class="p">)</span> <span class="k">from</span> <span class="n">employee</span> <span class="k">group</span> <span class="k">by</span> <span class="n">dep_id</span><span class="p">;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 对每个分组(dep_id)的相应字段(emp_name)进行count统计
+</span><span style="color:#75715e"></span>mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> dep_id,<span style="color:#66d9ef">count</span>(emp_name) <span style="color:#66d9ef">from</span> employee <span style="color:#66d9ef">group</span> <span style="color:#66d9ef">by</span> dep_id;</code></pre></div>
 <ul>
 <li><code>GROUP BY</code>和<code>HAVING</code>一起使用</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- having表示对分组进行条件筛选
-</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">dep_id</span><span class="p">,</span><span class="n">group_concat</span><span class="p">(</span><span class="n">emp_name</span><span class="p">)</span> <span class="k">from</span> <span class="n">employee</span> <span class="k">group</span> <span class="k">by</span> <span class="n">dep_id</span> <span class="k">having</span> <span class="k">count</span><span class="p">(</span><span class="n">emp_name</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">--------+------------------------+
-</span><span class="c1"></span><span class="o">|</span> <span class="n">dep_id</span> <span class="o">|</span> <span class="n">group_concat</span><span class="p">(</span><span class="n">emp_name</span><span class="p">)</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">--------+------------------------+
-</span><span class="c1"></span><span class="o">|</span>    <span class="mi">100</span> <span class="o">|</span> <span class="n">jack</span><span class="p">,</span><span class="n">tom</span><span class="p">,</span><span class="n">robin</span><span class="p">,</span><span class="n">alice</span>   <span class="o">|</span>
-<span class="o">+</span><span class="c1">--------+------------------------+
-</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- having表示对分组进行条件筛选
+</span><span style="color:#75715e"></span>mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> dep_id,group_concat(emp_name) <span style="color:#66d9ef">from</span> employee <span style="color:#66d9ef">group</span> <span style="color:#66d9ef">by</span> dep_id <span style="color:#66d9ef">having</span> <span style="color:#66d9ef">count</span>(emp_name)) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">2</span>;
+<span style="color:#f92672">+</span><span style="color:#75715e">--------+------------------------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> dep_id <span style="color:#f92672">|</span> group_concat(emp_name) <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">--------+------------------------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>    <span style="color:#ae81ff">100</span> <span style="color:#f92672">|</span> jack,tom,robin,alice   <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">--------+------------------------+
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">1</span> <span style="color:#66d9ef">row</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> sec)</code></pre></div>
 <ul>
 <li>按多个字段进行分组</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 使用了多个分组条件(dep_id 和 post)
-</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">dep_id</span><span class="p">,</span> <span class="n">post</span><span class="p">,</span> <span class="n">group_concat</span><span class="p">(</span><span class="n">emp_name</span><span class="p">)</span> <span class="k">from</span> <span class="n">employee</span> <span class="k">group</span> <span class="k">by</span> <span class="n">dep_id</span><span class="p">,</span><span class="n">post</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">--------+------------+------------------------+
-</span><span class="c1"></span><span class="o">|</span> <span class="n">dep_id</span> <span class="o">|</span> <span class="n">post</span>       <span class="o">|</span> <span class="n">group_concat</span><span class="p">(</span><span class="n">emp_name</span><span class="p">)</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">--------+------------+------------------------+
-</span><span class="c1"></span><span class="o">|</span>   <span class="k">NULL</span> <span class="o">|</span> <span class="n">wife</span>       <span class="o">|</span> <span class="n">xff</span>                    <span class="o">|</span>
-<span class="o">|</span>    <span class="mi">100</span> <span class="o">|</span> <span class="n">instructor</span> <span class="o">|</span> <span class="n">jack</span><span class="p">,</span><span class="n">tom</span><span class="p">,</span><span class="n">robin</span><span class="p">,</span><span class="n">alice</span>   <span class="o">|</span>
-<span class="o">|</span>    <span class="mi">101</span> <span class="o">|</span> <span class="n">hr</span>         <span class="o">|</span> <span class="n">tianyun</span><span class="p">,</span><span class="n">harry</span>          <span class="o">|</span>
-<span class="o">|</span>    <span class="mi">102</span> <span class="o">|</span> <span class="n">sale</span>       <span class="o">|</span> <span class="n">emma</span><span class="p">,</span><span class="n">christine</span>         <span class="o">|</span>
-<span class="o">+</span><span class="c1">--------+------------+------------------------+
-</span><span class="c1"></span><span class="mi">4</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 使用了多个分组条件(dep_id 和 post)
+</span><span style="color:#75715e"></span>mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> dep_id, post, group_concat(emp_name) <span style="color:#66d9ef">from</span> employee <span style="color:#66d9ef">group</span> <span style="color:#66d9ef">by</span> dep_id,post;
+<span style="color:#f92672">+</span><span style="color:#75715e">--------+------------+------------------------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> dep_id <span style="color:#f92672">|</span> post       <span style="color:#f92672">|</span> group_concat(emp_name) <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">--------+------------+------------------------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>   <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> wife       <span style="color:#f92672">|</span> xff                    <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>    <span style="color:#ae81ff">100</span> <span style="color:#f92672">|</span> instructor <span style="color:#f92672">|</span> jack,tom,robin,alice   <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>    <span style="color:#ae81ff">101</span> <span style="color:#f92672">|</span> hr         <span style="color:#f92672">|</span> tianyun,harry          <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>    <span style="color:#ae81ff">102</span> <span style="color:#f92672">|</span> sale       <span style="color:#f92672">|</span> emma,christine         <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">--------+------------+------------------------+
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">4</span> <span style="color:#66d9ef">rows</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> sec)</code></pre></div>
 <h2 id="7-正则表达式">7. 正则表达式</h2>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 使用正则表达式对字符类型字段进行匹配
-</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="n">emp_name</span> <span class="k">from</span> <span class="n">employee</span> <span class="k">where</span> <span class="n">emp_name</span> <span class="n">REGEXP</span> <span class="s1">&#39;^ali&#39;</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">----------+
-</span><span class="c1"></span><span class="o">|</span> <span class="n">emp_name</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">----------+
-</span><span class="c1"></span><span class="o">|</span> <span class="n">alice</span>    <span class="o">|</span>
-<span class="o">+</span><span class="c1">----------+
-</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div></article>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 使用正则表达式对字符类型字段进行匹配
+</span><span style="color:#75715e"></span>mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> emp_name <span style="color:#66d9ef">from</span> employee <span style="color:#66d9ef">where</span> emp_name REGEXP <span style="color:#e6db74">&#39;^ali&#39;</span>;
+<span style="color:#f92672">+</span><span style="color:#75715e">----------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> emp_name <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">----------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> alice    <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">----------+
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">1</span> <span style="color:#66d9ef">row</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> sec)</code></pre></div></article>
     <footer class="post-footer">
       
       <ul class="post-tags">
@@ -431,6 +428,29 @@
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

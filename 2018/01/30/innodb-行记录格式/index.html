@@ -302,27 +302,24 @@
 <p>从 MySQL 4.1版本开始，<code>char(N)</code>类型中的<code>N</code>表示的就是字符的长度，而不是字符串的长度。</p>
 
 <p>举个例子，我们创建如下的表:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">test_char</span><span class="p">(</span>
-    <span class="o">-&gt;</span> <span class="n">c1</span> <span class="nb">char</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-    <span class="o">-&gt;</span> <span class="p">)</span><span class="n">charset</span><span class="o">=</span><span class="s1">&#39;gbk&#39;</span><span class="p">;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> test_char(
+    <span style="color:#f92672">-&gt;</span> c1 char(<span style="color:#ae81ff">4</span>)
+    <span style="color:#f92672">-&gt;</span> )charset<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;gbk&#39;</span>;</code></pre></div>
 <p>然后向其中插入数据，并查看其中的数据:</p>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">insert</span> <span class="k">into</span> <span class="n">test_char</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;我们&#39;</span><span class="p">);</span>
-<span class="k">insert</span> <span class="k">into</span> <span class="n">test_char</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;abc&#39;</span><span class="p">);</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> test_char <span style="color:#66d9ef">values</span>(<span style="color:#e6db74">&#39;我们&#39;</span>);
+<span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> test_char <span style="color:#66d9ef">values</span>(<span style="color:#e6db74">&#39;abc&#39;</span>);
 
-<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="k">length</span><span class="p">(</span><span class="n">c1</span><span class="p">),</span> <span class="k">character_length</span><span class="p">(</span><span class="n">c1</span><span class="p">),</span> <span class="n">c1</span> <span class="k">from</span> <span class="n">test_char</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">------------+----------------------+--------+
-</span><span class="c1"></span><span class="o">|</span> <span class="k">length</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span> <span class="o">|</span> <span class="k">character_length</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span> <span class="o">|</span> <span class="n">c1</span>     <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+----------------------+--------+
-</span><span class="c1"></span><span class="o">|</span>          <span class="mi">3</span> <span class="o">|</span>                    <span class="mi">3</span> <span class="o">|</span> <span class="n">abc</span>    <span class="o">|</span>
-<span class="o">|</span>          <span class="mi">6</span> <span class="o">|</span>                    <span class="mi">3</span> <span class="o">|</span> <span class="err">我们</span>    <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+----------------------+--------+</span></code></pre></div>
+mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">length</span>(c1), <span style="color:#66d9ef">character_length</span>(c1), c1 <span style="color:#66d9ef">from</span> test_char;
+<span style="color:#f92672">+</span><span style="color:#75715e">------------+----------------------+--------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span> <span style="color:#66d9ef">length</span>(c1) <span style="color:#f92672">|</span> <span style="color:#66d9ef">character_length</span>(c1) <span style="color:#f92672">|</span> c1     <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">------------+----------------------+--------+
+</span><span style="color:#75715e"></span><span style="color:#f92672">|</span>          <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span>                    <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span> abc    <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>          <span style="color:#ae81ff">6</span> <span style="color:#f92672">|</span>                    <span style="color:#ae81ff">3</span> <span style="color:#f92672">|</span> <span style="color:#960050;background-color:#1e0010">我们</span>    <span style="color:#f92672">|</span>
+<span style="color:#f92672">+</span><span style="color:#75715e">------------+----------------------+--------+</span></code></pre></div>
 <p>我们可以看到，<code>我们</code>和<code>abc</code>的字符长度都是3，但是它们的字节长度是不同的。这也就意味着，在数据文件中存储的时候，<code>char</code>类型的字段也是被当做变长字段来存储的。</p>
 
 <p>我们可以通过<code>hexdump</code>命令来查看<code>test_char</code>表对应的数据文件，具体命令如下:</p>
-
-<pre><code>hexdump -C -v /usr/local/var/mysql/hp/test_char.ibd |less
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">hexdump -C -v /usr/local/var/mysql/hp/test_char.ibd |less</code></pre></div>
 <p><strong>注意</strong>: 我的 MySQL 开启了<code>innodb_file_per_table</code>选项，所以每个表都会有自己单独的数据文件。上述命令中的<code>/usr/local/var/mysql/hp/test_char.ibd</code>文件是<code>hp</code>数据库中的<code>test_char</code>表的数据文件。</p>
 
 <pre><code>0000c090  01 10 61 62 20 20 06 00  00 00 18 00 20 00 00 00  |..ab  ...... ...|
@@ -476,6 +473,29 @@
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

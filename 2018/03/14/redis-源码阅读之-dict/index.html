@@ -195,58 +195,58 @@
 <h2 id="dict-的实现">dict 的实现</h2>
 
 <p>在 Redis 中，dict 的代码存放在<code>src/dict.c</code>和<code>src/dict.h</code>两个文件中。在<code>src/dict.h</code>中定义了 dict 所用到的结构体，一共有四个:</p>
-<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="c1">// 哈希表项
-</span><span class="c1"></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">dictEntry</span> <span class="p">{</span>
-    <span class="kt">void</span> <span class="o">*</span><span class="n">key</span><span class="p">;</span>
-    <span class="k">union</span> <span class="p">{</span>
-        <span class="kt">void</span> <span class="o">*</span><span class="n">val</span><span class="p">;</span>
-        <span class="n">uint64_t</span> <span class="n">u64</span><span class="p">;</span>
-        <span class="n">int64_t</span> <span class="n">s64</span><span class="p">;</span>
-        <span class="kt">double</span> <span class="n">d</span><span class="p">;</span>
-    <span class="p">}</span> <span class="n">v</span><span class="p">;</span>
-    <span class="k">struct</span> <span class="n">dictEntry</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span> <span class="c1">// 哈希表中是通过单链表解决键索引冲突的，next用来指向同一个键索引下的下一个元素
-</span><span class="c1"></span><span class="p">}</span> <span class="n">dictEntry</span><span class="p">;</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// 哈希表项
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> dictEntry {
+    <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>key;
+    <span style="color:#66d9ef">union</span> {
+        <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>val;
+        uint64_t u64;
+        int64_t s64;
+        <span style="color:#66d9ef">double</span> d;
+    } v;
+    <span style="color:#66d9ef">struct</span> dictEntry <span style="color:#f92672">*</span>next; <span style="color:#75715e">// 哈希表中是通过单链表解决键索引冲突的，next用来指向同一个键索引下的下一个元素
+</span><span style="color:#75715e"></span>} dictEntry;
 
-<span class="c1">// 这里的思想类似于Go，使用函数来定义字典类型(接口)
-</span><span class="c1"></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">dictType</span> <span class="p">{</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">hashFunction</span><span class="p">)(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key</span><span class="p">);</span>
-    <span class="kt">void</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">keyDup</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">privdata</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key</span><span class="p">);</span>
-    <span class="kt">void</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">valDup</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">privdata</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">obj</span><span class="p">);</span>
-    <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">keyCompare</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">privdata</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key2</span><span class="p">);</span>
-    <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">keyDestructor</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">privdata</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key</span><span class="p">);</span>
-    <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">valDestructor</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">privdata</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">obj</span><span class="p">);</span>
-<span class="p">}</span> <span class="n">dictType</span><span class="p">;</span>
+<span style="color:#75715e">// 这里的思想类似于Go，使用函数来定义字典类型(接口)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> dictType {
+    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> (<span style="color:#f92672">*</span>hashFunction)(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>key);
+    <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>(<span style="color:#f92672">*</span>keyDup)(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>privdata, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>key);
+    <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>(<span style="color:#f92672">*</span>valDup)(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>privdata, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>obj);
+    <span style="color:#66d9ef">int</span> (<span style="color:#f92672">*</span>keyCompare)(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>privdata, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>key1, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>key2);
+    <span style="color:#66d9ef">void</span> (<span style="color:#f92672">*</span>keyDestructor)(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>privdata, <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>key);
+    <span style="color:#66d9ef">void</span> (<span style="color:#f92672">*</span>valDestructor)(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>privdata, <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>obj);
+} dictType;
 
-<span class="cm">/* 哈希表结构体，每个字典都有两个哈希表，其中多的一个用来做渐进式 rehash */</span>
-<span class="k">typedef</span> <span class="k">struct</span> <span class="n">dictht</span> <span class="p">{</span>
-    <span class="n">dictEntry</span> <span class="o">**</span><span class="n">table</span><span class="p">;</span>       <span class="c1">// 哈希表项组成的数组
-</span><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">size</span><span class="p">;</span>      <span class="c1">// 当前哈希表的大小
-</span><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">sizemask</span><span class="p">;</span>  <span class="c1">// 哈希表大小的掩码，总是等于size - 1
-</span><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">used</span><span class="p">;</span>      <span class="c1">// 哈希表中哈希表项的数目
-</span><span class="c1"></span><span class="p">}</span> <span class="n">dictht</span><span class="p">;</span>
+<span style="color:#75715e">/* 哈希表结构体，每个字典都有两个哈希表，其中多的一个用来做渐进式 rehash */</span>
+<span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> dictht {
+    dictEntry <span style="color:#f92672">**</span>table;       <span style="color:#75715e">// 哈希表项组成的数组
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> size;      <span style="color:#75715e">// 当前哈希表的大小
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> sizemask;  <span style="color:#75715e">// 哈希表大小的掩码，总是等于size - 1
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> used;      <span style="color:#75715e">// 哈希表中哈希表项的数目
+</span><span style="color:#75715e"></span>} dictht;
 
-<span class="cm">/* 字典的定义 */</span>
-<span class="k">typedef</span> <span class="k">struct</span> <span class="n">dict</span> <span class="p">{</span>
-    <span class="n">dictType</span> <span class="o">*</span><span class="n">type</span><span class="p">;</span>  <span class="c1">// 字典的类型
-</span><span class="c1"></span>    <span class="kt">void</span> <span class="o">*</span><span class="n">privdata</span><span class="p">;</span>  <span class="c1">// 字典私有数据
-</span><span class="c1"></span>    <span class="n">dictht</span> <span class="n">ht</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>    <span class="c1">// 字典中的哈希表
-</span><span class="c1"></span>    <span class="kt">long</span> <span class="n">rehashidx</span><span class="p">;</span>  <span class="c1">// rehashidx == -1 表示当前字典没有做 rehash，否则表示当前字典正在进行 rehash 操作
-</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">iterators</span><span class="p">;</span>   <span class="c1">// 安全迭代器的数量
-</span><span class="c1"></span><span class="p">}</span> <span class="n">dict</span><span class="p">;</span>
+<span style="color:#75715e">/* 字典的定义 */</span>
+<span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> dict {
+    dictType <span style="color:#f92672">*</span>type;  <span style="color:#75715e">// 字典的类型
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>privdata;  <span style="color:#75715e">// 字典私有数据
+</span><span style="color:#75715e"></span>    dictht ht[<span style="color:#ae81ff">2</span>];    <span style="color:#75715e">// 字典中的哈希表
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">long</span> rehashidx;  <span style="color:#75715e">// rehashidx == -1 表示当前字典没有做 rehash，否则表示当前字典正在进行 rehash 操作
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> iterators;   <span style="color:#75715e">// 安全迭代器的数量
+</span><span style="color:#75715e"></span>} dict;
 
-<span class="cm">/*
-</span><span class="cm"> * 字典迭代器用来获取字典中所有的项，其中迭代器可以分为安全迭代器和非安全迭代器两种
-</span><span class="cm"> * 安全迭代器表示在迭代过程中可以调用字典的 dictAdd(), dictFind() 等接口
-</span><span class="cm"> * 非安全迭代器在迭代过程中只能调用 dictNext() 接口
-</span><span class="cm"> * */</span>
-<span class="k">typedef</span> <span class="k">struct</span> <span class="n">dictIterator</span> <span class="p">{</span>
-    <span class="n">dict</span> <span class="o">*</span><span class="n">d</span><span class="p">;</span>             <span class="c1">// 迭代器所关联的字典
-</span><span class="c1"></span>    <span class="kt">long</span> <span class="n">index</span><span class="p">;</span>          <span class="c1">// 当前迭代器在字典中迭代的索引
-</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">table</span><span class="p">,</span> <span class="n">safe</span><span class="p">;</span>     <span class="c1">// 哈希表的索引，当前迭代器是否是安全迭代器
-</span><span class="c1"></span>    <span class="n">dictEntry</span> <span class="o">*</span><span class="n">entry</span><span class="p">,</span> <span class="o">*</span><span class="n">nextEntry</span><span class="p">;</span> <span class="c1">// 当前迭代器所指向的哈希表项和下一个哈希表项
-</span><span class="c1"></span>    <span class="cm">/* unsafe iterator fingerprint for misuse detection. */</span>
-    <span class="kt">long</span> <span class="kt">long</span> <span class="n">fingerprint</span><span class="p">;</span>  <span class="c1">// 字典的指纹，非安全迭代器中用于鉴别字典是否被修改过
-</span><span class="c1"></span><span class="p">}</span> <span class="n">dictIterator</span><span class="p">;</span></code></pre></div>
+<span style="color:#75715e">/*
+</span><span style="color:#75715e"> * 字典迭代器用来获取字典中所有的项，其中迭代器可以分为安全迭代器和非安全迭代器两种
+</span><span style="color:#75715e"> * 安全迭代器表示在迭代过程中可以调用字典的 dictAdd(), dictFind() 等接口
+</span><span style="color:#75715e"> * 非安全迭代器在迭代过程中只能调用 dictNext() 接口
+</span><span style="color:#75715e"> * */</span>
+<span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> dictIterator {
+    dict <span style="color:#f92672">*</span>d;             <span style="color:#75715e">// 迭代器所关联的字典
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">long</span> index;          <span style="color:#75715e">// 当前迭代器在字典中迭代的索引
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> table, safe;     <span style="color:#75715e">// 哈希表的索引，当前迭代器是否是安全迭代器
+</span><span style="color:#75715e"></span>    dictEntry <span style="color:#f92672">*</span>entry, <span style="color:#f92672">*</span>nextEntry; <span style="color:#75715e">// 当前迭代器所指向的哈希表项和下一个哈希表项
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">/* unsafe iterator fingerprint for misuse detection. */</span>
+    <span style="color:#66d9ef">long</span> <span style="color:#66d9ef">long</span> fingerprint;  <span style="color:#75715e">// 字典的指纹，非安全迭代器中用于鉴别字典是否被修改过
+</span><span style="color:#75715e"></span>} dictIterator;</code></pre></div>
 <p>他们之间的关系如图1所示:</p>
 
 <p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-03-10-054715.png" alt="图1" /></p>
@@ -290,20 +290,17 @@ idx = hash &amp; d-&gt;ht[table].sizemask
 <p>其中k1和k2计算出来的索引值是相同的，他们被存放到哈希表的同一个索引下，然后通过单链表的形式组合起来。</p>
 
 <p>在 <code>src/dict.c</code>的<code>dictEntry *dictAddRaw(dict *d, void *key)</code>函数中，我们可以看到向单链表中添加元素的过程</p>
-<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* 哈希表通过单链表来解决键冲突，下面的代码向单链表中添加了哈希表节点 */</span>
-<span class="n">entry</span> <span class="o">=</span> <span class="n">zmalloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">entry</span><span class="p">));</span>
-<span class="n">entry</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">ht</span><span class="o">-&gt;</span><span class="n">table</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
-<span class="n">ht</span><span class="o">-&gt;</span><span class="n">table</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="p">;</span>
-<span class="n">ht</span><span class="o">-&gt;</span><span class="n">used</span><span class="o">++</span><span class="p">;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">/* 哈希表通过单链表来解决键冲突，下面的代码向单链表中添加了哈希表节点 */</span>
+entry <span style="color:#f92672">=</span> zmalloc(<span style="color:#66d9ef">sizeof</span>(<span style="color:#f92672">*</span>entry));
+entry<span style="color:#f92672">-&gt;</span>next <span style="color:#f92672">=</span> ht<span style="color:#f92672">-&gt;</span>table[index];
+ht<span style="color:#f92672">-&gt;</span>table[index] <span style="color:#f92672">=</span> entry;
+ht<span style="color:#f92672">-&gt;</span>used<span style="color:#f92672">++</span>;</code></pre></div>
 <p>申请一个哈希表项之后，将它的地址存放在哈希表中，同时也使哈希表中原来存在的节点变成它的next节点，即新增元素在单链表的头部。</p>
 
 <h2 id="渐进式-rehash">渐进式 rehash</h2>
 
 <p>每个dict都有一个负载因子，计算方式如下：</p>
-
-<pre><code>load_factor = ht[0].used / ht[0].size
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">load_factor <span style="color:#f92672">=</span> ht[<span style="color:#ae81ff">0</span>].used <span style="color:#f92672">/</span> ht[<span style="color:#ae81ff">0</span>].size</code></pre></div>
 <p>当 dict 的负载因子过大或过小的时候，Redis 需要为这个 dict 扩展或者收缩哈希表的大小，这个过程叫做 rehash。上文中我们提到每个 dict 都有两个哈希表, <code>ht0</code>和<code>ht1</code>，在这里它们就发挥作用了。rehash 的具体操作如下:</p>
 
 <ol>
@@ -340,23 +337,23 @@ idx = hash &amp; d-&gt;ht[table].sizemask
 <p>在渐进式 rehash 一小节中我们提到，当字典的安全迭代器的数量为0的时候，才会执行 rehash 操作，这是为什么呢？</p>
 
 <p>首先我们可以分析一下字典迭代器的迭代操作，它可以用如下的伪代码来表示:</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">iter_dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-    <span class="c1"># 迭代0号哈希表</span>
-    <span class="n">iter_table</span><span class="p">(</span><span class="n">ht</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">table</span><span class="p">)</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">iter_dict</span>(dict):
+    <span style="color:#75715e"># 迭代0号哈希表</span>
+    iter_table(ht[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">-&gt;</span>table)
 
-    <span class="c1"># 如果正在进行 rehash 的话，也迭代1号哈希表</span>
-    <span class="k">if</span> <span class="nb">dict</span><span class="o">.</span><span class="n">is_rehashing</span><span class="p">():</span>
-        <span class="n">iter_table</span><span class="p">(</span><span class="n">ht</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">table</span><span class="p">)</span>
+    <span style="color:#75715e"># 如果正在进行 rehash 的话，也迭代1号哈希表</span>
+    <span style="color:#66d9ef">if</span> dict<span style="color:#f92672">.</span>is_rehashing():
+        iter_table(ht[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">-&gt;</span>table)
 
-<span class="k">def</span> <span class="nf">iter_table</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">table</span><span class="p">:</span>
-        <span class="c1"># 跳过空的哈希表项</span>
-        <span class="k">if</span> <span class="n">table</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">empty</span><span class="p">():</span>
-            <span class="k">continue</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">iter_table</span>(table):
+    <span style="color:#66d9ef">for</span> index <span style="color:#f92672">in</span> table:
+        <span style="color:#75715e"># 跳过空的哈希表项</span>
+        <span style="color:#66d9ef">if</span> table[index]<span style="color:#f92672">.</span>empty():
+            <span style="color:#66d9ef">continue</span>
 
-        <span class="c1"># 处理当前哈希表项的单链表上所有的节点</span>
-        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">table</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span>
-            <span class="n">do_some_thing_with</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></code></pre></div>
+        <span style="color:#75715e"># 处理当前哈希表项的单链表上所有的节点</span>
+        <span style="color:#66d9ef">for</span> node <span style="color:#f92672">in</span> table[node]:
+            do_some_thing_with(node)</code></pre></div>
 <p>假设我们在一个正在进行 rehash 操作的字典上创立了一个安全迭代器，首先执行了<code>dictNext()</code>，获取了<code>ht0</code>中的一个哈希表项<code>he1</code>。接着执行<code>dictAdd()</code>，添加了一个哈希表项。如果<code>dictAdd()</code>函数能够执行 rehash 的话，<code>he1</code>哈希表项可能被从<code>ht0</code>复制到了<code>ht1</code>，从而导致安全迭代器获取了哈希表项<code>he1</code>两次</p>
 
 <p>所以当字典中存在安全迭代器的时候，是不能进行 rehash 操作的。</p>
@@ -405,6 +402,29 @@ idx = hash &amp; d-&gt;ht[table].sizemask
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

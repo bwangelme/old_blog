@@ -246,53 +246,50 @@
 </ul>
 
 <h3 id="2-4-启用二进制日志">2.4 启用二进制日志</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 编辑 MySQL 配置文件，添加以下的选项</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 编辑 MySQL 配置文件，添加以下的选项</span>
 
-<span class="o">[</span>mysqld<span class="o">]</span>
-server-id <span class="o">=</span> <span class="m">1</span>
-log-bin<span class="o">[=</span>base_name<span class="o">]</span></code></pre></div>
+<span style="color:#f92672">[</span>mysqld<span style="color:#f92672">]</span>
+server-id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+log-bin<span style="color:#f92672">[=</span>base_name<span style="color:#f92672">]</span></code></pre></div>
 <p><code>base_name</code>是二进制日志文件的文件名，如果不指定<code>base_name</code>，默认会使用主机名作文二进制日志的文件名，后缀名是二进制日志的序列号，所在目录为数据库所在目录(<code>datadir</code>)。</p>
 
 <p>开启了二进制日志后，会产生如下文件:</p>
-
-<pre><code>&gt;&gt;&gt; ls /var/log/mysql/mysql-bin.*
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">&gt;&gt;&gt; ls /var/log/mysql/mysql-bin.*
 /var/log/mysql/mysql-bin.000001  /var/log/mysql/mysql-bin.index
-/var/log/mysql/mysql-bin.000002
-</code></pre>
-
+/var/log/mysql/mysql-bin.000002</code></pre></div>
 <p><code>mysql-bin.index</code>为二进制日志的索引文件，用来存储过往产生的二进制日志序号。</p>
 
 <p><code>mysql-bin.000001</code>和<code>mysql-bin.000002</code>为实际存储数据的文件，每次重启MySQL，都会产生一个新的mysql-bin的日志。</p>
 
 <h3 id="2-5-暂停二进制日志记录-当前会话">2.5 暂停二进制日志记录(当前会话)</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 暂停</span>
-mysql&gt; SET <span class="nv">SQL_LOG_BIN</span><span class="o">=</span><span class="m">0</span><span class="p">;</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 暂停</span>
+mysql&gt; SET SQL_LOG_BIN<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;
 
-<span class="c1"># 启用</span>
-mysql&gt; SET <span class="nv">SQL_LOG_BIN</span><span class="o">=</span><span class="m">1</span><span class="p">;</span></code></pre></div>
+<span style="color:#75715e"># 启用</span>
+mysql&gt; SET SQL_LOG_BIN<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;</code></pre></div>
 <h3 id="2-6-查看二进制日志">2.6 查看二进制日志</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 查看MySQL二进制的日志</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 查看MySQL二进制的日志</span>
 
-&gt; <span class="nb">pwd</span>
+&gt; pwd
 /usr/local/mysql/data
 &gt; mysqlbinlog mysql-bin.000002
 
-<span class="c1"># at 120 # 表明从第120个字节开始</span>
-<span class="c1"># 下面这句表明了执行时间(年月日 时分秒)和服务器id</span>
-<span class="c1">#160314  2:07:47 server id 1  end_log_pos 214 CRC32 0xa10bdfa4 	Query	thread_id=1	exec_time=0	error_code=0</span>
-SET <span class="nv">TIMESTAMP</span><span class="o">=</span><span class="m">1457892467</span>/*!*/<span class="p">;</span>
-SET @@session.pseudo_thread_id<span class="o">=</span><span class="m">1</span>/*!*/<span class="p">;</span>
-SET @@session.foreign_key_checks<span class="o">=</span><span class="m">1</span>, @@session.sql_auto_is_null<span class="o">=</span><span class="m">0</span>, @@session.unique_checks<span class="o">=</span><span class="m">1</span>, @@session.autocommit<span class="o">=</span><span class="m">1</span>/*!*/<span class="p">;</span>
-SET @@session.sql_mode<span class="o">=</span><span class="m">1075838976</span>/*!*/<span class="p">;</span>
-SET @@session.auto_increment_increment<span class="o">=</span><span class="m">1</span>, @@session.auto_increment_offset<span class="o">=</span><span class="m">1</span>/*!*/<span class="p">;</span>
-/*!<span class="se">\C</span> utf8 *//*!*/<span class="p">;</span>
-SET @@session.character_set_client<span class="o">=</span><span class="m">33</span>,@@session.collation_connection<span class="o">=</span><span class="m">33</span>,@@session.collation_server<span class="o">=</span><span class="m">33</span>/*!*/<span class="p">;</span>
-SET @@session.lc_time_names<span class="o">=</span><span class="m">0</span>/*!*/<span class="p">;</span>
-SET @@session.collation_database<span class="o">=</span>DEFAULT/*!*/<span class="p">;</span>
-create database xff1  <span class="c1"># 这里是创建数据库的语句</span>
-/*!*/<span class="p">;</span>
-DELIMITER <span class="p">;</span>
-<span class="c1"># End of log file</span></code></pre></div>
+<span style="color:#75715e"># at 120 # 表明从第120个字节开始</span>
+<span style="color:#75715e"># 下面这句表明了执行时间(年月日 时分秒)和服务器id</span>
+<span style="color:#75715e">#160314  2:07:47 server id 1  end_log_pos 214 CRC32 0xa10bdfa4 	Query	thread_id=1	exec_time=0	error_code=0</span>
+SET TIMESTAMP<span style="color:#f92672">=</span><span style="color:#ae81ff">1457892467</span>/*!*/;
+SET @@session.pseudo_thread_id<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>/*!*/;
+SET @@session.foreign_key_checks<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, @@session.sql_auto_is_null<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, @@session.unique_checks<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, @@session.autocommit<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>/*!*/;
+SET @@session.sql_mode<span style="color:#f92672">=</span><span style="color:#ae81ff">1075838976</span>/*!*/;
+SET @@session.auto_increment_increment<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, @@session.auto_increment_offset<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>/*!*/;
+/*!<span style="color:#ae81ff">\C</span> utf8 *//*!*/;
+SET @@session.character_set_client<span style="color:#f92672">=</span><span style="color:#ae81ff">33</span>,@@session.collation_connection<span style="color:#f92672">=</span><span style="color:#ae81ff">33</span>,@@session.collation_server<span style="color:#f92672">=</span><span style="color:#ae81ff">33</span>/*!*/;
+SET @@session.lc_time_names<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>/*!*/;
+SET @@session.collation_database<span style="color:#f92672">=</span>DEFAULT/*!*/;
+create database xff1  <span style="color:#75715e"># 这里是创建数据库的语句</span>
+/*!*/;
+DELIMITER ;
+<span style="color:#75715e"># End of log file</span></code></pre></div>
 <h2 id="3-慢查询日志">3 慢查询日志</h2>
 
 <p>和慢查询日志相关的配置有如下几个:</p>
@@ -342,6 +339,29 @@ DELIMITER <span class="p">;</span>
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

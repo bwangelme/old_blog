@@ -194,9 +194,9 @@
 <li>存储对象的键和值都是<strong>字符串</strong>，数字的键和值会被自动转义成字符串</li>
 <li>可以使用以下的方式来访问 Web Storage</li>
 </ol>
-<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">localStorage</span><span class="p">.</span><span class="nx">colorSetting</span> <span class="o">=</span> <span class="s1">&#39;#a4509b&#39;</span><span class="p">;</span>
-<span class="nx">localStorage</span><span class="p">[</span><span class="s1">&#39;colorSetting&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;#a4509b&#39;</span><span class="p">;</span>
-<span class="nx">localStorage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span><span class="s1">&#39;colorSetting&#39;</span><span class="p">,</span> <span class="s1">&#39;#a4509b&#39;</span><span class="p">);</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#a6e22e">localStorage</span>.<span style="color:#a6e22e">colorSetting</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;#a4509b&#39;</span>;
+<span style="color:#a6e22e">localStorage</span>[<span style="color:#e6db74">&#39;colorSetting&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;#a4509b&#39;</span>;
+<span style="color:#a6e22e">localStorage</span>.<span style="color:#a6e22e">setItem</span>(<span style="color:#e6db74">&#39;colorSetting&#39;</span>, <span style="color:#e6db74">&#39;#a4509b&#39;</span>);
 </code></pre></div>
 <blockquote>
 <p>不过建议使用 Web Storage API (setItem, getItem, removeItem, key, length)来访问数据，为了防止使用明文对象作为键值存储时的<a href="http://www.2ality.com/2012/01/objects-as-maps.html">陷阱</a>。</p>
@@ -242,25 +242,25 @@
 <p>如果在一个浏览器中 localStorage 是可用的，那么就会存在一个对象<code>window.localStorage</code>来代表本地存储区域。但是由于各种情况，在一个页面中，localStorage 不一定是可用的。例如在 Safari 浏览器的隐身模式下，<code>window.localStorage</code>就是一个空对象，而且分配给它的容量是0。</p>
 
 <p>下面这个代码片段就展示了如何检测 localStorage 和 sessionStorage 是否可用？</p>
-<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">storageAvailable</span><span class="p">(</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">try</span> <span class="p">{</span>
-		<span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nb">window</span><span class="p">[</span><span class="nx">type</span><span class="p">],</span>
-			<span class="nx">x</span> <span class="o">=</span> <span class="s1">&#39;__storage_test__&#39;</span><span class="p">;</span>
-		<span class="nx">storage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">x</span><span class="p">);</span>
-		<span class="nx">storage</span><span class="p">.</span><span class="nx">removeItem</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
-		<span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-	<span class="p">}</span>
-	<span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-	<span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">storageAvailable</span>(<span style="color:#a6e22e">type</span>) {
+	<span style="color:#66d9ef">try</span> {
+		<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">storage</span> <span style="color:#f92672">=</span> window[<span style="color:#a6e22e">type</span>],
+			<span style="color:#a6e22e">x</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;__storage_test__&#39;</span>;
+		<span style="color:#a6e22e">storage</span>.<span style="color:#a6e22e">setItem</span>(<span style="color:#a6e22e">x</span>, <span style="color:#a6e22e">x</span>);
+		<span style="color:#a6e22e">storage</span>.<span style="color:#a6e22e">removeItem</span>(<span style="color:#a6e22e">x</span>);
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>;
+	}
+	<span style="color:#66d9ef">catch</span>(<span style="color:#a6e22e">e</span>) {
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>;
+	}
+}
 
-<span class="k">if</span> <span class="p">(</span><span class="nx">storageAvailable</span><span class="p">(</span><span class="s1">&#39;localStorage&#39;</span><span class="p">))</span> <span class="p">{</span>
-	<span class="c1">// 其中这个&#39;localStorage&#39; 可以替换成 &#39;sessionStorage&#39;
-</span><span class="c1"></span>	<span class="c1">// Yippee! We can use localStorage awesomeness
-</span><span class="c1"></span><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-	<span class="c1">// Too bad, no localStorage for us
-</span><span class="c1"></span><span class="p">}</span>
+<span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">storageAvailable</span>(<span style="color:#e6db74">&#39;localStorage&#39;</span>)) {
+	<span style="color:#75715e">// 其中这个&#39;localStorage&#39; 可以替换成 &#39;sessionStorage&#39;
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// Yippee! We can use localStorage awesomeness
+</span><span style="color:#75715e"></span>} <span style="color:#66d9ef">else</span> {
+	<span style="color:#75715e">// Too bad, no localStorage for us
+</span><span style="color:#75715e"></span>}
 </code></pre></div>
 <p>关于检测 localStorage 的代码的演化历史，可以参考 <a href="https://gist.github.com/paulirish/5558557">A brief history of detecting local storage</a>。</p>
 
@@ -274,13 +274,13 @@
 <code>localStorage.removeItem(key)</code> &ndash; 删除当前域名下由key所指定的那个数据项</p>
 
 <h3 id="事件监听">事件监听</h3>
-<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;storage&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.my-key&#39;</span><span class="p">).</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span><span class="p">;</span>
-  <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.my-old&#39;</span><span class="p">).</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">oldValue</span><span class="p">;</span>
-  <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.my-new&#39;</span><span class="p">).</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">newValue</span><span class="p">;</span>
-  <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.my-url&#39;</span><span class="p">).</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">url</span><span class="p">;</span>
-  <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.my-storage&#39;</span><span class="p">).</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">storageArea</span><span class="p">;</span>
-<span class="p">});</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">window.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#39;storage&#39;</span>, <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">e</span>) {
+  document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;.my-key&#39;</span>).<span style="color:#a6e22e">textContent</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">key</span>;
+  document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;.my-old&#39;</span>).<span style="color:#a6e22e">textContent</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">oldValue</span>;
+  document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;.my-new&#39;</span>).<span style="color:#a6e22e">textContent</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">newValue</span>;
+  document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;.my-url&#39;</span>).<span style="color:#a6e22e">textContent</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">url</span>;
+  document.<span style="color:#a6e22e">querySelector</span>(<span style="color:#e6db74">&#39;.my-storage&#39;</span>).<span style="color:#a6e22e">textContent</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">storageArea</span>;
+});
 </code></pre></div>
 <p>上述代码展示了向 localStorage 添加事件监听器的方法，当 localStorage 改变的时候，会传入一个事件，其中各个字段意义如下:</p>
 
@@ -345,6 +345,29 @@
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

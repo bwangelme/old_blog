@@ -203,9 +203,9 @@
 &gt; 可调用对象的调度器，<code>fn</code>参数将会以<code>fn(*args, **kwargs)</code>的形式来调用，同时返回一个 Future 对象代表了可调用对象的执行情况。</p>
 
 <blockquote>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
-     <span class="n">future</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="nb">pow</span><span class="p">,</span> <span class="mi">323</span><span class="p">,</span> <span class="mi">1235</span><span class="p">)</span>
-     <span class="k">print</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span></code></pre></div></blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">with</span> ThreadPoolExecutor(max_workers<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>) <span style="color:#66d9ef">as</span> executor:
+     future <span style="color:#f92672">=</span> executor<span style="color:#f92672">.</span>submit(pow, <span style="color:#ae81ff">323</span>, <span style="color:#ae81ff">1235</span>)
+     <span style="color:#66d9ef">print</span>(future<span style="color:#f92672">.</span>result())</code></pre></div></blockquote>
 
 <p><code>map(func, *iterables, timeout=None, chunksize=1)</code></p>
 
@@ -224,12 +224,12 @@
 <p>如果<code>wait</code>等于 True 的话，这个方法不会立即返回，而直到所有阻塞的 futures 都返回，而且和这个执行器所有相关的资源都被释放以后，这个函数才会返回。 如果<code>wait</code>设置为 False ，那么这个方法会立刻返回，而和这个执行器所有相关的资源只有等到所有阻塞的 futures 都执行完以后才会被释放。而无论<code>wait</code>参数的值是什么，整个 Python 程序都会等到所有阻塞的 futures 执行完毕以后才会退出。</p>
 
 <p>通过<code>with</code>语句，可以避免明确地来调用这个方法，它在执行完以后将会自动关闭<code>Executor</code>。(调用 Executor.shutdown() 时<code>wait</code>会被设置为True，这将会等待所有 future 执行完毕)</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">shutil</span>
-<span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="n">e</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">,</span> <span class="s1">&#39;src1.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;dest1.txt&#39;</span><span class="p">)</span>
-    <span class="n">e</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">,</span> <span class="s1">&#39;src2.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;dest2.txt&#39;</span><span class="p">)</span>
-    <span class="n">e</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">,</span> <span class="s1">&#39;src3.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;dest3.txt&#39;</span><span class="p">)</span>
-    <span class="n">e</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">,</span> <span class="s1">&#39;src4.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;dest4.txt&#39;</span><span class="p">)</span></code></pre></div></blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> shutil
+<span style="color:#66d9ef">with</span> ThreadPoolExecutor(max_workers<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>) <span style="color:#66d9ef">as</span> e:
+    e<span style="color:#f92672">.</span>submit(shutil<span style="color:#f92672">.</span>copy, <span style="color:#e6db74">&#39;src1.txt&#39;</span>, <span style="color:#e6db74">&#39;dest1.txt&#39;</span>)
+    e<span style="color:#f92672">.</span>submit(shutil<span style="color:#f92672">.</span>copy, <span style="color:#e6db74">&#39;src2.txt&#39;</span>, <span style="color:#e6db74">&#39;dest2.txt&#39;</span>)
+    e<span style="color:#f92672">.</span>submit(shutil<span style="color:#f92672">.</span>copy, <span style="color:#e6db74">&#39;src3.txt&#39;</span>, <span style="color:#e6db74">&#39;dest3.txt&#39;</span>)
+    e<span style="color:#f92672">.</span>submit(shutil<span style="color:#f92672">.</span>copy, <span style="color:#e6db74">&#39;src4.txt&#39;</span>, <span style="color:#e6db74">&#39;dest4.txt&#39;</span>)</code></pre></div></blockquote>
 </blockquote>
 
 <h2 id="threadpoolexecutor">ThreadPoolExecutor</h2>
@@ -237,29 +237,29 @@
 <p><code>ThreadPoolExecutor</code>是<code>Executor</code>的子类，使用一个线程池去异步地执行调用。</p>
 
 <p>当一个 Future 关联的调用等待另外一个 Future 的执行结果的时候，死锁就有可能发生，例如下面的例子：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">time</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> time
 
-<span class="k">def</span> <span class="nf">wait_on_b</span><span class="p">():</span>
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>  <span class="c1"># b 永远不会完成，因为它等待着 a 的结果</span>
-    <span class="k">return</span> <span class="mi">5</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">wait_on_b</span>():
+    time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">5</span>)
+    <span style="color:#66d9ef">print</span>(b<span style="color:#f92672">.</span>result())  <span style="color:#75715e"># b 永远不会完成，因为它等待着 a 的结果</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">5</span>
 
-<span class="k">def</span> <span class="nf">wait_on_a</span><span class="p">():</span>
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">result</span><span class="p">())</span> <span class="c1"># a 永远不会完成，因为它等待着 b 的结果</span>
-    <span class="k">return</span> <span class="mi">6</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">wait_on_a</span>():
+    time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">5</span>)
+    <span style="color:#66d9ef">print</span>(a<span style="color:#f92672">.</span>result()) <span style="color:#75715e"># a 永远不会完成，因为它等待着 b 的结果</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">6</span>
 
-<span class="n">executor</span> <span class="o">=</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">wait_on_b</span><span class="p">)</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">wait_on_a</span><span class="p">)</span></code></pre></div>
+executor <span style="color:#f92672">=</span> ThreadPoolExecutor(max_workers<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+a <span style="color:#f92672">=</span> executor<span style="color:#f92672">.</span>submit(wait_on_b)
+b <span style="color:#f92672">=</span> executor<span style="color:#f92672">.</span>submit(wait_on_a)</code></pre></div>
 <p>和这个例子：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">wait_on_future</span><span class="p">():</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="nb">pow</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="c1"># 这个也永远不会完成，因为线程池里面最多只能有一个线程，而它现在正在执行着这个函数。</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">wait_on_future</span>():
+    f <span style="color:#f92672">=</span> executor<span style="color:#f92672">.</span>submit(pow, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">2</span>)
+    <span style="color:#75715e"># 这个也永远不会完成，因为线程池里面最多只能有一个线程，而它现在正在执行着这个函数。</span>
+    <span style="color:#66d9ef">print</span>(f<span style="color:#f92672">.</span>result())
 
-<span class="n">executor</span> <span class="o">=</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">wait_on_future</span><span class="p">)</span></code></pre></div>
+executor <span style="color:#f92672">=</span> ThreadPoolExecutor(max_workers<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+executor<span style="color:#f92672">.</span>submit(wait_on_future)</code></pre></div>
 <blockquote>
 <p><code>class concurrent.futures.ThreadPoolExecutor(max_workers=None)</code></p>
 
@@ -270,32 +270,32 @@ Python 3.5中的改变：如果<code>max_workers</code>参数为None或者没有
 </blockquote>
 
 <h3 id="threadpoolexecutor-例子">ThreadPoolExecutor 例子</h3>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">concurrent.futures</span>
-<span class="kn">import</span> <span class="nn">urllib.request</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> concurrent.futures
+<span style="color:#f92672">import</span> urllib.request
 
-<span class="n">URLS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;http://www.foxnews.com/&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;http://www.cnn.com/&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;http://europe.wsj.com/&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;http://www.bbc.co.uk/&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;http://some-made-up-domain.com/&#39;</span><span class="p">]</span>
+URLS <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;http://www.foxnews.com/&#39;</span>,
+        <span style="color:#e6db74">&#39;http://www.cnn.com/&#39;</span>,
+        <span style="color:#e6db74">&#39;http://europe.wsj.com/&#39;</span>,
+        <span style="color:#e6db74">&#39;http://www.bbc.co.uk/&#39;</span>,
+        <span style="color:#e6db74">&#39;http://some-made-up-domain.com/&#39;</span>]
 
-<span class="c1"># 获取一个单页，同时报告URL和内容</span>
-<span class="k">def</span> <span class="nf">load_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="p">):</span>
-    <span class="k">with</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">conn</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span style="color:#75715e"># 获取一个单页，同时报告URL和内容</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">load_url</span>(url, timeout):
+    <span style="color:#66d9ef">with</span> urllib<span style="color:#f92672">.</span>request<span style="color:#f92672">.</span>urlopen(url, timeout<span style="color:#f92672">=</span>timeout) <span style="color:#66d9ef">as</span> conn:
+        <span style="color:#66d9ef">return</span> conn<span style="color:#f92672">.</span>read()
 
-<span class="c1"># 我们可以通过with语句来确保线程能够被及时地清理</span>
-<span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
-    <span class="c1"># Start the load operations and mark each future with its URL</span>
-    <span class="n">future_to_url</span> <span class="o">=</span> <span class="p">{</span><span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">load_url</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="mi">60</span><span class="p">):</span> <span class="n">url</span> <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">URLS</span><span class="p">}</span>
-    <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">future_to_url</span><span class="p">):</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="n">future_to_url</span><span class="p">[</span><span class="n">future</span><span class="p">]</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%r</span><span class="s1"> generated an exception: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">exc</span><span class="p">))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%r</span><span class="s1"> page is </span><span class="si">%d</span><span class="s1"> bytes&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span></code></pre></div>
+<span style="color:#75715e"># 我们可以通过with语句来确保线程能够被及时地清理</span>
+<span style="color:#66d9ef">with</span> concurrent<span style="color:#f92672">.</span>futures<span style="color:#f92672">.</span>ThreadPoolExecutor(max_workers<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>) <span style="color:#66d9ef">as</span> executor:
+    <span style="color:#75715e"># Start the load operations and mark each future with its URL</span>
+    future_to_url <span style="color:#f92672">=</span> {executor<span style="color:#f92672">.</span>submit(load_url, url, <span style="color:#ae81ff">60</span>): url <span style="color:#66d9ef">for</span> url <span style="color:#f92672">in</span> URLS}
+    <span style="color:#66d9ef">for</span> future <span style="color:#f92672">in</span> concurrent<span style="color:#f92672">.</span>futures<span style="color:#f92672">.</span>as_completed(future_to_url):
+        url <span style="color:#f92672">=</span> future_to_url[future]
+        <span style="color:#66d9ef">try</span>:
+            data <span style="color:#f92672">=</span> future<span style="color:#f92672">.</span>result()
+        <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">Exception</span> <span style="color:#66d9ef">as</span> exc:
+            <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">%r</span><span style="color:#e6db74"> generated an exception: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (url, exc))
+        <span style="color:#66d9ef">else</span>:
+            <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">%r</span><span style="color:#e6db74"> page is </span><span style="color:#e6db74">%d</span><span style="color:#e6db74"> bytes&#39;</span> <span style="color:#f92672">%</span> (url, len(data)))</code></pre></div>
 <h2 id="processpoolexecutor">ProcessPoolExecutor</h2>
 
 <p><code>ProcessPoolExecutor</code> 类是<code>Executor</code>的一个子类，它使用一个进程池来异步地执行调用。<code>ProcessPoolExecutor</code>使用<code>multiprocessing</code>模块，它允许去避免全局解释器锁，但同时也意味着仅仅只有<code>pickable</code>(TODO译者注：这里这个单词的含义我还没理解)对象能够被执行和返回。</p>
@@ -314,45 +314,45 @@ Python 3.5中的改变：如果<code>max_workers</code>参数为None或者没有
 </blockquote>
 
 <h3 id="processpoolexecutor-的例子">ProcessPoolExecutor 的例子</h3>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">concurrent.futures</span>
-<span class="kn">import</span> <span class="nn">math</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> concurrent.futures
+<span style="color:#f92672">import</span> math
 
-<span class="n">PRIMES</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="mi">112272535095293</span><span class="p">,</span>
-    <span class="mi">112582705942171</span><span class="p">,</span>
-    <span class="mi">112272535095293</span><span class="p">,</span>
-    <span class="mi">115280095190773</span><span class="p">,</span>
-    <span class="mi">115797848077099</span><span class="p">,</span>
-    <span class="mi">1099726899285419</span><span class="p">]</span>
+PRIMES <span style="color:#f92672">=</span> [
+    <span style="color:#ae81ff">112272535095293</span>,
+    <span style="color:#ae81ff">112582705942171</span>,
+    <span style="color:#ae81ff">112272535095293</span>,
+    <span style="color:#ae81ff">115280095190773</span>,
+    <span style="color:#ae81ff">115797848077099</span>,
+    <span style="color:#ae81ff">1099726899285419</span>]
 
-<span class="k">def</span> <span class="nf">is_prime</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
-    <span class="s2">&#34;&#34;&#34;(译者注) 判断素数的程序
-</span><span class="s2">
-</span><span class="s2">    这里对 sqrt_n 做一点解释：
-</span><span class="s2">
-</span><span class="s2">    假设 n 不是素数，那么有 n = x * y( x != 1 and y != 1)
-</span><span class="s2">    因为 n = x * y， 所以 x &lt;= sqrt(n) or y &lt;= sqrt(n)
-</span><span class="s2">    所以 i in [2, sqrt(n)]; i表示能够被 n 整除的数
-</span><span class="s2">    所以如果 i not in [2, sqrt(n)]; 那么n是素数
-</span><span class="s2">
-</span><span class="s2">    在这个程序中我们在一开始就判断过2，所以循环从3开始，且跳过所有偶数
-</span><span class="s2">    &#34;&#34;&#34;</span>
-    <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">False</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">is_prime</span>(n):
+    <span style="color:#e6db74">&#34;&#34;&#34;(译者注) 判断素数的程序
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">    这里对 sqrt_n 做一点解释：
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">    假设 n 不是素数，那么有 n = x * y( x != 1 and y != 1)
+</span><span style="color:#e6db74">    因为 n = x * y， 所以 x &lt;= sqrt(n) or y &lt;= sqrt(n)
+</span><span style="color:#e6db74">    所以 i in [2, sqrt(n)]; i表示能够被 n 整除的数
+</span><span style="color:#e6db74">    所以如果 i not in [2, sqrt(n)]; 那么n是素数
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">    在这个程序中我们在一开始就判断过2，所以循环从3开始，且跳过所有偶数
+</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+    <span style="color:#66d9ef">if</span> n <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+        <span style="color:#66d9ef">return</span> False
 
-    <span class="n">sqrt_n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n</span><span class="p">)))</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">sqrt_n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
-    <span class="k">return</span> <span class="bp">True</span>
+    sqrt_n <span style="color:#f92672">=</span> int(math<span style="color:#f92672">.</span>floor(math<span style="color:#f92672">.</span>sqrt(n)))
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>, sqrt_n <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>):
+        <span style="color:#66d9ef">if</span> n <span style="color:#f92672">%</span> i <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+            <span style="color:#66d9ef">return</span> False
+    <span style="color:#66d9ef">return</span> True
 
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ProcessPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">number</span><span class="p">,</span> <span class="n">prime</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">PRIMES</span><span class="p">,</span> <span class="n">executor</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="n">is_prime</span><span class="p">,</span> <span class="n">PRIMES</span><span class="p">)):</span>
-            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1"> is prime: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="n">prime</span><span class="p">))</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>():
+    <span style="color:#66d9ef">with</span> concurrent<span style="color:#f92672">.</span>futures<span style="color:#f92672">.</span>ProcessPoolExecutor() <span style="color:#66d9ef">as</span> executor:
+        <span style="color:#66d9ef">for</span> number, prime <span style="color:#f92672">in</span> zip(PRIMES, executor<span style="color:#f92672">.</span>map(is_prime, PRIMES)):
+            <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">%d</span><span style="color:#e6db74"> is prime: </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (number, prime))
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span></code></pre></div>
+<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
+    main()</code></pre></div>
 <h2 id="future-对象">Future 对象</h2>
 
 <p>Future 类封装了一个可调用对象的异步执行过程，Future 对象是通过<code>Executor.submit()</code>函数来创建的。</p>
@@ -515,6 +515,29 @@ Python 3.5中的改变：如果<code>max_workers</code>参数为None或者没有
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

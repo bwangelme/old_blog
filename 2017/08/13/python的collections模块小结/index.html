@@ -201,57 +201,45 @@
 <h4 id="elements">elements()</h4>
 
 <p><code>elements</code>方法用户迭代地展示<code>Counter</code>内的所有元素，按元素的计数重复该元素，如果该元素的计数小于1，那么Counter就会忽略该元素，不进行展示。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">In [<span style="color:#ae81ff">1</span>]: <span style="color:#f92672">from</span> collections <span style="color:#f92672">import</span> Counter
 
-<pre><code>In [1]: from collections import Counter
+In [<span style="color:#ae81ff">2</span>]: c <span style="color:#f92672">=</span> Counter({<span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;b&#39;</span>: <span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#39;c&#39;</span>: <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#39;d&#39;</span>: <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>})
 
-In [2]: c = Counter({'a': 1, 'b': 2, 'c': 0, 'd': -2})
+<span style="color:#75715e"># elements()函数返回的是一个可迭代对象</span>
+In [<span style="color:#ae81ff">3</span>]: c<span style="color:#f92672">.</span>elements()
+Out[<span style="color:#ae81ff">3</span>]: <span style="color:#f92672">&lt;</span>itertools<span style="color:#f92672">.</span>chain at <span style="color:#ae81ff">0x106063b70</span><span style="color:#f92672">&gt;</span>
 
-# elements()函数返回的是一个可迭代对象
-In [3]: c.elements()
-Out[3]: &lt;itertools.chain at 0x106063b70&gt;
-
-In [4]: list(c.elements())
-Out[4]: ['a', 'b', 'b']
-</code></pre>
-
+In [<span style="color:#ae81ff">4</span>]: list(c<span style="color:#f92672">.</span>elements())
+Out[<span style="color:#ae81ff">4</span>]: [<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span>]</code></pre></div>
 <h4 id="most-common-n">most_common([n])</h4>
 
 <p><code>most_common</code>函数返回<code>Counter</code>中次数最多的N个元素，如果N没有提供或者是<code>None</code>，那么就会返回所有元素。</p>
-
-<pre><code>&gt;&gt;&gt; from collections import Counter
-&gt;&gt;&gt; c = Counter({'a': 1, 'b': 2, 'c': 0, 'd': -2})
-&gt;&gt;&gt; c.most_common()
-[('b', 2), ('a', 1), ('c', 0), ('d', -2)]
-&gt;&gt;&gt; c.most_common(2)
-[('b', 2), ('a', 1)]
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#f92672">from</span> collections <span style="color:#f92672">import</span> Counter
+<span style="color:#f92672">&gt;&gt;&gt;</span> c <span style="color:#f92672">=</span> Counter({<span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;b&#39;</span>: <span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#39;c&#39;</span>: <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#39;d&#39;</span>: <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>})
+<span style="color:#f92672">&gt;&gt;&gt;</span> c<span style="color:#f92672">.</span>most_common()
+[(<span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#ae81ff">2</span>), (<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#ae81ff">1</span>), (<span style="color:#e6db74">&#39;c&#39;</span>, <span style="color:#ae81ff">0</span>), (<span style="color:#e6db74">&#39;d&#39;</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>)]
+<span style="color:#f92672">&gt;&gt;&gt;</span> c<span style="color:#f92672">.</span>most_common(<span style="color:#ae81ff">2</span>)
+[(<span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#ae81ff">2</span>), (<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#ae81ff">1</span>)]</code></pre></div>
 <h4 id="subtract-iterable-or-mapping">subtract([iterable-or-mapping])</h4>
 
 <p><code>substract</code>方法接收一个可迭代或者可映射的对象，针对每个元素减去参数中的元素对应的次数。</p>
-
-<pre><code>&gt;&gt;&gt; from collections import Counter
-&gt;&gt;&gt; c = Counter({'a': 1, 'b': 3, 'c': -2, 'd': 0})
-&gt;&gt;&gt; c.subtract(['a', 'a', 'b', 'b', 'b', 'b'])
-&gt;&gt;&gt; c
-Counter({'d': 0, 'a': -1, 'b': -1, 'c': -2})
-# 注意这里减去一个负的次数相当于加上一个正的次数
-&gt;&gt;&gt; c.subtract({'d': -3})
-&gt;&gt;&gt; c
-Counter({'d': 3, 'a': -1, 'b': -1, 'c': -2})
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#f92672">from</span> collections <span style="color:#f92672">import</span> Counter
+<span style="color:#f92672">&gt;&gt;&gt;</span> c <span style="color:#f92672">=</span> Counter({<span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;b&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;c&#39;</span>: <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#39;d&#39;</span>: <span style="color:#ae81ff">0</span>})
+<span style="color:#f92672">&gt;&gt;&gt;</span> c<span style="color:#f92672">.</span>subtract([<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span>])
+<span style="color:#f92672">&gt;&gt;&gt;</span> c
+Counter({<span style="color:#e6db74">&#39;d&#39;</span>: <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;b&#39;</span>: <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;c&#39;</span>: <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>})
+<span style="color:#75715e"># 注意这里减去一个负的次数相当于加上一个正的次数</span>
+<span style="color:#f92672">&gt;&gt;&gt;</span> c<span style="color:#f92672">.</span>subtract({<span style="color:#e6db74">&#39;d&#39;</span>: <span style="color:#f92672">-</span><span style="color:#ae81ff">3</span>})
+<span style="color:#f92672">&gt;&gt;&gt;</span> c
+Counter({<span style="color:#e6db74">&#39;d&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;b&#39;</span>: <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;c&#39;</span>: <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>})</code></pre></div>
 <h4 id="update-iterable-or-mapping">update([iterable-or-mapping])</h4>
 
 <p><code>update</code>方法的功能和<code>substract</code>方法的功能正好相反，它接收一个可迭代或者可映射的对象，针对每个元素加上参数中的元素对应的次数。</p>
-
-<pre><code>&gt;&gt;&gt; from collections import Counter
-&gt;&gt;&gt; c = Counter({'a': 1, 'b': 3, 'c': -2, 'd': 0})
-&gt;&gt;&gt; c.update({'a': 2, 'c': 5, 'd': 3})
-&gt;&gt;&gt; c
-Counter({'a': 3, 'b': 3, 'c': 3, 'd': 3})
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#f92672">from</span> collections <span style="color:#f92672">import</span> Counter
+<span style="color:#f92672">&gt;&gt;&gt;</span> c <span style="color:#f92672">=</span> Counter({<span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;b&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;c&#39;</span>: <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#39;d&#39;</span>: <span style="color:#ae81ff">0</span>})
+<span style="color:#f92672">&gt;&gt;&gt;</span> c<span style="color:#f92672">.</span>update({<span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#39;c&#39;</span>: <span style="color:#ae81ff">5</span>, <span style="color:#e6db74">&#39;d&#39;</span>: <span style="color:#ae81ff">3</span>})
+<span style="color:#f92672">&gt;&gt;&gt;</span> c
+Counter({<span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;b&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;c&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;d&#39;</span>: <span style="color:#ae81ff">3</span>})</code></pre></div>
 <h3 id="counter的其他工作模式">Counter的其他工作模式</h3>
 
 <p>除了上面提到的方法外，<code>Counter</code>类还提供了一些其他的通用模式，让我们可以更方面地进行操作。</p>
@@ -261,94 +249,70 @@ Counter({'a': 3, 'b': 3, 'c': 3, 'd': 3})
 <ul>
 <li>统计所有元素的次数之和</li>
 </ul>
-
-<pre><code>&gt;&gt;&gt; c = Counter(a=1, b=-2, c=3, d=4)
-&gt;&gt;&gt; sum(c.values())
-6
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">&gt;&gt;&gt;</span> c <span style="color:#f92672">=</span> Counter(a<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, b<span style="color:#f92672">=-</span><span style="color:#ae81ff">2</span>, c<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, d<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>)
+<span style="color:#f92672">&gt;&gt;&gt;</span> sum(c<span style="color:#f92672">.</span>values())
+<span style="color:#ae81ff">6</span></code></pre></div>
 <ul>
 <li>清除所有元素的统计次数</li>
 </ul>
-
-<pre><code>&gt;&gt;&gt; c = Counter(a=1, b=-2, c=3, d=4)
-&gt;&gt;&gt; c.clear()
-&gt;&gt;&gt; c
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">&gt;&gt;&gt;</span> c <span style="color:#f92672">=</span> Counter(a<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, b<span style="color:#f92672">=-</span><span style="color:#ae81ff">2</span>, c<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, d<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>)
+<span style="color:#f92672">&gt;&gt;&gt;</span> c<span style="color:#f92672">.</span>clear()
+<span style="color:#f92672">&gt;&gt;&gt;</span> c
 Counter()
-&gt;&gt;&gt; c = Counter(a=1, b=-2, c=3, d=4)
-</code></pre>
-
+<span style="color:#f92672">&gt;&gt;&gt;</span> c <span style="color:#f92672">=</span> Counter(a<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, b<span style="color:#f92672">=-</span><span style="color:#ae81ff">2</span>, c<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, d<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>)</code></pre></div>
 <ul>
 <li>列出所有元素</li>
 </ul>
-
-<pre><code>&gt;&gt;&gt; c = Counter(a=1, b=-2, c=3, d=4, f=0)
-&gt;&gt;&gt; list(c)
-['a', 'b', 'c', 'd', 'f']
-&gt;&gt;&gt; set(c)  # 这里将所有元素以集合的方式来展现
-{'b', 'c', 'a', 'd', 'f'}
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">&gt;&gt;&gt;</span> c <span style="color:#f92672">=</span> Counter(a<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, b<span style="color:#f92672">=-</span><span style="color:#ae81ff">2</span>, c<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, d<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>, f<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+<span style="color:#f92672">&gt;&gt;&gt;</span> list(c)
+[<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#e6db74">&#39;c&#39;</span>, <span style="color:#e6db74">&#39;d&#39;</span>, <span style="color:#e6db74">&#39;f&#39;</span>]
+<span style="color:#f92672">&gt;&gt;&gt;</span> set(c)  <span style="color:#75715e"># 这里将所有元素以集合的方式来展现</span>
+{<span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#e6db74">&#39;c&#39;</span>, <span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#e6db74">&#39;d&#39;</span>, <span style="color:#e6db74">&#39;f&#39;</span>}</code></pre></div>
 <ul>
 <li>获取Counter中(元素，次数)的元祖</li>
 </ul>
-
-<pre><code>&gt;&gt;&gt; c = Counter(a=1, b=-2, c=3, d=4, f=0)
-&gt;&gt;&gt; dict(c)  # 将Counter转换成一个字典
-{'a': 1, 'b': -2, 'c': 3, 'd': 4, 'f': 0}
-&gt;&gt;&gt; c.items()  # 获取Counter中(元素，次数)的元祖
-dict_items([('a', 1), ('b', -2), ('c', 3), ('d', 4), ('f', 0)])
-# 将一个(元素，次数)元祖列表转换成Counter
-&gt;&gt;&gt; Counter(dict([('a', 1), ('b', 2), ('c', 3)]))
-Counter({'c': 3, 'b': 2, 'a': 1})
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">&gt;&gt;&gt;</span> c <span style="color:#f92672">=</span> Counter(a<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, b<span style="color:#f92672">=-</span><span style="color:#ae81ff">2</span>, c<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, d<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>, f<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+<span style="color:#f92672">&gt;&gt;&gt;</span> dict(c)  <span style="color:#75715e"># 将Counter转换成一个字典</span>
+{<span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;b&#39;</span>: <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#39;c&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;d&#39;</span>: <span style="color:#ae81ff">4</span>, <span style="color:#e6db74">&#39;f&#39;</span>: <span style="color:#ae81ff">0</span>}
+<span style="color:#f92672">&gt;&gt;&gt;</span> c<span style="color:#f92672">.</span>items()  <span style="color:#75715e"># 获取Counter中(元素，次数)的元祖</span>
+dict_items([(<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#ae81ff">1</span>), (<span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>), (<span style="color:#e6db74">&#39;c&#39;</span>, <span style="color:#ae81ff">3</span>), (<span style="color:#e6db74">&#39;d&#39;</span>, <span style="color:#ae81ff">4</span>), (<span style="color:#e6db74">&#39;f&#39;</span>, <span style="color:#ae81ff">0</span>)])
+<span style="color:#75715e"># 将一个(元素，次数)元祖列表转换成Counter</span>
+<span style="color:#f92672">&gt;&gt;&gt;</span> Counter(dict([(<span style="color:#e6db74">&#39;a&#39;</span>, <span style="color:#ae81ff">1</span>), (<span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#ae81ff">2</span>), (<span style="color:#e6db74">&#39;c&#39;</span>, <span style="color:#ae81ff">3</span>)]))
+Counter({<span style="color:#e6db74">&#39;c&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;b&#39;</span>: <span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#ae81ff">1</span>})</code></pre></div>
 <ul>
 <li>获取N个次数最少的元素</li>
 </ul>
-
-<pre><code>&gt;&gt;&gt; c = Counter(a=1, b=-2, c=3, d=4, f=0)
-&gt;&gt;&gt; c.most_common()[:2:-1]
-[('b', -2), ('f', 0)]
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">&gt;&gt;&gt;</span> c <span style="color:#f92672">=</span> Counter(a<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, b<span style="color:#f92672">=-</span><span style="color:#ae81ff">2</span>, c<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, d<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>, f<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+<span style="color:#f92672">&gt;&gt;&gt;</span> c<span style="color:#f92672">.</span>most_common()[:<span style="color:#ae81ff">2</span>:<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+[(<span style="color:#e6db74">&#39;b&#39;</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>), (<span style="color:#e6db74">&#39;f&#39;</span>, <span style="color:#ae81ff">0</span>)]</code></pre></div>
 <ul>
 <li>删除掉所有次数小于等于0的元素</li>
 </ul>
-
-<pre><code>&gt;&gt;&gt; c = Counter(a=1, b=-2, c=3, d=4, f=0)
-&gt;&gt;&gt; +c
-Counter({'d': 4, 'c': 3, 'a': 1})
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">&gt;&gt;&gt;</span> c <span style="color:#f92672">=</span> Counter(a<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, b<span style="color:#f92672">=-</span><span style="color:#ae81ff">2</span>, c<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, d<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>, f<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+<span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#f92672">+</span>c
+Counter({<span style="color:#e6db74">&#39;d&#39;</span>: <span style="color:#ae81ff">4</span>, <span style="color:#e6db74">&#39;c&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#ae81ff">1</span>})</code></pre></div>
 <h3 id="counter上的数学运算">Counter上的数学运算</h3>
 
 <p>Counter之间还能进行数学运算，<strong>在数学运算的结果中，次数小于等于0的元素将会被删除掉</strong>。</p>
-
-<pre><code>&gt;&gt;&gt; c = Counter(a=3, b=1)
-&gt;&gt;&gt; d = Counter(a=1, b=2)
-&gt;&gt;&gt; c + d  # 将元素的次数进行相加
-Counter({'a': 4, 'b': 3})
-&gt;&gt;&gt; c - d  # 将元素的次数进行相减
-Counter({'a': 2})
-&gt;&gt;&gt; f = Counter(a=3, b=2, c=1)
-&gt;&gt;&gt; c &amp; f  # 两个Counter的元素取交集，并且元素的次数取较小的那个
-Counter({'a': 3, 'b': 1})
-&gt;&gt;&gt; c | f  # 两个Counter的元素取并集，并且元素的次数取较大的那个
-Counter({'a': 3, 'b': 2, 'c': 1})
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">&gt;&gt;&gt;</span> c <span style="color:#f92672">=</span> Counter(a<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, b<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+<span style="color:#f92672">&gt;&gt;&gt;</span> d <span style="color:#f92672">=</span> Counter(a<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, b<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+<span style="color:#f92672">&gt;&gt;&gt;</span> c <span style="color:#f92672">+</span> d  <span style="color:#75715e"># 将元素的次数进行相加</span>
+Counter({<span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#ae81ff">4</span>, <span style="color:#e6db74">&#39;b&#39;</span>: <span style="color:#ae81ff">3</span>})
+<span style="color:#f92672">&gt;&gt;&gt;</span> c <span style="color:#f92672">-</span> d  <span style="color:#75715e"># 将元素的次数进行相减</span>
+Counter({<span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#ae81ff">2</span>})
+<span style="color:#f92672">&gt;&gt;&gt;</span> f <span style="color:#f92672">=</span> Counter(a<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, b<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, c<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+<span style="color:#f92672">&gt;&gt;&gt;</span> c <span style="color:#f92672">&amp;</span> f  <span style="color:#75715e"># 两个Counter的元素取交集，并且元素的次数取较小的那个</span>
+Counter({<span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;b&#39;</span>: <span style="color:#ae81ff">1</span>})
+<span style="color:#f92672">&gt;&gt;&gt;</span> c <span style="color:#f92672">|</span> f  <span style="color:#75715e"># 两个Counter的元素取并集，并且元素的次数取较大的那个</span>
+Counter({<span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;b&#39;</span>: <span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#39;c&#39;</span>: <span style="color:#ae81ff">1</span>})</code></pre></div>
 <ul>
 <li>单目运算符<code>+</code>或者<code>-</code></li>
 </ul>
-
-<pre><code>&gt;&gt;&gt; c = Counter(a=2, b=-4)
-&gt;&gt;&gt; +c
-Counter({'a': 2})
-&gt;&gt;&gt; -c
-Counter({'b': 4})
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">&gt;&gt;&gt;</span> c <span style="color:#f92672">=</span> Counter(a<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, b<span style="color:#f92672">=-</span><span style="color:#ae81ff">4</span>)
+<span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#f92672">+</span>c
+Counter({<span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#ae81ff">2</span>})
+<span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#f92672">-</span>c
+Counter({<span style="color:#e6db74">&#39;b&#39;</span>: <span style="color:#ae81ff">4</span>})</code></pre></div>
 <h3 id="注意事项">注意事项</h3>
 
 <ul>
@@ -403,6 +367,29 @@ Counter({'b': 4})
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

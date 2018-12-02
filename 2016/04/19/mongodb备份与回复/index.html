@@ -196,33 +196,33 @@
 <h1 id="json-or-csv格式导入导出">JSON or CSV格式导入导出</h1>
 
 <p>MongoDB导出</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mongoexport -d xff -c stu -f _id,name -q <span class="s1">&#39;{_id: {$lte:1000}}&#39;</span> -o ./xff.stu.json
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">mongoexport -d xff -c stu -f _id,name -q <span style="color:#e6db74">&#39;{_id: {$lte:1000}}&#39;</span> -o ./xff.stu.json
 
 -d 数据库
 -c 集合名字
 -f 列名
 -q 查询语句
---csv 输出csv格式 <span class="c1">#建议用--type=csv替代</span></code></pre></div>
+--csv 输出csv格式 <span style="color:#75715e">#建议用--type=csv替代</span></code></pre></div>
 <p>MongoDB导入</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mongoimport -d xff -c stu2 --file ./xff.stu.json
-<span class="c1"># 导入JSON格式</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">mongoimport -d xff -c stu2 --file ./xff.stu.json
+<span style="color:#75715e"># 导入JSON格式</span>
 
-mongoimport -d xff -c stu3 --type<span class="o">=</span>csv --headerline --file ./xff.stutest.csv
-<span class="c1"># 导入CSV格式</span>
+mongoimport -d xff -c stu3 --type<span style="color:#f92672">=</span>csv --headerline --file ./xff.stutest.csv
+<span style="color:#75715e"># 导入CSV格式</span>
 
 -d 数据库
 -c 集合名字</code></pre></div>
 <h1 id="二进制的导入导出">二进制的导入导出</h1>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mongodump -d xff -o dump
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">mongodump -d xff -o dump
 
 -d 代表数据库
--o 代表备份文件的位置</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mongorestore --dir<span class="o">=</span>dump
+-o 代表备份文件的位置</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">mongorestore --dir<span style="color:#f92672">=</span>dump
 
-<span class="c1"># 恢复dump文件夹中的所有数据库</span>
+<span style="color:#75715e"># 恢复dump文件夹中的所有数据库</span>
 
-mongorestore -d xff2 --dir<span class="o">=</span>dump/xff
+mongorestore -d xff2 --dir<span style="color:#f92672">=</span>dump/xff
 
-<span class="c1"># 恢复备份的xff数据库到xff2数据库中</span></code></pre></div></article>
+<span style="color:#75715e"># 恢复备份的xff数据库到xff2数据库中</span></code></pre></div></article>
     <footer class="post-footer">
       
       <ul class="post-tags">
@@ -262,6 +262,29 @@ mongorestore -d xff2 --dir<span class="o">=</span>dump/xff
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

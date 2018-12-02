@@ -202,53 +202,53 @@
 </ol>
 
 <p>##2. 创建视图</p>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="p">[</span><span class="n">ALGORITHM</span> <span class="o">=</span> <span class="err">{</span><span class="n">UNDEFINED</span><span class="o">|</span><span class="n">MERGE</span><span class="o">|</span><span class="n">TEMPTABLE</span><span class="err">}</span><span class="p">]</span>
-  <span class="k">view</span> <span class="err">视图名</span><span class="p">[(</span><span class="err">字段</span><span class="mi">1</span><span class="err">，字段</span><span class="mi">2</span><span class="p">)]</span>
-  <span class="k">as</span> <span class="k">select</span> <span class="err">语句</span>
-  <span class="p">[</span><span class="k">with</span> <span class="p">[</span><span class="k">CASCADED</span><span class="o">|</span><span class="k">LOCAL</span><span class="o">|</span><span class="p">]</span> <span class="k">CHECK</span> <span class="k">OPTION</span><span class="p">]</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">CREATE</span> [ALGORITHM <span style="color:#f92672">=</span> <span style="color:#960050;background-color:#1e0010">{</span>UNDEFINED<span style="color:#f92672">|</span>MERGE<span style="color:#f92672">|</span>TEMPTABLE<span style="color:#960050;background-color:#1e0010">}</span>]
+  <span style="color:#66d9ef">view</span> <span style="color:#960050;background-color:#1e0010">视图名</span>[(<span style="color:#960050;background-color:#1e0010">字段</span><span style="color:#ae81ff">1</span><span style="color:#960050;background-color:#1e0010">，字段</span><span style="color:#ae81ff">2</span>)]
+  <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">select</span> <span style="color:#960050;background-color:#1e0010">语句</span>
+  [<span style="color:#66d9ef">with</span> [<span style="color:#66d9ef">CASCADED</span><span style="color:#f92672">|</span><span style="color:#66d9ef">LOCAL</span><span style="color:#f92672">|</span>] <span style="color:#66d9ef">CHECK</span> <span style="color:#66d9ef">OPTION</span>]
 
-  <span class="c1">--CHECK OPTION约束虚表的操作</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">view</span> <span class="err">视图名</span>
-  <span class="k">as</span> <span class="k">select</span> <span class="err">语句</span></code></pre></div>
+  <span style="color:#75715e">--CHECK OPTION约束虚表的操作</span></code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">view</span> <span style="color:#960050;background-color:#1e0010">视图名</span>
+  <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">select</span> <span style="color:#960050;background-color:#1e0010">语句</span></code></pre></div>
 <p>建议用一个单独的数据库来存放视图</p>
 
 <p>##3. 查看视图</p>
 
 <p>查看某个数据库中的视图或者表</p>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span> <span class="k">table</span> <span class="n">status</span> <span class="k">from</span> <span class="err">数据库名字\</span><span class="k">G</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">show</span> <span style="color:#66d9ef">table</span> status <span style="color:#66d9ef">from</span> <span style="color:#960050;background-color:#1e0010">数据库名字\</span><span style="color:#66d9ef">G</span>
 
-<span class="o">***************************</span> <span class="mi">1</span><span class="p">.</span> <span class="k">row</span> <span class="o">***************************</span>
-           <span class="n">Name</span><span class="p">:</span> <span class="n">view_user</span>
-         <span class="n">Engine</span><span class="p">:</span> <span class="k">NULL</span>
-        <span class="k">Version</span><span class="p">:</span> <span class="k">NULL</span>
-     <span class="n">Row_format</span><span class="p">:</span> <span class="k">NULL</span>
-           <span class="k">Rows</span><span class="p">:</span> <span class="k">NULL</span>
- <span class="n">Avg_row_length</span><span class="p">:</span> <span class="k">NULL</span>
-    <span class="n">Data_length</span><span class="p">:</span> <span class="k">NULL</span>
-<span class="n">Max_data_length</span><span class="p">:</span> <span class="k">NULL</span>
-   <span class="n">Index_length</span><span class="p">:</span> <span class="k">NULL</span>
-      <span class="n">Data_free</span><span class="p">:</span> <span class="k">NULL</span>
- <span class="n">Auto_increment</span><span class="p">:</span> <span class="k">NULL</span>
-    <span class="n">Create_time</span><span class="p">:</span> <span class="k">NULL</span>
-    <span class="n">Update_time</span><span class="p">:</span> <span class="k">NULL</span>
-     <span class="n">Check_time</span><span class="p">:</span> <span class="k">NULL</span>
-      <span class="k">Collation</span><span class="p">:</span> <span class="k">NULL</span>
-       <span class="n">Checksum</span><span class="p">:</span> <span class="k">NULL</span>
- <span class="n">Create_options</span><span class="p">:</span> <span class="k">NULL</span>
-        <span class="k">Comment</span><span class="p">:</span> <span class="k">VIEW</span>  <span class="c1">--这里表示是视图
-</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+<span style="color:#f92672">***************************</span> <span style="color:#ae81ff">1</span>. <span style="color:#66d9ef">row</span> <span style="color:#f92672">***************************</span>
+           Name: view_user
+         Engine: <span style="color:#66d9ef">NULL</span>
+        <span style="color:#66d9ef">Version</span>: <span style="color:#66d9ef">NULL</span>
+     Row_format: <span style="color:#66d9ef">NULL</span>
+           <span style="color:#66d9ef">Rows</span>: <span style="color:#66d9ef">NULL</span>
+ Avg_row_length: <span style="color:#66d9ef">NULL</span>
+    Data_length: <span style="color:#66d9ef">NULL</span>
+Max_data_length: <span style="color:#66d9ef">NULL</span>
+   Index_length: <span style="color:#66d9ef">NULL</span>
+      Data_free: <span style="color:#66d9ef">NULL</span>
+ Auto_increment: <span style="color:#66d9ef">NULL</span>
+    Create_time: <span style="color:#66d9ef">NULL</span>
+    Update_time: <span style="color:#66d9ef">NULL</span>
+     Check_time: <span style="color:#66d9ef">NULL</span>
+      <span style="color:#66d9ef">Collation</span>: <span style="color:#66d9ef">NULL</span>
+       Checksum: <span style="color:#66d9ef">NULL</span>
+ Create_options: <span style="color:#66d9ef">NULL</span>
+        <span style="color:#66d9ef">Comment</span>: <span style="color:#66d9ef">VIEW</span>  <span style="color:#75715e">--这里表示是视图
+</span><span style="color:#75715e"></span><span style="color:#ae81ff">1</span> <span style="color:#66d9ef">row</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">01</span> sec)</code></pre></div>
 <p>查看某一个具体视图</p>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span> <span class="k">table</span> <span class="n">status</span> <span class="k">from</span> <span class="k">view</span> <span class="k">like</span> <span class="s1">&#39;view_user&#39;</span><span class="err">\</span><span class="k">G</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">show</span> <span style="color:#66d9ef">table</span> status <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">view</span> <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#39;view_user&#39;</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#66d9ef">G</span></code></pre></div>
 <p>查看某个视图的具体信息</p>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span> <span class="k">create</span> <span class="k">view</span> <span class="n">view_user</span><span class="err">\</span><span class="k">G</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">show</span> <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">view</span> view_user<span style="color:#960050;background-color:#1e0010">\</span><span style="color:#66d9ef">G</span></code></pre></div>
 <p>##4. 修改视图</p>
 
 <p>###4.1 替换原有视图</p>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">or</span> <span class="k">replace</span> <span class="k">view</span> <span class="n">view_user</span> <span class="k">as</span> <span class="k">select</span>
-    <span class="o">-&gt;</span> <span class="k">Host</span><span class="p">,</span> <span class="k">User</span><span class="p">,</span> <span class="n">Password</span> <span class="k">from</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">or</span> <span style="color:#66d9ef">replace</span> <span style="color:#66d9ef">view</span> view_user <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">select</span>
+    <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Host</span>, <span style="color:#66d9ef">User</span>, Password <span style="color:#66d9ef">from</span> mysql.<span style="color:#66d9ef">user</span>;</code></pre></div>
 <p>###4.2 利用<code>alter</code>修改视图</p>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">alter</span> <span class="k">view</span> <span class="n">view_user</span> <span class="k">as</span> <span class="k">select</span> <span class="k">Host</span><span class="p">,</span> <span class="k">User</span> <span class="k">from</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">view</span> view_user <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">Host</span>, <span style="color:#66d9ef">User</span> <span style="color:#66d9ef">from</span> mysql.<span style="color:#66d9ef">user</span>;</code></pre></div>
 <p>##5. 删除视图</p>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DROP</span> <span class="k">VIEW</span> <span class="n">view_name</span><span class="p">;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">DROP</span> <span style="color:#66d9ef">VIEW</span> view_name;</code></pre></div>
 <p>##6. 通过视图操作基表</p>
 
 <p><code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>都可以</p>
@@ -293,6 +293,29 @@
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

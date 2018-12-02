@@ -227,49 +227,42 @@
 </table>
 
 <h2 id="2-唯一约束unique">2. 唯一约束UNIQUE</h2>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="o">#</span> <span class="err">创建命名的约束</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#f92672">#</span> <span style="color:#960050;background-color:#1e0010">创建命名的约束</span>
 
-<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">dep2</span><span class="p">(</span>
-    <span class="o">-&gt;</span> <span class="n">dept_id</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="o">-&gt;</span> <span class="n">dept_name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span>
-    <span class="o">-&gt;</span> <span class="k">comment</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
-    <span class="o">-&gt;</span> <span class="k">constraint</span> <span class="n">uk_dept_name</span> <span class="k">unique</span><span class="p">(</span><span class="n">dept_name</span><span class="p">)</span>
-    <span class="o">-&gt;</span> <span class="p">);</span></code></pre></div>
+mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> dep2(
+    <span style="color:#f92672">-&gt;</span> dept_id int,
+    <span style="color:#f92672">-&gt;</span> dept_name varchar(<span style="color:#ae81ff">30</span>),
+    <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">comment</span> varchar(<span style="color:#ae81ff">50</span>),
+    <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">constraint</span> uk_dept_name <span style="color:#66d9ef">unique</span>(dept_name)
+    <span style="color:#f92672">-&gt;</span> );</code></pre></div>
 <h2 id="3-设置主键约束">3. 设置主键约束</h2>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="o">#</span> <span class="err">创建命名的主键约束</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#f92672">#</span> <span style="color:#960050;background-color:#1e0010">创建命名的主键约束</span>
 
-<span class="k">create</span> <span class="k">table</span> <span class="n">dept6</span><span class="p">(</span>
-<span class="n">dept_id</span> <span class="nb">int</span><span class="p">,</span>
-<span class="n">dept_name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span>
-<span class="k">comment</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
-<span class="k">constraint</span> <span class="n">pk_id</span> <span class="k">primary</span> <span class="k">key</span><span class="p">(</span><span class="n">dept_id</span><span class="p">)</span>
-<span class="p">);</span></code></pre></div>
+<span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> dept6(
+dept_id int,
+dept_name varchar(<span style="color:#ae81ff">30</span>),
+<span style="color:#66d9ef">comment</span> varchar(<span style="color:#ae81ff">50</span>),
+<span style="color:#66d9ef">constraint</span> pk_id <span style="color:#66d9ef">primary</span> <span style="color:#66d9ef">key</span>(dept_id)
+);</code></pre></div>
 <p>MySQL通过<code>show create table dept6</code>无法看到主键约束名字，正在寻找解决办法。</p>
 
 <h2 id="4-外键约束">4. 外键约束</h2>
 
 <p>创建父表</p>
-
-<pre><code>CREATE TABLE `employees` (
-  `name` varchar(20) NOT NULL,
-  `mail` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#f92672">`</span>employees<span style="color:#f92672">`</span> (
+  <span style="color:#f92672">`</span>name<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">20</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>mail<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">20</span>) <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#f92672">`</span>name<span style="color:#f92672">`</span>)
+) ENGINE<span style="color:#f92672">=</span>InnoDB <span style="color:#66d9ef">DEFAULT</span> CHARSET<span style="color:#f92672">=</span>latin1</code></pre></div>
 <p>创建子表</p>
-
-<pre><code>CREATE TABLE `payroll` (
-  `id` int(5) NOT NULL,
-  `name` varchar(20) NOT NULL,
-  `payroll` float(10,2) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_name` (`name`),
-  CONSTRAINT `fk_name` FOREIGN KEY (`name`) REFERENCES `employees` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1
-
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#f92672">`</span>payroll<span style="color:#f92672">`</span> (
+  <span style="color:#f92672">`</span>id<span style="color:#f92672">`</span> int(<span style="color:#ae81ff">5</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>name<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">20</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>payroll<span style="color:#f92672">`</span> float(<span style="color:#ae81ff">10</span>,<span style="color:#ae81ff">2</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#f92672">`</span>id<span style="color:#f92672">`</span>),
+  <span style="color:#66d9ef">KEY</span> <span style="color:#f92672">`</span>fk_name<span style="color:#f92672">`</span> (<span style="color:#f92672">`</span>name<span style="color:#f92672">`</span>),
+  <span style="color:#66d9ef">CONSTRAINT</span> <span style="color:#f92672">`</span>fk_name<span style="color:#f92672">`</span> <span style="color:#66d9ef">FOREIGN</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#f92672">`</span>name<span style="color:#f92672">`</span>) <span style="color:#66d9ef">REFERENCES</span> <span style="color:#f92672">`</span>employees<span style="color:#f92672">`</span> (<span style="color:#f92672">`</span>name<span style="color:#f92672">`</span>) <span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">DELETE</span> <span style="color:#66d9ef">CASCADE</span> <span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">UPDATE</span> <span style="color:#66d9ef">CASCADE</span>
+) ENGINE<span style="color:#f92672">=</span>InnoDB <span style="color:#66d9ef">DEFAULT</span> CHARSET<span style="color:#f92672">=</span>latin1</code></pre></div>
 <p><strong>外键和主键的类型必须相同，varchar的长度也必须相同</strong></p>
 
 <p>同步删除:<code>on delete cascade</code>
@@ -315,6 +308,29 @@
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

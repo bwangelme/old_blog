@@ -228,18 +228,18 @@
 <li><code>char</code>会占用定长字节的空间来进行存储,检索时会自动删除尾部空格</li>
 <li><code>varchar</code>会灵活地根据存储的值的长度来分配存储空间,检索时不会删除尾部空格。</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">table</span> <span class="n">c_v</span><span class="p">(</span>
-    <span class="n">v</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
-    <span class="k">c</span> <span class="nb">char</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-<span class="p">);</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> c_v(
+    v varchar(<span style="color:#ae81ff">4</span>),
+    <span style="color:#66d9ef">c</span> char(<span style="color:#ae81ff">4</span>)
+);
 
-<span class="k">insert</span> <span class="k">into</span> <span class="n">c_v</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;ab  &#39;</span><span class="p">,</span> <span class="s1">&#39;ab  &#39;</span><span class="p">)</span>
+<span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> c_v <span style="color:#66d9ef">values</span>(<span style="color:#e6db74">&#39;ab  &#39;</span>, <span style="color:#e6db74">&#39;ab  &#39;</span>)
 
-<span class="k">select</span> <span class="k">length</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="k">length</span><span class="p">(</span><span class="k">c</span><span class="p">)</span> <span class="k">from</span> <span class="n">c_v</span><span class="p">;</span>
-<span class="cm">/* 结果会显示v和c字段长度的不同，char会自动忽略尾部的空格。*/</span>
+<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">length</span>(v), <span style="color:#66d9ef">length</span>(<span style="color:#66d9ef">c</span>) <span style="color:#66d9ef">from</span> c_v;
+<span style="color:#75715e">/* 结果会显示v和c字段长度的不同，char会自动忽略尾部的空格。*/</span>
 
-<span class="k">select</span> <span class="n">concat</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s1">&#39;xff&#39;</span><span class="p">),</span> <span class="n">concat</span><span class="p">(</span><span class="k">c</span><span class="p">,</span> <span class="s1">&#39;xff&#39;</span><span class="p">)</span> <span class="k">from</span> <span class="n">test10</span><span class="p">;</span>
-<span class="cm">/* concat是连接函数，从结果可以看到c后面没有空格。*/</span></code></pre></div>
+<span style="color:#66d9ef">select</span> concat(v, <span style="color:#e6db74">&#39;xff&#39;</span>), concat(<span style="color:#66d9ef">c</span>, <span style="color:#e6db74">&#39;xff&#39;</span>) <span style="color:#66d9ef">from</span> test10;
+<span style="color:#75715e">/* concat是连接函数，从结果可以看到c后面没有空格。*/</span></code></pre></div>
 <h2 id="2-text系列字符串类型">2. TEXT系列字符串类型</h2>
 
 <table>
@@ -319,13 +319,13 @@
 <p>集合类型SET 多选</p>
 
 <p>示例：</p>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">student3</span><span class="p">(</span>
-    <span class="o">-&gt;</span> <span class="n">name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
-    <span class="o">-&gt;</span> <span class="n">sex</span> <span class="n">enum</span><span class="p">(</span><span class="s1">&#39;male&#39;</span><span class="p">,</span> <span class="s1">&#39;female&#39;</span><span class="p">),</span>
-    <span class="o">-&gt;</span> <span class="n">hobby</span> <span class="k">set</span><span class="p">(</span><span class="s1">&#39;music&#39;</span><span class="p">,</span> <span class="s1">&#39;book&#39;</span><span class="p">,</span> <span class="s1">&#39;game&#39;</span><span class="p">,</span> <span class="s1">&#39;dance&#39;</span><span class="p">)</span>
-    <span class="o">-&gt;</span> <span class="p">);</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> student3(
+    <span style="color:#f92672">-&gt;</span> name varchar(<span style="color:#ae81ff">100</span>),
+    <span style="color:#f92672">-&gt;</span> sex enum(<span style="color:#e6db74">&#39;male&#39;</span>, <span style="color:#e6db74">&#39;female&#39;</span>),
+    <span style="color:#f92672">-&gt;</span> hobby <span style="color:#66d9ef">set</span>(<span style="color:#e6db74">&#39;music&#39;</span>, <span style="color:#e6db74">&#39;book&#39;</span>, <span style="color:#e6db74">&#39;game&#39;</span>, <span style="color:#e6db74">&#39;dance&#39;</span>)
+    <span style="color:#f92672">-&gt;</span> );
 
-<span class="k">insert</span> <span class="k">into</span> <span class="n">student3</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;xff&#39;</span><span class="p">,</span> <span class="s1">&#39;female&#39;</span><span class="p">,</span> <span class="s1">&#39;book,game&#39;</span><span class="p">);</span></code></pre></div>
+<span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> student3 <span style="color:#66d9ef">values</span>(<span style="color:#e6db74">&#39;xff&#39;</span>, <span style="color:#e6db74">&#39;female&#39;</span>, <span style="color:#e6db74">&#39;book,game&#39;</span>);</code></pre></div>
 <h2 id="6-建议">6. 建议</h2>
 
 <p><strong>为了优化存储，任何情况下均应该使用最精确的类型</strong></p></article>
@@ -368,6 +368,29 @@
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

@@ -186,11 +186,11 @@
 <p>外键用来保证参照完整性，MySQL 数据库的 MyISAM 存储引擎本身并不支持外键，对于外键的定义只是起一个注释的作用，而 InnoDB 存储引擎则完整支持外键约束。</p>
 
 <p>外键的定义如下：</p>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="p">[</span><span class="k">CONSTRAINT</span> <span class="p">[</span><span class="n">symbol</span><span class="p">]]</span> <span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="p">[</span><span class="n">index_name</span><span class="p">]</span> <span class="p">(</span><span class="n">index_col_name</span><span class="p">,...)</span>
-<span class="k">REFERENCES</span> <span class="n">tbl_name</span> <span class="p">(</span><span class="n">index_col_name</span><span class="p">,...)</span>
-  <span class="p">[</span><span class="k">MATCH</span> <span class="k">FULL</span> <span class="o">|</span> <span class="k">MATCH</span> <span class="k">PARTIAL</span> <span class="o">|</span> <span class="k">MATCH</span> <span class="k">SIMPLE</span><span class="p">]</span>
-  <span class="p">[</span><span class="k">ON</span> <span class="k">DELETE</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">CASCADE</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">DEFAULT</span><span class="p">]</span>
-  <span class="p">[</span><span class="k">ON</span> <span class="k">UPDATE</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">CASCADE</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">DEFAULT</span><span class="p">]</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">[<span style="color:#66d9ef">CONSTRAINT</span> [symbol]] <span style="color:#66d9ef">FOREIGN</span> <span style="color:#66d9ef">KEY</span> [index_name] (index_col_name,...)
+<span style="color:#66d9ef">REFERENCES</span> tbl_name (index_col_name,...)
+  [<span style="color:#66d9ef">MATCH</span> <span style="color:#66d9ef">FULL</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">MATCH</span> <span style="color:#66d9ef">PARTIAL</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">MATCH</span> <span style="color:#66d9ef">SIMPLE</span>]
+  [<span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">DELETE</span> <span style="color:#66d9ef">RESTRICT</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">CASCADE</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SET</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">NO</span> ACTION <span style="color:#f92672">|</span> <span style="color:#66d9ef">SET</span> <span style="color:#66d9ef">DEFAULT</span>]
+  [<span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">UPDATE</span> <span style="color:#66d9ef">RESTRICT</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">CASCADE</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">SET</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">NO</span> ACTION <span style="color:#f92672">|</span> <span style="color:#66d9ef">SET</span> <span style="color:#66d9ef">DEFAULT</span>]</code></pre></div>
 <h2 id="reference-option">REFERENCE OPTION</h2>
 
 <p>一般来说，将被引用的表称为父表，将引用的表称为子表。当我们创建外键约束时，可以使用<code>ON UPDATE</code>和<code>ON DELETE</code>定义当父表发生<code>UPDATE</code>或者<code>DELETE</code>时，对子表做的操作。</p>
@@ -212,12 +212,9 @@
 <h2 id="忽略外键检查">忽略外键检查</h2>
 
 <p>对于参照完整性约束，外键能够起到非常好的作用，但是对于数据库的导入操作，外键往往导致在外键检查上花费大量的时间，因此我们可以设定 MySQL 在导入外键时忽略外键检查的选项。</p>
-
-<pre><code>mysql&gt; set foreign_key_checks = 0;
-mysql&gt; LOAD DATA...
-mysql&gt; set foreign_key_checks = 1;
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">set</span> foreign_key_checks <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">LOAD</span> <span style="color:#66d9ef">DATA</span>...
+mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">set</span> foreign_key_checks <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;</code></pre></div>
 <h2 id="参考资料">参考资料</h2>
 
 <ol>
@@ -265,6 +262,29 @@ mysql&gt; set foreign_key_checks = 1;
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

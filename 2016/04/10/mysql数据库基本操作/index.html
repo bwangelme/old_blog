@@ -201,20 +201,13 @@
 <h2 id="系统数据库">系统数据库</h2>
 
 <p>performance_schema: 存放性能参数</p>
-
-<pre><code># 查看连接
-show processlist;
-
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#f92672">#</span> <span style="color:#960050;background-color:#1e0010">查看连接</span>
+<span style="color:#66d9ef">show</span> processlist;</code></pre></div>
 <p>information_schema: 系统中数据库的对象信息（类似于文件系统元数据）,没有存储在磁盘上</p>
 
 <p>mysql: 授权库，存储用户的授权信息</p>
-
-<pre><code>select user(); # 查看当前登录用户
-select database(); # 查看当前使用的数据库
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">user</span>(); <span style="color:#f92672">#</span> <span style="color:#960050;background-color:#1e0010">查看当前登录用户</span>
+<span style="color:#66d9ef">select</span> <span style="color:#66d9ef">database</span>(); <span style="color:#f92672">#</span> <span style="color:#960050;background-color:#1e0010">查看当前使用的数据库</span></code></pre></div>
 <p>test: 测试库，任何人都可以操作这个库</p>
 
 <h2 id="忘记mysql密码">忘记MySQL密码</h2>
@@ -226,14 +219,11 @@ skip-grant-table
 </code></pre>
 
 <p>service mysql restart</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">update</span> mysql.<span style="color:#66d9ef">user</span> <span style="color:#66d9ef">set</span> passwd<span style="color:#f92672">=</span>passwd(<span style="color:#e6db74">&#39;456&#39;</span>) <span style="color:#66d9ef">where</span> <span style="color:#66d9ef">user</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;root&#34;</span> <span style="color:#66d9ef">and</span> <span style="color:#66d9ef">host</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;localhost&#34;</span>
 
-<pre><code>update mysql.user set passwd=passwd('456') where user=&quot;root&quot; and host=&quot;localhost&quot;
+flush <span style="color:#66d9ef">privileges</span>;
 
-flush privileges;
-
-语句结尾\c会清除输入缓存
-</code></pre>
-
+;; <span style="color:#960050;background-color:#1e0010">语句结尾\</span>c会清除输入缓存</code></pre></div>
 <h2 id="创建数据库">创建数据库</h2>
 
 <h3 id="数据库命名名字">数据库命名名字</h3>
@@ -288,6 +278,29 @@ flush privileges;
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

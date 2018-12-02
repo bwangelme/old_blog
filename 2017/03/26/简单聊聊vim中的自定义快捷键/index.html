@@ -197,15 +197,15 @@
 <h3 id="map系列命令">map系列命令</h3>
 
 <p>这个命令的声明如下: <code>:map {lhs} {rhs}</code>。这个命令就是将<code>{lhs}</code>代表的按键映射成<code>{rhs}</code>所代表的按键。例如<code>map L $</code>就是将<code>$</code>键映射成<code>L</code>。此外需要注意的是<code>map</code>命令定义的快捷键是可以嵌套的，例如下面这样的命令:</p>
-<div class="highlight"><pre class="chroma"><code class="language-vim" data-lang="vim"><span class="nx">map</span> <span class="nx">L</span> $<span class="err">
-</span><span class="err"></span><span class="nx">map</span> <span class="nx">Y</span> <span class="nx">yL</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim"><span style="color:#a6e22e">map</span> <span style="color:#a6e22e">L</span> $<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">map</span> <span style="color:#a6e22e">Y</span> <span style="color:#a6e22e">yL</span></code></pre></div>
 <p>就是将<code>Y</code>按键映射成了<code>y$</code>按键。</p>
 
 <h3 id="noremap系列命令">noremap系列命令</h3>
 
 <p>这个命令的声明如下: <code>:no[remap]  {lhs} {rhs}</code>，顾名思义，就是不可以重新映射的命令。这个命令和<code>map</code>命令类似，不过它所定义的命令不可以被重新映射，例如下面的例子:</p>
-<div class="highlight"><pre class="chroma"><code class="language-vim" data-lang="vim"><span class="nx">map</span> <span class="nx">L</span> $<span class="err">
-</span><span class="err"></span><span class="nx">map</span> <span class="nx">Y</span> <span class="nx">yL</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim"><span style="color:#a6e22e">map</span> <span style="color:#a6e22e">L</span> $<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">map</span> <span style="color:#a6e22e">Y</span> <span style="color:#a6e22e">yL</span></code></pre></div>
 <p>此时我们映射的<code>Y</code>按键的效果就不会和<code>y$</code>按键的效果相同了。此命令的主要作用是为了防止按键重新定义时出现冲突，所以一般推荐使用此命令来映射快捷键。</p>
 
 <h3 id="unmap系列命令">unmap系列命令</h3>
@@ -263,8 +263,8 @@ it&rsquo;s just used here for this situation.</p>
 <p><del>搜索无疑是一个使用频率非常高的快捷键，但在原始的Vim中使用的却是<code>/</code>或者<code>?</code>，当要使用搜索功能的时候，我的右手要离开HomeRow(就是<strong>爱上对方过后就哭了</strong>那一行)，然后使用中指或者食指去按<code>/</code>，感觉虽然也可以用右手小拇指去按<code>/</code>，但实在是太费劲。</del></p>
 
 <p><del>所以我就把<code>/</code>映射成了<code>&lt;Tab&gt;</code>，<code>&lt;Tab&gt;</code>键在普通模式下基本用不到，同时左手小拇指又非常容易按到，感觉一下子方便了许多。映射命令如下：</del></p>
-<div class="highlight"><pre class="chroma"><code class="language-vim" data-lang="vim"><span class="c">&#34; 映射/为&lt;Tab&gt;</span><span class="err">
-</span><span class="err"></span><span class="nx">noremap</span> <span class="p">&lt;</span><span class="nx">Tab</span><span class="p">&gt;</span> /</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim"><span style="color:#75715e">&#34; 映射/为&lt;Tab&gt;</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">noremap</span> &lt;<span style="color:#a6e22e">Tab</span>&gt; /</code></pre></div>
 <p><del>大家可以看到，我这里使用的是<code>noremap</code>映射的(防止以后再来映射和<code>&lt;Tab&gt;</code>键相关的组合键时出现错误)，同时，这个命令生效的模式是<code>Normal</code>，<code>Visual</code>，<code>Select</code>，<code>Operator-pending</code>。这样我不仅可以在普通模式下搜索，也可以在选择文本(Visual)，删除文本(通过<code>d</code>命令)时进行搜索。</del></p>
 
 <p>后来我才发现，<code>&lt;Tab&gt;</code>和<code>&lt;C-i&gt;</code>的keycode是一样的，<a href="http://stackoverflow.com/questions/14641942/how-to-unmap-tab-and-do-not-make-ctrl-i-invalid-in-vim">无法分别映射</a>，所以将<code>&lt;Tab&gt;</code>映射为搜索按键会影响到<code>&lt;C-i&gt;</code>的功能，所以还是先删除掉吧。</p>
@@ -272,8 +272,8 @@ it&rsquo;s just used here for this situation.</p>
 <h3 id="快速定位当前文件">快速定位当前文件</h3>
 
 <p>这条映射是我在<a href="https://book.douban.com/subject/25869486/">《VIM 实用技巧》</a>中看到的，感觉很好用，特意来分享给大家。此映射命令如下：</p>
-<div class="highlight"><pre class="chroma"><code class="language-vim" data-lang="vim"><span class="c">&#34; 将%:h映射为%%，%:h的功能是显示当前缓冲区文件的相对路径</span><span class="err">
-</span><span class="err"></span><span class="nx">cnoremap</span> <span class="p">&lt;</span><span class="nx">expr</span><span class="p">&gt;</span> %% <span class="nx">getcmdtype</span><span class="p">()</span> <span class="p">==</span> <span class="s1">&#39;:&#39;</span> ? <span class="nx">expand</span><span class="p">(</span><span class="s1">&#39;%:h&#39;</span><span class="p">)</span>.<span class="s1">&#39;/&#39;</span> <span class="p">:</span> <span class="s1">&#39;%%&#39;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim"><span style="color:#75715e">&#34; 将%:h映射为%%，%:h的功能是显示当前缓冲区文件的相对路径</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">cnoremap</span> &lt;<span style="color:#a6e22e">expr</span>&gt; %% <span style="color:#a6e22e">getcmdtype</span>() == <span style="color:#e6db74">&#39;:&#39;</span> ? <span style="color:#a6e22e">expand</span>(<span style="color:#e6db74">&#39;%:h&#39;</span>).<span style="color:#e6db74">&#39;/&#39;</span> : <span style="color:#e6db74">&#39;%%&#39;</span></code></pre></div>
 <p>这条命令比较复杂，首先<code>cnoremap</code>表示在命令行模式下进行映射，<code>&lt;expr&gt;</code>表示将映射命令的右边的参数当做一个表达式来对待(详见: <code>:help :map-&lt;expr&gt;</code>)。</p>
 
 <p><code>%%</code>就是我们定义的快捷键，<code>getcmdtype() == ':' ? expand('%:h').'/' : '%%'</code>就是我们要执行的表达式，此命令的含义就是每当我们在命令行模式下输入<code>%%</code>，就会得到表达式<code>getcmdtype() == ':' ? expand('%:h').'/' : '%%'</code>运算的结果。</p>
@@ -333,6 +333,29 @@ it&rsquo;s just used here for this situation.</p>
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

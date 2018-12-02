@@ -206,48 +206,48 @@
 <h2 id="启动过程">启动过程</h2>
 
 <h3 id="启动两台shard实例">启动两台shard实例</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mongod --dbpath /home/m17/ --logpath /home/mlog/m17.log --fork --port <span class="m">27017</span> --smallfiles
-mongod --dbpath /home/m18/ --logpath /home/mlog/m18.log --fork --port <span class="m">27018</span> --smallfiles</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">mongod --dbpath /home/m17/ --logpath /home/mlog/m17.log --fork --port <span style="color:#ae81ff">27017</span> --smallfiles
+mongod --dbpath /home/m18/ --logpath /home/mlog/m18.log --fork --port <span style="color:#ae81ff">27018</span> --smallfiles</code></pre></div>
 <h3 id="启动config-server服务器">启动Config Server服务器</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mongod --dbpath /home/m20/ --logpath /home/mlog/m20.log --fork --port <span class="m">27020</span> --configsvr</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">mongod --dbpath /home/m20/ --logpath /home/mlog/m20.log --fork --port <span style="color:#ae81ff">27020</span> --configsvr</code></pre></div>
 <h3 id="启动mongos服务器">启动MongoS服务器</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mongos --logpath /home/mlog/m30.log --port <span class="m">30000</span> --configdb <span class="m">192</span>.168.21.130:27020 --fork</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">mongos --logpath /home/mlog/m30.log --port <span style="color:#ae81ff">30000</span> --configdb <span style="color:#ae81ff">192</span>.168.21.130:27020 --fork</code></pre></div>
 <h3 id="为config-server添加分片节点">为COnfig Server添加分片节点</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">root@vv2x:/home/michael# mongo --port <span class="m">30000</span>
-MongoDB shell version: <span class="m">3</span>.2.0
-connecting to: <span class="m">127</span>.0.0.1:30000/test
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">root@vv2x:/home/michael# mongo --port <span style="color:#ae81ff">30000</span>
+MongoDB shell version: <span style="color:#ae81ff">3</span>.2.0
+connecting to: <span style="color:#ae81ff">127</span>.0.0.1:30000/test
 Welcome to the MongoDB shell.
-mongos&gt; sh.addShard<span class="o">(</span><span class="s1">&#39;192.168.21.130:27017&#39;</span><span class="o">)</span><span class="p">;</span>
-<span class="o">{</span> <span class="s2">&#34;shardAdded&#34;</span> : <span class="s2">&#34;shard0000&#34;</span>, <span class="s2">&#34;ok&#34;</span> : <span class="m">1</span> <span class="o">}</span>
-mongos&gt; sh.addShard<span class="o">(</span><span class="s1">&#39;192.168.21.130:27018&#39;</span><span class="o">)</span><span class="p">;</span>
-<span class="o">{</span> <span class="s2">&#34;shardAdded&#34;</span> : <span class="s2">&#34;shard0001&#34;</span>, <span class="s2">&#34;ok&#34;</span> : <span class="m">1</span> <span class="o">}</span>
+mongos&gt; sh.addShard<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;192.168.21.130:27017&#39;</span><span style="color:#f92672">)</span>;
+<span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;shardAdded&#34;</span> : <span style="color:#e6db74">&#34;shard0000&#34;</span>, <span style="color:#e6db74">&#34;ok&#34;</span> : <span style="color:#ae81ff">1</span> <span style="color:#f92672">}</span>
+mongos&gt; sh.addShard<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;192.168.21.130:27018&#39;</span><span style="color:#f92672">)</span>;
+<span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;shardAdded&#34;</span> : <span style="color:#e6db74">&#34;shard0001&#34;</span>, <span style="color:#e6db74">&#34;ok&#34;</span> : <span style="color:#ae81ff">1</span> <span style="color:#f92672">}</span>
 mongos&gt; sh.sta
-mongos&gt; sh.status<span class="o">()</span><span class="p">;</span>
+mongos&gt; sh.status<span style="color:#f92672">()</span>;
 --- Sharding Status ---
-  sharding version: <span class="o">{</span>
-    <span class="s2">&#34;_id&#34;</span> : <span class="m">1</span>,
-    <span class="s2">&#34;minCompatibleVersion&#34;</span> : <span class="m">5</span>,
-    <span class="s2">&#34;currentVersion&#34;</span> : <span class="m">6</span>,
-    <span class="s2">&#34;clusterId&#34;</span> : ObjectId<span class="o">(</span><span class="s2">&#34;57198ba481bf26385e2a2bc1&#34;</span><span class="o">)</span>
-<span class="o">}</span>
+  sharding version: <span style="color:#f92672">{</span>
+    <span style="color:#e6db74">&#34;_id&#34;</span> : <span style="color:#ae81ff">1</span>,
+    <span style="color:#e6db74">&#34;minCompatibleVersion&#34;</span> : <span style="color:#ae81ff">5</span>,
+    <span style="color:#e6db74">&#34;currentVersion&#34;</span> : <span style="color:#ae81ff">6</span>,
+    <span style="color:#e6db74">&#34;clusterId&#34;</span> : ObjectId<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;57198ba481bf26385e2a2bc1&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#f92672">}</span>
   shards:
-    <span class="o">{</span>  <span class="s2">&#34;_id&#34;</span> : <span class="s2">&#34;shard0000&#34;</span>,  <span class="s2">&#34;host&#34;</span> : <span class="s2">&#34;192.168.21.130:27017&#34;</span> <span class="o">}</span>
-    <span class="o">{</span>  <span class="s2">&#34;_id&#34;</span> : <span class="s2">&#34;shard0001&#34;</span>,  <span class="s2">&#34;host&#34;</span> : <span class="s2">&#34;192.168.21.130:27018&#34;</span> <span class="o">}</span>
+    <span style="color:#f92672">{</span>  <span style="color:#e6db74">&#34;_id&#34;</span> : <span style="color:#e6db74">&#34;shard0000&#34;</span>,  <span style="color:#e6db74">&#34;host&#34;</span> : <span style="color:#e6db74">&#34;192.168.21.130:27017&#34;</span> <span style="color:#f92672">}</span>
+    <span style="color:#f92672">{</span>  <span style="color:#e6db74">&#34;_id&#34;</span> : <span style="color:#e6db74">&#34;shard0001&#34;</span>,  <span style="color:#e6db74">&#34;host&#34;</span> : <span style="color:#e6db74">&#34;192.168.21.130:27018&#34;</span> <span style="color:#f92672">}</span>
   active mongoses:
-    <span class="s2">&#34;3.2.0&#34;</span> : <span class="m">1</span>
+    <span style="color:#e6db74">&#34;3.2.0&#34;</span> : <span style="color:#ae81ff">1</span>
   balancer:
     Currently enabled:  yes
     Currently running:  no
-    Failed balancer rounds in last <span class="m">5</span> attempts:  <span class="m">0</span>
-    Migration Results <span class="k">for</span> the last <span class="m">24</span> hours:
+    Failed balancer rounds in last <span style="color:#ae81ff">5</span> attempts:  <span style="color:#ae81ff">0</span>
+    Migration Results <span style="color:#66d9ef">for</span> the last <span style="color:#ae81ff">24</span> hours:
         No recent migrations
   databases:</code></pre></div>
 <h3 id="为config-server设置分片规则">为Config Server设置分片规则</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh">mongos&gt; sh.enableSharding<span class="o">(</span><span class="s1">&#39;shop&#39;</span><span class="o">)</span><span class="p">;</span> <span class="c1">#设置某个数据库开启分片</span>
-<span class="o">{</span> <span class="s2">&#34;ok&#34;</span> : <span class="m">1</span> <span class="o">}</span>
-mongos&gt; sh.shardCollection<span class="o">(</span><span class="s1">&#39;shop.goods&#39;</span>, <span class="o">{</span>goods_id: <span class="m">1</span><span class="o">})</span><span class="p">;</span>
-<span class="c1"># 设置某个collection的分片规则，依据goods_id分片, goods_id为片键</span>
-<span class="o">{</span> <span class="s2">&#34;collectionsharded&#34;</span> : <span class="s2">&#34;shop.goods&#34;</span>, <span class="s2">&#34;ok&#34;</span> : <span class="m">1</span> <span class="o">}</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">mongos&gt; sh.enableSharding<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;shop&#39;</span><span style="color:#f92672">)</span>; <span style="color:#75715e">#设置某个数据库开启分片</span>
+<span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;ok&#34;</span> : <span style="color:#ae81ff">1</span> <span style="color:#f92672">}</span>
+mongos&gt; sh.shardCollection<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;shop.goods&#39;</span>, <span style="color:#f92672">{</span>goods_id: <span style="color:#ae81ff">1</span><span style="color:#f92672">})</span>;
+<span style="color:#75715e"># 设置某个collection的分片规则，依据goods_id分片, goods_id为片键</span>
+<span style="color:#f92672">{</span> <span style="color:#e6db74">&#34;collectionsharded&#34;</span> : <span style="color:#e6db74">&#34;shop.goods&#34;</span>, <span style="color:#e6db74">&#34;ok&#34;</span> : <span style="color:#ae81ff">1</span> <span style="color:#f92672">}</span></code></pre></div>
 <h2 id="mongodb-chunk规则">MongoDB chunk规则</h2>
 
 <ul>
@@ -257,9 +257,9 @@ mongos&gt; sh.shardCollection<span class="o">(</span><span class="s1">&#39;shop.
 </ul>
 
 <p>更改<code>ChunkSize</code></p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 登陆到MongoS服务器</span>
-use config<span class="p">;</span>
-db.settings.save<span class="o">({</span>_id: <span class="s1">&#39;chunksize&#39;</span>, value: <span class="m">1</span><span class="o">})</span><span class="p">;</span> <span class="c1"># 单位为M</span></code></pre></div></article>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 登陆到MongoS服务器</span>
+use config;
+db.settings.save<span style="color:#f92672">({</span>_id: <span style="color:#e6db74">&#39;chunksize&#39;</span>, value: <span style="color:#ae81ff">1</span><span style="color:#f92672">})</span>; <span style="color:#75715e"># 单位为M</span></code></pre></div></article>
     <footer class="post-footer">
       
       <ul class="post-tags">
@@ -299,6 +299,29 @@ db.settings.save<span class="o">({</span>_id: <span class="s1">&#39;chunksize&#3
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

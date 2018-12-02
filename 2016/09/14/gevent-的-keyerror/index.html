@@ -191,10 +191,7 @@
 <h2 id="错误描述">错误描述</h2>
 
 <p>在包含有<code>gevent.monkey.patch_thread()</code>( gevent 的猴子补丁)的程序中，运行时会报出下面的错误：</p>
-
-<pre><code>Exception KeyError: KeyError(140468381321488,) in &lt;module 'threading' from '/usr/lib/python2.7/threading.pyc'&gt; ignored
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#a6e22e">Exception</span> <span style="color:#a6e22e">KeyError</span>: <span style="color:#a6e22e">KeyError</span>(<span style="color:#ae81ff">140468381321488</span>,) <span style="color:#f92672">in</span> <span style="color:#f92672">&lt;</span>module <span style="color:#e6db74">&#39;threading&#39;</span> <span style="color:#f92672">from</span> <span style="color:#e6db74">&#39;/usr/lib/python2.7/threading.pyc&#39;</span><span style="color:#f92672">&gt;</span> ignored</code></pre></div>
 <p>解决答案: <a href="http://stackoverflow.com/questions/8774958/keyerror-in-module-threading-after-a-successful-py-test-run">KeyError in module &lsquo;threading&rsquo; after a successful py.test run</a></p>
 
 <h2 id="原文翻译">原文翻译</h2>
@@ -204,11 +201,11 @@
 <h3 id="简短的回答">简短的回答</h3>
 
 <p>它的确和<code>threading</code>模块的猴子补丁有关。事实上，我能够轻易地开启这个异常，通过在猴子补丁线程之前导入<code>threading</code>模块。下面这两行代码就足够了：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">threading</span>
-<span class="kn">import</span> <span class="nn">gevent.monkey</span><span class="p">;</span> <span class="n">gevent</span><span class="o">.</span><span class="n">monkey</span><span class="o">.</span><span class="n">patch_thread</span><span class="p">()</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> threading
+<span style="color:#f92672">import</span> gevent.monkey; gevent<span style="color:#f92672">.</span>monkey<span style="color:#f92672">.</span>patch_thread()</code></pre></div>
 <p>上面的代码执行的时候，就报出了 &ldquo;忽略了一个<code>KeyError</code>&rdquo; 的信息：</p>
-<div class="highlight"><pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">(</span>env<span class="o">)</span>czajnik@autosan: python test.py
-Exception KeyError: KeyError<span class="o">(</span><span class="m">139924387112272</span>,<span class="o">)</span> in &lt;module <span class="s1">&#39;threading&#39;</span> from <span class="s1">&#39;/usr/lib/python2.7/threading.pyc&#39;</span>&gt; ignored</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#f92672">(</span>env<span style="color:#f92672">)</span>czajnik@autosan: python test.py
+Exception KeyError: KeyError<span style="color:#f92672">(</span><span style="color:#ae81ff">139924387112272</span>,<span style="color:#f92672">)</span> in &lt;module <span style="color:#e6db74">&#39;threading&#39;</span> from <span style="color:#e6db74">&#39;/usr/lib/python2.7/threading.pyc&#39;</span>&gt; ignored</code></pre></div>
 <p>如果你交换一下<code>import</code>行的顺序，这个错误信息就会消失了。</p>
 
 <h3 id="详细的回答">详细的回答</h3>
@@ -216,8 +213,8 @@ Exception KeyError: KeyError<span class="o">(</span><span class="m">139924387112
 <p>我可以在这里停止我的调试，但是我觉得它值得让我去了解，造成问题的准确的原因是什么？</p>
 
 <p>第一步是去寻找打印这个忽略了异常的信息的代码。这对于我来说找到这个有点困难（在 python 标准库中 grep 查找<code>Exception .*ignored</code>没有返回任何东西），但是 grep CPython 的源码，我最终在<a href="http://svn.python.org/projects/python/tags/r27/Python/errors.c"> Python/error.c </a>文件中找到了一个函数叫做<code>void PyErr_WriteUnraisable(PyObject *obj)</code>，它的注释非常有趣，</p>
-<div class="highlight"><pre class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* Call when an exception has occurred but there is no way for Python
-</span><span class="cm">   to handle it.  Examples: exception in __del__ or during GC. */</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">/* Call when an exception has occurred but there is no way for Python
+</span><span style="color:#75715e">   to handle it.  Examples: exception in __del__ or during GC. */</span></code></pre></div>
 <p>我决定去检查谁调用了它，这个利用了<code>gdb</code>的一点功能来实现的，最终得到了如下的C调用栈，</p>
 
 <pre><code>#0  0x0000000000542c40 in PyErr_WriteUnraisable ()
@@ -236,25 +233,25 @@ Exception KeyError: KeyError<span class="o">(</span><span class="m">139924387112
 <p>这个函数反过来调用了<code>threading</code>模块中的<code>_shutdown()</code>可调用对象，非常好，我们现在可以返回Python代码了。</p>
 
 <p>查看<code>threading.py</code> ,我发现了如下有趣的部分：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">_MainThread</span><span class="p">(</span><span class="n">Thread</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">_exitfunc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_Thread__stop</span><span class="p">()</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">_pickSomeNonDaemonThrad</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">t</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">__debug__</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_note</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">%s</span><span class="s2">: waiting for other threads&#34;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-        <span class="k">while</span> <span class="n">t</span><span class="p">:</span>
-            <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
-            <span class="n">t</span> <span class="o">=</span> <span class="n">_pickSomeNonDaemonThread</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">__debug__</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_note</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">%s</span><span class="s2">: exiting&#34;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_Thread__delete</span><span class="p">()</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">_MainThread</span>(Thread):
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_exitfunc</span>(self):
+        self<span style="color:#f92672">.</span>_Thread__stop()
+        t <span style="color:#f92672">=</span> _pickSomeNonDaemonThrad()
+        <span style="color:#66d9ef">if</span> t:
+            <span style="color:#66d9ef">if</span> __debug__:
+                self<span style="color:#f92672">.</span>_note(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">: waiting for other threads&#34;</span>, self)
+        <span style="color:#66d9ef">while</span> t:
+            t<span style="color:#f92672">.</span>join()
+            t <span style="color:#f92672">=</span> _pickSomeNonDaemonThread()
+        <span style="color:#66d9ef">if</span> __debug__:
+            self<span style="color:#f92672">.</span>_note(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">: exiting&#34;</span>, self)
+        self<span style="color:#f92672">.</span>_Thread__delete()
 
-<span class="c1"># Create the main thread object,</span>
-<span class="c1"># and make it available for the interpreter</span>
-<span class="c1"># (Py_Main) as threading._shutdown.</span>
+<span style="color:#75715e"># Create the main thread object,</span>
+<span style="color:#75715e"># and make it available for the interpreter</span>
+<span style="color:#75715e"># (Py_Main) as threading._shutdown.</span>
 
-<span class="n">_shutdown</span> <span class="o">=</span> <span class="n">_MainThread</span><span class="p">()</span><span class="o">.</span><span class="n">exitfunc</span></code></pre></div>
+_shutdown <span style="color:#f92672">=</span> _MainThread()<span style="color:#f92672">.</span>exitfunc</code></pre></div>
 <p>很明显，<code>threading._shutdown()</code>函数调用的作用就是join所有的非服务化(non daemon)的线程，然后删除主线程（这意味着它确切做了什么）。我决定去给<code>threading.py</code>打一点补丁，用<code>try / except</code>包裹整个<code>_exitfunc()</code>函数体，用<code>traceback</code>模块来打印出系统调用栈。这个给出了如下的追踪情况：</p>
 
 <pre><code>Traceback (most recent call last):
@@ -276,10 +273,10 @@ KeyError: 26805584
 <p>与上面的情况相反，如果猴子补丁在<code>threading</code>模块载入之前被打上了，所有的就都会正常。因为<code>_MainThread</code>实例被添加到<code>_active</code>中和<code>_get_ident()</code>都是在打补丁之后调用的，这样在清理线程的时候就会返回同样的线程ID。就是这样了。</p>
 
 <p>为了确保以正确的顺序导入模块，我在我的电脑中添加了如下的代码片段，仅仅在打上猴子补丁之前调用：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">sys</span>
-<span class="k">if</span> <span class="s1">&#39;threading&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;threading module loadded before patching!&#39;</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">gevent.monkey</span><span class="p">;</span> <span class="n">gevent</span><span class="o">.</span><span class="n">monkey</span><span class="o">.</span><span class="n">patch_thread</span><span class="p">()</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> sys
+<span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#39;threading&#39;</span> <span style="color:#f92672">in</span> sys<span style="color:#f92672">.</span>modules:
+    <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">Exception</span>(<span style="color:#e6db74">&#39;threading module loadded before patching!&#39;</span>)
+<span style="color:#f92672">import</span> gevent.monkey; gevent<span style="color:#f92672">.</span>monkey<span style="color:#f92672">.</span>patch_thread()</code></pre></div>
 <p>希望我的调试经历能够对你有用！</p></article>
     <footer class="post-footer">
       
@@ -326,6 +323,29 @@ KeyError: 26805584
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

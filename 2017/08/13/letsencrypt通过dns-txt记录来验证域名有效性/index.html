@@ -203,8 +203,7 @@
 <h2 id="利用certbot获取证书">利用certbot获取证书</h2>
 
 <p>运行<code>sudo certbot --manual --preferred-challenges dns certonly</code>命令，输入域名并同意记录本机IP后开始获取证书，接着<code>certbot</code>就会弹出如下的提示：</p>
-
-<pre><code>-------------------------------------------------------------------------------
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">-------------------------------------------------------------------------------
 Please deploy a DNS TXT record under the name
 _acme-challenge.example.com with the following value:
 
@@ -212,9 +211,7 @@ IMdfdsfsJDqBRyRaaEgPPQlEuvtxJQAgWZTIVbLuzDi8U
 
 Once this is deployed,
 -------------------------------------------------------------------------------
-Press Enter to Continue
-</code></pre>
-
+Press Enter to Continue</code></pre></div>
 <p>此时<code>certbot</code>程序就会暂停，等待我们去添加DNS记录。</p>
 
 <h2 id="添加dns的txt记录">添加DNS的TXT记录</h2>
@@ -270,6 +267,29 @@ Press Enter to Continue
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

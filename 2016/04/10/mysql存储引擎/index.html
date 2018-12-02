@@ -195,11 +195,8 @@
 <p>MySQL 有多种存储引擎，是插入式存储引擎</p>
 
 <h2 id="选择存储引擎">选择存储引擎</h2>
-
-<pre><code># 查看支持的存储引擎
-show engines\G
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">;; <span style="color:#960050;background-color:#1e0010">查看支持的存储引擎</span>
+<span style="color:#66d9ef">show</span> engines<span style="color:#960050;background-color:#1e0010">\</span><span style="color:#66d9ef">G</span></code></pre></div>
 <h3 id="myisam-常见">MyISAM (常见)</h3>
 
 <p>不支持事务(Transactions)
@@ -227,24 +224,21 @@ show engines\G
 <h3 id="ndbcluster">ndbcluster</h3>
 
 <p>用于集群的存储引擎</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#f92672">#</span> <span style="color:#960050;background-color:#1e0010">查看当前支持的存储引擎</span>
+<span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#39;have%&#39;</span>
 
-<pre><code># 查看当前支持的存储引擎
-show variables like 'have%'
+<span style="color:#f92672">#</span> <span style="color:#960050;background-color:#1e0010">查看当前存储引擎</span>
+<span style="color:#66d9ef">show</span> variables <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#39;storage_engine&#39;</span>
 
-# 查看当前存储引擎
-show variables like 'storage_engine'
+<span style="color:#f92672">#</span> <span style="color:#960050;background-color:#1e0010">选择存储引擎</span>
+<span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> innodb1(id int)engine<span style="color:#f92672">=</span>innode; <span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">创建表的时候选择</span>
 
-# 选择存储引擎
-create table innodb1(id int)engine=innode; #创建表的时候选择
-
-/etc/my.cnf
+<span style="color:#f92672">/</span>etc<span style="color:#f92672">/</span>my.cnf
 [mysqld]
-default-storage-engine=INNODB #修改配置文件中默认搜索引擎
+<span style="color:#66d9ef">default</span><span style="color:#f92672">-</span><span style="color:#66d9ef">storage</span><span style="color:#f92672">-</span>engine<span style="color:#f92672">=</span>INNODB <span style="color:#f92672">#</span><span style="color:#960050;background-color:#1e0010">修改配置文件中默认搜索引擎</span>
 
-# 查看表的信息
-show create table innodb1;
-</code></pre>
-
+<span style="color:#f92672">#</span> <span style="color:#960050;background-color:#1e0010">查看表的信息</span>
+<span style="color:#66d9ef">show</span> <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> innodb1;</code></pre></div>
 <h2 id="数据类型">数据类型</h2></article>
     <footer class="post-footer">
       
@@ -285,6 +279,29 @@ show create table innodb1;
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

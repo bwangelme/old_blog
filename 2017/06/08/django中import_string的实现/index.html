@@ -207,20 +207,20 @@
 <h2 id="django的-import-string-函数">Django的<code>import_string</code>函数</h2>
 
 <p><code>import_string</code>函数的代码如下所示：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">import_string</span><span class="p">(</span><span class="n">dotted_path</span><span class="p">):</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">module_path</span><span class="p">,</span> <span class="n">class_name</span> <span class="o">=</span> <span class="n">dotted_path</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">%s</span><span class="s2"> doesn&#39;t look like a module path&#34;</span> <span class="o">%</span> <span class="n">dotted_path</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">import_string</span>(dotted_path):
+    <span style="color:#66d9ef">try</span>:
+        module_path, class_name <span style="color:#f92672">=</span> dotted_path<span style="color:#f92672">.</span>rsplit(<span style="color:#e6db74">&#39;.&#39;</span>, <span style="color:#ae81ff">1</span>)
+    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">ValueError</span> <span style="color:#66d9ef">as</span> err:
+        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">ImportError</span>(<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74"> doesn&#39;t look like a module path&#34;</span> <span style="color:#f92672">%</span> dotted_path) <span style="color:#f92672">from</span> err
 
-    <span class="n">module</span> <span class="o">=</span> <span class="n">import_module</span><span class="p">(</span><span class="n">module_path</span><span class="p">)</span>
+    module <span style="color:#f92672">=</span> import_module(module_path)
 
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s1">&#39;Module &#34;</span><span class="si">%s</span><span class="s1">&#34; does not define a &#34;</span><span class="si">%s</span><span class="s1">&#34; attribute/class&#39;</span> <span class="o">%</span> <span class="p">(</span>
-            <span class="n">module_path</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
-        <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span></code></pre></div>
+    <span style="color:#66d9ef">try</span>:
+        <span style="color:#66d9ef">return</span> getattr(module, class_name)
+    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">AttributeError</span> <span style="color:#66d9ef">as</span> err:
+        <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">ImportError</span>(<span style="color:#e6db74">&#39;Module &#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34; does not define a &#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34; attribute/class&#39;</span> <span style="color:#f92672">%</span> (
+            module_path, class_name)
+        ) <span style="color:#f92672">from</span> err</code></pre></div>
 <p>从代码中我们可以看出，这个函数其实很简单，就是首先将要导入的路径名分割成模块名和类名，然后再来从模块中获得到类这个属性，然后就完成了。照着这个思路来看，其实我们导入一个函数也是可以的。</p></article>
     <footer class="post-footer">
       
@@ -263,6 +263,29 @@
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

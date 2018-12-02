@@ -190,17 +190,17 @@
 <p>WSGI（Python Web Server Gateway Interface）是一种协议，规定了『Web服务器』，『Web应用程序』，『中间件』这三者之间进行通信的方式。</p>
 
 <p>在 WSGI 中， Web 服务器会得到一个可调用的 app 参数(即 Web 应用程序)。每次它接收到这个 HTTP 请求以后就会调用一次这个 app ，然后将返回值作为 HTTP 响应体输出出去。在 WSGI 中，Web 应用程序是这样定义的：</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">simple_app</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
-    <span class="s2">&#34;&#34;&#34;Simplest possible application object
-</span><span class="s2">
-</span><span class="s2">    environ: 包含了 HTTP 请求的相关信息
-</span><span class="s2">    start_response: 一个用来发送 HTTP 响应包头部的函数
-</span><span class="s2">    return: HTTP 响应包的包体
-</span><span class="s2">    &#34;&#34;&#34;</span>
-    <span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;200 OK&#39;</span>
-    <span class="n">response_headers</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;Content-type&#39;</span><span class="p">,</span> <span class="s1">&#39;text/plain&#39;</span><span class="p">)]</span>
-    <span class="n">start_response</span><span class="p">(</span><span class="n">status</span><span class="p">,</span> <span class="n">response_headers</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;Hello world!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">]</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">simple_app</span>(environ, start_response):
+    <span style="color:#e6db74">&#34;&#34;&#34;Simplest possible application object
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">    environ: 包含了 HTTP 请求的相关信息
+</span><span style="color:#e6db74">    start_response: 一个用来发送 HTTP 响应包头部的函数
+</span><span style="color:#e6db74">    return: HTTP 响应包的包体
+</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+    status <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;200 OK&#39;</span>
+    response_headers <span style="color:#f92672">=</span> [(<span style="color:#e6db74">&#39;Content-type&#39;</span>, <span style="color:#e6db74">&#39;text/plain&#39;</span>)]
+    start_response(status, response_headers)
+    <span style="color:#66d9ef">return</span> [<span style="color:#e6db74">&#39;Hello world!</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>]</code></pre></div>
 <h2 id="werkzeug">Werkzeug</h2>
 
 <p>Werkzeug 是一个 WSGI 实用程序库，它实现了 Web 服务器的功能，定义了一些通用的中间件，并对一些常用功能进行了封装，让我们可以在它的基础上定义自己的 Web 应用程序。</p>
@@ -210,42 +210,42 @@
 <p>OK，说完了 Werkzeug，我们再来看用 Werkzeug 编写 Web 应用程序的一个官方例子。这个例子的代码可以在<a href="https://github.com/pallets/werkzeug/tree/master/examples/shortly">Github</a>上找到，所以我们这里并不会贴出全部代码，只分析其中的关键部分。</p>
 
 <p>首先来从它的主函数入手，我们可以看到这里的 app ，就相当于是我们的 Web 应用程序，而 werkzeug 的<code>run_simple</code>函数则为我们提供了 Web 服务器的功能。在这里， Web 服务器每收到一个 Web 请求，就会调用一次 app ，并从中获取 HTTP 响应并输出。</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">werkzeug.serving</span> <span class="kn">import</span> <span class="n">run_simple</span>
-    <span class="n">app</span> <span class="o">=</span> <span class="n">create_app</span><span class="p">()</span>
-    <span class="n">run_simple</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">use_debugger</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">use_reloader</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
+    <span style="color:#f92672">from</span> werkzeug.serving <span style="color:#f92672">import</span> run_simple
+    app <span style="color:#f92672">=</span> create_app()
+    run_simple(<span style="color:#e6db74">&#39;127.0.0.1&#39;</span>, <span style="color:#ae81ff">5000</span>, app, use_debugger<span style="color:#f92672">=</span>True, use_reloader<span style="color:#f92672">=</span>True)</code></pre></div>
 <p>接着我们来看一下这个<code>app</code>调用的时候发生了什么，</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">class</span> <span class="nc">Shortly</span><span class="p">:</span>
-    <span class="o">...</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Shortly</span>:
+    <span style="color:#f92672">...</span>
 
-    <span class="k">def</span> <span class="nf">dispatch_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
-        <span class="n">adapter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">url_map</span><span class="o">.</span><span class="n">bind_to_environ</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">endpoint</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">adapter</span><span class="o">.</span><span class="n">match</span><span class="p">()</span>
-            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;on_&#39;</span> <span class="o">+</span> <span class="n">endpoint</span><span class="p">)(</span><span class="n">request</span><span class="p">,</span> <span class="o">**</span><span class="n">values</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">NotFound</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">error_404</span><span class="p">()</span>
-        <span class="k">except</span> <span class="n">HTTPException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">e</span>
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">dispatch_request</span>(self, request):
+        adapter <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>url_map<span style="color:#f92672">.</span>bind_to_environ(request<span style="color:#f92672">.</span>environ)
+        <span style="color:#66d9ef">try</span>:
+            endpoint, values <span style="color:#f92672">=</span> adapter<span style="color:#f92672">.</span>match()
+            <span style="color:#66d9ef">return</span> getattr(self, <span style="color:#e6db74">&#39;on_&#39;</span> <span style="color:#f92672">+</span> endpoint)(request, <span style="color:#f92672">**</span>values)
+        <span style="color:#66d9ef">except</span> NotFound <span style="color:#66d9ef">as</span> e:
+            <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>error_404()
+        <span style="color:#66d9ef">except</span> HTTPException <span style="color:#66d9ef">as</span> e:
+            <span style="color:#66d9ef">return</span> e
 
-    <span class="k">def</span> <span class="nf">wsgi_app</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
-        <span class="n">request</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">environ</span><span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dispatch_request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">response</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">wsgi_app</span>(self, environ, start_response):
+        request <span style="color:#f92672">=</span> Request(environ)
+        response <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>dispatch_request(request)
+        <span style="color:#66d9ef">return</span> response(environ, start_response)
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wsgi_app</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
+    <span style="color:#66d9ef">def</span> __call__(self, environ, start_response):
+        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>wsgi_app(environ, start_response)
 
-<span class="k">def</span> <span class="nf">create_app</span><span class="p">(</span><span class="n">redis_host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">redis_port</span><span class="o">=</span><span class="mi">6379</span><span class="p">,</span> <span class="n">with_static</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-    <span class="n">app</span> <span class="o">=</span> <span class="n">Shortly</span><span class="p">({</span>
-        <span class="s1">&#39;redis_host&#39;</span><span class="p">:</span>       <span class="n">redis_host</span><span class="p">,</span>
-        <span class="s1">&#39;redis_port&#39;</span><span class="p">:</span>       <span class="n">redis_port</span>
-    <span class="p">})</span>
-    <span class="k">if</span> <span class="n">with_static</span><span class="p">:</span>
-        <span class="n">app</span><span class="o">.</span><span class="n">wsgi_app</span> <span class="o">=</span> <span class="n">SharedDataMiddleware</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">wsgi_app</span><span class="p">,</span> <span class="p">{</span>
-            <span class="s1">&#39;/static&#39;</span><span class="p">:</span>  <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;static&#39;</span><span class="p">)</span>
-        <span class="p">})</span>
-    <span class="k">return</span> <span class="n">app</span></code></pre></div>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create_app</span>(redis_host<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;localhost&#39;</span>, redis_port<span style="color:#f92672">=</span><span style="color:#ae81ff">6379</span>, with_static<span style="color:#f92672">=</span>True):
+    app <span style="color:#f92672">=</span> Shortly({
+        <span style="color:#e6db74">&#39;redis_host&#39;</span>:       redis_host,
+        <span style="color:#e6db74">&#39;redis_port&#39;</span>:       redis_port
+    })
+    <span style="color:#66d9ef">if</span> with_static:
+        app<span style="color:#f92672">.</span>wsgi_app <span style="color:#f92672">=</span> SharedDataMiddleware(app<span style="color:#f92672">.</span>wsgi_app, {
+            <span style="color:#e6db74">&#39;/static&#39;</span>:  os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>dirname(__file__), <span style="color:#e6db74">&#39;static&#39;</span>)
+        })
+    <span style="color:#66d9ef">return</span> app</code></pre></div>
 <p>从上面可以看出，<code>app</code>调用的时候，基本上就在调用<code>wsgi_app</code>函数，这个函数具体的工作流程如下:</p>
 
 <ul>
@@ -302,6 +302,29 @@
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

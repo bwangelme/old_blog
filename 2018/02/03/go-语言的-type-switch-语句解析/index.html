@@ -186,50 +186,50 @@
 <p>Type Switch 是 Go 语言中一种特殊的 switch 语句，它比较的是类型而不是具体的值。它判断某个接口变量的类型，然后根据具体类型再做相应处理。注意，在 Type Switch 语句的 case 子句中不能使用<code>fallthrough</code>。</p>
 
 <p>它的用法如下。</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="k">switch</span> <span class="nx">x</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
-<span class="k">case</span> <span class="nx">Type1</span><span class="p">:</span>
-	<span class="nf">doSomeThingWithType1</span><span class="p">()</span>
-<span class="k">case</span> <span class="nx">Type2</span><span class="p">:</span>
-	<span class="nf">doSomeThingWithType2</span><span class="p">()</span>
-<span class="k">default</span><span class="p">:</span>
-	<span class="nf">doSomeDefaultThing</span><span class="p">()</span>
-<span class="p">}</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">x</span>.(<span style="color:#66d9ef">type</span>) {
+<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">Type1</span>:
+	<span style="color:#a6e22e">doSomeThingWithType1</span>()
+<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">Type2</span>:
+	<span style="color:#a6e22e">doSomeThingWithType2</span>()
+<span style="color:#66d9ef">default</span>:
+	<span style="color:#a6e22e">doSomeDefaultThing</span>()
+}</code></pre></div>
 <p>其中，<code>x</code>必须是一个接口类型的变量，而所有的<code>case</code>语句后面跟的类型必须实现了<code>x</code>的接口类型。</p>
 
 <p>为了便于理解，我们可以结合下面这个例子来看:</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 
-<span class="kn">import</span> <span class="p">(</span>
-    <span class="s">&#34;fmt&#34;</span>
-    <span class="s">&#34;reflect&#34;</span>
-<span class="p">)</span>
+<span style="color:#f92672">import</span> (
+    <span style="color:#e6db74">&#34;fmt&#34;</span>
+    <span style="color:#e6db74">&#34;reflect&#34;</span>
+)
 
-<span class="kd">type</span> <span class="nx">Animal</span> <span class="kd">interface</span> <span class="p">{</span>
-    <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span>
-<span class="p">}</span>
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Animal</span> <span style="color:#66d9ef">interface</span> {
+    <span style="color:#a6e22e">shout</span>() <span style="color:#66d9ef">string</span>
+}
 
-<span class="kd">type</span> <span class="nx">Dog</span> <span class="kd">struct</span> <span class="p">{}</span>
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Dog</span> <span style="color:#66d9ef">struct</span> {}
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Dog</span><span class="p">)</span> <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;wang wang&#34;</span><span class="p">)</span>
-<span class="p">}</span>
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">self</span> <span style="color:#a6e22e">Dog</span>) <span style="color:#a6e22e">shout</span>() <span style="color:#66d9ef">string</span> {
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;wang wang&#34;</span>)
+}
 
-<span class="kd">type</span> <span class="nx">Cat</span> <span class="kd">struct</span> <span class="p">{}</span>
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Cat</span> <span style="color:#66d9ef">struct</span> {}
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Cat</span><span class="p">)</span> <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;miao miao&#34;</span><span class="p">)</span>
-<span class="p">}</span>
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">self</span> <span style="color:#a6e22e">Cat</span>) <span style="color:#a6e22e">shout</span>() <span style="color:#66d9ef">string</span> {
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;miao miao&#34;</span>)
+}
 
-<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">animal</span> <span class="nx">Animal</span> <span class="p">=</span> <span class="nx">Dog</span><span class="p">{}</span>
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">animal</span> <span style="color:#a6e22e">Animal</span> = <span style="color:#a6e22e">Dog</span>{}
 
-    <span class="k">switch</span> <span class="nx">animal</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">case</span> <span class="nx">Dog</span><span class="p">:</span>
-        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;animal&#39;type is Dog&#34;</span><span class="p">)</span>
-    <span class="k">case</span> <span class="nx">Cat</span><span class="p">:</span>
-        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;animal&#39;type is Cat&#34;</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span></code></pre></div>
+    <span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">animal</span>.(<span style="color:#66d9ef">type</span>) {
+    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">Dog</span>:
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;animal&#39;type is Dog&#34;</span>)
+    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">Cat</span>:
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;animal&#39;type is Cat&#34;</span>)
+    }
+}</code></pre></div>
 <p>在上面的例子中，<code>Cat</code>和<code>Dog</code>类型都实现了接口<code>Animal</code>，所以它们可以跟在<code>case</code>语句后面，判断接口变量<code>animal</code>是否是对应的类型。</p>
 
 <h2 id="在switch的语句表达式中声明变量">在Switch的语句表达式中声明变量</h2>
@@ -237,59 +237,59 @@
 <p>如果我们不仅想要判断某个接口变量的类型，还想要获得其类型转换后的值的话，我们可以在 Switch 的语句表达式中声明一个变量来获得这个值。</p>
 
 <p>其用法如下所示:</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 
-<span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;fmt&#34;</span>
-	<span class="s">&#34;reflect&#34;</span>
-<span class="p">)</span>
+<span style="color:#f92672">import</span> (
+	<span style="color:#e6db74">&#34;fmt&#34;</span>
+	<span style="color:#e6db74">&#34;reflect&#34;</span>
+)
 
-<span class="kd">type</span> <span class="nx">Animal</span> <span class="kd">interface</span> <span class="p">{</span>
-	<span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span>
-<span class="p">}</span>
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Animal</span> <span style="color:#66d9ef">interface</span> {
+	<span style="color:#a6e22e">shout</span>() <span style="color:#66d9ef">string</span>
+}
 
-<span class="kd">type</span> <span class="nx">Dog</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">name</span> <span class="kt">string</span>
-<span class="p">}</span>
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Dog</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>
+}
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Dog</span><span class="p">)</span> <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;wang wang&#34;</span><span class="p">)</span>
-<span class="p">}</span>
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">self</span> <span style="color:#a6e22e">Dog</span>) <span style="color:#a6e22e">shout</span>() <span style="color:#66d9ef">string</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;wang wang&#34;</span>)
+}
 
-<span class="kd">type</span> <span class="nx">Cat</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">name</span> <span class="kt">string</span>
-<span class="p">}</span>
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Cat</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>
+}
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Cat</span><span class="p">)</span> <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;miao miao&#34;</span><span class="p">)</span>
-<span class="p">}</span>
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">self</span> <span style="color:#a6e22e">Cat</span>) <span style="color:#a6e22e">shout</span>() <span style="color:#66d9ef">string</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;miao miao&#34;</span>)
+}
 
-<span class="kd">type</span> <span class="nx">Tiger</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">name</span> <span class="kt">string</span>
-<span class="p">}</span>
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Tiger</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>
+}
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Tiger</span><span class="p">)</span> <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
-	<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;hou hou&#34;</span><span class="p">)</span>
-<span class="p">}</span>
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">self</span> <span style="color:#a6e22e">Tiger</span>) <span style="color:#a6e22e">shout</span>() <span style="color:#66d9ef">string</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;hou hou&#34;</span>)
+}
 
-<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="c1">// var animal Animal = Tiger{}
-</span><span class="c1"></span>	<span class="c1">// var animal Animal  // 验证 case nil
-</span><span class="c1"></span>	<span class="c1">// var animal Animal = Wolf{} // 验证 default
-</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">animal</span> <span class="nx">Animal</span> <span class="p">=</span> <span class="nx">Dog</span><span class="p">{}</span>
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+	<span style="color:#75715e">// var animal Animal = Tiger{}
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// var animal Animal  // 验证 case nil
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// var animal Animal = Wolf{} // 验证 default
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">animal</span> <span style="color:#a6e22e">Animal</span> = <span style="color:#a6e22e">Dog</span>{}
 
-	<span class="k">switch</span> <span class="nx">a</span> <span class="o">:=</span> <span class="nx">animal</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">case</span> <span class="kc">nil</span><span class="p">:</span> <span class="c1">// a的类型是 Animal
-</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;nil&#34;</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span>
-	<span class="k">case</span> <span class="nx">Dog</span><span class="p">,</span> <span class="nx">Cat</span><span class="p">:</span> <span class="c1">// a的类型是 Animal
-</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span> <span class="c1">// 输出 {}
-</span><span class="c1"></span>		<span class="c1">// fmt.Println(a.name) 这里会报错，因为 Animal 类型没有成员name
-</span><span class="c1"></span>	<span class="k">case</span> <span class="nx">Tiger</span><span class="p">:</span> <span class="c1">// a的类型是 Tiger
-</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nf">shout</span><span class="p">(),</span> <span class="nx">a</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="c1">// 这里可以直接取出 name 成员
-</span><span class="c1"></span>	<span class="k">default</span><span class="p">:</span> <span class="c1">// a的类型是 Animal
-</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;default&#34;</span><span class="p">,</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span> <span class="nx">a</span><span class="p">)</span>
-	<span class="p">}</span>
-<span class="p">}</span></code></pre></div>
+	<span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">animal</span>.(<span style="color:#66d9ef">type</span>) {
+	<span style="color:#66d9ef">case</span> <span style="color:#66d9ef">nil</span>: <span style="color:#75715e">// a的类型是 Animal
+</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;nil&#34;</span>, <span style="color:#a6e22e">a</span>)
+	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">Dog</span>, <span style="color:#a6e22e">Cat</span>: <span style="color:#75715e">// a的类型是 Animal
+</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>) <span style="color:#75715e">// 输出 {}
+</span><span style="color:#75715e"></span>		<span style="color:#75715e">// fmt.Println(a.name) 这里会报错，因为 Animal 类型没有成员name
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">Tiger</span>: <span style="color:#75715e">// a的类型是 Tiger
+</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">shout</span>(), <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">name</span>) <span style="color:#75715e">// 这里可以直接取出 name 成员
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">default</span>: <span style="color:#75715e">// a的类型是 Animal
+</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;default&#34;</span>, <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">TypeOf</span>(<span style="color:#a6e22e">a</span>), <span style="color:#a6e22e">a</span>)
+	}
+}</code></pre></div>
 <p>在上述代码中，我们可以看到<code>a := animal.(type)</code>语句隐式地为每个<code>case</code>子句声明了一个变量<code>a</code>。</p>
 
 <p>变量<code>a</code>类型的判定规则如下:</p>
@@ -302,24 +302,24 @@
 </ul>
 
 <p>为了更好地理解上述规则，我们可以用<code>if</code>语句和类型断言来重写这个<code>switch</code>语句，如下所示：</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go">	<span class="nx">v</span> <span class="o">:=</span> <span class="nx">animal</span>   <span class="c1">// animal 只会被求值一次
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">v</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span> <span class="c1">// case nil 子句
-</span><span class="c1"></span>		<span class="nx">a</span> <span class="o">:=</span> <span class="nx">v</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;nil&#34;</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span>
-	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">isTiger</span> <span class="o">:=</span> <span class="nx">v</span><span class="p">.(</span><span class="nx">Tiger</span><span class="p">);</span> <span class="nx">isTiger</span> <span class="p">{</span> <span class="c1">// case Tiger 子句
-</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nf">shout</span><span class="p">(),</span> <span class="nx">a</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span>
-	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-		<span class="nx">_</span><span class="p">,</span> <span class="nx">isDog</span> <span class="o">:=</span> <span class="nx">v</span><span class="p">.(</span><span class="nx">Dog</span><span class="p">)</span>
-		<span class="nx">_</span><span class="p">,</span> <span class="nx">isCat</span> <span class="o">:=</span> <span class="nx">v</span><span class="p">.(</span><span class="nx">Cat</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">isDog</span> <span class="o">||</span> <span class="nx">isCat</span> <span class="p">{</span> <span class="c1">// case Dog, Cat 子句
-</span><span class="c1"></span>			<span class="nx">a</span> <span class="o">:=</span> <span class="nx">v</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span>
-			<span class="c1">// fmt.Println(a.name)
-</span><span class="c1"></span>		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="c1">// default 子句
-</span><span class="c1"></span>			<span class="nx">a</span> <span class="o">:=</span> <span class="nx">v</span>
-			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;default&#34;</span><span class="p">,</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span> <span class="nx">a</span><span class="p">)</span>
-		<span class="p">}</span>
-	<span class="p">}</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	<span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">animal</span>   <span style="color:#75715e">// animal 只会被求值一次
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">v</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> { <span style="color:#75715e">// case nil 子句
+</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">v</span>
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;nil&#34;</span>, <span style="color:#a6e22e">a</span>)
+	} <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">isTiger</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">v</span>.(<span style="color:#a6e22e">Tiger</span>); <span style="color:#a6e22e">isTiger</span> { <span style="color:#75715e">// case Tiger 子句
+</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">shout</span>(), <span style="color:#a6e22e">a</span>.<span style="color:#a6e22e">name</span>)
+	} <span style="color:#66d9ef">else</span> {
+		<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">isDog</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">v</span>.(<span style="color:#a6e22e">Dog</span>)
+		<span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">isCat</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">v</span>.(<span style="color:#a6e22e">Cat</span>)
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">isDog</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">isCat</span> { <span style="color:#75715e">// case Dog, Cat 子句
+</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">v</span>
+			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">a</span>)
+			<span style="color:#75715e">// fmt.Println(a.name)
+</span><span style="color:#75715e"></span>		} <span style="color:#66d9ef">else</span> { <span style="color:#75715e">// default 子句
+</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">v</span>
+			<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;default&#34;</span>, <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">TypeOf</span>(<span style="color:#a6e22e">a</span>), <span style="color:#a6e22e">a</span>)
+		}
+	}</code></pre></div>
 <h2 id="参考链接">参考链接</h2>
 
 <ul>
@@ -364,6 +364,29 @@
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

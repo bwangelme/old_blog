@@ -227,75 +227,75 @@ mysql.db  # 数据库级别授权
 <h2 id="2-用户管理">2. 用户管理</h2>
 
 <h3 id="2-1-登陆和退出mysql">2.1 登陆和退出MySQL</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span> <span class="o">-</span><span class="n">h</span> <span class="k">host</span> <span class="o">-</span><span class="n">p</span> <span class="n">port</span> <span class="o">-</span><span class="n">u</span> <span class="k">user</span> <span class="o">-</span><span class="n">ppassword</span> <span class="o">-</span><span class="n">e</span> <span class="s1">&#39;SQL语句&#39;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">mysql <span style="color:#f92672">-</span>h <span style="color:#66d9ef">host</span> <span style="color:#f92672">-</span>p port <span style="color:#f92672">-</span>u <span style="color:#66d9ef">user</span> <span style="color:#f92672">-</span>ppassword <span style="color:#f92672">-</span>e <span style="color:#e6db74">&#39;SQL语句&#39;</span></code></pre></div>
 <p>mysql.user表中授权什么主机的什么用户可以登陆</p>
 
 <h3 id="2-2-创建用户">2.2 创建用户</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 刷新授权表
-</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="n">flush</span> <span class="k">privileges</span><span class="p">;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 刷新授权表
+</span><span style="color:#75715e"></span>mysql<span style="color:#f92672">&gt;</span> flush <span style="color:#66d9ef">privileges</span>;</code></pre></div>
 <ul>
 <li>创建用户</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">user</span> <span class="n">xff</span><span class="o">@</span><span class="s1">&#39;%&#39;</span> <span class="n">identified</span> <span class="k">by</span> <span class="s1">&#39;123456&#39;</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span> <span class="n">sec</span><span class="p">)</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">user</span> xff<span style="color:#f92672">@</span><span style="color:#e6db74">&#39;%&#39;</span> identified <span style="color:#66d9ef">by</span> <span style="color:#e6db74">&#39;123456&#39;</span>;
+Query OK, <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">rows</span> affected (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">01</span> sec)
 
-<span class="c1">-- 查看权限基本为空
-</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span> <span class="k">where</span> <span class="k">user</span><span class="o">=</span><span class="s1">&#39;xff&#39;</span><span class="err">\</span><span class="k">G</span>
-<span class="o">***************************</span> <span class="mi">1</span><span class="p">.</span> <span class="k">row</span> <span class="o">***************************</span>
-                  <span class="k">Host</span><span class="p">:</span> <span class="o">%</span>
-                  <span class="k">User</span><span class="p">:</span> <span class="n">xff</span>
-              <span class="n">Password</span><span class="p">:</span> <span class="o">*</span><span class="mi">6</span><span class="n">BB4837EB74329105EE4568DDA7DC67ED2CA2AD9</span>
-           <span class="n">Select_priv</span><span class="p">:</span> <span class="n">N</span>
-           <span class="n">Insert_priv</span><span class="p">:</span> <span class="n">N</span>
-           <span class="n">Update_priv</span><span class="p">:</span> <span class="n">N</span>
-           <span class="n">Delete_priv</span><span class="p">:</span> <span class="n">N</span>
-           <span class="n">Create_priv</span><span class="p">:</span> <span class="n">N</span>
-             <span class="n">Drop_priv</span><span class="p">:</span> <span class="n">N</span>
-           <span class="n">Reload_priv</span><span class="p">:</span> <span class="n">N</span>
-         <span class="n">Shutdown_priv</span><span class="p">:</span> <span class="n">N</span>
-          <span class="n">Process_priv</span><span class="p">:</span> <span class="n">N</span>
-             <span class="n">File_priv</span><span class="p">:</span> <span class="n">N</span>
-            <span class="n">Grant_priv</span><span class="p">:</span> <span class="n">N</span>
-       <span class="n">References_priv</span><span class="p">:</span> <span class="n">N</span>
-            <span class="n">Index_priv</span><span class="p">:</span> <span class="n">N</span>
-            <span class="n">Alter_priv</span><span class="p">:</span> <span class="n">N</span>
-          <span class="n">Show_db_priv</span><span class="p">:</span> <span class="n">N</span>
-            <span class="n">Super_priv</span><span class="p">:</span> <span class="n">N</span>
- <span class="n">Create_tmp_table_priv</span><span class="p">:</span> <span class="n">N</span>
-      <span class="n">Lock_tables_priv</span><span class="p">:</span> <span class="n">N</span>
-          <span class="n">Execute_priv</span><span class="p">:</span> <span class="n">N</span>
-       <span class="n">Repl_slave_priv</span><span class="p">:</span> <span class="n">N</span>
-      <span class="n">Repl_client_priv</span><span class="p">:</span> <span class="n">N</span>
-      <span class="n">Create_view_priv</span><span class="p">:</span> <span class="n">N</span>
-        <span class="n">Show_view_priv</span><span class="p">:</span> <span class="n">N</span>
-   <span class="n">Create_routine_priv</span><span class="p">:</span> <span class="n">N</span>
-    <span class="n">Alter_routine_priv</span><span class="p">:</span> <span class="n">N</span>
-      <span class="n">Create_user_priv</span><span class="p">:</span> <span class="n">N</span>
-            <span class="n">Event_priv</span><span class="p">:</span> <span class="n">N</span>
-          <span class="n">Trigger_priv</span><span class="p">:</span> <span class="n">N</span>
-<span class="n">Create_tablespace_priv</span><span class="p">:</span> <span class="n">N</span>
-              <span class="n">ssl_type</span><span class="p">:</span> 
-            <span class="n">ssl_cipher</span><span class="p">:</span> 
-           <span class="n">x509_issuer</span><span class="p">:</span> 
-          <span class="n">x509_subject</span><span class="p">:</span> 
-         <span class="n">max_questions</span><span class="p">:</span> <span class="mi">0</span>
-           <span class="n">max_updates</span><span class="p">:</span> <span class="mi">0</span>
-       <span class="n">max_connections</span><span class="p">:</span> <span class="mi">0</span>
-  <span class="n">max_user_connections</span><span class="p">:</span> <span class="mi">0</span>
-                <span class="n">plugin</span><span class="p">:</span> <span class="n">mysql_native_password</span>
- <span class="n">authentication_string</span><span class="p">:</span> 
-      <span class="n">password_expired</span><span class="p">:</span> <span class="n">N</span>
-<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span> <span class="n">sec</span><span class="p">)</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 创建用户并且授权
-</span><span class="c1"></span><span class="k">grant</span> <span class="k">select</span> <span class="k">on</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">to</span> <span class="n">user3</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span> <span class="n">identified</span> <span class="k">by</span> <span class="s1">&#39;123456&#39;</span><span class="p">;</span></code></pre></div>
+<span style="color:#75715e">-- 查看权限基本为空
+</span><span style="color:#75715e"></span>mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> mysql.<span style="color:#66d9ef">user</span> <span style="color:#66d9ef">where</span> <span style="color:#66d9ef">user</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;xff&#39;</span><span style="color:#960050;background-color:#1e0010">\</span><span style="color:#66d9ef">G</span>
+<span style="color:#f92672">***************************</span> <span style="color:#ae81ff">1</span>. <span style="color:#66d9ef">row</span> <span style="color:#f92672">***************************</span>
+                  <span style="color:#66d9ef">Host</span>: <span style="color:#f92672">%</span>
+                  <span style="color:#66d9ef">User</span>: xff
+              Password: <span style="color:#f92672">*</span><span style="color:#ae81ff">6</span>BB4837EB74329105EE4568DDA7DC67ED2CA2AD9
+           Select_priv: N
+           Insert_priv: N
+           Update_priv: N
+           Delete_priv: N
+           Create_priv: N
+             Drop_priv: N
+           Reload_priv: N
+         Shutdown_priv: N
+          Process_priv: N
+             File_priv: N
+            Grant_priv: N
+       References_priv: N
+            Index_priv: N
+            Alter_priv: N
+          Show_db_priv: N
+            Super_priv: N
+ Create_tmp_table_priv: N
+      Lock_tables_priv: N
+          Execute_priv: N
+       Repl_slave_priv: N
+      Repl_client_priv: N
+      Create_view_priv: N
+        Show_view_priv: N
+   Create_routine_priv: N
+    Alter_routine_priv: N
+      Create_user_priv: N
+            Event_priv: N
+          Trigger_priv: N
+Create_tablespace_priv: N
+              ssl_type: 
+            ssl_cipher: 
+           x509_issuer: 
+          x509_subject: 
+         max_questions: <span style="color:#ae81ff">0</span>
+           max_updates: <span style="color:#ae81ff">0</span>
+       max_connections: <span style="color:#ae81ff">0</span>
+  max_user_connections: <span style="color:#ae81ff">0</span>
+                plugin: mysql_native_password
+ authentication_string: 
+      password_expired: N
+<span style="color:#ae81ff">1</span> <span style="color:#66d9ef">row</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">01</span> sec)</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 创建用户并且授权
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">on</span> <span style="color:#f92672">*</span>.<span style="color:#f92672">*</span> <span style="color:#66d9ef">to</span> user3<span style="color:#f92672">@</span><span style="color:#e6db74">&#39;localhost&#39;</span> identified <span style="color:#66d9ef">by</span> <span style="color:#e6db74">&#39;123456&#39;</span>;</code></pre></div>
 <ul>
 <li>删除用户</li>
 </ul>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">drop</span> <span class="k">user</span> <span class="n">xff</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delete</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="k">user</span><span class="o">=</span><span class="s1">&#39;user3&#39;</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">1</span> <span class="k">row</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">drop</span> <span style="color:#66d9ef">user</span> xff;
+Query OK, <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">rows</span> affected (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> sec)</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">delete</span> <span style="color:#66d9ef">from</span> <span style="color:#66d9ef">user</span> <span style="color:#66d9ef">where</span> <span style="color:#66d9ef">user</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;user3&#39;</span>;
+Query OK, <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">row</span> affected (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> sec)
 
-<span class="n">mysql</span><span class="o">&gt;</span> <span class="n">flush</span> <span class="k">privileges</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></div>
+mysql<span style="color:#f92672">&gt;</span> flush <span style="color:#66d9ef">privileges</span>;
+Query OK, <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">rows</span> affected (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> sec)</code></pre></div>
 <ul>
 <li><p>修改密码</p>
 
@@ -375,18 +375,18 @@ select(列1, 列2, &hellip;), update</p>
 |MAX_USER_CONNECTIONS|定义单个用户同时可以建立的连接数|</p>
 
 <h3 id="3-3-查看权限">3.3 查看权限</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 查看当前用户所有授权
-</span><span class="c1"></span><span class="k">show</span> <span class="n">grants</span><span class="err">\</span><span class="k">G</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 查看当前用户所有授权
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">show</span> grants<span style="color:#960050;background-color:#1e0010">\</span><span style="color:#66d9ef">G</span>
 
-<span class="c1">-- 管理员查看其它用户权限
-</span><span class="c1"></span><span class="k">show</span> <span class="n">grants</span> <span class="k">for</span> <span class="n">username</span><span class="err">\</span><span class="k">G</span></code></pre></div>
+<span style="color:#75715e">-- 管理员查看其它用户权限
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">show</span> grants <span style="color:#66d9ef">for</span> username<span style="color:#960050;background-color:#1e0010">\</span><span style="color:#66d9ef">G</span></code></pre></div>
 <h3 id="3-4-权限的回收">3.4 权限的回收</h3>
-<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 不会删除用户
-</span><span class="c1"></span><span class="k">revoke</span> <span class="err">权限列表</span> <span class="k">on</span> <span class="err">数据库名</span> <span class="k">from</span> <span class="err">用户名</span><span class="o">@</span><span class="s1">&#39;客户端主机&#39;</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">revoke</span> <span class="k">delete</span> <span class="k">on</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">from</span> <span class="n">admin1</span><span class="o">@</span><span class="s1">&#39;%&#39;</span><span class="p">;</span> <span class="c1">-- 回收删除权限
-</span><span class="c1"></span><span class="k">revoke</span> <span class="k">grant</span> <span class="k">option</span> <span class="k">on</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">from</span> <span class="n">admin1</span><span class="o">@</span><span class="s1">&#39;%&#39;</span><span class="p">;</span> <span class="c1">-- 取消授权权限
-</span><span class="c1">-- 删除用户
-</span><span class="c1"></span><span class="k">delete</span> <span class="k">from</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span> <span class="k">where</span> <span class="k">user</span><span class="o">=</span><span class="s1">&#39;admin1&#39;</span>
-<span class="n">flush</span> <span class="k">privileges</span></code></pre></div></article>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#75715e">-- 不会删除用户
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">revoke</span> <span style="color:#960050;background-color:#1e0010">权限列表</span> <span style="color:#66d9ef">on</span> <span style="color:#960050;background-color:#1e0010">数据库名</span> <span style="color:#66d9ef">from</span> <span style="color:#960050;background-color:#1e0010">用户名</span><span style="color:#f92672">@</span><span style="color:#e6db74">&#39;客户端主机&#39;</span></code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">revoke</span> <span style="color:#66d9ef">delete</span> <span style="color:#66d9ef">on</span> <span style="color:#f92672">*</span>.<span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> admin1<span style="color:#f92672">@</span><span style="color:#e6db74">&#39;%&#39;</span>; <span style="color:#75715e">-- 回收删除权限
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">revoke</span> <span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">option</span> <span style="color:#66d9ef">on</span> <span style="color:#f92672">*</span>.<span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> admin1<span style="color:#f92672">@</span><span style="color:#e6db74">&#39;%&#39;</span>; <span style="color:#75715e">-- 取消授权权限
+</span><span style="color:#75715e">-- 删除用户
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">delete</span> <span style="color:#66d9ef">from</span> mysql.<span style="color:#66d9ef">user</span> <span style="color:#66d9ef">where</span> <span style="color:#66d9ef">user</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;admin1&#39;</span>
+flush <span style="color:#66d9ef">privileges</span></code></pre></div></article>
     <footer class="post-footer">
       
       <ul class="post-tags">
@@ -426,6 +426,29 @@ select(列1, 列2, &hellip;), update</p>
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

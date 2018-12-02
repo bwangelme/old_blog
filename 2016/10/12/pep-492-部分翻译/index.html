@@ -197,8 +197,8 @@
 <h2 id="新的生成器声明语法">新的生成器声明语法</h2>
 
 <p>如下的新语法用来去生成一个新的 <em>原生协程</em> :</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">async</span> <span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
-    <span class="k">pass</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">read_data</span>(db):
+    <span style="color:#66d9ef">pass</span></code></pre></div>
 <p>协程的关键属性是：</p>
 
 <ul>
@@ -219,10 +219,10 @@
 <h2 id="types-coroutine">types.coroutine()</h2>
 
 <p>这是一个在 types 模块中新添加的方法<code>coroutine(fn)</code>。它允许在已经存在的异步IO中 <em>基于生成器的协程</em> 和 本PEP介绍的 <em>原生协程</em> 之间进行交互。</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="nd">@types.coroutine</span>
-<span class="k">def</span> <span class="nf">process_data</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="k">yield</span> <span class="kn">from</span> <span class="nn">read_data</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
-    <span class="o">...</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#a6e22e">@types.coroutine</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">process_data</span>(db):
+    data <span style="color:#f92672">=</span> <span style="color:#66d9ef">yield</span> <span style="color:#f92672">from</span> read_data(db)
+    <span style="color:#f92672">...</span></code></pre></div>
 <p>这个函数将 <code>CO_ITERABLE_COROUTINE</code> 标志应用到生成器函数代码对象上，使它返回一个协程对象。</p>
 
 <p>如果参数<code>fn</code>不是一个生成器函数的话，它将会将它封装。如果它返回了一个生成器，它将会将它封装成为一个 <em>awaitable</em> 的代理对象(参见下面 <em>awaitable</em> 对象的定义)。</p>
@@ -232,9 +232,9 @@
 <h2 id="await-表达式">Await 表达式</h2>
 
 <p>如下的新的await表达式用来获取一个协程执行的结果。</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">await</span> <span class="n">db</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s1">&#39;SELECT ...&#39;</span><span class="p">)</span>
-    <span class="o">...</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">read_data</span>(db):
+    data <span style="color:#f92672">=</span> await db<span style="color:#f92672">.</span>fetch(<span style="color:#e6db74">&#39;SELECT ...&#39;</span>)
+    <span style="color:#f92672">...</span></code></pre></div>
 <p><code>await</code> 相似于 <code>yield from</code>，暂停 <code>read_data</code> 协程的执行，直到<code>db.fetch()</code>这个 <em>awaitable</em> 对象完成并且返回数据。</p>
 
 <p>它使用了 <code>yield from</code> 的实现，并添加上了额外的验证参数的步骤。<code>await</code> 仅仅接收一个 <em>awaitable</em> 对象，它可以是如下几种形式：</p>
@@ -471,38 +471,32 @@ await ::= [&quot;await&quot;] primary
 <p>为了使这种设想成为可能，一种新的协议用来支持异步的上下文管理器被提出了。两个魔法方法被添加了，<code>__aenter__</code>和<code>__aexit__</code>。这两个都必须返回一个<code>awaitable</code>的对象。</p>
 
 <p>一个异步的上下文管理器的例子是：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AsyncContextManager</span>:
+    async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__aenter__</span>(self):
+        await log(<span style="color:#e6db74">&#39;enter context&#39;</span>)
 
-<pre><code>class AsyncContextManager:
-    async def __aenter__(self):
-        await log('enter context')
-
-    async def __aexit__(self, exc_type, exc, tb):
-        await log('exiting context')
-</code></pre>
-
+    async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__aexit__</span>(self, exc_type, exc, tb):
+        await log(<span style="color:#e6db74">&#39;exiting context&#39;</span>)</code></pre></div>
 <h3 id="新的语法">新的语法</h3>
 
 <p>针对异步的上下文管理器，一种新的语法被提出来了：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">with</span> <span class="n">EXPR</span> <span class="k">as</span> <span class="n">VAR</span><span class="p">:</span>
-    <span class="n">BLOCK</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">async <span style="color:#66d9ef">with</span> EXPR <span style="color:#66d9ef">as</span> VAR:
+    BLOCK</code></pre></div>
 <p>它在语义上等价于：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">mgr <span style="color:#f92672">=</span> (EXPR)
+aexit <span style="color:#f92672">=</span> type(mgr)<span style="color:#f92672">.</span>__aexit__
+aenter <span style="color:#f92672">=</span> type(mgr)<span style="color:#f92672">.</span>__aenter__(mgr)
+<span style="color:#66d9ef">exec</span> <span style="color:#f92672">=</span> True
 
-<pre><code>mgr = (EXPR)
-aexit = type(mgr).__aexit__
-aenter = type(mgr).__aenter__(mgr)
-exec = True
+VAR <span style="color:#f92672">=</span> await aenter
 
-VAR = await aenter
-
-try:
+<span style="color:#66d9ef">try</span>:
     block
-except:
-    if not await(mgr, *sys.exc_info()):
-        raise
-else:
-    await aexit(mgr, None, None, None)
-</code></pre>
-
+<span style="color:#66d9ef">except</span>:
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> await(mgr, <span style="color:#f92672">*</span>sys<span style="color:#f92672">.</span>exc_info()):
+        <span style="color:#66d9ef">raise</span>
+<span style="color:#66d9ef">else</span>:
+    await aexit(mgr, None, None, None)</code></pre></div>
 <p>就像普通的<code>with</code>语句一样，<code>async with</code>语句也能够指定多个上下文管理器。</p>
 
 <p>将一个普通的没有<code>__aenter__</code>和<code>__aexit__</code>方法的上下文管理器传递给<code>async with</code>语句是错误的。同时，在<code>async def</code>函数外部使用<code>async with</code>语句也是一个语法错误。</p>
@@ -510,18 +504,18 @@ else:
 <h3 id="例子">例子</h3>
 
 <p>使用异步的上下文管理器很容易去正确实现协程的数据库事物管理：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-    <span class="o">...</span>
-    <span class="n">async</span> <span class="k">with</span> <span class="n">sesson</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
-        <span class="o">...</span>
-        <span class="n">await</span> <span class="n">session</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-        <span class="o">...</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">commit</span>(session, data):
+    <span style="color:#f92672">...</span>
+    async <span style="color:#66d9ef">with</span> sesson<span style="color:#f92672">.</span>transaction():
+        <span style="color:#f92672">...</span>
+        await session<span style="color:#f92672">.</span>update(data)
+        <span style="color:#f92672">...</span></code></pre></div>
 <p>同时，代码需要看起来更轻量级一些：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
-    <span class="o">...</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">async <span style="color:#66d9ef">with</span> lock:
+    <span style="color:#f92672">...</span></code></pre></div>
 <p>而不是:</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">with</span> <span class="p">(</span><span class="k">yield</span> <span class="kn">from</span> <span class="nn">lock</span><span class="p">):</span>
-    <span class="o">...</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">with</span> (<span style="color:#66d9ef">yield</span> <span style="color:#f92672">from</span> lock):
+    <span style="color:#f92672">...</span></code></pre></div>
 <h2 id="异步迭代器和-async-for">异步迭代器和 “async for”</h2>
 
 <p>一个异步可迭代对象能够在它的迭代器实现中异步地调用代码，异步迭代器能够在它的<code>next</code>方法中调用异步代码，为了支持异步迭代:</p>
@@ -535,37 +529,37 @@ else:
 </blockquote>
 
 <p>一个异步迭代的例子如下所示：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">AsyncIterable</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__aiter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AsyncIterable</span>:
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__aiter__</span>(self):
+        <span style="color:#66d9ef">return</span> self
 
-    <span class="n">async</span> <span class="k">def</span> <span class="nf">__anext__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetch_data</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">data</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">StopAsyncIteration</span>
+    async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__anext__</span>(self):
+        data <span style="color:#f92672">=</span> await self<span style="color:#f92672">.</span>fetch_data()
+        <span style="color:#66d9ef">if</span> data:
+            <span style="color:#66d9ef">return</span> data
+        <span style="color:#66d9ef">else</span>:
+            <span style="color:#66d9ef">raise</span> StopAsyncIteration
 
-    <span class="n">async</span> <span class="k">def</span> <span class="nf">fetch_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="o">...</span></code></pre></div>
+    async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">fetch_data</span>(self):
+        <span style="color:#f92672">...</span></code></pre></div>
 <h3 id="新的语法-1">新的语法</h3>
 
 <p>一种通过异步迭代器进行迭代的新的语句被提出来了：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">for</span> <span class="n">TARGET</span> <span class="ow">in</span> <span class="n">ITER</span><span class="p">:</span>
-    <span class="n">BLOCK</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">BLOCK2</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">async <span style="color:#66d9ef">for</span> TARGET <span style="color:#f92672">in</span> ITER:
+    BLOCK
+<span style="color:#66d9ef">else</span>:
+    BLOCK2</code></pre></div>
 <p>它在语义上等于：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="nb">iter</span> <span class="o">=</span> <span class="p">(</span><span class="n">ITER</span><span class="p">)</span>
-<span class="nb">iter</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="nb">iter</span><span class="p">)</span><span class="o">.</span><span class="n">__aiter__</span><span class="p">(</span><span class="nb">iter</span><span class="p">)</span>
-<span class="n">running</span> <span class="o">=</span> <span class="bp">True</span>
-<span class="k">while</span> <span class="n">running</span><span class="p">:</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">TARGET</span> <span class="o">=</span> <span class="n">await</span> <span class="nb">type</span><span class="p">(</span><span class="nb">iter</span><span class="p">)</span><span class="o">.</span><span class="n">__anext__</span><span class="p">(</span><span class="nb">iter</span><span class="p">)</span>
-    <span class="k">except</span> <span class="n">StopAsyncIteration</span><span class="p">:</span>
-        <span class="n">running</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">BLOCK</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">iter <span style="color:#f92672">=</span> (ITER)
+iter <span style="color:#f92672">=</span> type(iter)<span style="color:#f92672">.</span>__aiter__(iter)
+running <span style="color:#f92672">=</span> True
+<span style="color:#66d9ef">while</span> running:
+    <span style="color:#66d9ef">try</span>:
+        TARGET <span style="color:#f92672">=</span> await type(iter)<span style="color:#f92672">.</span>__anext__(iter)
+    <span style="color:#66d9ef">except</span> StopAsyncIteration:
+        running <span style="color:#f92672">=</span> False
+    <span style="color:#66d9ef">else</span>:
+        BLOCK</code></pre></div>
 <p>对<code>async for</code>语句抛出一个没有<code>__aiter__</code>方法的普通迭代器将会抛出一个<code>TypeError</code>。在<code>async for</code>外部使用<code>async for</code>语句将会抛出一个<code>SyntaxError</code>。</p>
 
 <p>就像普通的<code>for</code>语句一样，<code>async for</code>有可选的<code>else</code>子句。</p>
@@ -573,70 +567,70 @@ else:
 <h3 id="例子1">例子1</h3>
 
 <p>使用异步迭代协议可以在迭代期间异步缓存数据：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">cursor</span><span class="p">:</span>
-    <span class="o">...</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">async <span style="color:#66d9ef">for</span> data <span style="color:#f92672">in</span> cursor:
+    <span style="color:#f92672">...</span></code></pre></div>
 <p><code>cursor</code>是一个异步迭代器，在N次迭代后从数据库中取出N行的数据。</p>
 
 <p>如下的代码说明了一种新的异步迭代协议：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">Cursor</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">deque</span><span class="p">()</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Cursor</span>:
+    <span style="color:#66d9ef">def</span> __init__(self):
+        self<span style="color:#f92672">.</span>buffer <span style="color:#f92672">=</span> collections<span style="color:#f92672">.</span>deque()
 
-    <span class="n">async</span> <span class="k">def</span> <span class="nf">_prefetch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="o">...</span>
+    async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_prefetch</span>(self):
+        <span style="color:#f92672">...</span>
 
-    <span class="k">def</span> <span class="nf">__aiter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span>
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__aiter__</span>(self):
+        <span style="color:#66d9ef">return</span> self
 
-    <span class="n">async</span> <span class="k">def</span> <span class="nf">__anext__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="nb">buffer</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="nb">buffer</span> <span class="o">=</span> <span class="n">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefetch</span><span class="p">()</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="nb">buffer</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">StopAsyncIteration</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="nb">buffer</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span></code></pre></div>
+    async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__anext__</span>(self):
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> self<span style="color:#f92672">.</span>buffer:
+            self<span style="color:#f92672">.</span>buffer <span style="color:#f92672">=</span> await self<span style="color:#f92672">.</span>_prefetch()
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> self<span style="color:#f92672">.</span>buffer:
+                <span style="color:#66d9ef">raise</span> StopAsyncIteration
+        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>buffer<span style="color:#f92672">.</span>popleft()</code></pre></div>
 <p><code>Cursor</code>类能够按下面的方式进行使用：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">Cursor</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">async <span style="color:#66d9ef">for</span> row <span style="color:#f92672">in</span> Cursor():
+    <span style="color:#66d9ef">print</span>(row)</code></pre></div>
 <p>它将会等价于如下的代码：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">i</span> <span class="o">=</span> <span class="n">Cursor</span><span class="p">()</span><span class="o">.</span><span class="n">__aiter__</span><span class="p">()</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">row</span> <span class="o">=</span> <span class="n">await</span> <span class="n">i</span><span class="o">.</span><span class="n">__anext__</span><span class="p">()</span>
-    <span class="k">except</span> <span class="n">StopAsyncIteration</span><span class="p">:</span>
-        <span class="k">break</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">i <span style="color:#f92672">=</span> Cursor()<span style="color:#f92672">.</span>__aiter__()
+<span style="color:#66d9ef">while</span> True:
+    <span style="color:#66d9ef">try</span>:
+        row <span style="color:#f92672">=</span> await i<span style="color:#f92672">.</span>__anext__()
+    <span style="color:#66d9ef">except</span> StopAsyncIteration:
+        <span style="color:#66d9ef">break</span>
+    <span style="color:#66d9ef">else</span>:
+        <span style="color:#66d9ef">print</span>(row)</code></pre></div>
 <h3 id="例子2">例子2</h3>
 
 <p>如下的例子是一个使用类将普通迭代器转换成异步的。虽然这并不是一个非常有用的事情，但是如下的代码说明了普通迭代器和异步迭代器之间的关系：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">AsyncIteratorWrapper</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AsyncIteratorWrapper</span>:
+    <span style="color:#66d9ef">def</span> __init__(self, obj):
+        self<span style="color:#f92672">.</span>_it <span style="color:#f92672">=</span> iter(obj)
 
-    <span class="k">def</span> <span class="nf">__aiter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span>
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__aiter__</span>(self):
+        <span style="color:#66d9ef">return</span> self
 
-    <span class="n">async</span> <span class="k">def</span> <span class="nf">__anext__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_it</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">StopAsyncIteration</span>
-        <span class="k">return</span> <span class="n">value</span>
+    async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__anext__</span>(self):
+        <span style="color:#66d9ef">try</span>:
+            value <span style="color:#f92672">=</span> next(self<span style="color:#f92672">.</span>_it)
+        <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">StopIteration</span>:
+            <span style="color:#66d9ef">raise</span> StopAsyncIteration
+        <span style="color:#66d9ef">return</span> value
 
-<span class="n">async</span> <span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">AsyncIteratorWrapper</span><span class="p">(</span><span class="s2">&#34;abc&#34;</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">letter</span><span class="p">)</span></code></pre></div>
+async <span style="color:#66d9ef">for</span> letter <span style="color:#f92672">in</span> AsyncIteratorWrapper(<span style="color:#e6db74">&#34;abc&#34;</span>):
+    <span style="color:#66d9ef">print</span>(letter)</code></pre></div>
 <h2 id="为什么是-stopasynciteration-异常">为什么是<code>StopAsyncIteration</code>异常</h2>
 
 <p>协程对象内部仍然是基于生成器的。所以，在<code>PEP 479</code>之前，在下面这两种代码中没有基本的区别：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">g1</span><span class="p">():</span>
-    <span class="k">yield</span> <span class="kn">from</span> <span class="nn">fut</span>
-    <span class="k">return</span> <span class="s1">&#39;spam&#39;</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">g2</span><span class="p">():</span>
-    <span class="k">yield</span> <span class="kn">from</span> <span class="nn">fut</span>
-    <span class="k">raise</span> <span class="ne">StopIteration</span><span class="p">(</span><span class="s1">&#39;spam&#39;</span><span class="p">)</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">g1</span>():
+    <span style="color:#66d9ef">yield</span> <span style="color:#f92672">from</span> fut
+    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;spam&#39;</span></code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">g2</span>():
+    <span style="color:#66d9ef">yield</span> <span style="color:#f92672">from</span> fut
+    <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">StopIteration</span>(<span style="color:#e6db74">&#39;spam&#39;</span>)</code></pre></div>
 <p>因为 PEP 479 被接受了，而且默认在协程对象中开启，所以如下的例子将会把它的<code>StopIteration</code>包裹在一个<code>RuntimeError</code>中：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">def</span> <span class="nf">a1</span><span class="p">():</span>
-    <span class="n">await</span> <span class="n">fut</span>
-    <span class="k">raise</span> <span class="ne">StopIteration</span><span class="p">(</span><span class="s1">&#39;spam&#39;</span><span class="p">)</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">a1</span>():
+    await fut
+    <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">StopIteration</span>(<span style="color:#e6db74">&#39;spam&#39;</span>)</code></pre></div>
 <p>唯一的方式就是由迭代器告诉外部的代码，迭代结束了而不能使用<code>StopIteration</code>异常。因此，一个新的内建的异常类<code>StopAsyncIteration</code> 被添加了。</p>
 
 <p>此外，由<code>PEP 479</code>的语义可得，所有协程中的<code>StopIteration</code>将会由一个<code>RuntimeError</code>来包裹。</p></article>
@@ -683,6 +677,29 @@ else:
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

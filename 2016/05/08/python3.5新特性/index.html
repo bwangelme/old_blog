@@ -197,35 +197,35 @@
 <p>通过添加<code>awaitabel</code>对象，协程函数，异步迭代器和异步内容管理器，PEP492极大地提升了在Python中进行协程编程的能力。</p>
 
 <p>通过<code>async func</code>语法可以声明一个协程函数，如下所示:</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">def</span> <span class="nf">coro</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s1">&#39;span&#39;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">coro</span>():
+    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;span&#39;</span></code></pre></div>
 <p>在一个协程函数内部，新的<code>await</code>表达式可以用来暂停协程的执行，直到新的结果可用，任何对象都可以被await化，只要这个对象通过定义<code>__await__</code>函数实现了<code>awaitabel</code>协议</p>
 
 <p>PEP492 也添加了<code>async for</code>语句来方便进行异步迭代器的迭代。</p>
 
 <h3 id="示例-基本的http客户端">示例: 基本的Http客户端</h3>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">asyncio</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> asyncio
 
-<span class="n">async</span> <span class="k">def</span> <span class="nf">http_get</span><span class="p">(</span><span class="n">domain</span><span class="p">):</span>
-    <span class="n">reader</span><span class="p">,</span> <span class="n">writer</span> <span class="o">=</span> <span class="n">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">open_connection</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">http_get</span>(domain):
+    reader, writer <span style="color:#f92672">=</span> await asyncio<span style="color:#f92672">.</span>open_connection(domain, <span style="color:#ae81ff">80</span>)
 
-    <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
-        <span class="sa">b</span><span class="s1">&#39;GET / HTTP/1.1&#39;</span><span class="p">,</span>
-        <span class="sa">b</span><span class="s1">&#39;Host: %b&#39;</span> <span class="o">%</span> <span class="n">domain</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;latin-1&#39;</span><span class="p">),</span>
-        <span class="sa">b</span><span class="s1">&#39;Connection: close&#39;</span><span class="p">,</span>
-        <span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
-    <span class="p">]))</span>
+    writer<span style="color:#f92672">.</span>write(<span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>join([
+        <span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;GET / HTTP/1.1&#39;</span>,
+        <span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;Host: %b&#39;</span> <span style="color:#f92672">%</span> domain<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#39;latin-1&#39;</span>),
+        <span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;Connection: close&#39;</span>,
+        <span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;&#39;</span>, <span style="color:#e6db74">b</span><span style="color:#e6db74">&#39;&#39;</span>
+    ]))
 
-    <span class="n">async</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt;&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+    async <span style="color:#66d9ef">for</span> line <span style="color:#f92672">in</span> reader:
+        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;&gt;&gt;&gt;&#39;</span>, line)
 
-    <span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    writer<span style="color:#f92672">.</span>close()
 
-<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">http_get</span><span class="p">(</span><span class="s1">&#39;baidu.com&#39;</span><span class="p">))</span>
-<span class="k">finally</span><span class="p">:</span>
-    <span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></div>
+loop <span style="color:#f92672">=</span> asyncio<span style="color:#f92672">.</span>get_event_loop()
+<span style="color:#66d9ef">try</span>:
+    loop<span style="color:#f92672">.</span>run_until_complete(http_get(<span style="color:#e6db74">&#39;baidu.com&#39;</span>))
+<span style="color:#66d9ef">finally</span>:
+    loop<span style="color:#f92672">.</span>close()</code></pre></div>
 <p>在上面的程序中，首先定义了一个事件循环和一个协程函数，协程函数跑在事件循环上，在协程函数内部，异步地去请求服务端的连接，连接成功建立以后，再向服务端发出Http请求，返回的Http相应被存储在reader这个异步迭代器中，然后再来通过<code>async for</code>来遍历出这个异步迭代器的所有结果。</p>
 
 <p>程序的输入如下:</p>
@@ -250,25 +250,22 @@
 <h3 id="示例-上下文管理器">示例: 上下文管理器</h3>
 
 <p>除了异步迭代器之外，还有新的语法支持异步的上下文管理器(关于上下文管理器可以参考我的这篇文章<a href="http://www.bwangel.win/2016/04/25/Python%E7%9A%84with%E8%AF%AD%E5%8F%A5/">Python的with语句</a>)，示例程序如下:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> asyncio
 
-<pre><code>import asyncio
+async <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">coro</span>(name, lock):
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;coro {}: waiting for lock&#39;</span><span style="color:#f92672">.</span>format(name))
+    async <span style="color:#66d9ef">with</span> lock:
+        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;coro {}: holding the lock&#39;</span><span style="color:#f92672">.</span>format(name))
+        await asyncio<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">1</span>)
+        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;coro {}: releasing the lock&#39;</span><span style="color:#f92672">.</span>format(name))
 
-async def coro(name, lock):
-    print('coro {}: waiting for lock'.format(name))
-    async with lock:
-        print('coro {}: holding the lock'.format(name))
-        await asyncio.sleep(1)
-        print('coro {}: releasing the lock'.format(name))
-
-loop = asyncio.get_event_loop()
-lock = asyncio.Lock()
-coros = asyncio.gather(coro(1, lock), coro(2, lock))
-try:
-    loop.run_until_complete(coros)
-finally:
-    loop.close()
-</code></pre>
-
+loop <span style="color:#f92672">=</span> asyncio<span style="color:#f92672">.</span>get_event_loop()
+lock <span style="color:#f92672">=</span> asyncio<span style="color:#f92672">.</span>Lock()
+coros <span style="color:#f92672">=</span> asyncio<span style="color:#f92672">.</span>gather(coro(<span style="color:#ae81ff">1</span>, lock), coro(<span style="color:#ae81ff">2</span>, lock))
+<span style="color:#66d9ef">try</span>:
+    loop<span style="color:#f92672">.</span>run_until_complete(coros)
+<span style="color:#66d9ef">finally</span>:
+    loop<span style="color:#f92672">.</span>close()</code></pre></div>
 <p>在上面的程序中，通过<code>asyncio.gather</code>函数将两个协程函数定义的协程对象生成一个future对象，然后通过一个事件循环去运行这个future对象。
 在协程函数内部，主要就是异步的获取锁，并且和with语句结合，可以在获取以后自动释放锁。</p>
 
@@ -325,6 +322,29 @@ coro 2: releasing the lock
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

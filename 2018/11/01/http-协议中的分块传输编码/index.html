@@ -207,72 +207,72 @@
 <h3 id="短连接例子">短连接例子</h3>
 
 <p>下面是使用短连接处理HTTP请求的例子，我们写完响应行后立刻将TCP连接关闭了，此时浏览器是能够正确处理这种请求的。</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">handleClosedHttpReq</span><span class="p">(</span><span class="nx">conn</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Conn</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">buffer</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
-    <span class="nx">n</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="nx">buffer</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-    <span class="p">}</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">buffer</span><span class="p">))</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">handleClosedHttpReq</span>(<span style="color:#a6e22e">conn</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Conn</span>) {
+    <span style="color:#a6e22e">buffer</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">byte</span>, <span style="color:#ae81ff">1024</span>)
+    <span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Read</span>(<span style="color:#a6e22e">buffer</span>)
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalln</span>(<span style="color:#a6e22e">err</span>)
+    }
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">n</span>, string(<span style="color:#a6e22e">buffer</span>))
 
-    <span class="nx">data</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;hello, world!&#34;</span><span class="p">)</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;HTTP/1.1 200 OK\r\n&#34;</span><span class="p">))</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;\r\n&#34;</span><span class="p">))</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-<span class="p">}</span>
+    <span style="color:#a6e22e">data</span> <span style="color:#f92672">:=</span> []byte(<span style="color:#e6db74">&#34;hello, world!&#34;</span>)
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;HTTP/1.1 200 OK\r\n&#34;</span>))
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;\r\n&#34;</span>))
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">data</span>)
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Close</span>()
+}
 
 
-<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">ln</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Listen</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="s">&#34;:8080&#34;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-    <span class="p">}</span>
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+    <span style="color:#a6e22e">ln</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Listen</span>(<span style="color:#e6db74">&#34;tcp&#34;</span>, <span style="color:#e6db74">&#34;:8080&#34;</span>)
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalln</span>(<span style="color:#a6e22e">err</span>)
+    }
 
-    <span class="k">for</span> <span class="p">{</span>
-        <span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ln</span><span class="p">.</span><span class="nf">Accept</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-            <span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-            <span class="k">continue</span>
-        <span class="p">}</span>
-        <span class="k">go</span> <span class="nf">handleClosedHttpReq</span><span class="p">(</span><span class="nx">conn</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span></code></pre></div>
+    <span style="color:#66d9ef">for</span> {
+        <span style="color:#a6e22e">conn</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ln</span>.<span style="color:#a6e22e">Accept</span>()
+        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+            <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+            <span style="color:#66d9ef">continue</span>
+        }
+        <span style="color:#66d9ef">go</span> <span style="color:#a6e22e">handleClosedHttpReq</span>(<span style="color:#a6e22e">conn</span>)
+    }
+}</code></pre></div>
 <p><img src="https://passage-1253400711.cos-website.ap-beijing.myqcloud.com/2018-11-01-233404.png" alt="HTTP短连接" /></p>
 
 <h3 id="持久连接例子">持久连接例子</h3>
 
 <p>在持久连接模式中，由于服务器不会立刻关闭TCP连接，所以需要在响应中加上一个<code>Content-Length</code>的响应头来表示响应体的长度，让浏览器判断HTTP响应是否结束。如果没有这个响应头的话，浏览器会处于<code>pending</code>的状态。</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 没有添加 Content-Length 的响应，浏览器会处于 pending 的状态
-</span><span class="c1"></span><span class="kd">func</span> <span class="nf">handleKeepAliveHttpReq</span><span class="p">(</span><span class="nx">conn</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Conn</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">buffer</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
-    <span class="nx">n</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="nx">buffer</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-    <span class="p">}</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">buffer</span><span class="p">))</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 没有添加 Content-Length 的响应，浏览器会处于 pending 的状态
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">handleKeepAliveHttpReq</span>(<span style="color:#a6e22e">conn</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Conn</span>) {
+    <span style="color:#a6e22e">buffer</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">byte</span>, <span style="color:#ae81ff">1024</span>)
+    <span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Read</span>(<span style="color:#a6e22e">buffer</span>)
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalln</span>(<span style="color:#a6e22e">err</span>)
+    }
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">n</span>, string(<span style="color:#a6e22e">buffer</span>))
 
-    <span class="nx">data</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;hello, keel-alive!&#34;</span><span class="p">)</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;HTTP/1.1 200 OK\r\n&#34;</span><span class="p">))</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;\r\n&#34;</span><span class="p">))</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
-<span class="p">}</span></code></pre></div>
+    <span style="color:#a6e22e">data</span> <span style="color:#f92672">:=</span> []byte(<span style="color:#e6db74">&#34;hello, keel-alive!&#34;</span>)
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;HTTP/1.1 200 OK\r\n&#34;</span>))
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;\r\n&#34;</span>))
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">data</span>)
+}</code></pre></div>
 <p><img src="https://passage-1253400711.cos-website.ap-beijing.myqcloud.com/2018-11-01-234251.png" alt="持久连接浏览器pending" /></p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 添加了 Content-Length，浏览器就可以正常处理响应了
-</span><span class="c1"></span><span class="kd">func</span> <span class="nf">handleKeepAliveHttpReq</span><span class="p">(</span><span class="nx">conn</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Conn</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">buffer</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
-    <span class="nx">n</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="nx">buffer</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-    <span class="p">}</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">buffer</span><span class="p">))</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// 添加了 Content-Length，浏览器就可以正常处理响应了
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">handleKeepAliveHttpReq</span>(<span style="color:#a6e22e">conn</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Conn</span>) {
+    <span style="color:#a6e22e">buffer</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">byte</span>, <span style="color:#ae81ff">1024</span>)
+    <span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Read</span>(<span style="color:#a6e22e">buffer</span>)
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalln</span>(<span style="color:#a6e22e">err</span>)
+    }
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">n</span>, string(<span style="color:#a6e22e">buffer</span>))
 
-    <span class="nx">data</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;hello, keel-alive!&#34;</span><span class="p">)</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;HTTP/1.1 200 OK\r\n&#34;</span><span class="p">))</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;Content-Length: %d\r\n&#34;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">data</span><span class="p">))))</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;\r\n&#34;</span><span class="p">))</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
-<span class="p">}</span></code></pre></div>
+    <span style="color:#a6e22e">data</span> <span style="color:#f92672">:=</span> []byte(<span style="color:#e6db74">&#34;hello, keel-alive!&#34;</span>)
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;HTTP/1.1 200 OK\r\n&#34;</span>))
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;Content-Length: %d\r\n&#34;</span>, len(<span style="color:#a6e22e">data</span>))))
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;\r\n&#34;</span>))
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">data</span>)
+}</code></pre></div>
 <p><img src="https://passage-1253400711.cos-website.ap-beijing.myqcloud.com/2018-11-01-234547.png" alt="持久连接" /></p>
 
 <h2 id="分块传输编码">分块传输编码</h2>
@@ -303,27 +303,27 @@ Transfer-Encoding: chunked\r\n
 </code></pre>
 
 <h3 id="分块传输编码例子">分块传输编码例子</h3>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">handleChunkedHttpResp</span><span class="p">(</span><span class="nx">conn</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Conn</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">buffer</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
-    <span class="nx">n</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="nx">buffer</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-    <span class="p">}</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">buffer</span><span class="p">))</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">handleChunkedHttpResp</span>(<span style="color:#a6e22e">conn</span> <span style="color:#a6e22e">net</span>.<span style="color:#a6e22e">Conn</span>) {
+    <span style="color:#a6e22e">buffer</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">byte</span>, <span style="color:#ae81ff">1024</span>)
+    <span style="color:#a6e22e">n</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Read</span>(<span style="color:#a6e22e">buffer</span>)
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+        <span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Fatalln</span>(<span style="color:#a6e22e">err</span>)
+    }
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">n</span>, string(<span style="color:#a6e22e">buffer</span>))
 
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;HTTP/1.1 200 OK\r\n&#34;</span><span class="p">))</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;Transfer-Encoding: chunked\r\n&#34;</span><span class="p">))</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;\r\n&#34;</span><span class="p">))</span>
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;HTTP/1.1 200 OK\r\n&#34;</span>))
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;Transfer-Encoding: chunked\r\n&#34;</span>))
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;\r\n&#34;</span>))
 
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;6\r\n&#34;</span><span class="p">))</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;hello,\r\n&#34;</span><span class="p">))</span>
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;6\r\n&#34;</span>))
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;hello,\r\n&#34;</span>))
 
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;8\r\n&#34;</span><span class="p">))</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;chunked!\r\n&#34;</span><span class="p">))</span>
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;8\r\n&#34;</span>))
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;chunked!\r\n&#34;</span>))
 
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;0\r\n&#34;</span><span class="p">))</span>
-    <span class="nx">conn</span><span class="p">.</span><span class="nf">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;\r\n&#34;</span><span class="p">))</span>
-<span class="p">}</span></code></pre></div>
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;0\r\n&#34;</span>))
+    <span style="color:#a6e22e">conn</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;\r\n&#34;</span>))
+}</code></pre></div>
 <p><img src="https://passage-1253400711.cos-website.ap-beijing.myqcloud.com/2018-11-02-000422.png" alt="HTTP chunked传输" /></p>
 
 <p>通过 WireShark 抓包我们可以更清晰地看到响应中有两个 chunked。但由于这两个chunked的内容很少，TCP传输的时候将它们合并了。</p>
@@ -376,6 +376,29 @@ Transfer-Encoding: chunked\r\n
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

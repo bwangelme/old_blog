@@ -211,12 +211,9 @@
 <h3 id="设置dhcp">设置DHCP</h3>
 
 <p>我的笔记本是通过网线连接到路由器上的，所以，首先我们需要将有线网卡通过 DHCP 自动连接网络的功能打开。这里我在网上搜索了一下，搜到了一篇文章：<a href="http://www.ubuntugeek.com/ubuntu-networking-configuration-using-command-line.html">Ubuntu Networking Configuration Using Command Line </a>。这篇文章很详细地介绍了Ubuntu如何设置动态IP和静态IP。我的电脑在刚装好系统的时候，没有任何关于有线网卡的配置文件，仅能够通过<code>ip addr</code>命令来看到当前系统的网卡，在了解到有线网卡的名称为<code>enp12s0</code>之后，我新建了一个文件<code>/etc/network/interfaces.d/enp12s0.conf</code>，然后向其中添加了如下的内容，</p>
-
-<pre><code># 设置网卡enp12s0在开机的时候通过 DHCP 自动连接到网络。
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 设置网卡enp12s0在开机的时候通过 DHCP 自动连接到网络。</span>
 auto enp12s0
-iface enp12s0 inet dhcp
-</code></pre>
-
+iface enp12s0 inet dhcp</code></pre></div>
 <p>上面两句配置就表示设置网卡enp12s0在开机的时候通过 DHCP 自动连接到网络。</p>
 
 <h3 id="设置默认网关">设置默认网关</h3>
@@ -240,29 +237,23 @@ iface enp12s0 inet dhcp
 <p><code>dnsmasq</code>在Ubuntu的源中直接有deb安装包，所以我们直接通过<code>sudo apt install dnsmasq</code>命令安装即可。</p>
 
 <p><code>dnsmasq</code>的配置我参考了文章<a href="http://cjting.me/misc/2016-08-20-%E4%BD%BF%E7%94%A8Dnsmasq%E6%90%AD%E5%BB%BA%E5%86%85%E7%BD%91DNS%E6%9C%8D%E5%8A%A1%E5%99%A8.html">使用Dnsmasq搭建内网DNS服务器</a>。使用了如下的配置：</p>
-
-<pre><code># 设置服务器的监听地址为192.168.X.X和127.0.0.1
-listen-address=192.168.X.X,127.0.0.1
-# 所有没有.号的域名(plain names)都不会向上游DNS Server转发，只查询hosts文件
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 设置服务器的监听地址为192.168.X.X和127.0.0.1</span>
+listen-address<span style="color:#f92672">=</span><span style="color:#ae81ff">192</span>.168.X.X,127.0.0.1
+<span style="color:#75715e"># 所有没有.号的域名(plain names)都不会向上游DNS Server转发，只查询hosts文件</span>
 domain-needed
-# 所有保留IP地址段内的反向查询都不会向上游DNS Server转发，只查询hosts文件
+<span style="color:#75715e"># 所有保留IP地址段内的反向查询都不会向上游DNS Server转发，只查询hosts文件</span>
 bogus-priv
-# 不要读取/etc/resolver中的DNS Server的配置
+<span style="color:#75715e"># 不要读取/etc/resolver中的DNS Server的配置</span>
 no-resolv
-# 不要poll /etc/resolver文件的更新
+<span style="color:#75715e"># 不要poll /etc/resolver文件的更新</span>
 no-poll
-# 配置上游服务器为DNSPod的公共DNS
-server=119.29.29.29
-server=182.254.116.116
-</code></pre>
-
+<span style="color:#75715e"># 配置上游服务器为DNSPod的公共DNS</span>
+server<span style="color:#f92672">=</span><span style="color:#ae81ff">119</span>.29.29.29
+server<span style="color:#f92672">=</span><span style="color:#ae81ff">182</span>.254.116.116</code></pre></div>
 <p>配置好了以后，我们可以通过<code>dnsmasq --test</code>命令来检查<code>dnsmasq</code>的配置文件语法是否正确。</p>
 
 <p>然后我们在服务器的<code>/etc/hosts</code>中添加我们想要设置的解析记录，比如这台服务器我设置了如下的记录：</p>
-
-<pre><code>192.168.X.X dev.bwangel.me
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#ae81ff">192</span>.168.X.X dev.bwangel.me</code></pre></div>
 <p>然后通过<code>sudo systemctl enable dnsmasq &amp;&amp; sudo systemctl restart dnsmasq</code>命令启动<code>dnsmasq</code>服务即可。</p>
 
 <p>最后我们可以通过<code>dig</code>命令测试一下，运行如下命令: <code>dig dev.bwangel.me @localhost</code>，看返回的IP地址是否和我们设置的解析记录相同。</p>
@@ -284,17 +275,14 @@ server=182.254.116.116
 <h3 id="ssh出现locale报错">ssh出现locale报错</h3>
 
 <p>这个问题经常遇到了，在Mac上通过SSH连接到Ubuntu上之后，在安装更新的过程中，出现了如下的报错：</p>
-
-<pre><code>perl: warning: Setting locale failed.
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">perl: warning: Setting locale failed.
 perl: warning: Please check that your locale settings:
-    LANGUAGE = (unset),
-    LC_ALL = (unset),
-    LC_MESSAGES = &quot;zh_CN.UTF-8&quot;,
-    LANG = &quot;zh_CN.UTF-8&quot;
+    LANGUAGE <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>unset<span style="color:#f92672">)</span>,
+    LC_ALL <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>unset<span style="color:#f92672">)</span>,
+    LC_MESSAGES <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;zh_CN.UTF-8&#34;</span>,
+    LANG <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;zh_CN.UTF-8&#34;</span>
     are supported and installed on your system.
-perl: warning: Falling back to the standard locale (&quot;C&quot;).
-</code></pre>
-
+perl: warning: Falling back to the standard locale <span style="color:#f92672">(</span><span style="color:#e6db74">&#34;C&#34;</span><span style="color:#f92672">)</span>.</code></pre></div>
 <p>这是由于终端SSH的时候，会将本地的locale配置传到服务端上去，我的本地设置的语系是<code>zh_CN.UTF-8</code>，但是服务器上只安装了<code>en_US.UTF-8</code>，所以就会报错提示说找不到语系<code>zh_CN.UTF-8</code>相关的文件。这里我们只需要修改一下服务器的<code>/etc/locale.gen</code>配置文件，将<code>zh_CN.UTF-8</code>相关的配置取消注释，然后再来运行<code>locale-gen</code>命令，就会安装上<code>zh_CN.UTF-8</code>语系相关的文件了，再来运行<code>perl</code>程序就不会报错了。</p></article>
     <footer class="post-footer">
       
@@ -339,6 +327,29 @@ perl: warning: Falling back to the standard locale (&quot;C&quot;).
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

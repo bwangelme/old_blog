@@ -193,40 +193,40 @@
 <h2 id="什么是命名空间">什么是命名空间</h2>
 
 <p>首先说什么是命名空间呢！我们知道，在Python中，一切都是对象，然后通过<strong>名字</strong>去引用对象。例如我们执行了一条语句<code>a = 3</code>,Python做的工作就是让名字<code>a</code>去引用一个 Int 对象<code>3</code>。这种名字和对象的对应关系都存储在一个字典中，而这个字典，就叫做命名空间。任何一个模块，类，实例，函数，都有其命名空间，这个命名空间可以通过<code>__dict__</code>来访问。比如下面这段代码：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">sys</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">m</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="vm">__dict__</span> <span class="ow">is</span> <span class="nb">globals</span><span class="p">())</span>
-<span class="bp">True</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
-<span class="mi">32</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#f92672">import</span> sys
+<span style="color:#f92672">&gt;&gt;&gt;</span> m <span style="color:#f92672">=</span> sys<span style="color:#f92672">.</span>modules[__name__]
+<span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#66d9ef">print</span>(m<span style="color:#f92672">.</span>__dict__ <span style="color:#f92672">is</span> globals())
+True
+<span style="color:#f92672">&gt;&gt;&gt;</span> a <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
+<span style="color:#f92672">&gt;&gt;&gt;</span> globals()<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;a&#39;</span>)
+<span style="color:#ae81ff">32</span></code></pre></div>
 <p>在上面的例子中，我们首先通过<code>sys.modules</code>获取了当前运行的模块，然后通过<code>__dict__</code>成员获取了当前模块的命名空间，然后发现<code>globals</code>函数返回的就是当前模块的命名空间。当我们执行了<code>a = 3</code>语句以后，可以看到，当前模块的命名空间中多了一个<code>a</code>成员，其值为3。</p>
 
 <h2 id="命名空间有哪些">命名空间有哪些</h2>
 
 <p>前面我们讲到，每个类，函数，实例，模块都有其命名空间，可以通过<code>__dict__</code>成员来访问，如下面代码所示：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">sys</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">main_module</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">module_member</span> <span class="o">=</span> <span class="s1">&#39;module&#39;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">class</span> <span class="nc">C</span><span class="p">:</span>
-<span class="o">...</span>     <span class="n">class_member</span> <span class="o">=</span> <span class="s1">&#39;class&#39;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">C</span><span class="p">()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">instance_member</span> <span class="o">=</span> <span class="s1">&#39;instance&#39;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">def</span> <span class="nf">func</span><span class="p">():</span>
-<span class="o">...</span>     <span class="n">func_member</span> <span class="o">=</span> <span class="s1">&#39;function&#39;</span>
-<span class="o">...</span>     <span class="n">fls</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">_getframe</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">f_locals</span>
-<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="s1">&#39;fls and locals() are same object? </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fls</span> <span class="ow">is</span> <span class="nb">locals</span><span class="p">()))</span>
-<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="n">fls</span><span class="p">[</span><span class="s1">&#39;func_member&#39;</span><span class="p">])</span>
-<span class="o">&gt;&gt;&gt;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">main_module</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;module_member&#39;</span><span class="p">])</span>
-<span class="n">module</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;class_member&#39;</span><span class="p">])</span>
-<span class="k">class</span>
-<span class="err">&gt;&gt;&gt; </span><span class="nc">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;instance_member&#39;</span><span class="p">])</span>
-<span class="n">instance</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">func</span><span class="p">()</span>
-<span class="n">fls</span> <span class="ow">and</span> <span class="nb">locals</span><span class="p">()</span> <span class="n">are</span> <span class="n">same</span> <span class="nb">object</span><span class="err">?</span> <span class="bp">True</span>
-<span class="n">function</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#f92672">import</span> sys
+<span style="color:#f92672">&gt;&gt;&gt;</span> main_module <span style="color:#f92672">=</span> sys<span style="color:#f92672">.</span>modules[__name__]
+<span style="color:#f92672">&gt;&gt;&gt;</span> module_member <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;module&#39;</span>
+<span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">C</span>:
+<span style="color:#f92672">...</span>     class_member <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;class&#39;</span>
+<span style="color:#f92672">&gt;&gt;&gt;</span> c <span style="color:#f92672">=</span> C()
+<span style="color:#f92672">&gt;&gt;&gt;</span> c<span style="color:#f92672">.</span>instance_member <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;instance&#39;</span>
+<span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">func</span>():
+<span style="color:#f92672">...</span>     func_member <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;function&#39;</span>
+<span style="color:#f92672">...</span>     fls <span style="color:#f92672">=</span> sys<span style="color:#f92672">.</span>_getframe(<span style="color:#ae81ff">0</span>)<span style="color:#f92672">.</span>f_locals
+<span style="color:#f92672">...</span>     <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;fls and locals() are same object? </span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (fls <span style="color:#f92672">is</span> locals()))
+<span style="color:#f92672">...</span>     <span style="color:#66d9ef">print</span>(fls[<span style="color:#e6db74">&#39;func_member&#39;</span>])
+<span style="color:#f92672">&gt;&gt;&gt;</span>
+<span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#66d9ef">print</span>(main_module<span style="color:#f92672">.</span>__dict__[<span style="color:#e6db74">&#39;module_member&#39;</span>])
+module
+<span style="color:#f92672">&gt;&gt;&gt;</span> <span style="color:#66d9ef">print</span>(C<span style="color:#f92672">.</span>__dict__[<span style="color:#e6db74">&#39;class_member&#39;</span>])
+<span style="color:#66d9ef">class</span>
+<span style="color:#960050;background-color:#1e0010">&gt;&gt;&gt; </span><span style="color:#a6e22e">print</span>(c<span style="color:#f92672">.</span>__dict__[<span style="color:#e6db74">&#39;instance_member&#39;</span>])
+instance
+<span style="color:#f92672">&gt;&gt;&gt;</span> func()
+fls <span style="color:#f92672">and</span> locals() are same object<span style="color:#960050;background-color:#1e0010">?</span> True
+function</code></pre></div>
 <p>在上面的代码中，我们分别访问了，模块，类，实例，函数的命名空间，并在其中取出了我们命名的变量。其中，访问函数的命名空间有些特殊，我们是通过<code>_getframe</code>函数访问了当前栈帧，然后在栈帧中找到了当前函数的命名空间。当然这个函数的命名空间也可以通过<code>locals</code>函数访问到。</p>
 
 <h2 id="变量查找原则">变量查找原则</h2>
@@ -238,30 +238,30 @@
 <p>遇到一个名字的时候，Python解释器首先会去本地命名空间(<code>Local</code>)中查找，然后再去其所在函数的作用域(<code>Enclosing Function</code>)中查找，如果还没找到，就去全局命名空间(<code>Global</code>)中查找，最后会去<code>__builtin__</code>这个模块中查找，<code>__builtin__</code>模块在 Python3 中已经重命名成了<code>builtins</code>，详见 <a href="http://stackoverflow.com/questions/9047745/where-is-the-builtin-module-in-python3-why-was-it-renamed">stackoverflow 上关于<code>builtin</code>的提问</a>，感谢<a href="https://gold.xitu.io/entry/5859fdb3570c3500691df8de/detail">@欧阳杰</a>童鞋指出这个问题。</p>
 
 <p>例如下面的一段代码：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
-<span class="o">...</span> <span class="n">__builtin__</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;Hello, World!&#39;</span>
-<span class="o">...</span> <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
-<span class="o">...</span>     <span class="n">y</span> <span class="o">=</span> <span class="s1">&#39;abc&#39;</span>
-<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-<span class="o">...</span>
-<span class="o">...</span> <span class="n">test</span><span class="p">()</span>
-<span class="o">...</span>
-<span class="mi">1234</span>
-<span class="n">abc</span>
-<span class="n">Hello</span><span class="p">,</span> <span class="n">World</span><span class="err">!</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">&gt;&gt;&gt;</span> x <span style="color:#f92672">=</span> <span style="color:#ae81ff">1234</span>
+<span style="color:#f92672">...</span> __builtin__<span style="color:#f92672">.</span>s <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Hello, World!&#39;</span>
+<span style="color:#f92672">...</span> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test</span>():
+<span style="color:#f92672">...</span>     y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;abc&#39;</span>
+<span style="color:#f92672">...</span>     <span style="color:#66d9ef">print</span>(x)
+<span style="color:#f92672">...</span>     <span style="color:#66d9ef">print</span>(y)
+<span style="color:#f92672">...</span>     <span style="color:#66d9ef">print</span>(s)
+<span style="color:#f92672">...</span>
+<span style="color:#f92672">...</span> test()
+<span style="color:#f92672">...</span>
+<span style="color:#ae81ff">1234</span>
+abc
+Hello, World<span style="color:#960050;background-color:#1e0010">!</span></code></pre></div>
 <p>在上面的代码中，s 是<code>builtins</code>命名空间中的名字，y 是<code>local</code>命名空间中的名字，x 是<code>Global</code>命名空间中的名字，它们都能够被正确找到并打印出来。</p>
 
 <h2 id="分析一个unboundlocalerror例子">分析一个UnboundLocalError例子</h2>
 
 <p>在最后，我们来分析这样一段代码：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
-<span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;abc&#39;</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">x <span style="color:#f92672">=</span> <span style="color:#ae81ff">1234</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test</span>():
+    <span style="color:#66d9ef">print</span>(x)
+    x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;abc&#39;</span>
 
-<span class="n">test</span><span class="p">()</span></code></pre></div>
+test()</code></pre></div>
 <pre><code>---------------------------------------------------------------------------
 
 UnboundLocalError                         Traceback (most recent call last)
@@ -284,32 +284,32 @@ UnboundLocalError: local variable 'x' referenced before assignment
 </code></pre>
 
 <p>在上面的函数中，我们要打印一个名字<code>x</code>，它首先会去本地命名空间中查找，没有找到。然后去当前函数<code>test</code>的作用域中查找，找到了。此时Python解释器就会发现<code>x</code>这个名字还没有添加到local本地命名空间中，就被引用了。所以就会抛出一个异常，说<code>x</code>还未被赋值就被引用了。如果我们把代码改成下面这种形式，发现就可以正常运行了：</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
-<span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">x <span style="color:#f92672">=</span> <span style="color:#ae81ff">1234</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test</span>():
+    <span style="color:#66d9ef">print</span>(x)
 
-<span class="n">test</span><span class="p">()</span></code></pre></div>
+test()</code></pre></div>
 <pre><code>1234
 </code></pre>
 
 <p>为什么删除了x的赋值语句，这个函数就能正常运行了呢？
 这是因为此时Python解释器查找命名空间的顺序变了。解释器首先会去查找本地命名空间，发现没有，然后去查找函数<code>test</code>的作用域，发现也没有，接着再去查找全局命名空间，此时找到了，就会打印出x的值。</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">dis</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> dis
 
-<span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
-<span class="k">def</span> <span class="nf">test_right</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+x <span style="color:#f92672">=</span> <span style="color:#ae81ff">1234</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_right</span>():
+    <span style="color:#66d9ef">print</span>(x)
 
-<span class="n">dis</span><span class="o">.</span><span class="n">dis</span><span class="p">(</span><span class="n">test_right</span><span class="p">)</span>
+dis<span style="color:#f92672">.</span>dis(test_right)
 
-<span class="k">print</span><span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">20</span><span class="p">)</span>
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;-&#39;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">20</span>)
 
-<span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
-<span class="k">def</span> <span class="nf">test_error</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;abc&#39;</span>
+x <span style="color:#f92672">=</span> <span style="color:#ae81ff">1234</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">test_error</span>():
+    <span style="color:#66d9ef">print</span>(x)
+    x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;abc&#39;</span>
 
-<span class="n">dis</span><span class="o">.</span><span class="n">dis</span><span class="p">(</span><span class="n">test_error</span><span class="p">)</span></code></pre></div>
+dis<span style="color:#f92672">.</span>dis(test_error)</code></pre></div>
 <pre><code>  5           0 LOAD_GLOBAL              0 (print)
               3 LOAD_GLOBAL              1 (x)
               6 CALL_FUNCTION            1 (1 positional, 0 keyword pair)
@@ -368,6 +368,29 @@ UnboundLocalError: local variable 'x' referenced before assignment
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 

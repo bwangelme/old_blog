@@ -192,8 +192,8 @@
 <h2 id="with语句的通常用法">With语句的通常用法</h2>
 
 <p>with语句是一个新的控制流结构, 它的基本结构如下:</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">with</span> <span class="n">expression</span> <span class="p">[</span><span class="k">as</span> <span class="n">variable</span><span class="p">]:</span>
-    <span class="k">with</span><span class="o">-</span><span class="n">block</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">with</span> expression [<span style="color:#66d9ef">as</span> variable]:
+    <span style="color:#66d9ef">with</span><span style="color:#f92672">-</span>block</code></pre></div>
 <p><code>expression</code>应该是可求值的，而且它的求值结果应该是一个支持上下文管理协议的对象。</p>
 
 <p>这个对象可能返回一个值，这个值可以绑定到一个命名变量variable（注意variable并不是表达式结果的赋值）。</p>
@@ -201,30 +201,30 @@
 <p><code>variable</code>能够在<code>with-block</code>语句执行前运行一些构造代码，且在<code>with-block</code>语句执行后运行一些析构代码，甚至就算<code>with-block</code>语句抛出异常了，析构代码一样能够运行。</p>
 
 <p>一些Python标准对象已经支持上下文管理协议，且能够和<code>with</code>一起使用，例如<code>File</code>对象:</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/etc/passwd&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
-        <span class="k">print</span> <span class="n">line</span>
-        <span class="o">...</span> <span class="n">more</span> <span class="n">processing</span> <span class="n">code</span> <span class="o">...</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;/etc/passwd&#39;</span>, <span style="color:#e6db74">&#39;r&#39;</span>) <span style="color:#66d9ef">as</span> f:
+    <span style="color:#66d9ef">for</span> line <span style="color:#f92672">in</span> f:
+        <span style="color:#66d9ef">print</span> line
+        <span style="color:#f92672">...</span> more processing code <span style="color:#f92672">...</span></code></pre></div>
 <p>在这个语句执行后，文件对象f将会是关闭状态，就算for循环抛出了一个一场，只是部分执行了<code>with-block</code>的代码。</p>
 
 <p><code>threading</code>模块的锁和条件变量也支持<code>with</code>语句:</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
-<span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
-    <span class="c1"># 原子操作的代码</span>
-    <span class="o">...</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">lock <span style="color:#f92672">=</span> threading<span style="color:#f92672">.</span>Lock()
+<span style="color:#66d9ef">with</span> lock:
+    <span style="color:#75715e"># 原子操作的代码</span>
+    <span style="color:#f92672">...</span></code></pre></div>
 <p>这个锁在<code>with-block</code>代码执行之前被锁定，而且在<code>with-block</code>语句执行完以后总是被释放。</p>
 
 <p><code>decimal</code>中新的<code>localcontext()</code>函数使保存和重置当前十进制环境变得很容易，它封装了计算所需的精度和圆整度:</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">Context</span><span class="p">,</span> <span class="n">localcontext</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> decimal <span style="color:#f92672">import</span> Decimal, Context, localcontext
 
-<span class="c1"># 显示默认的28位精度</span>
-<span class="n">v</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;578&#39;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">sqrt</span><span class="p">())</span>
+<span style="color:#75715e"># 显示默认的28位精度</span>
+v <span style="color:#f92672">=</span> Decimal(<span style="color:#e6db74">&#39;578&#39;</span>)
+<span style="color:#66d9ef">print</span>(v<span style="color:#f92672">.</span>sqrt())
 
-<span class="k">with</span> <span class="n">localcontext</span><span class="p">(</span><span class="n">Context</span><span class="p">(</span><span class="n">prec</span><span class="o">=</span><span class="mi">16</span><span class="p">)):</span>
-    <span class="c1"># 这个块中的所有代码都会是16位的精度</span>
-    <span class="c1"># 在这个代码块结束以后，原始的精度将会被重置回来</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">sqrt</span><span class="p">())</span></code></pre></div>
+<span style="color:#66d9ef">with</span> localcontext(Context(prec<span style="color:#f92672">=</span><span style="color:#ae81ff">16</span>)):
+    <span style="color:#75715e"># 这个块中的所有代码都会是16位的精度</span>
+    <span style="color:#75715e"># 在这个代码块结束以后，原始的精度将会被重置回来</span>
+    <span style="color:#66d9ef">print</span>(v<span style="color:#f92672">.</span>sqrt())</code></pre></div>
 <h2 id="自己动手写一个上下文管理器">自己动手写一个上下文管理器</h2>
 
 <p>在底层实现上, <code>with</code>语句还是相当复杂的，大多数人仅仅在公司中和已存在的对象一起使用<code>with</code>语句, 且不需要知道这些实际细节。
@@ -246,48 +246,45 @@
 <p>(对于不熟悉数据库的人们来说，事务就是一组数据库的改变打包到了一起，事务可以是<code>committed</code>，代表着所有的更改都被写入到了数据库中，也可以是<code>rolled back</code>, 代表所有的更改都被丢弃，数据库没有变化. 关于更多关于事务的信息可以参看任何数据库相关的书籍。)</p>
 
 <p>让我们假设这里有一个对象代表了数据库连接，我们的目标是让用户能够以下面的方式来写代码:</p>
-
-<pre><code>db_connection = DatabaseConnection()
-with db_connection as cursor:
-    cursor.execute('insert into ...')
-    cursor.execute('delete from')
-    # ... more operations ...
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">db_connection <span style="color:#f92672">=</span> DatabaseConnection()
+<span style="color:#66d9ef">with</span> db_connection <span style="color:#66d9ef">as</span> cursor:
+    cursor<span style="color:#f92672">.</span>execute(<span style="color:#e6db74">&#39;insert into ...&#39;</span>)
+    cursor<span style="color:#f92672">.</span>execute(<span style="color:#e6db74">&#39;delete from&#39;</span>)
+    <span style="color:#75715e"># ... more operations ...</span></code></pre></div>
 <p>如果with块中的代码被完美地执行了的话，事务应该被提交，否则如果with块中的代码抛出异常的话，事务应该被回滚。</p>
 
 <p>我假设<code>DatabaseConnection</code>对象应该有如下的基础接口。</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">class</span> <span class="nc">DatabaseConnection</span><span class="p">:</span>
-    <span class="c1"># Database interface</span>
-    <span class="k">def</span> <span class="nf">cursor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s2">&#34;&#34;&#34;返回一个cursor对象，而且开启一个新的事务
-</span><span class="s2">        &#34;&#34;&#34;</span>
-    <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s2">&#34;&#34;&#34;提交当前事务
-</span><span class="s2">        &#34;&#34;&#34;</span>
-    <span class="k">def</span> <span class="nf">rollback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s2">&#34;&#34;&#34;回滚当前事务
-</span><span class="s2">        &#34;&#34;&#34;</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DatabaseConnection</span>:
+    <span style="color:#75715e"># Database interface</span>
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">cursor</span>(self):
+        <span style="color:#e6db74">&#34;&#34;&#34;返回一个cursor对象，而且开启一个新的事务
+</span><span style="color:#e6db74">        &#34;&#34;&#34;</span>
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">commit</span>(self):
+        <span style="color:#e6db74">&#34;&#34;&#34;提交当前事务
+</span><span style="color:#e6db74">        &#34;&#34;&#34;</span>
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">rollback</span>(self):
+        <span style="color:#e6db74">&#34;&#34;&#34;回滚当前事务
+</span><span style="color:#e6db74">        &#34;&#34;&#34;</span></code></pre></div>
 <p><code>__enter__()</code>方法是很容易写的，仅仅需要开启一个新的事物。对于这个应用程序游标结果对象应该是一个有用的接口，所以这个方法应该返回它，用户能够增加一个游标到with语句块中，并绑定到一个变量上。</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">class</span> <span class="nc">DatabaseConnection</span><span class="p">:</span>
-    <span class="o">...</span>
-    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># code to start a new transaction</span>
-        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">cursor</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DatabaseConnection</span>:
+    <span style="color:#f92672">...</span>
+    <span style="color:#66d9ef">def</span> __enter__(self):
+        <span style="color:#75715e"># code to start a new transaction</span>
+        cursor <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>cursor()
+        <span style="color:#66d9ef">return</span> cursor</code></pre></div>
 <p><code>__exit__()</code>方法是最复杂的，因为这里需要做大部分的工作。这个方法必须去检查是否有异常发生。如果没有异常的话，事务被提交，如果有异常的话，事务被回滚。</p>
 
 <p>在如下的代码中，异常将会放在函数的末尾，返回默认值<code>None</code>. <code>None</code>就是<code>False</code>,所以异常就会被自动重新抛出。如果你希望的话，你可以做的更精确，在标记的位置添加一条return语句。</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="k">class</span> <span class="nc">DatabaseConnection</span><span class="p">:</span>
-    <span class="o">...</span>
-    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">tb</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="c1"># No execption, so commit</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Exception occurred, so rollback</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
-            <span class="c1"># return False</span></code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DatabaseConnection</span>:
+    <span style="color:#f92672">...</span>
+    <span style="color:#66d9ef">def</span> __exit__(self, type, value, tb):
+        <span style="color:#66d9ef">if</span> tb <span style="color:#f92672">is</span> None:
+            <span style="color:#75715e"># No execption, so commit</span>
+            self<span style="color:#f92672">.</span>commit()
+        <span style="color:#66d9ef">else</span>:
+            <span style="color:#75715e"># Exception occurred, so rollback</span>
+            self<span style="color:#f92672">.</span>rollback()
+            <span style="color:#75715e"># return False</span></code></pre></div>
 <h2 id="contextlib模块">contextlib模块</h2>
 
 <p>新的<code>contextlib</code>模块提供了一些有用的方法和修饰器去写能够和<code>with</code>语句一起使用的对象。</p>
@@ -295,35 +292,32 @@ with db_connection as cursor:
 <p>这个叫做<code>contextmanager</code>的修饰器, 它允许你去写一个生成器函数而不是定义一个新的类。这个生成器应该精确地<code>yield</code>一个值，在<code>yield</code>之前的代码将会被当作<code>__enter__()</code>函数执行，且yield的返回值将会被当作<code>__enter__()</code>函数的返回值，将会被绑定到<code>with</code>语句后<code>as</code>后的变量上(如果as后这个变量存在的话)。yield之后的代码将会被当作<code>__exit__()</code>函数来执行，任何抛出的异常将会由<code>yield</code>语句来重新抛出。</p>
 
 <p>我们上一节的数据库例子可以使用这个修饰器，以如下的方式来写：</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> contextlib <span style="color:#f92672">import</span> contextmanager
 
-<span class="nd">@contextmanager</span>
-<span class="k">def</span> <span class="nf">db_transaction</span><span class="p">(</span><span class="n">connection</span><span class="p">):</span>
-    <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">yield</span> <span class="n">cursor</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="n">connection</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
-        <span class="k">raise</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span style="color:#a6e22e">@contextmanager</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">db_transaction</span>(connection):
+    cursor <span style="color:#f92672">=</span> connection<span style="color:#f92672">.</span>cursor()
+    <span style="color:#66d9ef">try</span>:
+        <span style="color:#66d9ef">yield</span> cursor
+    <span style="color:#66d9ef">except</span>:
+        connection<span style="color:#f92672">.</span>rollback()
+        <span style="color:#66d9ef">raise</span>
+    <span style="color:#66d9ef">else</span>:
+        connection<span style="color:#f92672">.</span>commit()
 
-<span class="n">db</span> <span class="o">=</span> <span class="n">DatabaseConnection</span><span class="p">()</span>
-<span class="k">with</span> <span class="n">db_transaction</span><span class="p">(</span><span class="n">db</span><span class="p">)</span> <span class="k">as</span> <span class="n">cursor</span><span class="p">:</span>
-    <span class="o">...</span></code></pre></div>
+db <span style="color:#f92672">=</span> DatabaseConnection()
+<span style="color:#66d9ef">with</span> db_transaction(db) <span style="color:#66d9ef">as</span> cursor:
+    <span style="color:#f92672">...</span></code></pre></div>
 <p><code>contextlib</code>模块也有一个<code>nested(mgr1, mgr2, ...)</code>函数来绑定许多个上下文管理器，这样的话你就不需要写嵌套的<code>with</code>语句了。在下面这个例子中，单个with语句获得了线程锁，并且开启了一个事务。</p>
-
-<pre><code>lock = threading.Lock()
-with nested (db_transaction(db), lock) as (cursor, locked):
-</code></pre>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">lock <span style="color:#f92672">=</span> threading<span style="color:#f92672">.</span>Lock()
+<span style="color:#66d9ef">with</span> nested (db_transaction(db), lock) <span style="color:#66d9ef">as</span> (cursor, locked):</code></pre></div>
 <p>最后，closing函数返回了一个对象，它能够绑定到一个变量上，在函数块的末尾，自动调用<code>object.close()</code>方法</p>
-<div class="highlight"><pre class="chroma"><code class="language-py" data-lang="py"><span class="kn">import</span> <span class="nn">urllib</span><span class="o">,</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">closing</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> urllib<span style="color:#f92672">,</span> sys
+<span style="color:#f92672">from</span> contextlib <span style="color:#f92672">import</span> closing
 
-<span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s1">&#39;http://www.baidu.com&#39;</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span></code></pre></div>
+<span style="color:#66d9ef">with</span> closing(urllib<span style="color:#f92672">.</span>urlopen(<span style="color:#e6db74">&#39;http://www.baidu.com&#39;</span>)) <span style="color:#66d9ef">as</span> f:
+    <span style="color:#66d9ef">for</span> line <span style="color:#f92672">in</span> f:
+        sys<span style="color:#f92672">.</span>stdout<span style="color:#f92672">.</span>write(line)</code></pre></div>
 <h2 id="参考">参考</h2>
 
 <p><a href="http://www.python.org/peps/pep-0343.html">PEP 343, The &lsquo;with&rsquo; statement</a>
@@ -369,6 +363,29 @@ with nested (db_transaction(db), lock) as (cursor, locked):
 
 
 
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML' async></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    },
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
 
 
 
