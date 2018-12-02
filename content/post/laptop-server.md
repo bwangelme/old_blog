@@ -39,7 +39,7 @@ tags: [Ubuntu, DNS, 折腾]
 
 我的笔记本是通过网线连接到路由器上的，所以，首先我们需要将有线网卡通过 DHCP 自动连接网络的功能打开。这里我在网上搜索了一下，搜到了一篇文章：[Ubuntu Networking Configuration Using Command Line ](http://www.ubuntugeek.com/ubuntu-networking-configuration-using-command-line.html)。这篇文章很详细地介绍了Ubuntu如何设置动态IP和静态IP。我的电脑在刚装好系统的时候，没有任何关于有线网卡的配置文件，仅能够通过`ip addr`命令来看到当前系统的网卡，在了解到有线网卡的名称为`enp12s0`之后，我新建了一个文件`/etc/network/interfaces.d/enp12s0.conf`，然后向其中添加了如下的内容，
 
-```
+```sh
 # 设置网卡enp12s0在开机的时候通过 DHCP 自动连接到网络。
 auto enp12s0
 iface enp12s0 inet dhcp
@@ -69,7 +69,7 @@ iface enp12s0 inet dhcp
 
 `dnsmasq`的配置我参考了文章[使用Dnsmasq搭建内网DNS服务器](http://cjting.me/misc/2016-08-20-%E4%BD%BF%E7%94%A8Dnsmasq%E6%90%AD%E5%BB%BA%E5%86%85%E7%BD%91DNS%E6%9C%8D%E5%8A%A1%E5%99%A8.html)。使用了如下的配置：
 
-```
+```sh
 # 设置服务器的监听地址为192.168.X.X和127.0.0.1
 listen-address=192.168.X.X,127.0.0.1
 # 所有没有.号的域名(plain names)都不会向上游DNS Server转发，只查询hosts文件
@@ -89,7 +89,7 @@ server=182.254.116.116
 
 然后我们在服务器的`/etc/hosts`中添加我们想要设置的解析记录，比如这台服务器我设置了如下的记录：
 
-```
+```sh
 192.168.X.X dev.bwangel.me
 ```
 
@@ -115,7 +115,7 @@ server=182.254.116.116
 
 这个问题经常遇到了，在Mac上通过SSH连接到Ubuntu上之后，在安装更新的过程中，出现了如下的报错：
 
-```
+```sh
 perl: warning: Setting locale failed.
 perl: warning: Please check that your locale settings:
     LANGUAGE = (unset),

@@ -25,7 +25,7 @@ tags: [Python, Python标准库]
 
 `elements`方法用户迭代地展示`Counter`内的所有元素，按元素的计数重复该元素，如果该元素的计数小于1，那么Counter就会忽略该元素，不进行展示。
 
-```
+```py
 In [1]: from collections import Counter
 
 In [2]: c = Counter({'a': 1, 'b': 2, 'c': 0, 'd': -2})
@@ -42,7 +42,7 @@ Out[4]: ['a', 'b', 'b']
 
 `most_common`函数返回`Counter`中次数最多的N个元素，如果N没有提供或者是`None`，那么就会返回所有元素。
 
-```
+```py
 >>> from collections import Counter
 >>> c = Counter({'a': 1, 'b': 2, 'c': 0, 'd': -2})
 >>> c.most_common()
@@ -55,7 +55,7 @@ Out[4]: ['a', 'b', 'b']
 
 `substract`方法接收一个可迭代或者可映射的对象，针对每个元素减去参数中的元素对应的次数。
 
-```
+```py
 >>> from collections import Counter
 >>> c = Counter({'a': 1, 'b': 3, 'c': -2, 'd': 0})
 >>> c.subtract(['a', 'a', 'b', 'b', 'b', 'b'])
@@ -71,7 +71,7 @@ Counter({'d': 3, 'a': -1, 'b': -1, 'c': -2})
 
 `update`方法的功能和`substract`方法的功能正好相反，它接收一个可迭代或者可映射的对象，针对每个元素加上参数中的元素对应的次数。
 
-```
+```py
 >>> from collections import Counter
 >>> c = Counter({'a': 1, 'b': 3, 'c': -2, 'd': 0})
 >>> c.update({'a': 2, 'c': 5, 'd': 3})
@@ -87,7 +87,7 @@ __说明__：下面代码中全部省略了导入`Counter`类的过程
 
 + 统计所有元素的次数之和
 
-```
+```py
 >>> c = Counter(a=1, b=-2, c=3, d=4)
 >>> sum(c.values())
 6
@@ -95,7 +95,7 @@ __说明__：下面代码中全部省略了导入`Counter`类的过程
 
 + 清除所有元素的统计次数
 
-```
+```py
 >>> c = Counter(a=1, b=-2, c=3, d=4)
 >>> c.clear()
 >>> c
@@ -105,7 +105,7 @@ Counter()
 
 + 列出所有元素
 
-```
+```py
 >>> c = Counter(a=1, b=-2, c=3, d=4, f=0)
 >>> list(c)
 ['a', 'b', 'c', 'd', 'f']
@@ -115,7 +115,7 @@ Counter()
 
 + 获取Counter中(元素，次数)的元祖
 
-```
+```py
 >>> c = Counter(a=1, b=-2, c=3, d=4, f=0)
 >>> dict(c)  # 将Counter转换成一个字典
 {'a': 1, 'b': -2, 'c': 3, 'd': 4, 'f': 0}
@@ -128,7 +128,7 @@ Counter({'c': 3, 'b': 2, 'a': 1})
 
 + 获取N个次数最少的元素
 
-```
+```py
 >>> c = Counter(a=1, b=-2, c=3, d=4, f=0)
 >>> c.most_common()[:2:-1]
 [('b', -2), ('f', 0)]
@@ -136,7 +136,7 @@ Counter({'c': 3, 'b': 2, 'a': 1})
 
 + 删除掉所有次数小于等于0的元素
 
-```
+```py
 >>> c = Counter(a=1, b=-2, c=3, d=4, f=0)
 >>> +c
 Counter({'d': 4, 'c': 3, 'a': 1})
@@ -146,7 +146,7 @@ Counter({'d': 4, 'c': 3, 'a': 1})
 
 Counter之间还能进行数学运算，__在数学运算的结果中，次数小于等于0的元素将会被删除掉__。
 
-```
+```py
 >>> c = Counter(a=3, b=1)
 >>> d = Counter(a=1, b=2)
 >>> c + d  # 将元素的次数进行相加
@@ -162,7 +162,7 @@ Counter({'a': 3, 'b': 2, 'c': 1})
 
 + 单目运算符`+`或者`-`
 
-```
+```py
 >>> c = Counter(a=2, b=-4)
 >>> +c
 Counter({'a': 2})

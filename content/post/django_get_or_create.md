@@ -17,7 +17,7 @@ draft: false
 
 我查了一下 get_or_create 的源码：它创建数据库记录的代码是这样的：
 
-```
+```python
 def _create_object_from_params(self, lookup, params):
     """
     Tries to create an object using passed params.
@@ -41,7 +41,7 @@ _create_object_from_params 做的事情就是开启一个事务，然后通过 i
 
 文档中这句话针对的应该是这种情况:
 
-```
+```python
 from django.db import transaction
 with transaction.atomic():
      User.objects.get_or_create(nickname='xxx')

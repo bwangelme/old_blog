@@ -25,7 +25,7 @@ tags: [Letsencrypt]
 
 运行`sudo certbot --manual --preferred-challenges dns certonly`命令，输入域名并同意记录本机IP后开始获取证书，接着`certbot`就会弹出如下的提示：
 
-```
+```sh
 -------------------------------------------------------------------------------
 Please deploy a DNS TXT record under the name
 _acme-challenge.example.com with the following value:

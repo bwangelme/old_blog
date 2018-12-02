@@ -42,7 +42,7 @@ REFERENCES tbl_name (index_col_name,...)
 
 对于参照完整性约束，外键能够起到非常好的作用，但是对于数据库的导入操作，外键往往导致在外键检查上花费大量的时间，因此我们可以设定 MySQL 在导入外键时忽略外键检查的选项。
 
-```
+```sql
 mysql> set foreign_key_checks = 0;
 mysql> LOAD DATA...
 mysql> set foreign_key_checks = 1;

@@ -16,7 +16,7 @@ __摘要__:
 
 猴子补丁: 在程序运行时修改某些代码，例如下面这样：
 
-```
+```py
 import someclass
 
 def get_info(self, *args):
@@ -31,7 +31,7 @@ someclass.get_info = get_info
 `**kwargs`表示传递参数为不定长度的键值对
 `fargs`表示普通的位置参数
 
-```
+```py
 some_func(fargs, *args, **kwargs)
 ```
 

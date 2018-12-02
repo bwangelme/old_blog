@@ -18,8 +18,8 @@ MySQL 有多种存储引擎，是插入式存储引擎
 
 ## 选择存储引擎
 
-```
-# 查看支持的存储引擎
+```sql
+;; 查看支持的存储引擎
 show engines\G
 ```
 
@@ -51,7 +51,7 @@ show engines\G
 
 用于集群的存储引擎
 
-```
+```sql
 # 查看当前支持的存储引擎
 show variables like 'have%'
 

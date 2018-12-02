@@ -260,7 +260,7 @@ func Delete(elem int, tree *TreeNode) *TreeNode {
 
 我为`Delete`操作编写了两个单元测试，分别测试删除只有有右子树的节点，和删除有两个子树的节点，测试代码如下:
 
-```
+```go
 func TestDeleteRight(t *testing.T) {
 	var tree *TreeNode = nil
 

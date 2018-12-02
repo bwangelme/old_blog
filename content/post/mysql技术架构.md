@@ -62,7 +62,7 @@ MyISAM只支持表锁
 
 ### 定义事务的方法
 
-```
+```sql
 start transaction;
 SQL 语句
 commit;

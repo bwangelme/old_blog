@@ -61,7 +61,7 @@ import (
 
 Go 将依赖安装在`GOPATH/pkg/mod`中，并且依赖的每个版本会分开安装
 
-```
+```sh
 >>> tree $GOPATH/pkg/mod/github.com/bwangelme/                         08:42:57 (10-11)
 /Users/michaeltsui/go/pkg/mod/github.com/bwangelme/
 ├── testmod

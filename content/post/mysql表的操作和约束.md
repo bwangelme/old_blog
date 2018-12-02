@@ -52,7 +52,7 @@ MySQL通过`show create table dept6`无法看到主键约束名字，正在寻�
 
 创建父表
 
-```
+```sql
 CREATE TABLE `employees` (
   `name` varchar(20) NOT NULL,
   `mail` varchar(20) DEFAULT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE `employees` (
 
 创建子表
 
-```
+```sql
 CREATE TABLE `payroll` (
   `id` int(5) NOT NULL,
   `name` varchar(20) NOT NULL,

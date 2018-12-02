@@ -84,7 +84,7 @@ finally:
 
 除了异步迭代器之外，还有新的语法支持异步的上下文管理器(关于上下文管理器可以参考我的这篇文章[Python的with语句](http://www.bwangel.win/2016/04/25/Python%E7%9A%84with%E8%AF%AD%E5%8F%A5/))，示例程序如下:
 
-```
+```py
 import asyncio
 
 async def coro(name, lock):

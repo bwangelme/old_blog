@@ -131,7 +131,7 @@ ht->used++;
 
 每个dict都有一个负载因子，计算方式如下：
 
-```
+```c
 load_factor = ht[0].used / ht[0].size
 ```
 

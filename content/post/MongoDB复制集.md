@@ -30,7 +30,7 @@ sudo mkdir /home/m17 /home/m18 /home/m19 /home/mlog
 
 ### 启动3个实例
 
-```
+```sh
 sudo mongod --dbpath /home/m17 --logpath /home/mlog/m17.log --fork --port 27017 --replSet rs3
 sudo mongod --dbpath /home/m18 --logpath /home/mlog/m18.log --fork --port 27018 --replSet rs3
 sudo mongod --dbpath /home/m19 --logpath /home/mlog/m19.log --fork --port 27019 --replSet rs3

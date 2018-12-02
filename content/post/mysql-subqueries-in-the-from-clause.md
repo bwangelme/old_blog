@@ -25,16 +25,20 @@ __摘要:__
 
 为了方便演示，我们假设创建了这样的一个表。
 
-`CREATE TABLE t1(s1 INT, s2 CHAR(5), s3 FLOAT);`
+```sql
+CREATE TABLE t1(s1 INT, s2 CHAR(5), s3 FLOAT);
+```
 
 然后我们向其中插入了如下的数据：
 
-`INSERT INTO t1 VALUES (1, '1', 1.0)`
-`INSERT INTO t1 VALUES (2, '2', 2.0)`
+```sql
+INSERT INTO t1 VALUES (1, '1', 1.0)
+INSERT INTO t1 VALUES (2, '2', 2.0)
+```
 
 最后我们执行一个如下的查询：
 
-```
+```sql
 SELECT sb1, sb2, sb3
     FROM (SELECT s1 AS sb1, s2 AS sb2, s3*2 AS sb3 FROM t1) AS sb
     WHERE sb1 > 1;
@@ -52,7 +56,7 @@ SELECT sb1, sb2, sb3
 
 如果我们想要选出某个表中最后几行怎么办呢，我今天就遇到了这个问题，感觉下面这个子查询的方式最令我满意：
 
-```
+```sql
 SELECT * FROM (
     SELECT * FROM tmp_table ORDER BY id DESC LIMIT 50
     ) sub

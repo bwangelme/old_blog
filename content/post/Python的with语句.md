@@ -84,7 +84,7 @@ with localcontext(Context(prec=16)):
 
 让我们假设这里有一个对象代表了数据库连接，我们的目标是让用户能够以下面的方式来写代码:
 
-```
+```py
 db_connection = DatabaseConnection()
 with db_connection as cursor:
     cursor.execute('insert into ...')
@@ -166,7 +166,7 @@ with db_transaction(db) as cursor:
 
 `contextlib`模块也有一个`nested(mgr1, mgr2, ...)`函数来绑定许多个上下文管理器，这样的话你就不需要写嵌套的`with`语句了。在下面这个例子中，单个with语句获得了线程锁，并且开启了一个事务。
 
-```
+```py
 lock = threading.Lock()
 with nested (db_transaction(db), lock) as (cursor, locked):
 ```

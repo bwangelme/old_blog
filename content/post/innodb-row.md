@@ -94,7 +94,7 @@ mysql> select length(c1), character_length(c1), c1 from test_char;
 
 我们可以通过`hexdump`命令来查看`test_char`表对应的数据文件，具体命令如下:
 
-```
+```sh
 hexdump -C -v /usr/local/var/mysql/hp/test_char.ibd |less
 ```
 

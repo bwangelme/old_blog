@@ -94,7 +94,7 @@ p>{Click }+a{here}+{ to continue}
 
 不用强记，系统会自动判断生成，准确率却不知道啦。
 
-```
+```html
 table>.row>.col
 ---------------
 <table>
@@ -125,14 +125,14 @@ table>.row>.col
 
 ### CSS链接
 
-```
+```html
 link:css
 --------
 <link rel="stylesheet" href="style.css">
 ```
 ### favicon的链接
 
-```
+```html
 link:favicon
 ------------
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
@@ -140,7 +140,7 @@ link:favicon
 
 ### 设置字符编码
 
-```
+```html
 meta:utf
 --------
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
@@ -148,7 +148,7 @@ meta:utf
 
 ### 表单
 
-```
+```html
 form:get
 --------
 <form action="" method="get"></form>

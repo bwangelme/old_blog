@@ -69,7 +69,7 @@ select concat(emp_name, ' annual_salary: ', salary * 12) AS annual_salary from e
 
 + 语法格式
 
-```
+```sql
 SELECT 字段1，字段2..
   FROM 表名
   WHERE CONDITION[AND CONDITION];

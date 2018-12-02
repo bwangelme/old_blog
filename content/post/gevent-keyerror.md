@@ -15,7 +15,7 @@ __摘要__:
 
 在包含有`gevent.monkey.patch_thread()`( gevent 的猴子补丁)的程序中，运行时会报出下面的错误：
 
-```
+```py
 Exception KeyError: KeyError(140468381321488,) in <module 'threading' from '/usr/lib/python2.7/threading.pyc'> ignored
 ```
 

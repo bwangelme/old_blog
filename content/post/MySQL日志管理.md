@@ -78,7 +78,7 @@ log-bin[=base_name]
 
 开启了二进制日志后，会产生如下文件:
 
-```
+```sh
 >>> ls /var/log/mysql/mysql-bin.*
 /var/log/mysql/mysql-bin.000001  /var/log/mysql/mysql-bin.index
 /var/log/mysql/mysql-bin.000002

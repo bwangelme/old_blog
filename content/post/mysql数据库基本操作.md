@@ -24,7 +24,7 @@ DCL语句（数据库控制语言）：控制用户访问权限GRANT，REVOKE
 
 performance_schema: 存放性能参数
 
-```
+```sql
 # 查看连接
 show processlist;
 
@@ -34,7 +34,7 @@ information_schema: 系统中数据库的对象信息（类似于文件系统元
 
 mysql: 授权库，存储用户的授权信息
 
-```
+```sql
 select user(); # 查看当前登录用户
 select database(); # 查看当前使用的数据库
 ```
@@ -54,12 +54,12 @@ skip-grant-table
 
 service mysql restart
 
-```
+```sql
 update mysql.user set passwd=passwd('456') where user="root" and host="localhost"
 
 flush privileges;
 
-语句结尾\c会清除输入缓存
+;; 语句结尾\c会清除输入缓存
 ```
 
 
