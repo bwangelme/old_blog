@@ -16,13 +16,15 @@ Go 语言的模板通过`{{}}`来插入变量，`{{.}}`表示当前对象，类�
 
 如果字段名不是`exported`的，那么就会有如下错误:
 
-{{< highlight go >}}
 ```go
 template: header.html:5:14: executing "header.html" at <.title>: title is an unexported field of struct type struct { Env map[string]string; title string }
 ```
-{{< / highlight >}}
 
-+ {{ \`string\` }} 可以用这种形式输出字符串`string`
++ 可以用下面这种形式输出字符串变量`string`
+
+```go
+{{ `string` }}
+```
 
 ## 输出嵌套内容
 
