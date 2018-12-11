@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>说说Bash中的几个重定向 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content=" 摘要:
+ Bash中&amp;gt; &amp;amp;&amp;gt; &amp;gt;&amp;amp;三者的区别  " /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.51 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/bash-%E9%87%8D%E5%AE%9A%E5%90%91/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.93844dae.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="说说Bash中的几个重定向" />
+<meta property="og:description" content="
+摘要:
+
+
+Bash中&gt; &amp;&gt; &gt;&amp;三者的区别
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/bash-%E9%87%8D%E5%AE%9A%E5%90%91/" /><meta property="article:published_time" content="2017-08-13T14:10:48&#43;00:00"/>
+<meta property="article:modified_time" content="2017-08-13T14:10:48&#43;00:00"/>
+
+<meta itemprop="name" content="说说Bash中的几个重定向">
+<meta itemprop="description" content="
+摘要:
+
+
+Bash中&gt; &amp;&gt; &gt;&amp;三者的区别
+
+">
+
+
+<meta itemprop="datePublished" content="2017-08-13T14:10:48&#43;00:00" />
+<meta itemprop="dateModified" content="2017-08-13T14:10:48&#43;00:00" />
+<meta itemprop="wordCount" content="700">
+
+
+
+<meta itemprop="keywords" content="Bash," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="说说Bash中的几个重定向"/>
+<meta name="twitter:description" content="
+摘要:
+
+
+Bash中&gt; &amp;&gt; &gt;&amp;三者的区别
+
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">说说Bash中的几个重定向</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-08-13 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#和-操作符">&gt;、&amp;&gt; 和 &gt;&amp;操作符</a>
+<ul>
+<li><a href="#语法说明">语法说明</a></li>
+</ul></li>
+<li><a href="#参考链接">参考链接</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<p>摘要:</p>
+
+<ol>
+<li>Bash中<code>&gt;</code> <code>&amp;&gt;</code> <code>&gt;&amp;</code>三者的区别</li>
+</ol>
+</blockquote>
+
+<p>最近看脚本的时候，发现了有的地方使用了类似<code>some-command &amp;&gt; /dev/null</code>这样的命令，然后不禁想起来还有一种重定向的语法是<code>&gt;&amp;</code>，突然就觉得有点混乱了，特来捋一捋。</p>
+
+<h1 id="和-操作符">&gt;、&amp;&gt; 和 &gt;&amp;操作符</h1>
+
+<h2 id="语法说明">语法说明</h2>
+
+<p>这三个操作符的语法分别如下所示：</p>
+
+<ul>
+<li><code>&gt;</code> Syntax: <code>file_descriptor(可选)&gt;file_name</code></li>
+</ul>
+
+<p>这里的<code>file_descriptor</code>是可选的，如果没有的话，默认是1(stdout)。它的作用是将某个命令的某个输出(file_descriptor所代表的输出)重定向到一个文件，例如<code>find / &gt; file</code>和<code>find / 2&gt; file</code>这两个命令就分别是将stdout和stderr输出到文件<code>file</code>中去。</p>
+
+<ul>
+<li><code>&gt;&amp;</code> Syntax: <code>file_descriptor1(可选)&gt;&amp;file_descriptor2</code></li>
+</ul>
+
+<p>这里的<code>file_descriptor1</code>是可选的，如果没有的话，默认是1(stdout)。它的作用是将某个命令的<code>file_descriptor1</code>描述符的输出(例如1代表标准输出)重定向到此命令的描述符<code>file_descriptor2</code>中。例如<code>find / 1&gt;file 2&gt;&amp;1</code>这条命令就是将find命令的stderr(2)重定向到stdout(1)，然后再将stdout输出到文件<code>file</code>中。</p>
+
+<ul>
+<li><code>&amp;&gt;</code> Syntax: <code>&amp;&gt; file_name</code></li>
+</ul>
+
+<p>这种形式的重定向，在语义上等价于<code>&gt;filename 2&gt;&amp;1</code>(参见<a href="https://superuser.com/questions/335396/what-is-the-difference-between-and-in-bash">参考链接3</a>)。例如<code>find / &amp;&gt; file</code>等价于<code>find / &gt;file 2&gt;&amp;1</code>。</p>
+
+<h1 id="参考链接">参考链接</h1>
+
+<ol>
+<li><a href="http://stackoverflow.com/questions/24793069/what-does-do-in-bash/24793436#24793436">What does &amp;&gt; do in bash? [duplicate]</a></li>
+<li><a href="http://www.tldp.org/LDP/abs/html/io-redirection.html">I/O Redirection</a></li>
+<li><a href="https://superuser.com/questions/335396/what-is-the-difference-between-and-in-bash">What is the difference between &amp;&gt; and &gt;&amp; in bash?</a></li>
+</ol>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2017-08-13</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/bash/">Bash</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/tcp-ip-notes/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">TCP/IP 读书笔记</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/python-collections/">
+            <span class="next-text nav-default">Python的collections模块小结</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/yundong-xu" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://weibo.com/u/3093227873" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-89788711-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>MySQL 日志管理 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="简介: 讲述了MySQL中的日志及配置方式
+" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.51 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/mysql%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.93844dae.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="MySQL 日志管理" />
+<meta property="og:description" content="简介: 讲述了MySQL中的日志及配置方式" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/mysql%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/" /><meta property="article:published_time" content="2018-01-01T10:34:15&#43;08:00"/>
+<meta property="article:modified_time" content="2018-01-01T10:34:15&#43;08:00"/>
+
+<meta itemprop="name" content="MySQL 日志管理">
+<meta itemprop="description" content="简介: 讲述了MySQL中的日志及配置方式">
+
+
+<meta itemprop="datePublished" content="2018-01-01T10:34:15&#43;08:00" />
+<meta itemprop="dateModified" content="2018-01-01T10:34:15&#43;08:00" />
+<meta itemprop="wordCount" content="1923">
+
+
+
+<meta itemprop="keywords" content="MySQL," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="MySQL 日志管理"/>
+<meta name="twitter:description" content="简介: 讲述了MySQL中的日志及配置方式"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">MySQL 日志管理</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-01-01 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-mysql日志分类">1. MySQL日志分类</a></li>
+<li><a href="#2-二进制日志">2. 二进制日志</a>
+<ul>
+<li><a href="#2-1-作用">2.1 作用</a></li>
+<li><a href="#2-2-二进制日志格式">2.2 二进制日志格式</a>
+<ul>
+<li><a href="#statement">STATEMENT</a></li>
+<li><a href="#row">ROW</a></li>
+<li><a href="#mixed">MIXED</a></li>
+</ul></li>
+<li><a href="#2-3-日志格式的注意事项">2.3 日志格式的注意事项</a></li>
+<li><a href="#2-4-启用二进制日志">2.4 启用二进制日志</a></li>
+<li><a href="#2-5-暂停二进制日志记录-当前会话">2.5 暂停二进制日志记录(当前会话)</a></li>
+<li><a href="#2-6-查看二进制日志">2.6 查看二进制日志</a></li>
+</ul></li>
+<li><a href="#3-慢查询日志">3 慢查询日志</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><strong>简介</strong>: 讲述了MySQL中的日志及配置方式</p>
+
+<h2 id="1-mysql日志分类">1. MySQL日志分类</h2>
+
+<ul>
+<li>错误日志: 记录MySQL服务器启动、关闭及运行错误等信息</li>
+<li>二进制日志: 以二进制的方式记录数据库中除SELECT以外的所有操作</li>
+<li>查询日志: 记录查询的信息</li>
+<li>慢查询日志: 记录执行时间超过指定时间的操作</li>
+<li>中继日志: 备库将主库的日志复制到自己的中继日志中</li>
+<li>通用日志: 审计哪个账号、在哪个时段、做了哪些事情</li>
+<li>事务日志或称redo日志: 记录InnoDB事务相关的内容如事务执行时间，检查点等</li>
+</ul>
+
+<h2 id="2-二进制日志">2. 二进制日志</h2>
+
+<p>二进制日志记录了对 MySQL 数据库执行更改的所有操作，但是不包括<code>SELECT</code>和<code>SHOW</code>这类操作，因为这类操作对数据本身没有修改。</p>
+
+<h3 id="2-1-作用">2.1 作用</h3>
+
+<ul>
+<li><p><strong>恢复(recovery)</strong>: 在一个数据库的全备文件恢复后，可以通过二进制日志进行 point-in-time 的恢复</p></li>
+
+<li><p><strong>复制(replication)</strong>: 在 MySQL 复制中，主数据库发送记录了数据更改的事件给从数据库，从数据库应用这些事件来和主数据库进行同步</p></li>
+
+<li><p><strong>审计(audit)</strong>: 用户可以通过二进制日志中的信息来进行审计，判断是否有对数据库的注入攻击</p></li>
+</ul>
+
+<h3 id="2-2-二进制日志格式">2.2 二进制日志格式</h3>
+
+<p>MySQL 中一共存在着三种二进制日志格式<code>STATEMENT</code>, <code>ROW</code>, <code>MIXED</code>，可以配置<code>--binlog-format</code>选项来选择不同的格式。关于这三种格式的说明如下:</p>
+
+<h4 id="statement">STATEMENT</h4>
+
+<p>基于SQL语句的二进制日志，这种格式对于复制有一定的要求:</p>
+
+<ul>
+<li>如果主数据库上执行了包含<code>rand</code>，<code>uuid</code>等语句的日志，会导致主从数据库的数据不一致。</li>
+<li>数据库的事务隔离级别如果是读提交的话，也可能会造成主从数据库的数据不一致。InnoDB 默认的事务隔离级别为可重复读，就是受日志格式的影响。</li>
+</ul>
+
+<h4 id="row">ROW</h4>
+
+<p>在这种模式下，二进制日志记录的不再是简单的SQL语句了，而是记录表的行更改情况。同时，这种格式还解决了<code>STATEMENT</code>格式在复制时遇到的问题。如果设置了<code>binlog-format</code>为<code>ROW</code>，可以将 MySQL 的事务隔离级别改成读提交，以获得更改的并发性。</p>
+
+<h4 id="mixed">MIXED</h4>
+
+<p>MIXED 格式默认使用 STATEMENT 格式来记录，但是在某些情况下会使用 ROW 格式来记录。可能的情况有:</p>
+
+<ol>
+<li>使用了<code>UUID()</code>, <code>USER()</code>, <code>CURRENT_USER()</code>, <code>FOUND_ROWS()</code>, <code>ROW_COUNT()</code>等不确定函数</li>
+<li>使用了<code>INSERT DELAY</code>语句</li>
+<li>使用了用户定义函数(UDF)</li>
+<li>使用了临时表 (temporary table)</li>
+<li>更多的情况请参看 <a href="https://dev.mysql.com/doc/refman/5.7/en/binary-log-mixed.html">5.4.4.3 Mixed Binary Logging Format</a>。</li>
+</ol>
+
+<h3 id="2-3-日志格式的注意事项">2.3 日志格式的注意事项</h3>
+
+<ul>
+<li>每台 MySQL 服务器只能设定自己的二进制日志格式，主服务器更改了日志格式后，并不会影响从服务器。</li>
+<li>如果使用的是 InnoDB 存储引擎，且事务隔离级别是<code>读提交</code>或<code>读未提交</code>的时候，只能设置日志格式为<code>ROW</code>。此时你也可以将二进制日志格式改成<code>STATEMENT</code>，但是此时 MySQL 会快速地报很多错误，因为 InnoDB 不能够再执行插入操作了。</li>
+<li>不建议在运行时切换 MySQL 复制的格式，因为运行过程中有临时表的存在。临时表在<code>STATEMENT</code>格式下会被记录，但当它在<code>ROW</code>格式下的时候就不会被记录了。当处于<code>MIXED</code>格式的时候，临时表通常都会记录，但是当使用了用户自定义函数或使用了<code>UUID()</code>函数就不会记录了。</li>
+<li>我们通常可以使用<code>ROW</code>日志格式来获得更好的可靠性，但是<code>ROW</code>日志格式会导致二进制日志文件非常大。</li>
+</ul>
+
+<h3 id="2-4-启用二进制日志">2.4 启用二进制日志</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 编辑 MySQL 配置文件，添加以下的选项</span>
+
+<span class="o">[</span>mysqld<span class="o">]</span>
+server-id <span class="o">=</span> <span class="m">1</span>
+log-bin<span class="o">[=</span>base_name<span class="o">]</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><code>base_name</code>是二进制日志文件的文件名，如果不指定<code>base_name</code>，默认会使用主机名作文二进制日志的文件名，后缀名是二进制日志的序列号，所在目录为数据库所在目录(<code>datadir</code>)。</p>
+
+<p>开启了二进制日志后，会产生如下文件:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">&gt;&gt;&gt; ls /var/log/mysql/mysql-bin.*
+/var/log/mysql/mysql-bin.000001  /var/log/mysql/mysql-bin.index
+/var/log/mysql/mysql-bin.000002</code></pre></td></tr></table>
+</div>
+</div>
+<p><code>mysql-bin.index</code>为二进制日志的索引文件，用来存储过往产生的二进制日志序号。</p>
+
+<p><code>mysql-bin.000001</code>和<code>mysql-bin.000002</code>为实际存储数据的文件，每次重启MySQL，都会产生一个新的mysql-bin的日志。</p>
+
+<h3 id="2-5-暂停二进制日志记录-当前会话">2.5 暂停二进制日志记录(当前会话)</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 暂停</span>
+mysql&gt; SET <span class="nv">SQL_LOG_BIN</span><span class="o">=</span><span class="m">0</span><span class="p">;</span>
+
+<span class="c1"># 启用</span>
+mysql&gt; SET <span class="nv">SQL_LOG_BIN</span><span class="o">=</span><span class="m">1</span><span class="p">;</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="2-6-查看二进制日志">2.6 查看二进制日志</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 查看MySQL二进制的日志</span>
+
+&gt; <span class="nb">pwd</span>
+/usr/local/mysql/data
+&gt; mysqlbinlog mysql-bin.000002
+
+<span class="c1"># at 120 # 表明从第120个字节开始</span>
+<span class="c1"># 下面这句表明了执行时间(年月日 时分秒)和服务器id</span>
+<span class="c1">#160314  2:07:47 server id 1  end_log_pos 214 CRC32 0xa10bdfa4 	Query	thread_id=1	exec_time=0	error_code=0</span>
+SET <span class="nv">TIMESTAMP</span><span class="o">=</span><span class="m">1457892467</span>/*!*/<span class="p">;</span>
+SET @@session.pseudo_thread_id<span class="o">=</span><span class="m">1</span>/*!*/<span class="p">;</span>
+SET @@session.foreign_key_checks<span class="o">=</span><span class="m">1</span>, @@session.sql_auto_is_null<span class="o">=</span><span class="m">0</span>, @@session.unique_checks<span class="o">=</span><span class="m">1</span>, @@session.autocommit<span class="o">=</span><span class="m">1</span>/*!*/<span class="p">;</span>
+SET @@session.sql_mode<span class="o">=</span><span class="m">1075838976</span>/*!*/<span class="p">;</span>
+SET @@session.auto_increment_increment<span class="o">=</span><span class="m">1</span>, @@session.auto_increment_offset<span class="o">=</span><span class="m">1</span>/*!*/<span class="p">;</span>
+/*!<span class="se">\C</span> utf8 *//*!*/<span class="p">;</span>
+SET @@session.character_set_client<span class="o">=</span><span class="m">33</span>,@@session.collation_connection<span class="o">=</span><span class="m">33</span>,@@session.collation_server<span class="o">=</span><span class="m">33</span>/*!*/<span class="p">;</span>
+SET @@session.lc_time_names<span class="o">=</span><span class="m">0</span>/*!*/<span class="p">;</span>
+SET @@session.collation_database<span class="o">=</span>DEFAULT/*!*/<span class="p">;</span>
+create database xff1  <span class="c1"># 这里是创建数据库的语句</span>
+/*!*/<span class="p">;</span>
+DELIMITER <span class="p">;</span>
+<span class="c1"># End of log file</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="3-慢查询日志">3 慢查询日志</h2>
+
+<p>和慢查询日志相关的配置有如下几个:</p>
+
+<ul>
+<li><code>slow_query_log</code> 表示是否开启慢查询日志，可选值为<code>ON</code>和<code>OFF</code></li>
+<li><code>long_query_time</code> 表示如果一条语句的查询时间超出了这个值，这条语句就会被记录到慢查询日志中。在MySQL中，语句的查询时间是实际时间而不是CPU时间，所以同一条SQL语句在负载高的系统中的查询时长可能比在负载低的系统中的查询时长要大。<code>long_query_time</code>值可以是浮点数，它可以精确到微秒。</li>
+<li><code>slow_query_log_file</code> 表示慢查询日志文件的路径</li>
+<li><code>log_queries_not_using_indexes</code> 表示会将没有使用索引的查询语句记录到慢查询日志中</li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2018-01-01</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/mysql/">MySQL</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/django_get_or_create/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Django get_or_create 执行过程</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/go-concurrency/">
+            <span class="next-text nav-default">Go的并发编程简述</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/yundong-xu" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://weibo.com/u/3093227873" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-89788711-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
