@@ -51,7 +51,7 @@
 
 <meta itemprop="datePublished" content="2018-10-18T23:24:24&#43;08:00" />
 <meta itemprop="dateModified" content="2018-10-18T23:24:24&#43;08:00" />
-<meta itemprop="wordCount" content="1214">
+<meta itemprop="wordCount" content="1215">
 
 
 
@@ -157,24 +157,25 @@
 <p>Go 语言的模板通过<code>{{}}</code>来插入变量，<code>{{.}}</code>表示当前对象，类似于 C++ 中的 this 或者 Python 中的 self。<code>{{ .FieldName }}</code>用来获取当前对象中的字段<code>FieldName</code>，需要注意的是字段名必须是<code>exported</code>的(即变量的首字母必须是大写)。</p>
 
 <p>如果字段名不是<code>exported</code>的，那么就会有如下错误:</p>
-
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="s">```go
-</span><span class="s">template: header.html:5:14: executing &#34;header.html&#34; at &lt;.title&gt;: title is an unexported field of struct type struct { Env map[string]string; title string }
-</span><span class="s">```</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">template</span><span class="p">:</span> <span class="nx">header</span><span class="p">.</span><span class="nx">html</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span> <span class="nx">executing</span> <span class="s">&#34;header.html&#34;</span> <span class="nx">at</span> <span class="p">&lt;.</span><span class="nx">title</span><span class="p">&gt;:</span> <span class="nx">title</span> <span class="nx">is</span> <span class="nx">an</span> <span class="nx">unexported</span> <span class="nx">field</span> <span class="nx">of</span> <span class="kd">struct</span> <span class="kd">type</span> <span class="kd">struct</span> <span class="p">{</span> <span class="nx">Env</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">;</span> <span class="nx">title</span> <span class="kt">string</span> <span class="p">}</span></code></pre></td></tr></table>
 </div>
 </div>
-
 <ul>
-<li>{{ `string` }} 可以用这种形式输出字符串<code>string</code></li>
+<li>可以用下面这种形式输出字符串变量<code>string</code></li>
 </ul>
-
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="p">{{</span> <span class="s">`string`</span> <span class="p">}}</span></code></pre></td></tr></table>
+</div>
+</div>
 <h2 id="输出嵌套内容">输出嵌套内容</h2>
 
 <p><code>with</code>操作可以更改当前<code>{{ . }}</code>所指向的对象。</p>
