@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Python unittesting: run tests in another module - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="摘要:
+ 记录一次解决问题的过程。
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.51 with even 4.0.0" />
+
+
+<link rel="canonical" href="/2016/09/11/python-unittesting-run-tests-in-another-module/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.93844dae.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Python unittesting: run tests in another module" />
+<meta property="og:description" content="摘要:
+
+
+记录一次解决问题的过程。
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2016/09/11/python-unittesting-run-tests-in-another-module/" /><meta property="article:published_time" content="2016-09-11T11:46:43&#43;00:00"/>
+<meta property="article:modified_time" content="2016-09-11T11:46:43&#43;00:00"/>
+
+<meta itemprop="name" content="Python unittesting: run tests in another module">
+<meta itemprop="description" content="摘要:
+
+
+记录一次解决问题的过程。
+">
+
+
+<meta itemprop="datePublished" content="2016-09-11T11:46:43&#43;00:00" />
+<meta itemprop="dateModified" content="2016-09-11T11:46:43&#43;00:00" />
+<meta itemprop="wordCount" content="3059">
+
+
+
+<meta itemprop="keywords" content="Python,unittest," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python unittesting: run tests in another module"/>
+<meta name="twitter:description" content="摘要:
+
+
+记录一次解决问题的过程。
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Python unittesting: run tests in another module</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-09-11 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#前言">前言</a></li>
+<li><a href="#寻找解决办法">寻找解决办法</a></li>
+<li><a href="#遇到新的错误">遇到新的错误</a></li>
+<li><a href="#查看调用代码">查看调用代码</a></li>
+<li><a href="#找到错误原因">找到错误原因</a></li>
+<li><a href="#最终解决方案">最终解决方案</a></li>
+<li><a href="#感言">感言</a>
+<ul>
+<li><a href="#多余的废话">多余的废话</a></li>
+<li><a href="#工具很重要">工具很重要</a></li>
+<li><a href="#不足之处">不足之处</a>
+<ul>
+<li><a href="#心慌">心慌</a></li>
+<li><a href="#没有很好地利用工具">没有很好地利用工具</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><strong>摘要</strong>:</p>
+
+<blockquote>
+<p>记录一次解决问题的过程。</p>
+</blockquote>
+
+<h2 id="前言">前言</h2>
+
+<p>最近在写一个网站，用来树形显示一些信息。然后我开发的时候用到了TDD的方法，也就意味着要写很多测试。运行测试代码的时候，我就想，能不能像Django那样来运行测试代码呢（我用的是tornado）？写一个入口文件为<code>manage.py</code>，<code>python manage.py run</code>运行服务器，<code>python manage.py test</code>运行测试代码。</p>
+
+<p>首先是解析参数的问题，这个我找到了argparse模块的<a href="https://docs.python.org/3/library/argparse.html">子命令</a>，利用这个就可以解析出<code>run</code>和<code>test</code>命令来。但是运行测试的时候我又遇到了问题，平常运行测试是直接运行测试文件，而现在需要从其他模块import测样样例再来运行，这个该怎么做呢？</p>
+
+<h2 id="寻找解决办法">寻找解决办法</h2>
+
+<p>有了这个问题以后，我就去StackOverflow上面搜索解决的办法，找到了这个相似的问题：<a href="http://stackoverflow.com/questions/15334042/python-unittesting-run-tests-in-another-module">Python unittesting: run tests in another module</a>。然后我就按着rparent的答案来编写我的测试代码，如下所示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="c1"># 下面这条语句用来判定第二个位置参数是不是run</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;run&#39;</span><span class="p">):</span>
+        <span class="n">console</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Starting Web Server at port {}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
+        <span class="n">start_tornado_server</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+    <span class="c1"># 下面这条语句用来判定第二个位置参数是不是test</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">):</span>
+        <span class="n">console</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Run the unit tests&#34;</span><span class="p">)</span>
+        <span class="kn">import</span> <span class="nn">unittest</span>
+        <span class="kn">import</span> <span class="nn">sys</span>
+        <span class="kn">from</span> <span class="nn">tree.tests</span> <span class="kn">import</span> <span class="n">TestTreeApp</span>
+        <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="遇到新的错误">遇到新的错误</h2>
+
+<p>但是照着上面的代码编写了以后，发现程序并不能正确地执行，它报出了以下的错误：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nv">E</span>
+<span class="o">======================================================================</span>
+ERROR: <span class="nb">test</span> <span class="o">(</span>unittest.loader._FailedTest<span class="o">)</span>
+----------------------------------------------------------------------
+AttributeError: module <span class="s1">&#39;__main__&#39;</span> has no attribute <span class="s1">&#39;test&#39;</span>
+
+----------------------------------------------------------------------
+Ran <span class="m">1</span> <span class="nb">test</span> in <span class="m">0</span>.000s
+
+FAILED <span class="o">(</span><span class="nv">errors</span><span class="o">=</span><span class="m">1</span><span class="o">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>这里错误是<code>unittest.loader._FailedTest</code>中抛出的<code>AttributeErro</code>，说在模块<code>__main__</code>中找不到属性<code>test</code>,到了这里我又不知道该咋办了，然后继续去网上搜索原因，也没发现相应的答案。</p>
+
+<h2 id="查看调用代码">查看调用代码</h2>
+
+<p>这时候感觉自己已经被逼得山穷水尽了，没办法，只能去看源码来寻找答案了。</p>
+
+<p>首先，从异常入手，异常是在<code>unittest.loader._FailedTest</code>中抛出来的，我就沿着这个调用栈向上走，最终还原出调用栈为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="mi">6</span> <span class="n">unittest</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">_FailedTest</span>
+<span class="mi">5</span> <span class="n">unittest</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">_make_failed_test</span>
+<span class="mi">4</span> <span class="n">unittest</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">TestLoader</span><span class="o">.</span><span class="n">loadTestFromName</span>
+<span class="mi">3</span> <span class="n">unittest</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">TestLoader</span><span class="o">.</span><span class="n">loadTestFromNames</span>
+<span class="mi">2</span> <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">TestProgram</span><span class="o">.</span><span class="n">createTests</span>
+<span class="mi">1</span> <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">TestProgram</span><span class="o">.</span><span class="n">parseArgs</span>
+<span class="mi">0</span> <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>通过查看这个函数调用栈，最终发现错误的原因就出在<code>unittest.main.TestProgram.createTests</code>中。</p>
+
+<h2 id="找到错误原因">找到错误原因</h2>
+
+<p>在<code>unittest.main.TestProgram.createTests</code>中，它的代码是这样的</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">createTests</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">testNames</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLoader</span><span class="o">.</span><span class="n">loadTestsFromModule</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">)</span>
+        <span class="c1"># loadTestsFromModule函数的作用是从self.module这个模块中寻找测试样例，即unittest.TestCase的子类</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLoader</span><span class="o">.</span><span class="n">loadTestsFromNames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testNames</span><span class="p">,</span>
+                                                       <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">)</span>
+        <span class="c1"># loadTestsFromName函数的作用是从self.module这个模块中寻找名字为self.testNames的测试样例(unittest.TestCase的子类)</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>这里调用的是loadTestFromNames函数，传入的<code>self.testNames</code>为<code>test</code>，就是这个<code>test</code>，再后面无法找到，被抛出为异常。</p>
+
+<p>然后我又去找了一下这个<code>self.testNames</code>中从何而来，发现是在<code>unittest.main.TestProgram.parseArgs</code>函数中从<code>unittest.main.TestProgram.argv</code>中解析出来的，而<code>unittest.main.TestProgram.argv</code>又来自于<code>sys.argv</code>。</p>
+
+<p>至此，我终于明白了错误是出在哪里了。</p>
+
+<p>python的unittest是可以接受命令行参数的，比如下面这样：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">python</span> <span class="n">exam</span><span class="o">.</span><span class="n">py</span> <span class="n">TestStringMethods</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>其中<code>examp.py</code>是<a href="https://docs.python.org/3/library/unittest.html#basic-example">Python官方文档给出的例子</a>，在这个例子中有一个测试样例<code>TestStringMethods</code>类。上面的调用语句的意思就是说去<code>exam.py</code>模块中寻找<code>TestStringMethods</code>测试样例，并运行这个测试样例。其实上面的测试方法就是将<code>TestStringMethods</code>存放在<code>sys.argv</code>中，而unittest.main会根据<code>sys.argv</code>中的名字来查找相应的测试样例。</p>
+
+<p>而我调用的方式是<code>python manage.py test</code>，这里在<code>sys.argv</code>中添加了一个参数<code>test</code>，而<code>unittest</code>认为这个<code>test</code>是一个测试样例，会去执行的模块中寻找这个<code>test</code>属性，但是又找不到，最终就会抛出一开始的属性异常：<code>module '__main__' has no attribute 'test'</code></p>
+
+<h2 id="最终解决方案">最终解决方案</h2>
+
+<p>最终解决其实也很简单，我们只需要将argv改变就好。其中，<code>unittest.main</code>函数含有一个参数<code>argv</code>，如果这个参数为空，就会使用<code>sys.argv</code>，所以，我们只需要传入这个参数即可，不需要改变<code>sys.argv</code>。最终代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="c1"># 下面这条语句用来判定第二个位置参数是不是run</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;run&#39;</span><span class="p">):</span>
+        <span class="n">console</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Starting Web Server at port {}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
+        <span class="n">start_tornado_server</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+    <span class="c1"># 下面这条语句用来判定第二个位置参数是不是test</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">):</span>
+        <span class="n">console</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Run the unit tests&#34;</span><span class="p">)</span>
+        <span class="kn">import</span> <span class="nn">unittest</span>
+        <span class="kn">import</span> <span class="nn">sys</span>
+        <span class="kn">from</span> <span class="nn">tree.tests</span> <span class="kn">import</span> <span class="n">TestTreeApp</span>
+        <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[:</span><span class="mi">1</span><span class="p">])</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="感言">感言</h2>
+
+<h3 id="多余的废话">多余的废话</h3>
+
+<p>事先声明，这一部分完全和技术编程无关，不感兴趣的读者可以直接跳过。</p>
+
+<p>写到这里，我不禁想起了那个德国工程师的故事（也不知道是真是假）。故事是这样的: 话说有家工厂机器坏了，厂子里面的人怎么修也修不好，于是就去请了一个德国老外来修。老外来了，研究了三天，告诉厂子里面的人，打开这个地方，里面有个线圈，减少十圈就可以了。厂里的人照着做就修好了。然后老外就要好多好多钱，厂子里面的人就觉得不值，就一个线圈而已，干嘛要这么多钱。老外就说，线圈不值钱，找到问题所在却很值钱。</p>
+
+<p>我感觉我的解决问题的经历很相似啊，解决起来很简单，多传一个参数就可以了，但是为了找到这个问题，我花了一下午和一晚上的时间，来跟踪调用栈，查看源代码。</p>
+
+<p>好吧，感觉一解决了问题，就不禁自大起来，扯了很多无关的话，下面说点正经的感言，如何更好更快地解决问题。</p>
+
+<h3 id="工具很重要">工具很重要</h3>
+
+<p>首先，真的感觉工具很重要。我用的是 IPython 中集成的 ipdb 来跟踪调用栈，然后利用 PyCharm 来查看源代码。不得不说，虽然平常一直用 vim 来编写代码。但是真的觉得 PyCharm 在查找定义和查找引用方面，真的是完爆 vim ，毕竟 vim 不是 IDE 。我突然觉得，所有的 vim 教程其实在一开始都得加上一句话，<em>vim 不是 IDE ，该用 IDE 的时候就要用 IDE。</em> 感觉这比整天强调 vim 是编辑器之神要实用的多。</p>
+
+<p>除了 PyCharm ，还发现 IPython 真是个好东西，可以调用 ipdb ，还可以方便地查看 Python 文档。</p>
+
+<h3 id="不足之处">不足之处</h3>
+
+<p>尽管最终解决了这个问题，但是发现自己还是有很多的地方浪费了时间。</p>
+
+<h4 id="心慌">心慌</h4>
+
+<p>感觉自己遇到了问题还是会心慌，为了解决问题，也不思考问题的具体原因，就去网上找答案，然后瞎试，完全靠运气来解决问题。感觉这种心态很不好，而这种做法其实是最浪费时间的做法。</p>
+
+<p>究其原因，还是因为内心焦急，总是想着我晚上应该完成什么什么功能的，怎么又遇到这么一个该死的问题，怎么才能快点解决啊，拜托快点啊，我还要赶着写接下来的功能呢。遇到这种心态呢，如果是在工作中呢，我也不知道咋办，快到 deadline ，然后遇到问题了，不心急才怪，但还是要努力安慰自己，因为越心急，越解决不了。</p>
+
+<p>如果在平常个人项目中遇到了，我就觉得可以这样想，自己做项目为了什么，不就是为了学习吗，遇到问题了，不正是学习的良机吗？应该把握这个大好机会，把这个问题解决透彻，这样才是真正学习了啊。如果一点问题都没遇到，那才是失败的，因为你只不过是把自己以前做过的工作重复了一遍而已。</p>
+
+<h4 id="没有很好地利用工具">没有很好地利用工具</h4>
+
+<p>这里我跟踪函数调用栈的办法，还是用的非常笨的办法，就是自己手动去查。
+首先查到异常在哪里抛出，然后沿着调用栈往上，这个方法是被那个方法调用的，下一个方法是被哪个方法调用的。
+但其实还有更好的办法，我们完全可以让 Python 自己打印出函数调用栈。</p>
+
+<p>我们可以利用<a href="https://docs.python.org/3/library/traceback.html"> traceback </a>标准库，
+在代码中抛出一个异常，然后利用 traceback 打印出调用栈。
+具体使用方法可以参考官方文档给出的<a href="https://docs.python.org/3/library/traceback.html#traceback-examples">例子</a>。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2016-09-11</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/python/">Python</a>
+          <a href="/tags/unittest/">unittest</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2016/09/14/gevent-%E7%9A%84-keyerror/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Gevent 的 KeyError</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2016/08/31/python%E5%AD%97%E7%AC%A6%E4%B8%B2format%E6%96%B9%E6%B3%95%E7%A4%BA%E4%BE%8B/">
+            <span class="next-text nav-default">Python字符串Format方法示例</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/yundong-xu" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://weibo.com/u/3093227873" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-89788711-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

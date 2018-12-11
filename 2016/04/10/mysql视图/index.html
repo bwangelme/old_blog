@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>MySQL视图 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍MySQL视图
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.51 with even 4.0.0" />
+
+
+<link rel="canonical" href="/2016/04/10/mysql%E8%A7%86%E5%9B%BE/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.93844dae.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="MySQL视图" />
+<meta property="og:description" content="摘要:
+
+
+这是一篇关于MySQL的文章，主要介绍MySQL视图
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2016/04/10/mysql%E8%A7%86%E5%9B%BE/" /><meta property="article:published_time" content="2016-04-10T10:56:54&#43;00:00"/>
+<meta property="article:modified_time" content="2016-04-10T10:56:54&#43;00:00"/>
+
+<meta itemprop="name" content="MySQL视图">
+<meta itemprop="description" content="摘要:
+
+
+这是一篇关于MySQL的文章，主要介绍MySQL视图
+">
+
+
+<meta itemprop="datePublished" content="2016-04-10T10:56:54&#43;00:00" />
+<meta itemprop="dateModified" content="2016-04-10T10:56:54&#43;00:00" />
+<meta itemprop="wordCount" content="467">
+
+
+
+<meta itemprop="keywords" content="MySQL," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="MySQL视图"/>
+<meta name="twitter:description" content="摘要:
+
+
+这是一篇关于MySQL的文章，主要介绍MySQL视图
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">MySQL视图</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-04-10 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#mysql视图">MySQL视图</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><strong>摘要</strong>:</p>
+
+<blockquote>
+<p>这是一篇关于MySQL的文章，主要介绍MySQL视图</p>
+</blockquote>
+
+<h1 id="mysql视图">MySQL视图</h1>
+
+<p>##1. 基本概念</p>
+
+<p>视图里存储的内容和原始表一样，但是里面存储的是SQL查询语句的定义，存储的是SQL的定义</p>
+
+<p>视图的优点</p>
+
+<ol>
+<li>安全：可以隐藏一些数据</li>
+<li>一些复杂的数据可以便于理解与使用</li>
+</ol>
+
+<p>##2. 创建视图</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="p">[</span><span class="n">ALGORITHM</span> <span class="o">=</span> <span class="err">{</span><span class="n">UNDEFINED</span><span class="o">|</span><span class="n">MERGE</span><span class="o">|</span><span class="n">TEMPTABLE</span><span class="err">}</span><span class="p">]</span>
+  <span class="k">view</span> <span class="err">视图名</span><span class="p">[(</span><span class="err">字段</span><span class="mi">1</span><span class="err">，字段</span><span class="mi">2</span><span class="p">)]</span>
+  <span class="k">as</span> <span class="k">select</span> <span class="err">语句</span>
+  <span class="p">[</span><span class="k">with</span> <span class="p">[</span><span class="k">CASCADED</span><span class="o">|</span><span class="k">LOCAL</span><span class="o">|</span><span class="p">]</span> <span class="k">CHECK</span> <span class="k">OPTION</span><span class="p">]</span>
+
+  <span class="c1">--CHECK OPTION约束虚表的操作</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">view</span> <span class="err">视图名</span>
+  <span class="k">as</span> <span class="k">select</span> <span class="err">语句</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>建议用一个单独的数据库来存放视图</p>
+
+<p>##3. 查看视图</p>
+
+<p>查看某个数据库中的视图或者表</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span> <span class="k">table</span> <span class="n">status</span> <span class="k">from</span> <span class="err">数据库名字\</span><span class="k">G</span>
+
+<span class="o">***************************</span> <span class="mi">1</span><span class="p">.</span> <span class="k">row</span> <span class="o">***************************</span>
+           <span class="n">Name</span><span class="p">:</span> <span class="n">view_user</span>
+         <span class="n">Engine</span><span class="p">:</span> <span class="k">NULL</span>
+        <span class="k">Version</span><span class="p">:</span> <span class="k">NULL</span>
+     <span class="n">Row_format</span><span class="p">:</span> <span class="k">NULL</span>
+           <span class="k">Rows</span><span class="p">:</span> <span class="k">NULL</span>
+ <span class="n">Avg_row_length</span><span class="p">:</span> <span class="k">NULL</span>
+    <span class="n">Data_length</span><span class="p">:</span> <span class="k">NULL</span>
+<span class="n">Max_data_length</span><span class="p">:</span> <span class="k">NULL</span>
+   <span class="n">Index_length</span><span class="p">:</span> <span class="k">NULL</span>
+      <span class="n">Data_free</span><span class="p">:</span> <span class="k">NULL</span>
+ <span class="n">Auto_increment</span><span class="p">:</span> <span class="k">NULL</span>
+    <span class="n">Create_time</span><span class="p">:</span> <span class="k">NULL</span>
+    <span class="n">Update_time</span><span class="p">:</span> <span class="k">NULL</span>
+     <span class="n">Check_time</span><span class="p">:</span> <span class="k">NULL</span>
+      <span class="k">Collation</span><span class="p">:</span> <span class="k">NULL</span>
+       <span class="n">Checksum</span><span class="p">:</span> <span class="k">NULL</span>
+ <span class="n">Create_options</span><span class="p">:</span> <span class="k">NULL</span>
+        <span class="k">Comment</span><span class="p">:</span> <span class="k">VIEW</span>  <span class="c1">--这里表示是视图
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span> <span class="n">sec</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>查看某一个具体视图</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span> <span class="k">table</span> <span class="n">status</span> <span class="k">from</span> <span class="k">view</span> <span class="k">like</span> <span class="s1">&#39;view_user&#39;</span><span class="err">\</span><span class="k">G</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>查看某个视图的具体信息</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span> <span class="k">create</span> <span class="k">view</span> <span class="n">view_user</span><span class="err">\</span><span class="k">G</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>##4. 修改视图</p>
+
+<p>###4.1 替换原有视图</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">or</span> <span class="k">replace</span> <span class="k">view</span> <span class="n">view_user</span> <span class="k">as</span> <span class="k">select</span>
+    <span class="o">-&gt;</span> <span class="k">Host</span><span class="p">,</span> <span class="k">User</span><span class="p">,</span> <span class="n">Password</span> <span class="k">from</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>###4.2 利用<code>alter</code>修改视图</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">alter</span> <span class="k">view</span> <span class="n">view_user</span> <span class="k">as</span> <span class="k">select</span> <span class="k">Host</span><span class="p">,</span> <span class="k">User</span> <span class="k">from</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>##5. 删除视图</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DROP</span> <span class="k">VIEW</span> <span class="n">view_name</span><span class="p">;</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>##6. 通过视图操作基表</p>
+
+<p><code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>都可以</p>
+
+<p><code>INSERT</code>只能应用于存在于一个表上的视图(多表连接的视图不行)，而且如果省略的值没有默认值也回有警告。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2016-04-10</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/mysql/">MySQL</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2016/04/10/mysql%E8%A1%A8%E7%9A%84%E6%93%8D%E4%BD%9C%E5%92%8C%E7%BA%A6%E6%9D%9F/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">MySQL表的操作和约束</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2016/04/10/mysql%E8%A7%A6%E5%8F%91%E5%99%A8/">
+            <span class="next-text nav-default">MySQL触发器</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/yundong-xu" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://weibo.com/u/3093227873" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-89788711-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

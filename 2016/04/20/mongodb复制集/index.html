@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>MongoDB复制集 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="摘要:
+ 本文主要讲述了MongoDB复制集的配置，动态修改及部分原理，最后创建了一个自动化部署的脚本。
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.51 with even 4.0.0" />
+
+
+<link rel="canonical" href="/2016/04/20/mongodb%E5%A4%8D%E5%88%B6%E9%9B%86/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.93844dae.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="MongoDB复制集" />
+<meta property="og:description" content="摘要:
+
+
+本文主要讲述了MongoDB复制集的配置，动态修改及部分原理，最后创建了一个自动化部署的脚本。
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2016/04/20/mongodb%E5%A4%8D%E5%88%B6%E9%9B%86/" /><meta property="article:published_time" content="2016-04-20T10:34:01&#43;00:00"/>
+<meta property="article:modified_time" content="2016-04-20T10:34:01&#43;00:00"/>
+
+<meta itemprop="name" content="MongoDB复制集">
+<meta itemprop="description" content="摘要:
+
+
+本文主要讲述了MongoDB复制集的配置，动态修改及部分原理，最后创建了一个自动化部署的脚本。
+">
+
+
+<meta itemprop="datePublished" content="2016-04-20T10:34:01&#43;00:00" />
+<meta itemprop="dateModified" content="2016-04-20T10:34:01&#43;00:00" />
+<meta itemprop="wordCount" content="936">
+
+
+
+<meta itemprop="keywords" content="MongoDB," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="MongoDB复制集"/>
+<meta name="twitter:description" content="摘要:
+
+
+本文主要讲述了MongoDB复制集的配置，动态修改及部分原理，最后创建了一个自动化部署的脚本。
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">MongoDB复制集</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-04-20 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#原理">原理</a></li>
+<li><a href="#创建复制集过程">创建复制集过程</a>
+<ul>
+<li><a href="#创建目录">创建目录</a></li>
+<li><a href="#启动3个实例">启动3个实例</a></li>
+<li><a href="#配置复制集">配置复制集</a></li>
+<li><a href="#复制集的初始化">复制集的初始化</a></li>
+<li><a href="#动态修改复制集成员">动态修改复制集成员</a></li>
+<li><a href="#查看数据状态">查看数据状态</a></li>
+<li><a href="#数据库实例的角色切换">数据库实例的角色切换</a></li>
+<li><a href="#自动化部署">自动化部署</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><strong>摘要</strong>:</p>
+
+<blockquote>
+<p>本文主要讲述了MongoDB复制集的配置，动态修改及部分原理，最后创建了一个自动化部署的脚本。</p>
+</blockquote>
+
+<h2 id="原理">原理</h2>
+
+<p><code>replication set</code> 多台服务器维护相同的数据副本，提高服务器的可用性</p>
+
+<p>主服务器负责读写，从服务器保持和主服务器同样的数据集，从服务器为只读状态</p>
+
+<p><img src="/images/MongoDB_replication_set_1.jpg" alt="复制集原理示意图" /></p>
+
+<p>查看复制集的帮助<code>rs.help()</code></p>
+
+<h2 id="创建复制集过程">创建复制集过程</h2>
+
+<h3 id="创建目录">创建目录</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">sudo mkdir /home/m17 /home/m18 /home/m19 /home/mlog</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="启动3个实例">启动3个实例</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">sudo mongod --dbpath /home/m17 --logpath /home/mlog/m17.log --fork --port <span class="m">27017</span> --replSet rs3
+sudo mongod --dbpath /home/m18 --logpath /home/mlog/m18.log --fork --port <span class="m">27018</span> --replSet rs3
+sudo mongod --dbpath /home/m19 --logpath /home/mlog/m19.log --fork --port <span class="m">27019</span> --replSet rs3
+
+<span class="c1"># --replSet声明这个实例属于某个复制集</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="配置复制集">配置复制集</h3>
+
+<p>登陆到任意一台服务器上</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="cm">/* 复制集的配置 */</span>
+<span class="kd">var</span> <span class="nx">rsconf</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">_id</span><span class="o">:</span> <span class="s1">&#39;rs3&#39;</span><span class="p">,</span>
+  <span class="nx">members</span><span class="o">:</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nx">_id</span><span class="o">:</span><span class="mi">0</span><span class="p">,</span>
+    <span class="nx">host</span><span class="o">:</span> <span class="s1">&#39;192.168.21.130:27017&#39;</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">_id</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nx">host</span><span class="o">:</span> <span class="s1">&#39;192.168.21.130:27018&#39;</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">_id</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="nx">host</span><span class="o">:</span> <span class="s1">&#39;192.168.21.130:27019&#39;</span>
+  <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="复制集的初始化">复制集的初始化</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">rs</span><span class="p">.</span><span class="nx">initiate</span><span class="p">(</span><span class="nx">rsconf</span><span class="p">);</span>
+
+<span class="nx">rs3</span><span class="o">:</span><span class="nx">OTHER</span><span class="o">&gt;</span> <span class="nx">rs</span><span class="p">.</span><span class="nx">status</span><span class="p">()</span>  <span class="cm">/* 查看复制集状态 */</span>
+<span class="p">{</span>
+    <span class="s2">&#34;set&#34;</span> <span class="o">:</span> <span class="s2">&#34;rs3&#34;</span><span class="p">,</span>
+    <span class="s2">&#34;date&#34;</span> <span class="o">:</span> <span class="nx">ISODate</span><span class="p">(</span><span class="s2">&#34;2016-04-20T01:27:29.900Z&#34;</span><span class="p">),</span>
+    <span class="s2">&#34;myState&#34;</span> <span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&#34;term&#34;</span> <span class="o">:</span> <span class="nx">NumberLong</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+    <span class="s2">&#34;heartbeatIntervalMillis&#34;</span> <span class="o">:</span> <span class="nx">NumberLong</span><span class="p">(</span><span class="mi">2000</span><span class="p">),</span>
+    <span class="s2">&#34;members&#34;</span> <span class="o">:</span> <span class="p">[</span>  <span class="cm">/* 表示了当前复制集的成员 */</span>
+        <span class="p">{</span>
+            <span class="s2">&#34;_id&#34;</span> <span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&#34;name&#34;</span> <span class="o">:</span> <span class="s2">&#34;192.168.21.130:27017&#34;</span><span class="p">,</span>
+            <span class="s2">&#34;health&#34;</span> <span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&#34;state&#34;</span> <span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&#34;stateStr&#34;</span> <span class="o">:</span> <span class="s2">&#34;PRIMARY&#34;</span><span class="p">,</span>
+            <span class="s2">&#34;uptime&#34;</span> <span class="o">:</span> <span class="mi">686</span><span class="p">,</span>
+            <span class="s2">&#34;optime&#34;</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&#34;ts&#34;</span> <span class="o">:</span> <span class="nx">Timestamp</span><span class="p">(</span><span class="mi">1461115634</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+                <span class="s2">&#34;t&#34;</span> <span class="o">:</span> <span class="nx">NumberLong</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="p">},</span>
+            <span class="s2">&#34;optimeDate&#34;</span> <span class="o">:</span> <span class="nx">ISODate</span><span class="p">(</span><span class="s2">&#34;2016-04-20T01:27:14Z&#34;</span><span class="p">),</span>
+            <span class="s2">&#34;infoMessage&#34;</span> <span class="o">:</span> <span class="s2">&#34;could not find member to sync from&#34;</span><span class="p">,</span>
+            <span class="s2">&#34;electionTime&#34;</span> <span class="o">:</span> <span class="nx">Timestamp</span><span class="p">(</span><span class="mi">1461115634</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="s2">&#34;electionDate&#34;</span> <span class="o">:</span> <span class="nx">ISODate</span><span class="p">(</span><span class="s2">&#34;2016-04-20T01:27:14Z&#34;</span><span class="p">),</span>
+            <span class="s2">&#34;configVersion&#34;</span> <span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&#34;self&#34;</span> <span class="o">:</span> <span class="kc">true</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&#34;_id&#34;</span> <span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&#34;name&#34;</span> <span class="o">:</span> <span class="s2">&#34;192.168.21.130:27018&#34;</span><span class="p">,</span>
+            <span class="s2">&#34;health&#34;</span> <span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&#34;state&#34;</span> <span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="s2">&#34;stateStr&#34;</span> <span class="o">:</span> <span class="s2">&#34;SECONDARY&#34;</span><span class="p">,</span>
+            <span class="s2">&#34;uptime&#34;</span> <span class="o">:</span> <span class="mi">26</span><span class="p">,</span>
+            <span class="s2">&#34;optime&#34;</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&#34;ts&#34;</span> <span class="o">:</span> <span class="nx">Timestamp</span><span class="p">(</span><span class="mi">1461115634</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+                <span class="s2">&#34;t&#34;</span> <span class="o">:</span> <span class="nx">NumberLong</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="p">},</span>
+            <span class="s2">&#34;optimeDate&#34;</span> <span class="o">:</span> <span class="nx">ISODate</span><span class="p">(</span><span class="s2">&#34;2016-04-20T01:27:14Z&#34;</span><span class="p">),</span>
+            <span class="s2">&#34;lastHeartbeat&#34;</span> <span class="o">:</span> <span class="nx">ISODate</span><span class="p">(</span><span class="s2">&#34;2016-04-20T01:27:28.052Z&#34;</span><span class="p">),</span>
+            <span class="s2">&#34;lastHeartbeatRecv&#34;</span> <span class="o">:</span> <span class="nx">ISODate</span><span class="p">(</span><span class="s2">&#34;2016-04-20T01:27:29.707Z&#34;</span><span class="p">),</span>
+            <span class="s2">&#34;pingMs&#34;</span> <span class="o">:</span> <span class="nx">NumberLong</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+            <span class="s2">&#34;syncingTo&#34;</span> <span class="o">:</span> <span class="s2">&#34;192.168.21.130:27017&#34;</span><span class="p">,</span>
+            <span class="s2">&#34;configVersion&#34;</span> <span class="o">:</span> <span class="mi">1</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="s2">&#34;_id&#34;</span> <span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="s2">&#34;name&#34;</span> <span class="o">:</span> <span class="s2">&#34;192.168.21.130:27019&#34;</span><span class="p">,</span>
+            <span class="s2">&#34;health&#34;</span> <span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&#34;state&#34;</span> <span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="s2">&#34;stateStr&#34;</span> <span class="o">:</span> <span class="s2">&#34;SECONDARY&#34;</span><span class="p">,</span>
+            <span class="s2">&#34;uptime&#34;</span> <span class="o">:</span> <span class="mi">26</span><span class="p">,</span>
+            <span class="s2">&#34;optime&#34;</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&#34;ts&#34;</span> <span class="o">:</span> <span class="nx">Timestamp</span><span class="p">(</span><span class="mi">1461115634</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+                <span class="s2">&#34;t&#34;</span> <span class="o">:</span> <span class="nx">NumberLong</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="p">},</span>
+            <span class="s2">&#34;optimeDate&#34;</span> <span class="o">:</span> <span class="nx">ISODate</span><span class="p">(</span><span class="s2">&#34;2016-04-20T01:27:14Z&#34;</span><span class="p">),</span>
+            <span class="s2">&#34;lastHeartbeat&#34;</span> <span class="o">:</span> <span class="nx">ISODate</span><span class="p">(</span><span class="s2">&#34;2016-04-20T01:27:28.054Z&#34;</span><span class="p">),</span>
+            <span class="s2">&#34;lastHeartbeatRecv&#34;</span> <span class="o">:</span> <span class="nx">ISODate</span><span class="p">(</span><span class="s2">&#34;2016-04-20T01:27:29.708Z&#34;</span><span class="p">),</span>
+            <span class="s2">&#34;pingMs&#34;</span> <span class="o">:</span> <span class="nx">NumberLong</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+            <span class="s2">&#34;syncingTo&#34;</span> <span class="o">:</span> <span class="s2">&#34;192.168.21.130:27017&#34;</span><span class="p">,</span>
+            <span class="s2">&#34;configVersion&#34;</span> <span class="o">:</span> <span class="mi">1</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s2">&#34;ok&#34;</span> <span class="o">:</span> <span class="mi">1</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="动态修改复制集成员">动态修改复制集成员</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="cm">/* 在primary实例上运行 */</span>
+
+<span class="cm">/* 删除成员 */</span>
+<span class="nx">rs3</span><span class="o">:</span><span class="nx">PRIMARY</span><span class="o">&gt;</span> <span class="nx">rs</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="s1">&#39;192.168.21.130:27019&#39;</span><span class="p">)</span>
+
+<span class="cm">/* 添加成员 */</span>
+<span class="nx">rs3</span><span class="o">:</span><span class="nx">PRIMARY</span><span class="o">&gt;</span> <span class="nx">rs</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">&#39;192.168.21.130:27018&#39;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="查看数据状态">查看数据状态</h3>
+
+<p>secondary默认不能读写，只和primary保持通信</p>
+
+<p>在secondary上添加<code>rs.slaveOk()</code>来确保能够正常读</p>
+
+<p>在primary上添加数据，可以在secondary上看到数据被同步了。</p>
+
+<h3 id="数据库实例的角色切换">数据库实例的角色切换</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="cm">/* 关闭primary */</span>
+<span class="nx">rs3</span><span class="o">:</span><span class="nx">PRIMARY</span><span class="o">&gt;</span> <span class="nx">use</span> <span class="nx">admin</span>
+<span class="nx">switched</span> <span class="nx">to</span> <span class="nx">db</span> <span class="nx">admin</span>
+<span class="nx">rs3</span><span class="o">:</span><span class="nx">PRIMARY</span><span class="o">&gt;</span> <span class="nx">db</span><span class="p">.</span><span class="nx">shutdownServer</span><span class="p">()</span>
+
+<span class="cm">/* 此时其他实例会自动变成primary */</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="自动化部署">自动化部署</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="cp">#!/bin/bash
+</span><span class="cp"></span><span class="c1">#History:</span>
+<span class="c1">#   Michael  4月,20,2016</span>
+<span class="c1">#Program:</span>
+#
+
+<span class="nv">MONGOD</span><span class="o">=</span>/usr/local/mongodb/bin/mongod
+<span class="nv">MONGO</span><span class="o">=</span>/usr/local/mongodb/bin/mongo
+<span class="nv">IP</span><span class="o">=</span><span class="m">192</span>.168.21.130
+<span class="nv">NA</span><span class="o">=</span>rs3
+
+sudo pkill -9 mongo
+<span class="k">if</span> <span class="o">[</span> -d /home/mlog <span class="o">]</span>
+<span class="k">then</span>
+    sudo rm -rf /home/mlog <span class="o">||</span> <span class="nb">exit</span> <span class="m">1</span>
+<span class="k">fi</span>
+sudo mkdir -p /home/mlog <span class="o">||</span> <span class="nb">exit</span> <span class="m">2</span>
+
+<span class="k">for</span> item in <span class="m">17</span> <span class="m">18</span> <span class="m">19</span>
+<span class="k">do</span>
+    <span class="k">if</span> <span class="o">[</span> -d /home/m<span class="si">${</span><span class="nv">item</span><span class="si">}</span> <span class="o">]</span>
+    <span class="k">then</span>
+        sudo rm -rf /home/m<span class="si">${</span><span class="nv">item</span><span class="si">}</span> <span class="o">||</span> <span class="nb">exit</span> <span class="m">1</span>
+    <span class="k">fi</span>
+    sudo mkdir -p /home/m<span class="si">${</span><span class="nv">item</span><span class="si">}</span> <span class="o">||</span> <span class="nb">exit</span> <span class="m">2</span>
+
+    sudo <span class="nv">$MONGOD</span> --dbpath /home/m<span class="si">${</span><span class="nv">item</span><span class="si">}</span> --logpath /home/mlog/m<span class="si">${</span><span class="nv">item</span><span class="si">}</span>.log --port <span class="m">270</span><span class="si">${</span><span class="nv">item</span><span class="si">}</span> --fork --smallfiles --replSet <span class="si">${</span><span class="nv">NA</span><span class="si">}</span>
+<span class="k">done</span>
+
+<span class="si">${</span><span class="nv">MONGO</span><span class="si">}</span> <span class="s">&lt;&lt;EOF
+</span><span class="s">use admin
+</span><span class="s">var rsconf = {
+</span><span class="s">  _id: &#39;rs3&#39;,
+</span><span class="s">  members: [
+</span><span class="s">    { _id:0, host: &#39;${IP}:27017&#39; },
+</span><span class="s">    { _id:1, host: &#39;${IP}:27018&#39; },
+</span><span class="s">    { _id:2, host: &#39;${IP}:27019&#39; }
+</span><span class="s">  ]
+</span><span class="s">}
+</span><span class="s">rs.initiate(rsconf);
+</span><span class="s">EOF</span></code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2016-04-20</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/mongodb/">MongoDB</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2016/04/22/mongodb%E5%88%86%E7%89%87/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">MongoDB分片</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2016/04/19/mongodb%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%9B%9E%E5%A4%8D/">
+            <span class="next-text nav-default">MongoDB备份与回复</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/yundong-xu" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://weibo.com/u/3093227873" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-89788711-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
