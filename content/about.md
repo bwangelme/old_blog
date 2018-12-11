@@ -21,6 +21,7 @@ weight: 40
 
 ## Blog Logs
 
++ 2018年12月11日：将博客主题更换成了 [even](https://github.com/olOwOlo/hugo-theme-even)
 + 2018年07月08日: 将博客迁移到了 [Github Page](http://bwangel23.github.io)
 + 2018年01月12日：博客文章全部迁移到CSDN，原 GitHub 仓库作为备份，[新地址](http://blog.csdn.net/u012291393)
 + 2017年08月27日: 将博客从 Hexo 迁移到了 [Hugo](https://gohugo.io/)
