@@ -1,7 +1,7 @@
 ---
 title: Gevent 的 KeyError
 date: 2016-09-14 15:21:40
-tags: [Python, gevent, stackoverflow, 翻译]
+tags: [Python, Gevent, stackoverflow, 翻译]
 ---
 
 __摘要__:

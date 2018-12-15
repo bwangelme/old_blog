@@ -1,7 +1,7 @@
 ---
 title: Redis Sort 命令简介
 date: 2017-06-21 13:29:08
-tags: [redis]
+tags: [Redis]
 ---
 
 > `sort`命令是Redis中最强大的命令之一，本文试图通过一些例子来总结Redis Sort的常用方法。

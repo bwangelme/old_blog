@@ -1,7 +1,7 @@
 ---
 title: "Go 模板"
 author: "bwangel"
-tags: ["template", "Go"]
+tags: ["Template", "Go"]
 date: 2018-10-18T23:24:24+08:00
 draft: false
 ---

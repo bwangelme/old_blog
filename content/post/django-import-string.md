@@ -1,7 +1,7 @@
 ---
 title: Django中import_string的实现
 date: 2017-06-08 07:17:28
-tags: ['django', 'python']
+tags: ['Django', 'Python']
 ---
 
 __摘要__:

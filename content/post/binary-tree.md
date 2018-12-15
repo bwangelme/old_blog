@@ -2,7 +2,7 @@
 title: "完全二叉树与满二叉树"
 date: 2018-03-31T22:42:53+08:00
 draft: true
-tags: [Tag, ]
+tags: [Algorithm, ]
 ---
 
 本文主要讲述了完全二叉树和满二叉树的定义及一些特性

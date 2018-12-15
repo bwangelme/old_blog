@@ -1,7 +1,7 @@
 ---
 title: "简单聊聊HTML 5中的Web Storage"
 date: 2017-05-06 02:34:14
-tags: [html, 前端]
+tags: [HTML, Web]
 ---
 
 > 1. 针对HTML5中的 Web Storage进行了介绍
