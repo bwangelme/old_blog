@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>MySQL数据类型_数值类型 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍MySQL数据类型_数值类型
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/mysql%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B_%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.da936970.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="MySQL数据类型_数值类型" />
+<meta property="og:description" content="摘要:
+
+
+这是一篇关于MySQL的文章，主要介绍MySQL数据类型_数值类型
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/mysql%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B_%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B/" />
+<meta property="article:published_time" content="2016-04-10T10:56:54&#43;00:00"/>
+<meta property="article:modified_time" content="2016-04-10T10:56:54&#43;00:00"/>
+
+<meta itemprop="name" content="MySQL数据类型_数值类型">
+<meta itemprop="description" content="摘要:
+
+
+这是一篇关于MySQL的文章，主要介绍MySQL数据类型_数值类型
+">
+
+
+<meta itemprop="datePublished" content="2016-04-10T10:56:54&#43;00:00" />
+<meta itemprop="dateModified" content="2016-04-10T10:56:54&#43;00:00" />
+<meta itemprop="wordCount" content="629">
+
+
+
+<meta itemprop="keywords" content="MySQL," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="MySQL数据类型_数值类型"/>
+<meta name="twitter:description" content="摘要:
+
+
+这是一篇关于MySQL的文章，主要介绍MySQL数据类型_数值类型
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">MySQL数据类型_数值类型</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-04-10 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-整数类型">1. 整数类型</a></li>
+<li><a href="#2-浮点数类型">2. 浮点数类型</a></li>
+<li><a href="#3-定点数类型">3. 定点数类型</a></li>
+<li><a href="#4-位类型">4. 位类型</a></li>
+<li><a href="#5-日期和时间类型">5. 日期和时间类型</a></li>
+<li><a href="#6-建议">6. 建议</a>
+<ul>
+<li><a href="#1-浮点数">1. 浮点数</a></li>
+<li><a href="#2-定点数">2. 定点数</a></li>
+<li><a href="#3-位类型">3. 位类型</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><strong>摘要</strong>:</p>
+
+<blockquote>
+<p>这是一篇关于MySQL的文章，主要介绍MySQL数据类型_数值类型</p>
+</blockquote>
+
+<h2 id="1-整数类型">1. 整数类型</h2>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>mysql自带</th>
+<th>字节数</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>TINYINT</td>
+<td>YES</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>SMALLINT</td>
+<td></td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>MEDIUMINT</td>
+<td>YES</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>INT或者INTEGER</td>
+<td></td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>BGIINT</td>
+<td>YES</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span> <span class="n">warnings</span><span class="p">;</span> <span class="o">#</span> <span class="err">查看警告</span>
+
+<span class="o">#</span> <span class="err">创建无符号整数字段</span><span class="p">,</span> <span class="err">默认是有符号的</span>
+<span class="k">create</span> <span class="k">table</span> <span class="n">test2</span><span class="p">(</span>
+    <span class="n">tinyint_test</span> <span class="n">tinyint</span> <span class="n">unsigned</span><span class="p">,</span>
+    <span class="n">int_test</span> <span class="nb">int</span> <span class="n">unsigned</span>
+    <span class="p">);</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">test4</span><span class="p">(</span>
+    <span class="o">-&gt;</span> <span class="n">id1</span> <span class="nb">int</span> <span class="n">zerofill</span><span class="p">,</span>
+    <span class="o">-&gt;</span> <span class="n">id2</span> <span class="nb">int</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="n">zerofill</span><span class="p">)</span>
+    <span class="o">-&gt;</span> <span class="p">;</span>
+
+<span class="o">#</span> <span class="err">如果不够显示字段，自动补充</span><span class="mi">0</span><span class="err">，由于是以</span><span class="mi">0</span><span class="err">开始，所以默认会是</span><span class="n">unsigned的</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="2-浮点数类型">2. 浮点数类型</h2>
+
+<p>|类型|字节|
+|Float|4|
+|Double|8|</p>
+
+<p>也有精度和标度的概念,超过精度会四舍五入</p>
+
+<p><strong>错误示例</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">table</span> <span class="n">test5</span><span class="p">(</span><span class="n">float_test</span> <span class="nb">float</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+
+<span class="k">insert</span> <span class="k">into</span> <span class="n">test5</span> <span class="k">values</span><span class="p">(</span><span class="mi">1111</span><span class="p">.</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="o">#</span> <span class="err">最终存入的会是</span><span class="mi">999</span><span class="p">.</span><span class="mi">99</span><span class="p">,</span><span class="err">因为已经超出整数位了</span><span class="p">(</span><span class="err">三位</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="3-定点数类型">3. 定点数类型</h2>
+
+<p>在MySQL内部以字符串存储,精度比浮点数更高。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="nb">DEC</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+
+<span class="o">#</span> <span class="n">M</span><span class="p">:</span> <span class="err">精度，一共的位数</span>
+<span class="o">#</span> <span class="n">D</span><span class="p">:</span> <span class="err">标度，小数点后的位数</span>
+
+<span class="err">默认情况下，</span><span class="n">M</span><span class="o">=</span><span class="mi">10</span><span class="err">，</span><span class="n">D</span><span class="o">=</span><span class="mi">0</span><span class="err">，不能存储小数。</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="4-位类型">4. 位类型</h2>
+
+<p>多位二进制数，范围是1-64二进制数，默认是一位</p>
+
+<p>字节是1 - 8</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">table</span> <span class="n">test6</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="nb">bit</span><span class="p">(</span><span class="err">位数</span><span class="p">))</span>
+
+<span class="o">#</span> <span class="n">id是一个bit类型的整型</span><span class="err">，表示一个二进制数，括号里面跟位数，默认是</span><span class="mi">1</span>
+
+<span class="k">select</span> <span class="n">bin</span><span class="p">(</span><span class="n">id</span><span class="p">),</span> <span class="n">oct</span><span class="p">(</span><span class="n">id</span><span class="p">),</span> <span class="n">hex</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="k">from</span> <span class="n">test6</span><span class="p">;</span>
+
+<span class="o">#</span> <span class="err">将二进制数</span><span class="n">id</span><span class="err">，以二进制，八进制，十六进制的数字字符串的形式来显示。</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="5-日期和时间类型">5. 日期和时间类型</h2>
+
+<p>日期和时间类型|字节|最大值|最小值
+&mdash;-|&mdash;-|
+DATE|4|
+DATETIME|8|1000-01-01 00:00:00|9999-12-31 23:59:59|
+TIMESTAMP|4|19700101080001|2038年的某个时刻|
+TIME|3|-835:59:59|838:59:59|
+YEAR|1|1901|2155</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">YEAR &lt;=69 会以20开头，&gt;=70会以19开头</pre></td></tr></table>
+</div>
+</div>
+<h2 id="6-建议">6. 建议</h2>
+
+<h3 id="1-浮点数">1. 浮点数</h3>
+
+<p>用户身高，体重，薪水等。</p>
+
+<h3 id="2-定点数">2. 定点数</h3>
+
+<p>存储货币等高精度要求的数据。</p>
+
+<h3 id="3-位类型">3. 位类型</h3>
+
+<p>注意使用相应函数<code>bin oct hex</code>去查看相应的数据。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2016-04-10</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/mysql/">MySQL</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/mysql%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B_%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">MySQL数据类型-字符串类型</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/mysql%E7%B4%A2%E5%BC%95/">
+            <span class="next-text nav-default">MySQL索引</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+    <script src="https://utteranc.es/client.js"
+          repo="anotherbwangel/blog-comment"
+          issue-term="pathname"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/yundong-xu" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://weibo.com/u/3093227873" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-89788711-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Python3.5新特性 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="摘要:
+  Python3.5的新特性，原文地址 用async和await等新语法来进行协程编程  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/python3-5%E6%96%B0%E7%89%B9%E6%80%A7/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.da936970.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Python3.5新特性" />
+<meta property="og:description" content="摘要:
+
+
+
+Python3.5的新特性，原文地址
+用async和await等新语法来进行协程编程
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/python3-5%E6%96%B0%E7%89%B9%E6%80%A7/" />
+<meta property="article:published_time" content="2016-05-08T14:27:17&#43;00:00"/>
+<meta property="article:modified_time" content="2016-05-08T14:27:17&#43;00:00"/>
+
+<meta itemprop="name" content="Python3.5新特性">
+<meta itemprop="description" content="摘要:
+
+
+
+Python3.5的新特性，原文地址
+用async和await等新语法来进行协程编程
+
+">
+
+
+<meta itemprop="datePublished" content="2016-05-08T14:27:17&#43;00:00" />
+<meta itemprop="dateModified" content="2016-05-08T14:27:17&#43;00:00" />
+<meta itemprop="wordCount" content="966">
+
+
+
+<meta itemprop="keywords" content="Python,翻译," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python3.5新特性"/>
+<meta name="twitter:description" content="摘要:
+
+
+
+Python3.5的新特性，原文地址
+用async和await等新语法来进行协程编程
+
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Python3.5新特性</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-05-08 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#原文链接">原文链接</a></li>
+<li><a href="#pep-492-coroutines-with-async-and-await-syntax">PEP 492 - Coroutines with async and await syntax</a>
+<ul>
+<li><a href="#示例-基本的http客户端">示例: 基本的Http客户端</a></li>
+<li><a href="#示例-上下文管理器">示例: 上下文管理器</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><strong>摘要</strong>:</p>
+
+<blockquote>
+<ol>
+<li>Python3.5的新特性，<a href="https://docs.python.org/3/whatsnew/3.5.html">原文地址</a></li>
+<li>用<code>async</code>和<code>await</code>等新语法来进行协程编程</li>
+</ol>
+</blockquote>
+
+<h2 id="原文链接">原文链接</h2>
+
+<p><a href="https://docs.python.org/3/whatsnew/3.5.html">What’s New In Python 3.5</a></p>
+
+<h2 id="pep-492-coroutines-with-async-and-await-syntax">PEP 492 - Coroutines with async and await syntax</h2>
+
+<p>通过添加<code>awaitabel</code>对象，协程函数，异步迭代器和异步内容管理器，PEP492极大地提升了在Python中进行协程编程的能力。</p>
+
+<p>通过<code>async func</code>语法可以声明一个协程函数，如下所示:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">def</span> <span class="nf">coro</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s1">&#39;span&#39;</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>在一个协程函数内部，新的<code>await</code>表达式可以用来暂停协程的执行，直到新的结果可用，任何对象都可以被await化，只要这个对象通过定义<code>__await__</code>函数实现了<code>awaitabel</code>协议</p>
+
+<p>PEP492 也添加了<code>async for</code>语句来方便进行异步迭代器的迭代。</p>
+
+<h3 id="示例-基本的http客户端">示例: 基本的Http客户端</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="n">async</span> <span class="k">def</span> <span class="nf">http_get</span><span class="p">(</span><span class="n">domain</span><span class="p">):</span>
+    <span class="n">reader</span><span class="p">,</span> <span class="n">writer</span> <span class="o">=</span> <span class="n">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">open_connection</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+
+    <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+        <span class="sa">b</span><span class="s1">&#39;GET / HTTP/1.1&#39;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s1">&#39;Host: %b&#39;</span> <span class="o">%</span> <span class="n">domain</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;latin-1&#39;</span><span class="p">),</span>
+        <span class="sa">b</span><span class="s1">&#39;Connection: close&#39;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+    <span class="p">]))</span>
+
+    <span class="n">async</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt;&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+
+    <span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">http_get</span><span class="p">(</span><span class="s1">&#39;baidu.com&#39;</span><span class="p">))</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>在上面的程序中，首先定义了一个事件循环和一个协程函数，协程函数跑在事件循环上，在协程函数内部，异步地去请求服务端的连接，连接成功建立以后，再向服务端发出Http请求，返回的Http相应被存储在reader这个异步迭代器中，然后再来通过<code>async for</code>来遍历出这个异步迭代器的所有结果。</p>
+
+<p>程序的输入如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">&gt;&gt;&gt; b&#39;HTTP/1.1 200 OK\r\n&#39;
+&gt;&gt;&gt; b&#39;Date: Sun, 08 May 2016 07:33:29 GMT\r\n&#39;
+&gt;&gt;&gt; b&#39;Server: Apache\r\n&#39;
+&gt;&gt;&gt; b&#39;Last-Modified: Tue, 12 Jan 2010 13:48:00 GMT\r\n&#39;
+&gt;&gt;&gt; b&#39;ETag: &#34;51-47cf7e6ee8400&#34;\r\n&#39;
+&gt;&gt;&gt; b&#39;Accept-Ranges: bytes\r\n&#39;
+&gt;&gt;&gt; b&#39;Content-Length: 81\r\n&#39;
+&gt;&gt;&gt; b&#39;Cache-Control: max-age=86400\r\n&#39;
+&gt;&gt;&gt; b&#39;Expires: Mon, 09 May 2016 07:33:29 GMT\r\n&#39;
+&gt;&gt;&gt; b&#39;Connection: Close\r\n&#39;
+&gt;&gt;&gt; b&#39;Content-Type: text/html\r\n&#39;
+&gt;&gt;&gt; b&#39;\r\n&#39;
+&gt;&gt;&gt; b&#39;&lt;html&gt;\n&#39;
+&gt;&gt;&gt; b&#39;&lt;meta http-equiv=&#34;refresh&#34; content=&#34;0;url=http://www.baidu.com/&#34;&gt;\n&#39;
+&gt;&gt;&gt; b&#39;&lt;/meta&gt;html&gt;\n&#39;</pre></td></tr></table>
+</div>
+</div>
+<h3 id="示例-上下文管理器">示例: 上下文管理器</h3>
+
+<p>除了异步迭代器之外，还有新的语法支持异步的上下文管理器(关于上下文管理器可以参考我的这篇文章<a href="http://www.bwangel.win/2016/04/25/Python%E7%9A%84with%E8%AF%AD%E5%8F%A5/">Python的with语句</a>)，示例程序如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="n">async</span> <span class="k">def</span> <span class="nf">coro</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;coro {}: waiting for lock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+    <span class="n">async</span> <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;coro {}: holding the lock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="n">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;coro {}: releasing the lock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="n">lock</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+<span class="n">coros</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">coro</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">lock</span><span class="p">),</span> <span class="n">coro</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">lock</span><span class="p">))</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">coros</span><span class="p">)</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>在上面的程序中，通过<code>asyncio.gather</code>函数将两个协程函数定义的协程对象生成一个future对象，然后通过一个事件循环去运行这个future对象。
+在协程函数内部，主要就是异步的获取锁，并且和with语句结合，可以在获取以后自动释放锁。</p>
+
+<p>程序的运行结果如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">coro 1: waiting for lock
+coro 1: holding the lock
+coro 2: waiting for lock
+coro 1: releasing the lock
+coro 2: holding the lock
+coro 2: releasing the lock</pre></td></tr></table>
+</div>
+</div>
+<p>需要注意的是<code>async with</code>和<code>async for</code>必须运行在<code>async def</code>定义的协程函数内部。
+协程函数必须运行在一个兼容的事件循环之上，例如<code>asyncio loop</code></p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2016-05-08</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/python/">Python</a>
+          <a href="/tags/%E7%BF%BB%E8%AF%91/">翻译</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/ubuntu%E7%BC%A9%E5%B0%8F%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA%E5%A4%A7%E5%B0%8F/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Ubuntu缩小磁盘分区大小</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/npm%E5%B0%8F%E8%AE%B0/">
+            <span class="next-text nav-default">npm小记</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+    <script src="https://utteranc.es/client.js"
+          repo="anotherbwangel/blog-comment"
+          issue-term="pathname"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/yundong-xu" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://weibo.com/u/3093227873" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-89788711-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

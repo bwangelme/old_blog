@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>简单聊聊Vim中的自定义快捷键 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="摘要:
+  Vim中几个Map命令的区别 分享几个自定义的快捷键  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/vim-map/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.da936970.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="简单聊聊Vim中的自定义快捷键" />
+<meta property="og:description" content="摘要:
+
+
+
+Vim中几个Map命令的区别
+分享几个自定义的快捷键
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/vim-map/" />
+<meta property="article:published_time" content="2017-03-26T17:19:11&#43;00:00"/>
+<meta property="article:modified_time" content="2017-03-26T17:19:11&#43;00:00"/>
+
+<meta itemprop="name" content="简单聊聊Vim中的自定义快捷键">
+<meta itemprop="description" content="摘要:
+
+
+
+Vim中几个Map命令的区别
+分享几个自定义的快捷键
+
+">
+
+
+<meta itemprop="datePublished" content="2017-03-26T17:19:11&#43;00:00" />
+<meta itemprop="dateModified" content="2017-03-26T17:19:11&#43;00:00" />
+<meta itemprop="wordCount" content="2659">
+
+
+
+<meta itemprop="keywords" content="Vim," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="简单聊聊Vim中的自定义快捷键"/>
+<meta name="twitter:description" content="摘要:
+
+
+
+Vim中几个Map命令的区别
+分享几个自定义的快捷键
+
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">简单聊聊Vim中的自定义快捷键</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-03-26 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#前言">前言</a></li>
+<li><a href="#与自定义快捷键相关的四个系列命令">与自定义快捷键相关的四个系列命令</a>
+<ul>
+<li><a href="#map系列命令">map系列命令</a></li>
+<li><a href="#noremap系列命令">noremap系列命令</a></li>
+<li><a href="#unmap系列命令">unmap系列命令</a></li>
+<li><a href="#mapclear系命令">mapclear系命令</a></li>
+</ul></li>
+<li><a href="#自定义快捷键相关的六种模式">自定义快捷键相关的六种模式</a>
+<ul>
+<li><a href="#命令模式对应表">命令模式对应表</a></li>
+</ul></li>
+<li><a href="#分享两个我自己定义的快捷键">分享两个我自己定义的快捷键</a>
+<ul>
+<li><a href="#tab键映射成搜索"><del>Tab键映射成搜索</del></a></li>
+<li><a href="#快速定位当前文件">快速定位当前文件</a></li>
+</ul></li>
+<li><a href="#有待考证和完善之处">有待考证和完善之处</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><strong>摘要</strong>:</p>
+
+<blockquote>
+<ol>
+<li>Vim中几个<code>Map</code>命令的区别</li>
+<li>分享几个自定义的快捷键</li>
+</ol>
+</blockquote>
+
+<h2 id="前言">前言</h2>
+
+<p>平常在Vim中自定义快捷键，使用的都是<code>map</code>命令，但最近发现自定义快捷键命令还有好多，如<code>noremap</code>， <code>nmap</code>，<code>vmap</code>等等。所以就想写一篇关于Vim中自定义快捷键的文章，来总结一些Vim中的自定义快捷键的命令和他们的命名方式。</p>
+
+<h2 id="与自定义快捷键相关的四个系列命令">与自定义快捷键相关的四个系列命令</h2>
+
+<h3 id="map系列命令">map系列命令</h3>
+
+<p>这个命令的声明如下: <code>:map {lhs} {rhs}</code>。这个命令就是将<code>{lhs}</code>代表的按键映射成<code>{rhs}</code>所代表的按键。例如<code>map L $</code>就是将<code>$</code>键映射成<code>L</code>。此外需要注意的是<code>map</code>命令定义的快捷键是可以嵌套的，例如下面这样的命令:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-vim" data-lang="vim"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-vim" data-lang="vim"><span class="nx">map</span> <span class="nx">L</span> $<span class="err">
+</span><span class="err"></span><span class="nx">map</span> <span class="nx">Y</span> <span class="nx">yL</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>就是将<code>Y</code>按键映射成了<code>y$</code>按键。</p>
+
+<h3 id="noremap系列命令">noremap系列命令</h3>
+
+<p>这个命令的声明如下: <code>:no[remap]  {lhs} {rhs}</code>，顾名思义，就是不可以重新映射的命令。这个命令和<code>map</code>命令类似，不过它所定义的命令不可以被重新映射，例如下面的例子:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-vim" data-lang="vim"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-vim" data-lang="vim"><span class="nx">map</span> <span class="nx">L</span> $<span class="err">
+</span><span class="err"></span><span class="nx">map</span> <span class="nx">Y</span> <span class="nx">yL</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>此时我们映射的<code>Y</code>按键的效果就不会和<code>y$</code>按键的效果相同了。此命令的主要作用是为了防止按键重新定义时出现冲突，所以一般推荐使用此命令来映射快捷键。</p>
+
+<h3 id="unmap系列命令">unmap系列命令</h3>
+
+<p><code>unmap</code>，顾名思义，就是用来取消<strong>所在模式</strong>下快捷键的定义(关于<strong>模式</strong>我们下一小结会将)。</p>
+
+<h3 id="mapclear系命令">mapclear系命令</h3>
+
+<p><code>mapclear</code>，清除所在模式下定义的所有快捷键。</p>
+
+<h2 id="自定义快捷键相关的六种模式">自定义快捷键相关的六种模式</h2>
+
+<p>在Vim中，共有六种模式，不同的定义快捷键的命令生效的模式不同，这六种模式如下：</p>
+
+<ul>
+<li><strong>N</strong>ormal Mode: 即Vim的普通模式，我们打开Vim后进入的第一个模式即此模式。</li>
+<li><strong>V</strong>isual Mode: 即Vim的<code>Visual</code>模式，我们在选中了一定的文本之后(通过<code>v</code>或者<code>V</code>命令)即进入此模式。</li>
+<li><strong>S</strong>elect Mode: 这种模式和<code>Visual</code>模式相似，不过输入的文本都会替换选中的文本。在普通模式下，通过鼠标选中或者使用<code>gH</code>命令都可以进入此模式。</li>
+<li><strong>O</strong>perator-pending Mode: 当我们输入一个<a href="http://vimdoc.sourceforge.net/htmldoc/motion.html#operator">操作符</a>后(例如，<code>d</code>，<code>y</code>，<code>c</code>等等)，就会进入此模式。</li>
+<li><strong>I</strong>nsert Mode: 即Vim的插入模式，普通模式下我们输入<code>i</code>(或者<code>s</code>,<code>a</code>等等)就会进入此模式。</li>
+<li><strong>C</strong>ommand-line Mode: 命令行模式，我们在普通模式下输入<code>:</code>或者<code>/</code>等就会进入此模式。</li>
+</ul>
+
+<h3 id="命令模式对应表">命令模式对应表</h3>
+
+<p>下表表示了每个自定义快捷键的命令和其对应的生效模式，需要注意的是<code>Lang-Arg</code>并不是一种新的模式，而是表示了这样一种情况。当我们键入一个字符的时候，它是缓冲区中文本的一部分，而不是一个Vim命令。上面这句话我翻译自Vim文档，我感觉自己也没有很是搞懂，所以还是把原文贴出了吧(参见<code>:help language-mapping</code>)：</p>
+
+<blockquote>
+<p>Generally: Whenever a character is to be typed that is part of the text in the
+buffer, not a Vim command character.  &ldquo;Lang-Arg&rdquo; isn&rsquo;t really another mode,
+it&rsquo;s just used here for this situation.</p>
+</blockquote>
+
+<p>| <code>map</code>系命令|<code>noremap</code>系命令|<code>unmap</code>系命令|<code>mapclear</code>系命令|生效模式
+| &mdash;-|&mdash;-|&mdash;-|&mdash;-|&mdash;-|&mdash;-
+| :map |:noremap |:unmap |:mapc[lear] |Normal, Visual, Select, Operator-pending
+| :nmap|:nnoremap|:nunmap|:nmapc[lear]|Normal
+| :vmap|:vnoremap|:vunmap|:vmapc[lear]|Visual and Select
+| :smap|:snoremap|:sunmap|:smapc[lear]|Select
+| :xmap|:xnoremap|:xunmap|:xmapc[lear]|Visual
+| :omap|:onoremap|:ounmap|:omapc[lear]|Operator-pending
+| :map!|:noremap!|:unmap!|:mapc[lear]!|Insert and Command-line
+| :imap|:inoremap|:iunmap|:imapc[lear]|Insert
+| :lmap|:lnoremap|:lunmap|:lmapc[lear]|Insert, Command-line, Lang-Arg
+| :cmap|:cnoremap|:cunmap|:cmapc[lear]|Command-line</p>
+
+<p>通过观察上面这些命令的前缀，我们可以发现，命令前缀和生效的模式有关。例如，<code>v</code>表示<code>Visual和Select</code>模式，<code>s</code>表示<code>Select</code>模式，<code>c</code>表示<code>Command-line</code>模式，等等。</p>
+
+<h2 id="分享两个我自己定义的快捷键">分享两个我自己定义的快捷键</h2>
+
+<p>Ok，扯了那么多和自定义快捷键相关的东西，接下来我和大家分享几个我自定义的快捷键吧，感觉用起来很爽，希望对大家有帮助。</p>
+
+<h3 id="tab键映射成搜索"><del>Tab键映射成搜索</del></h3>
+
+<p><del>搜索无疑是一个使用频率非常高的快捷键，但在原始的Vim中使用的却是<code>/</code>或者<code>?</code>，当要使用搜索功能的时候，我的右手要离开HomeRow(就是<strong>爱上对方过后就哭了</strong>那一行)，然后使用中指或者食指去按<code>/</code>，感觉虽然也可以用右手小拇指去按<code>/</code>，但实在是太费劲。</del></p>
+
+<p><del>所以我就把<code>/</code>映射成了<code>&lt;Tab&gt;</code>，<code>&lt;Tab&gt;</code>键在普通模式下基本用不到，同时左手小拇指又非常容易按到，感觉一下子方便了许多。映射命令如下：</del></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-vim" data-lang="vim"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-vim" data-lang="vim"><span class="c">&#34; 映射/为&lt;Tab&gt;</span><span class="err">
+</span><span class="err"></span><span class="nx">noremap</span> <span class="p">&lt;</span><span class="nx">Tab</span><span class="p">&gt;</span> /</code></pre></td></tr></table>
+</div>
+</div>
+<p><del>大家可以看到，我这里使用的是<code>noremap</code>映射的(防止以后再来映射和<code>&lt;Tab&gt;</code>键相关的组合键时出现错误)，同时，这个命令生效的模式是<code>Normal</code>，<code>Visual</code>，<code>Select</code>，<code>Operator-pending</code>。这样我不仅可以在普通模式下搜索，也可以在选择文本(Visual)，删除文本(通过<code>d</code>命令)时进行搜索。</del></p>
+
+<p>后来我才发现，<code>&lt;Tab&gt;</code>和<code>&lt;C-i&gt;</code>的keycode是一样的，<a href="http://stackoverflow.com/questions/14641942/how-to-unmap-tab-and-do-not-make-ctrl-i-invalid-in-vim">无法分别映射</a>，所以将<code>&lt;Tab&gt;</code>映射为搜索按键会影响到<code>&lt;C-i&gt;</code>的功能，所以还是先删除掉吧。</p>
+
+<h3 id="快速定位当前文件">快速定位当前文件</h3>
+
+<p>这条映射是我在<a href="https://book.douban.com/subject/25869486/">《VIM 实用技巧》</a>中看到的，感觉很好用，特意来分享给大家。此映射命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-vim" data-lang="vim"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-vim" data-lang="vim"><span class="c">&#34; 将%:h映射为%%，%:h的功能是显示当前缓冲区文件的相对路径</span><span class="err">
+</span><span class="err"></span><span class="nx">cnoremap</span> <span class="p">&lt;</span><span class="nx">expr</span><span class="p">&gt;</span> %% <span class="nx">getcmdtype</span><span class="p">()</span> <span class="p">==</span> <span class="s1">&#39;:&#39;</span> ? <span class="nx">expand</span><span class="p">(</span><span class="s1">&#39;%:h&#39;</span><span class="p">)</span>.<span class="s1">&#39;/&#39;</span> <span class="p">:</span> <span class="s1">&#39;%%&#39;</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>这条命令比较复杂，首先<code>cnoremap</code>表示在命令行模式下进行映射，<code>&lt;expr&gt;</code>表示将映射命令的右边的参数当做一个表达式来对待(详见: <code>:help :map-&lt;expr&gt;</code>)。</p>
+
+<p><code>%%</code>就是我们定义的快捷键，<code>getcmdtype() == ':' ? expand('%:h').'/' : '%%'</code>就是我们要执行的表达式，此命令的含义就是每当我们在命令行模式下输入<code>%%</code>，就会得到表达式<code>getcmdtype() == ':' ? expand('%:h').'/' : '%%'</code>运算的结果。</p>
+
+<p>接着我们再来分析一下这个表达式，<code>getcmdtype() == ':' ? expand('%:h').'/' : '%%'</code>。</p>
+
+<p>首先来看调用的两个函数，<code>getcmdtype</code>表示获取当前命令行模式的类型，<code>:</code>表示是Ex-Mode，就是在普通模式下输入<code>:</code>进入的模式，此外其他的返回结果参见<code>:help getcmdtype()</code>。
+<code>expand()</code>函数表示对通配符进行扩展，其中传入的参数为<code>%</code>和<code>:h</code>，<code>%</code>表示当前缓冲区文件，<code>:h</code>相当于一个函数，传入一个文件参数，返回文件所在的文件夹(相当于Python中的<code>os.path.dirname()</code>)，我们可以看到<code>expand('%:h')</code>函数的功能就是返回当前缓冲区文件所在的路径。</p>
+
+<p>整体来看这个表达式的话，就是一个三元运算符，如果当前模式是Ex-Mode的话，返回当前缓冲区文件所在的文件夹，否则的话返回<code>%%</code>。</p>
+
+<h2 id="有待考证和完善之处">有待考证和完善之处</h2>
+
+<p>写文章之前，我觉得我应该已经了解了Vim的<code>map</code>相关的命令，但是写完以后，发现还是有很多疑问，写到最后发现还有新东西自己没有涉及，这里先记录下来，以待以后完善：</p>
+
+<ol>
+<li><code>map</code>的递归定义的用法。我看到<code>:help :map</code>文档中说，<strong>This allows for nested and recursive use of mappings.</strong>也就是说<code>map</code>可以进行递归定义的，只是不知道怎么用，递归出口在哪？</li>
+<li><code>map</code>命令还有一个<code>map-&lt;expr&gt;</code>的用法，这次还没有将，以后加上。</li>
+<li>关于文档中<code>Lang-arg</code>还不是很懂。</li>
+</ol>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2017-03-26</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/vim/">Vim</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/laptop-server/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">【流水账】利用闲置笔记本搭建自己的开发服务器</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/wsgi-app-example/">
+            <span class="next-text nav-default">Werkzeug 的 wsgi-app 说明</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+    <script src="https://utteranc.es/client.js"
+          repo="anotherbwangel/blog-comment"
+          issue-term="pathname"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/yundong-xu" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://weibo.com/u/3093227873" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-89788711-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

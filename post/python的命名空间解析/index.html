@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Python的命名空间解析 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="摘要:
+  什么是命名空间 命名空间有哪些 变量查找原则 分析一个UnboundLocalError的例子  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/python%E7%9A%84%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E8%A7%A3%E6%9E%90/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.da936970.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Python的命名空间解析" />
+<meta property="og:description" content="摘要:
+
+
+
+什么是命名空间
+命名空间有哪些
+变量查找原则
+分析一个UnboundLocalError的例子
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/python%E7%9A%84%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E8%A7%A3%E6%9E%90/" />
+<meta property="article:published_time" content="2016-08-03T22:29:41&#43;00:00"/>
+<meta property="article:modified_time" content="2016-08-03T22:29:41&#43;00:00"/>
+
+<meta itemprop="name" content="Python的命名空间解析">
+<meta itemprop="description" content="摘要:
+
+
+
+什么是命名空间
+命名空间有哪些
+变量查找原则
+分析一个UnboundLocalError的例子
+
+">
+
+
+<meta itemprop="datePublished" content="2016-08-03T22:29:41&#43;00:00" />
+<meta itemprop="dateModified" content="2016-08-03T22:29:41&#43;00:00" />
+<meta itemprop="wordCount" content="1774">
+
+
+
+<meta itemprop="keywords" content="Python," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python的命名空间解析"/>
+<meta name="twitter:description" content="摘要:
+
+
+
+什么是命名空间
+命名空间有哪些
+变量查找原则
+分析一个UnboundLocalError的例子
+
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Python的命名空间解析</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-08-03 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#什么是命名空间">什么是命名空间</a></li>
+<li><a href="#命名空间有哪些">命名空间有哪些</a></li>
+<li><a href="#变量查找原则">变量查找原则</a></li>
+<li><a href="#分析一个unboundlocalerror例子">分析一个UnboundLocalError例子</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><strong>摘要</strong>:</p>
+
+<blockquote>
+<ol>
+<li>什么是命名空间</li>
+<li>命名空间有哪些</li>
+<li>变量查找原则</li>
+<li>分析一个UnboundLocalError的例子</li>
+</ol>
+</blockquote>
+
+<h2 id="什么是命名空间">什么是命名空间</h2>
+
+<p>首先说什么是命名空间呢！我们知道，在Python中，一切都是对象，然后通过<strong>名字</strong>去引用对象。例如我们执行了一条语句<code>a = 3</code>,Python做的工作就是让名字<code>a</code>去引用一个 Int 对象<code>3</code>。这种名字和对象的对应关系都存储在一个字典中，而这个字典，就叫做命名空间。任何一个模块，类，实例，函数，都有其命名空间，这个命名空间可以通过<code>__dict__</code>来访问。比如下面这段代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">sys</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">m</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="vm">__dict__</span> <span class="ow">is</span> <span class="nb">globals</span><span class="p">())</span>
+<span class="bp">True</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="mi">32</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>在上面的例子中，我们首先通过<code>sys.modules</code>获取了当前运行的模块，然后通过<code>__dict__</code>成员获取了当前模块的命名空间，然后发现<code>globals</code>函数返回的就是当前模块的命名空间。当我们执行了<code>a = 3</code>语句以后，可以看到，当前模块的命名空间中多了一个<code>a</code>成员，其值为3。</p>
+
+<h2 id="命名空间有哪些">命名空间有哪些</h2>
+
+<p>前面我们讲到，每个类，函数，实例，模块都有其命名空间，可以通过<code>__dict__</code>成员来访问，如下面代码所示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">sys</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">main_module</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">module_member</span> <span class="o">=</span> <span class="s1">&#39;module&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">class</span> <span class="nc">C</span><span class="p">:</span>
+<span class="o">...</span>     <span class="n">class_member</span> <span class="o">=</span> <span class="s1">&#39;class&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">C</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">instance_member</span> <span class="o">=</span> <span class="s1">&#39;instance&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">def</span> <span class="nf">func</span><span class="p">():</span>
+<span class="o">...</span>     <span class="n">func_member</span> <span class="o">=</span> <span class="s1">&#39;function&#39;</span>
+<span class="o">...</span>     <span class="n">fls</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">_getframe</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">f_locals</span>
+<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="s1">&#39;fls and locals() are same object? </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fls</span> <span class="ow">is</span> <span class="nb">locals</span><span class="p">()))</span>
+<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="n">fls</span><span class="p">[</span><span class="s1">&#39;func_member&#39;</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">main_module</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;module_member&#39;</span><span class="p">])</span>
+<span class="n">module</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;class_member&#39;</span><span class="p">])</span>
+<span class="k">class</span>
+<span class="err">&gt;&gt;&gt; </span><span class="nc">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;instance_member&#39;</span><span class="p">])</span>
+<span class="n">instance</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">func</span><span class="p">()</span>
+<span class="n">fls</span> <span class="ow">and</span> <span class="nb">locals</span><span class="p">()</span> <span class="n">are</span> <span class="n">same</span> <span class="nb">object</span><span class="err">?</span> <span class="bp">True</span>
+<span class="n">function</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>在上面的代码中，我们分别访问了，模块，类，实例，函数的命名空间，并在其中取出了我们命名的变量。其中，访问函数的命名空间有些特殊，我们是通过<code>_getframe</code>函数访问了当前栈帧，然后在栈帧中找到了当前函数的命名空间。当然这个函数的命名空间也可以通过<code>locals</code>函数访问到。</p>
+
+<h2 id="变量查找原则">变量查找原则</h2>
+
+<p>从上面的例子中，我们了解到，命名空间其实就是存储名字和对象的对应关系的，那么当我们通过一个名字来获取一个对象的时候，其查找命名空间的顺序是怎样的呢？在Python中遵循着<strong>LEGB</strong>的查找原则。</p>
+
+<p>LEGB的意思就是<code>Local -&gt; Enclosing Function -&gt; Global -&gt; Builtins</code>。</p>
+
+<p>遇到一个名字的时候，Python解释器首先会去本地命名空间(<code>Local</code>)中查找，然后再去其所在函数的作用域(<code>Enclosing Function</code>)中查找，如果还没找到，就去全局命名空间(<code>Global</code>)中查找，最后会去<code>__builtin__</code>这个模块中查找，<code>__builtin__</code>模块在 Python3 中已经重命名成了<code>builtins</code>，详见 <a href="http://stackoverflow.com/questions/9047745/where-is-the-builtin-module-in-python3-why-was-it-renamed">stackoverflow 上关于<code>builtin</code>的提问</a>，感谢<a href="https://gold.xitu.io/entry/5859fdb3570c3500691df8de/detail">@欧阳杰</a>童鞋指出这个问题。</p>
+
+<p>例如下面的一段代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
+<span class="o">...</span> <span class="n">__builtin__</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;Hello, World!&#39;</span>
+<span class="o">...</span> <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+<span class="o">...</span>     <span class="n">y</span> <span class="o">=</span> <span class="s1">&#39;abc&#39;</span>
+<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="o">...</span> <span class="n">test</span><span class="p">()</span>
+<span class="o">...</span>
+<span class="mi">1234</span>
+<span class="n">abc</span>
+<span class="n">Hello</span><span class="p">,</span> <span class="n">World</span><span class="err">!</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>在上面的代码中，s 是<code>builtins</code>命名空间中的名字，y 是<code>local</code>命名空间中的名字，x 是<code>Global</code>命名空间中的名字，它们都能够被正确找到并打印出来。</p>
+
+<h2 id="分析一个unboundlocalerror例子">分析一个UnboundLocalError例子</h2>
+
+<p>在最后，我们来分析这样一段代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
+<span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;abc&#39;</span>
+
+<span class="n">test</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">---------------------------------------------------------------------------
+
+UnboundLocalError                         Traceback (most recent call last)
+
+&lt;ipython-input-45-9f45a812fe7a&gt; in &lt;module&gt;()
+      4     x = &#39;abc&#39;
+      5
+----&gt; 6 test()
+
+
+&lt;ipython-input-45-9f45a812fe7a&gt; in test()
+      1 x = 1234
+      2 def test():
+----&gt; 3     print(x)
+      4     x = &#39;abc&#39;
+      5
+
+
+UnboundLocalError: local variable &#39;x&#39; referenced before assignment</pre></td></tr></table>
+</div>
+</div>
+<p>在上面的函数中，我们要打印一个名字<code>x</code>，它首先会去本地命名空间中查找，没有找到。然后去当前函数<code>test</code>的作用域中查找，找到了。此时Python解释器就会发现<code>x</code>这个名字还没有添加到local本地命名空间中，就被引用了。所以就会抛出一个异常，说<code>x</code>还未被赋值就被引用了。如果我们把代码改成下面这种形式，发现就可以正常运行了：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
+<span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">test</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">1234</pre></td></tr></table>
+</div>
+</div>
+<p>为什么删除了x的赋值语句，这个函数就能正常运行了呢？
+这是因为此时Python解释器查找命名空间的顺序变了。解释器首先会去查找本地命名空间，发现没有，然后去查找函数<code>test</code>的作用域，发现也没有，接着再去查找全局命名空间，此时找到了，就会打印出x的值。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">dis</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
+<span class="k">def</span> <span class="nf">test_right</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">dis</span><span class="o">.</span><span class="n">dis</span><span class="p">(</span><span class="n">test_right</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">20</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
+<span class="k">def</span> <span class="nf">test_error</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;abc&#39;</span>
+
+<span class="n">dis</span><span class="o">.</span><span class="n">dis</span><span class="p">(</span><span class="n">test_error</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">  5           0 LOAD_GLOBAL              0 (print)
+              3 LOAD_GLOBAL              1 (x)
+              6 CALL_FUNCTION            1 (1 positional, 0 keyword pair)
+              9 POP_TOP
+             10 LOAD_CONST               0 (None)
+             13 RETURN_VALUE
+--------------------
+ 13           0 LOAD_GLOBAL              0 (print)
+              3 LOAD_FAST                0 (x)
+              6 CALL_FUNCTION            1 (1 positional, 0 keyword pair)
+              9 POP_TOP
+
+ 14          10 LOAD_CONST               1 (&#39;abc&#39;)
+             13 STORE_FAST               0 (x)
+             16 LOAD_CONST               0 (None)
+             19 RETURN_VALUE</pre></td></tr></table>
+</div>
+</div>
+<p>通过查看这两个函数的反汇编出来的代码可以看到，这两个函数访问x的时候，一个是通过<code>LOAD_GLOBAL</code>指令，访问的全局命名空间，另外一个则是通过<code>LOAD_FAST</code>指令访问的本地命名空间。通过这些反汇编出来的代码，可以部分地证明我们上面的猜想。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2016-08-03</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/python/">Python</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/python%E4%B8%AD%E7%9A%84%E7%94%9F%E6%88%90%E5%99%A8%E5%92%8C%E5%8D%8F%E7%A8%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Python中的生成器和协程</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/ubuntu%E7%BC%A9%E5%B0%8F%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA%E5%A4%A7%E5%B0%8F/">
+            <span class="next-text nav-default">Ubuntu缩小磁盘分区大小</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+    <script src="https://utteranc.es/client.js"
+          repo="anotherbwangel/blog-comment"
+          issue-term="pathname"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/yundong-xu" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://weibo.com/u/3093227873" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-89788711-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
