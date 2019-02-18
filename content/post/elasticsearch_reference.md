@@ -9,7 +9,7 @@ tags: [ElasticSearch, ]
 
 <!--more-->
 
-## 配置 Elasticsearch
+# 配置 Elasticsearch
 
 ES 有三个配置文件:
 
@@ -23,3 +23,6 @@ ES 有三个配置文件:
 ES_PATH_CONF=/path/to/my/config ./bin/elasticsearch
 ```
 
+## TODO
+
+[Shards & Replicas](https://www.elastic.co/guide/en/elasticsearch/reference/current/getting-started-concepts.html#getting-started-shards-and-replicas)
