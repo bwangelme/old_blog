@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Python Upgrade Importerror - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="  记一次因 Python 升级导致的 ImportError  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/python-upgrade-importerror/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.da936970.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Python Upgrade Importerror" />
+<meta property="og:description" content="
+
+记一次因 Python 升级导致的 ImportError
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/python-upgrade-importerror/" />
+<meta property="article:published_time" content="2017-12-05T22:33:57&#43;08:00"/>
+<meta property="article:modified_time" content="2017-12-05T22:33:57&#43;08:00"/>
+
+<meta itemprop="name" content="Python Upgrade Importerror">
+<meta itemprop="description" content="
+
+记一次因 Python 升级导致的 ImportError
+
+">
+
+
+<meta itemprop="datePublished" content="2017-12-05T22:33:57&#43;08:00" />
+<meta itemprop="dateModified" content="2017-12-05T22:33:57&#43;08:00" />
+<meta itemprop="wordCount" content="1573">
+
+
+
+<meta itemprop="keywords" content="Python,ImportError," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python Upgrade Importerror"/>
+<meta name="twitter:description" content="
+
+记一次因 Python 升级导致的 ImportError
+
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Python Upgrade Importerror</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-12-05 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#出错场景">出错场景</a></li>
+<li><a href="#原因分析">原因分析</a>
+<ul>
+<li><a href="#从异常入手查找原因">从异常入手查找原因</a></li>
+<li><a href="#has-tlsv1-3-的定义"><code>HAS_TLSv1_3</code>的定义</a></li>
+<li><a href="#错误复现">错误复现</a></li>
+</ul></li>
+<li><a href="#错误总结">错误总结</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<ul>
+<li>记一次因 Python 升级导致的 ImportError</li>
+</ul>
+</blockquote>
+
+<p>我们有一个 Django 应用通过 uwsgi 跑在阿里云的 ECS 上，所用的系统是 Ubuntu 16.04，uwsgi 是通过 supervisord 来管理的，每个应用都在单独的 virtualenv 中运行，这就是大概的软件运行环境。</p>
+
+<p>因为一些软件没有升级，阿里云一直提示存在安全漏洞，所以我就想把 ECS 上的系统升级一下。升级的过程并没有什么什么问题，毕竟用的阿里云自己维护的源，基本上不会出现什么版本依赖之类的问题。</p>
+
+<h1 id="出错场景">出错场景</h1>
+
+<p>升级完成后重新启动 Django 应用，发现应用启动不起来，uwsgi 报错</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">from _ssl import HAS_SNI, HAS_ECDH, HAS_NPN, HAS_ALPN, HAS_TLSv1_3
+ImportError: cannot import name &#39;HAS_TLSv1_3&#39;</pre></td></tr></table>
+</div>
+</div>
+<h1 id="原因分析">原因分析</h1>
+
+<h2 id="从异常入手查找原因">从异常入手查找原因</h2>
+
+<p>抛出的异常意思是在<code>_ssl</code>模块中没有<code>HAS_TLSv1_3</code>的属性，于是我就去Python 文档中查询了一下这个属性，它的解释是这样的：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">ssl.HAS_TLSv1_3
+Whether the OpenSSL library has built-in support for the TLS 1.3 protocol.
+
+New in version 3.6.3.</pre></td></tr></table>
+</div>
+</div>
+<p>看到<code>New in version 3.6.3.</code>的字样，再去查系统的升级记录，我发现刚刚执行的升级中就把宿主机的 Python 从3.6.2升级到了3.6.3，此时我隐隐约约觉得就是因为此次升级导致了 uwsgi 启动时的报错。</p>
+
+<p>但我升级的是宿主机的 Python，它又是如何影响到了 Virtualenv 中的 Python 呢？各位别急，我们接着往下挖。</p>
+
+<h2 id="has-tlsv1-3-的定义"><code>HAS_TLSv1_3</code>的定义</h2>
+
+<p>我们接着再去看抛出异常的那行代码，它在 Python 的标准库的<code>ssl.py</code>的<a href="https://github.com/python/cpython/blob/v3.6.3/Lib/ssl.py#L118">118行</a>，具体内容如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">from _ssl import HAS_SNI, HAS_ECDH, HAS_NPN, HAS_ALPN, HAS_TLSv1_3</pre></td></tr></table>
+</div>
+</div>
+<p>我们可以看到，抛出异常就是因为Python解释器从<code>_ssl</code>模块中导入<code>HAS_TLSv1_3</code>时，出现了导入异常。</p>
+
+<p>而<code>_ssl</code>模块是用C语言编写的，它被编译进入了Python解释器中，它的代码位于 Python 源码的 <a href="https://github.com/python/cpython/blob/v3.6.3/Lib/ssl.py">Modules/_ssl.c</a> 文件中。</p>
+
+<p>在它的<a href="https://github.com/python/cpython/blob/v3.6.3/Modules/_ssl.c#L5154-L5206">5154-5206</a>行，我们可以看到它对于<code>_ssl</code>模块的定义：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="k">static</span> <span class="k">struct</span> <span class="n">PyModuleDef</span> <span class="n">_sslmodule</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">PyModuleDef_HEAD_INIT</span><span class="p">,</span>
+    <span class="s">&#34;_ssl&#34;</span><span class="p">,</span>
+    <span class="n">module_doc</span><span class="p">,</span>
+    <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">PySSL_methods</span><span class="p">,</span>
+    <span class="nb">NULL</span><span class="p">,</span>
+    <span class="nb">NULL</span><span class="p">,</span>
+    <span class="nb">NULL</span><span class="p">,</span>
+    <span class="nb">NULL</span>
+<span class="p">};</span>
+
+<span class="p">...</span>
+
+<span class="n">PyMODINIT_FUNC</span>
+<span class="n">PyInit__ssl</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">m</span><span class="p">,</span> <span class="o">*</span><span class="n">d</span><span class="p">,</span> <span class="o">*</span><span class="n">r</span><span class="p">;</span>
+    <span class="p">...</span>
+  
+    <span class="c1">// _ssl 模块在这里定义，指针m代表了_ssl模块
+</span><span class="c1"></span>    <span class="n">m</span> <span class="o">=</span> <span class="n">PyModule_Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">_sslmodule</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">...</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>而在它的<a href="https://github.com/python/cpython/blob/v3.6.3/Modules/_ssl.c#L5462-L5468">5642-5468</a>行，我们可以看到<code>_ssl</code>模块中对于<code>HAS_TLSv1_3</code>属性的定义：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#if defined(TLS1_3_VERSION) &amp;&amp; !defined(OPENSSL_NO_TLS1_3)
+</span><span class="cp"></span>    <span class="n">r</span> <span class="o">=</span> <span class="n">Py_True</span><span class="p">;</span>
+<span class="cp">#else
+</span><span class="cp"></span>    <span class="n">r</span> <span class="o">=</span> <span class="n">Py_False</span><span class="p">;</span>
+<span class="cp">#endif
+</span><span class="cp"></span>    <span class="n">Py_INCREF</span><span class="p">(</span><span class="n">r</span><span class="p">);</span>
+    <span class="c1">// 下面这条语句向_ssl模块中添加了布尔值 HAS_TLSv1_3
+</span><span class="c1"></span>    <span class="n">PyModule_AddObject</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="s">&#34;HAS_TLSv1_3&#34;</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>上述的代码主要就是判断当前系统是否支持 TLS 1.3版本，并向<code>_ssl</code>模块添加了一个布尔值<code>HAS_TLSv1_3</code>来表明当前系统是否支持 TLS 1.3版本。</p>
+
+<h2 id="错误复现">错误复现</h2>
+
+<p>从上面的分析中我们可以看出，我们可以知道三件事情，</p>
+
+<ol>
+<li><code>HAS_TLSv1_3</code>这个布尔值是被编译进 Python 解释器中的，</li>
+<li>根据 <a href="https://docs.python.org/3/library/ssl.html#ssl.HAS_TLSv1_3">Python 文档</a> 的说明，<code>HAS_TLSv1_3</code>是在 Python 3.6.3中新添加的。</li>
+<li>我们将宿主机的 Python 从3.6.2升级到了3.6.3，但是我们的 Virtualenv 仍然使用着 3.6.2 版本的 Python 解释器。</li>
+</ol>
+
+<p>知道了以上三点，我们就可以复现出我们的错误场景，梳理出整个出错的流程：</p>
+
+<ul>
+<li>uwsgi 启动，使用的是 Virtualenv 中的 3.6.2版本的 Python 解释器</li>
+<li>Python 3.6.2 的解释器在某些第三方库中执行了<code>import ssl</code>的语句</li>
+<li>由于 Virtualenv 创建的时候并没有将标准库的<code>ssl.py</code>文件一并复制过来，所以 Python 3.6.2 的解释器去系统目录下寻找<code>ssl.py</code>文件并执行</li>
+<li>Python 3.6.2 的解释器找到了系统目录下的<code>ssl.py</code>文件，也就是 Python 3.6.3 的系统库文件。</li>
+<li>Python 3.6.2 的解释器执行了 Python 3.6.3的库文件<code>ssl.py</code>中的一条导入语句：
+<code>py
+from _ssl import HAS_SNI, HAS_ECDH, HAS_NPN, HAS_ALPN, HAS_TLSv1_3
+</code></li>
+<li>Python 3.6.2 的解释器从解释器內建的模块<code>_ssl</code>中导入<code>HAS_TLSv1_3</code></li>
+<li>由于 Python 3.6.2 的解释器中并没有定义<code>HAS_TLSv1_3</code>这个布尔值，程序抛出<code>ImportError</code></li>
+</ul>
+
+<p>上面这个出错流程也可以用下面这张图来概括:</p>
+
+<p><img src="https://passage-1253400711.cos-website.ap-beijing.myqcloud.com/2019-02-18-2017-10-14-080329.jpg" alt="Import Error" /></p>
+
+<h1 id="错误总结">错误总结</h1>
+
+<p>看到这里，我想 Virtualenv 创建时没有复制系统库文件<code>ssl.py</code>过来，是不是因为我没有指定它的 <a href="https://virtualenv.pypa.io/en/stable/reference/#cmdoption-always-copy">&ndash;always-copy</a> 属性，我特意指定了这个属性又来创建了一遍 Virtualenv，发现它还是没有复制<code>ssl.py</code>文件过来。</p>
+
+<p>关于这个问题，我请教了公司的一位大佬。大佬说这样设计其实复合 Virtualenv 的定位，它只是做 Python 第三方库的隔离，并不做 Python 版本的隔离。</p>
+
+<p>所以如果我们以后需要在同一个系统上安装多个 Python 版本的话，还是需要使用 <a href="https://github.com/pyenv/pyenv">pyenv</a> 这样的工具，而不能指望 Virutalenv 的 <a href="https://virtualenv.pypa.io/en/stable/reference/#cmdoption-p">&ndash;python</a> 选项。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2017-12-05</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/python/">Python</a>
+          <a href="/tags/importerror/">ImportError</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/mysql%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">MySQL 日志管理</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/go-concurrency/">
+            <span class="next-text nav-default">Go的并发编程简述</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+    <script src="https://utteranc.es/client.js"
+          repo="anotherbwangel/blog-comment"
+          issue-term="pathname"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/yundong-xu" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://weibo.com/u/3093227873" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>
