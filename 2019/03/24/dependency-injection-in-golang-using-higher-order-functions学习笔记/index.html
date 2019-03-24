@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>《Dependency injection in Golang using higher order functions》学习笔记 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="  原文地址: https://stein.wtf/posts/2019-03-12/inject/ 相关代码: https://github.com/steinfletcher/func-dependency-injection-go  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
+
+
+<link rel="canonical" href="/2019/03/24/dependency-injection-in-golang-using-higher-order-functions%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.da936970.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="《Dependency injection in Golang using higher order functions》学习笔记" />
+<meta property="og:description" content="
+
+原文地址: https://stein.wtf/posts/2019-03-12/inject/
+相关代码: https://github.com/steinfletcher/func-dependency-injection-go
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2019/03/24/dependency-injection-in-golang-using-higher-order-functions%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" />
+<meta property="article:published_time" content="2019-03-24T18:37:43&#43;08:00"/>
+<meta property="article:modified_time" content="2019-03-24T18:37:43&#43;08:00"/>
+
+<meta itemprop="name" content="《Dependency injection in Golang using higher order functions》学习笔记">
+<meta itemprop="description" content="
+
+原文地址: https://stein.wtf/posts/2019-03-12/inject/
+相关代码: https://github.com/steinfletcher/func-dependency-injection-go
+
+">
+
+
+<meta itemprop="datePublished" content="2019-03-24T18:37:43&#43;08:00" />
+<meta itemprop="dateModified" content="2019-03-24T18:37:43&#43;08:00" />
+<meta itemprop="wordCount" content="177">
+
+
+
+<meta itemprop="keywords" content="ARTS,Go," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="《Dependency injection in Golang using higher order functions》学习笔记"/>
+<meta name="twitter:description" content="
+
+原文地址: https://stein.wtf/posts/2019-03-12/inject/
+相关代码: https://github.com/steinfletcher/func-dependency-injection-go
+
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">《Dependency injection in Golang using higher order functions》学习笔记</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-03-24 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<ul>
+<li>原文地址: <a href="https://stein.wtf/posts/2019-03-12/inject/">https://stein.wtf/posts/2019-03-12/inject/</a></li>
+<li>相关代码: <a href="https://github.com/steinfletcher/func-dependency-injection-go">https://github.com/steinfletcher/func-dependency-injection-go</a></li>
+</ul>
+</blockquote>
+
+<ul>
+<li>以下分别为 Go 实现和 Java 实现的对比</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">interface</span> <span class="nc">DB</span> <span class="o">{</span>
+  <span class="n">User</span> <span class="nf">SelectUser</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">)</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserService</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="kd">final</span> <span class="n">DB</span> <span class="n">db</span><span class="o">;</span>
+
+  <span class="kd">public</span> <span class="nf">UserService</span><span class="o">(</span><span class="n">DB</span> <span class="n">db</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">DB</span> <span class="o">=</span> <span class="n">db</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="n">UserProfile</span> <span class="nf">getUserProfile</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">DB</span><span class="o">.</span><span class="na">SelectUser</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="n">UserProfile</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">DB</span> <span class="kd">interface</span> <span class="p">{</span>
+  <span class="nf">SelectUser</span><span class="p">(</span><span class="nx">id</span> <span class="kt">string</span><span class="p">)</span> <span class="nx">User</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">getUserProfile</span> <span class="kd">func</span><span class="p">(</span><span class="nx">id</span> <span class="kt">string</span><span class="p">)</span> <span class="nx">UserProfile</span>
+
+<span class="kd">func</span> <span class="nf">newGetUserProfile</span><span class="p">(</span><span class="nx">db</span> <span class="nx">DB</span><span class="p">)</span> <span class="nx">getUserProfile</span><span class="p">{</span>
+  <span class="k">return</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">id</span> <span class="kt">string</span><span class="p">)</span> <span class="nx">UserProfile</span> <span class="p">{</span>
+    <span class="nx">user</span> <span class="o">:=</span> <span class="nx">db</span><span class="p">.</span><span class="nf">SelectUser</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="nx">userProfile</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>从以上的代码可以看出，Go 的实现中没有刻意去创建对象，而是实现了一个工厂函数，所以整体的实现更精简一些。</li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2019-03-24</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/arts/">ARTS</a>
+          <a href="/tags/go/">Go</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/2018/11/01/http-%E5%8D%8F%E8%AE%AE%E4%B8%AD%E7%9A%84%E5%88%86%E5%9D%97%E4%BC%A0%E8%BE%93%E7%BC%96%E7%A0%81/">
+            <span class="next-text nav-default">HTTP 协议中的分块传输编码</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+    <script src="https://utteranc.es/client.js"
+          repo="anotherbwangel/blog-comment"
+          issue-term="pathname"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/yundong-xu" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://weibo.com/u/3093227873" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>
