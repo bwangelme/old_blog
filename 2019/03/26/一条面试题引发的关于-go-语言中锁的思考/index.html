@@ -560,24 +560,24 @@
 	<span class="s">&#34;sync&#34;</span>
 <span class="p">)</span>
 
-<span class="kd">type</span> <span class="nx">FailLock</span> <span class="kd">struct</span> <span class="p">{</span>
+<span class="kd">type</span> <span class="nx">FairLock</span> <span class="kd">struct</span> <span class="p">{</span>
 	<span class="nx">mu</span>        <span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span>
 	<span class="nx">cond</span>      <span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">Cond</span>
 	<span class="nx">holdCount</span> <span class="kt">int</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="nf">NewFailLock</span><span class="p">()</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">Locker</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="nf">NewFairLock</span><span class="p">()</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">Locker</span> <span class="p">{</span>
 	<span class="nx">mu</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span><span class="p">)</span>
 	<span class="nx">cond</span> <span class="o">:=</span> <span class="nx">sync</span><span class="p">.</span><span class="nf">NewCond</span><span class="p">(</span><span class="nx">mu</span><span class="p">)</span>
 
-	<span class="k">return</span> <span class="o">&amp;</span><span class="nx">FailLock</span><span class="p">{</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="nx">FairLock</span><span class="p">{</span>
 		<span class="nx">holdCount</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
 		<span class="nx">mu</span><span class="p">:</span>        <span class="nx">mu</span><span class="p">,</span>
 		<span class="nx">cond</span><span class="p">:</span>      <span class="nx">cond</span><span class="p">,</span>
 	<span class="p">}</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">fl</span> <span class="o">*</span><span class="nx">FailLock</span><span class="p">)</span> <span class="nf">Lock</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">fl</span> <span class="o">*</span><span class="nx">FairLock</span><span class="p">)</span> <span class="nf">Lock</span><span class="p">()</span> <span class="p">{</span>
 	<span class="nx">fl</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
 	<span class="k">defer</span> <span class="nx">fl</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
 
@@ -589,7 +589,7 @@
 	<span class="nx">fl</span><span class="p">.</span><span class="nx">cond</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
 <span class="p">}</span>
 
-<span class="kd">func</span> <span class="p">(</span><span class="nx">fl</span> <span class="o">*</span><span class="nx">FailLock</span><span class="p">)</span> <span class="nf">Unlock</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">fl</span> <span class="o">*</span><span class="nx">FairLock</span><span class="p">)</span> <span class="nf">Unlock</span><span class="p">()</span> <span class="p">{</span>
 	<span class="nx">fl</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
 	<span class="k">defer</span> <span class="nx">fl</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
 
@@ -628,7 +628,7 @@
 <span class="p">}</span>
 
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">mu</span> <span class="o">:=</span> <span class="nf">NewFailLock</span><span class="p">()</span>
+	<span class="nx">mu</span> <span class="o">:=</span> <span class="nf">NewFairLock</span><span class="p">()</span>
 	<span class="nx">names</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;A&#34;</span><span class="p">,</span> <span class="s">&#34;B&#34;</span><span class="p">,</span> <span class="s">&#34;C&#34;</span><span class="p">}</span>
 
 	<span class="k">for</span> <span class="nx">idx</span><span class="p">,</span> <span class="nx">name</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">names</span> <span class="p">{</span>
