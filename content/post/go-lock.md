@@ -341,6 +341,69 @@ func main() {
 }
 ```
 
+## 正确答案V4 - FanIn
+
+经V友 @Mark3K 的[补充](https://www.v2ex.com/t/552620#r_7143193)，还可以使用多个 channel 执行扇入(Fan In)操作，避免使用锁。
+
+首先说一下扇入的定义，Go blog 中是这样描述的：
+
+> A function can read from multiple inputs and proceed until all are closed by multiplexing the input channels onto a single channel that's closed when all the inputs are closed. This is called fan-in.
+
+通过将多个输入 channel 多路复用到单个处理 channel 的方式，一个函数能够从多个输入 channel 中读取数据并处理。当所有的输出 channel 都关闭的时候，单个处理 channel 也会关闭。这就叫做扇入。
+
+在维基百科中描述的逻辑门的扇入如下(大家也可以参考这个来理解 Go 中的扇入):
+
+> Fan-in is the number of inputs a logic gate can handle. For instance the fan-in for the AND gate shown in the figure is 3. Physical logic gates with a large fan-in tend to be slower than those with a small fan-in. This is because the complexity of the input circuitry increases the input capacitance of the device. Using logic gates with higher fan-in will help reducing the depth of a logic circuit.
+
+![](https://passage-1253400711.cos-website.ap-beijing.myqcloud.com/2019-04-07-040937.jpg)
+
+> 逻辑门中的扇入定义: 一个逻辑门将多个输入处理成一个输出，它能够处理的输入数量就叫做扇入。
+
+理解了扇入的概念后，上述问题的答案也呼之欲出了。我们可以为`A,B,C`三个 Goroutine 创建三个 channel。然后通过一个 FanIn 函数将三个 channel 的输出输入到一个 channel 中。具体代码如下：
+
+```go
+package main
+
+import "fmt"
+
+func gen(v string, times int) <-chan string {
+	ch := make(chan string)
+	go func() {
+		defer close(ch)
+		for i := 0; i < times; i++ {
+			ch <- v
+		}
+	}()
+	return ch
+}
+
+func fanIn(times int, inputs []<-chan string) <-chan string {
+	ch := make(chan string)
+	go func() {
+		defer close(ch)
+		for i := 0; i < times; i++ {
+			for _, input := range inputs {
+				v := <-input
+				ch <- v
+			}
+		}
+	}()
+	return ch
+}
+
+func main() {
+	times := 10
+	inputs := make([]<-chan string, 0, 3)
+	for _, K := range []string{"A", "B", "C"} {
+		inputs = append(inputs, gen(K, times))
+	}
+	for char := range fanIn(times, inputs) {
+		fmt.Println(char)
+	}
+}
+```
+
+
 ## 参考链接
 
 + [一条经典面试题引发的思考](http://samray.me/%E4%B8%80%E6%9D%A1%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98%E5%BC%95%E5%8F%91%E7%9A%84%E6%80%9D%E8%80%83)
@@ -349,3 +412,6 @@ func main() {
 + [The Go Memory Model](https://golang.org/ref/mem#tmp_2)
 + [GoLang内存模型](http://ifeve.com/golang-mem/)
 + [go reentrant lock(可重入锁) 简单实现](https://blog.csdn.net/u012233832/article/details/82501839)
++ [Go Concurrency Patterns: Pipelines and cancellation](https://blog.golang.org/pipelines)
++ [Fan-In Wikipedia](https://en.wikipedia.org/wiki/Fan-in)
++ [V友 Mark3K的评论](https://www.v2ex.com/t/552620#r_7143193)
