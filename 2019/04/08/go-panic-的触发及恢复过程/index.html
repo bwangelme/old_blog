@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>大白的碎碎念</title>
+  <title>Go Panic 的触发及恢复过程 - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content="闻道百，以为莫己若者，我之谓也" /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content="  Panic 过程 recover 函数 defer 函数  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
@@ -26,9 +26,7 @@
 <meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
 
 
-<link rel="canonical" href="/" />
-  <link href="/index.xml" rel="alternate" type="application/rss+xml" title="大白的碎碎念" />
-  <link href="/index.xml" rel="feed" type="application/rss+xml" title="大白的碎碎念" />
+<link rel="canonical" href="/2019/04/08/go-panic-%E7%9A%84%E8%A7%A6%E5%8F%91%E5%8F%8A%E6%81%A2%E5%A4%8D%E8%BF%87%E7%A8%8B/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -40,19 +38,45 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:title" content="大白的碎碎念" />
-<meta property="og:description" content="闻道百，以为莫己若者，我之谓也" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="/" />
+<meta property="og:title" content="Go Panic 的触发及恢复过程" />
+<meta property="og:description" content="
 
-<meta property="og:updated_time" content="2016-04-10T10:56:54&#43;00:00"/>
+Panic 过程
+recover 函数
+defer 函数
 
-<meta itemprop="name" content="大白的碎碎念">
-<meta itemprop="description" content="闻道百，以为莫己若者，我之谓也">
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2019/04/08/go-panic-%E7%9A%84%E8%A7%A6%E5%8F%91%E5%8F%8A%E6%81%A2%E5%A4%8D%E8%BF%87%E7%A8%8B/" />
+<meta property="article:published_time" content="2019-04-08T22:14:43&#43;08:00"/>
+<meta property="article:modified_time" content="2019-04-08T22:14:43&#43;08:00"/>
 
+<meta itemprop="name" content="Go Panic 的触发及恢复过程">
+<meta itemprop="description" content="
+
+Panic 过程
+recover 函数
+defer 函数
+
+">
+
+
+<meta itemprop="datePublished" content="2019-04-08T22:14:43&#43;08:00" />
+<meta itemprop="dateModified" content="2019-04-08T22:14:43&#43;08:00" />
+<meta itemprop="wordCount" content="432">
+
+
+
+<meta itemprop="keywords" content="ARTS,Go," />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="大白的碎碎念"/>
-<meta name="twitter:description" content="闻道百，以为莫己若者，我之谓也"/>
+<meta name="twitter:title" content="Go Panic 的触发及恢复过程"/>
+<meta name="twitter:description" content="
+
+Panic 过程
+recover 函数
+defer 函数
+
+"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -112,152 +136,110 @@
     <main id="main" class="main">
       <div class="content-wrapper">
         <div id="content" class="content">
-          <section id="posts" class="posts">
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/04/10/tdd-with-python-%E7%AC%AC%E5%85%AD%E7%AB%A0%E7%AC%94%E8%AE%B0/">TDD with python 第六章笔记</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-04-10 </span>
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p><strong>摘要</strong>:</p>
-
-<blockquote>
-<p>Python Web开发测试驱动方法第六章的笔记</p>
-</blockquote>
-    </div>
-    <div class="read-more">
-      <a href="/2016/04/10/tdd-with-python-%E7%AC%AC%E5%85%AD%E7%AB%A0%E7%AC%94%E8%AE%B0/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/04/10/vue.js%E5%85%B3%E4%BA%8E%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AC%94%E8%AE%B0/">Vue.js关于组件的笔记</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-04-10 </span>
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p><strong>摘要</strong>:</p>
-
-<blockquote>
-<p>学习Vue.js官方教程的笔记</p>
-</blockquote>
-    </div>
-    <div class="read-more">
-      <a href="/2016/04/10/vue.js%E5%85%B3%E4%BA%8E%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AC%94%E8%AE%B0/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/04/10/web%E6%A1%86%E6%9E%B6%E8%A6%81%E7%B4%A0/">web框架要素</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-04-10 </span>
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p><strong>摘要</strong>:</p>
-    </div>
-    <div class="read-more">
-      <a href="/2016/04/10/web%E6%A1%86%E6%9E%B6%E8%A6%81%E7%B4%A0/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/04/10/%E6%B7%B1%E5%85%A5%E6%9F%A5%E8%AF%A2%E8%A1%A8%E8%BE%BE%E5%BC%8F/">深入查询表达式</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-04-10 </span>
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p><strong>摘要</strong>:</p>
-
-<blockquote>
-<p>这是一篇关于MongoDB的文章，主要介绍深入查询表达式</p>
-</blockquote>
-    </div>
-    <div class="read-more">
-      <a href="/2016/04/10/%E6%B7%B1%E5%85%A5%E6%9F%A5%E8%AF%A2%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/04/10/%E6%B8%B8%E6%A0%87%E6%93%8D%E4%BD%9C/">游标操作</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-04-10 </span>
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p><strong>摘要</strong>:</p>
-
-<blockquote>
-<p>这是一篇关于MongoDB的文章，主要介绍游标操作</p>
-</blockquote>
-    </div>
-    <div class="read-more">
-      <a href="/2016/04/10/%E6%B8%B8%E6%A0%87%E6%93%8D%E4%BD%9C/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/04/10/%E7%BC%96%E8%BE%91%E5%99%A8%E9%9C%80%E6%B1%82/">编辑器需求</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-04-10 </span>
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p><strong>摘要</strong>:</p>
-
-<blockquote>
-<p>关于自己对于编辑器的需求，留作以后定制编辑器用</p>
-</blockquote>
-    </div>
-    <div class="read-more">
-      <a href="/2016/04/10/%E7%BC%96%E8%BE%91%E5%99%A8%E9%9C%80%E6%B1%82/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    </section>
-  
-  <nav class="pagination">
-    <a class="prev" href="/page/8/">
-        <i class="iconfont icon-left"></i>
-        <span class="prev-text">上一页</span>
-      </a>
+          <article class="post">
     
-  </nav>
+    <header class="post-header">
+      <h1 class="post-title">Go Panic 的触发及恢复过程</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-04-08 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#panic-过程">Panic 过程</a></li>
+<li><a href="#recover-函数">recover 函数</a></li>
+<li><a href="#defer-函数">defer 函数</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<ul>
+<li>Panic 过程</li>
+<li>recover 函数</li>
+<li>defer 函数</li>
+</ul>
+</blockquote>
+
+<h2 id="panic-过程">Panic 过程</h2>
+
+<ul>
+<li>当代码触发<code>panic</code>的时候，<code>panic详情</code>就会被初始化。随后程序的控制权从最底端的调用函数一级一级向上传递到最顶端的调用函数。</li>
+<li>到了最顶端调用函数后，控制权会被移交给 Go 语言的运行时系统，Go 语言的运行时系统打印出<code>panic详情</code>，并结束程序的运行。</li>
+<li>在控制权传递的过程中<code>panic详情</code>会被逐渐积累起来。所以最后程序输出<code>panic详情</code>的时候，会从最底端的函数一直输出到最顶端的函数。我们查看调用栈的信息的时候，应该从底部<code>exit status 2</code>这一行向上看。</li>
+</ul>
+
+<h2 id="recover-函数">recover 函数</h2>
+
+<ul>
+<li>因为<code>panic</code>发生的时候，<code>panic</code>函数后面的语句都不会执行了，所以<code>recover</code>函数不能放在<code>panic</code>语句后面执行，而要放在<code>defer</code>函数中执行。</li>
+</ul>
+
+<h2 id="defer-函数">defer 函数</h2>
+
+<ul>
+<li>defer 函数的执行顺序和它的定义顺序是完全相反的</li>
+<li>defer 语句每次执行的时候，Go 会把它携带的 defer 函数及其参数值存储到另一个栈中，这个栈是遵循 FILO(First Input Last Output)原则的。</li>
+<li>defer 函数中也可以引发<code>panic</code>，这样可以把<code>recover</code>捕获的<code>panic</code>包装一下再抛出去。</li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2019-04-08</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/arts/">ARTS</a>
+          <a href="/tags/go/">Go</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2019/04/09/leetcode-258%E9%A2%98%E6%95%B0%E6%A0%B9/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Leetcode 258题【数根】</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2019/04/08/arts-%E7%AC%AC%E4%B8%89%E5%91%A8/">
+            <span class="next-text nav-default">ARTS 第三周</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
         </div>
         
+
+  
+    <script src="https://utteranc.es/client.js"
+          repo="anotherbwangel/blog-comment"
+          issue-term="pathname"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
 
       </div>
     </main>
