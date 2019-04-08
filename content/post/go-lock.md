@@ -3,7 +3,7 @@ title: "一条面试题引发的关于 Go 语言中锁的思考"
 date: 2019-03-26T21:56:43+08:00
 lastmod: 2019-03-26T21:56:43+08:00
 draft: false
-tags: [Go, 锁]
+tags: [Go, 锁, ARTS]
 author: "bwangel"
 comment: true
 toc: true
@@ -205,24 +205,24 @@ import (
 	"sync"
 )
 
-type FailLock struct {
+type FairLock struct {
 	mu        *sync.Mutex
 	cond      *sync.Cond
 	holdCount int
 }
 
-func NewFailLock() sync.Locker {
+func NewFairLock() sync.Locker {
 	mu := new(sync.Mutex)
 	cond := sync.NewCond(mu)
 
-	return &FailLock{
+	return &FairLock{
 		holdCount: 0,
 		mu:        mu,
 		cond:      cond,
 	}
 }
 
-func (fl *FailLock) Lock() {
+func (fl *FairLock) Lock() {
 	fl.mu.Lock()
 	defer fl.mu.Unlock()
 
@@ -234,7 +234,7 @@ func (fl *FailLock) Lock() {
 	fl.cond.Wait()
 }
 
-func (fl *FailLock) Unlock() {
+func (fl *FairLock) Unlock() {
 	fl.mu.Lock()
 	defer fl.mu.Unlock()
 
@@ -273,7 +273,7 @@ func threadPrint(threadNum int, threadName string, mu sync.Locker) {
 }
 
 func main() {
-	mu := NewFailLock()
+	mu := NewFairLock()
 	names := []string{"A", "B", "C"}
 
 	for idx, name := range names {
