@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ARTS 第一周 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="  【2019年第14周】【2019/03/18 - 2019/03/24 】 A. LeetCode 661 R: Dependency injection in Golang using higher order functions T: Go 的测试 S: 图解 Go 内存分配器 S: 如何打印日志  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
+
+
+<link rel="canonical" href="/2019/03/19/arts-1/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.da936970.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="ARTS 第一周" />
+<meta property="og:description" content="
+
+【2019年第14周】【2019/03/18 - 2019/03/24 】
+A. LeetCode 661
+R: Dependency injection in Golang using higher order functions
+T: Go 的测试
+S: 图解 Go 内存分配器
+S: 如何打印日志
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2019/03/19/arts-1/" />
+<meta property="article:published_time" content="2019-03-19T23:32:24&#43;08:00"/>
+<meta property="article:modified_time" content="2019-03-19T23:32:24&#43;08:00"/>
+
+<meta itemprop="name" content="ARTS 第一周">
+<meta itemprop="description" content="
+
+【2019年第14周】【2019/03/18 - 2019/03/24 】
+A. LeetCode 661
+R: Dependency injection in Golang using higher order functions
+T: Go 的测试
+S: 图解 Go 内存分配器
+S: 如何打印日志
+
+">
+
+
+<meta itemprop="datePublished" content="2019-03-19T23:32:24&#43;08:00" />
+<meta itemprop="dateModified" content="2019-03-19T23:32:24&#43;08:00" />
+<meta itemprop="wordCount" content="1226">
+
+
+
+<meta itemprop="keywords" content="ARTS,ARTS-LIST," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ARTS 第一周"/>
+<meta name="twitter:description" content="
+
+【2019年第14周】【2019/03/18 - 2019/03/24 】
+A. LeetCode 661
+R: Dependency injection in Golang using higher order functions
+T: Go 的测试
+S: 图解 Go 内存分配器
+S: 如何打印日志
+
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">ARTS 第一周</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-03-19 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#algorithm">Algorithm</a></li>
+<li><a href="#review">Review</a></li>
+<li><a href="#tips">Tips</a></li>
+<li><a href="#share">Share</a>
+<ul>
+<li><a href="#图解-go-内存分配器-https-www-weibo-com-ttarticle-p-show-id-2309404347690665261491-0-笔记"><a href="https://www.weibo.com/ttarticle/p/show?id=2309404347690665261491#_0">图解 Go 内存分配器</a>笔记</a></li>
+<li><a href="#如何打印日志-https-mp-weixin-qq-com-s-chpgfvnfexpxcafm5ljlra-笔记"><a href="https://mp.weixin.qq.com/s/ChPGFVnfEXpXcAfM5LjlRA">如何打印日志</a>笔记</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<ul>
+<li>【2019年第14周】【2019/03/18 - 2019/03/24 】</li>
+<li>A. LeetCode 661</li>
+<li>R: Dependency injection in Golang using higher order functions</li>
+<li>T: Go 的测试</li>
+<li>S: 图解 Go 内存分配器</li>
+<li>S: 如何打印日志</li>
+</ul>
+</blockquote>
+
+<h2 id="algorithm">Algorithm</h2>
+
+<ul>
+<li><a href="https://www.bwangel.me/2019/03/24/leetcode-661%E9%A2%98/">LeetCode 661</a></li>
+</ul>
+
+<h2 id="review">Review</h2>
+
+<ul>
+<li><a href="https://stein.wtf/posts/2019-03-12/inject/">Dependency injection in Golang using higher order functions</a></li>
+<li><a href="https://bwangel.me/2019/03/24/dependency-injection-in-golang-using-higher-order-functions%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">阅读笔记</a></li>
+</ul>
+
+<h2 id="tips">Tips</h2>
+
+<ul>
+<li><a href="https://www.bwangel.me/2019/03/24/go-%E7%9A%84%E6%B5%8B%E8%AF%95/">Go 的测试</a></li>
+</ul>
+
+<h2 id="share">Share</h2>
+
+<h3 id="图解-go-内存分配器-https-www-weibo-com-ttarticle-p-show-id-2309404347690665261491-0-笔记"><a href="https://www.weibo.com/ttarticle/p/show?id=2309404347690665261491#_0">图解 Go 内存分配器</a>笔记</h3>
+
+<ul>
+<li><p>CPU通过控制总线，数据总线，地址总线和内存通信。</p>
+
+<ul>
+<li>数据总线：在 CPU 和内存之间传递数据的通道</li>
+<li>控制总线：在 CPU 和内存之间传递各种控制/状态信号的通道</li>
+<li>地址总线：传递地址信号，以确定所要访问的内存地址</li>
+</ul></li>
+
+<li><p>目前具有64位地址总线的 CPU(x86-64)可以寻址2的64次方，但是目前大多数 CPU 都只用了其中的48位或者42位，尽管理论上可以访问2的64次方(256TB)大小的地址空间，但是操作系统通常没有完全支持它们。</p></li>
+
+<li><p>系统的每个进程运行在各自的沙盒中，也就是所谓的虚拟地址空间。操作系统需要记录虚拟地址到物理地址的映射转换，也就是页表。</p></li>
+
+<li><p>系统在分配内存的时候，并没有申请相应的物理页帧，只有在真正赋值的时候才会申请物理页帧。这也就是 VSZ (进程虚拟内存大小) 和 RSS(物理常驻内存大小) 的最大区别</p></li>
+</ul>
+
+<h3 id="如何打印日志-https-mp-weixin-qq-com-s-chpgfvnfexpxcafm5ljlra-笔记"><a href="https://mp.weixin.qq.com/s/ChPGFVnfEXpXcAfM5LjlRA">如何打印日志</a>笔记</h3>
+
+<p>在程序开发的过程中，并不是所有的 bug 都是可以复现的。当我们遇到不可复现的 bug 时。
+日志就成为了我们解决 bug 的一个重要参考内容。如何打印日志才能日志尽可能多地包含有效信息，而整体看起来又不是很混乱呢，感觉这篇文章中提到的一些 tips 很有参考意义。</p>
+
+<ul>
+<li>成功日志: 动词 + 一些事</li>
+</ul>
+
+<p>为了让日志简短，我们可以把一些不必要的连词去掉（例如 to, and 等），动词的 ing 时态写在代码开始运行时，ed 时态写在代码运行后。这样日志使用 egrep 查找起来也方便一些</p>
+
+<ul>
+<li>失败日志: Fail to 动词 + 一些事</li>
+</ul>
+
+<p>这里使用<code>fail to</code>的原因是，很多框架，库，编译器等产生错误时，会使用<code>failed</code>关键字，使用<code>fail to</code>可以让我们在 egrep 查询的时候更有效率。</p>
+
+<ul>
+<li>打印值</li>
+</ul>
+
+<p>感觉使用<code>=</code>而不是<code>:</code>表示值这点很值得推广，因为<code>:</code>会在其他场合用到，<code>=</code>只会用来表示一个变量的值。一些容器类型变量可以用下面的形式，打印字典(<code>{a=1}</code>)，打印数组(<code>[1 2 3]</code>)，打印元组(<code>(1, 2, 3.14)</code>)。</p>
+
+<ul>
+<li>使用简单英语</li>
+</ul>
+
+<p>想象这样一个场景，半夜两点你被同事打电话叫醒，告诉你线上服务挂了。
+然后你问他报什么错，他把一个单词来回念了四五遍，还向你拼写了好几遍，你才反应过来这是啥。
+你这时会不会想锤自己，为什么当初写日志的时候要写这么长的一个谁都不认得的单词(写日志的时候你用 Google 查了一个陌生的单词，相信我，过了两个月后你很快就会忘记这个是单词什么意思)。</p>
+
+<ul>
+<li>懂得汇总</li>
+</ul>
+
+<p>文章中提到了很好的一点，可以把日志写入到 thread-loca 或者 session-local 中，等 Session 结束后打印汇总信息或一起打印，这样可以减少 IO 压力，也可以让日志更清晰明确。</p>
+
+<ul>
+<li>个人补充的一些 tips</li>
+</ul>
+
+<ol>
+<li>对一些变量进行 clean 操作(去除掉<code>\t</code>, <code>\r\n</code>, <code>\n</code>等特殊字符)。之前曾经写过一个 csv 格式的日志，但是因为打印的一个变量中含有<code>\t</code>字符，导致解析困难，需要重新记录日志</li>
+<li>对于一些重要的代码，可以在函数入口处打印函数的名称和参数名称。例如 Python 中可以使用 <code>%(funcName)s</code> 获取函数名。如果函数的参数是列表/字典等容器类型的话，可以打印出长度以及少量元素。</li>
+</ol>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2019-03-19</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/arts/">ARTS</a>
+          <a href="/tags/arts-list/">ARTS-LIST</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2019/03/24/go-dep-inject/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">《Dependency injection in Golang using higher order functions》学习笔记</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2018/11/01/http-chunked/">
+            <span class="next-text nav-default">HTTP 协议中的分块传输编码</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+    <script src="https://utteranc.es/client.js"
+          repo="anotherbwangel/blog-comment"
+          issue-term="pathname"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/yundong-xu" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>

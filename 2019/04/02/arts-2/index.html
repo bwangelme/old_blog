@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ARTS 第二周 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="  【2019年第15周】【2019/03/25 - 2019/03/31 】 A. LeetCode 8 R: The Go Memory Model T: 一条面试题引发的关于 Go 语言中锁的思考 S: go reentrant lock(可重入锁) 简单实现  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
+
+
+<link rel="canonical" href="/2019/04/02/arts-2/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.da936970.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="ARTS 第二周" />
+<meta property="og:description" content="
+
+【2019年第15周】【2019/03/25 - 2019/03/31 】
+A. LeetCode 8
+R: The Go Memory Model
+T: 一条面试题引发的关于 Go 语言中锁的思考
+S: go reentrant lock(可重入锁) 简单实现
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2019/04/02/arts-2/" />
+<meta property="article:published_time" content="2019-04-02T21:50:47&#43;08:00"/>
+<meta property="article:modified_time" content="2019-04-02T21:50:47&#43;08:00"/>
+
+<meta itemprop="name" content="ARTS 第二周">
+<meta itemprop="description" content="
+
+【2019年第15周】【2019/03/25 - 2019/03/31 】
+A. LeetCode 8
+R: The Go Memory Model
+T: 一条面试题引发的关于 Go 语言中锁的思考
+S: go reentrant lock(可重入锁) 简单实现
+
+">
+
+
+<meta itemprop="datePublished" content="2019-04-02T21:50:47&#43;08:00" />
+<meta itemprop="dateModified" content="2019-04-02T21:50:47&#43;08:00" />
+<meta itemprop="wordCount" content="440">
+
+
+
+<meta itemprop="keywords" content="ARTS,ARTS-LIST," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ARTS 第二周"/>
+<meta name="twitter:description" content="
+
+【2019年第15周】【2019/03/25 - 2019/03/31 】
+A. LeetCode 8
+R: The Go Memory Model
+T: 一条面试题引发的关于 Go 语言中锁的思考
+S: go reentrant lock(可重入锁) 简单实现
+
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">ARTS 第二周</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-04-02 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#algorithm">Algorithm</a></li>
+<li><a href="#review">Review</a></li>
+<li><a href="#tips">Tips</a></li>
+<li><a href="#share">Share</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<ul>
+<li>【2019年第15周】【2019/03/25 - 2019/03/31 】</li>
+<li>A. LeetCode 8</li>
+<li>R: The Go Memory Model</li>
+<li>T: 一条面试题引发的关于 Go 语言中锁的思考</li>
+<li>S: go reentrant lock(可重入锁) 简单实现</li>
+</ul>
+</blockquote>
+
+<h2 id="algorithm">Algorithm</h2>
+
+<ul>
+<li><a href="https://www.bwangel.me/2019/04/02/leetcode-%E7%AC%AC8%E9%A2%98/">Leetcode 8</a></li>
+</ul>
+
+<h2 id="review">Review</h2>
+
+<ul>
+<li><a href="https://golang.org/ref/mem">The Go Memory Model</a></li>
+</ul>
+
+<p>这篇文章讲述了 Go 的内存模型。虽然名称叫<code>Memory Model</code>，但是我感觉讲的内容并不多。主要讲得就是 Go 中的可见性原则，即一个读操作如果查看变量的值。</p>
+
+<p>这个感觉理解起来比较简单，需要记住的就是如果一个读操作和一个写操作可能同时发生的话，那么读操作可能读取的是旧的值。此时就需要使用同步原语执行同步操作。</p>
+
+<p>可用的同步原语有: <code>Channel</code>, <code>Lock</code> 和 <code>Once</code>。</p>
+
+<h2 id="tips">Tips</h2>
+
+<ul>
+<li><a href="https://www.bwangel.me/2019/03/26/%E4%B8%80%E6%9D%A1%E9%9D%A2%E8%AF%95%E9%A2%98%E5%BC%95%E5%8F%91%E7%9A%84%E5%85%B3%E4%BA%8E-go-%E8%AF%AD%E8%A8%80%E4%B8%AD%E9%94%81%E7%9A%84%E6%80%9D%E8%80%83/">一条面试题引发的关于 Go 语言中锁的思考</a></li>
+</ul>
+
+<h2 id="share">Share</h2>
+
+<ul>
+<li><a href="https://blog.csdn.net/u012233832/article/details/82501839">go reentrant lock(可重入锁) 简单实现</a></li>
+</ul>
+
+<p>Go 语言中自身并不提供可重入锁，而且 <a href="https://github.com/golang/go/issues/24192">Go 官方也不愿意添加可重入锁的支持</a>。</p>
+
+<p>上述文章中使用 <code>sync.mutex</code> 和 <code>sync.cond</code> 实现了简单的可重入锁。主要实现思路就是锁中加一个 Goroutine 的 ID 和 <code>sync/cond</code> 同步条件。对于一个已经加锁的锁来说，如果是拥有者 Goroutine 上锁能够正常上锁。如果是其他 Goroutine 上锁的时候，则会利用<code>cond.wait</code>执行阻塞操作，直到其他 Goroutine 解锁后唤醒当前 Goroutine。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2019-04-02</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/arts/">ARTS</a>
+          <a href="/tags/arts-list/">ARTS-LIST</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2019/04/02/leetcode-8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Leetcode 第8题</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2019/03/26/go-lock/">
+            <span class="next-text nav-default">一条面试题引发的关于 Go 语言中锁的思考</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+    <script src="https://utteranc.es/client.js"
+          repo="anotherbwangel/blog-comment"
+          issue-term="pathname"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/yundong-xu" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go 语言的 Type Switch 语句解析 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="讲述了Go语言中 Type Swith 的用法以及获取对应变量的一些特殊情况。
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
+
+
+<link rel="canonical" href="/2018/02/03/golang-type-switch/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.da936970.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go 语言的 Type Switch 语句解析" />
+<meta property="og:description" content="讲述了Go语言中 Type Swith 的用法以及获取对应变量的一些特殊情况。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2018/02/03/golang-type-switch/" />
+<meta property="article:published_time" content="2018-02-03T00:17:00&#43;08:00"/>
+<meta property="article:modified_time" content="2018-02-03T00:17:00&#43;08:00"/>
+
+<meta itemprop="name" content="Go 语言的 Type Switch 语句解析">
+<meta itemprop="description" content="讲述了Go语言中 Type Swith 的用法以及获取对应变量的一些特殊情况。">
+
+
+<meta itemprop="datePublished" content="2018-02-03T00:17:00&#43;08:00" />
+<meta itemprop="dateModified" content="2018-02-03T00:17:00&#43;08:00" />
+<meta itemprop="wordCount" content="1153">
+
+
+
+<meta itemprop="keywords" content="Go," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go 语言的 Type Switch 语句解析"/>
+<meta name="twitter:description" content="讲述了Go语言中 Type Swith 的用法以及获取对应变量的一些特殊情况。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go 语言的 Type Switch 语句解析</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-02-03 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#type-switch-的基本用法">Type Switch 的基本用法</a></li>
+<li><a href="#在switch的语句表达式中声明变量">在Switch的语句表达式中声明变量</a></li>
+<li><a href="#参考链接">参考链接</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>讲述了Go语言中 Type Swith 的用法以及获取对应变量的一些特殊情况。</p>
+
+<h2 id="type-switch-的基本用法">Type Switch 的基本用法</h2>
+
+<p>Type Switch 是 Go 语言中一种特殊的 switch 语句，它比较的是类型而不是具体的值。它判断某个接口变量的类型，然后根据具体类型再做相应处理。注意，在 Type Switch 语句的 case 子句中不能使用<code>fallthrough</code>。</p>
+
+<p>它的用法如下。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="k">switch</span> <span class="nx">x</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">case</span> <span class="nx">Type1</span><span class="p">:</span>
+	<span class="nf">doSomeThingWithType1</span><span class="p">()</span>
+<span class="k">case</span> <span class="nx">Type2</span><span class="p">:</span>
+	<span class="nf">doSomeThingWithType2</span><span class="p">()</span>
+<span class="k">default</span><span class="p">:</span>
+	<span class="nf">doSomeDefaultThing</span><span class="p">()</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>其中，<code>x</code>必须是一个接口类型的变量，而所有的<code>case</code>语句后面跟的类型必须实现了<code>x</code>的接口类型。</p>
+
+<p>为了便于理解，我们可以结合下面这个例子来看:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;reflect&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span> <span class="nx">Animal</span> <span class="kd">interface</span> <span class="p">{</span>
+    <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">Dog</span> <span class="kd">struct</span> <span class="p">{}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Dog</span><span class="p">)</span> <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;wang wang&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">Cat</span> <span class="kd">struct</span> <span class="p">{}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Cat</span><span class="p">)</span> <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;miao miao&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">animal</span> <span class="nx">Animal</span> <span class="p">=</span> <span class="nx">Dog</span><span class="p">{}</span>
+
+    <span class="k">switch</span> <span class="nx">animal</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nx">Dog</span><span class="p">:</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;animal&#39;type is Dog&#34;</span><span class="p">)</span>
+    <span class="k">case</span> <span class="nx">Cat</span><span class="p">:</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;animal&#39;type is Cat&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>在上面的例子中，<code>Cat</code>和<code>Dog</code>类型都实现了接口<code>Animal</code>，所以它们可以跟在<code>case</code>语句后面，判断接口变量<code>animal</code>是否是对应的类型。</p>
+
+<h2 id="在switch的语句表达式中声明变量">在Switch的语句表达式中声明变量</h2>
+
+<p>如果我们不仅想要判断某个接口变量的类型，还想要获得其类型转换后的值的话，我们可以在 Switch 的语句表达式中声明一个变量来获得这个值。</p>
+
+<p>其用法如下所示:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;reflect&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span> <span class="nx">Animal</span> <span class="kd">interface</span> <span class="p">{</span>
+	<span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">Dog</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">name</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Dog</span><span class="p">)</span> <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;wang wang&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">Cat</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">name</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Cat</span><span class="p">)</span> <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;miao miao&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">Tiger</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">name</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">self</span> <span class="nx">Tiger</span><span class="p">)</span> <span class="nf">shout</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;hou hou&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// var animal Animal = Tiger{}
+</span><span class="c1"></span>	<span class="c1">// var animal Animal  // 验证 case nil
+</span><span class="c1"></span>	<span class="c1">// var animal Animal = Wolf{} // 验证 default
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">animal</span> <span class="nx">Animal</span> <span class="p">=</span> <span class="nx">Dog</span><span class="p">{}</span>
+
+	<span class="k">switch</span> <span class="nx">a</span> <span class="o">:=</span> <span class="nx">animal</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">case</span> <span class="kc">nil</span><span class="p">:</span> <span class="c1">// a的类型是 Animal
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;nil&#34;</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span>
+	<span class="k">case</span> <span class="nx">Dog</span><span class="p">,</span> <span class="nx">Cat</span><span class="p">:</span> <span class="c1">// a的类型是 Animal
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span> <span class="c1">// 输出 {}
+</span><span class="c1"></span>		<span class="c1">// fmt.Println(a.name) 这里会报错，因为 Animal 类型没有成员name
+</span><span class="c1"></span>	<span class="k">case</span> <span class="nx">Tiger</span><span class="p">:</span> <span class="c1">// a的类型是 Tiger
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nf">shout</span><span class="p">(),</span> <span class="nx">a</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="c1">// 这里可以直接取出 name 成员
+</span><span class="c1"></span>	<span class="k">default</span><span class="p">:</span> <span class="c1">// a的类型是 Animal
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;default&#34;</span><span class="p">,</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span> <span class="nx">a</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>在上述代码中，我们可以看到<code>a := animal.(type)</code>语句隐式地为每个<code>case</code>子句声明了一个变量<code>a</code>。</p>
+
+<p>变量<code>a</code>类型的判定规则如下:</p>
+
+<ul>
+<li>如果<code>case</code>后面跟着<strong>一个</strong>类型，那么变量<code>a</code>在这个<code>case</code>子句中就是这个类型。例如在<code>case Tiger</code>子句中<code>a</code>的类型就是<code>Tiger</code></li>
+<li>如果<code>case</code>后面跟着<strong>多个</strong>类型，那么变量<code>a</code>的类型就是接口变量<code>animal</code>的类型，例如在<code>case Dog, Cat</code>子句中<code>a</code>的类型就是<code>Animal</code></li>
+<li>如果<code>case</code>后面跟着<code>nil</code>，那么变量<code>a</code>的类型就是接口变量<code>animal</code>的类型<code>Animal</code>，通常这种子句用来判断未赋值的接口变量</li>
+<li><code>default</code>子句中变量<code>a</code>的类型是接口变量<code>animal</code>的类型</li>
+</ul>
+
+<p>为了更好地理解上述规则，我们可以用<code>if</code>语句和类型断言来重写这个<code>switch</code>语句，如下所示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go">	<span class="nx">v</span> <span class="o">:=</span> <span class="nx">animal</span>   <span class="c1">// animal 只会被求值一次
+</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">v</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span> <span class="c1">// case nil 子句
+</span><span class="c1"></span>		<span class="nx">a</span> <span class="o">:=</span> <span class="nx">v</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;nil&#34;</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">isTiger</span> <span class="o">:=</span> <span class="nx">v</span><span class="p">.(</span><span class="nx">Tiger</span><span class="p">);</span> <span class="nx">isTiger</span> <span class="p">{</span> <span class="c1">// case Tiger 子句
+</span><span class="c1"></span>		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nf">shout</span><span class="p">(),</span> <span class="nx">a</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="nx">_</span><span class="p">,</span> <span class="nx">isDog</span> <span class="o">:=</span> <span class="nx">v</span><span class="p">.(</span><span class="nx">Dog</span><span class="p">)</span>
+		<span class="nx">_</span><span class="p">,</span> <span class="nx">isCat</span> <span class="o">:=</span> <span class="nx">v</span><span class="p">.(</span><span class="nx">Cat</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">isDog</span> <span class="o">||</span> <span class="nx">isCat</span> <span class="p">{</span> <span class="c1">// case Dog, Cat 子句
+</span><span class="c1"></span>			<span class="nx">a</span> <span class="o">:=</span> <span class="nx">v</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span>
+			<span class="c1">// fmt.Println(a.name)
+</span><span class="c1"></span>		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="c1">// default 子句
+</span><span class="c1"></span>			<span class="nx">a</span> <span class="o">:=</span> <span class="nx">v</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;default&#34;</span><span class="p">,</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span> <span class="nx">a</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="参考链接">参考链接</h2>
+
+<ul>
+<li><a href="https://golang.org/ref/spec#Type_switches">The Go Programming Language Specification</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2018-02-03</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go/">Go</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2018/03/01/go-binarysearchtree/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go与数据结构之二叉搜索树</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2018/01/30/innodb-row/">
+            <span class="next-text nav-default">InnoDB 行记录格式</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+    <script src="https://utteranc.es/client.js"
+          repo="anotherbwangel/blog-comment"
+          issue-term="pathname"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/yundong-xu" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>

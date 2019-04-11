@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Redis 源码阅读之 dict  - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="本文主要介绍了 Redis 的基础数据结构 dict 的实现，并描述了其渐进式 rehash 的操作
+注意: 本文基于 Redis 3.0.0 的代码进行分析的
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
+
+
+<link rel="canonical" href="/2018/03/14/redis-source-dict/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.da936970.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Redis 源码阅读之 dict " />
+<meta property="og:description" content="本文主要介绍了 Redis 的基础数据结构 dict 的实现，并描述了其渐进式 rehash 的操作
+
+注意: 本文基于 Redis 3.0.0 的代码进行分析的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2018/03/14/redis-source-dict/" />
+<meta property="article:published_time" content="2018-03-14T00:14:32&#43;08:00"/>
+<meta property="article:modified_time" content="2018-03-14T00:14:32&#43;08:00"/>
+
+<meta itemprop="name" content="Redis 源码阅读之 dict ">
+<meta itemprop="description" content="本文主要介绍了 Redis 的基础数据结构 dict 的实现，并描述了其渐进式 rehash 的操作
+
+注意: 本文基于 Redis 3.0.0 的代码进行分析的">
+
+
+<meta itemprop="datePublished" content="2018-03-14T00:14:32&#43;08:00" />
+<meta itemprop="dateModified" content="2018-03-14T00:14:32&#43;08:00" />
+<meta itemprop="wordCount" content="3143">
+
+
+
+<meta itemprop="keywords" content="Redis,C语言," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Redis 源码阅读之 dict "/>
+<meta name="twitter:description" content="本文主要介绍了 Redis 的基础数据结构 dict 的实现，并描述了其渐进式 rehash 的操作
+
+注意: 本文基于 Redis 3.0.0 的代码进行分析的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Redis 源码阅读之 dict </h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-03-14 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#dict-介绍">dict 介绍</a></li>
+<li><a href="#dict-的实现">dict 的实现</a></li>
+<li><a href="#dict-的哈希算法">dict 的哈希算法</a></li>
+<li><a href="#dict-解决键冲突的方案">dict 解决键冲突的方案</a></li>
+<li><a href="#渐进式-rehash">渐进式 rehash</a></li>
+<li><a href="#字典迭代器和-rehash-的关系">字典迭代器和 rehash 的关系</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>本文主要介绍了 Redis 的基础数据结构 dict 的实现，并描述了其渐进式 rehash 的操作</p>
+
+<p><strong>注意</strong>: 本文基于 Redis 3.0.0 的代码进行分析的</p>
+
+<h2 id="dict-介绍">dict 介绍</h2>
+
+<p>dict 又称符号表(symbol table)，关联数组(associative array)或映射(map)，是一种用于保存键值对的抽象数据结构。</p>
+
+<p>Redis 实现使用的C语言并没有内置 dict 这种数据类型，所以 Redis 实现了自己的 dict。dict 在 Redis 中有广泛的应用，Redis 数据库的底层就是使用字典来实现的，也就是说对数据库的增，删，改，查都是建立在字典之上的。同时，字典也是<code>hash</code>和<code>sorted set</code>等数据结构的底层实现之一。</p>
+
+<h2 id="dict-的实现">dict 的实现</h2>
+
+<p>在 Redis 中，dict 的代码存放在<code>src/dict.c</code>和<code>src/dict.h</code>两个文件中。在<code>src/dict.h</code>中定义了 dict 所用到的结构体，一共有四个:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="c1">// 哈希表项
+</span><span class="c1"></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">dictEntry</span> <span class="p">{</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">key</span><span class="p">;</span>
+    <span class="k">union</span> <span class="p">{</span>
+        <span class="kt">void</span> <span class="o">*</span><span class="n">val</span><span class="p">;</span>
+        <span class="n">uint64_t</span> <span class="n">u64</span><span class="p">;</span>
+        <span class="n">int64_t</span> <span class="n">s64</span><span class="p">;</span>
+        <span class="kt">double</span> <span class="n">d</span><span class="p">;</span>
+    <span class="p">}</span> <span class="n">v</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">dictEntry</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span> <span class="c1">// 哈希表中是通过单链表解决键索引冲突的，next用来指向同一个键索引下的下一个元素
+</span><span class="c1"></span><span class="p">}</span> <span class="n">dictEntry</span><span class="p">;</span>
+
+<span class="c1">// 这里的思想类似于Go，使用函数来定义字典类型(接口)
+</span><span class="c1"></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">dictType</span> <span class="p">{</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">hashFunction</span><span class="p">)(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">keyDup</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">privdata</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">valDup</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">privdata</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">obj</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">keyCompare</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">privdata</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key2</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">keyDestructor</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">privdata</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">valDestructor</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="n">privdata</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">obj</span><span class="p">);</span>
+<span class="p">}</span> <span class="n">dictType</span><span class="p">;</span>
+
+<span class="cm">/* 哈希表结构体，每个字典都有两个哈希表，其中多的一个用来做渐进式 rehash */</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">dictht</span> <span class="p">{</span>
+    <span class="n">dictEntry</span> <span class="o">**</span><span class="n">table</span><span class="p">;</span>       <span class="c1">// 哈希表项组成的数组
+</span><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">size</span><span class="p">;</span>      <span class="c1">// 当前哈希表的大小
+</span><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">sizemask</span><span class="p">;</span>  <span class="c1">// 哈希表大小的掩码，总是等于size - 1
+</span><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">used</span><span class="p">;</span>      <span class="c1">// 哈希表中哈希表项的数目
+</span><span class="c1"></span><span class="p">}</span> <span class="n">dictht</span><span class="p">;</span>
+
+<span class="cm">/* 字典的定义 */</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">dict</span> <span class="p">{</span>
+    <span class="n">dictType</span> <span class="o">*</span><span class="n">type</span><span class="p">;</span>  <span class="c1">// 字典的类型
+</span><span class="c1"></span>    <span class="kt">void</span> <span class="o">*</span><span class="n">privdata</span><span class="p">;</span>  <span class="c1">// 字典私有数据
+</span><span class="c1"></span>    <span class="n">dictht</span> <span class="n">ht</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>    <span class="c1">// 字典中的哈希表
+</span><span class="c1"></span>    <span class="kt">long</span> <span class="n">rehashidx</span><span class="p">;</span>  <span class="c1">// rehashidx == -1 表示当前字典没有做 rehash，否则表示当前字典正在进行 rehash 操作
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">iterators</span><span class="p">;</span>   <span class="c1">// 安全迭代器的数量
+</span><span class="c1"></span><span class="p">}</span> <span class="n">dict</span><span class="p">;</span>
+
+<span class="cm">/*
+</span><span class="cm"> * 字典迭代器用来获取字典中所有的项，其中迭代器可以分为安全迭代器和非安全迭代器两种
+</span><span class="cm"> * 安全迭代器表示在迭代过程中可以调用字典的 dictAdd(), dictFind() 等接口
+</span><span class="cm"> * 非安全迭代器在迭代过程中只能调用 dictNext() 接口
+</span><span class="cm"> * */</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">dictIterator</span> <span class="p">{</span>
+    <span class="n">dict</span> <span class="o">*</span><span class="n">d</span><span class="p">;</span>             <span class="c1">// 迭代器所关联的字典
+</span><span class="c1"></span>    <span class="kt">long</span> <span class="n">index</span><span class="p">;</span>          <span class="c1">// 当前迭代器在字典中迭代的索引
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">table</span><span class="p">,</span> <span class="n">safe</span><span class="p">;</span>     <span class="c1">// 哈希表的索引，当前迭代器是否是安全迭代器
+</span><span class="c1"></span>    <span class="n">dictEntry</span> <span class="o">*</span><span class="n">entry</span><span class="p">,</span> <span class="o">*</span><span class="n">nextEntry</span><span class="p">;</span> <span class="c1">// 当前迭代器所指向的哈希表项和下一个哈希表项
+</span><span class="c1"></span>    <span class="cm">/* unsafe iterator fingerprint for misuse detection. */</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">fingerprint</span><span class="p">;</span>  <span class="c1">// 字典的指纹，非安全迭代器中用于鉴别字典是否被修改过
+</span><span class="c1"></span><span class="p">}</span> <span class="n">dictIterator</span><span class="p">;</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>他们之间的关系如图1所示:</p>
+
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-03-10-054715.png" alt="图1" /></p>
+
+<p><strong>图1</strong></p>
+
+<p>当我们向字典中存储键值对(k, v)时，字典通过一定的算法计算出k的索引值，它的计算方法如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 先根据哈希算法计算出键k的哈希值，哈希值为unsigned int 类型
+hash = d-&gt;type-&gt;hashFunction(k)
+# 然后再将哈希值和哈希表的sizemask按位与，获得键k在哈希表中的索引
+idx = hash &amp; d-&gt;ht[table].sizemask</pre></td></tr></table>
+</div>
+</div>
+<p>最后按照计算出来的索引值将键值对存储到字典中的哈希表中。</p>
+
+<h2 id="dict-的哈希算法">dict 的哈希算法</h2>
+
+<p>dict 按照使用方式的不同，所采取的哈希算法也不同。Redis目前共使用两种不同的哈希算法：</p>
+
+<ol>
+<li>MurmurHash2 32 bit 算法：这种算法的分布率和速度都非常好， 具体信息请参考 MurmurHash 的主页： <a href="http://code.google.com/p/smhasher/">http://code.google.com/p/smhasher/</a> 。</li>
+<li>基于 djb 算法实现的一个大小写无关散列算法：具体信息请参考 <a href="http://www.cse.yorku.ca/~oz/hash.html">http://www.cse.yorku.ca/~oz/hash.html</a> 。</li>
+</ol>
+
+<ul>
+<li>dict 在命令表以及 Lua 脚本缓存中时，使用了算法2</li>
+<li>dict 在数据库，集群，哈希键和阻塞操作等功能中都使用到了算法1</li>
+</ul>
+
+<h2 id="dict-解决键冲突的方案">dict 解决键冲突的方案</h2>
+
+<p>根据前面的内容所知，向dict中添加键值对时，dict根据键计算出来的索引值将键值对存储到哈希表中。由于哈希表的大小是有限的，所以可能会出现两个键的索引值相同的情况，这种情况也称作键冲突。</p>
+
+<p>当出现键冲突的时候，dict会将两个键值对存放在同一个哈希表的同一个索引下，它们通过单链表的形式组合起来，如图2所示：</p>
+
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-03-13-155621.jpg" alt="图2" /></p>
+
+<p><strong>图2</strong></p>
+
+<p>其中k1和k2计算出来的索引值是相同的，他们被存放到哈希表的同一个索引下，然后通过单链表的形式组合起来。</p>
+
+<p>在 <code>src/dict.c</code>的<code>dictEntry *dictAddRaw(dict *d, void *key)</code>函数中，我们可以看到向单链表中添加元素的过程</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* 哈希表通过单链表来解决键冲突，下面的代码向单链表中添加了哈希表节点 */</span>
+<span class="n">entry</span> <span class="o">=</span> <span class="n">zmalloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">entry</span><span class="p">));</span>
+<span class="n">entry</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">ht</span><span class="o">-&gt;</span><span class="n">table</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+<span class="n">ht</span><span class="o">-&gt;</span><span class="n">table</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="p">;</span>
+<span class="n">ht</span><span class="o">-&gt;</span><span class="n">used</span><span class="o">++</span><span class="p">;</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>申请一个哈希表项之后，将它的地址存放在哈希表中，同时也使哈希表中原来存在的节点变成它的next节点，即新增元素在单链表的头部。</p>
+
+<h2 id="渐进式-rehash">渐进式 rehash</h2>
+
+<p>每个dict都有一个负载因子，计算方式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="n">load_factor</span> <span class="o">=</span> <span class="n">ht</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">used</span> <span class="o">/</span> <span class="n">ht</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>当 dict 的负载因子过大或过小的时候，Redis 需要为这个 dict 扩展或者收缩哈希表的大小，这个过程叫做 rehash。上文中我们提到每个 dict 都有两个哈希表, <code>ht0</code>和<code>ht1</code>，在这里它们就发挥作用了。rehash 的具体操作如下:</p>
+
+<ol>
+<li>设置<code>ht1</code>的size，扩展过程中size为大于<code>ht0.size</code>的最小2次幂，收缩过程中size为大于<code>ht0.used</code>的最小2次幂</li>
+<li>将 dict.rehashidx 设置为0</li>
+
+<li><p>在增删改查的过程中，检查 dict.rehashidx 是否不等于 -1，如果是，那么就执行<code>_dictRehashStep</code>操作，<code>_dictRehashStep</code>的操作如下:</p>
+
+<ul>
+<li>如果当前字典上的没有安全迭代器，执行<code>dictRehash</code>操作</li>
+<li><code>dictRehash</code>操作就是从<code>ht0</code>中取出值，重新计算哈希值，然后放到<code>ht1</code>中，并将<code>ht0.used</code>减少。将<code>dict.rehashidx</code>的索引加1。由于在这个过程中重新计算了 key 的哈希值，所以这个过程称为 <strong>rehash</strong></li>
+<li>如果<code>ht0</code>中的所有元素都复制到了<code>ht1</code>中后，Redis 会交换<code>ht1</code>和<code>ht0</code>的地址，然后将<code>ht1</code>置为空表(即存在dictht这个结构体变量，但是里面的dictEntry指针为空，没有任何哈希表项)，同时将<code>dict.rehashidx</code>置为 -1。</li>
+<li>同时<code>dictRehash</code>还有一个限制，每次 rehash 的时候存在一个 <code>empty_visits</code> 限制(empty_visits = 10 * n，n是本次<code>dictRehash</code>操作要 rehash 哈希表项的数量)。如果访问到的空的哈希表项的次数超过了<code>empty_visits</code>，本次 rehash 操作就结束了。</li>
+</ul></li>
+</ol>
+
+<ul>
+<li><p>由于 rehash 操作不是一次性做完的，而是在字典的操作中一点一点做的，所以这个过程称作<strong>渐进式rehash</strong></p></li>
+
+<li><p>因为在字典的增删改查操作中执行了 rehash 操作，所以这些操作的行为也会受到影响</p>
+
+<ul>
+<li>在<code>dictAdd</code>操作中，如果当前字典正在进行 rehash，那么新加的值都会加入到<code>ht1</code>中，这样保证<code>ht0</code>只会减少，不会增加，最终<code>ht0</code>会变成空表</li>
+<li>在<code>dictFind</code>操作中，会在<code>ht0</code>和<code>ht1</code>两个哈希表中查询对应的键</li>
+<li>在<code>dictDelete</code>操作中也回在<code>ht0</code>和<code>ht1</code>中查找对应的键</li>
+<li><code>dictReplace</code>操作调用的是<code>dictFind</code>方法查找对应的键</li>
+</ul></li>
+
+<li><p>在执行 BGSAVE 和 BGREWRITEAOF 命令时，Redis 会提高字典的负载因子。因为在调用这两个命令时，Redis 会为当前进程产生子进程，而很多操作系统采用了写时复制的策略，如果不执行 rehash 操作，会避免不必要的内存写入操作，从而节省一些内存。</p></li>
+</ul>
+
+<h2 id="字典迭代器和-rehash-的关系">字典迭代器和 rehash 的关系</h2>
+
+<p>在渐进式 rehash 一小节中我们提到，当字典的安全迭代器的数量为0的时候，才会执行 rehash 操作，这是为什么呢？</p>
+
+<p>首先我们可以分析一下字典迭代器的迭代操作，它可以用如下的伪代码来表示:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">iter_dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="c1"># 迭代0号哈希表</span>
+    <span class="n">iter_table</span><span class="p">(</span><span class="n">ht</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">table</span><span class="p">)</span>
+
+    <span class="c1"># 如果正在进行 rehash 的话，也迭代1号哈希表</span>
+    <span class="k">if</span> <span class="nb">dict</span><span class="o">.</span><span class="n">is_rehashing</span><span class="p">():</span>
+        <span class="n">iter_table</span><span class="p">(</span><span class="n">ht</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">table</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">iter_table</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">table</span><span class="p">:</span>
+        <span class="c1"># 跳过空的哈希表项</span>
+        <span class="k">if</span> <span class="n">table</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">empty</span><span class="p">():</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># 处理当前哈希表项的单链表上所有的节点</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">table</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span>
+            <span class="n">do_some_thing_with</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>假设我们在一个正在进行 rehash 操作的字典上创立了一个安全迭代器，首先执行了<code>dictNext()</code>，获取了<code>ht0</code>中的一个哈希表项<code>he1</code>。接着执行<code>dictAdd()</code>，添加了一个哈希表项。如果<code>dictAdd()</code>函数能够执行 rehash 的话，<code>he1</code>哈希表项可能被从<code>ht0</code>复制到了<code>ht1</code>，从而导致安全迭代器获取了哈希表项<code>he1</code>两次</p>
+
+<p>所以当字典中存在安全迭代器的时候，是不能进行 rehash 操作的。</p>
+
+<p>而对于非安全迭代器，Redis 规定在非安全迭代器的生命周期内只能执行<code>dictNext()</code>操作，不能执行其他操作，从而避免了 rehash 操作。</p>
+
+<p>同时 Redis 在创建非安全迭代器的时候会获取 dict 的指纹，在释放非安全迭代器的时候重新获取指纹，检查两次指纹是否相同。如果不同，证明 dict 被修改过，Redis 就会抛出异常。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2018-03-14</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/redis/">Redis</a>
+          <a href="/tags/c%E8%AF%AD%E8%A8%80/">C语言</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2018/07/08/jump-stairs/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">变态跳台阶问题的解题思路</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2018/03/05/mysql-foreign-key/">
+            <span class="next-text nav-default">MySQL 外键分析</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+    <script src="https://utteranc.es/client.js"
+          repo="anotherbwangel/blog-comment"
+          issue-term="pathname"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/yundong-xu" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>
