@@ -9,7 +9,7 @@ weight: 40
 
 ## 简介
 
-+ 90后，Python 程序员
++ 90后，后端开发工程师, Python
 + 常用 ID
   + `bwangel`
   + `bwangel23` 当`bwangel`被占用时的选择
