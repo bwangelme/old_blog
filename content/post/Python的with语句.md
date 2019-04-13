@@ -2,6 +2,10 @@
 title: "PEP 343: Python的with语句"
 date: 2016-04-25 21:04:33
 tags: [Python, 翻译]
+author: "bwangel"
+comment: true
+aliases:
+  - /2016/04/25/Python的with语句/
 ---
 
 __摘要__:

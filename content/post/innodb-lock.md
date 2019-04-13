@@ -3,6 +3,8 @@ title: "InnoDB 锁机制"
 date: 2018-03-04T13:22:46+08:00
 draft: false
 tags: [MySQL, ]
+aliases:
+  - /2018/03/04/innodb-锁机制/
 ---
 
 本文试图讲清楚 InnoDB 中存在的各种锁，以及它们锁定的区别。

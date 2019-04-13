@@ -4,6 +4,8 @@ author: "bwangel"
 tags: ["Template", "Go"]
 date: 2018-10-18T23:24:24+08:00
 draft: false
+aliases:
+  - /2018/10/18/go-模板/
 ---
 
 关于 Go 模板的笔记

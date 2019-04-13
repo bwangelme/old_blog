@@ -4,6 +4,8 @@ author: "bwangel"
 tags: ["Go", "mod"]
 date: 2018-10-11T08:44:25+08:00
 draft: false
+aliases:
+  - /2018/10/11/go-mod-说明/
 ---
 
 关于 Go mod 的介绍

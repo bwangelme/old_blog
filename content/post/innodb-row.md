@@ -3,6 +3,8 @@ title: "InnoDB 行记录格式"
 date: 2018-01-30T12:51:59+08:00
 draft: false
 tags: [MySQL, ]
+aliases:
+  - /2018/01/30/innodb-行记录格式/
 ---
 
 __简介__: 本文主要讲述了 InnoDB 的行如何在数据文件中进行存储的，同时简单分析了 InnoDB 的逻辑存储结构

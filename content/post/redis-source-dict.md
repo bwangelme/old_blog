@@ -3,6 +3,8 @@ title: "Redis 源码阅读之 dict "
 date: 2018-03-14T00:14:32+08:00
 draft: false
 tags: [Redis, C语言]
+aliases:
+  - /2018/03/14/redis-源码阅读之-dict/
 ---
 
 本文主要介绍了 Redis 的基础数据结构 dict 的实现，并描述了其渐进式 rehash 的操作

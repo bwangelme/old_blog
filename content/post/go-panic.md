@@ -7,7 +7,8 @@ tags: [ARTS, Go]
 author: "bwangel"
 comment: true
 toc: true
-
+aliases:
+  - /2019/04/08/go-panic-的触发及恢复过程/
 ---
 
 > + Panic 过程

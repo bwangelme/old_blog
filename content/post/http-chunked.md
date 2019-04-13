@@ -4,6 +4,8 @@ author: "bwangel"
 tags: ["HTTP"]
 date: 2018-11-01T23:32:43+08:00
 draft: false
+aliases:
+  - /2018/11/01/http-协议中的分块传输编码/
 ---
 
 说明了 HTTP 分块传输编码方式

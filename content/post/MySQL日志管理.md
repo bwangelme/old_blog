@@ -3,6 +3,8 @@ title: "MySQL 日志管理"
 date: 2018-01-01T10:34:15+08:00
 draft: false
 tags: [MySQL, ]
+aliases:
+  - /2018/01/01/mysql-日志管理/
 ---
 
 __简介__: 讲述了MySQL中的日志及配置方式

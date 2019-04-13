@@ -122,7 +122,7 @@ def decorate_class(self, cls):
 
 > __注意__:
 > 这个函数的代码涉及到了Python的上下文管理器(`with`语句)的部分知识，如果你可以自己动手写一个上下文管理器的话，继续阅读即可。
-> 如果你对于上下文管理器还有些疑问的话，请参考我的另一篇文章: [PEP 343: Python的with语句](https://www.bwangel.me/2016/04/25/Python%E7%9A%84with%E8%AF%AD%E5%8F%A5/)
+> 如果你对于上下文管理器还有些疑问的话，请参考我的另一篇文章: [PEP 343: Python的with语句](/2016/04/25/Python%E7%9A%84with%E8%AF%AD%E5%8F%A5/)
 
 分析完了`decorate_class`函数，我们接着回到`TestContextDecorator.__call__`方法，接着分析被修饰对象是可调用对象的那一种情况，也就是`TestContextDecorator.decorate_callable`函数。`decorate_callable`函数的代码如下所示:
 

@@ -7,6 +7,8 @@ tags: [ARTS, ARTS-LIST]
 author: "bwangel"
 comment: true
 toc: true
+aliases:
+  - /2019/04/02/arts-第二周/
 ---
 
 > + 【2019年第15周】【2019/03/25 - 2019/03/31 】
@@ -19,7 +21,7 @@ toc: true
 
 ## Algorithm
 
-+ [Leetcode 8](https://www.bwangel.me/2019/04/02/leetcode-%E7%AC%AC8%E9%A2%98/)
++ [Leetcode 8](/2019/04/02/leetcode-%E7%AC%AC8%E9%A2%98/)
 
 ## Review
 
@@ -33,7 +35,7 @@ toc: true
 
 ## Tips
 
-+ [一条面试题引发的关于 Go 语言中锁的思考](https://www.bwangel.me/2019/03/26/%E4%B8%80%E6%9D%A1%E9%9D%A2%E8%AF%95%E9%A2%98%E5%BC%95%E5%8F%91%E7%9A%84%E5%85%B3%E4%BA%8E-go-%E8%AF%AD%E8%A8%80%E4%B8%AD%E9%94%81%E7%9A%84%E6%80%9D%E8%80%83/)
++ [一条面试题引发的关于 Go 语言中锁的思考](/2019/03/26/%E4%B8%80%E6%9D%A1%E9%9D%A2%E8%AF%95%E9%A2%98%E5%BC%95%E5%8F%91%E7%9A%84%E5%85%B3%E4%BA%8E-go-%E8%AF%AD%E8%A8%80%E4%B8%AD%E9%94%81%E7%9A%84%E6%80%9D%E8%80%83/)
 
 ## Share
 

@@ -6,6 +6,8 @@ author: "bwangel"
 comment: true
 toc: true
 draft: false
+aliases:
+  - /2019/03/24/dependency-injection-in-golang-using-higher-order-functions学习笔记/
 ---
 
 > + 原文地址: https://stein.wtf/posts/2019-03-12/inject/

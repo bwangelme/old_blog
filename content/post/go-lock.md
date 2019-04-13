@@ -7,7 +7,8 @@ tags: [Go, 锁, ARTS]
 author: "bwangel"
 comment: true
 toc: true
-
+aliases:
+  - /2019/03/26/一条面试题引发的关于-go-语言中锁的思考/
 ---
 
 <!--more-->
@@ -291,55 +292,6 @@ func main() {
 1. 由于 Goroutine 无法保证启动顺序，即我们无法保证最开始上锁的顺序是`A,B,C`这样的顺序，所以需要在`64~67`行加一个判断，程序刚开始执行时如果获得的锁不对，就不执行任何操作，重新获得锁。
 2. 由于可见性的原因，需要在`60~63`行上锁之后加一个判断，保证`i`的值是最新的值。
 
-## 正确答案 V3 -- AtomicInt
-
-除了自己手动加锁外，我们也可以使用 Go 的 `atomic` 包中提供的原子操作来完成上述功能。
-每个 Goroutine 原子性地获得`i`的值，如果符合`i % 3 == threadNum`的条件，则执行操作，否则作自旋。代码如下：
-
-
-```go
-package main
-
-import (
-	"fmt"
-	"sync/atomic"
-)
-
-var (
-	end = make(chan struct{})
-	i   int32
-)
-
-func threadPrint(threadNum int32, threadName string) {
-
-	for {
-		v := atomic.LoadInt32((*int32)(&i))
-		if v >= 30 {
-			break
-		}
-
-		if v%3 == threadNum {
-			fmt.Printf("%d: %s\n", i, threadName)
-			atomic.AddInt32((*int32)(&i), int32(1))
-		} else {
-			continue
-		}
-	}
-	end <- struct{}{}
-}
-
-func main() {
-	names := []string{"A", "B", "C"}
-
-	for idx, name := range names {
-		go threadPrint(int32(idx), name)
-	}
-
-	for _ = range names {
-		<-end
-	}
-}
-```
 
 ## 正确答案V4 - FanIn
 

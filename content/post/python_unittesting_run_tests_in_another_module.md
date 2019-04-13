@@ -2,6 +2,8 @@
 title: "Python unittesting: run tests in another module"
 date: 2016-09-11 11:46:43
 tags: [Python, unittest]
+aliases:
+  - /2016/09/11/python-unittesting-run-tests-in-another-module/
 ---
 
 __摘要__:

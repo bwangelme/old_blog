@@ -3,6 +3,8 @@ title: "Go 语言的 Type Switch 语句解析"
 date: 2018-02-03T00:17:00+08:00
 draft: false
 tags: [Go, ]
+aliases:
+  - /2018/02/03/go-语言的-type-switch-语句解析/
 ---
 
 讲述了Go语言中 Type Swith 的用法以及获取对应变量的一些特殊情况。

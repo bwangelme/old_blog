@@ -7,7 +7,8 @@ tags: [ARTS, ARTS-LIST]
 author: "bwangel"
 comment: true
 toc: true
-
+aliases:
+  - /2019/03/19/arts-第一周/
 ---
 
 > + 【2019年第14周】【2019/03/18 - 2019/03/24 】
@@ -21,17 +22,17 @@ toc: true
 
 ## Algorithm
 
-+ [LeetCode 661](https://www.bwangel.me/2019/03/24/leetcode-661%E9%A2%98/)
++ [LeetCode 661](/2019/03/24/leetcode-661%E9%A2%98/)
 
 
 ## Review
 
 + [Dependency injection in Golang using higher order functions](https://stein.wtf/posts/2019-03-12/inject/)
-+ [阅读笔记](https://bwangel.me/2019/03/24/dependency-injection-in-golang-using-higher-order-functions%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/)
++ [阅读笔记](/2019/03/24/dependency-injection-in-golang-using-higher-order-functions%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/)
 
 ## Tips
 
-+ [Go 的测试](https://www.bwangel.me/2019/03/24/go-%E7%9A%84%E6%B5%8B%E8%AF%95/)
++ [Go 的测试](/2019/03/24/go-%E7%9A%84%E6%B5%8B%E8%AF%95/)
 
 ## Share
 

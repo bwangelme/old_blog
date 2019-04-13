@@ -3,6 +3,8 @@ title: "Django get_or_create 执行过程"
 date: 2018-01-03T22:31:01+08:00
 tags: [Python, Django]
 draft: false
+aliases:
+  - /2018/01/03/django-get_or_create-执行过程/
 ---
 
 关于 Django 文档`get_or_create`的解释

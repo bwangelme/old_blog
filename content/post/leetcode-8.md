@@ -7,7 +7,8 @@ tags: [LeetCode, ARTS]
 author: "bwangel"
 comment: true
 toc: true
-
+aliases:
+  - /2019/04/02/leetcode-第8题/
 ---
 
 > https://leetcode.com/problems/string-to-integer-atoi/submissions/
