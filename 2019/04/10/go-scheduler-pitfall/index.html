@@ -16,7 +16,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content="背景说明 前两天遇到了这样一道题目: 编写一个程序，开启 3 个线程A,B,C，这三个线程的输出分别为 A、B、C，每个线程将自己的 输出在屏幕上打印 10" /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content=" 注意: 这篇文章的答案可以有正确的结果，但解题思路是不对的，正确的思路请参考 关于线程同步操作的一道面试题
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
@@ -39,26 +40,32 @@
 
 
 <meta property="og:title" content="Go 调度器的一个无法执行陷阱" />
-<meta property="og:description" content="背景说明 前两天遇到了这样一道题目: 编写一个程序，开启 3 个线程A,B,C，这三个线程的输出分别为 A、B、C，每个线程将自己的 输出在屏幕上打印 10" />
+<meta property="og:description" content="
+注意: 这篇文章的答案可以有正确的结果，但解题思路是不对的，正确的思路请参考 关于线程同步操作的一道面试题
+" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2019/04/10/go-scheduler-pitfall/" />
 <meta property="article:published_time" content="2019-04-10T22:18:53&#43;08:00"/>
 <meta property="article:modified_time" content="2019-04-10T22:18:53&#43;08:00"/>
 
 <meta itemprop="name" content="Go 调度器的一个无法执行陷阱">
-<meta itemprop="description" content="背景说明 前两天遇到了这样一道题目: 编写一个程序，开启 3 个线程A,B,C，这三个线程的输出分别为 A、B、C，每个线程将自己的 输出在屏幕上打印 10">
+<meta itemprop="description" content="
+注意: 这篇文章的答案可以有正确的结果，但解题思路是不对的，正确的思路请参考 关于线程同步操作的一道面试题
+">
 
 
 <meta itemprop="datePublished" content="2019-04-10T22:18:53&#43;08:00" />
 <meta itemprop="dateModified" content="2019-04-10T22:18:53&#43;08:00" />
-<meta itemprop="wordCount" content="1632">
+<meta itemprop="wordCount" content="1683">
 
 
 
 <meta itemprop="keywords" content="Go,AtomicInteger," />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go 调度器的一个无法执行陷阱"/>
-<meta name="twitter:description" content="背景说明 前两天遇到了这样一道题目: 编写一个程序，开启 3 个线程A,B,C，这三个线程的输出分别为 A、B、C，每个线程将自己的 输出在屏幕上打印 10"/>
+<meta name="twitter:description" content="
+注意: 这篇文章的答案可以有正确的结果，但解题思路是不对的，正确的思路请参考 关于线程同步操作的一道面试题
+"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -150,7 +157,11 @@
   </div>
 </div>
     <div class="post-content">
-      <h2 id="背景说明">背景说明</h2>
+      <blockquote>
+<p><strong>注意</strong>: 这篇文章的答案可以有正确的结果，但解题思路是不对的，正确的思路请参考 <a href="/2019/04/13/go-sync-channel/">关于线程同步操作的一道面试题</a></p>
+</blockquote>
+
+<h2 id="背景说明">背景说明</h2>
 
 <p>前两天遇到了这样一道题目:</p>
 
