@@ -1,5 +1,5 @@
 ---
-title: "一条面试题引发的关于 Go 语言中锁的思考"
+title: "线程同步操作面试题使用锁的解法"
 date: 2019-03-26T21:56:43+08:00
 lastmod: 2019-03-26T21:56:43+08:00
 draft: false
@@ -10,6 +10,8 @@ toc: true
 aliases:
   - /2019/03/26/一条面试题引发的关于-go-语言中锁的思考/
 ---
+
+> __注意__: 这篇文章的思路是不正确的，正确的思路请参考 [关于线程同步操作的一道面试题](/2019/04/13/go-sync-channel/)
 
 <!--more-->
 
@@ -261,7 +263,7 @@ func threadPrint(threadNum int, threadName string, mu sync.Locker) {
 			mu.Unlock()
 			continue
 		}
-		if i < 3 && i%3 != threadNum {
+		if i%3 != threadNum {
 			mu.Unlock()
 			continue
 		}
@@ -287,73 +289,21 @@ func main() {
 }
 ```
 
-上述代码中需要注意两点：
-
-1. 由于 Goroutine 无法保证启动顺序，即我们无法保证最开始上锁的顺序是`A,B,C`这样的顺序，所以需要在`64~67`行加一个判断，程序刚开始执行时如果获得的锁不对，就不执行任何操作，重新获得锁。
-2. 由于可见性的原因，需要在`60~63`行上锁之后加一个判断，保证`i`的值是最新的值。
+__注意__： 由于可见性的原因，需要在`60~63`行上锁之后加一个判断，保证`i`的值是最新的值。
 
 
-## 正确答案V4 - FanIn
+## 公平锁的一个错误尝试
 
-经V友 @Mark3K 的[补充](https://www.v2ex.com/t/552620#r_7143193)，还可以使用多个 channel 执行扇入(Fan In)操作，避免使用锁。
+在之前的代码中，我尝试利用公平锁上锁和解锁的有序性，来让3个 Goroutine 顺序执行并按顺序输出`A,B,C`。后经V友 [hheedat](https://www.v2ex.com/t/552620#r_7173035) 指出了错误，发现这样的想法是不可行的。因为以下两点是冲突的：
 
-首先说一下扇入的定义，Go blog 中是这样描述的：
+1. 让 Goroutine 在无法获得锁资源的时候阻塞
+2. 让 Goroutine 按照 `A,B,C` 的顺序上锁
 
-> A function can read from multiple inputs and proceed until all are closed by multiplexing the input channels onto a single channel that's closed when all the inputs are closed. This is called fan-in.
++ 因为 Goroutine 的启动时间和接收到信号量的时间都是无序的，所以正常情况下无法让 Goroutine 按顺序上锁。
++ 我尝试让 Goroutine 上锁之后使用一个信号通知`main`Goroutine，让`main`Goroutine 再去通知下一个 Goroutine 去上锁。
++ 但由于 Goroutine 上锁之后是阻塞的，所以使用信号通知`main`Goroutine 的方案也是不可行的。
 
-通过将多个输入 channel 多路复用到单个处理 channel 的方式，一个函数能够从多个输入 channel 中读取数据并处理。当所有的输出 channel 都关闭的时候，单个处理 channel 也会关闭。这就叫做扇入。
-
-在维基百科中描述的逻辑门的扇入如下(大家也可以参考这个来理解 Go 中的扇入):
-
-> Fan-in is the number of inputs a logic gate can handle. For instance the fan-in for the AND gate shown in the figure is 3. Physical logic gates with a large fan-in tend to be slower than those with a small fan-in. This is because the complexity of the input circuitry increases the input capacitance of the device. Using logic gates with higher fan-in will help reducing the depth of a logic circuit.
-
-![](https://passage-1253400711.cos-website.ap-beijing.myqcloud.com/2019-04-07-040937.jpg)
-
-> 逻辑门中的扇入定义: 一个逻辑门将多个输入处理成一个输出，它能够处理的输入数量就叫做扇入。
-
-理解了扇入的概念后，上述问题的答案也呼之欲出了。我们可以为`A,B,C`三个 Goroutine 创建三个 channel。然后通过一个 FanIn 函数将三个 channel 的输出输入到一个 channel 中。具体代码如下：
-
-```go
-package main
-
-import "fmt"
-
-func gen(v string, times int) <-chan string {
-	ch := make(chan string)
-	go func() {
-		defer close(ch)
-		for i := 0; i < times; i++ {
-			ch <- v
-		}
-	}()
-	return ch
-}
-
-func fanIn(times int, inputs []<-chan string) <-chan string {
-	ch := make(chan string)
-	go func() {
-		defer close(ch)
-		for i := 0; i < times; i++ {
-			for _, input := range inputs {
-				v := <-input
-				ch <- v
-			}
-		}
-	}()
-	return ch
-}
-
-func main() {
-	times := 10
-	inputs := make([]<-chan string, 0, 3)
-	for _, K := range []string{"A", "B", "C"} {
-		inputs = append(inputs, gen(K, times))
-	}
-	for char := range fanIn(times, inputs) {
-		fmt.Println(char)
-	}
-}
-```
+或许还有其他方案，但我认为这样思考的思路是不对的，__这个同步问题本来就应该使用信号量来解决，使用锁并尝试按顺序上锁只是在歧路上越走越远__。
 
 
 ## 参考链接
@@ -367,3 +317,4 @@ func main() {
 + [Go Concurrency Patterns: Pipelines and cancellation](https://blog.golang.org/pipelines)
 + [Fan-In Wikipedia](https://en.wikipedia.org/wiki/Fan-in)
 + [V友 Mark3K的评论](https://www.v2ex.com/t/552620#r_7143193)
++ [一条面试题引发的思考 Go 版本](https://www.v2ex.com/t/552620#r_7173035)
