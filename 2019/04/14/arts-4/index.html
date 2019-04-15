@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ARTS 第四周 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="  【2019年第16周】【2019/04/08 - 2019/04/14 】 A. LeetCode 151 R: Go Concurrency Patterns: Pipelines and cancellation T:  Go 调度器的一个无法执行陷阱 关于线程同步操作的一道面试题  S:  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
+
+
+<link rel="canonical" href="/2019/04/14/arts-4/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.0e5e4d97.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="ARTS 第四周" />
+<meta property="og:description" content="
+
+【2019年第16周】【2019/04/08 - 2019/04/14 】
+A. LeetCode 151
+R: Go Concurrency Patterns: Pipelines and cancellation
+T:
+
+
+Go 调度器的一个无法执行陷阱
+关于线程同步操作的一道面试题
+
+S:
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2019/04/14/arts-4/" />
+<meta property="article:published_time" content="2019-04-14T20:02:02&#43;08:00"/>
+<meta property="article:modified_time" content="2019-04-14T20:02:02&#43;08:00"/>
+
+<meta itemprop="name" content="ARTS 第四周">
+<meta itemprop="description" content="
+
+【2019年第16周】【2019/04/08 - 2019/04/14 】
+A. LeetCode 151
+R: Go Concurrency Patterns: Pipelines and cancellation
+T:
+
+
+Go 调度器的一个无法执行陷阱
+关于线程同步操作的一道面试题
+
+S:
+
+">
+
+
+<meta itemprop="datePublished" content="2019-04-14T20:02:02&#43;08:00" />
+<meta itemprop="dateModified" content="2019-04-14T20:02:02&#43;08:00" />
+<meta itemprop="wordCount" content="1314">
+
+
+
+<meta itemprop="keywords" content="ARTS,ARTS-LIST," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ARTS 第四周"/>
+<meta name="twitter:description" content="
+
+【2019年第16周】【2019/04/08 - 2019/04/14 】
+A. LeetCode 151
+R: Go Concurrency Patterns: Pipelines and cancellation
+T:
+
+
+Go 调度器的一个无法执行陷阱
+关于线程同步操作的一道面试题
+
+S:
+
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">ARTS 第四周</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-04-14 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#algorithm">Algorithm</a></li>
+<li><a href="#review">Review</a></li>
+<li><a href="#tips">Tips</a></li>
+<li><a href="#share">Share</a>
+<ul>
+<li><a href="#腾讯防水墙团队-浅谈业务安全前端对抗">腾讯防水墙团队：浅谈业务安全前端对抗</a></li>
+<li><a href="#go-语言核心36讲-之-条件变量-sync-cond">《Go 语言核心36讲》之 条件变量 sync.Cond</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<ul>
+<li>【2019年第16周】【2019/04/08 - 2019/04/14 】</li>
+<li>A. LeetCode 151</li>
+<li>R: Go Concurrency Patterns: Pipelines and cancellation</li>
+<li>T:
+
+<ul>
+<li>Go 调度器的一个无法执行陷阱</li>
+<li>关于线程同步操作的一道面试题</li>
+</ul></li>
+<li>S:</li>
+</ul>
+</blockquote>
+
+<h2 id="algorithm">Algorithm</h2>
+
+<ul>
+<li><a href="/2019/04/14/leetcode-151/">LeetCode 151题</a></li>
+</ul>
+
+<h2 id="review">Review</h2>
+
+<ul>
+<li><a href="/2019/04/15/review-go-pipelines/">Go Concurrency Patterns: Pipelines and cancellation</a></li>
+</ul>
+
+<p>这篇文章读起来略有些费劲，这周只读了一半，下周继续读完</p>
+
+<h2 id="tips">Tips</h2>
+
+<p>这周写了两篇文章:</p>
+
+<ul>
+<li><a href="/2019/04/13/go-sync-channel/">关于线程同步操作的一道面试题</a></li>
+<li><a href="/2019/04/10/go-scheduler-pitfall/">Go 调度器的一个无法执行陷阱</a></li>
+</ul>
+
+<p>修改了一篇文章:</p>
+
+<ul>
+<li><a href="/2019/03/26/go-lock/">线程同步操作面试题使用锁的解法</a></li>
+</ul>
+
+<h2 id="share">Share</h2>
+
+<h3 id="腾讯防水墙团队-浅谈业务安全前端对抗">腾讯防水墙团队：浅谈业务安全前端对抗</h3>
+
+<p>原文链接: <a href="https://mp.weixin.qq.com/s/JBKTuwP5HEjsNLVheppHfg">https://mp.weixin.qq.com/s/JBKTuwP5HEjsNLVheppHfg</a></p>
+
+<p>这篇文章整体是个广告文，但是感觉讲的以下内容有点价值:</p>
+
+<blockquote>
+<p>首先需要给大家一个客观的认识，<strong>类似 Uglify 的代码压缩并不是很好的代码保护手段，因此普遍认为代码压缩不属于代码保护的一部分，代码压缩只是一种代码优化</strong>。前端代码保护大致有两个流派，一个是以语法树变换为基础的混淆保护，一个是以构建私有执行环境为思路的虚拟机保护，谷歌则属于后者。代码混淆的效果因混淆器的负责程度而不同，基础级别的混淆器混淆出来的代码也很容易被逆向，而虚拟机保护的抗逆向效果好，其原理是在 JavaScript 的执行环境之上再设计构建一个虚拟机，所有原有业务逻辑的 JavaScript 代码均转换为该虚拟机可识别的字节码，复杂度较高效果好。</p>
+</blockquote>
+
+<p>代码压缩并不是代码保护，这点我是很赞同的。想起之前在 V2EX 上，很多人在那争论 <code>utf-8</code> 算不算加密算法。我觉得这是很搞笑的争论，并不是说把文本变成人类无法识别的数字就是加密了。</p>
+
+<p>在我的理解中，加密需要保证以下几个特性:</p>
+
+<ol>
+<li>使用秘钥保证被保护的内容的安全，加密算法是否公开不会影响被保护内容的安全性。而且好的加密算法应该是公开的，这样才能让全世界的开发者一起来检验并提高安全性。</li>
+<li>密文不能透露出原文的的时间，内容频率等信息。例如经典的凯撒加密算法在现在完全不能使用，很容易通过分析字母频率来破解。</li>
+</ol>
+
+<h3 id="go-语言核心36讲-之-条件变量-sync-cond">《Go 语言核心36讲》之 条件变量 sync.Cond</h3>
+
+<p>课程链接：<a href="https://time.geekbang.org/column/article/41588">https://time.geekbang.org/column/article/41588</a> (需要购买方可查看)</p>
+
+<ul>
+<li><p>条件变量的 Wait 方法执行的操作</p>
+
+<ol>
+<li>将调用它的 Goroutine 加入当前条件变量的通知队列中</li>
+<li>解锁当前条件变量的底层互斥锁</li>
+<li>让当前 Goroutine 处于等待状态，当前 Goroutine 会阻塞在<code>Wait</code>那行代码上</li>
+<li>如果通知到来，唤醒当前 Goroutine，并且锁定条件变量底层的互斥锁，Goroutine 会继续执行后面的代码</li>
+</ol></li>
+
+<li><p>Wait 为什么要将底层的互斥锁解锁</p>
+
+<ul>
+<li><code>Wait</code>解锁遵循了互斥锁的重要原则，成对的锁定和解锁。</li>
+<li><code>Wait</code>解锁后，其他的 Goroutine 也好修改互斥资源，否则其他 Goroutine 无法获得锁，也无法修改互斥资源。</li>
+<li>如果是其他 Goroutine 解锁互斥锁，这样很容易造成多 Goroutine 解锁同一个锁的情况，这样会导致不可恢复的<code>panic</code>。</li>
+</ul></li>
+
+<li><p><code>Wait</code>为什么要使用<code>for</code>循环来判断临界条件。</p></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go">  <span class="nx">c</span><span class="p">.</span><span class="nx">L</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+  <span class="k">for</span> <span class="p">!</span><span class="nf">condition</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">c</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+  <span class="p">}</span>
+  <span class="o">...</span> <span class="nx">make</span> <span class="nx">use</span> <span class="nx">of</span> <span class="nx">condition</span> <span class="o">...</span>
+  <span class="nx">c</span><span class="p">.</span><span class="nx">L</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li><p>假设有多个 Goroutine 同时<code>Wait</code>一个<code>cond</code>的时候，某个 Goroutine 的<code>Broadcast</code>可能会唤醒多个 Goroutine，多个 Goroutine 都去针对<code>cond</code>底层的互斥锁上锁，只有一个 Goroutine 会上锁成功，其他 Goroutine 就会阻塞。
+等成功上锁的 Goroutine 执行完之后，其他的 Goroutine 不会再去检查条件了，而是直接上锁，这样就会导致第二次上锁的 Goroutine 获得的临界条件不是预期的值
+所以<code>Wait</code>操作要包裹在<code>for</code>循环之中。</p></li>
+
+<li><p>在多 CPU 核心的计算机系统中，即使没有收到条件变量的通知，调用其<code>Wait</code>方法的 Goroutine 也是可能被唤醒的。这是由计算机硬件层面决定的。</p></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-04-14
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/arts/">ARTS</a>
+          <a href="/tags/arts-list/">ARTS-LIST</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2019/04/14/leetcode-151/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Leetcode 第151题</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2019/04/13/go-sync-channel/">
+            <span class="next-text nav-default">关于线程同步操作的一道面试题</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+    <script src="https://utteranc.es/client.js"
+          repo="anotherbwangel/blog-comment"
+          issue-term="pathname"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>
