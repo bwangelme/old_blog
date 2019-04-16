@@ -208,9 +208,12 @@ import (
 	"sync"
 )
 
+const endNum = 30
+
 type FairLock struct {
 	mu        *sync.Mutex
 	cond      *sync.Cond
+	isHold    bool
 	holdCount int
 }
 
@@ -220,6 +223,7 @@ func NewFairLock() sync.Locker {
 
 	return &FairLock{
 		holdCount: 0,
+		isHold:    false,
 		mu:        mu,
 		cond:      cond,
 	}
@@ -229,26 +233,32 @@ func (fl *FairLock) Lock() {
 	fl.mu.Lock()
 	defer fl.mu.Unlock()
 
-	fl.holdCount++
-	if fl.holdCount == 1 {
+	if !fl.isHold {
+		fl.holdCount++
+		fl.isHold = true
 		return
 	}
 
-	fl.cond.Wait()
+	fl.holdCount++
+	for fl.isHold {
+		fl.cond.Wait()
+	}
+	fl.isHold = true
 }
 
 func (fl *FairLock) Unlock() {
 	fl.mu.Lock()
 	defer fl.mu.Unlock()
 
-	if fl.holdCount == 0 {
+	if !fl.isHold {
 		log.Fatal("unlock of UnLocked mutex")
 	}
 
-	fl.holdCount--
-	if fl.holdCount != 0 {
+	if fl.holdCount > 1 {
 		fl.cond.Signal()
 	}
+	fl.isHold = false
+	fl.holdCount--
 }
 
 var (
@@ -256,21 +266,21 @@ var (
 	i   int
 )
 
-func threadPrint(threadNum int, threadName string, mu sync.Locker) {
-	for i < 30 {
-		mu.Lock()
-		if i >= 30 {
-			mu.Unlock()
+func threadPrint(threadNum int, threadName string, locker sync.Locker) {
+	for i < endNum {
+		locker.Lock()
+		if i >= endNum {
+			locker.Unlock()
 			continue
 		}
 		if i%3 != threadNum {
-			mu.Unlock()
+			locker.Unlock()
 			continue
 		}
 
 		fmt.Printf("%d: %s\n", i, threadName)
 		i += 1
-		mu.Unlock()
+		locker.Unlock()
 	}
 	end <- struct{}{}
 }
@@ -289,7 +299,11 @@ func main() {
 }
 ```
 
-__注意__： 由于可见性的原因，需要在`60~63`行上锁之后加一个判断，保证`i`的值是最新的值。
+__注意__： 由于可见性的原因，需要在`70~72`行上锁之后加一个判断，保证`i`的值是最新的值。
+
+经 V友 @hheedat 的[提醒](https://www.v2ex.com/t/552620#r_7183057)，`cond.Wait`操作需要放在 `for` 循环中，因为阻塞的 Goroutine 可能会被误唤醒。
+
+Go 的文档中也说明 [`Wait`需要放在`for`循环中](https://golang.org/pkg/sync/#Cond.Wait)。因为在 `Wait` 的过程中，`cond` 相关的锁并没有上锁，所以`Wait`唤醒后，相关的条件不一定是正确的。
 
 
 ## 公平锁的一个错误尝试
