@@ -56,7 +56,7 @@
 
 <meta itemprop="datePublished" content="2019-03-26T21:56:43&#43;08:00" />
 <meta itemprop="dateModified" content="2019-03-26T21:56:43&#43;08:00" />
-<meta itemprop="wordCount" content="2628">
+<meta itemprop="wordCount" content="2767">
 
 
 
@@ -560,6 +560,16 @@
 </span><span class="lnt">85
 </span><span class="lnt">86
 </span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span><span class="lnt">90
+</span><span class="lnt">91
+</span><span class="lnt">92
+</span><span class="lnt">93
+</span><span class="lnt">94
+</span><span class="lnt">95
+</span><span class="lnt">96
+</span><span class="lnt">97
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
@@ -570,9 +580,12 @@
 	<span class="s">&#34;sync&#34;</span>
 <span class="p">)</span>
 
+<span class="kd">const</span> <span class="nx">endNum</span> <span class="p">=</span> <span class="mi">30</span>
+
 <span class="kd">type</span> <span class="nx">FairLock</span> <span class="kd">struct</span> <span class="p">{</span>
 	<span class="nx">mu</span>        <span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span>
 	<span class="nx">cond</span>      <span class="o">*</span><span class="nx">sync</span><span class="p">.</span><span class="nx">Cond</span>
+	<span class="nx">isHold</span>    <span class="kt">bool</span>
 	<span class="nx">holdCount</span> <span class="kt">int</span>
 <span class="p">}</span>
 
@@ -582,6 +595,7 @@
 
 	<span class="k">return</span> <span class="o">&amp;</span><span class="nx">FairLock</span><span class="p">{</span>
 		<span class="nx">holdCount</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+		<span class="nx">isHold</span><span class="p">:</span>    <span class="kc">false</span><span class="p">,</span>
 		<span class="nx">mu</span><span class="p">:</span>        <span class="nx">mu</span><span class="p">,</span>
 		<span class="nx">cond</span><span class="p">:</span>      <span class="nx">cond</span><span class="p">,</span>
 	<span class="p">}</span>
@@ -591,26 +605,32 @@
 	<span class="nx">fl</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
 	<span class="k">defer</span> <span class="nx">fl</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
 
-	<span class="nx">fl</span><span class="p">.</span><span class="nx">holdCount</span><span class="o">++</span>
-	<span class="k">if</span> <span class="nx">fl</span><span class="p">.</span><span class="nx">holdCount</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">!</span><span class="nx">fl</span><span class="p">.</span><span class="nx">isHold</span> <span class="p">{</span>
+		<span class="nx">fl</span><span class="p">.</span><span class="nx">holdCount</span><span class="o">++</span>
+		<span class="nx">fl</span><span class="p">.</span><span class="nx">isHold</span> <span class="p">=</span> <span class="kc">true</span>
 		<span class="k">return</span>
 	<span class="p">}</span>
 
-	<span class="nx">fl</span><span class="p">.</span><span class="nx">cond</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+	<span class="nx">fl</span><span class="p">.</span><span class="nx">holdCount</span><span class="o">++</span>
+	<span class="k">for</span> <span class="nx">fl</span><span class="p">.</span><span class="nx">isHold</span> <span class="p">{</span>
+		<span class="nx">fl</span><span class="p">.</span><span class="nx">cond</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+	<span class="p">}</span>
+	<span class="nx">fl</span><span class="p">.</span><span class="nx">isHold</span> <span class="p">=</span> <span class="kc">true</span>
 <span class="p">}</span>
 
 <span class="kd">func</span> <span class="p">(</span><span class="nx">fl</span> <span class="o">*</span><span class="nx">FairLock</span><span class="p">)</span> <span class="nf">Unlock</span><span class="p">()</span> <span class="p">{</span>
 	<span class="nx">fl</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
 	<span class="k">defer</span> <span class="nx">fl</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
 
-	<span class="k">if</span> <span class="nx">fl</span><span class="p">.</span><span class="nx">holdCount</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="p">!</span><span class="nx">fl</span><span class="p">.</span><span class="nx">isHold</span> <span class="p">{</span>
 		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="s">&#34;unlock of UnLocked mutex&#34;</span><span class="p">)</span>
 	<span class="p">}</span>
 
-	<span class="nx">fl</span><span class="p">.</span><span class="nx">holdCount</span><span class="o">--</span>
-	<span class="k">if</span> <span class="nx">fl</span><span class="p">.</span><span class="nx">holdCount</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">fl</span><span class="p">.</span><span class="nx">holdCount</span> <span class="p">&gt;</span> <span class="mi">1</span> <span class="p">{</span>
 		<span class="nx">fl</span><span class="p">.</span><span class="nx">cond</span><span class="p">.</span><span class="nf">Signal</span><span class="p">()</span>
 	<span class="p">}</span>
+	<span class="nx">fl</span><span class="p">.</span><span class="nx">isHold</span> <span class="p">=</span> <span class="kc">false</span>
+	<span class="nx">fl</span><span class="p">.</span><span class="nx">holdCount</span><span class="o">--</span>
 <span class="p">}</span>
 
 <span class="kd">var</span> <span class="p">(</span>
@@ -618,21 +638,21 @@
 	<span class="nx">i</span>   <span class="kt">int</span>
 <span class="p">)</span>
 
-<span class="kd">func</span> <span class="nf">threadPrint</span><span class="p">(</span><span class="nx">threadNum</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">threadName</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">mu</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">Locker</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">for</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">30</span> <span class="p">{</span>
-		<span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
-		<span class="k">if</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="mi">30</span> <span class="p">{</span>
-			<span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+<span class="kd">func</span> <span class="nf">threadPrint</span><span class="p">(</span><span class="nx">threadNum</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">threadName</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">locker</span> <span class="nx">sync</span><span class="p">.</span><span class="nx">Locker</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">endNum</span> <span class="p">{</span>
+		<span class="nx">locker</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+		<span class="k">if</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="nx">endNum</span> <span class="p">{</span>
+			<span class="nx">locker</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
 			<span class="k">continue</span>
 		<span class="p">}</span>
 		<span class="k">if</span> <span class="nx">i</span><span class="o">%</span><span class="mi">3</span> <span class="o">!=</span> <span class="nx">threadNum</span> <span class="p">{</span>
-			<span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+			<span class="nx">locker</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
 			<span class="k">continue</span>
 		<span class="p">}</span>
 
 		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%d: %s\n&#34;</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">threadName</span><span class="p">)</span>
 		<span class="nx">i</span> <span class="o">+=</span> <span class="mi">1</span>
-		<span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+		<span class="nx">locker</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
 	<span class="p">}</span>
 	<span class="nx">end</span> <span class="o">&lt;-</span> <span class="kd">struct</span><span class="p">{}{}</span>
 <span class="p">}</span>
@@ -651,7 +671,11 @@
 <span class="p">}</span></code></pre></td></tr></table>
 </div>
 </div>
-<p><strong>注意</strong>： 由于可见性的原因，需要在<code>60~63</code>行上锁之后加一个判断，保证<code>i</code>的值是最新的值。</p>
+<p><strong>注意</strong>： 由于可见性的原因，需要在<code>70~72</code>行上锁之后加一个判断，保证<code>i</code>的值是最新的值。</p>
+
+<p>经 V友 @hheedat 的<a href="https://www.v2ex.com/t/552620#r_7183057">提醒</a>，<code>cond.Wait</code>操作需要放在 <code>for</code> 循环中，因为阻塞的 Goroutine 可能会被误唤醒。</p>
+
+<p>Go 的文档中也说明 <a href="https://golang.org/pkg/sync/#Cond.Wait"><code>Wait</code>需要放在<code>for</code>循环中</a>。因为在 <code>Wait</code> 的过程中，<code>cond</code> 相关的锁并没有上锁，所以<code>Wait</code>唤醒后，相关的条件不一定是正确的。</p>
 
 <h2 id="公平锁的一个错误尝试">公平锁的一个错误尝试</h2>
 
