@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content="  【2019年第15周】【2019/03/25 - 2019/03/31 】 A. LeetCode 8 R: The Go Memory Model T: 一条面试题引发的关于 Go 语言中锁的思考 S: go reentrant lock(可重入锁) 简单实现  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content="  【2019年第13周】【2019/03/25 - 2019/03/31 】 A. LeetCode 8 R: The Go Memory Model T: 一条面试题引发的关于 Go 语言中锁的思考 S: go reentrant lock(可重入锁) 简单实现  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
@@ -41,7 +41,7 @@
 <meta property="og:title" content="ARTS 第二周" />
 <meta property="og:description" content="
 
-【2019年第15周】【2019/03/25 - 2019/03/31 】
+【2019年第13周】【2019/03/25 - 2019/03/31 】
 A. LeetCode 8
 R: The Go Memory Model
 T: 一条面试题引发的关于 Go 语言中锁的思考
@@ -56,7 +56,7 @@ S: go reentrant lock(可重入锁) 简单实现
 <meta itemprop="name" content="ARTS 第二周">
 <meta itemprop="description" content="
 
-【2019年第15周】【2019/03/25 - 2019/03/31 】
+【2019年第13周】【2019/03/25 - 2019/03/31 】
 A. LeetCode 8
 R: The Go Memory Model
 T: 一条面试题引发的关于 Go 语言中锁的思考
@@ -76,7 +76,7 @@ S: go reentrant lock(可重入锁) 简单实现
 <meta name="twitter:title" content="ARTS 第二周"/>
 <meta name="twitter:description" content="
 
-【2019年第15周】【2019/03/25 - 2019/03/31 】
+【2019年第13周】【2019/03/25 - 2019/03/31 】
 A. LeetCode 8
 R: The Go Memory Model
 T: 一条面试题引发的关于 Go 语言中锁的思考
@@ -109,6 +109,10 @@ S: go reentrant lock(可重入锁) 简单实现
   <ul class="mobile-menu-list">
     <a href="/">
         <li class="mobile-menu-item">主页</li>
+      </a><a href="/arts/">
+        <li class="mobile-menu-item">ARTS</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
       </a><a href="/post/">
         <li class="mobile-menu-item">归档</li>
       </a><a href="/tags/">
@@ -129,6 +133,10 @@ S: go reentrant lock(可重入锁) 简单实现
     <li class="menu-item">
         <a class="menu-item-link" href="/">主页</a>
       </li><li class="menu-item">
+        <a class="menu-item-link" href="/arts/">ARTS</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
         <a class="menu-item-link" href="/post/">归档</a>
       </li><li class="menu-item">
         <a class="menu-item-link" href="/tags/">标签</a>
@@ -143,37 +151,10 @@ S: go reentrant lock(可重入锁) 简单实现
       <div class="content-wrapper">
         <div id="content" class="content">
           <article class="post">
-    
-    <header class="post-header">
-      <h1 class="post-title">ARTS 第二周</h1>
-
-      <div class="post-meta">
-        <span class="post-time"> 2019-04-02 </span>
-        
-        
-      </div>
-    </header>
-
-    <div class="post-toc" id="post-toc">
-  <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
-    <nav id="TableOfContents">
+  <div class="post-content">
+    <blockquote>
 <ul>
-<li>
-<ul>
-<li><a href="#algorithm">Algorithm</a></li>
-<li><a href="#review">Review</a></li>
-<li><a href="#tips">Tips</a></li>
-<li><a href="#share">Share</a></li>
-</ul></li>
-</ul>
-</nav>
-  </div>
-</div>
-    <div class="post-content">
-      <blockquote>
-<ul>
-<li>【2019年第15周】【2019/03/25 - 2019/03/31 】</li>
+<li>【2019年第13周】【2019/03/25 - 2019/03/31 】</li>
 <li>A. LeetCode 8</li>
 <li>R: The Go Memory Model</li>
 <li>T: 一条面试题引发的关于 Go 语言中锁的思考</li>
@@ -214,45 +195,8 @@ S: go reentrant lock(可重入锁) 简单实现
 <p>Go 语言中自身并不提供可重入锁，而且 <a href="https://github.com/golang/go/issues/24192">Go 官方也不愿意添加可重入锁的支持</a>。</p>
 
 <p>上述文章中使用 <code>sync.mutex</code> 和 <code>sync.cond</code> 实现了简单的可重入锁。主要实现思路就是锁中加一个 Goroutine 的 ID 和 <code>sync/cond</code> 同步条件。对于一个已经加锁的锁来说，如果是拥有者 Goroutine 上锁能够正常上锁。如果是其他 Goroutine 上锁的时候，则会利用<code>cond.wait</code>执行阻塞操作，直到其他 Goroutine 解锁后唤醒当前 Goroutine。</p>
-    </div>
-
-    <div class="post-copyright">
-  <p class="copyright-item">
-    <span class="item-title">文章作者</span>
-    <span class="item-content">bwangel</span>
-  </p>
-  <p class="copyright-item">
-    <span class="item-title">上次更新</span>
-    <span class="item-content">
-        2019-04-02
-        
-    </span>
-  </p>
-  
-  <p class="copyright-item">
-    <span class="item-title">许可协议</span>
-    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
-  </p>
-</div>
-<footer class="post-footer">
-      <div class="post-tags">
-          <a href="/tags/arts/">ARTS</a>
-          <a href="/tags/arts-list/">ARTS-LIST</a>
-          </div>
-      <nav class="post-nav">
-        <a class="prev" href="/2019/04/02/leetcode-8/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">Leetcode 第8题</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
-        <a class="next" href="/2019/03/26/go-lock/">
-            <span class="next-text nav-default">线程同步操作面试题使用锁的解法</span>
-            <span class="next-text nav-mobile">下一篇</span>
-            <i class="iconfont icon-right"></i>
-          </a>
-      </nav>
-    </footer>
-  </article>
+  </div>
+</article>
         </div>
         
 
