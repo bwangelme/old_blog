@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Leetcode 第338题 - 大白的碎碎念</title>
+  <title>Review 《Golang Trick: Export unexport method for test》 - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content="  LeetCode 338题  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content="  原文地址: https://medium.com/@robiplus/golang-trick-export-for-test-aa16cbd7b8cd  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
@@ -26,7 +26,7 @@
 <meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
 
 
-<link rel="canonical" href="/2019/04/21/leetcode-338/" />
+<link rel="canonical" href="/2019/04/27/golang-trick-export-for-test/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -38,37 +38,37 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:title" content="Leetcode 第338题" />
+<meta property="og:title" content="Review 《Golang Trick: Export unexport method for test》" />
 <meta property="og:description" content="
 
-LeetCode 338题
+原文地址: https://medium.com/@robiplus/golang-trick-export-for-test-aa16cbd7b8cd
 
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2019/04/21/leetcode-338/" />
-<meta property="article:published_time" content="2019-04-21T23:37:34&#43;08:00"/>
-<meta property="article:modified_time" content="2019-04-21T23:37:34&#43;08:00"/>
+<meta property="og:url" content="/2019/04/27/golang-trick-export-for-test/" />
+<meta property="article:published_time" content="2019-04-27T17:33:52&#43;08:00"/>
+<meta property="article:modified_time" content="2019-04-27T17:33:52&#43;08:00"/>
 
-<meta itemprop="name" content="Leetcode 第338题">
+<meta itemprop="name" content="Review 《Golang Trick: Export unexport method for test》">
 <meta itemprop="description" content="
 
-LeetCode 338题
+原文地址: https://medium.com/@robiplus/golang-trick-export-for-test-aa16cbd7b8cd
 
 ">
 
 
-<meta itemprop="datePublished" content="2019-04-21T23:37:34&#43;08:00" />
-<meta itemprop="dateModified" content="2019-04-21T23:37:34&#43;08:00" />
-<meta itemprop="wordCount" content="419">
+<meta itemprop="datePublished" content="2019-04-27T17:33:52&#43;08:00" />
+<meta itemprop="dateModified" content="2019-04-27T17:33:52&#43;08:00" />
+<meta itemprop="wordCount" content="1207">
 
 
 
-<meta itemprop="keywords" content="ARTS,LeetCode," />
+<meta itemprop="keywords" content="翻译,Go," />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Leetcode 第338题"/>
+<meta name="twitter:title" content="Review 《Golang Trick: Export unexport method for test》"/>
 <meta name="twitter:description" content="
 
-LeetCode 338题
+原文地址: https://medium.com/@robiplus/golang-trick-export-for-test-aa16cbd7b8cd
 
 "/>
 
@@ -145,10 +145,10 @@ LeetCode 338题
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Leetcode 第338题</h1>
+      <h1 class="post-title">Review 《Golang Trick: Export unexport method for test》</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2019-04-21 </span>
+        <span class="post-time"> 2019-04-27 </span>
         
         
       </div>
@@ -161,9 +161,10 @@ LeetCode 338题
 <ul>
 <li>
 <ul>
-<li><a href="#题目描述">题目描述</a></li>
-<li><a href="#解题思路">解题思路</a></li>
-<li><a href="#代码">代码</a></li>
+<li><a href="#go-测试">Go 测试</a></li>
+<li><a href="#export-test-go">export_test.go</a></li>
+<li><a href="#使用-export-test-go-的实例">使用 export_test.go 的实例</a></li>
+<li><a href="#go-标准库中的应用">Go 标准库中的应用</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -172,87 +173,65 @@ LeetCode 338题
     <div class="post-content">
       <blockquote>
 <ul>
-<li><a href="https://leetcode.com/problems/reverse-words-in-a-string/">LeetCode 338题</a></li>
+<li>原文地址: <a href="https://medium.com/@robiplus/golang-trick-export-for-test-aa16cbd7b8cd">https://medium.com/@robiplus/golang-trick-export-for-test-aa16cbd7b8cd</a></li>
 </ul>
 </blockquote>
 
-<h2 id="题目描述">题目描述</h2>
+<p>在 Go 语言中， 导出的表示符是以大写字母开头的，小写字母开头的标识符只可以在它所在的包中使用。我们在开发过程中，仅仅应该导出真正需要的标识符给调用者， 来让我们的API易于使用且易于维护。</p>
 
-<p>Given a non negative integer number num. For every numbers i in the range 0 ≤ i ≤ num calculate the number of 1&rsquo;s in their binary representation and return them as an array.</p>
+<h2 id="go-测试">Go 测试</h2>
 
-<p>Example 1:</p>
+<p>Go 中的测试代码通常写在源代码的旁边， 以<code>xxx_test.go</code>命名。例如我们的源码文件叫做<code>sum.go</code>，测试代码应该写 在<code>sum_test.go</code> 中。</p>
+
+<p>在测试代码中命名<code>package</code>的时候，我们有两个选择。</p>
+
+<ol>
+<li>使用和源码文件相同的<code>package</code>名，例如源码文件和测试文件都是<code>package math</code></li>
+<li>使用和源码文件不同的<code>package</code>名，通常是<code>xxx_test</code>。例如源码文件是<code>package math</code>，测试文件是<code>package math_test</code></li>
+</ol>
+
+<p>通常情况下，我们会选择第二种命名方式。因为测试文件和源码文件使用不同的<code>package</code>，被测代码就是一个黑盒，能够让我们专注地基于其 API(以大写字母开头的<strong>导出标识符</strong>) 进行开发，以帮助我们设计出更易用的 API 出来。</p>
+
+<h2 id="export-test-go">export_test.go</h2>
+
+<p>源码文件和测试文件使用不同的<code>package</code>名称，通常情况都是可以的，但在一些特殊 TestCase 下我们可能需要使用未导出的标识符，此时就需要<code>export_test.go</code>文件登场了。</p>
+
+<p>整理一下，我们的需求是这样的:</p>
+
+<ol>
+<li>不将未导出标识符导出到生产代码中</li>
+<li>将一些未导出标识符导出到测试代码中</li>
+</ol>
+
+<p>此时我们就可以将一些未<strong>导出标识符</strong>包裹成<strong>导出标识符</strong>，放到<code>export_test.go</code>文件中，供测试代码使用。</p>
+
+<p><em>export_test.go</em> 文件仅仅在运行<code>go test</code>命令的时候会被包括进来，所以它不会污染包所提供的API，用户也无法访问到它(不像 Java 中的<code>@VisibleForTesting</code>)。</p>
+
+<p>它建立了一座桥梁，让测试代码能够访问到未导出的标识符。</p>
+
+<p><code>export_test.go</code>这个名字不是限定死的，也可以使用其他名字，但注意必须以<code>_test.go</code>结尾。</p>
+
+<h2 id="使用-export-test-go-的实例">使用 export_test.go 的实例</h2>
+
+<ul>
+<li>包<code>math</code>的目录结构如下:</li>
+</ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span><span class="lnt">2
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">Input: 2
-Output: [0,1,1]</pre></td></tr></table>
-</div>
-</div>
-<p>Example 2:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span><span class="lnt">2
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">Input: 5
-Output: [0,1,1,2,1,2]</pre></td></tr></table>
-</div>
-</div>
-<p>Follow up:</p>
-
-<p>It is very easy to come up with a solution with run time O(n*sizeof(integer)). But can you do it in linear time O(n) /possibly in a single pass?
-Space complexity should be O(n).
-Can you do it like a boss? Do it without using any builtin function like <strong>builtin</strong> popcount in c++ or in any other language.</p>
-
-<h2 id="解题思路">解题思路</h2>
-
-<p>求一个非负整数的二进制表示中有多少个1, 这个问题可以用分治法来解决。</p>
-
-<p>令非负整数 N 中的1有 f(N) 个，N的个位数为 S(N)</p>
-
-<p>$$
-f(N) = f(N/2) + (S(N) == 1)
-$$
-$$
-&hellip;
-$$
-$$
-f(0) = 0
-$$</p>
-
-<p>根据上述的思路，我们可以写出如下的伪代码:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">def count_bit(N):
-  if N == 0:
-    return 0
-
-  if N &amp; 1 == 1:
-    return count_bit(N/2) + 1
-  else:
-    return count_bit(N/2)</pre></td></tr></table>
+<pre class="chroma"><code class="language-sh" data-lang="sh">math
+├── export_test.go
+├── math.go
+└── math_test.go</code></pre></td></tr></table>
 </div>
 </div>
-<p>这个题需要求<code>1..N</code>每个数的二进制表示中1的个数，所以我们可以将中间结果存储起来，没必要每个数都从0开始运算一遍。</p>
-
-<h2 id="代码">代码</h2>
-
 <ul>
-<li>solution.go</li>
+<li><code>sum.go</code>文件中有未导出标识符<code>sum</code>函数</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -266,40 +245,39 @@ $$</p>
 </span><span class="lnt"> 8
 </span><span class="lnt"> 9
 </span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">l338</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">//sum.go
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">math</span>
 
-<span class="kd">func</span> <span class="nf">CountBits</span><span class="p">(</span><span class="nx">num</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
-	<span class="kd">var</span> <span class="nx">result</span> <span class="p">[]</span><span class="kt">int</span>
-	<span class="kd">var</span> <span class="nx">bitCount</span> <span class="kt">int</span>
+<span class="kd">func</span> <span class="nf">sum</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span>
+<span class="p">}</span>
 
-	<span class="nx">result</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">num</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">i</span><span class="o">&amp;</span><span class="mi">1</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
-			<span class="nx">bitCount</span> <span class="p">=</span> <span class="nx">result</span><span class="p">[</span><span class="nx">i</span><span class="o">&gt;&gt;</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
-		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-			<span class="nx">bitCount</span> <span class="p">=</span> <span class="nx">result</span><span class="p">[</span><span class="nx">i</span><span class="o">&gt;&gt;</span><span class="mi">1</span><span class="p">]</span>
-		<span class="p">}</span>
+<span class="kd">func</span> <span class="nf">Name</span><span class="p">()</span> <span class="p">{</span>
 
-		<span class="nx">result</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="nx">bitCount</span><span class="p">)</span>
-	<span class="p">}</span>
-
-	<span class="k">return</span> <span class="nx">result</span>
 <span class="p">}</span></code></pre></td></tr></table>
 </div>
 </div>
 <ul>
-<li>solution_test.go</li>
+<li><code>export_test.go</code>文件命名了<code>Sum</code>函数作为<code>sum</code>函数的副本</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">//export_test.go
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">math</span>
+
+<span class="kd">var</span> <span class="nx">Sum</span> <span class="p">=</span> <span class="nx">sum</span></code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li><code>sum_test.go</code>测试文件使用的包名是<code>package math_test</code>，它通过<code>export_test.go</code>访问到了<code>math</code>未导出的标识符<code>Sum</code></li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -315,24 +293,40 @@ $$</p>
 </span><span class="lnt">10
 </span><span class="lnt">11
 </span><span class="lnt">12
-</span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">l338</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">//sum_test.go
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">math_test</span>
 
 <span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;testing&#34;</span>
-
-	<span class="s">&#34;github.com/stretchr/testify/assert&#34;</span>
+    <span class="s">&#34;github.com/d5/tengo/assert&#34;</span>
+    <span class="s">&#34;testing&#34;</span>
+    <span class="s">&#34;xxx/math&#34;</span>
 <span class="p">)</span>
 
-<span class="kd">func</span> <span class="nf">TestCountBits</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">})</span>
-	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">CountBits</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">})</span>
-	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">CountBits</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">})</span>
+<span class="kd">func</span> <span class="nf">TestName</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="nx">math</span><span class="p">.</span><span class="nf">Sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="p">}</span></code></pre></td></tr></table>
 </div>
 </div>
+<h2 id="go-标准库中的应用">Go 标准库中的应用</h2>
+
+<p>在 Go 1.12的 strings 库中，存在以下定义</p>
+
+<ol>
+<li><code>search.go</code>中定义的函数<code>makeStringFinder</code>是未导出的。</li>
+<li><code>search_test.go</code>和<code>search.go</code>使用了不同的<code>package</code>名称，分别是<code>strings</code>和<code>strings_test</code></li>
+<li>为了让<code>search_test.go</code>中能够使用到<code>makeStringFinder</code>函数，在<code>export_test.go</code>中定义了<code>StringFind</code>函数，供其使用。</li>
+</ol>
+
+<p>以下是代码链接，大家可以参考阅读。</p>
+
+<ul>
+<li><a href="(https://github.com/golang/go/tree/release-branch.go1.12/src/strings)">strings 目录</a></li>
+<li><a href="https://github.com/golang/go/blob/release-branch.go1.12/src/strings/search.go#L5">search.go</a></li>
+<li><a href="https://github.com/golang/go/blob/release-branch.go1.12/src/strings/search_test.go#L5">search_test.go</a></li>
+<li><a href="https://github.com/golang/go/blob/release-branch.go1.12/src/strings/export_test.go#L40-L42">export_test.go</a></li>
+</ul>
     </div>
 
     <div class="post-copyright">
@@ -343,7 +337,7 @@ $$</p>
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2019-04-21
+        2019-04-27
         
     </span>
   </p>
@@ -355,13 +349,13 @@ $$</p>
 </div>
 <footer class="post-footer">
       <div class="post-tags">
-          <a href="/tags/arts/">ARTS</a>
-          <a href="/tags/leetcode/">LeetCode</a>
+          <a href="/tags/%E7%BF%BB%E8%AF%91/">翻译</a>
+          <a href="/tags/go/">Go</a>
           </div>
       <nav class="post-nav">
         
-        <a class="next" href="/2019/04/14/leetcode-151/">
-            <span class="next-text nav-default">Leetcode 第151题</span>
+        <a class="next" href="/2019/04/21/go-cli/">
+            <span class="next-text nav-default">urfave/cli 学习笔记</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
