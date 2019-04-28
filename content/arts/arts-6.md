@@ -10,13 +10,16 @@ toc: true
 
 ---
 
-> + 【2019年第17周】【2019/04/22 - 2019/03/28】
-> + A. LeetCode 116
-> + R: xxx
-> + T: xxx
-> + S: xxx
+2019年第17周|2019/04/22 -- 2019/03/28
+---|---
+Algorithm|LeetCode 116
+Review|Golang Trick: Export unexport method for test
+Tips|strings.Builder 转换字符串的时候为什么比 bytes.Buffer 要快
+Share|Python 工匠系列文章
 
 <!--more-->
+
+---
 
 ## Algorithm
 
@@ -27,4 +30,9 @@ toc: true
 
 ## Tips
 
++ [strings.Builder 转换字符串的时候为什么比 bytes.Buffer 要快](/2019/04/28/byte-vs-builder/)
+
 ## Share
+
+分享 [@peilei](https://github.com/piglei) 的 [Python 工匠](https://design-patterns.readthedocs.io/zh_CN/latest/index.html#) 系列文章。
+感觉作者的文章很棒，希望他能坚持下去，写出一本 __More Effective Python__ 出来。
