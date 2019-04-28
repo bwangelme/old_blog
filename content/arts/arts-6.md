@@ -22,6 +22,9 @@ toc: true
 
 ## Review
 
++ 文章地址: [Golang Trick: Export unexport method for test](https://medium.com/@robiplus/golang-trick-export-for-test-aa16cbd7b8cd)
++ Review 笔记: [Review 《Golang Trick: Export unexport method for test》](/2019/04/27/golang-trick-export-for-test/)
+
 ## Tips
 
 ## Share
