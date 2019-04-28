@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>strings.Builder 转换字符串的时候为什么比 bytes.Buffer 要快 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="unsafe.Pointer 的用法 Pointer类型代表了任意一种类型的指针，类型Pointer有四种专属的操作： 任意类型的指针能够被转换成Pointer值 一个Poi" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
+
+
+<link rel="canonical" href="/2019/04/28/byte-vs-builder/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.0e5e4d97.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="strings.Builder 转换字符串的时候为什么比 bytes.Buffer 要快" />
+<meta property="og:description" content="unsafe.Pointer 的用法 Pointer类型代表了任意一种类型的指针，类型Pointer有四种专属的操作： 任意类型的指针能够被转换成Pointer值 一个Poi" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2019/04/28/byte-vs-builder/" />
+<meta property="article:published_time" content="2019-04-28T23:48:00&#43;08:00"/>
+<meta property="article:modified_time" content="2019-04-28T23:48:00&#43;08:00"/>
+
+<meta itemprop="name" content="strings.Builder 转换字符串的时候为什么比 bytes.Buffer 要快">
+<meta itemprop="description" content="unsafe.Pointer 的用法 Pointer类型代表了任意一种类型的指针，类型Pointer有四种专属的操作： 任意类型的指针能够被转换成Pointer值 一个Poi">
+
+
+<meta itemprop="datePublished" content="2019-04-28T23:48:00&#43;08:00" />
+<meta itemprop="dateModified" content="2019-04-28T23:48:00&#43;08:00" />
+<meta itemprop="wordCount" content="1055">
+
+
+
+<meta itemprop="keywords" content="Go," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="strings.Builder 转换字符串的时候为什么比 bytes.Buffer 要快"/>
+<meta name="twitter:description" content="unsafe.Pointer 的用法 Pointer类型代表了任意一种类型的指针，类型Pointer有四种专属的操作： 任意类型的指针能够被转换成Pointer值 一个Poi"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/arts/">
+        <li class="mobile-menu-item">ARTS</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/arts/">ARTS</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">strings.Builder 转换字符串的时候为什么比 bytes.Buffer 要快</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-04-28 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#unsafe-pointer-的用法">unsafe.Pointer 的用法</a>
+<ul>
+<li><a href="#类型转换模式">类型转换模式</a></li>
+</ul></li>
+<li><a href="#针对-byte-和-string-执行类型转换">针对 []byte 和 string 执行类型转换</a></li>
+<li><a href="#比较-strings-builder-和-bytes-buffer">比较 strings.Builder 和 bytes.Buffer</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h2 id="unsafe-pointer-的用法">unsafe.Pointer 的用法</h2>
+
+<p><code>Pointer</code>类型代表了任意一种类型的指针，类型<code>Pointer</code>有四种专属的操作：</p>
+
+<ul>
+<li>任意类型的指针能够被转换成<code>Pointer</code>值</li>
+<li>一个<code>Pointer</code>值能够被转换成任意类型的指针值</li>
+<li>一个<code>uintptr</code>值能够被转换从<code>Pointer</code>值</li>
+<li>一个<code>Pointer</code>值能够被转换成<code>uintptr</code>值</li>
+</ul>
+
+<p>因此<code>Pointer</code>类型允许一个程序绕过类型系统，读，写任意内存。它应该被非常谨慎地使用</p>
+
+<p><code>Pointer</code>通过特定的模式来使用。如果某些代码不以 Go 文档中指定的模式来使用，Go 将无法保证它在现在或者未来是有效的
+下面的每个模式都有非常重要的注意事项。</p>
+
+<p>运行<code>go vet</code>命令可以检测<code>Pointer</code>的用法是否超出 Go 文档中指定的模式，
+但是<code>go vet</code>没有检测到异常并不代表所检测的代码一定是有效的。</p>
+
+<p>下面我们将简单介绍类型转换模式，更多的模式请参考 <a href="https://golang.org/pkg/unsafe/#Pointer">Go Pointer 文档</a></p>
+
+<h3 id="类型转换模式">类型转换模式</h3>
+
+<p>可以通过<code>*T1 =&gt; Pointer =&gt; *T2</code>的方式来完成类型转换。</p>
+
+<p>需要保证<code>T2</code>的内存 &lt;= <code>T1</code>的内存，而且转换以后它们使用的是同一片内存数据。
+这个转换允许将一片内存区中的数据从一种类型变成另外一种类型。
+使用这个转换的一个例子是<code>math.Float64bits</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Float64bits</span><span class="p">(</span><span class="nx">f</span> <span class="kt">float64</span><span class="p">)</span> <span class="kt">uint64</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="kt">uint64</span><span class="p">)(</span><span class="nx">unsafe</span><span class="p">.</span><span class="nf">Pointer</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">f</span><span class="p">))</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="针对-byte-和-string-执行类型转换">针对 []byte 和 string 执行类型转换</h2>
+
+<p>了解了类型转换模式后，我们来看一段 <code>[]byte</code> 转换成 <code>string</code> 的代码:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;unsafe&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">b</span> <span class="p">=</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">{</span><span class="sc">&#39;H&#39;</span><span class="p">,</span> <span class="sc">&#39;E&#39;</span><span class="p">,</span> <span class="sc">&#39;L&#39;</span><span class="p">,</span> <span class="sc">&#39;L&#39;</span><span class="p">,</span> <span class="sc">&#39;O&#39;</span><span class="p">}</span>
+
+	<span class="nx">s</span> <span class="o">:=</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="kt">string</span><span class="p">)(</span><span class="nx">unsafe</span><span class="p">.</span><span class="nf">Pointer</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">b</span><span class="p">))</span>
+
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;b =&#34;</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;s =&#34;</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span>
+
+	<span class="nx">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">=</span> <span class="sc">&#39;B&#39;</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;s =&#34;</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span>
+
+	<span class="nx">s</span> <span class="p">=</span> <span class="s">&#34;WORLD&#34;</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;b =&#34;</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;s =&#34;</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span>
+
+	<span class="c1">//b = [72 69 76 76 79]
+</span><span class="c1"></span>	<span class="c1">//s = HELLO
+</span><span class="c1"></span>	<span class="c1">//s = HBLLO
+</span><span class="c1"></span>	<span class="c1">//b = [72 66 76 76 79]
+</span><span class="c1"></span>	<span class="c1">//s = WORLD
+</span><span class="c1"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>可以看到，将<code>b []byte</code>转换成<code>s string</code>后，他们还是用同一片内存空间，
+所以针对<code>b</code>的改变也会影响到<code>s</code>。
+但是对<code>s</code>重新赋值后，它们所使用的内存空间不同了，所以<code>s</code>改变后，<code>b</code>并不会改变。</p>
+
+<h2 id="比较-strings-builder-和-bytes-buffer">比较 strings.Builder 和 bytes.Buffer</h2>
+
+<p><code>strings.Builder</code>和<code>bytes.Buffer</code>底层都是使用<code>[]byte</code>实现的，
+但是<a href="https://gist.github.com/bwangelme/37facf96621fef19e2e70bce7a7b8457">性能测试的结果显示</a>，
+执行<code>String()</code>函数的时候，<code>strings.Builder</code>却比<code>bytes.Buffer</code>快很多。</p>
+
+<p>区别就在于 <code>bytes.Buffer</code> 是重新申请了一块空间，存放生成的<code>string</code>变量，
+而<code>strings.Builder</code>直接将底层的<code>[]byte</code>转换成了<code>string</code>类型返回了回来。</p>
+
+<p>在<code>bytes.Buffer</code>中也说明了，如果想更有效率地(<strong>efficiently</strong>)构建字符串，请使用<code>strings.Builder</code>类型</p>
+
+<ul>
+<li>bytes.Buffer</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// String returns the contents of the unread portion of the buffer
+</span><span class="c1">// as a string. If the Buffer is a nil pointer, it returns &#34;&lt;nil&gt;&#34;.
+</span><span class="c1">//
+</span><span class="c1">// To build strings more efficiently, see the strings.Builder type.
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">Buffer</span><span class="p">)</span> <span class="nf">String</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">b</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="c1">// Special case, useful in debugging.
+</span><span class="c1"></span>		<span class="k">return</span> <span class="s">&#34;&lt;nil&gt;&#34;</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nb">string</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">buf</span><span class="p">[</span><span class="nx">b</span><span class="p">.</span><span class="nx">off</span><span class="p">:])</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>strings.Builder</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// String returns the accumulated string.
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">Builder</span><span class="p">)</span> <span class="nf">String</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="kt">string</span><span class="p">)(</span><span class="nx">unsafe</span><span class="p">.</span><span class="nf">Pointer</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">b</span><span class="p">.</span><span class="nx">buf</span><span class="p">))</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-04-28
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go/">Go</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/2019/04/13/go-sync-channel/">
+            <span class="next-text nav-default">关于线程同步操作的一道面试题</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+    <script src="https://utteranc.es/client.js"
+          repo="anotherbwangel/blog-comment"
+          issue-term="pathname"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>
