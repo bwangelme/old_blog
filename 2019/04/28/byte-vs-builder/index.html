@@ -16,7 +16,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content="unsafe.Pointer 的用法 Pointer类型代表了任意一种类型的指针，类型Pointer有四种专属的操作： 任意类型的指针能够被转换成Pointer值 一个Poi" /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content="strings.Builder和bytes.Buffer底层都是[]byte， 为什么strings.Builder的String()方法比bytes.Buffer的要快？
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
@@ -39,26 +40,29 @@
 
 
 <meta property="og:title" content="strings.Builder 转换字符串的时候为什么比 bytes.Buffer 要快" />
-<meta property="og:description" content="unsafe.Pointer 的用法 Pointer类型代表了任意一种类型的指针，类型Pointer有四种专属的操作： 任意类型的指针能够被转换成Pointer值 一个Poi" />
+<meta property="og:description" content="strings.Builder和bytes.Buffer底层都是[]byte，
+为什么strings.Builder的String()方法比bytes.Buffer的要快？" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2019/04/28/byte-vs-builder/" />
 <meta property="article:published_time" content="2019-04-28T23:48:00&#43;08:00"/>
 <meta property="article:modified_time" content="2019-04-28T23:48:00&#43;08:00"/>
 
 <meta itemprop="name" content="strings.Builder 转换字符串的时候为什么比 bytes.Buffer 要快">
-<meta itemprop="description" content="unsafe.Pointer 的用法 Pointer类型代表了任意一种类型的指针，类型Pointer有四种专属的操作： 任意类型的指针能够被转换成Pointer值 一个Poi">
+<meta itemprop="description" content="strings.Builder和bytes.Buffer底层都是[]byte，
+为什么strings.Builder的String()方法比bytes.Buffer的要快？">
 
 
 <meta itemprop="datePublished" content="2019-04-28T23:48:00&#43;08:00" />
 <meta itemprop="dateModified" content="2019-04-28T23:48:00&#43;08:00" />
-<meta itemprop="wordCount" content="1055">
+<meta itemprop="wordCount" content="1140">
 
 
 
 <meta itemprop="keywords" content="Go," />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="strings.Builder 转换字符串的时候为什么比 bytes.Buffer 要快"/>
-<meta name="twitter:description" content="unsafe.Pointer 的用法 Pointer类型代表了任意一种类型的指针，类型Pointer有四种专属的操作： 任意类型的指针能够被转换成Pointer值 一个Poi"/>
+<meta name="twitter:description" content="strings.Builder和bytes.Buffer底层都是[]byte，
+为什么strings.Builder的String()方法比bytes.Buffer的要快？"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -161,7 +165,12 @@
   </div>
 </div>
     <div class="post-content">
-      <h2 id="unsafe-pointer-的用法">unsafe.Pointer 的用法</h2>
+      <p><code>strings.Builder</code>和<code>bytes.Buffer</code>底层都是<code>[]byte</code>，
+为什么<code>strings.Builder</code>的<code>String()</code>方法比<code>bytes.Buffer</code>的要快？</p>
+
+<hr />
+
+<h2 id="unsafe-pointer-的用法">unsafe.Pointer 的用法</h2>
 
 <p><code>Pointer</code>类型代表了任意一种类型的指针，类型<code>Pointer</code>有四种专属的操作：</p>
 
