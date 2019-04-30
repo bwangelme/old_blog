@@ -12,7 +12,7 @@ toc: true
 
 2019年第17周|2019/04/22 -- 2019/03/28
 ---|---
-Algorithm|LeetCode 116
+Algorithm|LeetCode 191
 Review|Golang Trick: Export unexport method for test
 Tips|strings.Builder 转换字符串的时候为什么比 bytes.Buffer 要快
 Share|Python 工匠系列文章
@@ -22,6 +22,8 @@ Share|Python 工匠系列文章
 ---
 
 ## Algorithm
+
++ [191. Number of 1 Bits](/2019/04/30/leetcode-191/)
 
 ## Review
 

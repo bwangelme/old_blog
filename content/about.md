@@ -13,7 +13,7 @@ weight: 40
 + 常用 ID: `bwangel`, `bwangel23`, `bwangelme`
 + 联系我: 使用 Vim 中的神秘咒语`G`
 
-> 我从来没感到过寂寞和孤独，因为一切都有趣而值得探索。 `---` [tombkeeper](https://weibo.com/1401527553/GEVqXh5Wz?filter=hot&root_comment_id=0&type=comment)
+> 我从来没感到过寂寞和孤独，因为一切都有趣而值得探索。 `---` [tombkeeper](https://www.zhihu.com/question/283922633/answer/437070531)
 
 
 ## 个人开发环境配置
