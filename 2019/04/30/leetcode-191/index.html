@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Leetcode 第338题 - 大白的碎碎念</title>
+  <title>Leetcode 第191题 - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content="  LeetCode 338题  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content="  LeetCode 191题  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
@@ -26,7 +26,7 @@
 <meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
 
 
-<link rel="canonical" href="/2019/04/21/leetcode-338/" />
+<link rel="canonical" href="/2019/04/30/leetcode-191/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -38,37 +38,37 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
-<meta property="og:title" content="Leetcode 第338题" />
+<meta property="og:title" content="Leetcode 第191题" />
 <meta property="og:description" content="
 
-LeetCode 338题
+LeetCode 191题
 
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2019/04/21/leetcode-338/" />
-<meta property="article:published_time" content="2019-04-21T23:37:34&#43;08:00"/>
-<meta property="article:modified_time" content="2019-04-21T23:37:34&#43;08:00"/>
+<meta property="og:url" content="/2019/04/30/leetcode-191/" />
+<meta property="article:published_time" content="2019-04-30T13:21:59&#43;08:00"/>
+<meta property="article:modified_time" content="2019-04-30T13:21:59&#43;08:00"/>
 
-<meta itemprop="name" content="Leetcode 第338题">
+<meta itemprop="name" content="Leetcode 第191题">
 <meta itemprop="description" content="
 
-LeetCode 338题
+LeetCode 191题
 
 ">
 
 
-<meta itemprop="datePublished" content="2019-04-21T23:37:34&#43;08:00" />
-<meta itemprop="dateModified" content="2019-04-21T23:37:34&#43;08:00" />
-<meta itemprop="wordCount" content="419">
+<meta itemprop="datePublished" content="2019-04-30T13:21:59&#43;08:00" />
+<meta itemprop="dateModified" content="2019-04-30T13:21:59&#43;08:00" />
+<meta itemprop="wordCount" content="808">
 
 
 
 <meta itemprop="keywords" content="ARTS,LeetCode," />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Leetcode 第338题"/>
+<meta name="twitter:title" content="Leetcode 第191题"/>
 <meta name="twitter:description" content="
 
-LeetCode 338题
+LeetCode 191题
 
 "/>
 
@@ -145,10 +145,10 @@ LeetCode 338题
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Leetcode 第338题</h1>
+      <h1 class="post-title">Leetcode 第191题</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2019-04-21 </span>
+        <span class="post-time"> 2019-04-30 </span>
         
         
       </div>
@@ -161,9 +161,23 @@ LeetCode 338题
 <ul>
 <li>
 <ul>
-<li><a href="#题目描述">题目描述</a></li>
-<li><a href="#解题思路">解题思路</a></li>
+<li><a href="#题目描述">题目描述</a>
+<ul>
+<li><a href="#example-1">Example 1:</a></li>
+<li><a href="#example-2">Example 2:</a></li>
+<li><a href="#example-3">Example 3:</a></li>
+</ul></li>
+<li><a href="#解题思路">解题思路</a>
+<ul>
+<li><a href="#n-n-1">n &amp; n - 1</a>
+<ul>
+<li><a href="#二的幂的正整数">二的幂的正整数</a></li>
+<li><a href="#普通正整数">普通正整数</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#答案">答案</a></li>
 <li><a href="#代码">代码</a></li>
+<li><a href="#参考资料">参考资料</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -172,84 +186,109 @@ LeetCode 338题
     <div class="post-content">
       <blockquote>
 <ul>
-<li><a href="https://leetcode.com/problems/reverse-words-in-a-string/">LeetCode 338题</a></li>
+<li><a href="https://leetcode.com/problems/number-of-1-bits/">LeetCode 191题</a></li>
 </ul>
 </blockquote>
 
+<hr />
+
 <h2 id="题目描述">题目描述</h2>
 
-<p>Given a non negative integer number num. For every numbers i in the range 0 ≤ i ≤ num calculate the number of 1&rsquo;s in their binary representation and return them as an array.</p>
+<p>Write a function that takes an unsigned integer and return the number of &lsquo;1&rsquo; bits it has (also known as the Hamming weight).</p>
 
-<p>Example 1:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span><span class="lnt">2
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">Input: 2
-Output: [0,1,1]</pre></td></tr></table>
-</div>
-</div>
-<p>Example 2:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span><span class="lnt">2
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">Input: 5
-Output: [0,1,1,2,1,2]</pre></td></tr></table>
-</div>
-</div>
-<p>Follow up:</p>
-
-<p>It is very easy to come up with a solution with run time O(n*sizeof(integer)). But can you do it in linear time O(n) /possibly in a single pass?
-Space complexity should be O(n).
-Can you do it like a boss? Do it without using any builtin function like <strong>builtin</strong> popcount in c++ or in any other language.</p>
-
-<h2 id="解题思路">解题思路</h2>
-
-<p>求一个非负整数的二进制表示中有多少个1, 这个问题可以用分治法来解决。</p>
-
-<p>令非负整数 N 中的1有 f(N) 个，N的个位数为 S(N)</p>
-
-<p>$$
-f(N) = f(N/2) + (S(N) == 1)
-$$
-$$
-&hellip;
-$$
-$$
-f(0) = 0
-$$</p>
-
-<p>根据上述的思路，我们可以写出如下的伪代码:</p>
+<h3 id="example-1">Example 1:</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
 </span></pre></td>
 <td class="lntd">
-<pre class="chroma">def count_bit(N):
-  if N == 0:
-    return 0
+<pre class="chroma">Input: 00000000000000000000000000001011
+Output: 3
+Explanation: The input binary string 00000000000000000000000000001011 has a total of three &#39;1&#39; bits.</pre></td></tr></table>
+</div>
+</div>
+<h3 id="example-2">Example 2:</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">Input: 00000000000000000000000010000000
+Output: 1
+Explanation: The input binary string 00000000000000000000000010000000 has a total of one &#39;1&#39; bit.</pre></td></tr></table>
+</div>
+</div>
+<h3 id="example-3">Example 3:</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">Input: 11111111111111111111111111111101
+Output: 31
+Explanation: The input binary string 11111111111111111111111111111101 has a total of thirty one &#39;1&#39; bits.</pre></td></tr></table>
+</div>
+</div>
+<p>Note:</p>
 
-  if N &amp; 1 == 1:
-    return count_bit(N/2) + 1
-  else:
-    return count_bit(N/2)</pre></td></tr></table>
-</div>
-</div>
-<p>这个题需要求<code>1..N</code>每个数的二进制表示中1的个数，所以我们可以将中间结果存储起来，没必要每个数都从0开始运算一遍。</p>
+<p>Note that in some languages such as Java, there is no unsigned integer type. In this case, the input will be given as signed integer type and should not affect your implementation, as the internal binary representation of the integer is the same whether it is signed or unsigned.</p>
+
+<p>In Java, the compiler represents the signed integers using 2&rsquo;s complement notation. Therefore, in Example 3 above the input represents the signed integer -3.</p>
+
+<h2 id="解题思路">解题思路</h2>
+
+<h3 id="n-n-1">n &amp; n - 1</h3>
+
+<h4 id="二的幂的正整数">二的幂的正整数</h4>
+
+<p>如果一个正整数是2的幂，那么这个正整数的二进制表示中只有一个1，且<code>n &amp; (n-1) == 0</code>。因为从<code>n</code>的二进制表示中的1开始向右数，<code>n</code>和<code>n-1</code>的二进制表示正好是相反的。</p>
+
+<p>例如<code>bin(8) = 0b1000</code>，<code>bin(7) = 0b0111</code>，<code>8 &amp; 7 == 0b1000 &amp; 0b0111 == 0</code>。</p>
+
+<h4 id="普通正整数">普通正整数</h4>
+
+<p>任何一个正整数<code>N</code>都可以分解成若干个2的正指数幂的和：</p>
+
+<p>$$
+  N = 2^n*tn + 2^{n-1}*t{n-1} + &hellip; + 2^0*t0
+$$</p>
+
+<p>那么对于任意一个正整数N来说，<code>N = N &amp; (N-1)</code>就是让<code>N</code>减去其中最小的2的幂。例如：</p>
+
+<p>$$
+10 = 2^3 * 1 + 2^2 * 0 + 2^1 * 1 + 2^0 * 0
+$$</p>
+
+<p>$$
+9 = 2^3 * 1 + 2^2 * 0 + 2^1 * 0 + 2^0 * 1
+$$</p>
+
+<p><code>10 &amp; 9</code>就是将10减去其中的最小的2的幂<code>2</code>，得到的结果为<code>8</code>。</p>
+
+<p>将以上结果代入到正整数二进制表示中考虑，可得:</p>
+
+<blockquote>
+<p><code>N = N &amp; (N-1)</code>会将N的二进制表示中最右边的1变成0。</p>
+</blockquote>
+
+<h2 id="答案">答案</h2>
+
+<p>了解了<code>N = N &amp; (N-1)</code>的含义之后，整个题目的解题思路也就出来了，</p>
+
+<p>每次执行<code>N = N &amp; (N-1)</code>都会将<code>N</code>最右边的1变成0，我们就可以执行循环<code>N = N &amp; (N-1)</code>，
+直到<code>N == 0</code>，循环的执行次数就是<code>N</code>中1的个数。</p>
+
+<p>由于题目中给出的<code>N</code>是非负整数，所以我们还需要额外处理一下<code>N == 0</code>的情况。</p>
 
 <h2 id="代码">代码</h2>
+
+<p>题目的答案及测试代码如下:</p>
 
 <ul>
 <li>solution.go</li>
@@ -275,26 +314,54 @@ $$</p>
 </span><span class="lnt">17
 </span><span class="lnt">18
 </span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">l338</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">l166</span>
 
-<span class="kd">func</span> <span class="nf">CountBits</span><span class="p">(</span><span class="nx">num</span> <span class="kt">int</span><span class="p">)</span> <span class="p">[]</span><span class="kt">int</span> <span class="p">{</span>
-	<span class="kd">var</span> <span class="nx">result</span> <span class="p">[]</span><span class="kt">int</span>
-	<span class="kd">var</span> <span class="nx">bitCount</span> <span class="kt">int</span>
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;log&#34;</span>
+	<span class="s">&#34;strconv&#34;</span>
+<span class="p">)</span>
 
-	<span class="nx">result</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">num</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-		<span class="k">if</span> <span class="nx">i</span><span class="o">&amp;</span><span class="mi">1</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
-			<span class="nx">bitCount</span> <span class="p">=</span> <span class="nx">result</span><span class="p">[</span><span class="nx">i</span><span class="o">&gt;&gt;</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
-		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-			<span class="nx">bitCount</span> <span class="p">=</span> <span class="nx">result</span><span class="p">[</span><span class="nx">i</span><span class="o">&gt;&gt;</span><span class="mi">1</span><span class="p">]</span>
-		<span class="p">}</span>
-
-		<span class="nx">result</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="nx">bitCount</span><span class="p">)</span>
+<span class="kd">func</span> <span class="nf">hammingWeight</span><span class="p">(</span><span class="nx">num</span> <span class="kt">uint32</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">num</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="mi">0</span>
 	<span class="p">}</span>
 
-	<span class="k">return</span> <span class="nx">result</span>
+	<span class="kd">var</span> <span class="nx">count</span> <span class="p">=</span> <span class="mi">1</span>
+
+	<span class="k">for</span> <span class="p">{</span>
+		<span class="nx">num</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="nx">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">num</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+			<span class="k">break</span>
+		<span class="p">}</span>
+		<span class="nx">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="nx">count</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">binStrToUint32</span><span class="p">(</span><span class="nx">binary</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">uint32</span> <span class="p">{</span>
+	<span class="nx">num</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">ParseUint</span><span class="p">(</span><span class="nx">binary</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="nb">uint32</span><span class="p">(</span><span class="nx">num</span><span class="p">)</span>
 <span class="p">}</span></code></pre></td></tr></table>
 </div>
 </div>
@@ -316,9 +383,10 @@ $$</p>
 </span><span class="lnt">11
 </span><span class="lnt">12
 </span><span class="lnt">13
+</span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">l338</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">l166</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;testing&#34;</span>
@@ -326,13 +394,19 @@ $$</p>
 	<span class="s">&#34;github.com/stretchr/testify/assert&#34;</span>
 <span class="p">)</span>
 
-<span class="kd">func</span> <span class="nf">TestCountBits</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">})</span>
-	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">CountBits</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">})</span>
-	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">CountBits</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">})</span>
+<span class="kd">func</span> <span class="nf">TestHammingWeight</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">hammingWeight</span><span class="p">(</span><span class="nf">binStrToUint32</span><span class="p">(</span><span class="s">&#34;00000000000000000000000000001011&#34;</span><span class="p">)),</span> <span class="mi">3</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">hammingWeight</span><span class="p">(</span><span class="nf">binStrToUint32</span><span class="p">(</span><span class="s">&#34;11111111111111111111111111111101&#34;</span><span class="p">)),</span> <span class="mi">31</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">hammingWeight</span><span class="p">(</span><span class="nf">binStrToUint32</span><span class="p">(</span><span class="s">&#34;00000000000000000000000010000000&#34;</span><span class="p">)),</span> <span class="mi">1</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">hammingWeight</span><span class="p">(</span><span class="nf">binStrToUint32</span><span class="p">(</span><span class="s">&#34;00000000000000000000000000000000&#34;</span><span class="p">)),</span> <span class="mi">0</span><span class="p">)</span>
 <span class="p">}</span></code></pre></td></tr></table>
 </div>
 </div>
+<h2 id="参考资料">参考资料</h2>
+
+<ul>
+<li><a href="https://book.douban.com/subject/3004255/">《编程之美》</a></li>
+</ul>
     </div>
 
     <div class="post-copyright">
@@ -343,7 +417,7 @@ $$</p>
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2019-04-21
+        2019-04-30
         
     </span>
   </p>
@@ -359,13 +433,9 @@ $$</p>
           <a href="/tags/leetcode/">LeetCode</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/2019/04/30/leetcode-191/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">Leetcode 第191题</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
-        <a class="next" href="/2019/04/14/leetcode-151/">
-            <span class="next-text nav-default">Leetcode 第151题</span>
+        
+        <a class="next" href="/2019/04/21/leetcode-338/">
+            <span class="next-text nav-default">Leetcode 第338题</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
