@@ -1161,7 +1161,7 @@
 </span><span class="lnt">55
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestMarshalStruct</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestMarshalCyclicStruct</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
 	<span class="kd">type</span> <span class="nx">Engine</span> <span class="kd">struct</span> <span class="p">{</span>
 		<span class="nx">Power</span> <span class="kt">int</span>
 		<span class="nx">Code</span>  <span class="kt">int</span>
@@ -1176,45 +1176,45 @@
 	<span class="nx">data</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="s">``</span><span class="p">)</span>
-	<span class="c1">//	&gt;&gt;&gt; go test json_example
-</span><span class="c1"></span>	<span class="c1">//	# json_example [json_example.test]
+	<span class="c1">// &gt;&gt;&gt; go test json_example
+</span><span class="c1"></span>	<span class="c1">// # json_example [json_example.test]
 </span><span class="c1"></span>	<span class="c1">//panic: runtime error: invalid memory address or nil pointer dereference
-</span><span class="c1"></span>	<span class="c1">//	[signal SIGSEGV: segmentation violation code=0x1 addr=0x70 pc=0x17e3d29]
+</span><span class="c1"></span>	<span class="c1">// [signal SIGSEGV: segmentation violation code=0x1 addr=0x70 pc=0x17e3d29]
 </span><span class="c1"></span>	<span class="c1">//
-</span><span class="c1"></span>	<span class="c1">//	goroutine 1 [running]:
-</span><span class="c1"></span>	<span class="c1">//	cmd/compile/internal/gc.dowidth(0xc0004cf920)
-</span><span class="c1"></span>	<span class="c1">//	/usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:175 +0xa9
-</span><span class="c1"></span>	<span class="c1">//	cmd/compile/internal/gc.widstruct(0xc0004cf860, 0xc0004cf860, 0x0, 0x1, 0x3)
-</span><span class="c1"></span>	<span class="c1">//	/usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:95 +0xc6
-</span><span class="c1"></span>	<span class="c1">//	cmd/compile/internal/gc.dowidth(0xc0004cf860)
-</span><span class="c1"></span>	<span class="c1">//	/usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:340 +0x5e9
-</span><span class="c1"></span>	<span class="c1">//	cmd/compile/internal/gc.widstruct(0xc0004cf920, 0xc0004cf920, 0x0, 0x1, 0xc000448d01)
-</span><span class="c1"></span>	<span class="c1">//	/usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:95 +0xc6
-</span><span class="c1"></span>	<span class="c1">//	cmd/compile/internal/gc.dowidth(0xc0004cf920)
-</span><span class="c1"></span>	<span class="c1">//	/usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:340 +0x5e9
-</span><span class="c1"></span>	<span class="c1">//	cmd/compile/internal/gc.widstruct(0xc0004cf8c0, 0xc0004cf8c0, 0x0, 0x1, 0xc0004cf8c0)
-</span><span class="c1"></span>	<span class="c1">//	/usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:95 +0xc6
-</span><span class="c1"></span>	<span class="c1">//	cmd/compile/internal/gc.dowidth(0xc0004cf8c0)
-</span><span class="c1"></span>	<span class="c1">//	/usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:340 +0x5e9
-</span><span class="c1"></span>	<span class="c1">//	cmd/compile/internal/gc.resumecheckwidth()
-</span><span class="c1"></span>	<span class="c1">//	/usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:450 +0x51
-</span><span class="c1"></span>	<span class="c1">//	cmd/compile/internal/gc.typecheckdef(0xc00042fe00)
-</span><span class="c1"></span>	<span class="c1">//	/usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:3927 +0x8e3
-</span><span class="c1"></span>	<span class="c1">//	cmd/compile/internal/gc.typecheck1(0xc00042fe00, 0x4, 0x0)
-</span><span class="c1"></span>	<span class="c1">//	/usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:376 +0xc387
-</span><span class="c1"></span>	<span class="c1">//	cmd/compile/internal/gc.typecheck(0xc00042fe00, 0x4, 0x0)
-</span><span class="c1"></span>	<span class="c1">//	/usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:299 +0x6f2
-</span><span class="c1"></span>	<span class="c1">//	cmd/compile/internal/gc.typecheck1(0xc000437480, 0x1, 0x0)
-</span><span class="c1"></span>	<span class="c1">//	/usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:2204 +0x5446
-</span><span class="c1"></span>	<span class="c1">//	cmd/compile/internal/gc.typecheck(0xc000437480, 0x1, 0x0)
-</span><span class="c1"></span>	<span class="c1">//	/usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:299 +0x6f2
-</span><span class="c1"></span>	<span class="c1">//	cmd/compile/internal/gc.typecheckslice(0xc000424480, 0x6, 0x8, 0x1)
-</span><span class="c1"></span>	<span class="c1">//	/usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:117 +0x50
-</span><span class="c1"></span>	<span class="c1">//	cmd/compile/internal/gc.Main(0x1a73428)
-</span><span class="c1"></span>	<span class="c1">//	/usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/main.go:545 +0x29a5
-</span><span class="c1"></span>	<span class="c1">//	main.main()
-</span><span class="c1"></span>	<span class="c1">//	/usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/main.go:51 +0xad
-</span><span class="c1"></span>	<span class="c1">//	FAIL    json_example [build failed]
+</span><span class="c1"></span>	<span class="c1">// goroutine 1 [running]:
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.dowidth(0xc0004cf920)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:175 +0xa9
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.widstruct(0xc0004cf860, 0xc0004cf860, 0x0, 0x1, 0x3)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:95 +0xc6
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.dowidth(0xc0004cf860)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:340 +0x5e9
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.widstruct(0xc0004cf920, 0xc0004cf920, 0x0, 0x1, 0xc000448d01)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:95 +0xc6
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.dowidth(0xc0004cf920)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:340 +0x5e9
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.widstruct(0xc0004cf8c0, 0xc0004cf8c0, 0x0, 0x1, 0xc0004cf8c0)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:95 +0xc6
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.dowidth(0xc0004cf8c0)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:340 +0x5e9
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.resumecheckwidth()
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:450 +0x51
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheckdef(0xc00042fe00)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:3927 +0x8e3
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheck1(0xc00042fe00, 0x4, 0x0)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:376 +0xc387
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheck(0xc00042fe00, 0x4, 0x0)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:299 +0x6f2
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheck1(0xc000437480, 0x1, 0x0)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:2204 +0x5446
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheck(0xc000437480, 0x1, 0x0)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:299 +0x6f2
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheckslice(0xc000424480, 0x6, 0x8, 0x1)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:117 +0x50
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.Main(0x1a73428)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/main.go:545 +0x29a5
+</span><span class="c1"></span>	<span class="c1">// main.main()
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/main.go:51 +0xad
+</span><span class="c1"></span>	<span class="c1">// FAIL    json_example [build failed]
 </span><span class="c1"></span><span class="p">}</span></code></pre></td></tr></table>
 </div>
 </div>
