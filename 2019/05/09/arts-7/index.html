@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content="   2019年第19周 2019/05/06 &amp;ndash; 2019/05/12     Algorithm LeetCode 29   Review xxx   Tips xxx   Share Golang 新手可能会踩的50个坑   " /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content="   2019年第21周 2019/05/20 &amp;ndash; 2019/05/26     Algorithm LeetCode 29   Review Review 《JSON and Go》   Tips 在 Go 中屏蔽类型某个接口的方法   Share Golang 新手可能会踩的50个坑   " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
@@ -42,8 +42,8 @@
 <meta property="og:description" content="
 
 
-2019年第19周
-2019/05/06 &ndash; 2019/05/12
+2019年第21周
+2019/05/20 &ndash; 2019/05/26
 
 
 
@@ -55,12 +55,12 @@ LeetCode 29
 
 
 Review
-xxx
+Review 《JSON and Go》
 
 
 
 Tips
-xxx
+在 Go 中屏蔽类型某个接口的方法
 
 
 
@@ -78,8 +78,8 @@ Golang 新手可能会踩的50个坑
 <meta itemprop="description" content="
 
 
-2019年第19周
-2019/05/06 &ndash; 2019/05/12
+2019年第21周
+2019/05/20 &ndash; 2019/05/26
 
 
 
@@ -91,12 +91,12 @@ LeetCode 29
 
 
 Review
-xxx
+Review 《JSON and Go》
 
 
 
 Tips
-xxx
+在 Go 中屏蔽类型某个接口的方法
 
 
 
@@ -109,7 +109,7 @@ Golang 新手可能会踩的50个坑
 
 <meta itemprop="datePublished" content="2019-05-09T08:05:55&#43;08:00" />
 <meta itemprop="dateModified" content="2019-05-09T08:05:55&#43;08:00" />
-<meta itemprop="wordCount" content="50">
+<meta itemprop="wordCount" content="368">
 
 
 
@@ -119,8 +119,8 @@ Golang 新手可能会踩的50个坑
 <meta name="twitter:description" content="
 
 
-2019年第19周
-2019/05/06 &ndash; 2019/05/12
+2019年第21周
+2019/05/20 &ndash; 2019/05/26
 
 
 
@@ -132,12 +132,12 @@ LeetCode 29
 
 
 Review
-xxx
+Review 《JSON and Go》
 
 
 
 Tips
-xxx
+在 Go 中屏蔽类型某个接口的方法
 
 
 
@@ -249,8 +249,8 @@ Golang 新手可能会踩的50个坑
       <table>
 <thead>
 <tr>
-<th>2019年第19周</th>
-<th>2019/05/06 &ndash; 2019/05/12</th>
+<th>2019年第21周</th>
+<th>2019/05/20 &ndash; 2019/05/26</th>
 </tr>
 </thead>
 
@@ -262,12 +262,12 @@ Golang 新手可能会踩的50个坑
 
 <tr>
 <td>Review</td>
-<td>xxx</td>
+<td>Review 《JSON and Go》</td>
 </tr>
 
 <tr>
 <td>Tips</td>
-<td>xxx</td>
+<td>在 Go 中屏蔽类型某个接口的方法</td>
 </tr>
 
 <tr>
@@ -287,7 +287,68 @@ Golang 新手可能会踩的50个坑
 
 <h2 id="review">Review</h2>
 
+<ul>
+<li><a href="/2019/05/21/review-json-and-go/">Review 《JSON and Go》</a></li>
+</ul>
+
 <h2 id="tips">Tips</h2>
+
+<p>在 Go 中屏蔽类型某个接口的方法:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;bytes&#34;</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;io&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span> <span class="nx">Buffer</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="c1">// ReadFrom 和 WriteTo 在两个地方定义了，所以 Buffer 无法正确调用
+</span><span class="c1"></span>	<span class="nx">bytes</span><span class="p">.</span><span class="nx">Buffer</span>
+	<span class="nx">io</span><span class="p">.</span><span class="nx">ReaderFrom</span>
+	<span class="nx">io</span><span class="p">.</span><span class="nx">WriterTo</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">buf</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
+	<span class="nx">reader</span> <span class="o">:=</span> <span class="nx">bytes</span><span class="p">.</span><span class="nf">NewBuffer</span><span class="p">(</span><span class="nx">buf</span><span class="p">)</span>
+	<span class="nx">rb</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">Buffer</span><span class="p">)</span>
+
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">rb</span><span class="p">.</span><span class="nf">ReadFrom</span><span class="p">(</span><span class="nx">reader</span><span class="p">))</span>
+	<span class="c1">//ambiguous selector rb.ReadFrom
+</span><span class="c1"></span><span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>在上述代码中，我们新定义了<code>Buffer</code>类型，并在其中包含了<code>bytes.Buffer</code>类型, <code>io.ReaderFrom</code>和<code>io.WriterTo</code>接口。
+此时我们就相当于在实现了一种新的<code>bytes.Buffer</code>类型，并屏蔽了<code>io.ReaderFrom</code>和<code>io.WriterTo</code>接口。
+如果我们直接就用这两个接口方法，就会出现编译错误<code>ambiguous selector rb.ReadFrom/rb.WriteTo</code>。</p>
 
 <h2 id="share">Share</h2>
 
