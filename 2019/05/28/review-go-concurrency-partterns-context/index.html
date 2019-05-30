@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>大白的碎碎念</title>
+  <title>Review 《Go Concurrency Patterns: Context》 - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content="闻道百，以为莫己若者，我之谓也" /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content="  原文地址: https://blog.golang.org/context  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
@@ -26,9 +26,7 @@
 <meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
 
 
-<link rel="canonical" href="/" />
-  <link href="/index.xml" rel="alternate" type="application/rss+xml" title="大白的碎碎念" />
-  <link href="/index.xml" rel="feed" type="application/rss+xml" title="大白的碎碎念" />
+<link rel="canonical" href="/2019/05/28/review-go-concurrency-partterns-context/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -40,19 +38,39 @@
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
-<meta property="og:title" content="大白的碎碎念" />
-<meta property="og:description" content="闻道百，以为莫己若者，我之谓也" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="/" />
+<meta property="og:title" content="Review 《Go Concurrency Patterns: Context》" />
+<meta property="og:description" content="
 
-<meta property="og:updated_time" content="2016-04-10T10:56:54&#43;00:00"/>
+原文地址: https://blog.golang.org/context
 
-<meta itemprop="name" content="大白的碎碎念">
-<meta itemprop="description" content="闻道百，以为莫己若者，我之谓也">
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2019/05/28/review-go-concurrency-partterns-context/" />
+<meta property="article:published_time" content="2019-05-28T07:53:13&#43;08:00"/>
+<meta property="article:modified_time" content="2019-05-28T07:53:13&#43;08:00"/>
 
+<meta itemprop="name" content="Review 《Go Concurrency Patterns: Context》">
+<meta itemprop="description" content="
+
+原文地址: https://blog.golang.org/context
+
+">
+
+
+<meta itemprop="datePublished" content="2019-05-28T07:53:13&#43;08:00" />
+<meta itemprop="dateModified" content="2019-05-28T07:53:13&#43;08:00" />
+<meta itemprop="wordCount" content="6">
+
+
+
+<meta itemprop="keywords" content="翻译,Go,Context," />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="大白的碎碎念"/>
-<meta name="twitter:description" content="闻道百，以为莫己若者，我之谓也"/>
+<meta name="twitter:title" content="Review 《Go Concurrency Patterns: Context》"/>
+<meta name="twitter:description" content="
+
+原文地址: https://blog.golang.org/context
+
+"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -124,175 +142,80 @@
     <main id="main" class="main">
       <div class="content-wrapper">
         <div id="content" class="content">
-          <section id="posts" class="posts">
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/04/10/sublime_text/">Sublime小记</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-04-10 </span>
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p><strong>摘要</strong>:</p>
-
-<blockquote>
-<p>关于Sublime Text的一些小记</p>
-</blockquote>
-    </div>
-    <div class="read-more">
-      <a href="/2016/04/10/sublime_text/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/04/10/tdd_with_python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">TDD with python 第六章笔记</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-04-10 </span>
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p><strong>摘要</strong>:</p>
-
-<blockquote>
-<p>Python Web开发测试驱动方法第六章的笔记</p>
-</blockquote>
-    </div>
-    <div class="read-more">
-      <a href="/2016/04/10/tdd_with_python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/04/10/vuejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">Vue.js关于组件的笔记</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-04-10 </span>
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p><strong>摘要</strong>:</p>
-
-<blockquote>
-<p>学习Vue.js官方教程的笔记</p>
-</blockquote>
-    </div>
-    <div class="read-more">
-      <a href="/2016/04/10/vuejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/04/10/web%E6%A1%86%E6%9E%B6%E8%A6%81%E7%B4%A0/">web框架要素</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-04-10 </span>
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p><strong>摘要</strong>:</p>
-    </div>
-    <div class="read-more">
-      <a href="/2016/04/10/web%E6%A1%86%E6%9E%B6%E8%A6%81%E7%B4%A0/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/04/10/%E6%B7%B1%E5%85%A5%E6%9F%A5%E8%AF%A2%E8%A1%A8%E8%BE%BE%E5%BC%8F/">深入查询表达式</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-04-10 </span>
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p><strong>摘要</strong>:</p>
-
-<blockquote>
-<p>这是一篇关于MongoDB的文章，主要介绍深入查询表达式</p>
-</blockquote>
-    </div>
-    <div class="read-more">
-      <a href="/2016/04/10/%E6%B7%B1%E5%85%A5%E6%9F%A5%E8%AF%A2%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/04/10/%E6%B8%B8%E6%A0%87%E6%93%8D%E4%BD%9C/">游标操作</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-04-10 </span>
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p><strong>摘要</strong>:</p>
-
-<blockquote>
-<p>这是一篇关于MongoDB的文章，主要介绍游标操作</p>
-</blockquote>
-    </div>
-    <div class="read-more">
-      <a href="/2016/04/10/%E6%B8%B8%E6%A0%87%E6%93%8D%E4%BD%9C/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/04/10/%E7%BC%96%E8%BE%91%E5%99%A8%E9%9C%80%E6%B1%82/">编辑器需求</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2016-04-10 </span>
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p><strong>摘要</strong>:</p>
-
-<blockquote>
-<p>关于自己对于编辑器的需求，留作以后定制编辑器用</p>
-</blockquote>
-    </div>
-    <div class="read-more">
-      <a href="/2016/04/10/%E7%BC%96%E8%BE%91%E5%99%A8%E9%9C%80%E6%B1%82/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    </section>
-  
-  <nav class="pagination">
-    <a class="prev" href="/page/7/">
-        <i class="iconfont icon-left"></i>
-        <span class="prev-text">上一页</span>
-      </a>
+          <article class="post">
     
-  </nav>
+    <header class="post-header">
+      <h1 class="post-title">Review 《Go Concurrency Patterns: Context》</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-05-28 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<ul>
+<li>原文地址: <a href="https://blog.golang.org/context">https://blog.golang.org/context</a></li>
+</ul>
+</blockquote>
+
+<hr />
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-05-28
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E7%BF%BB%E8%AF%91/">翻译</a>
+          <a href="/tags/go/">Go</a>
+          <a href="/tags/context/">Context</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/2019/05/21/review-json-and-go/">
+            <span class="next-text nav-default">Review 《JSON and Go》</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
         </div>
         
+
+  
+    <script src="https://utteranc.es/client.js"
+          repo="anotherbwangel/blog-comment"
+          issue-term="pathname"
+          theme="github-light"
+          crossorigin="anonymous"
+          async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
 
       </div>
     </main>
