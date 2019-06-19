@@ -15,6 +15,9 @@ weight: 40
 
 > 我从来没感到过寂寞和孤独，因为一切都有趣而值得探索。 `---` [tombkeeper](https://www.zhihu.com/question/283922633/answer/437070531)
 
+## 友链
+
++ [SMSLIT](https://www.smslit.top/): 江湖无名，专心练剑！
 
 ## 个人开发环境配置
 
