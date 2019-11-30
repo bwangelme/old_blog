@@ -2,7 +2,7 @@
 title: "MySQL 分区表"
 date: 2018-02-28T23:41:32+08:00
 draft: true
-tags: [Golang, ]
+tags: [Go, ]
 ---
 
 ## 概述

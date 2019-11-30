@@ -2,7 +2,7 @@
 title: "Go与数据结构之二叉搜索树"
 date: 2018-03-01T22:22:52+08:00
 draft: false
-tags: [Golang, ]
+tags: [Go, ]
 aliases:
   - /2018/03/01/go与数据结构之二叉搜索树/
 ---
