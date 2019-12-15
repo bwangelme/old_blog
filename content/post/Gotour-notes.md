@@ -670,7 +670,11 @@ func main() {
 ```
 
 如果你想要更改自定义类型的默认字符串格式，只需要给这个类型实现`String() string`方法即可。
-注意如果想要更改某个类型的值及其指针的打印方式，应该讲传入的类型变量设置成值传入
+
+__注意:__
+
+1. 应该添加值方法`func (v CustomType) String() string`，指针方法`func (v *CustomType) String() string`不会生效
+2. 这个方法仅会修改`fmt`包中打印方法打印的值，不会修改`string(value)`的值。
 
 ```go
 // Point 是二维坐标中的一个点

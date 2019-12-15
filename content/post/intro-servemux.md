@@ -3,7 +3,7 @@ title: "Golang 中的 ServeMux 路由简介"
 date: 2019-11-30T18:35:05+08:00
 lastmod: 2019-11-30T18:35:05+08:00
 draft: false
-tags: [Golang, HTTP]
+tags: [Go, HTTP]
 author: "bwangel"
 comment: true
 toc: true
