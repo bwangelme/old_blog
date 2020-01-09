@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Python中的生成器和协程 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="摘要:
+ 今天读了《A Curious Course on Coroutines and Concurrency》的第一部分，以下为我的碎碎念。 1. 生成器和协程的异同 2. 协程的一些特性
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with theme even" />
+
+
+<link rel="canonical" href="/2016/08/05/python%E4%B8%AD%E7%9A%84%E7%94%9F%E6%88%90%E5%99%A8%E5%92%8C%E5%8D%8F%E7%A8%8B/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.0e5e4d97.min.css" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+<meta property="og:title" content="Python中的生成器和协程" />
+<meta property="og:description" content="摘要:
+
+
+今天读了《A Curious Course on Coroutines and Concurrency》的第一部分，以下为我的碎碎念。
+1. 生成器和协程的异同
+2. 协程的一些特性
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2016/08/05/python%E4%B8%AD%E7%9A%84%E7%94%9F%E6%88%90%E5%99%A8%E5%92%8C%E5%8D%8F%E7%A8%8B/" />
+<meta property="article:published_time" content="2016-08-05T21:37:41&#43;00:00"/>
+<meta property="article:modified_time" content="2016-08-05T21:37:41&#43;00:00"/>
+
+<meta itemprop="name" content="Python中的生成器和协程">
+<meta itemprop="description" content="摘要:
+
+
+今天读了《A Curious Course on Coroutines and Concurrency》的第一部分，以下为我的碎碎念。
+1. 生成器和协程的异同
+2. 协程的一些特性
+">
+
+
+<meta itemprop="datePublished" content="2016-08-05T21:37:41&#43;00:00" />
+<meta itemprop="dateModified" content="2016-08-05T21:37:41&#43;00:00" />
+<meta itemprop="wordCount" content="1749">
+
+
+
+<meta itemprop="keywords" content="Python," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python中的生成器和协程"/>
+<meta name="twitter:description" content="摘要:
+
+
+今天读了《A Curious Course on Coroutines and Concurrency》的第一部分，以下为我的碎碎念。
+1. 生成器和协程的异同
+2. 协程的一些特性
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/life/">
+        <li class="mobile-menu-item">随笔</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/life/">随笔</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Python中的生成器和协程</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-08-05 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#生成器和协程的异同">生成器和协程的异同</a></li>
+<li><a href="#关于协程">关于协程</a>
+<ul>
+<li><a href="#协程的启动">协程的启动</a></li>
+<li><a href="#协程的关闭">协程的关闭</a></li>
+<li><a href="#向协程抛出异常">向协程抛出异常</a></li>
+</ul></li>
+<li><a href="#参考文献">参考文献</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><strong>摘要</strong>:</p>
+
+<blockquote>
+<p>今天读了《A Curious Course on Coroutines and Concurrency》的第一部分，以下为我的碎碎念。
+1. 生成器和协程的异同
+2. 协程的一些特性</p>
+</blockquote>
+
+<h2 id="生成器和协程的异同">生成器和协程的异同</h2>
+
+<p>今天看过这本书以后，对于生成器和协程的理解突然增加了不少，特写与此，以备记录。</p>
+
+<p>生成器和协程都是通过python中的<code>yield</code>的关键字实现的，不同的是，生成器只会调用<code>next</code>来不断地生成数据，而协程却会调用<code>next</code>和<code>send</code>来返回结果和接收参数。</p>
+
+<p>作者还一再地强调，尽管生成器和协程看起来很像，但是它们代表的却是完全不同的设计理念。生成器是用来生成数据的，而协程从某种意义上来说是消耗数据的，而且作者还一再地强调，<strong>协程和迭代无关</strong>，尽管协程也会用<code>next</code>来获取数据，但是<strong>协程和迭代无关</strong>，不要尝试像使用生成器那样去迭代地使用协程。</p>
+
+<p>个人理解就是生成器是通过迭代来不断地获取数据的一个东西。而协程呢，根本和生成器没有半毛钱关系（尽管它们都用<code>yield</code>），我在协程的维基百科里面看到，协程是和子例程（也就是编程语言中的函数）比较着说的。</p>
+
+<ul>
+<li>子例程调用完了就结束了，但是协程<code>yield</code>返回后并没有结束，只要你愿意，可以无限调用下去</li>
+<li>子例程只有一个入口(参数)和一个出口(返回值)，但是对于协程，一个<code>yield</code>就是一个入口或者出口，也就是说，协程可以拥有任意多的入口和出口</li>
+<li>子例程之间是相互调用的关系(函数a调用函数b)，但是协程之间是平等的关机，通过<code>yield</code>来转移执行权</li>
+</ul>
+
+<p>这就是协程，用维基百科的话来说，就是和子例程一样，也是一种程序组件。</p>
+
+<h2 id="关于协程">关于协程</h2>
+
+<p>除了协程和生成器的比较外，还看到书中讲了一些关于协程的一些比较有意思的东西，特在此写出来，以备查阅。</p>
+
+<h3 id="协程的启动">协程的启动</h3>
+
+<p>先举个例子，比如下面这个模拟Unix grep的协程:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
+
+
+<span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="p">(</span><span class="k">yield</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">grep</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^abcd&#39;</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;abcd&#39;</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">---------------------------------------------------------------------------
+
+TypeError                                 Traceback (most recent call last)
+
+&lt;ipython-input-14-6248a9077ec9&gt; in &lt;module&gt;()
+     12
+     13 g = grep(r&#39;^abcd&#39;)
+---&gt; 14 g.send(&#39;abcd&#39;)
+
+
+TypeError: can&#39;t send non-None value to a just-started generator</pre></td></tr></table>
+</div>
+</div>
+<p>如上所示，我们构造了一个协程<code>g</code>，如果我们直接向其中发送查询字符串，就会抛出一个<code>TypeError</code>，显示<code>cann't send non-None value to a just-started generator</code>。也就是说，我们需要先启动协程。其实这个启动过程，就是让上面那个函数先运行，运行到<code>yield</code>处，然后这个协程才能通过<code>send</code>来接收值。</p>
+
+<p>那么如何启动协程呢，其实也很简单，只需要执行<code>next(g)</code>或者<code>g.send(None)</code>就可以了。</p>
+
+<p>但是，每次都这样手动地去启动协程，太容易忘掉了，我们可以去写一个装饰器，加到协程函数上，让其自动启动，代码如下所示:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
+
+
+<span class="k">def</span> <span class="nf">coroutine</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">cr</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">next</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cr</span>
+    <span class="k">return</span> <span class="n">start</span>
+
+
+<span class="nd">@coroutine</span>
+<span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="p">(</span><span class="k">yield</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">grep</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^abcd&#39;</span><span class="p">)</span>
+
+<span class="n">g</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;abcd&#39;</span><span class="p">)</span>  <span class="c1"># True</span>
+<span class="n">g</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;1234abcd&#39;</span><span class="p">)</span> <span class="c1"># False</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">abcd</pre></td></tr></table>
+</div>
+</div>
+<h3 id="协程的关闭">协程的关闭</h3>
+
+<p>接下来我们再来说说协程的关闭，还以上面的那个<code>grep</code>协程为例子，由于它的<code>yield</code>语句是写在一个死循环里面的，所以只要我们一直<code>send</code>，这个协程就会一直运行下去，那么该如何停止这个协程呢，其实也很简单，只要调用协程的<code>close</code>函数即可，如下所示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
+
+
+<span class="k">def</span> <span class="nf">coroutine</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">cr</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">next</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cr</span>
+    <span class="k">return</span> <span class="n">start</span>
+
+
+<span class="nd">@coroutine</span>
+<span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="p">(</span><span class="k">yield</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">grep</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^abcd&#39;</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;abcd&#39;</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">g</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;1abcd&#39;</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">abcd
+
+
+
+---------------------------------------------------------------------------
+
+StopIteration                             Traceback (most recent call last)
+
+&lt;ipython-input-9-1958b0399f9e&gt; in &lt;module&gt;()
+     22 g.send(&#39;abcd&#39;)
+     23 g.close()
+---&gt; 24 g.send(&#39;1abcd&#39;)
+
+
+StopIteration:</pre></td></tr></table>
+</div>
+</div>
+<p>从上面的代码可以看出，当我们关闭了协程以后，如果再通过<code>send</code>向其中发送值的话，就会抛出一个<code>StopIteration</code>异常了。</p>
+
+<p>需要注意的是，<code>close</code>函数其实是向协程内部抛出了一个<code>GeneratorExit</code>异常，我们当然也可以捕获这个异常,不过就算捕获了这个异常，协程一样会退出，而且对于这个异常唯一合理的做法就是清理环境并退出。</p>
+
+<h3 id="向协程抛出异常">向协程抛出异常</h3>
+
+<p>除了可以向协程中发送值以外，也可以通过<code>throw</code>函数向协程中抛出异常，而这个异常像普通的异常一样，也可以通过<code>try-except</code>来捕获，请看下面这段代码:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
+
+
+<span class="k">def</span> <span class="nf">coroutine</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">cr</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">next</span><span class="p">(</span><span class="n">cr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cr</span>
+    <span class="k">return</span> <span class="n">start</span>
+
+
+<span class="nd">@coroutine</span>
+<span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="p">(</span><span class="k">yield</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;I catch you |</span><span class="si">%s</span><span class="s1">| haha!&#39;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">grep</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^abcd&#39;</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;abcd&#39;</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">throw</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">,</span> <span class="s2">&#34;You can&#39;t catch me!&#34;</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">abcd
+I catch you |You can&#39;t catch me!| haha!</pre></td></tr></table>
+</div>
+</div>
+<p>在上面的代码中，我们通过<code>throw</code>函数向协程内部抛出了一个<code>RuntimeError</code>的异常，而这个异常在协程内部被捕获到了！</p>
+
+<h2 id="参考文献">参考文献</h2>
+
+<ol>
+<li><a href="http://www.dabeaz.com/coroutines/">A Curious Course on Coroutines and Concurrency</a> authored by <code>David Beazley</code></li>
+<li><a href="https://www.wikiwand.com/zh/%E5%8D%8F%E7%A8%8B">协程</a> authored by <code>维基百科</code></li>
+</ol>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2016-08-05
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/python/">Python</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2016/09/11/python_unittesting_run_tests_in_another_module/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Python unittesting: run tests in another module</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2016/08/03/python%E7%9A%84%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E8%A7%A3%E6%9E%90/">
+            <span class="next-text nav-default">Python的命名空间解析</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+    <script src="https://utteranc.es/client.js"
+            repo="anotherbwangel/blog-comment"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="/lib/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>

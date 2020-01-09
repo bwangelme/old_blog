@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go 调度器的一个无法执行陷阱 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content=" 注意: 这篇文章的答案可以有正确的结果，但解题思路是不对的，正确的思路请参考 关于线程同步操作的一道面试题
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with theme even" />
+
+
+<link rel="canonical" href="/2019/04/10/go-scheduler-pitfall/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.0e5e4d97.min.css" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+<meta property="og:title" content="Go 调度器的一个无法执行陷阱" />
+<meta property="og:description" content="
+注意: 这篇文章的答案可以有正确的结果，但解题思路是不对的，正确的思路请参考 关于线程同步操作的一道面试题
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2019/04/10/go-scheduler-pitfall/" />
+<meta property="article:published_time" content="2019-04-10T22:18:53&#43;08:00"/>
+<meta property="article:modified_time" content="2019-04-10T22:18:53&#43;08:00"/>
+
+<meta itemprop="name" content="Go 调度器的一个无法执行陷阱">
+<meta itemprop="description" content="
+注意: 这篇文章的答案可以有正确的结果，但解题思路是不对的，正确的思路请参考 关于线程同步操作的一道面试题
+">
+
+
+<meta itemprop="datePublished" content="2019-04-10T22:18:53&#43;08:00" />
+<meta itemprop="dateModified" content="2019-04-10T22:18:53&#43;08:00" />
+<meta itemprop="wordCount" content="1683">
+
+
+
+<meta itemprop="keywords" content="Go,AtomicInteger," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go 调度器的一个无法执行陷阱"/>
+<meta name="twitter:description" content="
+注意: 这篇文章的答案可以有正确的结果，但解题思路是不对的，正确的思路请参考 关于线程同步操作的一道面试题
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/life/">
+        <li class="mobile-menu-item">随笔</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/life/">随笔</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go 调度器的一个无法执行陷阱</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-04-10 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#背景说明">背景说明</a></li>
+<li><a href="#错误答案">错误答案</a></li>
+<li><a href="#操作系统线程调度器">操作系统线程调度器</a></li>
+<li><a href="#go-调度器">Go 调度器</a></li>
+<li><a href="#代码错误原因简析">代码错误原因简析</a></li>
+<li><a href="#解决方案">解决方案</a></li>
+<li><a href="#参考链接">参考链接</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<p><strong>注意</strong>: 这篇文章的答案可以有正确的结果，但解题思路是不对的，正确的思路请参考 <a href="/2019/04/13/go-sync-channel/">关于线程同步操作的一道面试题</a></p>
+</blockquote>
+
+<h2 id="背景说明">背景说明</h2>
+
+<p>前两天遇到了这样一道题目:</p>
+
+<blockquote>
+<p>编写一个程序，开启 3 个线程A,B,C，这三个线程的输出分别为 A、B、C，每个线程将自己的 输出在屏幕上打印 10 遍，要求输出的结果必须按顺序显示。如：ABCABCABC&hellip;.</p>
+</blockquote>
+
+<p><strong>注意</strong>:</p>
+
+<ul>
+<li>输出要在各自的线程中输出，不能在主线程中输出</li>
+</ul>
+
+<h2 id="错误答案">错误答案</h2>
+
+<p>当时想到一种思路是使用 Go <code>atomic</code> 包中提供的原子操作来完成上述功能。
+即每个<code>Goroutine</code>原子性地获得<code>i</code>的值，如果符合<code>i % 3 == threadNum</code>的条件，则执行操作，否则作自旋。代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;sync/atomic&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">var</span> <span class="p">(</span>
+	<span class="nx">end</span> <span class="p">=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kd">struct</span><span class="p">{})</span>
+	<span class="nx">i</span>   <span class="kt">int32</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">threadPrint</span><span class="p">(</span><span class="nx">threadNum</span> <span class="kt">int32</span><span class="p">,</span> <span class="nx">threadName</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+
+	<span class="k">for</span> <span class="p">{</span>
+		<span class="nx">v</span> <span class="o">:=</span> <span class="nx">atomic</span><span class="p">.</span><span class="nf">LoadInt32</span><span class="p">((</span><span class="o">*</span><span class="kt">int32</span><span class="p">)(</span><span class="o">&amp;</span><span class="nx">i</span><span class="p">))</span>
+		<span class="k">if</span> <span class="nx">v</span> <span class="o">&gt;=</span> <span class="mi">30</span> <span class="p">{</span>
+			<span class="k">break</span>
+		<span class="p">}</span>
+
+		<span class="k">if</span> <span class="nx">v</span><span class="o">%</span><span class="mi">3</span> <span class="o">==</span> <span class="nx">threadNum</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%d: %s\n&#34;</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">threadName</span><span class="p">)</span>
+			<span class="nx">atomic</span><span class="p">.</span><span class="nf">AddInt32</span><span class="p">((</span><span class="o">*</span><span class="kt">int32</span><span class="p">)(</span><span class="o">&amp;</span><span class="nx">i</span><span class="p">),</span> <span class="nb">int32</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="k">continue</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="nx">end</span> <span class="o">&lt;-</span> <span class="kd">struct</span><span class="p">{}{}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">names</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;A&#34;</span><span class="p">,</span> <span class="s">&#34;B&#34;</span><span class="p">,</span> <span class="s">&#34;C&#34;</span><span class="p">}</span>
+
+	<span class="k">for</span> <span class="nx">idx</span><span class="p">,</span> <span class="nx">name</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">names</span> <span class="p">{</span>
+		<span class="k">go</span> <span class="nf">threadPrint</span><span class="p">(</span><span class="nb">int32</span><span class="p">(</span><span class="nx">idx</span><span class="p">),</span> <span class="nx">name</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="k">for</span> <span class="nx">_</span> <span class="p">=</span> <span class="k">range</span> <span class="nx">names</span> <span class="p">{</span>
+		<span class="o">&lt;-</span><span class="nx">end</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>这个程序当时跑的是没有问题的。我把答案发到 V2EX 论坛上之后， V友 @whoisghost 指出了<a href="https://www.v2ex.com/t/552620#r_7143228">问题</a></p>
+
+<blockquote>
+<p>把 names 再追加 “ D ”, &ldquo;E&rdquo;, 把 3 =&gt; 5, 30 =&gt; 50, 还能正常运行吗？</p>
+</blockquote>
+
+<p>我照着它的说明试了一下，发现程序会阻塞起来。后来我去查了一下资料，才了解到 Go 的调度器中还有一个隐藏的陷阱。在了解这个陷阱之前，我们需要先了解一下操作系统的线程调度器和 Go 的调度器。</p>
+
+<h2 id="操作系统线程调度器">操作系统线程调度器</h2>
+
+<p>操作系统线程调度器的执行逻辑如下:</p>
+
+<ul>
+<li>操作系统的调度器维护了一组线程的信息，这些线程分别处于<code>running</code>, <code>runnable</code>, <code>non-runnable</code>的状态。</li>
+<li>当一个线程在一个 CPU 核心上运行超过一个时间片以后，它就会被系统时钟中断给中断掉。</li>
+<li>被中断的线程会保存它的上下文信息，并执行中断处理函数。</li>
+<li>中断处理函数会将执行权转交给操作系统的调度器，操作系统的调度器会调取其他的线程来这个 CPU 核心上运行。</li>
+</ul>
+
+<h2 id="go-调度器">Go 调度器</h2>
+
+<p>Go 语言中使用<code>Goroutine</code>来实现并发，<code>Goroutine</code>类似于线程，但它又是非常轻量的。一个创造成千上万个<code>Goroutine</code>的程序很常见，但是创造成千上万个线程的程序却很少见。</p>
+
+<p><code>Goroutine</code>是在用户层实现的，当 Go 程序启动的时候，Go 的运行时会创建<code>GOMAXPROCS</code>个系统级线程，然后<code>Goroutine</code>就被它在这<code>GOMAXPROCS</code>个系统级线程上调度。</p>
+
+<p>Go 语言实现了一个协同式的，部分中断调度器(Golang implements a co-operative partially preemptive scheduler.)。它没有基于时钟中断来实现调度，但调度器可以在系统级线程上并行地运行多个 Goroutine。</p>
+
+<p>在<code>runtime</code>提供的构造体，库，系统调用函数中，Go 添加了钩子函数，这些钩子函数能够协同式地启动 Go 的调度器。
+Go 通过这种方式来将执行权切换到 Go 调度器，从而避免通过时钟中断来将执行权切换到 Go 调度器。<code>runtime</code>提供的这些函数也成为了进入 Go 调度器的入口。
+但是如果我们在<code>Goroutine</code>中没有调用 <code>runtime</code> 的任何函数会发生什么情况呢？</p>
+
+<h2 id="代码错误原因简析">代码错误原因简析</h2>
+
+<p>在上述代码中，我们启动了5个 Goroutine，在我的电脑上<code>GOMAXPROCS</code> 是4。
+也就是说有4个<code>Goroutine</code>会各自占用一个系统级线程进行自旋操作，但因为它们没有调用<code>runtime</code>中的函数，所以它们并不会主动将执行权交给 Go 调度器。
+这样始终有一个<code>Goroutine</code>无法获得执行的机会，整个程序也就被阻塞住了。</p>
+
+<h2 id="解决方案">解决方案</h2>
+
+<p>在生产环境中，我们遇到上述错误的机会很少。因为我们的程序基本都会执行<code>runtime</code>中提供的一些功能，例如<code>channel</code>，<code>系统调用</code>, <code>fmt.Sprint</code>, <code>Mutex</code>, <code>time.Sleep</code>等。</p>
+
+<p>例如如果我们在上述代码第加入一句<code>time.Sleep(0)</code>，程序就不会阻塞了，因为<code>time.Sleep</code>中包含的钩子函数启动了 Go 调度器，第五个 goroutine 有了执行的机会。</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go">		<span class="k">if</span> <span class="nx">v</span><span class="o">%</span><span class="mi">3</span> <span class="o">==</span> <span class="nx">threadNum</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%d: %s\n&#34;</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">threadName</span><span class="p">)</span>
+			<span class="nx">atomic</span><span class="p">.</span><span class="nf">AddInt32</span><span class="p">((</span><span class="o">*</span><span class="kt">int32</span><span class="p">)(</span><span class="o">&amp;</span><span class="nx">i</span><span class="p">),</span> <span class="nb">int32</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">// 加入这条语句
+</span><span class="c1"></span>			<span class="k">continue</span>
+		<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<p>如果我们在生产环境中遇到了这个问题的话，正确的做法应该是加入一句 <a href="https://golang.org/pkg/runtime/#Gosched">runtime.Gosched()</a>，如下所示:</p>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go">		<span class="k">if</span> <span class="nx">v</span><span class="o">%</span><span class="mi">3</span> <span class="o">==</span> <span class="nx">threadNum</span> <span class="p">{</span>
+			<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%d: %s\n&#34;</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">threadName</span><span class="p">)</span>
+			<span class="nx">atomic</span><span class="p">.</span><span class="nf">AddInt32</span><span class="p">((</span><span class="o">*</span><span class="kt">int32</span><span class="p">)(</span><span class="o">&amp;</span><span class="nx">i</span><span class="p">),</span> <span class="nb">int32</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="nx">runtime</span><span class="p">.</span><span class="nf">Gosched</span><span class="p">()</span> <span class="c1">// 加入这条语句
+</span><span class="c1"></span>			<span class="k">continue</span>
+		<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<p>这样当<code>Goroutine</code>自旋的时候，就会主动地去启动 Go 调度器，让其他<code>Goroutine</code>获得执行的机会。</p>
+
+<h2 id="参考链接">参考链接</h2>
+
+<ul>
+<li><a href="http://www.sarathlakshman.com/2016/06/15/pitfall-of-golang-scheduler">A pitfall of golang scheduler</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-04-10
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go/">Go</a>
+          <a href="/tags/atomicinteger/">AtomicInteger</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2019/04/13/go-sync-channel/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">关于线程同步操作的一道面试题</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2019/04/08/go-panic/">
+            <span class="next-text nav-default">Go Panic 的触发及恢复过程</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+    <script src="https://utteranc.es/client.js"
+            repo="anotherbwangel/blog-comment"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="/lib/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>

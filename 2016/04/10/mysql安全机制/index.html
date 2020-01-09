@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>MySQL安全机制 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="摘要:
+ 这是一篇关于MySQL的文章，主要介绍 MySQL 安全机制
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with theme even" />
+
+
+<link rel="canonical" href="/2016/04/10/mysql%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.0e5e4d97.min.css" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+<meta property="og:title" content="MySQL安全机制" />
+<meta property="og:description" content="摘要:
+
+
+这是一篇关于MySQL的文章，主要介绍 MySQL 安全机制
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2016/04/10/mysql%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6/" />
+<meta property="article:published_time" content="2016-04-10T10:56:54&#43;00:00"/>
+<meta property="article:modified_time" content="2016-04-10T10:56:54&#43;00:00"/>
+
+<meta itemprop="name" content="MySQL安全机制">
+<meta itemprop="description" content="摘要:
+
+
+这是一篇关于MySQL的文章，主要介绍 MySQL 安全机制
+">
+
+
+<meta itemprop="datePublished" content="2016-04-10T10:56:54&#43;00:00" />
+<meta itemprop="dateModified" content="2016-04-10T10:56:54&#43;00:00" />
+<meta itemprop="wordCount" content="1197">
+
+
+
+<meta itemprop="keywords" content="MySQL," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="MySQL安全机制"/>
+<meta name="twitter:description" content="摘要:
+
+
+这是一篇关于MySQL的文章，主要介绍 MySQL 安全机制
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/life/">
+        <li class="mobile-menu-item">随笔</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/life/">随笔</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">MySQL安全机制</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-04-10 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#mysql安全机制">MySQL安全机制</a>
+<ul>
+<li><a href="#1-权限表">1. 权限表</a></li>
+<li><a href="#2-用户管理">2. 用户管理</a>
+<ul>
+<li><a href="#2-1-登陆和退出mysql">2.1 登陆和退出MySQL</a></li>
+<li><a href="#2-2-创建用户">2.2 创建用户</a></li>
+</ul></li>
+<li><a href="#3-权限管理">3. 权限管理</a>
+<ul>
+<li><a href="#3-1-权限应用的顺序">3.1 权限应用的顺序</a></li>
+<li><a href="#3-2-语法格式">3.2 语法格式</a></li>
+<li><a href="#3-3-查看权限">3.3 查看权限</a></li>
+<li><a href="#3-4-权限的回收">3.4 权限的回收</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><strong>摘要</strong>:</p>
+
+<blockquote>
+<p>这是一篇关于MySQL的文章，主要介绍 MySQL 安全机制</p>
+</blockquote>
+
+<h1 id="mysql安全机制">MySQL安全机制</h1>
+
+<h2 id="1-权限表">1. 权限表</h2>
+
+<p>mysql数据库中的表</p>
+
+<ul>
+<li>mysql.user</li>
+</ul>
+
+<p>用户字段: Host, User, Password
+权限字段: _priv结尾的字段
+安全字段: ssl x509字段
+资源控制字段: max_开头的字段</p>
+
+<ul>
+<li>mysql.db</li>
+</ul>
+
+<p>用户字段: Host, User, Db
+权限字段: 剩下的_priv结尾的字段</p>
+
+<ul>
+<li>mysql.tables_priv, mysql.columns_priv, procs_priv</li>
+</ul>
+
+<p>授权表</p>
+
+<ul>
+<li>授权级别排列</li>
+</ul>
+
+<p>mysql.user # 全局授权
+mysql.db  # 数据库级别授权
+其他  # 表级，列级授权</p>
+
+<h2 id="2-用户管理">2. 用户管理</h2>
+
+<h3 id="2-1-登陆和退出mysql">2.1 登陆和退出MySQL</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span> <span class="o">-</span><span class="n">h</span> <span class="k">host</span> <span class="o">-</span><span class="n">p</span> <span class="n">port</span> <span class="o">-</span><span class="n">u</span> <span class="k">user</span> <span class="o">-</span><span class="n">ppassword</span> <span class="o">-</span><span class="n">e</span> <span class="s1">&#39;SQL语句&#39;</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>mysql.user表中授权什么主机的什么用户可以登陆</p>
+
+<h3 id="2-2-创建用户">2.2 创建用户</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 刷新授权表
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="n">flush</span> <span class="k">privileges</span><span class="p">;</span></code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>创建用户</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">user</span> <span class="n">xff</span><span class="o">@</span><span class="s1">&#39;%&#39;</span> <span class="n">identified</span> <span class="k">by</span> <span class="s1">&#39;123456&#39;</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="c1">-- 查看权限基本为空
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span> <span class="k">where</span> <span class="k">user</span><span class="o">=</span><span class="s1">&#39;xff&#39;</span><span class="err">\</span><span class="k">G</span>
+<span class="o">***************************</span> <span class="mi">1</span><span class="p">.</span> <span class="k">row</span> <span class="o">***************************</span>
+                  <span class="k">Host</span><span class="p">:</span> <span class="o">%</span>
+                  <span class="k">User</span><span class="p">:</span> <span class="n">xff</span>
+              <span class="n">Password</span><span class="p">:</span> <span class="o">*</span><span class="mi">6</span><span class="n">BB4837EB74329105EE4568DDA7DC67ED2CA2AD9</span>
+           <span class="n">Select_priv</span><span class="p">:</span> <span class="n">N</span>
+           <span class="n">Insert_priv</span><span class="p">:</span> <span class="n">N</span>
+           <span class="n">Update_priv</span><span class="p">:</span> <span class="n">N</span>
+           <span class="n">Delete_priv</span><span class="p">:</span> <span class="n">N</span>
+           <span class="n">Create_priv</span><span class="p">:</span> <span class="n">N</span>
+             <span class="n">Drop_priv</span><span class="p">:</span> <span class="n">N</span>
+           <span class="n">Reload_priv</span><span class="p">:</span> <span class="n">N</span>
+         <span class="n">Shutdown_priv</span><span class="p">:</span> <span class="n">N</span>
+          <span class="n">Process_priv</span><span class="p">:</span> <span class="n">N</span>
+             <span class="n">File_priv</span><span class="p">:</span> <span class="n">N</span>
+            <span class="n">Grant_priv</span><span class="p">:</span> <span class="n">N</span>
+       <span class="n">References_priv</span><span class="p">:</span> <span class="n">N</span>
+            <span class="n">Index_priv</span><span class="p">:</span> <span class="n">N</span>
+            <span class="n">Alter_priv</span><span class="p">:</span> <span class="n">N</span>
+          <span class="n">Show_db_priv</span><span class="p">:</span> <span class="n">N</span>
+            <span class="n">Super_priv</span><span class="p">:</span> <span class="n">N</span>
+ <span class="n">Create_tmp_table_priv</span><span class="p">:</span> <span class="n">N</span>
+      <span class="n">Lock_tables_priv</span><span class="p">:</span> <span class="n">N</span>
+          <span class="n">Execute_priv</span><span class="p">:</span> <span class="n">N</span>
+       <span class="n">Repl_slave_priv</span><span class="p">:</span> <span class="n">N</span>
+      <span class="n">Repl_client_priv</span><span class="p">:</span> <span class="n">N</span>
+      <span class="n">Create_view_priv</span><span class="p">:</span> <span class="n">N</span>
+        <span class="n">Show_view_priv</span><span class="p">:</span> <span class="n">N</span>
+   <span class="n">Create_routine_priv</span><span class="p">:</span> <span class="n">N</span>
+    <span class="n">Alter_routine_priv</span><span class="p">:</span> <span class="n">N</span>
+      <span class="n">Create_user_priv</span><span class="p">:</span> <span class="n">N</span>
+            <span class="n">Event_priv</span><span class="p">:</span> <span class="n">N</span>
+          <span class="n">Trigger_priv</span><span class="p">:</span> <span class="n">N</span>
+<span class="n">Create_tablespace_priv</span><span class="p">:</span> <span class="n">N</span>
+              <span class="n">ssl_type</span><span class="p">:</span> 
+            <span class="n">ssl_cipher</span><span class="p">:</span> 
+           <span class="n">x509_issuer</span><span class="p">:</span> 
+          <span class="n">x509_subject</span><span class="p">:</span> 
+         <span class="n">max_questions</span><span class="p">:</span> <span class="mi">0</span>
+           <span class="n">max_updates</span><span class="p">:</span> <span class="mi">0</span>
+       <span class="n">max_connections</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="n">max_user_connections</span><span class="p">:</span> <span class="mi">0</span>
+                <span class="n">plugin</span><span class="p">:</span> <span class="n">mysql_native_password</span>
+ <span class="n">authentication_string</span><span class="p">:</span> 
+      <span class="n">password_expired</span><span class="p">:</span> <span class="n">N</span>
+<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span> <span class="n">sec</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 创建用户并且授权
+</span><span class="c1"></span><span class="k">grant</span> <span class="k">select</span> <span class="k">on</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">to</span> <span class="n">user3</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span> <span class="n">identified</span> <span class="k">by</span> <span class="s1">&#39;123456&#39;</span><span class="p">;</span></code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>删除用户</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">drop</span> <span class="k">user</span> <span class="n">xff</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delete</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="k">user</span><span class="o">=</span><span class="s1">&#39;user3&#39;</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">1</span> <span class="k">row</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="n">flush</span> <span class="k">privileges</span><span class="p">;</span>
+<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li><p>修改密码</p>
+
+<ol>
+<li><code>mysqladmin -u root -ppasswd password 'passwd'</code>
+2.
+```sql
+&ndash; 普通用户对于user表没有权限的话，只能修改自己的密码
+mysql&gt; set password for username@&lsquo;localhost&rsquo;=password(&lsquo;mysql123&rsquo;);
+Query OK, 0 rows affected (0.00 sec)</li>
+</ol>
+
+<p>mysql&gt; flush privileges;
+Query OK, 0 rows affected (0.00 sec)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">3.
+```sql
+mysql&gt; update user set password = password(&#39;passwd&#39;) where user=&#39;root&#39;;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+mysql&gt; flush privileges;
+Query OK, 0 rows affected (0.01 sec)</pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+
+<h2 id="3-权限管理">3. 权限管理</h2>
+
+<h3 id="3-1-权限应用的顺序">3.1 权限应用的顺序</h3>
+
+<p>user(Y|N) &gt;= db &gt;= tables_priv &gt;= columns_priv</p>
+
+<p>相应权限对于的表为:</p>
+
+<p>mysql.user &gt;= mysql.db &gt;= mysql.tables_priv &gt;= mysql.columns_priv</p>
+
+<p>一个用户对一个数据库有权限则可以创建，删除这个数据库</p>
+
+<h3 id="3-2-语法格式">3.2 语法格式</h3>
+
+<p>grant 权限列表 on 库名.表名 to &lsquo;用户名&rsquo;@&lsquo;客户端主机&rsquo; [identified by &lsquo;密码&rsquo; with grant option];</p>
+
+<ul>
+<li>权限列表</li>
+</ul>
+
+<p>all &lt;==&gt; 所有权限(不包括授权权限，如果有了grant语句最后有grant option则有了授权权限)
+select(列1, 列2, &hellip;), update</p>
+
+<ul>
+<li>数据库.表名</li>
+</ul>
+
+<p>|参数|说明|
+|&ndash;|&ndash;|
+|<em>.</em>|所有库的所有表|</p>
+
+<ul>
+<li>客户端主机</li>
+</ul>
+
+<p>|参数|说明|
+|&ndash;|&ndash;|
+|%|所有主机|
+|192.168.1.%|192.168.2.0网段的所有主机|
+|192.168.2.1|某个特定的主机|</p>
+
+<ul>
+<li>with_option 参数</li>
+</ul>
+
+<p>|参数|说明|
+|&ndash;|&ndash;|
+|GRANT OPTION|授权选项|
+|MAX_QUERIES_PER_HOUR|允许每小时执行的查询数|
+|MAX_UPDATES_PER_HOUR|允许每小时执行的更新数|
+|MAX_CONNECTIONS_PER_HOUR|允许每小时可以建立连接数|
+|MAX_USER_CONNECTIONS|定义单个用户同时可以建立的连接数|</p>
+
+<h3 id="3-3-查看权限">3.3 查看权限</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 查看当前用户所有授权
+</span><span class="c1"></span><span class="k">show</span> <span class="n">grants</span><span class="err">\</span><span class="k">G</span>
+
+<span class="c1">-- 管理员查看其它用户权限
+</span><span class="c1"></span><span class="k">show</span> <span class="n">grants</span> <span class="k">for</span> <span class="n">username</span><span class="err">\</span><span class="k">G</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="3-4-权限的回收">3.4 权限的回收</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 不会删除用户
+</span><span class="c1"></span><span class="k">revoke</span> <span class="err">权限列表</span> <span class="k">on</span> <span class="err">数据库名</span> <span class="k">from</span> <span class="err">用户名</span><span class="o">@</span><span class="s1">&#39;客户端主机&#39;</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">revoke</span> <span class="k">delete</span> <span class="k">on</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">from</span> <span class="n">admin1</span><span class="o">@</span><span class="s1">&#39;%&#39;</span><span class="p">;</span> <span class="c1">-- 回收删除权限
+</span><span class="c1"></span><span class="k">revoke</span> <span class="k">grant</span> <span class="k">option</span> <span class="k">on</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">from</span> <span class="n">admin1</span><span class="o">@</span><span class="s1">&#39;%&#39;</span><span class="p">;</span> <span class="c1">-- 取消授权权限
+</span><span class="c1">-- 删除用户
+</span><span class="c1"></span><span class="k">delete</span> <span class="k">from</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span> <span class="k">where</span> <span class="k">user</span><span class="o">=</span><span class="s1">&#39;admin1&#39;</span>
+<span class="n">flush</span> <span class="k">privileges</span></code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2016-04-10
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/mysql/">MySQL</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2016/04/10/mysql%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">MySQL存储过程</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2016/04/10/mysql%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/">
+            <span class="next-text nav-default">MySQL常用函数</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+    <script src="https://utteranc.es/client.js"
+            repo="anotherbwangel/blog-comment"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="/lib/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>

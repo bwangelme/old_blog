@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Review 《Golang Trick: Export unexport method for test》 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="  原文地址: https://medium.com/@robiplus/golang-trick-export-for-test-aa16cbd7b8cd  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with theme even" />
+
+
+<link rel="canonical" href="/2019/04/27/golang-trick-export-for-test/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.0e5e4d97.min.css" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+<meta property="og:title" content="Review 《Golang Trick: Export unexport method for test》" />
+<meta property="og:description" content="
+
+原文地址: https://medium.com/@robiplus/golang-trick-export-for-test-aa16cbd7b8cd
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2019/04/27/golang-trick-export-for-test/" />
+<meta property="article:published_time" content="2019-04-27T17:33:52&#43;08:00"/>
+<meta property="article:modified_time" content="2019-04-27T17:33:52&#43;08:00"/>
+
+<meta itemprop="name" content="Review 《Golang Trick: Export unexport method for test》">
+<meta itemprop="description" content="
+
+原文地址: https://medium.com/@robiplus/golang-trick-export-for-test-aa16cbd7b8cd
+
+">
+
+
+<meta itemprop="datePublished" content="2019-04-27T17:33:52&#43;08:00" />
+<meta itemprop="dateModified" content="2019-04-27T17:33:52&#43;08:00" />
+<meta itemprop="wordCount" content="1207">
+
+
+
+<meta itemprop="keywords" content="翻译,Go,ARTS," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Review 《Golang Trick: Export unexport method for test》"/>
+<meta name="twitter:description" content="
+
+原文地址: https://medium.com/@robiplus/golang-trick-export-for-test-aa16cbd7b8cd
+
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/life/">
+        <li class="mobile-menu-item">随笔</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/life/">随笔</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Review 《Golang Trick: Export unexport method for test》</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-04-27 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#go-测试">Go 测试</a></li>
+<li><a href="#export-test-go">export_test.go</a></li>
+<li><a href="#使用-export-test-go-的实例">使用 export_test.go 的实例</a></li>
+<li><a href="#go-标准库中的应用">Go 标准库中的应用</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<ul>
+<li>原文地址: <a href="https://medium.com/@robiplus/golang-trick-export-for-test-aa16cbd7b8cd">https://medium.com/@robiplus/golang-trick-export-for-test-aa16cbd7b8cd</a></li>
+</ul>
+</blockquote>
+
+<p>在 Go 语言中， 导出的标识符是以大写字母开头的，小写字母开头的标识符只可以在它所在的包中使用。我们在开发过程中，仅仅应该导出真正需要的标识符给调用者， 来让我们的API易于使用且易于维护。</p>
+
+<h2 id="go-测试">Go 测试</h2>
+
+<p>Go 中的测试代码通常写在源代码的旁边， 以<code>xxx_test.go</code>命名。例如我们的源码文件叫做<code>sum.go</code>，测试代码应该写 在<code>sum_test.go</code> 中。</p>
+
+<p>在测试代码中命名<code>package</code>的时候，我们有两个选择。</p>
+
+<ol>
+<li>使用和源码文件相同的<code>package</code>名，例如源码文件和测试文件都是<code>package math</code></li>
+<li>使用和源码文件不同的<code>package</code>名，通常是<code>xxx_test</code>。例如源码文件是<code>package math</code>，测试文件是<code>package math_test</code></li>
+</ol>
+
+<p>通常情况下，我们会选择第二种命名方式。因为测试文件和源码文件使用不同的<code>package</code>，被测代码就是一个黑盒，能够让我们专注地基于其 API(以大写字母开头的<strong>导出标识符</strong>) 进行开发，以帮助我们设计出更易用的 API 出来。</p>
+
+<h2 id="export-test-go">export_test.go</h2>
+
+<p>源码文件和测试文件使用不同的<code>package</code>名称，通常情况都是可以的，但在一些特殊 TestCase 下我们可能需要使用未导出的标识符，此时就需要<code>export_test.go</code>文件登场了。</p>
+
+<p>整理一下，我们的需求是这样的:</p>
+
+<ol>
+<li>不将未导出标识符导出到生产代码中</li>
+<li>将一些未导出标识符导出到测试代码中</li>
+</ol>
+
+<p>此时我们就可以将一些未<strong>导出标识符</strong>包裹成<strong>导出标识符</strong>，放到<code>export_test.go</code>文件中，供测试代码使用。</p>
+
+<p><em>export_test.go</em> 文件仅仅在运行<code>go test</code>命令的时候会被包括进来，所以它不会污染包所提供的API，用户也无法访问到它(不像 Java 中的<code>@VisibleForTesting</code>)。</p>
+
+<p>它建立了一座桥梁，让测试代码能够访问到未导出的标识符。</p>
+
+<p><code>export_test.go</code>这个名字不是限定死的，也可以使用其他名字，但注意必须以<code>_test.go</code>结尾。</p>
+
+<h2 id="使用-export-test-go-的实例">使用 export_test.go 的实例</h2>
+
+<ul>
+<li>包<code>math</code>的目录结构如下:</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">math
+├── export_test.go
+├── math.go
+└── math_test.go</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li><code>sum.go</code>文件中有未导出标识符<code>sum</code>函数</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">//sum.go
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">math</span>
+
+<span class="kd">func</span> <span class="nf">sum</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">Name</span><span class="p">()</span> <span class="p">{</span>
+
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li><code>export_test.go</code>文件命名了<code>Sum</code>函数作为<code>sum</code>函数的副本</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">//export_test.go
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">math</span>
+
+<span class="kd">var</span> <span class="nx">Sum</span> <span class="p">=</span> <span class="nx">sum</span></code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li><code>sum_test.go</code>测试文件使用的包名是<code>package math_test</code>，它通过<code>export_test.go</code>访问到了<code>math</code>未导出的标识符<code>Sum</code></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">//sum_test.go
+</span><span class="c1"></span><span class="kn">package</span> <span class="nx">math_test</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s">&#34;github.com/d5/tengo/assert&#34;</span>
+    <span class="s">&#34;testing&#34;</span>
+    <span class="s">&#34;xxx/math&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">TestName</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="nx">math</span><span class="p">.</span><span class="nf">Sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="go-标准库中的应用">Go 标准库中的应用</h2>
+
+<p>在 Go 1.12的 strings 库中，存在以下定义</p>
+
+<ol>
+<li><code>search.go</code>中定义的函数<code>makeStringFinder</code>是未导出的。</li>
+<li><code>search_test.go</code>和<code>search.go</code>使用了不同的<code>package</code>名称，分别是<code>strings</code>和<code>strings_test</code></li>
+<li>为了让<code>search_test.go</code>中能够使用到<code>makeStringFinder</code>函数，在<code>export_test.go</code>中定义了<code>StringFind</code>函数，供其使用。</li>
+</ol>
+
+<p>以下是代码链接，大家可以参考阅读。</p>
+
+<ul>
+<li><a href="(https://github.com/golang/go/tree/release-branch.go1.12/src/strings)">strings 目录</a></li>
+<li><a href="https://github.com/golang/go/blob/release-branch.go1.12/src/strings/search.go#L5">search.go</a></li>
+<li><a href="https://github.com/golang/go/blob/release-branch.go1.12/src/strings/search_test.go#L5">search_test.go</a></li>
+<li><a href="https://github.com/golang/go/blob/release-branch.go1.12/src/strings/export_test.go#L40-L42">export_test.go</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-04-27
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E7%BF%BB%E8%AF%91/">翻译</a>
+          <a href="/tags/go/">Go</a>
+          <a href="/tags/arts/">ARTS</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2019/05/21/review-json-and-go/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Review 《JSON and Go》</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2019/04/21/go-cli/">
+            <span class="next-text nav-default">urfave/cli 学习笔记</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+    <script src="https://utteranc.es/client.js"
+            repo="anotherbwangel/blog-comment"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="/lib/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>
