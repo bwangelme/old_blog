@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with even 4.0.0" />
+<meta name="generator" content="Hugo 0.54.0 with theme even" />
 
 
 <link rel="canonical" href="/2017/08/29/gotour-notes/" />
@@ -64,7 +64,7 @@ Golang的基础语法学习
 
 <meta itemprop="datePublished" content="2017-08-29T08:32:02&#43;00:00" />
 <meta itemprop="dateModified" content="2017-08-29T08:32:02&#43;00:00" />
-<meta itemprop="wordCount" content="11472">
+<meta itemprop="wordCount" content="11519">
 
 
 
@@ -1424,8 +1424,14 @@ Golang的基础语法学习
 <span class="p">}</span></code></pre></td></tr></table>
 </div>
 </div>
-<p>如果你想要更改自定义类型的默认字符串格式，只需要给这个类型实现<code>String() string</code>方法即可。
-注意如果想要更改某个类型的值及其指针的打印方式，应该讲传入的类型变量设置成值传入</p>
+<p>如果你想要更改自定义类型的默认字符串格式，只需要给这个类型实现<code>String() string</code>方法即可。</p>
+
+<p><strong>注意:</strong></p>
+
+<ol>
+<li>应该添加值方法<code>func (v CustomType) String() string</code>，指针方法<code>func (v *CustomType) String() string</code>不会生效</li>
+<li>这个方法仅会修改<code>fmt</code>包中打印方法打印的值，不会修改<code>string(value)</code>的值。</li>
+</ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
@@ -3009,12 +3015,14 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span></cod
         
 
   
+
+  
     <script src="https://utteranc.es/client.js"
-          repo="anotherbwangel/blog-comment"
-          issue-term="pathname"
-          theme="github-light"
-          crossorigin="anonymous"
-          async>
+            repo="anotherbwangel/blog-comment"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
     </script>
     <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
 
@@ -3046,7 +3054,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span></cod
   <span class="copyright-year">
     &copy; 
     2016 - 
-    2019
+    2020
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
@@ -3066,6 +3074,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span></cod
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
       showProcessingMessages: false,
       messageStyle: 'none'
     };
