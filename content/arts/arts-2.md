@@ -6,7 +6,6 @@ draft: false
 tags: [ARTS, ARTS-LIST]
 author: "bwangel"
 comment: true
-toc: true
 aliases:
   - /2019/04/02/arts-第二周/
 ---

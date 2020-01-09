@@ -6,7 +6,6 @@ draft: false
 tags: [tombkeeper, 人生思考]
 author: "bwangel"
 comment: true
-toc: true
 
 ---
 

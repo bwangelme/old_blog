@@ -6,7 +6,6 @@ draft: false
 tags: [ARTS, LeetCode, 翻译]
 author: "bwangel"
 comment: true
-toc: true
 aliases:
   - /2019/04/09/leetcode-258题数根/
 ---

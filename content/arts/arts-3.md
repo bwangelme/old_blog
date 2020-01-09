@@ -6,7 +6,6 @@ draft: false
 tags: [ARTS, ARTS-LIST]
 author: "bwangel"
 comment: true
-toc: true
 aliases:
   - /2019/04/08/arts-第三周/
 ---

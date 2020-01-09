@@ -6,7 +6,6 @@ draft: false
 tags: [Go, AtomicInteger]
 author: "bwangel"
 comment: true
-toc: true
 
 ---
 

@@ -4,7 +4,6 @@ date: 2019-03-24T18:37:43+08:00
 tags: [ARTS, Go]
 author: "bwangel"
 comment: true
-toc: true
 draft: false
 aliases:
   - /2019/03/24/dependency-injection-in-golang-using-higher-order-functions学习笔记/

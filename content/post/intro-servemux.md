@@ -6,7 +6,6 @@ draft: false
 tags: [Go, HTTP]
 author: "bwangel"
 comment: true
-toc: true
 
 ---
 

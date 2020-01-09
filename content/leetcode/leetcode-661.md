@@ -6,7 +6,6 @@ draft: false
 tags: [ARTS, LeetCode]
 author: "bwangel"
 comment: true
-toc: true
 aliases:
   - /2019/03/24/leetcode-661题/
 ---

@@ -6,7 +6,6 @@ draft: true
 tags: [ARTS, LeetCode]
 author: "bwangel"
 comment: true
-toc: true
 ---
 
 > + [LeetCode 166题](https://leetcode.com/problems/reverse-words-in-a-string/)

@@ -6,7 +6,6 @@ draft: false
 tags: [ARTS, LeetCode]
 author: "bwangel"
 comment: true
-toc: true
 
 ---
 

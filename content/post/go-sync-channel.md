@@ -6,7 +6,6 @@ draft: false
 tags: [Go, Channel]
 author: "bwangel"
 comment: true
-toc: true
 
 ---
 

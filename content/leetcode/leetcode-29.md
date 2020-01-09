@@ -6,7 +6,6 @@ draft: false
 tags: [ARTS, LeetCode]
 author: "bwangel"
 comment: true
-toc: true
 ---
 
 > + [LeetCode 29题](https://leetcode.com/problemset/all/)

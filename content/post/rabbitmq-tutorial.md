@@ -6,7 +6,6 @@ draft: false
 tags: [Go, RabbitMQ, Tutorial]
 author: "bwangel"
 comment: true
-toc: true
 
 ---
 

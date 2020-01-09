@@ -6,7 +6,6 @@ draft: false
 tags: [Go]
 author: "bwangel"
 comment: true
-toc: true
 
 ---
 

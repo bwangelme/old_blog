@@ -6,7 +6,6 @@ draft: false
 tags: [ARTS, LeetCode]
 author: "bwangel"
 comment: true
-toc: true
 ---
 
 > + [LeetCode 2题](https://leetcode.com/problems/add-two-numbers/)

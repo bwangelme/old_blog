@@ -6,7 +6,6 @@ draft: false
 tags: [ARTS, LeetCode]
 author: "bwangel"
 comment: true
-toc: true
 ---
 
 > + [LeetCode 191题](https://leetcode.com/problems/number-of-1-bits/)

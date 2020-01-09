@@ -6,7 +6,6 @@ draft: false
 tags: [Tag1, Tag2]
 author: "bwangel"
 comment: true
-toc: true
 
 ---
 

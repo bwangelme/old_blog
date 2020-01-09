@@ -6,7 +6,6 @@ draft: false
 tags: [Go, PubSub, 并发编程]
 author: "bwangel"
 comment: true
-toc: true
 
 ---
 

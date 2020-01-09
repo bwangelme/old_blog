@@ -6,7 +6,6 @@ draft: false
 tags: [翻译, Go]
 author: "bwangel"
 comment: true
-toc: true
 
 ---
 
