@@ -19,13 +19,6 @@ weight: 40
 
 + [SMSLIT](https://www.smslit.top/): 江湖无名，专心练剑！
 
-## 个人开发环境配置
-
-名字|描述
----|---
-[dotvim](https://github.com/bwangel23/dotvim) | Fork 自[wklken/k-vim](https://github.com/wklken/k-vim)，并做了大量改动
-[dotzsh](https://github.com/bwangel23/dotzsh) | Fork 自[lilydjwg/dotzsh](https://github.com/lilydjwg/dotzsh)
-
 ## Blog Logs
 
 + 2018年12月11日：将博客主题更换成了 [hugo-theme-even](https://github.com/olOwOlo/hugo-theme-even)
