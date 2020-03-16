@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go 的调度模型学习笔记 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content=" 阅读 Go 调度模型 后记的笔记
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with theme even" />
+
+
+<link rel="canonical" href="/2020/03/16/go-schedule/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+<meta property="og:title" content="Go 的调度模型学习笔记" />
+<meta property="og:description" content="
+阅读 Go 调度模型 后记的笔记
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2020/03/16/go-schedule/" />
+<meta property="article:published_time" content="2020-03-16T01:18:03&#43;08:00"/>
+<meta property="article:modified_time" content="2020-03-16T01:18:03&#43;08:00"/>
+
+<meta itemprop="name" content="Go 的调度模型学习笔记">
+<meta itemprop="description" content="
+阅读 Go 调度模型 后记的笔记
+">
+
+
+<meta itemprop="datePublished" content="2020-03-16T01:18:03&#43;08:00" />
+<meta itemprop="dateModified" content="2020-03-16T01:18:03&#43;08:00" />
+<meta itemprop="wordCount" content="1059">
+
+
+
+<meta itemprop="keywords" content="笔记,Go," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go 的调度模型学习笔记"/>
+<meta name="twitter:description" content="
+阅读 Go 调度模型 后记的笔记
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go 的调度模型学习笔记</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-03-16 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#gpm-模型">GPM 模型</a></li>
+<li><a href="#用户态的阻塞-唤醒">用户态的阻塞/唤醒</a></li>
+<li><a href="#系统态的阻塞-唤醒">系统态的阻塞/唤醒</a></li>
+<li><a href="#netpoller">NetPoller</a></li>
+<li><a href="#抢占式调度">抢占式调度</a></li>
+<li><a href="#参考链接">参考链接</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<p>阅读 <a href="https://wudaijun.com/2018/01/go-scheduler/">Go 调度模型</a> 后记的笔记</p>
+</blockquote>
+
+<hr />
+
+<h2 id="gpm-模型">GPM 模型</h2>
+
+<ul>
+<li>G: 每个Goroutine都会对应一个 <a href="https://github.com/bwangelme/go-1.13/blob/6ece83485f77117120693f16ff516c768a31c02a/src/runtime/runtime2.go#L387-L386">G 结构体</a>，它保存了函数执行的栈。</li>
+<li>P: Processor，逻辑上的处理器，对应 <a href="https://github.com/bwangelme/go-1.13/blob/6ece83485f77117120693f16ff516c768a31c02a/src/runtime/runtime2.go#L523">P 结构体</a>。在 Go 程序启动后，会创建和CPU内核数相等的 P。用户可以通过<code>GOMAXPROCS</code>调整P的数量，不过这个函数会 <a href="https://github.com/bwangelme/go-1.13/blob/6ece83485f77117120693f16ff516c768a31c02a/src/runtime/debug.go#L29">STW</a>，尽量少调用这个函数。</li>
+<li>M: Machine, 对应 <a href="https://github.com/bwangelme/go-1.13/blob/6ece83485f77117120693f16ff516c768a31c02a/src/runtime/runtime2.go#L452">M 结构体</a>，通过 <a href="http://man7.org/linux/man-pages/man2/clone.2.html">clone</a> 创建的系统级线程，任务的实际执行者。G 和 P 绑定后， P 会放到 M 上执行，M 不保存 G 的状态，所以 G 可以跨 M 执行。</li>
+<li><code>GRQ</code>: Globale Runable Queue，Goroutine 的全局运行队列</li>
+<li><code>LRQ</code>: Local Runable Queue， P 本地保存的 Goroutine 运行队列</li>
+</ul>
+
+<p>Goroutine 创建后，会创建一个G对象，它会先尝试加入到 P 的 runnext中，如果不行的话，会接着尝试 P 的 LRQ，如果仍然不行，会放入到 GRQ 中，同时将当前P的 LRQ 中的一半任务放入到 GRQ 中。</p>
+
+<p>P 运行时会从 LRQ 中取出一个 G，和它绑定到一起，在 M 上运行。
+P取 G 的顺序是: <code>LRQ &gt; GRQ &gt; 从其他 P 偷 G</code></p>
+
+<h2 id="用户态的阻塞-唤醒">用户态的阻塞/唤醒</h2>
+
+<p>当 G 在用户态阻塞的时候(例如从 channel 读/写)，会将当前 G 的状态从 Running 改为 Wait，同时将 G 放入到一个 wait 队列中(例如 channel 的 wait 队列)。</p>
+
+<p>当 G 被另外一个 G2 唤醒时(通过 <a href="https://github.com/bwangelme/go-1.13/blob/6ece83485f77117120693f16ff516c768a31c02a/src/runtime/chan.go#L299">goready 函数</a>)，那么 G 就会尝试加入到 G2 所在 P 的 runnext 中，如果不成的话，会依次尝试 LRQ 和 GRQ。</p>
+
+<h2 id="系统态的阻塞-唤醒">系统态的阻塞/唤醒</h2>
+
+<p>当 G 在 M 上执行系统调用后，它会阻塞，并将状态设置为 syscall 状态。M 也会进行阻塞。G 所绑定的 P 会和当前 G 和 M 解绑，寻找空闲 M，或创建新的 M，继续运行它队列中的其他 G .</p>
+
+<p>当 M 执行完系统调用后，G 会重新寻找一个空闲的 P，进行运行，如果没有空闲的 P，那么它就会进入 GRQ。</p>
+
+<h2 id="netpoller">NetPoller</h2>
+
+<p>Go 将 epoll 进行了包装(使用了垂直触发)，会单独创建一个名为 NetPoller 的 M 异步处理网络IO，它不需要和 P 进行绑定。</p>
+
+<p>当 G 执行网络 IO 的时候，G 会将当前 M 和 P 解绑，进入到 NetPoller 的 M 中，等待网络 IO 完成，这样即使执行网络 IO 的系统调用，也不会产生阻塞的 M.</p>
+
+<p>当网络 IO 完成后，M 的 Schedule 函数，会通过 <a href="https://github.com/bwangelme/go-1.13/blob/6ece83485f77117120693f16ff516c768a31c02a/src/runtime/proc.go#L2210">findrunable函数</a> 取到这个 G，继续运行它。</p>
+
+<h2 id="抢占式调度">抢占式调度</h2>
+
+<p>当 G 执行的时间超过 10ms 时，一个名为 sysmon 的 M 就会向其发起抢占式调度。由于 Go 是用户态的代码，并没有时间片和硬中断的概念，所以 Go 抢占式调度的方式是运行方主动将自己挂起。</p>
+
+<p>sysmon 如果要抢占某个 G 的执行权，那么就会设置它的抢占标记(<a href="https://github.com/bwangelme/go-1.13/blob/6ece83485f77117120693f16ff516c768a31c02a/src/runtime/runtime2.go#L396">g.stackguard0</a>)。G 在执行函数的时候(具体来说是 <a href="https://github.com/bwangelme/go-1.13/blob/6ece83485f77117120693f16ff516c768a31c02a/src/runtime/stack.go#L916">newstack函数</a>)，会检查抢占标记，如果这个标记已经被设置了，那么它就会通过 <a href="https://github.com/bwangelme/go-1.13/blob/6ece83485f77117120693f16ff516c768a31c02a/src/runtime/stack.go#L1036-L1038">Gosched</a> 的方式将自己放到 GRQ 中，重新等待执行。</p>
+
+<h2 id="参考链接">参考链接</h2>
+
+<ol>
+<li><a href="https://wudaijun.com/2018/01/go-scheduler/">Go 调度模型</a></li>
+<li><a href="https://www.youtube.com/watch?v=oFJL8S1dwsw">#64 深入浅出 Golang Runtime</a></li>
+<li><a href="https://speakerdeck.com/retervision/go-runtime-scheduler">Go Runtime Scheduler</a></li>
+<li><a href="https://colobu.com/2017/05/04/go-scheduler/">[译]Go 调度器: M, P 和 G</a></li>
+<li><a href="https://studygolang.com/articles/16407">Golang并发原理及GPM调度策略（一）</a></li>
+<li><a href="https://github.com/bwangelme/go-1.13/blob/master/src/runtime/runtime2.go">Go 代码 runtime/runtime2.go runtime/proc.go runtime/stack.go</a></li>
+</ol>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-03-16
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E7%AC%94%E8%AE%B0/">笔记</a>
+          <a href="/tags/go/">Go</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/2019/12/21/rabbitmq-tutorial/">
+            <span class="next-text nav-default">Rabbitmq Tutorial 学习笔记</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+    <script src="https://utteranc.es/client.js"
+            repo="anotherbwangel/blog-comment"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>
