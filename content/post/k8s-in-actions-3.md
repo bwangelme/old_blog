@@ -311,3 +311,84 @@ spec:
 每个节点都有一个默认标签: `kubernetes.io/hostname={节点的主机名}`，可以通过这个标签来让某个 Pod 只在一个节点上调度。
 
 但是如果这个节点挂了的话，这个 Pod 则不会调度。
+
+## 注解 Pod
+
+```sh
+# 添加注解
+ø> kubectl annotate pod kubia-gpu bwangel.me/someannotation="foo bar"
+pod/kubia-gpu annotated
+
+# 查看注解
+ø> kubectl describe pod kubia-gpu
+Name:         kubia-gpu
+Annotations:  bwangel.me/someannotation: foo bar
+              kubernetes.io/limit-ranger: LimitRanger plugin set: cpu request for container kubiame
+```
+
+## 使用命名空间对资源进行分组
+
+### 命名空间介绍
+
+k8s 命名空间和 Linux 的命名空间不同，它只是简单地为对象名称提供了一个作用域，可以让我们在不同的命名空间中使用相同的名称，k8s 命名空间并不会隔离网络。
+
+节点资源是全局的且未被约束于单一命名空间的资源，其他的大多数资源都和命名空间有关。
+
+k8s 中所有的内容都是一个 API 对象，都可以通过向 K8S API 服务器提供 YAML manifest，来实现创建，读取，更新和删除操作。
+
+### 查看命名空间及资源
+
+```sh
+# 获取所有命名空间
+
+ø> kubectl get ns
+NAME                   STATUS   AGE
+default                Active   11d
+kube-node-lease        Active   11d
+kube-public            Active   11d
+kube-system            Active   11d
+kubernetes-dashboard   Active   9d
+
+# 列出只属于某个 NS 的 Pod
+ø> kubectl get pod -n kubernetes-dashboard
+NAME                                          READY   STATUS    RESTARTS   AGE
+kubernetes-dashboard-6f89577b77-fhbfb         1/1     Running   0          6d8h
+kubernetes-metrics-scraper-79c9985bc6-bx59z   1/1     Running   0          6d8h
+```
+
+### 创建命名空间
+
+可以通过以下 yaml 文件创建命名空间，也可以通过 `k create namespace {namespace}` 命令来创建命名空间。
+
+命名空间的名字可以包括 字母，数字，横杠(`-`)，但是不能包括点(`.`)。
+
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bwangel
+```
+
+### 为资源指定命名空间
+
+可以在 Pod 的创建文件中设置 `metadata.namespace` 字段，为资源指定命名空间，也可以通过 `k create -f pod.yaml -n {namespace}` 命令指定资源的命名空间。
+
+```yaml
+metadata:
+  name: kubia-manual
+  namespace: bwangel
+```
+
+### 切换命名空间
+
+```sh
+# 切换当前 kubectl 的默认命名空间到 bwangel
+kubectl config set-context $(kubectl config current-context) --namespace bwangel
+
+# 创建 kcd 命名，快速地切换命名空间
+(( $+commands[kubectl] )) && alias kcd='kubectl config set-context $(kubectl config current-context) --namespace'
+
+# 查看当前命名空间
+ø> kubectl config view| grep namespace:
+    namespace: default
+```
