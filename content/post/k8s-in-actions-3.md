@@ -43,10 +43,17 @@ k8s 集群中所有的 pod 都在同一个网络地址空间中，他们之间�
 
 ### 常用命令
 
-+ `kubernetes.io/hostname=gke-demo-default-pool-ade08258-vqx4 get pod podName -o=yaml` 输出一个 Pod 的 yaml 配置
-+ `kubernetes.io/hostname=gke-demo-default-pool-ade08258-vqx4 explain pod`
-+ `kubernetes.io/hostname=gke-demo-default-pool-ade08258-vqx4 explain pod.spec.containers` 获取配置的文档
-+ `kubernetes.io/hostname=gke-demo-default-pool-ade08258-vqx4 create -f somefile.yaml` 通过 manifest 创建一个 Pod
+```sh
+# 输出一个 Pod 的 yaml 配置
+`kubectl get pod podName -o=yaml`
+
+# 获取配置的文档
+`kubectl explain pod`
+`kubectl explain pod.spec.containers`
+
+# 通过 manifest 创建一个 Pod
+`kubectl create -f somefile.yaml`
+```
 
 ### Manifest 说明
 
@@ -150,7 +157,7 @@ status:
   startTime: "2020-03-16T13:35:38Z"
 ```
 
-上面是通过 `kubernetes.io/hostname=gke-demo-default-pool-ade08258-vqx4 get pod -o=yaml` 获取的完整的配置文件，一个 Pod 的YAML配置文件主要包括这么几部分:
+上面是通过 `kubectl get pod -o=yaml` 获取的完整的配置文件，一个 Pod 的YAML配置文件主要包括这么几部分:
 
 名称|说明
 ---|---
@@ -163,7 +170,7 @@ status:
 
 ## 创建一个 Pod
 
-下面是创建 Pod 所需的 Manifest 文件, `kubia-manual.yaml`，使用命令 `kubernetes.io/hostname=gke-demo-default-pool-ade08258-vqx4 create -f kubia-manual.yaml` 就可以创建一个 Pod 了。
+下面是创建 Pod 所需的 Manifest 文件, `kubia-manual.yaml`，使用命令 `kubectl create -f kubia-manual.yaml` 就可以创建一个 Pod 了。
 
 ```yaml
 apiVersion: v1
@@ -391,4 +398,31 @@ kubectl config set-context $(kubectl config current-context) --namespace bwangel
 # 查看当前命名空间
 ø> kubectl config view| grep namespace:
     namespace: default
+```
+
+## 停止和移除 Pod
+
+k8s 在终止容器时，首先会向进程发送 `SIGTERM` 信号，并等待30秒。如果没有关闭的话，则继续发送 `SIGKILL` 信号。
+
+如果应用程序想要正常结束的话，需要处理 `SIGTERM` 信号。
+
+```sh
+# 通过标签删除容器
+ø> kubectl delete pod -l creation_method=manual
+pod "kubia-manual" deleted
+pod "kubia-manual-v2" deleted
+
+# 删除所有资源(注：删除的是当前命名空间下的)
+ø> kubectl delete all --all
+pod "kubia-gpu" deleted
+pod "kubiame-fvh8x" deleted
+pod "kubiame-hcjkf" deleted
+pod "kubiame-qvw7w" deleted
+replicationcontroller "kubiame" deleted
+service "kubernetes" deleted
+service "kubia-http" deleted
+
+# 删除命名空间
+ø> kubectl delete ns bwangel
+namespace "bwangel" deleted
 ```
