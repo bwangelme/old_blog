@@ -1,0 +1,2028 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ElasticSearch 学习笔记 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content=" 教程地址 " /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with theme even" />
+
+
+<link rel="canonical" href="/2020/03/28/es-note/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+<meta property="og:title" content="ElasticSearch 学习笔记" />
+<meta property="og:description" content="
+教程地址
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2020/03/28/es-note/" />
+<meta property="article:published_time" content="2020-03-28T17:16:40&#43;08:00"/>
+<meta property="article:modified_time" content="2020-03-28T17:16:40&#43;08:00"/>
+
+<meta itemprop="name" content="ElasticSearch 学习笔记">
+<meta itemprop="description" content="
+教程地址
+">
+
+
+<meta itemprop="datePublished" content="2020-03-28T17:16:40&#43;08:00" />
+<meta itemprop="dateModified" content="2020-03-28T17:16:40&#43;08:00" />
+<meta itemprop="wordCount" content="3898">
+
+
+
+<meta itemprop="keywords" content="ElasticSearch," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ElasticSearch 学习笔记"/>
+<meta name="twitter:description" content="
+教程地址
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">ElasticSearch 学习笔记</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-03-28 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#分词器">分词器</a>
+<ul>
+<li><a href="#分词器概述">分词器概述</a></li>
+<li><a href="#创建分词器">创建分词器</a></li>
+<li><a href="#中文分词器-ik-的使用示例">中文分词器 ik 的使用示例</a></li>
+</ul></li>
+<li><a href="#索引">索引</a>
+<ul>
+<li><a href="#创建索引">创建索引</a></li>
+<li><a href="#查看-lib-索引的配置">查看 /lib 索引的配置</a></li>
+<li><a href="#查看所有索引">查看所有索引</a></li>
+<li><a href="#查看所有索引的配置">查看所有索引的配置</a></li>
+<li><a href="#删除索引">删除索引</a></li>
+</ul></li>
+<li><a href="#文档">文档</a>
+<ul>
+<li><a href="#创建-全量更新文档">创建&amp;全量更新文档</a></li>
+<li><a href="#创建文档">创建文档</a></li>
+<li><a href="#查询文档-by-id">查询文档 By ID</a></li>
+<li><a href="#只看文档的一部分字段">只看文档的一部分字段</a></li>
+<li><a href="#增量修改文档">增量修改文档</a></li>
+<li><a href="#删除文档">删除文档</a></li>
+</ul></li>
+<li><a href="#multiget-批量获取文档">MultiGet 批量获取文档</a>
+<ul>
+<li><a href="#基于索引-类型-字段">基于索引，类型，字段</a></li>
+<li><a href="#multiget-只获取一部分字段">MultiGet 只获取一部分字段</a></li>
+<li><a href="#指定索引-类型">指定索引&amp;类型</a></li>
+<li><a href="#指定id">指定ID</a></li>
+</ul></li>
+<li><a href="#bulk-批量操作">Bulk 批量操作</a>
+<ul>
+<li><a href="#说明">说明</a></li>
+<li><a href="#bulk-的格式">Bulk 的格式</a></li>
+<li><a href="#批量创建">批量创建</a></li>
+<li><a href="#批量修改-删除">批量修改/删除</a></li>
+</ul></li>
+<li><a href="#版本控制">版本控制</a>
+<ul>
+<li><a href="#内部版本控制">内部版本控制</a></li>
+<li><a href="#外部版本控制">外部版本控制</a></li>
+</ul></li>
+<li><a href="#mapping">Mapping</a>
+<ul>
+<li><a href="#查看索引下的mapping">查看索引下的mapping</a></li>
+<li><a href="#es-的核心数据类型">ES 的核心数据类型</a></li>
+<li><a href="#类型动态映射">类型动态映射</a></li>
+<li><a href="#mapping-参数">mapping 参数</a></li>
+<li><a href="#object-类型">Object 类型</a></li>
+</ul></li>
+<li><a href="#基本查询">基本查询</a>
+<ul>
+<li><a href="#创建索引-1">创建索引</a></li>
+<li><a href="#准备数据">准备数据</a></li>
+<li><a href="#按字段简单查询">按字段简单查询</a></li>
+<li><a href="#term-level-查询">Term-level 查询</a>
+<ul>
+<li><a href="#range-查询">range 查询</a></li>
+<li><a href="#wildcard-查询">WildCard 查询</a></li>
+<li><a href="#fuzzy-查询">fuzzy 查询</a></li>
+</ul></li>
+<li><a href="#full-text-查询">Full text 查询</a>
+<ul>
+<li><a href="#match-查询">match 查询</a></li>
+<li><a href="#multi-match">multi_match</a></li>
+<li><a href="#match-phrase">match_phrase</a></li>
+<li><a href="#match-phrase-prefix">match_phrase_prefix</a></li>
+<li><a href="#控制返回字段">控制返回字段</a></li>
+<li><a href="#排序">排序</a></li>
+</ul></li>
+<li><a href="#高亮返回结果">高亮返回结果</a></li>
+<li><a href="#filter-查询">Filter 查询</a>
+<ul>
+<li><a href="#创建数据">创建数据</a></li>
+<li><a href="#布尔查询">布尔查询</a></li>
+<li><a href="#范围查询-gt-lt">范围查询 (gt, lt)</a></li>
+<li><a href="#constant-score">Constant Score</a></li>
+</ul></li>
+<li><a href="#聚合查询">聚合查询</a>
+<ul>
+<li><a href="#sum">Sum</a></li>
+<li><a href="#max">Max</a></li>
+<li><a href="#min">Min</a></li>
+<li><a href="#avg">Avg</a></li>
+<li><a href="#cardinality">Cardinality</a></li>
+<li><a href="#terms">Terms</a></li>
+<li><a href="#示例">示例</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#集群">集群</a>
+<ul>
+<li><a href="#查看集群的健康状况">查看集群的健康状况</a></li>
+<li><a href="#水平扩容">水平扩容</a></li>
+<li><a href="#es-的容错机制">ES 的容错机制</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <ul>
+<li><a href="https://www.bilibili.com/video/BV1R4411W7be">教程地址</a></li>
+</ul>
+
+<hr />
+
+<h1 id="分词器">分词器</h1>
+
+<h2 id="分词器概述">分词器概述</h2>
+
+<p>分词器包含三部分</p>
+
+<ol>
+<li>character filter: 分词之前的预处理，过滤掉HTML标签，特殊符号转换等。</li>
+<li>tokenizer: 分词</li>
+<li>token filter: 标准化，大小写，同义词，单复数转换。</li>
+</ol>
+
+<h2 id="创建分词器">创建分词器</h2>
+
+<p>下面为创建索引时指定类型的设置:</p>
+
+<p>为索引创建了 person 类型，其中包含 user 字段</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">{
+  &#34;mappings&#34;: {
+    &#34;person&#34;: {
+      &#34;properties&#34;: {
+        &#34;user&#34;: {
+          &#34;type&#34;: &#34;text&#34;,
+          &#34;analyzer&#34;: &#34;ik_max_word&#34;,
+          &#34;search_analyzer&#34;: &#34;ik_max_word&#34;
+        },
+      }
+    }
+  }
+}</pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>search_analyzer 是搜索词的分词器</li>
+<li>analyzer 是字段文本的分词器</li>
+</ul>
+
+<h2 id="中文分词器-ik-的使用示例">中文分词器 ik 的使用示例</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">POST /ik-test/fulltext/1
+{
+&#34;content&#34;: &#34;美国留给伊拉克的是个烂摊子吗？&#34;
+}
+
+
+POST /ik-test/fulltext/2
+{
+&#34;content&#34;: &#34;公安部：各地校车将享有最高路权&#34;
+}
+
+POST /ik-test/fulltext/3
+{
+&#34;content&#34;: &#34;中韩渔警冲突调查：韩警平均每天扣1艘中国渔船&#34;
+}
+
+POST /ik-test/fulltext/4
+{
+&#34;content&#34;: &#34;中国驻洛杉矶领事馆遭亚裔男子枪击 嫌犯已自首&#34;
+}
+
+POST /ik-test/fulltext/_search
+{
+  &#34;query&#34;: {
+    &#34;match&#34;: {
+      &#34;content&#34;: &#34;中国&#34;
+    }
+  },
+  &#34;highlight&#34; : {
+      &#34;pre_tags&#34; : [&#34;&lt;tag1&gt;&#34;, &#34;&lt;tag2&gt;&#34;],
+      &#34;post_tags&#34; : [&#34;&lt;/tag1&gt;&#34;, &#34;&lt;/tag2&gt;&#34;],
+      &#34;fields&#34; : {
+          &#34;content&#34; : {}
+      }
+  }
+}</pre></td></tr></table>
+</div>
+</div>
+<h1 id="索引">索引</h1>
+
+<h2 id="创建索引">创建索引</h2>
+
+<ul>
+<li>索引名称必须是小写的，不能以下划线开头，不能包括逗号</li>
+<li>索引一旦创建，主分片的数量不可改，副分片的数量可改</li>
+<li>三个分片，没有备份</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">PUT /lib/
+{
+  &#34;settings&#34;: {
+    &#34;index&#34;: {
+      &#34;number_of_shards&#34;: 3,
+      &#34;number_of_replicas&#34;: 0
+    }
+  }
+}</pre></td></tr></table>
+</div>
+</div>
+<h2 id="查看-lib-索引的配置">查看 /lib 索引的配置</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">GET /lib/_settings</pre></td></tr></table>
+</div>
+</div>
+<h2 id="查看所有索引">查看所有索引</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">GET /_cat/indices?v</pre></td></tr></table>
+</div>
+</div>
+<h2 id="查看所有索引的配置">查看所有索引的配置</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">GET _all/_settings</pre></td></tr></table>
+</div>
+</div>
+<h2 id="删除索引">删除索引</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">DELETE /ik-test</pre></td></tr></table>
+</div>
+</div>
+<h1 id="文档">文档</h1>
+
+<h2 id="创建-全量更新文档">创建&amp;全量更新文档</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">PUT /lib/user/1
+{
+  &#34;first_name&#34;: &#34;Jane&#34;,
+  &#34;last_name&#34;: &#34;Smith&#34;,
+  &#34;age&#34;: 30,
+  &#34;about&#34;: &#34;I like to collect rock albums&#34;,
+  &#34;interests&#34;: [&#34;music&#34;]
+}</pre></td></tr></table>
+</div>
+</div>
+<h2 id="创建文档">创建文档</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">POST /lib/user/
+{
+  &#34;first_name&#34;: &#34;Jane&#34;,
+  &#34;last_name&#34;: &#34;Smith&#34;,
+  &#34;age&#34;: 32,
+  &#34;about&#34;: &#34;I like to collect rock albums&#34;,
+  &#34;interests&#34;: [&#34;music&#34;]
+}</pre></td></tr></table>
+</div>
+</div>
+<h2 id="查询文档-by-id">查询文档 By ID</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">GET /lib/user/1</pre></td></tr></table>
+</div>
+</div>
+<h2 id="只看文档的一部分字段">只看文档的一部分字段</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">GET /lib/user/1?_source=age,about</pre></td></tr></table>
+</div>
+</div>
+<h2 id="增量修改文档">增量修改文档</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">POST /lib/user/1/_update
+{
+  &#34;doc&#34;: {
+    &#34;age&#34;: 26
+  }
+}</pre></td></tr></table>
+</div>
+</div>
+<h2 id="删除文档">删除文档</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">DELETE /lib/user/1</pre></td></tr></table>
+</div>
+</div>
+<h1 id="multiget-批量获取文档">MultiGet 批量获取文档</h1>
+
+<h2 id="基于索引-类型-字段">基于索引，类型，字段</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">GET /_mget
+{
+  &#34;docs&#34;: [
+    {
+      &#34;_index&#34;: &#34;lib&#34;,
+      &#34;_type&#34;: &#34;user&#34;,
+      &#34;_id&#34;: 1
+    },
+    {
+      &#34;_index&#34;: &#34;lib&#34;,
+      &#34;_type&#34;: &#34;user&#34;,
+      &#34;_id&#34;: 2
+    },
+    {
+      &#34;_index&#34;: &#34;lib&#34;,
+      &#34;_type&#34;: &#34;user&#34;,
+      &#34;_id&#34;: 3
+    }
+    ]
+}</pre></td></tr></table>
+</div>
+</div>
+<h2 id="multiget-只获取一部分字段">MultiGet 只获取一部分字段</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">GET /_mget
+{
+  &#34;docs&#34;: [
+    {
+      &#34;_index&#34;: &#34;lib&#34;,
+      &#34;_type&#34;: &#34;user&#34;,
+      &#34;_id&#34;: 1,
+      &#34;_source&#34;: [&#34;interests&#34;]
+    },
+    {
+      &#34;_index&#34;: &#34;lib&#34;,
+      &#34;_type&#34;: &#34;user&#34;,
+      &#34;_id&#34;: 2,
+      &#34;_source&#34;: [&#34;age&#34;, &#34;interests&#34;]
+    }
+    ]
+}</pre></td></tr></table>
+</div>
+</div>
+<h2 id="指定索引-类型">指定索引&amp;类型</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">GET /lib/user/_mget
+{
+  &#34;docs&#34;: [
+    {&#34;_id&#34;: 1},
+    {&#34;_id&#34;: 2}
+  ]
+}</pre></td></tr></table>
+</div>
+</div>
+<h2 id="指定id">指定ID</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">GET /lib/user/_mget
+{
+  &#34;ids&#34;: [&#34;1&#34;, &#34;2&#34;, &#34;3&#34;]
+}</pre></td></tr></table>
+</div>
+</div>
+<h1 id="bulk-批量操作">Bulk 批量操作</h1>
+
+<h2 id="说明">说明</h2>
+
+<p>bulk 一次操作的文档建议在 1000 ~ 5000 之间，大小建议是在 5 ~ 15MB，默认不超过100M。</p>
+
+<h2 id="bulk-的格式">Bulk 的格式</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">{action: {metadata}}
+{requestBody}</pre></td></tr></table>
+</div>
+</div>
+<table>
+<thead>
+<tr>
+<th>action 的值</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>create</td>
+<td>文档不存在时创建(如果文档已经存在，会操作失败，提示文档已经存在)</td>
+</tr>
+
+<tr>
+<td>update</td>
+<td>更新文档(要传入 &ldquo;doc&rdquo; 参数)</td>
+</tr>
+
+<tr>
+<td>index</td>
+<td>创建新文档或者替换已有文档</td>
+</tr>
+
+<tr>
+<td>delete</td>
+<td>删除一个文档</td>
+</tr>
+</tbody>
+</table>
+
+<p>metadata的三个字段: <code>_index</code>, <code>_type</code>, <code>_id</code>，分别表示索引，类型，文档ID</p>
+
+<h2 id="批量创建">批量创建</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">POST /lib2/books/_bulk
+{&#34;index&#34;:{&#34;_id&#34;: 1}}
+{&#34;title&#34;: &#34;Java&#34;, &#34;price&#34;: 55}
+{&#34;index&#34;:{&#34;_id&#34;: 2}}
+{&#34;title&#34;: &#34;HTML5&#34;, &#34;price&#34;: 45}
+{&#34;index&#34;:{&#34;_id&#34;: 3}}
+{&#34;title&#34;: &#34;PHP&#34;, &#34;price&#34;: 35}
+{&#34;index&#34;:{&#34;_id&#34;: 4}}
+{&#34;title&#34;: &#34;Python&#34;, &#34;price&#34;: 50}</pre></td></tr></table>
+</div>
+</div>
+<h2 id="批量修改-删除">批量修改/删除</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">POST /lib2/books/_bulk
+{&#34;delete&#34;: {&#34;_index&#34;: &#34;lib2&#34;, &#34;_type&#34;: &#34;books&#34;, &#34;_id&#34;: 4}}
+{&#34;create&#34;: {&#34;_index&#34;: &#34;tt&#34;, &#34;_type&#34;: &#34;ttt&#34;, &#34;_id&#34;: &#34;100&#34;}}
+{&#34;name&#34;: &#34;lisi&#34;}
+{&#34;index&#34;: {&#34;_index&#34;: &#34;tt&#34;, &#34;_type&#34;: &#34;ttt&#34;}}
+{&#34;name&#34;: &#34;zhaosi&#34;}
+{&#34;update&#34;: {&#34;_index&#34;: &#34;lib2&#34;, &#34;_type&#34;: &#34;books&#34;, &#34;_id&#34;: &#34;4&#34;}}
+{&#34;doc&#34;: {&#34;price&#34;: 58}}</pre></td></tr></table>
+</div>
+</div>
+<h1 id="版本控制">版本控制</h1>
+
+<h2 id="内部版本控制">内部版本控制</h2>
+
+<p>elasticseach 采用乐观锁来处理并发问题，每个文档都有版本，更新一次后版本号会加1。
+更新的时候可以传递 version 参数(<code>POST /index/type/id?version={num}</code>)，如果更新时携带的版本和elasticsearch实际的版本不同，那么程序就会报错: <code>VersionConflictEngineException</code></p>
+
+<h2 id="外部版本控制">外部版本控制</h2>
+
+<p>更新的时候传递参数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">POST /index/type/id?version={num}&amp;version_type=external</pre></td></tr></table>
+</div>
+</div>
+<p>只有当 <code>version</code> 大于 ElasticSearch 中存储的版本时，更新才会成功，否则就会报错 <code>VersionConflict</code>。更新完之后，ElasticSearch 中存储的 version 就会变成我们传递的 version。版本号的范围是 <code>[1, 2^63-1]</code></p>
+
+<h1 id="mapping">Mapping</h1>
+
+<h2 id="查看索引下的mapping">查看索引下的mapping</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">GET /index/type/_mapping</pre></td></tr></table>
+</div>
+</div>
+<h2 id="es-的核心数据类型">ES 的核心数据类型</h2>
+
+<p>字符串类型:</p>
+
+<ul>
+<li>text: text 类型被用来索引长文本，在建立索引前会将这个文本进行分词，转化为词的组合，建立索引，允许es来检索这些词语。text 类型不能用来排序和聚合。</li>
+<li>keyword: keyword 类型不需要进行分词，可以被用来检索，过滤，排序和聚合，keyword 类型字段只能用本身来进行检索。</li>
+<li>数字类型: long, integer, short, byte, double, float</li>
+<li>日期类型: date</li>
+<li>布尔类型: boolean</li>
+<li>二进制类型: binary</li>
+</ul>
+
+<h2 id="类型动态映射">类型动态映射</h2>
+
+<p>创建时会根据这些值自动创建字段类型</p>
+
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>自动创建的字段类型</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>true, false</td>
+<td>boolean</td>
+</tr>
+
+<tr>
+<td>&ldquo;abc&rdquo;</td>
+<td>text</td>
+</tr>
+
+<tr>
+<td>119</td>
+<td>long</td>
+</tr>
+
+<tr>
+<td>123.22</td>
+<td>double</td>
+</tr>
+
+<tr>
+<td>2020-11-10</td>
+<td>date</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="mapping-参数">mapping 参数</h2>
+
+<p><a href="https://www.elastic.co/guide/en/elasticsearch/reference/6.8/mapping-params.html">https://www.elastic.co/guide/en/elasticsearch/reference/6.8/mapping-params.html</a></p>
+
+<p>store: 表示字段是否存储而从_souce 中分离，默认是false
+index: 表示某个字段是否被索引，没有被索引的字段是不能被查询的，默认是 true
+analyzer: 分词器
+ignore_above: 索引的字符串超过了这个数字后，就不会被索引了</p>
+
+<h2 id="object-类型">Object 类型</h2>
+
+<p>类型组合起来，就是 Object 类型</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">PUT /lib5/person/1
+{
+    &#34;name&#34;: &#34;Tom&#34;,
+    &#34;age&#34;: 25,
+    &#34;birthday&#34;: &#34;1985-12-12&#34;,
+    &#34;address&#34;: {
+        &#34;country&#34;: &#34;china&#34;,
+        &#34;province&#34;: &#34;guangdong&#34;,
+        &#34;city&#34;: &#34;shenzhen&#34;
+    }
+}</pre></td></tr></table>
+</div>
+</div>
+<h1 id="基本查询">基本查询</h1>
+
+<h2 id="创建索引-1">创建索引</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">PUT /lib3
+{
+  &#34;settings&#34;: {
+    &#34;index&#34;: {
+      &#34;number_of_shards&#34;: 3,
+      &#34;number_of_replicas&#34;: 0
+    }
+  },
+  &#34;mappings&#34;: {
+    &#34;user&#34;: {
+        &#34;properties&#34;: {
+            &#34;name&#34;: {&#34;type&#34;: &#34;text&#34;},
+            &#34;address&#34;: {&#34;type&#34;: &#34;text&#34;},
+            &#34;age&#34;: {&#34;type&#34;: &#34;integer&#34;},
+            &#34;interests&#34;: {&#34;type&#34;: &#34;text&#34;},
+            &#34;birthday&#34;: {&#34;type&#34;: &#34;date&#34;},
+        }
+    }
+  }
+}</pre></td></tr></table>
+</div>
+</div>
+<h2 id="准备数据">准备数据</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">PUT /lib3/user/1
+{
+  &#34;name&#34;: &#34;zhaoliu&#34;,
+  &#34;address&#34;: &#34;hei long jiang province, tieling city&#34;,
+  &#34;age&#34;: 50,
+  &#34;birthday&#34;: &#34;1970-12-12&#34;,
+  &#34;interests&#34;: &#34;hejiu,duanlian,lvyou&#34;
+}
+PUT /lib3/user/2
+{
+  &#34;name&#34;: &#34;zhaoming&#34;,
+  &#34;address&#34;: &#34;beijing city, haidian area, qinghe&#34;,
+  &#34;age&#34;: 20,
+  &#34;birthday&#34;: &#34;1998-10-12&#34;,
+  &#34;interests&#34;: &#34;hejiu,duanlian,changge&#34;
+}
+PUT /lib3/user/3
+{
+  &#34;name&#34;: &#34;lisi&#34;,
+  &#34;address&#34;: &#34;beijing city, haidian area, qinghe&#34;,
+  &#34;age&#34;: 23,
+  &#34;birthday&#34;: &#34;1995-10-12&#34;,
+  &#34;interests&#34;: &#34;hejiu,duanlian,changge&#34;
+}
+PUT /lib3/user/4
+{
+  &#34;name&#34;: &#34;wangwu&#34;,
+  &#34;address&#34;: &#34;beijing city, haidian area, qinghe&#34;,
+  &#34;age&#34;: 26,
+  &#34;birthday&#34;: &#34;1992-10-12&#34;,
+  &#34;interests&#34;: &#34;biancheng,tingyinyue,lvyou&#34;
+}
+PUT /lib3/user/5
+{
+  &#34;name&#34;: &#34;zhangsan&#34;,
+  &#34;address&#34;: &#34;beijing city, chaoyang area&#34;,
+  &#34;age&#34;: 29,
+  &#34;birthday&#34;: &#34;1989-10-12&#34;,
+  &#34;interests&#34;: &#34;tingyingyue,changge,tiaowu&#34;
+}</pre></td></tr></table>
+</div>
+</div>
+<h2 id="按字段简单查询">按字段简单查询</h2>
+
+<ul>
+<li>查询某个类型下的所有文档</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">GET /lib3/user/_search</pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">GET /lib3/user/_search
+{
+  &#34;query&#34;: {
+    &#34;match_all&#34;: {}
+  }
+}</pre></td></tr></table>
+</div>
+</div>
+<p>在 <code>/Index/Type/_search</code> 的搜索结果中，</p>
+
+<ul>
+<li><code>hits</code>中的每个结果会有一个<code>_score</code>字段(<strong>相关度分数</strong>)，表示匹配程度(这个值最大是1)，默认按照这个字段降序排列。</li>
+<li><code>took</code>表示查询时间，单位是毫秒</li>
+<li><code>timed_out</code>表示是否查询超时</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 查询所有名字中含有`lisi`词的文档</span>
+GET /lib3/user/_search?q<span class="o">=</span>name:lisi
+
+<span class="c1"># 查询所有兴趣中含有`changge`词的文档，且按照年龄降序排序</span>
+GET /lib3/user/_search?q<span class="o">=</span>interests:changge<span class="p">&amp;</span><span class="nv">sort</span><span class="o">=</span>age:desc</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="term-level-查询">Term-level 查询</h2>
+
+<ul>
+<li>Term-level 查询会去倒排索引中寻找确切的<code>term</code>，它并不对搜索词进行分词</li>
+<li>Term-level 查询对<code>keyword</code>类型的字段查询时，会对关键字进行 <code>normalize</code> 操作</li>
+<li>term 查询只支持对单个关键字进行查询</li>
+<li>terms 支持多个关键字进行查询，且多个关键字之间是或的关系</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 查询 name 完整匹配 `zhaoliu` 的文档</span>
+GET /lib3/user/_search
+<span class="o">{</span>
+    <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;term&#34;</span>: <span class="o">{</span><span class="s2">&#34;name&#34;</span>: <span class="s2">&#34;zhaoliu&#34;</span><span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1"># 查询 address 中包含词 `beijing` 或 `haidian` 的文档，在结果中输出版本号，只获得前两个结果。(注意 address 已经进行过分词了)</span>
+GET /lib3/user/_search
+<span class="o">{</span>
+    <span class="s2">&#34;from&#34;</span>: <span class="m">0</span>,
+    <span class="s2">&#34;size&#34;</span>: <span class="m">2</span>,
+    <span class="s2">&#34;version&#34;</span>: true,
+    <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;terms&#34;</span>: <span class="o">{</span>
+            <span class="s2">&#34;address&#34;</span>: <span class="o">[</span><span class="s2">&#34;beijing&#34;</span>, <span class="s2">&#34;haidian&#34;</span><span class="o">]</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="range-查询">range 查询</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 按日期范围查找，注意日期格式一定是8位数字</span>
+GET /lib3/user/_search
+<span class="o">{</span>
+    <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;range&#34;</span>: <span class="o">{</span>
+            <span class="s2">&#34;birthday&#34;</span>: <span class="o">{</span>
+                <span class="s2">&#34;from&#34;</span>: <span class="s2">&#34;1990-10-01&#34;</span>,
+                <span class="s2">&#34;to&#34;</span>: <span class="s2">&#34;2018-05-01&#34;</span>,
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1"># 查询年龄在 [20,25)</span>
+GET /lib3/user/_search
+<span class="o">{</span>
+    <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;range&#34;</span>: <span class="o">{</span>
+            <span class="s2">&#34;age&#34;</span>: <span class="o">{</span>
+                <span class="s2">&#34;from&#34;</span>: <span class="s2">&#34;20&#34;</span>,
+                <span class="s2">&#34;to&#34;</span>: <span class="s2">&#34;25&#34;</span>,
+                <span class="s2">&#34;include_lower&#34;</span>: true,
+                <span class="s2">&#34;include_upper&#34;</span>: <span class="nb">false</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="wildcard-查询">WildCard 查询</h3>
+
+<ul>
+<li><code>*</code> 代表0或多个字符</li>
+<li><code>?</code> 表示任意一个字符</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /lib4/user/_search
+<span class="o">{</span>
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;wildcard&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;name&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;value&#34;</span>: <span class="s2">&#34;赵*&#34;</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="fuzzy-查询">fuzzy 查询</h3>
+
+<ul>
+<li>boost: 查询的权值，默认是1.0</li>
+<li>min_similarity: 匹配的最小相似度，默认是0.5，对于字符串来说，相似度在0-1，对于数值来说，相似度可以大于1，日期类型相似度取值为 1d, 1m，代表一天，一个月</li>
+<li>prefix_length: 指明区分词项的共同前缀长度，默认是0</li>
+<li>max_expansions: 查询中的词项可以扩展的书目，默认可以无限大</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /lib3/user/_search
+<span class="o">{</span>
+    <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;fuzzy&#34;</span>: <span class="o">{</span>
+            <span class="s2">&#34;name&#34;</span>: <span class="s2">&#34;zhuliu&#34;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+GET /lib3/user/_search
+<span class="o">{</span>
+    <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;fuzzy&#34;</span>: <span class="o">{</span>
+            <span class="s2">&#34;interests&#34;</span>: <span class="s2">&#34;change&#34;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="full-text-查询">Full text 查询</h2>
+
+<p>Full text 查询通常被用来在全文字段上进行一些查询。他们理解被查询的字段是如何被分词的，而且在执行查询之前，将会应用每个字段的分词器(或 search_analyzer) 到查询字符串上。</p>
+
+<h3 id="match-查询">match 查询</h3>
+
+<ul>
+<li>对搜索字符串进行分词，分别查询<code>name</code>包含 &ldquo;zhaoliu&rdquo;, &ldquo;zhaoming&rdquo; 这两个关键字的文档。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /lib3/user/_search
+<span class="o">{</span>
+    <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;match&#34;</span>: <span class="o">{</span>
+            <span class="s2">&#34;name&#34;</span>: <span class="s2">&#34;zhaoliu zhaoming&#34;</span>,
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="multi-match">multi_match</h3>
+
+<ul>
+<li>支持对多个字段查询</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /lib3/user/_search
+<span class="o">{</span>
+    <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;multi_match&#34;</span>: <span class="o">{</span>
+            <span class="s2">&#34;query&#34;</span>: <span class="s2">&#34;changge&#34;</span>,
+            <span class="s2">&#34;fields&#34;</span>: <span class="o">[</span><span class="s2">&#34;interests&#34;</span>, <span class="s2">&#34;name&#34;</span><span class="o">]</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="match-phrase">match_phrase</h3>
+
+<p>按照从搜索字符串中分析出来的短语去匹配搜索的文档，按照短语顺序查找</p>
+
+<p>slop 表示结果中的单词移动几次能够匹配短语，这里设置一次就能匹配我们查询的短语。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /lib3/user/_search
+<span class="o">{</span>
+    <span class="s2">&#34;_source&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;includes&#34;</span>: <span class="o">[</span><span class="s2">&#34;name&#34;</span>, <span class="s2">&#34;address&#34;</span>, <span class="s2">&#34;interests&#34;</span><span class="o">]</span>
+    <span class="o">}</span>,
+    <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;match_phrase&#34;</span>: <span class="o">{</span>
+            <span class="s2">&#34;interests&#34;</span>: <span class="o">{</span>
+              <span class="s2">&#34;query&#34;</span>: <span class="s2">&#34;hejiu,changge&#34;</span>,
+              <span class="s2">&#34;slop&#34;</span>: <span class="m">1</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="match-phrase-prefix">match_phrase_prefix</h3>
+
+<ul>
+<li>查询所有name以zhao开头的文档</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /lib3/user/_search
+<span class="o">{</span>
+    <span class="s2">&#34;_source&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;includes&#34;</span>: <span class="o">[</span><span class="s2">&#34;name&#34;</span><span class="o">]</span>
+    <span class="o">}</span>,
+    <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;match_phrase_prefix&#34;</span>: <span class="o">{</span>
+            <span class="s2">&#34;name&#34;</span>: <span class="o">{</span>
+              <span class="s2">&#34;query&#34;</span>: <span class="s2">&#34;zhao&#34;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="控制返回字段">控制返回字段</h3>
+
+<p><code>_source</code> 控制返回值</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /lib3/user/_search
+<span class="o">{</span>
+    <span class="s2">&#34;_source&#34;</span>: <span class="o">[</span><span class="s2">&#34;id&#34;</span>, <span class="s2">&#34;name&#34;</span><span class="o">]</span>,
+    <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;match_phrase&#34;</span>: <span class="o">{</span>
+            <span class="s2">&#34;interests&#34;</span>: <span class="s2">&#34;duanlian,changge&#34;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="排序">排序</h3>
+
+<p><code>sort</code> 关键字进行排序</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /lib3/user/_search
+<span class="o">{</span>
+    <span class="s2">&#34;sort&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;age&#34;</span>: <span class="o">{</span>
+            <span class="s2">&#34;order&#34;</span>: <span class="s2">&#34;desc&#34;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="高亮返回结果">高亮返回结果</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /lib3/user/_search
+<span class="o">{</span>
+    <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;match&#34;</span>: <span class="o">{</span>
+            <span class="s2">&#34;name&#34;</span>: <span class="s2">&#34;zhaoliu zhaoming&#34;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>,
+    <span class="s2">&#34;highlight&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;fields&#34;</span>: <span class="o">{</span>
+            <span class="s2">&#34;name&#34;</span>: <span class="o">{}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="filter-查询">Filter 查询</h2>
+
+<h3 id="创建数据">创建数据</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">POST /lib6/items/_bulk
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: <span class="m">1</span><span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;price&#34;</span>: <span class="m">40</span>, <span class="s2">&#34;itemID&#34;</span>: <span class="s2">&#34;ID100123&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: <span class="m">2</span><span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;price&#34;</span>: <span class="m">50</span>, <span class="s2">&#34;itemID&#34;</span>: <span class="s2">&#34;ID100124&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: <span class="m">3</span><span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;price&#34;</span>: <span class="m">25</span>, <span class="s2">&#34;itemID&#34;</span>: <span class="s2">&#34;ID100125&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: <span class="m">4</span><span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;price&#34;</span>: <span class="m">30</span>, <span class="s2">&#34;itemID&#34;</span>: <span class="s2">&#34;ID100126&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: <span class="m">5</span><span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;price&#34;</span>: null, <span class="s2">&#34;itemID&#34;</span>: <span class="s2">&#34;ID100127&#34;</span><span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="布尔查询">布尔查询</h3>
+
+<ul>
+<li><code>must</code> 各个条件必须都被满足</li>
+<li><code>should</code> 满足一个条件即可</li>
+<li><code>must_not</code> 必须不能被满足</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">GET /lib6/items/_search
+{
+  &#34;query&#34;: {
+    &#34;bool&#34;: {
+      &#34;should&#34;: [
+        {&#34;term&#34;: {&#34;price&#34;: 30}},
+        {&#34;bool&#34;: {&#34;must&#34;: [{&#34;term&#34;: {&#34;price&#34;: 25}}]}},
+        {
+          &#34;bool&#34;: {
+            &#34;must_not&#34;: [{&#34;term&#34;: {&#34;price&#34;: 50}}]
+          }
+        }
+      ]
+    }
+  }
+}</pre></td></tr></table>
+</div>
+</div>
+<h3 id="范围查询-gt-lt">范围查询 (gt, lt)</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">GET /lib6/items/_search
+{
+  &#34;query&#34;: {
+    &#34;bool&#34;: {
+      &#34;filter&#34;: {
+        &#34;range&#34;: {
+          &#34;price&#34;: {
+            &#34;gte&#34;: 25,
+            &#34;lte&#34;: 50
+          }
+        }
+      }
+    }
+  }
+}</pre></td></tr></table>
+</div>
+</div>
+<h3 id="constant-score">Constant Score</h3>
+
+<ul>
+<li>将所有文档分配一个固定的分数，不计算相关度，这样来节省查询时间，适用于只filter的情况</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /lib3/user/_search
+<span class="o">{</span>
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;constant_score&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;filter&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;term&#34;</span>: <span class="o">{</span>
+          <span class="s2">&#34;age&#34;</span>: <span class="m">23</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="聚合查询">聚合查询</h2>
+
+<p>仍然使用 Filter 查询中的数据</p>
+
+<h3 id="sum">Sum</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /lib6/items/_search
+<span class="o">{</span>
+  <span class="s2">&#34;aggs&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;price_of_sum&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;sum&#34;</span>: <span class="o">{</span><span class="s2">&#34;field&#34;</span>: <span class="s2">&#34;price&#34;</span><span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>,
+  <span class="s2">&#34;size&#34;</span>: <span class="m">0</span>  <span class="c1"># 不输出查询到的文档，只输出聚合结果</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="max">Max</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /lib6/items/_search
+<span class="o">{</span>
+  <span class="s2">&#34;aggs&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;price_max&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;max&#34;</span>: <span class="o">{</span><span class="s2">&#34;field&#34;</span>: <span class="s2">&#34;price&#34;</span><span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>,
+  <span class="s2">&#34;size&#34;</span>: <span class="m">0</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="min">Min</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /lib6/items/_search
+<span class="o">{</span>
+  <span class="s2">&#34;aggs&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;price_min&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;min&#34;</span>: <span class="o">{</span><span class="s2">&#34;field&#34;</span>: <span class="s2">&#34;price&#34;</span><span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>,
+  <span class="s2">&#34;size&#34;</span>: <span class="m">0</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="avg">Avg</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /lib6/items/_search
+<span class="o">{</span>
+  <span class="s2">&#34;aggs&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;price_avg&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;avg&#34;</span>: <span class="o">{</span><span class="s2">&#34;field&#34;</span>: <span class="s2">&#34;price&#34;</span><span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>,
+  <span class="s2">&#34;size&#34;</span>: <span class="m">0</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="cardinality">Cardinality</h3>
+
+<ul>
+<li>基数，互不相同的值的个数</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /lib6/items/_search
+<span class="o">{</span>
+  <span class="s2">&#34;aggs&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;price_cardinnality&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;cardinality&#34;</span>: <span class="o">{</span><span class="s2">&#34;field&#34;</span>: <span class="s2">&#34;price&#34;</span><span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>,
+  <span class="s2">&#34;size&#34;</span>: <span class="m">0</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="terms">Terms</h3>
+
+<ul>
+<li>根据<code>price</code>对文档进行分组，并输出每组文档的个数</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">GET /lib6/items/_search
+{
+  &#34;aggs&#34;: {
+    &#34;price_group&#34;: {
+      &#34;terms&#34;: {&#34;field&#34;: &#34;price&#34;}
+    }
+  },
+  &#34;size&#34;: 0
+}</pre></td></tr></table>
+</div>
+</div>
+<h3 id="示例">示例</h3>
+
+<p>查询所有有<code>changge</code>兴趣的人，并按照年龄分组，并求平均年龄，按照评价年龄降序排序</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /lib3/user/_search
+<span class="o">{</span>
+  <span class="s2">&#34;size&#34;</span>: <span class="m">0</span>,
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;term&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;interests&#34;</span>: <span class="s2">&#34;changge&#34;</span>
+      <span class="o">}</span>
+  <span class="o">}</span>,
+  <span class="s2">&#34;aggs&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;age_count&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;terms&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;field&#34;</span>: <span class="s2">&#34;age&#34;</span>
+        , <span class="s2">&#34;order&#34;</span>: <span class="o">{</span>
+          <span class="s2">&#34;age_avg&#34;</span>: <span class="s2">&#34;desc&#34;</span>
+        <span class="o">}</span>
+      <span class="o">}</span>,
+      <span class="s2">&#34;aggs&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;age_avg&#34;</span>: <span class="o">{</span>
+          <span class="s2">&#34;avg&#34;</span>: <span class="o">{</span>
+            <span class="s2">&#34;field&#34;</span>: <span class="s2">&#34;age&#34;</span>
+          <span class="o">}</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h1 id="集群">集群</h1>
+
+<h2 id="查看集群的健康状况">查看集群的健康状况</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">GET _cat/health</pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li>绿色表示所有的主分片和副分片都可用</li>
+<li>黄色表示所有的主分片可用，但副分片不是全部都可用</li>
+<li>红色表示不是所有的主分片都可用</li>
+</ul>
+
+<h2 id="水平扩容">水平扩容</h2>
+
+<p>水平扩容的极限，每个节点上只放一个分片。
+如果在达到极限后想要增加更多的节点，可以增加主分片的备份节点，以此来提高扩容上限。</p>
+
+<h2 id="es-的容错机制">ES 的容错机制</h2>
+
+<p>处理 master 宕机的方法</p>
+
+<ol>
+<li>master节点发生宕机，集群状态变成红色。</li>
+<li>重新选取一个节点作为master节点</li>
+<li>master节点会把丢失的主分片的一个副本提升为主分片，此时所有主分片都是可用的，集群状态变为黄色</li>
+<li>将宕机的服务器重启，会拷贝所有主分片的副本到该服务器上，集群的状态变成绿色</li>
+</ol>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-03-28
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/elasticsearch/">ElasticSearch</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/2020/03/19/k8s-in-actions-3/">
+            <span class="next-text nav-default">k8s in Actions 第三章学习笔记</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+    <script src="https://utteranc.es/client.js"
+            repo="anotherbwangel/blog-comment"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>
