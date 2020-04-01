@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Review 《Getting started with the Elastic Stackedit》 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="  原文地址: https://www.elastic.co/guide/en/elastic-stack-get-started/6.8/get-started-elastic-stack.html#get-started-elastic-stack  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.54.0 with theme even" />
+
+
+<link rel="canonical" href="/2020/03/29/review-elk-intro/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+<meta property="og:title" content="Review 《Getting started with the Elastic Stackedit》" />
+<meta property="og:description" content="
+
+原文地址: https://www.elastic.co/guide/en/elastic-stack-get-started/6.8/get-started-elastic-stack.html#get-started-elastic-stack
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2020/03/29/review-elk-intro/" />
+<meta property="article:published_time" content="2020-03-29T00:10:08&#43;08:00"/>
+<meta property="article:modified_time" content="2020-03-29T00:10:08&#43;08:00"/>
+
+<meta itemprop="name" content="Review 《Getting started with the Elastic Stackedit》">
+<meta itemprop="description" content="
+
+原文地址: https://www.elastic.co/guide/en/elastic-stack-get-started/6.8/get-started-elastic-stack.html#get-started-elastic-stack
+
+">
+
+
+<meta itemprop="datePublished" content="2020-03-29T00:10:08&#43;08:00" />
+<meta itemprop="dateModified" content="2020-03-29T00:10:08&#43;08:00" />
+<meta itemprop="wordCount" content="706">
+
+
+
+<meta itemprop="keywords" content="ElasticSearch," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Review 《Getting started with the Elastic Stackedit》"/>
+<meta name="twitter:description" content="
+
+原文地址: https://www.elastic.co/guide/en/elastic-stack-get-started/6.8/get-started-elastic-stack.html#get-started-elastic-stack
+
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Review 《Getting started with the Elastic Stackedit》</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-03-29 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#metricbeat">MetricBeat</a>
+<ul>
+<li><a href="#无法创建-kibana-dashboard-的错误">无法创建 Kibana Dashboard 的错误</a></li>
+<li><a href="#修改输出源">修改输出源</a></li>
+</ul></li>
+<li><a href="#logstash">LogStash</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<ul>
+<li>原文地址: <a href="https://www.elastic.co/guide/en/elastic-stack-get-started/6.8/get-started-elastic-stack.html#get-started-elastic-stack">https://www.elastic.co/guide/en/elastic-stack-get-started/6.8/get-started-elastic-stack.html#get-started-elastic-stack</a></li>
+</ul>
+</blockquote>
+
+<hr />
+
+<p>这篇文章讲的就是通过 <code>ElasticSeach</code>, <code>Kibana</code>, <code>MetricBeat</code>, <code>LogStash</code> 搭建一个简单的监控系统。</p>
+
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>ElasticSearch</td>
+<td>存储指标</td>
+</tr>
+
+<tr>
+<td>Kibana</td>
+<td>可视化</td>
+</tr>
+
+<tr>
+<td>MetricBeat</td>
+<td>收集系统指标，并发送到 ES 或 LogStash 中</td>
+</tr>
+
+<tr>
+<td>LogStash</td>
+<td>对指标进行一些转换过滤操作后再发送</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="metricbeat">MetricBeat</h2>
+
+<h3 id="无法创建-kibana-dashboard-的错误">无法创建 Kibana Dashboard 的错误</h3>
+
+<p><code>metricbeat setup -e</code> 命令会在 Kibana 中创建 Dashboard，但是我通过 brew 安装 MetricBeat 后，运行此命令会报错:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">Skipping loading dashboards, No directory /usr/local/Cellar/metricbeat/6.8.7/kibana/6</pre></td></tr></table>
+</div>
+</div>
+<p>这个目录不知道为什么改名字了，改成了 <code>/usr/local/Cellar/metricbeat/6.8.7/kibana.generated/6/</code></p>
+
+<p>做一个 <code>kibana</code> 到 <code>kibana-generated</code> 的软链接，就可以正常初始化了。</p>
+
+<h3 id="修改输出源">修改输出源</h3>
+
+<p><code>/usr/local/etc/metricbeat/metricbeat.yml</code> 配置文件中的 <code>output.elasticsearch</code>和 <code>output.logstash</code> 定义了输出源。</p>
+
+<h2 id="logstash">LogStash</h2>
+
+<p>Logstash is a powerfull tool that integrates with a wid variety of deployments. It offers a large selection of plugins to help you parse, enrich, transform and buffer data from a variety of source.</p>
+
+<p>启动 LogStash: <code>logstash -f custom-config.conf</code></p>
+
+<p>我们可以写这样一个简单的配置文件:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 监听 5044 端口，读取 beats 发送的数据</span>
+input <span class="o">{</span>
+  beats <span class="o">{</span>
+    <span class="nv">port</span> <span class="o">=</span>&gt; <span class="m">5044</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1"># 将数据写入到 es 中，索引的名称为 /metricbeat-6.8.7-2020.03.28</span>
+output <span class="o">{</span>
+  elasticsearch <span class="o">{</span>
+    <span class="nv">hosts</span> <span class="o">=</span>&gt; <span class="o">[</span><span class="s2">&#34;http://localhost:9200&#34;</span><span class="o">]</span>
+    <span class="nv">manage_template</span> <span class="o">=</span>&gt; <span class="nb">false</span>
+    <span class="nv">index</span> <span class="o">=</span>&gt; <span class="s2">&#34;%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}&#34;</span>
+    <span class="c1">#user =&gt; &#34;elastic&#34;</span>
+    <span class="c1">#password =&gt; &#34;changeme&#34;</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>上述文件 LogStash 只是做了一个转发，并没有做任何的处理。</p>
+
+<p>我们可以在<code>input</code>和<code>output</code>之间加一个<code>filter</code>部分，处理指标，</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">input <span class="o">{</span>...<span class="o">}</span>
+
+<span class="c1"># 判断如果存在 system.process.cmdline 字段，那么将 cmdline 字段变成 cmdline_path 字段</span>
+<span class="c1"># 且只输出路径信息，不再输出参数</span>
+<span class="c1"># 同时移除 system.process.cmdline 字段</span>
+filter <span class="o">{</span>
+  <span class="k">if</span> <span class="o">[</span>system<span class="o">][</span>process<span class="o">]</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">[</span>system<span class="o">][</span>process<span class="o">][</span>cmdline<span class="o">]</span> <span class="o">{</span>
+      grok <span class="o">{</span>
+        <span class="nv">match</span> <span class="o">=</span>&gt; <span class="o">{</span>
+          <span class="s2">&#34;[system][process][cmdline]&#34;</span> <span class="o">=</span>&gt; <span class="s2">&#34;^%{PATH:[system][process][cmdline_path]}&#34;</span>
+        <span class="o">}</span>
+        <span class="nv">remove_field</span> <span class="o">=</span>&gt; <span class="s2">&#34;[system][process][cmdline]&#34;</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+output <span class="o">{</span>...<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>在 ES 中可以看到更改后的结果</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /metricbeat-6.8.7-2020.03.28/_search
+<span class="o">{</span>
+  <span class="s2">&#34;from&#34;</span>: <span class="m">0</span>,
+  <span class="s2">&#34;size&#34;</span>: <span class="m">10</span>,
+  <span class="s2">&#34;sort&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;@timestamp&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;order&#34;</span>: <span class="s2">&#34;desc&#34;</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">## 输出结果</span>
+<span class="o">{</span>
+    ...
+  <span class="s2">&#34;hits&#34;</span> : <span class="o">{</span>
+      ...
+    <span class="s2">&#34;hits&#34;</span> : <span class="o">[</span>
+      <span class="o">{</span>
+          ...
+        <span class="s2">&#34;_source&#34;</span> : <span class="o">{</span>
+          <span class="s2">&#34;@version&#34;</span> : <span class="s2">&#34;1&#34;</span>,
+          <span class="s2">&#34;@timestamp&#34;</span> : <span class="s2">&#34;2020-03-28T17:04:30.182Z&#34;</span>,
+          <span class="s2">&#34;system&#34;</span> : <span class="o">{</span>
+            <span class="s2">&#34;process&#34;</span> : <span class="o">{</span>
+              <span class="s2">&#34;pid&#34;</span> : <span class="m">5288</span>,
+              <span class="s2">&#34;cpu&#34;</span> : <span class="o">{</span>
+                <span class="s2">&#34;start_time&#34;</span> : <span class="s2">&#34;2020-03-26T16:43:50.832Z&#34;</span>,
+                <span class="s2">&#34;total&#34;</span> : <span class="o">{</span>
+                  <span class="s2">&#34;value&#34;</span> : <span class="m">52246</span>,
+                  <span class="s2">&#34;pct&#34;</span> : <span class="m">0</span>.0223,
+                  <span class="s2">&#34;norm&#34;</span> : <span class="o">{</span>
+                    <span class="s2">&#34;pct&#34;</span> : <span class="m">0</span>.0019
+                  <span class="o">}</span>
+                <span class="o">}</span>
+              <span class="o">}</span>,
+              <span class="c1"># 这里输出了 cmdline_path</span>
+              <span class="s2">&#34;cmdline_path&#34;</span> : <span class="s2">&#34;/Applications/Visual&#34;</span>,
+              <span class="s2">&#34;ppid&#34;</span> : <span class="m">5278</span>,
+              <span class="s2">&#34;name&#34;</span> : <span class="s2">&#34;Code Helper (GP&#34;</span>,
+              <span class="s2">&#34;memory&#34;</span> : <span class="o">{</span>
+                <span class="s2">&#34;share&#34;</span> : <span class="m">0</span>,
+                <span class="s2">&#34;rss&#34;</span> : <span class="o">{</span>
+                  <span class="s2">&#34;bytes&#34;</span> : <span class="m">80519168</span>,
+                  <span class="s2">&#34;pct&#34;</span> : <span class="m">0</span>.0023
+                <span class="o">}</span>,
+                <span class="s2">&#34;size&#34;</span> : <span class="m">6317944832</span>
+              <span class="o">}</span>,
+              <span class="s2">&#34;state&#34;</span> : <span class="s2">&#34;running&#34;</span>,
+              <span class="s2">&#34;pgid&#34;</span> : <span class="m">5278</span>,
+              <span class="s2">&#34;username&#34;</span> : <span class="s2">&#34;michaeltsui&#34;</span>
+            <span class="o">}</span>
+          <span class="o">}</span>
+        <span class="o">}</span>,
+      <span class="o">}</span>
+    <span class="o">]</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-03-29
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/elasticsearch/">ElasticSearch</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/2019/06/02/review-testify/">
+            <span class="next-text nav-default">Review 《github.com/stretchr/testify》</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+    <script src="https://utteranc.es/client.js"
+            repo="anotherbwangel/blog-comment"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>
