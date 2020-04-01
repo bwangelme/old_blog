@@ -1,5 +1,5 @@
 ---
-title: "k8s in Actions 第三章学习笔记"
+title: "《K8S in Actions》 第三章学习笔记"
 date: 2020-03-19T00:03:01+08:00
 lastmod: 2020-03-19T00:03:01+08:00
 draft: false
@@ -9,7 +9,7 @@ comment: true
 
 ---
 
-> k8s in Actions 第三章阅读笔记
+> Pod - 运行于 Kubernetes 中的容器
 
 <!--more-->
 
