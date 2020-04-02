@@ -175,3 +175,206 @@ Java 和 Python 应用，启动时解释器会执行一些初始化操作，耗�
 #### 3. 探针中的操作无需重试
 
 K8S 在检查应用的探针时就会自动重试，故探针内部只用做一次检查就好，无需重试。
+
+## 了解 ReplicationController
+
+### 介绍
+
+ReplicationController 旨在创建和管理一个 Pod 的多个副本(replicas)，这就是它名字的由来，ReplicationController 是通过标签来查看和管理容器。
+
+ReplicationController 由三部分组成:
+
+1. Label Selector(标签选择器)，用于确定 ReplicationController 的作用域中有哪些 Pod
+2. Replica Count(副本个数)，指定应该运行的 Pod 数量。
+3. Pod template(Pod 模板)，用于创建新的 Pod 副本
+
+__注意:__ ReplicationController 管理的 Pod 不会从一个节点迁移到另一个节点上，它只会在另一个节点上新建一个 Pod，或者删除当前节点上的 Pod。
+
+### 创建 ReplicationController
+
+以下是创建一个 ReplicationController 的示例文件
+
+```yaml
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: kubia
+spec:
+  # 定义了 RC 的副本个数和标签选择器属性
+  replicas: 3
+  selector:
+    app: kubia
+  # template 定义了 Pod 模板
+  template:
+    metadata:
+      # 注意这里定义的标签要和 spec.selector 中定义的标签一致，否则 RC 就会不停地创建 Pod
+      labels:
+        app: kubia
+    spec:
+      containers:
+        - name: kubia
+          image: bwangel/kubia:v0.1
+          ports:
+            - containerPort: 8080
+```
+
+__注意:__ 模板文件可以不指定选择器(spec.selector)，让 K8S 自动从 Pod 模板中提取标签配置
+
++ 创建好 RC 后，我们可以查看 集群中的 Pod，可以看到已经有对应标签的 Pod 被创建了
+
+```sh
+ø> kubectl get pod --show-labels
+NAME          READY   STATUS              RESTARTS   AGE   LABELS
+kubia-8fnnc   1/1     Running             0          36s   app=kubia
+kubia-gswk6   0/1     ContainerCreating   0          36s   app=kubia
+kubia-q865j   1/1     Running             0          36s   app=kubia
+```
+
++ 查看 RC 的详细信息
+
+```sh
+ø> kubectl describe rc kubia
+Name:         kubia
+Namespace:    default
+Selector:     app=kubia
+Labels:       app=kubia
+Annotations:  <none>
+Replicas:     3 current / 3 desired  # 副本的实际数量和期望数量
+Pods Status:  3 Running / 0 Waiting / 0 Succeeded / 0 Failed  # 当前各个状态的 Pod 数量
+Pod Template:
+  Labels:  app=kubia
+  Containers:
+   kubia:
+    Image:        bwangel/kubia:v0.1
+    Port:         8080/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+# 这里列出了 RC 的事件
+Events:
+  Type    Reason            Age   From                    Message
+  ----    ------            ----  ----                    -------
+  Normal  SuccessfulCreate  6m7s  replication-controller  Created pod: kubia-8fnnc
+  Normal  SuccessfulCreate  6m7s  replication-controller  Created pod: kubia-gswk6
+  Normal  SuccessfulCreate  6m7s  replication-controller  Created pod: kubia-q865j
+```
+
+### 通过删除 Pod 来看 RC 的自动恢复能力
+
+```sh
+# 查看当前所有的 Pod
+ø> kubectl get pod --show-labels
+NAME          READY   STATUS    RESTARTS   AGE     LABELS
+kubia-8fnnc   1/1     Running   0          9m36s   app=kubia
+kubia-gswk6   1/1     Running   0          9m36s   app=kubia
+kubia-q865j   1/1     Running   0          9m36s   app=kubia
+
+# 删除某个特定的 Pod
+ø> kubectl delete pod kubia-q865j
+pod "kubia-q865j" deleted
+
+# 可以看到 RC 又重建了一个 Pod
+ø> kubectl get pod --show-labels
+NAME          READY   STATUS    RESTARTS   AGE   LABELS
+kubia-2c592   1/1     Running   0          14s   app=kubia
+kubia-8fnnc   1/1     Running   0          10m   app=kubia
+kubia-gswk6   1/1     Running   0          10m   app=kubia
+
+# 查看 RC 的详细信息
+ø> kubectl describe rc kubia
+Name:         kubia
+Selector:     app=kubia
+Labels:       app=kubia
+Replicas:     3 current / 3 desired
+Pods Status:  3 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=kubia
+Events:
+  Type    Reason            Age   From                    Message
+  ----    ------            ----  ----                    -------
+  Normal  SuccessfulCreate  11m   replication-controller  Created pod: kubia-8fnnc
+  Normal  SuccessfulCreate  11m   replication-controller  Created pod: kubia-gswk6
+  Normal  SuccessfulCreate  11m   replication-controller  Created pod: kubia-q865j
+  # 可以看到新增了一个新建 Pod 的事件
+  Normal  SuccessfulCreate  85s   replication-controller  Created pod: kubia-2c592
+```
+
+当 K8S 的 API 服务器收到删除某个 Pod 的请求后，会将该事件通知相关的 RC。RC 收到事件通知后会去检查实际的 Pod 数量并采取适当的措施。
+
+RC 不会对删除 Pod 操作本身做出反应，而是对删除 Pod 操作导致的状态 `Pod 数量不足` 做出了反应。
+
+### 通过停止节点来查看 RC 的自动恢复能力
+
+```sh
+# 查看当前 Pod 的状态
+ø> kubectl get pod --show-labels -o=wide
+NAME          READY   STATUS    RESTARTS   AGE     IP         NODE                                  NOMINATED NODE   READINESS GATES   LABELS
+kubia-2c592   1/1     Running   0          3m24s   10.0.2.5   gke-demo-default-pool-ade08258-zjhd   <none>           <none>            app=kubia
+kubia-8fnnc   1/1     Running   0          13m     10.0.2.4   gke-demo-default-pool-ade08258-zjhd   <none>           <none>            app=kubia
+kubia-gswk6   1/1     Running   0          13m     10.0.1.5   gke-demo-default-pool-ade08258-g3rl   <none>           <none>            app=kubia
+
+# 停掉 gke-demo-default-pool-ade08258-g3rl 节点
+ø> gcloud compute ssh gke-demo-default-pool-ade08258-g3rl
+Welcome to Kubernetes v1.14.10-gke.27!
+
+You can find documentation for Kubernetes at:
+  http://docs.kubernetes.io/
+
+The source for this release can be found at:
+  /home/kubernetes/kubernetes-src.tar.gz
+Or you can download it at:
+  https://storage.googleapis.com/kubernetes-release-gke/release/v1.14.10-gke.27/kubernetes-src.tar.gz
+
+It is based on the Kubernetes source at:
+  https://github.com/kubernetes/kubernetes/tree/v1.14.10-gke.27
+
+For Kubernetes copyright and licensing information, see:
+  /home/kubernetes/LICENSES
+
+# 通过关闭网卡来停掉这个节点
+michaeltsui@gke-demo-default-pool-ade08258-g3rl ~ $ sudo ifconfig eth0 down
+packet_write_wait: Connection to 35.234.11.33 port 22: Broken pipe
+ERROR: (gcloud.compute.ssh) [/usr/bin/ssh] exited with return code [255].
+
+# 查看所有节点的状态，发现被停掉节点的状态变成了 NotReady
+ø> kubectl get node --show-labels
+NAME                                  STATUS     ROLES    AGE   VERSION
+gke-demo-default-pool-ade08258-g3rl   NotReady   <none>   47h   v1.14.10-gke.27
+gke-demo-default-pool-ade08258-vqx4   Ready      <none>   19d   v1.14.10-gke.27
+gke-demo-default-pool-ade08258-zjhd   Ready      <none>   19d   v1.14.10-gke.27
+
+# 查看 Pod 的状态，发现新建了一个 Pod kubia-fxkbc
+# 被停掉节点上的 Pod kubia-gswk6 的状态变成了 Unknown
+ø> kubectl get pods --show-labels -o=wide
+NAME          READY   STATUS    RESTARTS   AGE    IP         NODE                                  NOMINATED NODE   READINESS GATES   LABELS
+kubia-2c592   1/1     Running   0          16m    10.0.2.5   gke-demo-default-pool-ade08258-zjhd   <none>           <none>            app=kubia
+kubia-8fnnc   1/1     Running   0          26m    10.0.2.4   gke-demo-default-pool-ade08258-zjhd   <none>           <none>            app=kubia
+kubia-fxkbc   1/1     Running   0          112s   10.0.2.6   gke-demo-default-pool-ade08258-zjhd   <none>           <none>            app=kubia
+kubia-gswk6   1/1     Unknown   0          26m    10.0.1.5   gke-demo-default-pool-ade08258-g3rl   <none>           <none>            app=kubia
+
+# 恢复被停掉的节点
+ø> gcloud compute instances reset gke-demo-default-pool-ade08258-g3rl
+Updated [https://www.googleapis.com/compute/v1/projects/braided-turbine-271114/zones/asia-east1-c/instances/gke-demo-default-pool-ade08258-g3rl].
+
+Updates are available for some Cloud SDK components.  To install them,
+please run:
+  $ gcloud components update
+
+To take a quick anonymous survey, run:
+  $ gcloud survey
+
+# 查看 K8S 集群中的节点也恢复了
+ø> kubectl get node
+NAME                                  STATUS   ROLES    AGE   VERSION
+gke-demo-default-pool-ade08258-g3rl   Ready    <none>   47h   v1.14.10-gke.27
+gke-demo-default-pool-ade08258-vqx4   Ready    <none>   19d   v1.14.10-gke.27
+gke-demo-default-pool-ade08258-zjhd   Ready    <none>   19d   v1.14.10-gke.27
+
+# 节点恢复后，查看 Pod 会发现刚刚状态为 Unknown 的 Pod 被删除了。
+ø> kubectl get pods --show-labels -o=wide
+NAME          READY   STATUS    RESTARTS   AGE     IP         NODE                                  NOMINATED NODE   READINESS GATES   LABELS
+kubia-2c592   1/1     Running   0          19m     10.0.2.5   gke-demo-default-pool-ade08258-zjhd   <none>           <none>            app=kubia
+kubia-8fnnc   1/1     Running   0          29m     10.0.2.4   gke-demo-default-pool-ade08258-zjhd   <none>           <none>            app=kubia
+kubia-fxkbc   1/1     Running   0          5m35s   10.0.2.6   gke-demo-default-pool-ade08258-zjhd   <none>           <none>            app=kubia
+```
