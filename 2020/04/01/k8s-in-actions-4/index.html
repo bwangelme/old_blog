@@ -52,7 +52,7 @@
 
 <meta itemprop="datePublished" content="2020-04-01T21:21:52&#43;08:00" />
 <meta itemprop="dateModified" content="2020-04-01T21:21:52&#43;08:00" />
-<meta itemprop="wordCount" content="2839">
+<meta itemprop="wordCount" content="4926">
 
 
 
@@ -168,6 +168,14 @@
 <li><a href="#创建-replicationcontroller">创建 ReplicationController</a></li>
 <li><a href="#通过删除-pod-来看-rc-的自动恢复能力">通过删除 Pod 来看 RC 的自动恢复能力</a></li>
 <li><a href="#通过停止节点来查看-rc-的自动恢复能力">通过停止节点来查看 RC 的自动恢复能力</a></li>
+<li><a href="#将-pod-移入或移出-rc-的作用域">将 Pod 移入或移出 RC 的作用域</a></li>
+<li><a href="#编辑-replicationcontroller">编辑 ReplicationController</a></li>
+<li><a href="#删除-replicationcontroller">删除 ReplicationController</a></li>
+</ul></li>
+<li><a href="#使用-replicaset-而不是-replicationcontroller">使用 ReplicaSet 而不是 ReplicationController</a>
+<ul>
+<li><a href="#使用-replicaset">使用 ReplicaSet</a></li>
+<li><a href="#使用-replicaset-更富表达力的标签选择器">使用 ReplicaSet 更富表达力的标签选择器</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -824,6 +832,479 @@ kubia-8fnnc   <span class="m">1</span>/1     Running   <span class="m">0</span> 
 kubia-fxkbc   <span class="m">1</span>/1     Running   <span class="m">0</span>          5m35s   <span class="m">10</span>.0.2.6   gke-demo-default-pool-ade08258-zjhd   &lt;none&gt;           &lt;none&gt;            <span class="nv">app</span><span class="o">=</span>kubia</code></pre></td></tr></table>
 </div>
 </div>
+<h3 id="将-pod-移入或移出-rc-的作用域">将 Pod 移入或移出 RC 的作用域</h3>
+
+<p>ReplicationController 的工作方式:</p>
+
+<blockquote>
+<p>通过标签选择器来查看 Pod，如果与预期的数量不符，则新建 Pod 或删除 Pod，直到达到预期(<code>desired</code>)的数量。</p>
+</blockquote>
+
+<p>所以通过更改 Pod 的标签，可以将 Pod 从 RC 中移除。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 为 Pod 新增一个无关标签，并不影响RC</span>
+ø&gt; kubectl label pod kubia-2c592 <span class="nv">foo</span><span class="o">=</span>bar
+pod/kubia-2c592 labeled
+ø&gt; kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE     LABELS
+kubia-2c592   <span class="m">1</span>/1     Running   <span class="m">0</span>          6d23h   <span class="nv">app</span><span class="o">=</span>kubia,foo<span class="o">=</span>bar
+kubia-8fnnc   <span class="m">1</span>/1     Running   <span class="m">0</span>          6d23h   <span class="nv">app</span><span class="o">=</span>kubia
+kubia-fxkbc   <span class="m">1</span>/1     Running   <span class="m">0</span>          6d23h   <span class="nv">app</span><span class="o">=</span>kubia
+ø&gt; kubectl describe rc kubia
+Name:         kubia
+Namespace:    default
+Selector:     <span class="nv">app</span><span class="o">=</span>kubia
+Labels:       <span class="nv">app</span><span class="o">=</span>kubia
+Annotations:  &lt;none&gt;
+Replicas:     <span class="m">3</span> current / <span class="m">3</span> desired
+Pods Status:  <span class="m">3</span> Running / <span class="m">0</span> Waiting / <span class="m">0</span> Succeeded / <span class="m">0</span> Failed
+Pod Template:
+  Labels:  <span class="nv">app</span><span class="o">=</span>kubia
+  Containers:
+   kubia:
+    Image:        bwangel/kubia:v0.1
+    Port:         <span class="m">8080</span>/TCP
+    Host Port:    <span class="m">0</span>/TCP
+    Environment:  &lt;none&gt;
+    Mounts:       &lt;none&gt;
+  Volumes:        &lt;none&gt;
+Events:           &lt;none&gt;
+
+
+<span class="c1"># 为 Pod 删除 app=kubia 标签，将 kubia-2c592 从 RC 中移除，</span>
+<span class="c1"># 可以看到 RC 会自动创建一个 Pod，来达到预期的数量</span>
+<span class="c1"># 注意必须指定 --overwrite 选项，否则 k8s 不会覆盖已有的标签 (一个防止误操作的保护措施)</span>
+ø&gt; kubectl label pod kubia-2c592 <span class="nv">app</span><span class="o">=</span>bar --overwrite
+pod/kubia-2c592 labeled
+ø&gt; kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE     LABELS
+kubia-2c592   <span class="m">1</span>/1     Running   <span class="m">0</span>          6d23h   <span class="nv">app</span><span class="o">=</span>bar,foo<span class="o">=</span>bar
+kubia-8fnnc   <span class="m">1</span>/1     Running   <span class="m">0</span>          6d23h   <span class="nv">app</span><span class="o">=</span>kubia
+kubia-fxkbc   <span class="m">1</span>/1     Running   <span class="m">0</span>          6d23h   <span class="nv">app</span><span class="o">=</span>kubia
+kubia-l8hs9   <span class="m">1</span>/1     Running   <span class="m">0</span>          6s      <span class="nv">app</span><span class="o">=</span>kubia
+<span class="m">5496</span> <span class="o">(</span>lazywork<span class="o">)</span> ~/k8s
+
+
+<span class="c1"># 为 Pod 新增标签 app=kubia，让 Pod kubia-2c592 重新回到 RC 的管理中</span>
+<span class="c1"># 可以看到 RC 会自动删除刚刚新建的 Pod，保持 Pod 数量达到预期</span>
+ø&gt; kubectl label pod kubia-2c592 <span class="nv">app</span><span class="o">=</span>kubia --overwrite
+pod/kubia-2c592 labeled
+ø&gt; kubectl get pods --show-labels
+NAME          READY   STATUS        RESTARTS   AGE     LABELS
+kubia-2c592   <span class="m">1</span>/1     Running       <span class="m">0</span>          6d23h   <span class="nv">app</span><span class="o">=</span>kubia,foo<span class="o">=</span>bar
+kubia-8fnnc   <span class="m">1</span>/1     Running       <span class="m">0</span>          6d23h   <span class="nv">app</span><span class="o">=</span>kubia
+kubia-fxkbc   <span class="m">1</span>/1     Running       <span class="m">0</span>          6d23h   <span class="nv">app</span><span class="o">=</span>kubia
+kubia-l8hs9   <span class="m">0</span>/1     Terminating   <span class="m">0</span>          48s     <span class="nv">app</span><span class="o">=</span>kubia
+ø&gt; kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE     LABELS
+kubia-2c592   <span class="m">1</span>/1     Running   <span class="m">0</span>          6d23h   <span class="nv">app</span><span class="o">=</span>kubia,foo<span class="o">=</span>bar
+kubia-8fnnc   <span class="m">1</span>/1     Running   <span class="m">0</span>          6d23h   <span class="nv">app</span><span class="o">=</span>kubia
+kubia-fxkbc   <span class="m">1</span>/1     Running   <span class="m">0</span>          6d23h   <span class="nv">app</span><span class="o">=</span>kubia</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="编辑-replicationcontroller">编辑 ReplicationController</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 编辑 RC，在 spec.template.metadata.labels 中新增标签 dae: k8s</span>
+ø&gt; kubectl edit rc kubia
+replicationcontroller/kubia edited
+<span class="c1"># 原有的 Pod 并不会发生改变</span>
+ø&gt; kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE     LABELS
+kubia-2c592   <span class="m">1</span>/1     Running   <span class="m">0</span>          7d      <span class="nv">app</span><span class="o">=</span>kubia,foo<span class="o">=</span>bar
+kubia-8fnnc   <span class="m">1</span>/1     Running   <span class="m">0</span>          7d      <span class="nv">app</span><span class="o">=</span>kubia
+kubia-fxkbc   <span class="m">1</span>/1     Running   <span class="m">0</span>          6d23h   <span class="nv">app</span><span class="o">=</span>kubia
+
+<span class="c1"># 删除一个 Pod 后，发现新建的 Pod 会有 dae=k8s 的标签</span>
+ø&gt; kubectl delete pod kubia-2c592
+pod <span class="s2">&#34;kubia-2c592&#34;</span> deleted
+ø&gt; kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE     LABELS
+kubia-47kt7   <span class="m">1</span>/1     Running   <span class="m">0</span>          9s      <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-8fnnc   <span class="m">1</span>/1     Running   <span class="m">0</span>          7d      <span class="nv">app</span><span class="o">=</span>kubia
+kubia-fxkbc   <span class="m">1</span>/1     Running   <span class="m">0</span>          6d23h   <span class="nv">app</span><span class="o">=</span>kubia</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 编辑 RC，修改 spec.relicas = 10，可以看到 RC 新建了 Pod，让 Pod 总数达到了10个</span>
+ø&gt; kubectl edit rc kubia
+replicationcontroller/kubia edited
+ø&gt; kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE     LABELS
+kubia-2sgqm   <span class="m">1</span>/1     Running   <span class="m">0</span>          7s      <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-47kt7   <span class="m">1</span>/1     Running   <span class="m">0</span>          2m53s   <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-8fnnc   <span class="m">1</span>/1     Running   <span class="m">0</span>          7d      <span class="nv">app</span><span class="o">=</span>kubia
+kubia-fxkbc   <span class="m">1</span>/1     Running   <span class="m">0</span>          6d23h   <span class="nv">app</span><span class="o">=</span>kubia
+kubia-h2klc   <span class="m">1</span>/1     Running   <span class="m">0</span>          7s      <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-lx9k2   <span class="m">1</span>/1     Running   <span class="m">0</span>          7s      <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-mvvk8   <span class="m">1</span>/1     Running   <span class="m">0</span>          7s      <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-rxlpv   <span class="m">1</span>/1     Running   <span class="m">0</span>          7s      <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-tlnn9   <span class="m">1</span>/1     Running   <span class="m">0</span>          7s      <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-vx4kf   <span class="m">1</span>/1     Running   <span class="m">0</span>          7s      <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+
+<span class="c1"># 通过 scale 命令，将 RC 期望的 Pod 降到了3</span>
+<span class="c1"># 此时 RC 的描述文件也相应地发生了变化</span>
+ø&gt; kubectl scale replicationcontroller kubia --replicas<span class="o">=</span><span class="m">3</span>
+replicationcontroller/kubia scaled
+ø&gt; kubectl get pods --show-labels
+NAME          READY   STATUS        RESTARTS   AGE     LABELS
+kubia-2sgqm   <span class="m">0</span>/1     Terminating   <span class="m">0</span>          2m19s   <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-47kt7   <span class="m">1</span>/1     Running       <span class="m">0</span>          5m5s    <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-8fnnc   <span class="m">1</span>/1     Running       <span class="m">0</span>          7d      <span class="nv">app</span><span class="o">=</span>kubia
+kubia-fxkbc   <span class="m">1</span>/1     Running       <span class="m">0</span>          6d23h   <span class="nv">app</span><span class="o">=</span>kubia
+kubia-h2klc   <span class="m">0</span>/1     Terminating   <span class="m">0</span>          2m19s   <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-lx9k2   <span class="m">0</span>/1     Terminating   <span class="m">0</span>          2m19s   <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-mvvk8   <span class="m">0</span>/1     Terminating   <span class="m">0</span>          2m19s   <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-rxlpv   <span class="m">0</span>/1     Terminating   <span class="m">0</span>          2m19s   <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-tlnn9   <span class="m">0</span>/1     Terminating   <span class="m">0</span>          2m19s   <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-vx4kf   <span class="m">0</span>/1     Terminating   <span class="m">0</span>          2m19s   <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+ø&gt; kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE     LABELS
+kubia-47kt7   <span class="m">1</span>/1     Running   <span class="m">0</span>          5m14s   <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-8fnnc   <span class="m">1</span>/1     Running   <span class="m">0</span>          7d      <span class="nv">app</span><span class="o">=</span>kubia
+kubia-fxkbc   <span class="m">1</span>/1     Running   <span class="m">0</span>          6d23h   <span class="nv">app</span><span class="o">=</span>kubia</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="删除-replicationcontroller">删除 ReplicationController</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># --cascade=true: If true, cascade the deletion of the resources managed by this resource</span> 
+<span class="c1"># (e.g. Pods created by a ReplicationController).  Default true.</span>
+
+<span class="c1"># 通过 --cascade=false 选项，在删除 RC 的时候不删除它管理的 Pod</span>
+ø&gt; kubectl delete rc kubia --cascade<span class="o">=</span><span class="nb">false</span>
+replicationcontroller <span class="s2">&#34;kubia&#34;</span> deleted
+<span class="c1"># 发现 RC 已经被删除了</span>
+ø&gt; kubectl get rc
+No resources found in default namespace.
+<span class="c1"># 我们之前通过 RC 创建的 Pod 仍然存在</span>
+ø&gt; kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE    LABELS
+kubia-47kt7   <span class="m">1</span>/1     Running   <span class="m">0</span>          8m8s   <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-8fnnc   <span class="m">1</span>/1     Running   <span class="m">0</span>          7d     <span class="nv">app</span><span class="o">=</span>kubia
+kubia-fxkbc   <span class="m">1</span>/1     Running   <span class="m">0</span>          7d     <span class="nv">app</span><span class="o">=</span>kubia</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="使用-replicaset-而不是-replicationcontroller">使用 ReplicaSet 而不是 ReplicationController</h2>
+
+<p>ReplicaSet 的标签选择器要比 ReplicationController 的更强大，以后都应该使用 ReplicaSet 而不是 ReplicationController。</p>
+
+<h3 id="使用-replicaset">使用 ReplicaSet</h3>
+
+<ul>
+<li>kubia-replicaset.yaml</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># replicaset 资源属于 apps API 组的 v1beta2 版本</span><span class="w">
+</span><span class="w"></span>apiVersion<span class="p">:</span><span class="w"> </span>apps/v1beta2<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>ReplicaSet<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>kubia<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>replicas<span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span><span class="w">  </span><span class="c"># 这里我们使用了简单的 matchLabels，它和 RC 中的直接指定标签的效果是一样的</span><span class="w">
+</span><span class="w">  </span>selector<span class="p">:</span><span class="w">
+</span><span class="w">    </span>matchLabels<span class="p">:</span><span class="w">
+</span><span class="w">      </span>app<span class="p">:</span><span class="w"> </span>kubia<span class="w">
+</span><span class="w">  </span>template<span class="p">:</span><span class="w">
+</span><span class="w">    </span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">      </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">        </span>app<span class="p">:</span><span class="w"> </span>kubia<span class="w">
+</span><span class="w">    </span>spec<span class="p">:</span><span class="w">
+</span><span class="w">      </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>kubia<span class="w">
+</span><span class="w">          </span>image<span class="p">:</span><span class="w"> </span>bwangel/kubia<span class="p">:</span>v0.<span class="m">1</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>apiVersion 的格式为 <code>API 组/API 版本</code>，如果没有指定 API 组，则表明此资源属于<code>核心 API 组</code>。</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 ReplicaSet 资源</span>
+ø&gt; kubectl create -f kubia-replicaset.yaml
+replicaset.apps/kubia created
+
+<span class="c1"># 查看已经创建好的 ReplicaSet 资源</span>
+ø&gt; kubectl get rs
+NAME    DESIRED   CURRENT   READY   AGE
+kubia   <span class="m">3</span>         <span class="m">3</span>         <span class="m">3</span>       7s
+ø&gt; kubectl describe rs kubia
+Name:         kubia
+Namespace:    default
+Selector:     <span class="nv">app</span><span class="o">=</span>kubia
+Labels:       &lt;none&gt;
+Annotations:  &lt;none&gt;
+Replicas:     <span class="m">3</span> current / <span class="m">3</span> desired
+Pods Status:  <span class="m">3</span> Running / <span class="m">0</span> Waiting / <span class="m">0</span> Succeeded / <span class="m">0</span> Failed
+Pod Template:
+  Labels:  <span class="nv">app</span><span class="o">=</span>kubia
+  Containers:
+   kubia:
+    Image:        bwangel/kubia:v0.1
+    Port:         &lt;none&gt;
+    Host Port:    &lt;none&gt;
+    Environment:  &lt;none&gt;
+    Mounts:       &lt;none&gt;
+  Volumes:        &lt;none&gt;
+Events:           &lt;none&gt;
+
+<span class="c1"># 查看命名空间中的所有 Pod，可以看到 RS 没有创建新的 Pod，而是使用之前遗留的 Pod</span>
+<span class="c1"># 故我们指定的新 Pod 模板没有生效，如果需要让 Pod 使用新的模板创建，需要把这些遗留的 Pod 删掉，让 RS 再创建新的 Pod</span>
+ø&gt; kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE    LABELS
+kubia-47kt7   <span class="m">1</span>/1     Running   <span class="m">0</span>          7h9m   <span class="nv">app</span><span class="o">=</span>kubia,dae<span class="o">=</span>k8s
+kubia-8fnnc   <span class="m">1</span>/1     Running   <span class="m">0</span>          7d7h   <span class="nv">app</span><span class="o">=</span>kubia
+kubia-fxkbc   <span class="m">1</span>/1     Running   <span class="m">0</span>          7d7h   <span class="nv">app</span><span class="o">=</span>kubia
+
+<span class="c1"># 删除我们刚刚创建的 RS</span>
+ø&gt; kubectl delete rs kubia
+replicaset.extensions <span class="s2">&#34;kubia&#34;</span> deleted
+ø&gt; kubectl get pods --show-labels
+No resources found in default namespace.
+ø&gt; kubectl get rs
+No resources found in default namespace.</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="使用-replicaset-更富表达力的标签选择器">使用 ReplicaSet 更富表达力的标签选择器</h3>
+
+<p>RS 标签选择器的配置文件格式:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">selector<span class="p">:</span><span class="w">
+</span><span class="w">  </span>matchExpressions<span class="p">:</span><span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>key<span class="p">:</span><span class="w"> </span>app<span class="w">
+</span><span class="w">      </span>operator<span class="p">:</span><span class="w"> </span>In<span class="w">
+</span><span class="w">      </span>values<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>kubia</code></pre></td></tr></table>
+</div>
+</div>
+<p>一个 matchExpressions 可以有多个表达式，这些表达式之间是<code>与</code>的关系。</p>
+
+<p>一个表达式由三部分构成: <code>key</code>, <code>operator</code>, <code>values</code>(可选)</p>
+
+<p><code>operator</code> 有以下四种情况:</p>
+
+<ol>
+<li><code>In</code>: Label 的值必须与其中一个指定的 values 匹配</li>
+<li><code>NotIn</code>: Label 的值与任何指定的 values 不匹配</li>
+<li><code>Exists</code>: pod 必须包含一个指定名称的标签(值不重要)。使用此运算符时，values 属性不得指定</li>
+<li><code>DoesNotExist</code>: pod 不得包含一个指定名称的标签。values 属性不得指定</li>
+</ol>
+
+<p>如果同时指定了 <code>matchExpressions</code> 和 <code>matchLabels</code>，则 Pod 必须同时满足两者的条件，它才会被选中。</p>
     </div>
 
     <div class="post-copyright">
