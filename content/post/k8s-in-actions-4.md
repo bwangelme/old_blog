@@ -378,3 +378,259 @@ kubia-2c592   1/1     Running   0          19m     10.0.2.5   gke-demo-default-p
 kubia-8fnnc   1/1     Running   0          29m     10.0.2.4   gke-demo-default-pool-ade08258-zjhd   <none>           <none>            app=kubia
 kubia-fxkbc   1/1     Running   0          5m35s   10.0.2.6   gke-demo-default-pool-ade08258-zjhd   <none>           <none>            app=kubia
 ```
+
+### 将 Pod 移入或移出 RC 的作用域
+
+ReplicationController 的工作方式:
+
+> 通过标签选择器来查看 Pod，如果与预期的数量不符，则新建 Pod 或删除 Pod，直到达到预期(`desired`)的数量。
+
+所以通过更改 Pod 的标签，可以将 Pod 从 RC 中移除。
+
+```sh
+# 为 Pod 新增一个无关标签，并不影响RC
+ø> kubectl label pod kubia-2c592 foo=bar
+pod/kubia-2c592 labeled
+ø> kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE     LABELS
+kubia-2c592   1/1     Running   0          6d23h   app=kubia,foo=bar
+kubia-8fnnc   1/1     Running   0          6d23h   app=kubia
+kubia-fxkbc   1/1     Running   0          6d23h   app=kubia
+ø> kubectl describe rc kubia
+Name:         kubia
+Namespace:    default
+Selector:     app=kubia
+Labels:       app=kubia
+Annotations:  <none>
+Replicas:     3 current / 3 desired
+Pods Status:  3 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=kubia
+  Containers:
+   kubia:
+    Image:        bwangel/kubia:v0.1
+    Port:         8080/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Events:           <none>
+
+
+# 为 Pod 删除 app=kubia 标签，将 kubia-2c592 从 RC 中移除，
+# 可以看到 RC 会自动创建一个 Pod，来达到预期的数量
+# 注意必须指定 --overwrite 选项，否则 k8s 不会覆盖已有的标签 (一个防止误操作的保护措施)
+ø> kubectl label pod kubia-2c592 app=bar --overwrite
+pod/kubia-2c592 labeled
+ø> kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE     LABELS
+kubia-2c592   1/1     Running   0          6d23h   app=bar,foo=bar
+kubia-8fnnc   1/1     Running   0          6d23h   app=kubia
+kubia-fxkbc   1/1     Running   0          6d23h   app=kubia
+kubia-l8hs9   1/1     Running   0          6s      app=kubia
+5496 (lazywork) ~/k8s
+
+
+# 为 Pod 新增标签 app=kubia，让 Pod kubia-2c592 重新回到 RC 的管理中
+# 可以看到 RC 会自动删除刚刚新建的 Pod，保持 Pod 数量达到预期
+ø> kubectl label pod kubia-2c592 app=kubia --overwrite
+pod/kubia-2c592 labeled
+ø> kubectl get pods --show-labels
+NAME          READY   STATUS        RESTARTS   AGE     LABELS
+kubia-2c592   1/1     Running       0          6d23h   app=kubia,foo=bar
+kubia-8fnnc   1/1     Running       0          6d23h   app=kubia
+kubia-fxkbc   1/1     Running       0          6d23h   app=kubia
+kubia-l8hs9   0/1     Terminating   0          48s     app=kubia
+ø> kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE     LABELS
+kubia-2c592   1/1     Running   0          6d23h   app=kubia,foo=bar
+kubia-8fnnc   1/1     Running   0          6d23h   app=kubia
+kubia-fxkbc   1/1     Running   0          6d23h   app=kubia
+```
+
+### 编辑 ReplicationController
+
+```sh
+# 编辑 RC，在 spec.template.metadata.labels 中新增标签 dae: k8s
+ø> kubectl edit rc kubia
+replicationcontroller/kubia edited
+# 原有的 Pod 并不会发生改变
+ø> kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE     LABELS
+kubia-2c592   1/1     Running   0          7d      app=kubia,foo=bar
+kubia-8fnnc   1/1     Running   0          7d      app=kubia
+kubia-fxkbc   1/1     Running   0          6d23h   app=kubia
+
+# 删除一个 Pod 后，发现新建的 Pod 会有 dae=k8s 的标签
+ø> kubectl delete pod kubia-2c592
+pod "kubia-2c592" deleted
+ø> kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE     LABELS
+kubia-47kt7   1/1     Running   0          9s      app=kubia,dae=k8s
+kubia-8fnnc   1/1     Running   0          7d      app=kubia
+kubia-fxkbc   1/1     Running   0          6d23h   app=kubia
+```
+
+```sh
+# 编辑 RC，修改 spec.relicas = 10，可以看到 RC 新建了 Pod，让 Pod 总数达到了10个
+ø> kubectl edit rc kubia
+replicationcontroller/kubia edited
+ø> kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE     LABELS
+kubia-2sgqm   1/1     Running   0          7s      app=kubia,dae=k8s
+kubia-47kt7   1/1     Running   0          2m53s   app=kubia,dae=k8s
+kubia-8fnnc   1/1     Running   0          7d      app=kubia
+kubia-fxkbc   1/1     Running   0          6d23h   app=kubia
+kubia-h2klc   1/1     Running   0          7s      app=kubia,dae=k8s
+kubia-lx9k2   1/1     Running   0          7s      app=kubia,dae=k8s
+kubia-mvvk8   1/1     Running   0          7s      app=kubia,dae=k8s
+kubia-rxlpv   1/1     Running   0          7s      app=kubia,dae=k8s
+kubia-tlnn9   1/1     Running   0          7s      app=kubia,dae=k8s
+kubia-vx4kf   1/1     Running   0          7s      app=kubia,dae=k8s
+
+# 通过 scale 命令，将 RC 期望的 Pod 降到了3
+# 此时 RC 的描述文件也相应地发生了变化
+ø> kubectl scale replicationcontroller kubia --replicas=3
+replicationcontroller/kubia scaled
+ø> kubectl get pods --show-labels
+NAME          READY   STATUS        RESTARTS   AGE     LABELS
+kubia-2sgqm   0/1     Terminating   0          2m19s   app=kubia,dae=k8s
+kubia-47kt7   1/1     Running       0          5m5s    app=kubia,dae=k8s
+kubia-8fnnc   1/1     Running       0          7d      app=kubia
+kubia-fxkbc   1/1     Running       0          6d23h   app=kubia
+kubia-h2klc   0/1     Terminating   0          2m19s   app=kubia,dae=k8s
+kubia-lx9k2   0/1     Terminating   0          2m19s   app=kubia,dae=k8s
+kubia-mvvk8   0/1     Terminating   0          2m19s   app=kubia,dae=k8s
+kubia-rxlpv   0/1     Terminating   0          2m19s   app=kubia,dae=k8s
+kubia-tlnn9   0/1     Terminating   0          2m19s   app=kubia,dae=k8s
+kubia-vx4kf   0/1     Terminating   0          2m19s   app=kubia,dae=k8s
+ø> kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE     LABELS
+kubia-47kt7   1/1     Running   0          5m14s   app=kubia,dae=k8s
+kubia-8fnnc   1/1     Running   0          7d      app=kubia
+kubia-fxkbc   1/1     Running   0          6d23h   app=kubia
+```
+
+### 删除 ReplicationController
+
+```sh
+# --cascade=true: If true, cascade the deletion of the resources managed by this resource 
+# (e.g. Pods created by a ReplicationController).  Default true.
+
+# 通过 --cascade=false 选项，在删除 RC 的时候不删除它管理的 Pod
+ø> kubectl delete rc kubia --cascade=false
+replicationcontroller "kubia" deleted
+# 发现 RC 已经被删除了
+ø> kubectl get rc
+No resources found in default namespace.
+# 我们之前通过 RC 创建的 Pod 仍然存在
+ø> kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE    LABELS
+kubia-47kt7   1/1     Running   0          8m8s   app=kubia,dae=k8s
+kubia-8fnnc   1/1     Running   0          7d     app=kubia
+kubia-fxkbc   1/1     Running   0          7d     app=kubia
+```
+
+## 使用 ReplicaSet 而不是 ReplicationController
+
+ReplicaSet 的标签选择器要比 ReplicationController 的更强大，以后都应该使用 ReplicaSet 而不是 ReplicationController。
+
+### 使用 ReplicaSet
+
++ kubia-replicaset.yaml
+
+```yaml
+# replicaset 资源属于 apps API 组的 v1beta2 版本
+apiVersion: apps/v1beta2
+kind: ReplicaSet
+metadata:
+  name: kubia
+spec:
+  replicas: 3
+  # 这里我们使用了简单的 matchLabels，它和 RC 中的直接指定标签的效果是一样的
+  selector:
+    matchLabels:
+      app: kubia
+  template:
+    metadata:
+      labels:
+        app: kubia
+    spec:
+      containers:
+        - name: kubia
+          image: bwangel/kubia:v0.1
+```
+
+> apiVersion 的格式为 `API 组/API 版本`，如果没有指定 API 组，则表明此资源属于`核心 API 组`。
+
+```sh
+# 创建 ReplicaSet 资源
+ø> kubectl create -f kubia-replicaset.yaml
+replicaset.apps/kubia created
+
+# 查看已经创建好的 ReplicaSet 资源
+ø> kubectl get rs
+NAME    DESIRED   CURRENT   READY   AGE
+kubia   3         3         3       7s
+ø> kubectl describe rs kubia
+Name:         kubia
+Namespace:    default
+Selector:     app=kubia
+Labels:       <none>
+Annotations:  <none>
+Replicas:     3 current / 3 desired
+Pods Status:  3 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=kubia
+  Containers:
+   kubia:
+    Image:        bwangel/kubia:v0.1
+    Port:         <none>
+    Host Port:    <none>
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Events:           <none>
+
+# 查看命名空间中的所有 Pod，可以看到 RS 没有创建新的 Pod，而是使用之前遗留的 Pod
+# 故我们指定的新 Pod 模板没有生效，如果需要让 Pod 使用新的模板创建，需要把这些遗留的 Pod 删掉，让 RS 再创建新的 Pod
+ø> kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE    LABELS
+kubia-47kt7   1/1     Running   0          7h9m   app=kubia,dae=k8s
+kubia-8fnnc   1/1     Running   0          7d7h   app=kubia
+kubia-fxkbc   1/1     Running   0          7d7h   app=kubia
+
+# 删除我们刚刚创建的 RS
+ø> kubectl delete rs kubia
+replicaset.extensions "kubia" deleted
+ø> kubectl get pods --show-labels
+No resources found in default namespace.
+ø> kubectl get rs
+No resources found in default namespace.
+```
+
+### 使用 ReplicaSet 更富表达力的标签选择器
+
+RS 标签选择器的配置文件格式:
+
+```yaml
+selector:
+  matchExpressions:
+    - key: app
+      operator: In
+      values:
+        - kubia
+```
+
+一个 matchExpressions 可以有多个表达式，这些表达式之间是`与`的关系。
+
+一个表达式由三部分构成: `key`, `operator`, `values`(可选)
+
+`operator` 有以下四种情况:
+
+1. `In`: Label 的值必须与其中一个指定的 values 匹配
+2. `NotIn`: Label 的值与任何指定的 values 不匹配
+3. `Exists`: pod 必须包含一个指定名称的标签(值不重要)。使用此运算符时，values 属性不得指定
+4. `DoesNotExist`: pod 不得包含一个指定名称的标签。values 属性不得指定
+
+如果同时指定了 `matchExpressions` 和 `matchLabels`，则 Pod 必须同时满足两者的条件，它才会被选中。
