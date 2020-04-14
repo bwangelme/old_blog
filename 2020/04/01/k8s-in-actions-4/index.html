@@ -52,7 +52,7 @@
 
 <meta itemprop="datePublished" content="2020-04-01T21:21:52&#43;08:00" />
 <meta itemprop="dateModified" content="2020-04-01T21:21:52&#43;08:00" />
-<meta itemprop="wordCount" content="4926">
+<meta itemprop="wordCount" content="5500">
 
 
 
@@ -176,6 +176,10 @@
 <ul>
 <li><a href="#使用-replicaset">使用 ReplicaSet</a></li>
 <li><a href="#使用-replicaset-更富表达力的标签选择器">使用 ReplicaSet 更富表达力的标签选择器</a></li>
+</ul></li>
+<li><a href="#使用-daemonset">使用 DaemonSet</a>
+<ul>
+<li><a href="#创建并使用-daemonset">创建并使用 DaemonSet</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -1305,6 +1309,139 @@ No resources found in default namespace.</code></pre></td></tr></table>
 </ol>
 
 <p>如果同时指定了 <code>matchExpressions</code> 和 <code>matchLabels</code>，则 Pod 必须同时满足两者的条件，它才会被选中。</p>
+
+<h2 id="使用-daemonset">使用 DaemonSet</h2>
+
+<p>DaemonSet 的 Pod 实例可以在每个节点上运行，且每个节点都只运行一个 Pod 实例。在不可调度的节点上，DaemonSet 也会运行 Pod，DaemonSet 部署 Pod 会完全绕过调度器。</p>
+
+<h3 id="创建并使用-daemonset">创建并使用 DaemonSet</h3>
+
+<ul>
+<li>ssd-monitor-daemonset.yaml</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>apps/v1beta2<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>DaemonSet<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>ssd-monitor<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>selector<span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c"># matchLabels 指定 DaemonSet 选择 pod 时使用的标签</span><span class="w">
+</span><span class="w">    </span>matchLabels<span class="p">:</span><span class="w">
+</span><span class="w">      </span>app<span class="p">:</span><span class="w"> </span>ssd-monitor<span class="w">
+</span><span class="w">  </span>template<span class="p">:</span><span class="w">
+</span><span class="w">    </span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">      </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">        </span>app<span class="p">:</span><span class="w"> </span>ssd-monitor<span class="w">
+</span><span class="w">    </span>spec<span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="c"># nodeSelector 指定 DaemonSet 选择节点时使用的标签</span><span class="w">
+</span><span class="w">      </span>nodeSelector<span class="p">:</span><span class="w">
+</span><span class="w">        </span>disk<span class="p">:</span><span class="w"> </span>ssd<span class="w">
+</span><span class="w">      </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>main<span class="w">
+</span><span class="w">          </span>image<span class="p">:</span><span class="w"> </span>luksa/ssd-monitor</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 DaemonSet</span>
+ø&gt; kubectl create -f ssd-monitor-daemonset.yaml
+daemonset.apps/ssd-monitor created
+
+<span class="c1"># 由于集群中没有符合条件的节点(存在标签 disk=ssd)，所以 DaemonSet 没有创建任何 Pod 实例</span>
+ø&gt; kubectl get pods --show-labels
+No resources found in default namespace.
+ø&gt; kubectl get ds --show-labels
+NAME          DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE   LABELS
+ssd-monitor   <span class="m">0</span>         <span class="m">0</span>         <span class="m">0</span>       <span class="m">0</span>            <span class="m">0</span>           <span class="nv">disk</span><span class="o">=</span>ssd        11s   &lt;none&gt;
+
+<span class="c1"># 为节点 gke-demo-default-pool-ade08258-zjhd 加上标签</span>
+ø&gt; kubectl label node gke-demo-default-pool-ade08258-zjhd <span class="nv">disk</span><span class="o">=</span>ssd
+node/gke-demo-default-pool-ade08258-zjhd labeled
+
+<span class="c1"># 可以看到 Pod 实例被创建了</span>
+ø&gt; kubectl get pods --show-labels
+NAME                READY   STATUS              RESTARTS   AGE   LABELS
+ssd-monitor-rfzg7   <span class="m">0</span>/1     ContainerCreating   <span class="m">0</span>          6s    <span class="nv">app</span><span class="o">=</span>ssd-monitor,controller-revision-hash<span class="o">=</span>645b8b64c4,pod-template-generation<span class="o">=</span><span class="m">1</span>
+ø&gt; kubectl get pods --show-labels
+NAME                READY   STATUS    RESTARTS   AGE   LABELS
+ssd-monitor-rfzg7   <span class="m">1</span>/1     Running   <span class="m">0</span>          19s   <span class="nv">app</span><span class="o">=</span>ssd-monitor,controller-revision-hash<span class="o">=</span>645b8b64c4,pod-template-generation<span class="o">=</span><span class="m">1</span>
+
+<span class="c1"># 删除掉节点的 disk=ssd 标签</span>
+ø&gt; kubectl label node gke-demo-default-pool-ade08258-zjhd <span class="nv">disk</span><span class="o">=</span>hhd --overwrite
+node/gke-demo-default-pool-ade08258-zjhd labeled
+<span class="c1"># DaemonSet 对应的 Pod 实例也开始删除</span>
+ø&gt; kubectl get pods --show-labels
+NAME                READY   STATUS        RESTARTS   AGE   LABELS
+ssd-monitor-rfzg7   <span class="m">1</span>/1     Terminating   <span class="m">0</span>          48s   <span class="nv">app</span><span class="o">=</span>ssd-monitor,controller-revision-hash<span class="o">=</span>645b8b64c4,pod-template-generation<span class="o">=</span><span class="m">1</span>
+ø&gt; kubectl get pods --show-labels
+No resources found in default namespace.
+
+<span class="c1"># 删除 DaemonSet</span>
+ø&gt; kubectl delete ds ssd-monitor
+daemonset.extensions <span class="s2">&#34;ssd-monitor&#34;</span> deleted</code></pre></td></tr></table>
+</div>
+</div>
     </div>
 
     <div class="post-copyright">
