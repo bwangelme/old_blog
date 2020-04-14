@@ -59,7 +59,7 @@ LeetCode 343题
 
 <meta itemprop="datePublished" content="2020-04-14T23:43:14&#43;08:00" />
 <meta itemprop="dateModified" content="2020-04-14T23:43:14&#43;08:00" />
-<meta itemprop="wordCount" content="448">
+<meta itemprop="wordCount" content="446">
 
 
 
@@ -208,7 +208,7 @@ LeetCode 343题
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-py" data-lang="py"><span class="n">P</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span>
-    <span class="c1"># 注意，因为 P 函数将整数至少分解成了两个整数， P(N-1) 的求最大值的结果集中，不包括 N - 1</span>
+    <span class="c1"># 注意，因为 P 函数将整数至少分解成了两个整数， P(N-1) 的 max 比较整数集中，不包括 N - 1</span>
     <span class="mi">1</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
     <span class="mi">2</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">2</span><span class="p">),</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">2</span><span class="p">),</span>
     <span class="mi">3</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">3</span><span class="p">),</span>
@@ -246,12 +246,12 @@ LeetCode 343题
 <span class="n">dp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">dp</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
-<span class="c1"># 对于任意一个正整数i, P(i)的计算公式为</span>
+<span class="c1"># 对于任意一个正整数i, P(i)的计算函数为</span>
 <span class="k">for</span> <span class="n">j</span> <span class="p">:</span><span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">-=</span> <span class="mi">1</span> <span class="p">{</span>
     <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span>
         <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">)</span> <span class="o">*</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">],</span>
         <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">)</span> <span class="o">*</span> <span class="n">j</span><span class="p">,</span>
-        <span class="c1"># dp[i] 表示上一次(j+1)求出的最小值</span>
+        <span class="c1"># dp[i] 表示上一次(j+1)求出的最大值</span>
         <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
     <span class="p">])</span>
 <span class="p">}</span></code></pre></td></tr></table>
