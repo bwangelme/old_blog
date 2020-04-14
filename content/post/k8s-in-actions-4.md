@@ -634,3 +634,75 @@ selector:
 4. `DoesNotExist`: pod 不得包含一个指定名称的标签。values 属性不得指定
 
 如果同时指定了 `matchExpressions` 和 `matchLabels`，则 Pod 必须同时满足两者的条件，它才会被选中。
+
+
+## 使用 DaemonSet
+
+DaemonSet 的 Pod 实例可以在每个节点上运行，且每个节点都只运行一个 Pod 实例。在不可调度的节点上，DaemonSet 也会运行 Pod，DaemonSet 部署 Pod 会完全绕过调度器。
+
+
+### 创建并使用 DaemonSet
+
++ ssd-monitor-daemonset.yaml
+
+```yaml
+apiVersion: apps/v1beta2
+kind: DaemonSet
+metadata:
+  name: ssd-monitor
+spec:
+  selector:
+    # matchLabels 指定 DaemonSet 选择 pod 时使用的标签
+    matchLabels:
+      app: ssd-monitor
+  template:
+    metadata:
+      labels:
+        app: ssd-monitor
+    spec:
+      # nodeSelector 指定 DaemonSet 选择节点时使用的标签
+      nodeSelector:
+        disk: ssd
+      containers:
+        - name: main
+          image: luksa/ssd-monitor
+```
+
+```sh
+# 创建 DaemonSet
+ø> kubectl create -f ssd-monitor-daemonset.yaml
+daemonset.apps/ssd-monitor created
+
+# 由于集群中没有符合条件的节点(存在标签 disk=ssd)，所以 DaemonSet 没有创建任何 Pod 实例
+ø> kubectl get pods --show-labels
+No resources found in default namespace.
+ø> kubectl get ds --show-labels
+NAME          DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE   LABELS
+ssd-monitor   0         0         0       0            0           disk=ssd        11s   <none>
+
+# 为节点 gke-demo-default-pool-ade08258-zjhd 加上标签
+ø> kubectl label node gke-demo-default-pool-ade08258-zjhd disk=ssd
+node/gke-demo-default-pool-ade08258-zjhd labeled
+
+# 可以看到 Pod 实例被创建了
+ø> kubectl get pods --show-labels
+NAME                READY   STATUS              RESTARTS   AGE   LABELS
+ssd-monitor-rfzg7   0/1     ContainerCreating   0          6s    app=ssd-monitor,controller-revision-hash=645b8b64c4,pod-template-generation=1
+ø> kubectl get pods --show-labels
+NAME                READY   STATUS    RESTARTS   AGE   LABELS
+ssd-monitor-rfzg7   1/1     Running   0          19s   app=ssd-monitor,controller-revision-hash=645b8b64c4,pod-template-generation=1
+
+# 删除掉节点的 disk=ssd 标签
+ø> kubectl label node gke-demo-default-pool-ade08258-zjhd disk=hhd --overwrite
+node/gke-demo-default-pool-ade08258-zjhd labeled
+# DaemonSet 对应的 Pod 实例也开始删除
+ø> kubectl get pods --show-labels
+NAME                READY   STATUS        RESTARTS   AGE   LABELS
+ssd-monitor-rfzg7   1/1     Terminating   0          48s   app=ssd-monitor,controller-revision-hash=645b8b64c4,pod-template-generation=1
+ø> kubectl get pods --show-labels
+No resources found in default namespace.
+
+# 删除 DaemonSet
+ø> kubectl delete ds ssd-monitor
+daemonset.extensions "ssd-monitor" deleted
+```
