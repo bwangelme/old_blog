@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Leetcode 第342题 - 大白的碎碎念</title>
+  <title>Leetcode 第343题 - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content="  LeetCode 342题  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content="  LeetCode 343题  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
@@ -26,7 +26,7 @@
 <meta name="generator" content="Hugo 0.54.0 with theme even" />
 
 
-<link rel="canonical" href="/2020/04/07/leetcode-342/" />
+<link rel="canonical" href="/2020/04/14/leetcode-343/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -38,37 +38,37 @@
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
-<meta property="og:title" content="Leetcode 第342题" />
+<meta property="og:title" content="Leetcode 第343题" />
 <meta property="og:description" content="
 
-LeetCode 342题
+LeetCode 343题
 
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2020/04/07/leetcode-342/" />
-<meta property="article:published_time" content="2020-04-07T18:14:41&#43;08:00"/>
-<meta property="article:modified_time" content="2020-04-07T18:14:41&#43;08:00"/>
+<meta property="og:url" content="/2020/04/14/leetcode-343/" />
+<meta property="article:published_time" content="2020-04-14T23:43:14&#43;08:00"/>
+<meta property="article:modified_time" content="2020-04-14T23:43:14&#43;08:00"/>
 
-<meta itemprop="name" content="Leetcode 第342题">
+<meta itemprop="name" content="Leetcode 第343题">
 <meta itemprop="description" content="
 
-LeetCode 342题
+LeetCode 343题
 
 ">
 
 
-<meta itemprop="datePublished" content="2020-04-07T18:14:41&#43;08:00" />
-<meta itemprop="dateModified" content="2020-04-07T18:14:41&#43;08:00" />
-<meta itemprop="wordCount" content="291">
+<meta itemprop="datePublished" content="2020-04-14T23:43:14&#43;08:00" />
+<meta itemprop="dateModified" content="2020-04-14T23:43:14&#43;08:00" />
+<meta itemprop="wordCount" content="448">
 
 
 
 <meta itemprop="keywords" content="ARTS,LeetCode," />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Leetcode 第342题"/>
+<meta name="twitter:title" content="Leetcode 第343题"/>
 <meta name="twitter:description" content="
 
-LeetCode 342题
+LeetCode 343题
 
 "/>
 
@@ -141,10 +141,10 @@ LeetCode 342题
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Leetcode 第342题</h1>
+      <h1 class="post-title">Leetcode 第343题</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2020-04-07 </span>
+        <span class="post-time"> 2020-04-14 </span>
         
         
       </div>
@@ -159,7 +159,6 @@ LeetCode 342题
 <ul>
 <li><a href="#题目描述">题目描述</a></li>
 <li><a href="#解题思路">解题思路</a></li>
-<li><a href="#复杂度分析">复杂度分析</a></li>
 <li><a href="#代码">代码</a></li>
 </ul></li>
 </ul>
@@ -169,7 +168,7 @@ LeetCode 342题
     <div class="post-content">
       <blockquote>
 <ul>
-<li><a href="https://leetcode.com/problems/power-of-four/">LeetCode 342题</a></li>
+<li><a href="https://leetcode.com/problems/integer-break/">LeetCode 343题</a></li>
 </ul>
 </blockquote>
 
@@ -177,46 +176,92 @@ LeetCode 342题
 
 <h2 id="题目描述">题目描述</h2>
 
-<p><a href="https://leetcode.com/problems/power-of-four/">https://leetcode.com/problems/power-of-four/</a></p>
+<p><a href="https://leetcode.com/problems/integer-break/">https://leetcode.com/problems/integer-break/</a></p>
 
 <p><strong>注意:</strong></p>
 
 <ol>
-<li>给定的整数参数是 <code>signed 32 bits</code>，即它有可能是负数</li>
-<li>Follow up: Could you solve it without loops/recursion? 我们要给出一个不用循环或递归的解法</li>
+<li>给定的整数和被分解的整数都是正数，整数应该被分解成<strong>至少</strong>两个整数。</li>
+<li>输入的 n 应该不小于 2，不大于 58</li>
 </ol>
+
+<p>相关主题:</p>
+
+<ul>
+<li>动态规划</li>
+</ul>
 
 <h2 id="解题思路">解题思路</h2>
 
-<p>这道题的 Related Topic 中给出的主题是 Bit Manipulation，我们要从4的二进制形式去考虑</p>
+<p>令求分解整数最大积的函数为 P，初始情况 <code>P(2) = 1</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="n">P</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span>
+    <span class="c1"># 注意，因为 P 函数将整数至少分解成了两个整数， P(N-1) 的求最大值的结果集中，不包括 N - 1</span>
+    <span class="mi">1</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="mi">2</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">2</span><span class="p">),</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="mi">3</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="o">...</span>
+    <span class="c1"># 注意 P(1) 是不存在的，为了方便运算，我们将其设置为 1</span>
+    <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">])</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>从上面的公式可以看出，求出 <code>P(1) ~ P(N-1)</code> 后，才能求 <code>P(N)</code></p>
 
-<p>4的N次方幂可以写成 $4^N$ ，可以进一步写成 $2^{2N}$ 。从这里我们就可以看出其二进制形式的规律</p>
+<p>这是<code>P(N)</code>的递归公式，如果用递归实现的话，会存在大量的重复计算，所以我们使用动态规划的方式来解这个题目。</p>
 
-<ol>
-<li>只有1位是1，其余都是0</li>
-<li>为1的位其位置是个偶数</li>
-</ol>
+<p>令记录中间结果的表格为<code>dp</code>，<code>dp[n] = P(N)</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="c1"># 初始化 dp, 设置dp中的每一个值都是 0</span>
 
-<p>例如: 4 -&gt; 1000, 0 -&gt; 0001, 16 -&gt; 0001 0000</p>
+<span class="n">dp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">dp</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
-<p>找到了这个规律后，我们的解决方案就是逐个判断给定的数字是否满足上面的条件</p>
-
-<ol>
-<li>num 必须是正数(隐含条件)</li>
-<li><code>num &amp; (num-1) == 0</code>，此整数只有一位是1</li>
-<li><code>num &amp; 0x55555555 == 0</code>，此整数为1的位，它的位置索引是个偶数</li>
-</ol>
-
-<h2 id="复杂度分析">复杂度分析</h2>
-
-<ul>
-<li>时间复杂度: O(1)</li>
-<li>空间复杂度: O(1)</li>
-</ul>
+<span class="c1"># 对于任意一个正整数i, P(i)的计算公式为</span>
+<span class="k">for</span> <span class="n">j</span> <span class="p">:</span><span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">-=</span> <span class="mi">1</span> <span class="p">{</span>
+    <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span>
+        <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">)</span> <span class="o">*</span> <span class="n">dp</span><span class="p">[</span><span class="n">j</span><span class="p">],</span>
+        <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">j</span><span class="p">)</span> <span class="o">*</span> <span class="n">j</span><span class="p">,</span>
+        <span class="c1"># dp[i] 表示上一次(j+1)求出的最小值</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+    <span class="p">])</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>整个程序的思路就是，对于输入的正整数N，求出 <code>dp[3] ~ dp[N]</code> 的所有值，然后返回 <code>dp[N]</code> 即可</p>
 
 <h2 id="代码">代码</h2>
 
-<p><a href="https://github.com/bwangelme/LeetCode-Go/tree/master/l342/">https://github.com/bwangelme/LeetCode-Go/tree/master/l342/</a></p>
+<p><a href="https://github.com/bwangelme/LeetCode-Go/tree/master/l343">https://github.com/bwangelme/LeetCode-Go/tree/master/l343</a></p>
     </div>
 
     <div class="post-copyright">
@@ -227,7 +272,7 @@ LeetCode 342题
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2020-04-07
+        2020-04-14
         
     </span>
   </p>
@@ -243,13 +288,9 @@ LeetCode 342题
           <a href="/tags/leetcode/">LeetCode</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/2020/04/14/leetcode-343/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">Leetcode 第343题</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
-        <a class="next" href="/2020/04/03/leetcode-65/">
-            <span class="next-text nav-default">Leetcode 第65题</span>
+        
+        <a class="next" href="/2020/04/07/leetcode-342/">
+            <span class="next-text nav-default">Leetcode 第342题</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
