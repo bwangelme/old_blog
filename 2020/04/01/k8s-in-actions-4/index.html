@@ -52,7 +52,7 @@
 
 <meta itemprop="datePublished" content="2020-04-01T21:21:52&#43;08:00" />
 <meta itemprop="dateModified" content="2020-04-01T21:21:52&#43;08:00" />
-<meta itemprop="wordCount" content="5500">
+<meta itemprop="wordCount" content="6745">
 
 
 
@@ -181,6 +181,13 @@
 <ul>
 <li><a href="#创建并使用-daemonset">创建并使用 DaemonSet</a></li>
 </ul></li>
+<li><a href="#运行单个任务的-pod-job">运行单个任务的 Pod &ndash; Job</a>
+<ul>
+<li><a href="#定义-查看-job-资源">定义 &amp; 查看 Job 资源</a></li>
+<li><a href="#在-job-中运行多个-pod-实例">在 Job 中运行多个 Pod 实例</a></li>
+<li><a href="#job-的限制">Job 的限制</a></li>
+</ul></li>
+<li><a href="#安排-job-定期运行或在将来运行一次-cronjob">安排 Job 定期运行或在将来运行一次 &ndash; CronJob</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -1442,6 +1449,302 @@ No resources found in default namespace.
 daemonset.extensions <span class="s2">&#34;ssd-monitor&#34;</span> deleted</code></pre></td></tr></table>
 </div>
 </div>
+<h2 id="运行单个任务的-pod-job">运行单个任务的 Pod &ndash; Job</h2>
+
+<p>Job 是 K8S 上的一种资源，它会运行一个或多个 Pod，它在 Pod 内的进程成功结束时，不重启容器，一旦任务完成， Pod 就被认为处于完成状态。</p>
+
+<p>在发生节点故障时，该节点上由 Job 管理的 Pod 将按照 ReplicationController 的方式，将 Pod 重新安排到其他节点。如果进程本身异常退出(进程返回错误退出代码)，可以将 Job 配置为重新启动 Pod。</p>
+
+<h3 id="定义-查看-job-资源">定义 &amp; 查看 Job 资源</h3>
+
+<ul>
+<li>exporter.yaml</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>batch/v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Job<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>batch-job<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># 注意，我们没有显示地为 Job 指定 Selector 来让其选择 Pod</span><span class="w">
+</span><span class="w">  </span><span class="c"># Job 将会自动根据 Pod 创建时使用的标签来创建 Selector</span><span class="w">
+</span><span class="w">  </span>template<span class="p">:</span><span class="w">
+</span><span class="w">    </span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">      </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">        </span>app<span class="p">:</span><span class="w"> </span>batch-job<span class="w">
+</span><span class="w">    </span>spec<span class="p">:</span><span class="w">
+</span><span class="w">      </span>restartPolicy<span class="p">:</span><span class="w"> </span>OnFailure<span class="w">
+</span><span class="w">      </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>main<span class="w">
+</span><span class="w">          </span>image<span class="p">:</span><span class="w"> </span>luksa/batch-job</code></pre></td></tr></table>
+</div>
+</div>
+<p>在 Pod 的定义中，我们可以指定在容器中运行的进程结束时，K8S 会做什么，这是通过<code>restartPolicy</code>选项指定的，默认是 <code>Always</code>。</p>
+
+<p>但 Job Pod 不能使用默认策略，需要明确地将重启策略设置为 <code>OnFailure</code> 或 <code>Never</code>。此设置防止容器在完成任务后重新启动。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 Job</span>
+ø&gt; kubectl create -f exporter.yaml
+job.batch/batch-job created
+
+<span class="c1"># 查看所有 Job</span>
+ø&gt; kubectl get job
+NAME        COMPLETIONS   DURATION   AGE
+batch-job   <span class="m">0</span>/1           6s         6s
+
+<span class="c1"># 查看 Job 创建的 Pod</span>
+ø&gt; kubectl get pod
+NAME              READY   STATUS    RESTARTS   AGE
+batch-job-b24d2   <span class="m">1</span>/1     Running   <span class="m">0</span>          9s
+
+<span class="c1"># Job 运行完成后状态会变成 Complated</span>
+ø&gt; kubectl get pod --show-all
+NAME              READY   STATUS      RESTARTS   AGE     LABELS
+batch-job-b24d2   <span class="m">0</span>/1     Completed   <span class="m">0</span>          3m37s   <span class="nv">app</span><span class="o">=</span>batch-job,controller-uid<span class="o">=</span>1b33484a-7f20-11ea-87c1-42010a8c00bc,job-name<span class="o">=</span>batch-job
+
+<span class="c1"># 可以查看到这个 Pod 运行时输出的日志</span>
+ø&gt; kubectl logs batch-job-b24d2
+Wed Apr <span class="m">15</span> <span class="m">13</span>:50:51 UTC <span class="m">2020</span> Batch job starting
+Wed Apr <span class="m">15</span> <span class="m">13</span>:52:51 UTC <span class="m">2020</span> Finished succesfully</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="在-job-中运行多个-pod-实例">在 Job 中运行多个 Pod 实例</h3>
+
+<ul>
+<li>exporter-parallel.yaml</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>batch/v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Job<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>batch-job-parallel<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>completions<span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">  </span><span class="c"># Pod 运行的总次数</span><span class="w">
+</span><span class="w">  </span>parallelism<span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">  </span><span class="c"># 可以同时运行的 Pod 的数量</span><span class="w">
+</span><span class="w">  </span>template<span class="p">:</span><span class="w">
+</span><span class="w">    </span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">      </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">        </span>app<span class="p">:</span><span class="w"> </span>batch-job-parallel<span class="w">
+</span><span class="w">    </span>spec<span class="p">:</span><span class="w">
+</span><span class="w">      </span>restartPolicy<span class="p">:</span><span class="w"> </span>OnFailure<span class="w">
+</span><span class="w">      </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>main<span class="w">
+</span><span class="w">          </span>image<span class="p">:</span><span class="w"> </span>luksa/batch-job</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 可以看到 COMPLETIONS 列是 0/5</span>
+ø&gt; kubectl get job
+NAME                 COMPLETIONS   DURATION   AGE
+batch-job-parallel   <span class="m">0</span>/5           6s         6s
+
+<span class="c1"># 同时有两个 Pod 在运行</span>
+ø&gt; kubectl get pod
+NAME                       READY   STATUS      RESTARTS   AGE
+batch-job-parallel-kf2px   <span class="m">1</span>/1     Running     <span class="m">0</span>          16s
+batch-job-parallel-qjkkc   <span class="m">1</span>/1     Running     <span class="m">0</span>          16s</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="job-的限制">Job 的限制</h3>
+
+<ul>
+<li><code>spec.activeDeadlineSeconds</code> 设置 Job 的超时时间</li>
+<li><code>spec.backoffLimit</code> 设置 Job 被标记为失败之前重试的次数</li>
+</ul>
+
+<p><code>spec.activeDeadlineSeconds</code> 的优先级高于 <code>spec.backoffLimit</code>，即一旦到达限制的时间，即使重试次数小于<code>spec.backoffLimit</code>， Job 也会终止。</p>
+
+<h2 id="安排-job-定期运行或在将来运行一次-cronjob">安排 Job 定期运行或在将来运行一次 &ndash; CronJob</h2>
+
+<ul>
+<li>cronjob.yaml</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>batch/v1beta1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>CronJob<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>batch-job-every-five-minutes<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># Job 必须在15秒内开始运行，如果15秒内未开始运行，Job 将不会运行，并且将状态设置为 Failed</span><span class="w">
+</span><span class="w">  </span>startingDeadlineSeconds<span class="p">:</span><span class="w"> </span><span class="m">15</span><span class="w">
+</span><span class="w">  </span>schedule<span class="p">:</span><span class="w"> </span><span class="s2">&#34;*/5 * * * *&#34;</span><span class="w">
+</span><span class="w">  </span>jobTemplate<span class="p">:</span><span class="w">
+</span><span class="w">    </span>spec<span class="p">:</span><span class="w">
+</span><span class="w">      </span>template<span class="p">:</span><span class="w">
+</span><span class="w">        </span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">          </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">            </span>app<span class="p">:</span><span class="w"> </span>periodic-batch-job<span class="w">
+</span><span class="w">        </span>spec<span class="p">:</span><span class="w">
+</span><span class="w">          </span>restartPolicy<span class="p">:</span><span class="w"> </span>OnFailure<span class="w">
+</span><span class="w">          </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">            </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>main<span class="w">
+</span><span class="w">              </span>image<span class="p">:</span><span class="w"> </span>luksa/batch-job</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 CronJob</span>
+ø&gt; kubectl create -f cronjob.yaml
+cronjob.batch/batch-job-every-five-minutes created
+
+<span class="c1"># 查看 CronJob</span>
+ø&gt; kubectl get cronjob
+NAME                              SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+batch-job-every-fifteen-minutes   */5 * * * *   False     <span class="m">1</span>        14s             6m40s
+
+<span class="c1"># 查看 Job，由于未到设置的时间，我们没有发现运行的 CronJob</span>
+ø&gt; kubectl get job
+NAME                 COMPLETIONS   DURATION   AGE
+batch-job            <span class="m">1</span>/1           2m5s       98m
+batch-job-parallel   <span class="m">5</span>/5           6m13s      74m
+
+<span class="c1"># 到了指定的时间后，我们可以看到 K8S 创建了对应的 Job</span>
+ø&gt; kubectl get job
+NAME                                         COMPLETIONS   DURATION   AGE
+batch-job                                    <span class="m">1</span>/1           2m5s       99m
+batch-job-every-five-minutes-1586964600      <span class="m">0</span>/1           3s         3s
+batch-job-parallel                           <span class="m">5</span>/5           6m13s      75m
+
+<span class="c1"># 同时也可以看到正在执行具体程序的 Pod</span>
+ø&gt; kubectl get pod
+NAME                                               READY   STATUS    RESTARTS   AGE
+batch-job-every-fifve-minutes-1586964600-k8j2f     <span class="m">1</span>/1     Running   <span class="m">0</span>          44s
+<span class="c1"># 在运行的同时也可以查看当前 Job 的 Pod 的日志</span>
+ø&gt; kubectl logs batch-job-every-five-minutes-1586964600-k8j2f
+<span class="c1"># 注意程序的开始时间，延迟了11秒</span>
+Wed Apr <span class="m">15</span> <span class="m">15</span>:30:11 UTC <span class="m">2020</span> Batch job starting</code></pre></td></tr></table>
+</div>
+</div>
+<p>Cronjob 并不是精确运行的，可能会同时运行两个 Job，或者一个 Job 也不运行。因此开发者需要确保定时运行的 Job 是幂等的，多次运行也不会报错。</p>
     </div>
 
     <div class="post-copyright">
