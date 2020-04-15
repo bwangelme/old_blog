@@ -706,3 +706,166 @@ No resources found in default namespace.
 ø> kubectl delete ds ssd-monitor
 daemonset.extensions "ssd-monitor" deleted
 ```
+
+## 运行单个任务的 Pod -- Job
+
+Job 是 K8S 上的一种资源，它会运行一个或多个 Pod，它在 Pod 内的进程成功结束时，不重启容器，一旦任务完成， Pod 就被认为处于完成状态。
+
+在发生节点故障时，该节点上由 Job 管理的 Pod 将按照 ReplicationController 的方式，将 Pod 重新安排到其他节点。如果进程本身异常退出(进程返回错误退出代码)，可以将 Job 配置为重新启动 Pod。
+
+### 定义 & 查看 Job 资源
+
++ exporter.yaml
+
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: batch-job
+spec:
+  # 注意，我们没有显示地为 Job 指定 Selector 来让其选择 Pod
+  # Job 将会自动根据 Pod 创建时使用的标签来创建 Selector
+  template:
+    metadata:
+      labels:
+        app: batch-job
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: main
+          image: luksa/batch-job
+```
+
+在 Pod 的定义中，我们可以指定在容器中运行的进程结束时，K8S 会做什么，这是通过`restartPolicy`选项指定的，默认是 `Always`。
+
+但 Job Pod 不能使用默认策略，需要明确地将重启策略设置为 `OnFailure` 或 `Never`。此设置防止容器在完成任务后重新启动。
+
+```sh
+# 创建 Job
+ø> kubectl create -f exporter.yaml
+job.batch/batch-job created
+
+# 查看所有 Job
+ø> kubectl get job
+NAME        COMPLETIONS   DURATION   AGE
+batch-job   0/1           6s         6s
+
+# 查看 Job 创建的 Pod
+ø> kubectl get pod
+NAME              READY   STATUS    RESTARTS   AGE
+batch-job-b24d2   1/1     Running   0          9s
+
+# Job 运行完成后状态会变成 Complated
+ø> kubectl get pod --show-all
+NAME              READY   STATUS      RESTARTS   AGE     LABELS
+batch-job-b24d2   0/1     Completed   0          3m37s   app=batch-job,controller-uid=1b33484a-7f20-11ea-87c1-42010a8c00bc,job-name=batch-job
+
+# 可以查看到这个 Pod 运行时输出的日志
+ø> kubectl logs batch-job-b24d2
+Wed Apr 15 13:50:51 UTC 2020 Batch job starting
+Wed Apr 15 13:52:51 UTC 2020 Finished succesfully
+```
+
+### 在 Job 中运行多个 Pod 实例
+
++ exporter-parallel.yaml
+
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: batch-job-parallel
+spec:
+  completions: 5  # Pod 运行的总次数
+  parallelism: 2  # 可以同时运行的 Pod 的数量
+  template:
+    metadata:
+      labels:
+        app: batch-job-parallel
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: main
+          image: luksa/batch-job
+```
+
+```sh
+# 可以看到 COMPLETIONS 列是 0/5
+ø> kubectl get job
+NAME                 COMPLETIONS   DURATION   AGE
+batch-job-parallel   0/5           6s         6s
+
+# 同时有两个 Pod 在运行
+ø> kubectl get pod
+NAME                       READY   STATUS      RESTARTS   AGE
+batch-job-parallel-kf2px   1/1     Running     0          16s
+batch-job-parallel-qjkkc   1/1     Running     0          16s
+```
+
+### Job 的限制
+
++ `spec.activeDeadlineSeconds` 设置 Job 的超时时间
++ `spec.backoffLimit` 设置 Job 被标记为失败之前重试的次数
+
+`spec.activeDeadlineSeconds` 的优先级高于 `spec.backoffLimit`，即一旦到达限制的时间，即使重试次数小于`spec.backoffLimit`， Job 也会终止。
+
+## 安排 Job 定期运行或在将来运行一次 -- CronJob
+
++ cronjob.yaml
+
+```yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: batch-job-every-five-minutes
+spec:
+  # Job 必须在15秒内开始运行，如果15秒内未开始运行，Job 将不会运行，并且将状态设置为 Failed
+  startingDeadlineSeconds: 15
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: periodic-batch-job
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: main
+              image: luksa/batch-job
+```
+
+```sh
+# 创建 CronJob
+ø> kubectl create -f cronjob.yaml
+cronjob.batch/batch-job-every-five-minutes created
+
+# 查看 CronJob
+ø> kubectl get cronjob
+NAME                              SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+batch-job-every-fifteen-minutes   */5 * * * *   False     1        14s             6m40s
+
+# 查看 Job，由于未到设置的时间，我们没有发现运行的 CronJob
+ø> kubectl get job
+NAME                 COMPLETIONS   DURATION   AGE
+batch-job            1/1           2m5s       98m
+batch-job-parallel   5/5           6m13s      74m
+
+# 到了指定的时间后，我们可以看到 K8S 创建了对应的 Job
+ø> kubectl get job
+NAME                                         COMPLETIONS   DURATION   AGE
+batch-job                                    1/1           2m5s       99m
+batch-job-every-five-minutes-1586964600      0/1           3s         3s
+batch-job-parallel                           5/5           6m13s      75m
+
+# 同时也可以看到正在执行具体程序的 Pod
+ø> kubectl get pod
+NAME                                               READY   STATUS    RESTARTS   AGE
+batch-job-every-fifve-minutes-1586964600-k8j2f     1/1     Running   0          44s
+# 在运行的同时也可以查看当前 Job 的 Pod 的日志
+ø> kubectl logs batch-job-every-five-minutes-1586964600-k8j2f
+# 注意程序的开始时间，延迟了11秒
+Wed Apr 15 15:30:11 UTC 2020 Batch job starting
+```
+
+Cronjob 并不是精确运行的，可能会同时运行两个 Job，或者一个 Job 也不运行。因此开发者需要确保定时运行的 Job 是幂等的，多次运行也不会报错。
