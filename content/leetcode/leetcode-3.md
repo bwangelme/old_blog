@@ -8,12 +8,14 @@ author: "bwangel"
 comment: true
 ---
 
-> + [LeetCode 3题](https://leetcode.com/problemset/all/)
+> + [LeetCode 3题](https://leetcode.com/problems/longest-substring-without-repeating-characters/)
 
 <!--more-->
 ---
 
 ## 题目描述
+
+https://leetcode.com/problems/longest-substring-without-repeating-characters/
 
 ## 解题思路
 
@@ -31,3 +33,5 @@ comment: true
   + `char`在`NoRepeatSub(N)`中, `L(N) = L()`
 
 ## 代码
+
+https://github.com/bwangelme/LeetCode-Go/tree/master/l3
