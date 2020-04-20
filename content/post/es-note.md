@@ -3,21 +3,21 @@ title: "ElasticSearch 学习笔记"
 date: 2020-03-28T17:16:40+08:00
 lastmod: 2020-03-28T17:16:40+08:00
 draft: false
-tags: [ElasticSearch]
+tags: [ElasticSearch, 笔记]
 author: "bwangel"
 comment: true
 
 ---
 
-+ ES 学习笔记
++ ES 6.8 学习笔记
 
 <!--more-->
 
 ---
 
-#  分词器
+## 分词器
 
-## 分词器概述
+### 分词器概述
 
 分词器包含三部分
 
@@ -25,7 +25,13 @@ comment: true
 2. tokenizer: 分词
 3. token filter: 标准化，大小写，同义词，单复数转换。
 
-## 创建分词器
+### 分词器的类别
+
++ `keyword`: 不对输入做任何的处理，直接将输入当做一个 term 输出
++ `standard`: 对英文按 word 分词，对中文按照汉字分词
++ ...
+
+### 创建 & 使用分词器
 
 下面为创建索引时指定类型的设置:
 
@@ -52,9 +58,9 @@ comment: true
 + analyzer 是字段文本的分词器
 
 
-## 中文分词器 ik 的使用示例
+### ES 6.8 中文分词器 ik 的使用示例
 
-```
+```sh
 POST /ik-test/fulltext/1
 {
 "content": "美国留给伊拉克的是个烂摊子吗？"
@@ -93,15 +99,143 @@ POST /ik-test/fulltext/_search
 }
 ```
 
-# 索引
+### ES 7.6 分词器的使用示例
 
-## 创建索引
+```sh
+GET /_analyze
+{
+  "analyzer": "keyword",
+  "text": "Mastering ElasticSearch, elasticsearch in action"
+}
+{
+  "tokens" : [
+    {
+      "token" : "Mastering ElasticSearch, elasticsearch in action",
+      "start_offset" : 0,
+      "end_offset" : 48,
+      "type" : "word",
+      "position" : 0
+    }
+  ]
+}
+
+---
+
+GET /_analyze
+{
+  "analyzer": "icu_analyzer",
+  "text": "他说的确实在理"
+}
+{
+  "tokens" : [
+    {
+      "token" : "他",
+      "start_offset" : 0,
+      "end_offset" : 1,
+      "type" : "<IDEOGRAPHIC>",
+      "position" : 0
+    },
+    {
+      "token" : "说的",
+      "start_offset" : 1,
+      "end_offset" : 3,
+      "type" : "<IDEOGRAPHIC>",
+      "position" : 1
+    },
+    {
+      "token" : "确实",
+      "start_offset" : 3,
+      "end_offset" : 5,
+      "type" : "<IDEOGRAPHIC>",
+      "position" : 2
+    },
+    {
+      "token" : "在",
+      "start_offset" : 5,
+      "end_offset" : 6,
+      "type" : "<IDEOGRAPHIC>",
+      "position" : 3
+    },
+    {
+      "token" : "理",
+      "start_offset" : 6,
+      "end_offset" : 7,
+      "type" : "<IDEOGRAPHIC>",
+      "position" : 4
+    }
+  ]
+}
+
+GET /_analyze
+{
+  "analyzer": "standard",
+  "text": "他说的确实在理"
+}
+
+{
+  "tokens" : [
+    {
+      "token" : "他",
+      "start_offset" : 0,
+      "end_offset" : 1,
+      "type" : "<IDEOGRAPHIC>",
+      "position" : 0
+    },
+    {
+      "token" : "说",
+      "start_offset" : 1,
+      "end_offset" : 2,
+      "type" : "<IDEOGRAPHIC>",
+      "position" : 1
+    },
+    {
+      "token" : "的",
+      "start_offset" : 2,
+      "end_offset" : 3,
+      "type" : "<IDEOGRAPHIC>",
+      "position" : 2
+    },
+    {
+      "token" : "确",
+      "start_offset" : 3,
+      "end_offset" : 4,
+      "type" : "<IDEOGRAPHIC>",
+      "position" : 3
+    },
+    {
+      "token" : "实",
+      "start_offset" : 4,
+      "end_offset" : 5,
+      "type" : "<IDEOGRAPHIC>",
+      "position" : 4
+    },
+    {
+      "token" : "在",
+      "start_offset" : 5,
+      "end_offset" : 6,
+      "type" : "<IDEOGRAPHIC>",
+      "position" : 5
+    },
+    {
+      "token" : "理",
+      "start_offset" : 6,
+      "end_offset" : 7,
+      "type" : "<IDEOGRAPHIC>",
+      "position" : 6
+    }
+  ]
+}
+```
+
+## 索引
+
++ 创建索引
 
 + 索引名称必须是小写的，不能以下划线开头，不能包括逗号
 + 索引一旦创建，主分片的数量不可改，副分片的数量可改
 + 三个分片，没有备份
 
-```
+```sh
 PUT /lib/
 {
   "settings": {
@@ -113,35 +247,24 @@ PUT /lib/
 }
 ```
 
+```sh
 ## 查看 /lib 索引的配置
-
-```
 GET /lib/_settings
-```
 
 ## 查看所有索引
-
-```
 GET /_cat/indices?v
-```
 
 ## 查看所有索引的配置
-
-```
 GET _all/_settings
-```
 
 ## 删除索引
-
-```
 DELETE /ik-test
 ```
 
-# 文档
+## 文档
 
+```sh
 ## 创建&全量更新文档
-
-```
 PUT /lib/user/1
 {
   "first_name": "Jane",
@@ -150,11 +273,8 @@ PUT /lib/user/1
   "about": "I like to collect rock albums",
   "interests": ["music"]
 }
-```
 
 ## 创建文档
-
-```
 POST /lib/user/
 {
   "first_name": "Jane",
@@ -163,34 +283,22 @@ POST /lib/user/
   "about": "I like to collect rock albums",
   "interests": ["music"]
 }
-```
 
 ## 查询文档 By ID
-
-```
 GET /lib/user/1
-```
 
 ## 只看文档的一部分字段
-
-```
 GET /lib/user/1?_source=age,about
-```
 
 ## 增量修改文档
-
-```
 POST /lib/user/1/_update
 {
   "doc": {
     "age": 26
   }
 }
-```
 
 ## 删除文档
-
-```
 DELETE /lib/user/1
 ```
 
@@ -256,7 +364,7 @@ GET /lib/user/_mget
 ```
 
 ## 指定ID
- 
+
 ```
 GET /lib/user/_mget
 {
@@ -281,8 +389,8 @@ bulk 一次操作的文档建议在 1000 ~ 5000 之间，大小建议是在 5 ~ 
 action 的值|说明
 ---|---
 create|文档不存在时创建(如果文档已经存在，会操作失败，提示文档已经存在)
-update|更新文档(要传入 "doc" 参数)
-index|创建新文档或者替换已有文档
+update|更新文档(要传入 "doc" 参数) `增量更新`
+index|创建新文档或者替换已有文档 `全量更新`
 delete|删除一个文档
 
 metadata的三个字段: `_index`, `_type`, `_id`，分别表示索引，类型，文档ID
@@ -389,11 +497,18 @@ PUT /lib5/person/1
 }
 ```
 
-# 基本查询
+# Query DSL
+
+## 说明
+
+查询分为两种:
+
+1. [URI Search](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-uri-request.html#search-uri-request)
+2. [Request Body Search](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-body.html)
 
 ## 创建索引
 
-```
+```sh
 PUT /lib3
 {
   "settings": {
@@ -409,7 +524,7 @@ PUT /lib3
             "address": {"type": "text"},
             "age": {"type": "integer"},
             "interests": {"type": "text"},
-            "birthday": {"type": "date"},
+            "birthday": {"type": "date"}
         }
     }
   }
@@ -418,7 +533,7 @@ PUT /lib3
 
 ## 准备数据
 
-```
+```sh
 PUT /lib3/user/1
 {
   "name": "zhaoliu",
@@ -463,13 +578,10 @@ PUT /lib3/user/5
 
 ## 按字段简单查询
 
-+ 查询某个类型下的所有文档
-
-```
+```sh
+# 查询某个类型下的所有文档
 GET /lib3/user/_search
-```
 
-```
 GET /lib3/user/_search
 {
   "query": {
@@ -492,14 +604,18 @@ GET /lib3/user/_search?q=name:lisi
 # 查询所有兴趣中含有`changge`词的文档，且按照年龄降序排序
 GET /lib3/user/_search?q=interests:changge&sort=age:desc
 ```
- 
+
 ## Term-level 查询
 
 + Term-level 查询会去倒排索引中寻找确切的`term`，它并不对搜索词进行分词
 + Term-level 查询对`keyword`类型的字段查询时，会对关键字进行 `normalize` 操作
-+ term 查询只支持对单个关键字进行查询
-+ terms 支持多个关键字进行查询，且多个关键字之间是或的关系
 
+### Term 查询
+
++ 不建议使用 Term 查询 text 字段，原因如下:
+
+1. Term 查询不对搜索关键字进行分词处理
+2. Term 查询的是经ES分词处理后的文本中的 Term，例如 `Quick Brown Foxes!` 经分词处理后变成了 `[quick, brown, foxes]`，使用 `{term: {title: 'quick'}}` 才能查到结果，使用 `{term: {title: Quick}}` 或 `{term: {title: "quick brown"}}` 都是查询不到结果的
 
 ```sh
 # 查询 name 完整匹配 `zhaoliu` 的文档
@@ -509,8 +625,14 @@ GET /lib3/user/_search
         "term": {"name": "zhaoliu"}
     }
 }
+```
 
-# 查询 address 中包含词 `beijing` 或 `haidian` 的文档，在结果中输出版本号，只获得前两个结果。(注意 address 已经进行过分词了)
+### Terms 查询
+
++ terms 支持多个关键字进行查询，且多个关键字之间是或的关系
+
+```sh
+# 查询 address 中包含词 `beijing` 或 `haidian` 的文档，在结果中输出版本号，只获得前两个结果。(注意 address 已经进行过分词了，Term 查询关键字要用小写，去掉标点符号)
 GET /lib3/user/_search
 {
     "from": 0,
@@ -521,6 +643,51 @@ GET /lib3/user/_search
             "address": ["beijing", "haidian"]
         }
     }
+}
+# ----
+{
+  "took" : 11,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 3,
+    "successful" : 3,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 4,
+    "max_score" : 1.0,
+    "hits" : [
+      {
+        "_index" : "lib3",
+        "_type" : "user",
+        "_id" : "5",
+        "_version" : 1,
+        "_score" : 1.0,
+        "_source" : {
+          "name" : "zhangsan",
+          "address" : "beijing city, chaoyang area",
+          "age" : 29,
+          "birthday" : "1989-10-12",
+          "interests" : "tingyingyue,changge,tiaowu"
+        }
+      },
+      {
+        "_index" : "lib3",
+        "_type" : "user",
+        "_id" : "4",
+        "_version" : 1,
+        "_score" : 1.0,
+        "_source" : {
+          "name" : "wangwu",
+          "address" : "beijing city, haidian area, qinghe",
+          "age" : 26,
+          "birthday" : "1992-10-12",
+          "interests" : "biancheng,tingyinyue,lvyou"
+        }
+      }
+    ]
+  }
 }
 ```
 
