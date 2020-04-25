@@ -15,9 +15,9 @@ comment: true
 
 ---
 
-## 分词器
+# 分词器
 
-### 分词器概述
+## 分词器概述
 
 分词器包含三部分
 
@@ -25,13 +25,13 @@ comment: true
 2. tokenizer: 分词
 3. token filter: 标准化，大小写，同义词，单复数转换。
 
-### 分词器的类别
+## 分词器的类别
 
 + `keyword`: 不对输入做任何的处理，直接将输入当做一个 term 输出
 + `standard`: 对英文按 word 分词，对中文按照汉字分词
 + ...
 
-### 创建 & 使用分词器
+## 创建 & 使用分词器
 
 下面为创建索引时指定类型的设置:
 
@@ -58,7 +58,7 @@ comment: true
 + analyzer 是字段文本的分词器
 
 
-### ES 6.8 中文分词器 ik 的使用示例
+## ES 6.8 中文分词器 ik 的使用示例
 
 ```sh
 POST /ik-test/fulltext/1
@@ -99,7 +99,7 @@ POST /ik-test/fulltext/_search
 }
 ```
 
-### ES 7.6 分词器的使用示例
+## ES 7.6 分词器的使用示例
 
 ```sh
 GET /_analyze
@@ -227,7 +227,7 @@ GET /_analyze
 }
 ```
 
-## 索引
+# 索引
 
 + 创建索引
 
@@ -261,7 +261,7 @@ GET _all/_settings
 DELETE /ik-test
 ```
 
-## 文档
+# 文档
 
 ```sh
 ## 创建&全量更新文档
