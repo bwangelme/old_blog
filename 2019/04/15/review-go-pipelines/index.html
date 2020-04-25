@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2019/04/15/review-go-pipelines/" />
@@ -34,7 +34,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -46,25 +47,21 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2019/04/15/review-go-pipelines/" />
-<meta property="article:published_time" content="2019-04-15T22:35:48&#43;08:00"/>
-<meta property="article:modified_time" content="2019-04-15T22:35:48&#43;08:00"/>
-
+<meta property="article:published_time" content="2019-04-15T22:35:48+08:00" />
+<meta property="article:modified_time" content="2019-04-15T22:35:48+08:00" />
 <meta itemprop="name" content="Review 《Go Concurrency Patterns: Pipelines and cancellation》">
 <meta itemprop="description" content="
 
 【Go Concurrency Patterns: Pipelines and cancellation】笔记
 
 ">
-
-
 <meta itemprop="datePublished" content="2019-04-15T22:35:48&#43;08:00" />
 <meta itemprop="dateModified" content="2019-04-15T22:35:48&#43;08:00" />
-<meta itemprop="wordCount" content="1105">
+<meta itemprop="wordCount" content="1141">
 
 
 
-<meta itemprop="keywords" content="Tag1,Tag2," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Tag1,Tag2," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Review 《Go Concurrency Patterns: Pipelines and cancellation》"/>
 <meta name="twitter:description" content="
 
@@ -152,16 +149,17 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#管道操作的定义">管道操作的定义</a></li>
-<li><a href="#管道操作的简单例子">管道操作的简单例子</a></li>
-<li><a href="#扇入-扇出">扇入/扇出</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#管道操作的定义">管道操作的定义</a></li>
+        <li><a href="#管道操作的简单例子">管道操作的简单例子</a></li>
+        <li><a href="#扇入扇出">扇入/扇出</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
@@ -171,26 +169,18 @@
 <li>【<a href="https://blog.golang.org/pipelines">Go Concurrency Patterns: Pipelines and cancellation</a>】笔记</li>
 </ul>
 </blockquote>
-
 <h2 id="管道操作的定义">管道操作的定义</h2>
-
 <p>在 Go 中没有管道操作的正式定义，它仅仅是众多并发程序中的一种。</p>
-
-<p>非正式地定义是，管道操作可以由一系列用<code>channel</code>连接的<strong>stage</strong>组成，每个<strong>stage</strong>是一组运行着相同函数的 Goroutine。
-在每个<strong>stage</strong>中的 Goroutine 中，执行着以下的操作:</p>
-
+<p>非正式地定义是，管道操作可以由一系列用<code>channel</code>连接的__stage__组成，每个__stage__是一组运行着相同函数的 Goroutine。
+在每个__stage__中的 Goroutine 中，执行着以下的操作:</p>
 <ul>
 <li>通过<code>inbound</code> channel 从上游接收值</li>
 <li>对输入的值中执行一组操作，通常执行完以后会生成新的值</li>
 <li>通过<code>outbound</code> channel 向下游发送值</li>
 </ul>
-
-<p>第一个和最后一个<strong>stage</strong>分别通常只有一组<code>inbound</code>或<code>outbound</code> channel，其他的<strong>stage</strong>可以有任意多个<code>inbound</code>和<code>outbound</code> channel。第一个<strong>stage</strong>通常叫做<code>source</code>或<code>producer</code>，最后一个<strong>stage</strong>通常叫做<code>sink</code>或<code>consumer</code>。</p>
-
+<p>第一个和最后一个__stage__分别通常只有一组<code>inbound</code>或<code>outbound</code> channel，其他的__stage__可以有任意多个<code>inbound</code>和<code>outbound</code> channel。第一个__stage__通常叫做<code>source</code>或<code>producer</code>，最后一个__stage__通常叫做<code>sink</code>或<code>consumer</code>。</p>
 <h2 id="管道操作的简单例子">管道操作的简单例子</h2>
-
-<p>下面是一个管道操作的简单例子，一共分为三个<strong>stage</strong>，<code>gen</code>，<code>sq</code>，<code>main</code>。</p>
-
+<p>下面是一个管道操作的简单例子，一共分为三个__stage__，<code>gen</code>，<code>sq</code>，<code>main</code>。</p>
 <ul>
 <li><code>gen</code> 用来生成数字到管道中</li>
 <li><code>sq</code> 用来处理管道中的数字</li>
@@ -198,7 +188,7 @@
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -281,33 +271,26 @@
 </span><span class="c1"></span>	<span class="k">for</span> <span class="nx">n</span> <span class="o">:=</span> <span class="k">range</span> <span class="nf">sq</span><span class="p">(</span><span class="nf">sq</span><span class="p">(</span><span class="nf">gen</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span> <span class="p">{</span>
 		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span>
 	<span class="p">}</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="扇入-扇出">扇入/扇出</h2>
-
+</div><h2 id="扇入扇出">扇入/扇出</h2>
 <p>配合下面这张图，我觉得更容易理解<code>扇入/扇出</code>的概念:</p>
-
-<p><img src="https://passage-1253400711.cos-website.ap-beijing.myqcloud.com/2019-04-07-040937.jpg" alt="" /></p>
-
+<p><img src="https://passage-1253400711.cos-website.ap-beijing.myqcloud.com/2019-04-07-040937.jpg" alt=""></p>
 <p>上面的图是一个门电路，看起来就像一个扇子。</p>
-
 <ul>
 <li>从左往右看，将多个管道的数据输出到一个管道中，这就叫做扇入。</li>
 <li>从右往左看，将一个管道的数据输出到多个管道中，这就叫做扇出。</li>
 </ul>
-
-<p>下面是一个执行了<strong>扇入/扇出</strong>操作的例子，</p>
-
+<p>下面是一个执行了__扇入/扇出__操作的例子，</p>
 <ul>
 <li><code>gen</code>生成的数据分别交个了两个<code>sq</code>去处理，这叫做扇入。</li>
 <li>两个<code>sq</code>处理的数据交给<code>merge</code>函数统一处理，这叫做扇出。</li>
 </ul>
-
 <p><strong>注意</strong>: 向关闭的<code>channel</code>发送数据将会导致<code>panic</code>，所以<code>merge</code>函数中使用了<code>sync.WaitGroup</code>来确保在关闭<code>out</code> channel 的时候，所有读取数据的 Goroutine 已经都执行完毕了。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -442,7 +425,8 @@
 </span><span class="c1"></span>	<span class="k">for</span> <span class="nx">n</span> <span class="o">:=</span> <span class="k">range</span> <span class="nf">merge</span><span class="p">(</span><span class="nx">c1</span><span class="p">,</span> <span class="nx">c2</span><span class="p">)</span> <span class="p">{</span>
 		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="c1">// 4 then 9, or 9 then 4
 </span><span class="c1"></span>	<span class="p">}</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -542,7 +526,10 @@
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

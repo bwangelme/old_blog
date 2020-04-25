@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2018/08/14/prime-generator/" />
@@ -35,7 +35,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -43,21 +44,17 @@
 <meta property="og:description" content="一个不太优雅的素数生成器，主要用来观察“Go-routine &#43; 管道”的开发方式" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2018/08/14/prime-generator/" />
-<meta property="article:published_time" content="2018-08-14T06:54:09&#43;08:00"/>
-<meta property="article:modified_time" content="2018-08-14T06:54:09&#43;08:00"/>
-
+<meta property="article:published_time" content="2018-08-14T06:54:09+08:00" />
+<meta property="article:modified_time" content="2018-08-14T06:54:09+08:00" />
 <meta itemprop="name" content="素数生成器">
 <meta itemprop="description" content="一个不太优雅的素数生成器，主要用来观察“Go-routine &#43; 管道”的开发方式">
-
-
 <meta itemprop="datePublished" content="2018-08-14T06:54:09&#43;08:00" />
 <meta itemprop="dateModified" content="2018-08-14T06:54:09&#43;08:00" />
-<meta itemprop="wordCount" content="1232">
+<meta itemprop="wordCount" content="1240">
 
 
 
-<meta itemprop="keywords" content="Go," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Go," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="素数生成器"/>
 <meta name="twitter:description" content="一个不太优雅的素数生成器，主要用来观察“Go-routine &#43; 管道”的开发方式"/>
 
@@ -141,33 +138,30 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#前言">前言</a></li>
-<li><a href="#代码">代码</a></li>
-<li><a href="#分析">分析</a></li>
-<li><a href="#参考文章">参考文章</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#前言">前言</a></li>
+        <li><a href="#代码">代码</a></li>
+        <li><a href="#分析">分析</a></li>
+        <li><a href="#参考文章">参考文章</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p>一个不太优雅的素数生成器，主要用来观察“Go-routine + 管道”的开发方式</p>
-
 <h2 id="前言">前言</h2>
-
 <p>在阅读《Go高级编程》的时候，里面有个用 Newsqueak 编写的生成素数的例子，感觉这个例子很有意思，我就把它用Go重写了一下，特来此记录一下。</p>
-
 <h2 id="代码">代码</h2>
-
 <p>下面的程序实现了一个“素数生成器”，它将会输出前<code>N</code>个素数:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -292,25 +286,19 @@
 		<span class="nx">p</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">prime</span>
 		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span>
 	<span class="p">}</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="分析">分析</h2>
-
+</div><h2 id="分析">分析</h2>
 <p>整个素数生成器可以用下面这张流程图来表示。</p>
-
-<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-08-13-150647.png" alt="素数生成器流程图" /></p>
-
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-08-13-150647.png" alt="素数生成器流程图"></p>
 <p>上图中各个 Goroutine 的说明如下</p>
-
 <ul>
 <li>Counter 用来生成从2到N的数字</li>
-<li><code>FilterPrimer(prime, listen, send)</code> 从<code>listen</code><strong>输入管道</strong>中读取数字，将素数<code>prime</code>的倍数过滤掉，然后将结果输出到<code>send</code><strong>输出管道</strong>中</li>
+<li><code>FilterPrimer(prime, listen, send)</code> 从<code>listen</code>__输入管道__中读取数字，将素数<code>prime</code>的倍数过滤掉，然后将结果输出到<code>send</code>__输出管道__中</li>
 <li><code>sieve</code>负责从读取素数，并根据产生的素数新建<code>FilterPrime</code>进行后续的过滤</li>
 </ul>
-
 <p>整个程序的流程如下：</p>
-
 <ul>
 <li>Counter 产生第一个素数2，<code>sieve</code> Goroutine 将2输出到<code>prime</code>管道中，并以此建立 Goroutine <code>FilterPrime(2)</code>，<code>Counter</code>的输出管道会成为<code>FilterPrime(2)</code>的输入管道</li>
 <li><code>FilterPrime(2)</code>从输入管道中读取数字并过滤输出，它输出的第一个数字是素数3。<code>sieve</code> Goroutine 将3输出到<code>prime</code>管道中，并以此建立 Goroutine <code>FilterPrime(3)</code>，<code>FilterPrime(2)</code>的输出管道会作为<code>FilterPrime(3)</code>的输入管道</li>
@@ -318,11 +306,8 @@
 <li>依次类推。。。</li>
 <li>最终可以从管道<code>prime</code>中读取出素数，<code>prime</code>管道每次读取，数字都会从<code>Counter</code>产生，然后经过一层层过滤，最终将素数输出出来，并根据这个输出的素数，建立下一个<code>FilterPrime</code> Goroutine。</li>
 </ul>
-
 <p>从上面的分析中我们可以看出，如果我们想要获取前N个素数，那么就需要建立N+2个 Goroutine 和N+1个 Channel 。故其空间复杂度为O(2N)。同时，整个程序的流程就是<code>Counter</code>产生数字，然后经历一个一个的<code>FilterPrime</code>，最终将素数过滤出来，整个循环只进行一次，所以时间复杂度为O(M)，其中M表示第N个素数的值。</p>
-
 <h2 id="参考文章">参考文章</h2>
-
 <ul>
 <li><a href="https://chai2010.gitbooks.io/advanced-go-programming-book/content/ch1-basic/ch1-02-hello-revolution.html">《Go高级编程》1.2.3小节</a></li>
 </ul>
@@ -422,7 +407,10 @@
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

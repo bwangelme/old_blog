@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2017/06/22/mysql-character-set-support/" />
@@ -34,7 +34,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -42,21 +43,17 @@
 <meta property="og:description" content="摘要: 本文是对MySQL文档 Character Set Support 的翻译 字符集(character set)和排序规则(collation)概要 一个字符集是一组符号和编码的集" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2017/06/22/mysql-character-set-support/" />
-<meta property="article:published_time" content="2017-06-22T23:32:43&#43;08:00"/>
-<meta property="article:modified_time" content="2017-06-22T23:32:43&#43;08:00"/>
-
+<meta property="article:published_time" content="2017-06-22T23:32:43+08:00" />
+<meta property="article:modified_time" content="2017-06-22T23:32:43+08:00" />
 <meta itemprop="name" content="MySQL Character Set support">
 <meta itemprop="description" content="摘要: 本文是对MySQL文档 Character Set Support 的翻译 字符集(character set)和排序规则(collation)概要 一个字符集是一组符号和编码的集">
-
-
 <meta itemprop="datePublished" content="2017-06-22T23:32:43&#43;08:00" />
 <meta itemprop="dateModified" content="2017-06-22T23:32:43&#43;08:00" />
-<meta itemprop="wordCount" content="2700">
+<meta itemprop="wordCount" content="2687">
 
 
 
-<meta itemprop="keywords" content="MySQL," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySQL Character Set support"/>
 <meta name="twitter:description" content="摘要: 本文是对MySQL文档 Character Set Support 的翻译 字符集(character set)和排序规则(collation)概要 一个字符集是一组符号和编码的集"/>
 
@@ -140,84 +137,50 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#字符集-character-set-和排序规则-collation-概要">字符集(character set)和排序规则(collation)概要</a></li>
-<li><a href="#mysql中的字符集和排序规则">MySQL中的字符集和排序规则</a></li>
-<li><a href="#排序规则命名规范">排序规则命名规范</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#字符集character-set和排序规则collation概要">字符集(character set)和排序规则(collation)概要</a></li>
+        <li><a href="#mysql中的字符集和排序规则">MySQL中的字符集和排序规则</a></li>
+        <li><a href="#排序规则命名规范">排序规则命名规范</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
-      
-
-<p><strong>摘要</strong>:</p>
-
+      <p><strong>摘要</strong>:</p>
 <blockquote>
 <ol>
 <li>本文是对MySQL文档 <a href="https://dev.mysql.com/doc/refman/5.7/en/charset.html">Character Set Support</a> 的翻译</li>
 </ol>
 </blockquote>
-
-<!-- more -->
-
-<h2 id="字符集-character-set-和排序规则-collation-概要">字符集(character set)和排序规则(collation)概要</h2>
-
+<!-- raw HTML omitted -->
+<h2 id="字符集character-set和排序规则collation概要">字符集(character set)和排序规则(collation)概要</h2>
 <p>一个字符集是一组符号和编码的集合。一个排序规则是一组字符集中用来比较字符的规则的集合。让我们使用一个假想的字符集的例子来分别区分它们。</p>
-
-<p>假设我们有四个字母：A, B, a, b。我们给每个字母赋值一个数字，A = 0, B = 1, a = 2, b = 3。字母 <strong>A</strong> 是一个符号，数字0是字母 <strong>A</strong> 的编码，四个字母和它们编码的集合叫做<strong>字符集</strong>(character set)。</p>
-
+<p>假设我们有四个字母：A, B, a, b。我们给每个字母赋值一个数字，A = 0, B = 1, a = 2, b = 3。字母 <strong>A</strong> 是一个符号，数字0是字母 <strong>A</strong> 的编码，四个字母和它们编码的集合叫做__字符集__(character set)。</p>
 <p>假设我们想要比较两个字符串值，A 和 B。做这个最简单的方式就是去查看它们的编码，A 是0，B 是1。因为0比1小，所以我们说 A 比 B 小。刚刚我们所做的事情是将一个排序规则(collation)应用到我们的字符集上。排序规则(collation)是一组规则(比较编码)的集合(在这个例子中仅有一个规则)。我们称这个所有可能的排序规则中最简单的排序规则为二进制排序规则(binary collation)。</p>
-
 <p>但是如果我们想说大写字母和小写字母是等价的，那该怎么排序呢？那么我们将会有至少两个规则：</p>
-
 <ol>
 <li>将小写字母 a 和 b 等价成大写字母 A 和 B。</li>
 <li>然后比较它们的编码。</li>
 </ol>
-
 <p>我们称这个为不区分大小写的排序规则。它比起二进制排序规则来要复杂一些。</p>
-
 <p>在现实生活中，大多数的字符集都有许多字符；并不仅仅是 A 和 B 而是包括所有的字母，有时还会包括多字母和东方书写系统中成千上万个字符和许多相关的特殊字符和标点符号。同样在现实生活中，大多数的排序规则都有许多条规则，并不仅仅是区分大小写对于多字符映射(比如德语排序规则中的两个规则之一就是Ö = OE)也会区分口音(口音是和字符相关的一个标记例如德语中的Ö)。</p>
-
 <p>MySQL 能为你做这些事情：</p>
-
 <ul>
 <li>使用各种各样的字符集来存储字符串。</li>
 <li>使用各种各样的排序规则来比较字符串。</li>
 <li>在同一台服务器上，在同一个的数据库，甚至是在同一个表中，混合使用不同字符集不同排序规则的字符串。</li>
 <li>在任何等级上开启特殊的字符集和排序规则。</li>
 </ul>
-
 <p>为了能够有效地使用这些特性，你必须要知道哪些字符集和排序规则是可用的，如何改变默认的排序规则，以及它们是如何影响到字符串操作符和相关函数的行为的。</p>
-
 <h2 id="mysql中的字符集和排序规则">MySQL中的字符集和排序规则</h2>
-
-<p>MySQL 服务器支持多种字符集。使用<strong>INFORMATION_SCHEMA.CHARACTER_SETS</strong>表或者<strong>SHOW CHARACTER_SET</strong>语句能够列出所有的可用字符集。下面的例子列出了一部分字符集，如果想要查看完整的信息，请参看<a href="https://dev.mysql.com/doc/refman/5.7/en/charset-charsets.html"> Section 11.1.14, “Character Sets and Collations Supported by MySQL” </a>。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">mysql&gt; SHOW CHARACTER SET;
+<p>MySQL 服务器支持多种字符集。使用__INFORMATION_SCHEMA.CHARACTER_SETS__表或者__SHOW CHARACTER_SET__语句能够列出所有的可用字符集。下面的例子列出了一部分字符集，如果想要查看完整的信息，请参看<a href="https://dev.mysql.com/doc/refman/5.7/en/charset-charsets.html"> Section 11.1.14, “Character Sets and Collations Supported by MySQL” </a>。</p>
+<pre><code>mysql&gt; SHOW CHARACTER SET;
 +----------+---------------------------------+---------------------+--------+
 | Charset  | Description                     | Default collation   | Maxlen |
 +----------+---------------------------------+---------------------+--------+
@@ -230,28 +193,10 @@
 | ucs2     | UCS-2 Unicode                   | ucs2_general_ci     |      2 |
 ...
 | utf8mb4  | UTF-8 Unicode                   | utf8mb4_general_ci  |      4 |
-...</pre></td></tr></table>
-</div>
-</div>
-<p>一个给定的字符集至少有一个排序规则，而大多数的字符集都有多个。通过<strong>INFORMATION_SCHEMA.COLLATIONS</strong>表或者<strong>SHOW COLLATION</strong>语句可以列出一个字符集所有可用的排序规则。例如，使用下面的语句可以列出 <em>latin1</em> 字符集(cp1252 西欧)所有的排序规则。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">mysql&gt; SHOW COLLATION WHERE Charset = &#39;latin1&#39;;
+...
+</code></pre>
+<p>一个给定的字符集至少有一个排序规则，而大多数的字符集都有多个。通过__INFORMATION_SCHEMA.COLLATIONS__表或者__SHOW COLLATION__语句可以列出一个字符集所有可用的排序规则。例如，使用下面的语句可以列出 <em>latin1</em> 字符集(cp1252 西欧)所有的排序规则。</p>
+<pre><code>mysql&gt; SHOW COLLATION WHERE Charset = 'latin1';
 +-------------------+---------+----+---------+----------+---------+
 | Collation         | Charset | Id | Default | Compiled | Sortlen |
 +-------------------+---------+----+---------+----------+---------+
@@ -263,11 +208,9 @@
 | latin1_general_ci | latin1  | 48 |         | Yes      |       1 |
 | latin1_general_cs | latin1  | 49 |         | Yes      |       1 |
 | latin1_spanish_ci | latin1  | 94 |         | Yes      |       1 |
-+-------------------+---------+----+---------+----------+---------+</pre></td></tr></table>
-</div>
-</div>
++-------------------+---------+----+---------+----------+---------+
+</code></pre>
 <p><em>latin1</em> 的排序规则有如下含义。</p>
-
 <table>
 <thead>
 <tr>
@@ -275,75 +218,60 @@
 <th>Meaning</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td>latin1_bin</td>
 <td>根据 latin1 的编码进行二进制排序</td>
 </tr>
-
 <tr>
 <td>latin_danish_ci</td>
 <td>丹麦/挪威</td>
 </tr>
-
 <tr>
 <td>latin1_general_ci</td>
 <td>多语言(西欧)</td>
 </tr>
-
 <tr>
 <td>latin1_general_cs</td>
 <td>多语言(ISO 西欧)，区分大小写</td>
 </tr>
-
 <tr>
 <td>latin1_german1_ci</td>
 <td>德语 DIN-1 (字典顺序)</td>
 </tr>
-
 <tr>
 <td>latin1_german2_ci</td>
 <td>德语 DIN-2 (电话簿顺序)</td>
 </tr>
-
 <tr>
 <td>latin1_spanish_ci</td>
 <td>现代西班牙语</td>
 </tr>
-
 <tr>
 <td>latin1_swedish_ci</td>
 <td>瑞典/芬兰</td>
 </tr>
 </tbody>
 </table>
-
 <p>排序规则有如下的特点：</p>
-
 <ul>
 <li>两个不同字符集不能有同样的排序规则</li>
-<li>每个字符集有一个排序规则称为默认排序规则(<em>default collation</em>)。例如，<strong>latin1</strong> 和 <strong>utf8</strong> 的默认排序规则分别是 <strong>latin1_swedish_ci</strong> 和 <strong>utf8_general_ci</strong> 。<strong>INFORMATION_SHCEMA.CHARACTER_SETS</strong> 表和 <strong>SHOW CHARACTER_SET</strong> 语句表明了每个字符集的默认排序规则。 <strong>INFORMATION_SHCEMA.COLLATIONS</strong> 表和 <strong>SHOW COLLATION</strong> 语句有一列表明每个排序规则是不是它所属字符集的默认排序规则。(是的话值为*YES*，否则值为空)。</li>
+<li>每个字符集有一个排序规则称为默认排序规则(<em>default collation</em>)。例如，<strong>latin1</strong> 和 <strong>utf8</strong> 的默认排序规则分别是 <strong>latin1_swedish_ci</strong> 和 <strong>utf8_general_ci</strong> 。<strong>INFORMATION_SHCEMA.CHARACTER_SETS</strong> 表和 <strong>SHOW CHARACTER_SET</strong> 语句表明了每个字符集的默认排序规则。 <strong>INFORMATION_SHCEMA.COLLATIONS</strong> 表和 <strong>SHOW COLLATION</strong> 语句有一列表明每个排序规则是不是它所属字符集的默认排序规则。(是的话值为<em>YES</em>，否则值为空)。</li>
 <li>排序规则的名字是以它们相关联的字符集的名字作为起始值，后面跟着一个或多个的后缀来表明其他的排序规则特性。如果想要了解更多的排序规则命名规范，请参考<a href="https://dev.mysql.com/doc/refman/5.7/en/charset-collation-names.html"> Section 11.1.3, “Collation Naming Conventions” </a>。</li>
 </ul>
-
 <p>当一个字符集有多个排序规则的时候，对于一个给定的应用程序来说哪个排序规则是最适合的可能并不清晰。为了避免选择一个不合适的排序规则，请使用一些代表数据值来执行一些比较，来确认给定的排序规则将值排序的方式是否符合你的期望。</p>
-
 <p><a href="http://www.collation-charts.org/">Collation-Charts.Org</a>是一个很有用的网站，用来展示一个排序规则和另外一个排序规则的比较信息。</p>
-
 <h2 id="排序规则命名规范">排序规则命名规范</h2>
-
 <p>MySQL 排序规则的命名遵循如下的规范：</p>
-
 <ul>
 <li>一个排序规则的名字使用和它相关联的那个字符集的名字作为开始，后面跟着一个或者多个后缀表示排序规则的其他特性。例如，<em>utf8_general_ci</em> 和 <em>latin1_swedish_ci</em> 分别是 <em>utf8</em> 和 <em>latin1</em> 字符集的排序规则。</li>
 <li>某个语言特定的排序规则包括了语言名。例如，<em>utf8_turkish_ci</em> 和 <em>utf8_hungarian_ci</em> 分别使用土耳其和匈牙利的的规则来为 <em>utf8</em> 字符集排序字符。</li>
 <li>一个排序规则可能是区分大小写或者不区分大小写的，也有可能是二进制排序的。对于二进制排序的排序规则，字符比较基于字符的二进制编码值。下面的表格表示了这些排序特性使用的后缀。</li>
 </ul>
-
 <blockquote>
 <p><strong>表格 11.1 排序规则大小写区分的后缀</strong></p>
-
+</blockquote>
+<blockquote>
 <table>
 <thead>
 <tr>
@@ -351,47 +279,43 @@
 <th>Meaning</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td>_ai</td>
 <td>不区分口音</td>
 </tr>
-
 <tr>
 <td>_as</td>
 <td>区分口音</td>
 </tr>
-
 <tr>
 <td>_ci</td>
 <td>不区分大小写</td>
 </tr>
-
 <tr>
 <td>_cs</td>
 <td>区分大小写</td>
 </tr>
-
 <tr>
 <td>_bin</td>
 <td>二进制排序</td>
 </tr>
 </tbody>
 </table>
-
-<p>对于没有指定口音的非二进制排序规则，它是由区分大小写来决定的。那就意味着，如果一个排序规则名字中没有包含 <em>_ai</em> 或者 <em>_as</em> ，名字中的 <em>_ci</em> 就暗示着 *_ai*，而 <em>_cs</em> 就暗示着 *_as*。</p>
-
+</blockquote>
+<blockquote>
+<p>对于没有指定口音的非二进制排序规则，它是由区分大小写来决定的。那就意味着，如果一个排序规则名字中没有包含 <em>_ai</em> 或者 <em>_as</em> ，名字中的 <em>_ci</em> 就暗示着 <em>_ai</em>，而 <em>_cs</em> 就暗示着 <em>_as</em>。</p>
+</blockquote>
+<blockquote>
 <p>例如，<em>latin1_general_ci</em> 是不区分大小写的(同时也暗示着不区分口音)。<em>latin1_general_cs</em> 是区分大小写的(同时也暗示着区分口音), <em>latin1_bin</em> 使用二进制编码的值。</p>
 </blockquote>
-
 <ul>
 <li>对于 Unicode 字符集，排序规则名字中可能包含着一个版本号，用来表示这个排序规则基于的 UCA(Unicode Collation Algorithm) 的版本。基于 UCA 的排序规则的名字中没有版本号的话，意味着使用了 UCA 加权键 4.0.0 版本。例如：
-
 <ul>
 <li><em>utf8_unicode_520_ci</em> 是基于 <a href="http://www.unicode.org/Public/UCA/5.2.0/allkeys.txt">UCA 5.2.0 加权键</a>。</li>
 <li><em>utf8_unicode_ci</em> (名字中不含版本号) 是基于 <a href="http://www.unicode.org/Public/UCA/4.0.0/allkeys-4.0.0.txt">UCA 4.0.0 加权键</a>。</li>
-</ul></li>
+</ul>
+</li>
 <li>对于 Unicode 字符集来说，<em>xxx_general_mysql500_ci</em> 排序规则保留了5.1.24之前的的原始排序规则 <em>xxx_general_ci</em> ，同时也允许 MySQL 5.1.24 之前创建的表进行升级。想要了解更多信息，请参考 <a href="http://dev.mysql.com/doc/refman/5.7/en/checking-table-incompatibilities.html"> Section 2.11.3, “Checking Whether Tables or Indexes Must Be Rebuilt” </a> 和 <a href="http://dev.mysql.com/doc/refman/5.7/en/rebuilding-tables.html"> Section 2.11.4, “Rebuilding or Repairing Tables or Indexes” </a></li>
 </ul>
 
@@ -491,7 +415,10 @@
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

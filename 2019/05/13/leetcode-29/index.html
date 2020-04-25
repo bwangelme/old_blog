@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2019/05/13/leetcode-29/" />
@@ -34,7 +34,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -46,25 +47,21 @@ LeetCode 29题
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2019/05/13/leetcode-29/" />
-<meta property="article:published_time" content="2019-05-13T23:27:08&#43;08:00"/>
-<meta property="article:modified_time" content="2019-05-13T23:27:08&#43;08:00"/>
-
+<meta property="article:published_time" content="2019-05-13T23:27:08+08:00" />
+<meta property="article:modified_time" content="2019-05-13T23:27:08+08:00" />
 <meta itemprop="name" content="Leetcode 第29题">
 <meta itemprop="description" content="
 
 LeetCode 29题
 
 ">
-
-
 <meta itemprop="datePublished" content="2019-05-13T23:27:08&#43;08:00" />
 <meta itemprop="dateModified" content="2019-05-13T23:27:08&#43;08:00" />
 <meta itemprop="wordCount" content="916">
 
 
 
-<meta itemprop="keywords" content="ARTS,LeetCode," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="ARTS,LeetCode," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Leetcode 第29题"/>
 <meta name="twitter:description" content="
 
@@ -152,21 +149,23 @@ LeetCode 29题
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#题目描述">题目描述</a></li>
-<li><a href="#解题思路">解题思路</a>
-<ul>
-<li><a href="#基本思路">基本思路</a></li>
-<li><a href="#处理符号">处理符号</a></li>
-<li><a href="#溢出情况">溢出情况</a></li>
-</ul></li>
-<li><a href="#代码">代码</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#题目描述">题目描述</a></li>
+        <li><a href="#解题思路">解题思路</a>
+          <ul>
+            <li><a href="#基本思路">基本思路</a></li>
+            <li><a href="#处理符号">处理符号</a></li>
+            <li><a href="#溢出情况">溢出情况</a></li>
+          </ul>
+        </li>
+        <li><a href="#代码">代码</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
@@ -176,84 +175,69 @@ LeetCode 29题
 <li><a href="https://leetcode.com/problemset/all/">LeetCode 29题</a></li>
 </ul>
 </blockquote>
-
-<hr />
-
+<hr>
 <h2 id="题目描述">题目描述</h2>
-
 <p>Given two integers dividend and divisor, divide two integers without using multiplication, division and mod operator.</p>
-
 <p>Return the quotient after dividing dividend by divisor.</p>
-
 <p>The integer division should truncate toward zero.</p>
-
 <p>Example 1:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">Input: dividend = 10, divisor = 3
-Output: 3</pre></td></tr></table>
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">Input: dividend = 10, divisor = 3
+Output: 3
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>Example 2:</p>
+</div><p>Example 2:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">Input: dividend = 7, divisor = -3
-Output: -2</pre></td></tr></table>
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">Input: dividend = 7, divisor = -3
+Output: -2
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>Note:</p>
-
+</div><p>Note:</p>
 <p>Both dividend and divisor will be 32-bit signed integers.
 The divisor will never be 0. Assume we are dealing with an environment which could only store integers within the 32-bit signed integer range: [<code>−2^31</code>,  <code>2^31 − 1</code>]. For the purpose of this problem, assume that your function returns <code>2^31 − 1</code> when the division result overflows.</p>
-
 <h2 id="解题思路">解题思路</h2>
-
 <h3 id="基本思路">基本思路</h3>
-
 <p>这道题是要求在不使用<code>*</code>, <code>/</code> 和取余的情况下做除法，那能用的方法就是做减法了。最简单的做法就是让被除数一直减除数，直到被除数为0为止，减法执行的次数就是商。</p>
-
 <p>在这个基础上，我们可以执行一定的优化，例如 <code>divide(10, 2)</code> 执行的是以下的操作:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">10 - 2 - 2 - 2 - 2 - 2
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">10 - 2 - 2 - 2 - 2 - 2
 
-# 共执行了5次减法，所以商是5</pre></td></tr></table>
+# 共执行了5次减法，所以商是5
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>我们可以将除数不断乘二（<code>&lt;&lt;1</code>），同时也将商不断乘二，直到除数为小于被除数的最大数，然后再执行被除数减去除数的操作。</p>
-
+</div><p>我们可以将除数不断乘二（<code>&lt;&lt;1</code>），同时也将商不断乘二，直到除数为小于被除数的最大数，然后再执行被除数减去除数的操作。</p>
 <p>在最好的情况下，上述优化可以将 $\frac{被除数}{除数}$ 次减法合并成 $log_2{\frac{被除数}{除数}}$ 次位运算。</p>
-
 <h3 id="处理符号">处理符号</h3>
-
 <p>题目中的输入值为32位有符号数，所以需要处理为负数的情况。这里比较简单，就是判断被除数和除数的符号是否相同就可以了。</p>
-
 <p>在 C 语言中布尔值即是整数值，可以执行异或运算</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="n">sign</span> <span class="o">=</span> <span class="p">(</span><span class="err">被除数</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="err">除数</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="mi">1</span><span class="p">;</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="n">sign</span> <span class="o">=</span> <span class="p">(</span><span class="err">被除数</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="err">除数</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="mi">1</span><span class="p">;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>在 Go 语言中，布尔值执行异或运算，只需要判断两个布尔值是否相同即可以了</p>
+</div><p>在 Go 语言中，布尔值执行异或运算，只需要判断两个布尔值是否相同即可以了</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -262,27 +246,22 @@ The divisor will never be 0. Assume we are dealing with an environment which cou
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">sign</span> <span class="p">=</span> <span class="mi">1</span>
 <span class="k">if</span> <span class="p">(</span><span class="nx">除数</span> <span class="p">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="p">(</span><span class="nx">被除数</span> <span class="p">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
 	<span class="nx">sign</span> <span class="p">=</span> <span class="o">-</span><span class="mi">1</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="溢出情况">溢出情况</h3>
-
+</div><h3 id="溢出情况">溢出情况</h3>
 <p>题目中还提示到，当溢出发生时，返回$2^{31} - 1$。由于输入的数值是32位整数，执行的又是除法，所以溢出只可能是一种情况，就是</p>
-
 <p>$$
 \frac{-2^{31}}{-1}
 $$</p>
-
 <p>所以我们只需要处理这一种溢出情况即可。</p>
-
 <h2 id="代码">代码</h2>
-
 <ul>
 <li><code>solution.go</code></li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -381,15 +360,15 @@ $$</p>
 	<span class="p">}</span>
 
 	<span class="k">return</span> <span class="nx">answer</span> <span class="o">*</span> <span class="nx">sign</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li><code>solution_test.go</code></li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -416,7 +395,8 @@ $$</p>
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">divide</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">),</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span>
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">divide</span><span class="p">(</span><span class="o">-</span><span class="mi">2147483648</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="mi">2147483647</span><span class="p">)</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -516,7 +496,10 @@ $$</p>
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

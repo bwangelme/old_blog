@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2016/04/10/mysql%E7%B4%A2%E5%BC%95/" />
@@ -36,40 +36,34 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
 <meta property="og:title" content="MySQL索引" />
 <meta property="og:description" content="摘要:
 
-
 这是一篇关于MySQL的文章，主要介绍MySQL索引
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2016/04/10/mysql%E7%B4%A2%E5%BC%95/" />
-<meta property="article:published_time" content="2016-04-10T10:56:54&#43;00:00"/>
-<meta property="article:modified_time" content="2016-04-10T10:56:54&#43;00:00"/>
-
+<meta property="article:published_time" content="2016-04-10T10:56:54+00:00" />
+<meta property="article:modified_time" content="2016-04-10T10:56:54+00:00" />
 <meta itemprop="name" content="MySQL索引">
 <meta itemprop="description" content="摘要:
 
-
 这是一篇关于MySQL的文章，主要介绍MySQL索引
 ">
-
-
 <meta itemprop="datePublished" content="2016-04-10T10:56:54&#43;00:00" />
 <meta itemprop="dateModified" content="2016-04-10T10:56:54&#43;00:00" />
-<meta itemprop="wordCount" content="1098">
+<meta itemprop="wordCount" content="1072">
 
 
 
-<meta itemprop="keywords" content="MySQL," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySQL索引"/>
 <meta name="twitter:description" content="摘要:
-
 
 这是一篇关于MySQL的文章，主要介绍MySQL索引
 "/>
@@ -154,44 +148,63 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li><a href="#mysql索引">MySQL索引</a></li>
-</ul>
+  <ul>
+    <li><a href="#mysql索引">MySQL索引</a></li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p><strong>摘要</strong>:</p>
-
 <blockquote>
 <p>这是一篇关于MySQL的文章，主要介绍MySQL索引</p>
 </blockquote>
-
 <h1 id="mysql索引">MySQL索引</h1>
-
 <p>##1. 索引简介</p>
-
 <p>索引在MySQL中也叫作键，是存储引擎用于快速找到记录的一种数据结构</p>
-
 <p>索引优化应该是对查询性能优化最有效的手段了</p>
-
 <p>相当于字典中的音序表，如果没有音序表，则需要一页一页去查</p>
-
 <p>##2. 索引分类</p>
-
-<p>|说明|普通索引|唯一索引|全文索引|单列索引|多列索引|空间索引|
-|&ndash;|&ndash;|&ndash;|&ndash;|&ndash;|&ndash;|&ndash;|
-|存储引擎|所有存储引擎支持(同样的索引，不同存储类型，实现不同)|只有Memory支持|5.5及之前前仅MyISAM支持| | | |
-|特点|允许字段重复|不允许字段重复|针对<code>varchar</code>类型支持| |select语句条件有第一个字段时才会使用多列索引| | |</p>
-
+<table>
+<thead>
+<tr>
+<th>说明</th>
+<th>普通索引</th>
+<th>唯一索引</th>
+<th>全文索引</th>
+<th>单列索引</th>
+<th>多列索引</th>
+<th>空间索引</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>存储引擎</td>
+<td>所有存储引擎支持(同样的索引，不同存储类型，实现不同)</td>
+<td>只有Memory支持</td>
+<td>5.5及之前前仅MyISAM支持</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>特点</td>
+<td>允许字段重复</td>
+<td>不允许字段重复</td>
+<td>针对<code>varchar</code>类型支持</td>
+<td></td>
+<td>select语句条件有第一个字段时才会使用多列索引</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <p>##3. 测试</p>
-
 <p>###利用存储过程插入数据</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -216,17 +229,15 @@
     <span class="o">-&gt;</span> <span class="k">end</span> <span class="n">while</span><span class="p">;</span>
     <span class="o">-&gt;</span> <span class="k">END</span><span class="err">$$</span>
 <span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delimiter</span> <span class="p">;</span> <span class="c1">--还原分隔符为;
-</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">call</span> <span class="n">autoinsert1</span><span class="p">();</span> <span class="c1">--调用存储过程</span></code></pre></td></tr></table>
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">call</span> <span class="n">autoinsert1</span><span class="p">();</span> <span class="c1">--调用存储过程
+</span></code></pre></td></tr></table>
 </div>
-</div>
-<p>创建存储过程要选择对应数据库，否则可能会报错</p>
-
+</div><p>创建存储过程要选择对应数据库，否则可能会报错</p>
 <p>###创建索引</p>
-
 <p>####1. 在创建表的时候创建索引</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -241,15 +252,14 @@
 <span class="p">[</span><span class="k">UNIQUE</span><span class="o">|</span><span class="n">FULLTEXT</span><span class="o">|</span><span class="n">SPATIAL</span><span class="p">]</span> <span class="k">INDEX</span><span class="o">|</span><span class="k">KEY</span>
 <span class="p">[</span><span class="err">索引名</span><span class="p">]</span> <span class="p">(</span><span class="err">字段名</span><span class="p">[(</span><span class="err">长度</span><span class="p">)]</span> <span class="p">[</span><span class="k">ASC</span><span class="o">|</span><span class="k">DESC</span><span class="p">])</span> <span class="c1">--ASC|DESC表示对索引进行排序
 </span><span class="c1">--字段名后的长度针对varchar类型
-</span><span class="c1"></span><span class="p">);</span></code></pre></td></tr></table>
+</span><span class="c1"></span><span class="p">);</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>####2. 创建多列索引</p>
-
+</div><p>####2. 创建多列索引</p>
 <p>select在条件中使用第一个字段时才会使用索引</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -276,11 +286,12 @@
   <span class="o">`</span><span class="k">comment</span><span class="o">`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
   <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">dept_id</span><span class="o">`</span><span class="p">),</span>
   <span class="k">KEY</span> <span class="o">`</span><span class="n">index_dept_name</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">dept_name</span><span class="o">`</span><span class="p">,</span><span class="o">`</span><span class="k">comment</span><span class="o">`</span><span class="p">)</span>
-<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">latin1</span></code></pre></td></tr></table>
+<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">latin1</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -339,13 +350,13 @@
           <span class="k">ref</span><span class="p">:</span> <span class="k">NULL</span>
          <span class="k">rows</span><span class="p">:</span> <span class="mi">4</span>              <span class="c1">-- 一共查询了多少行
 </span><span class="c1"></span>        <span class="n">Extra</span><span class="p">:</span> <span class="k">Using</span> <span class="k">where</span><span class="p">;</span> <span class="k">Using</span> <span class="k">index</span>
-<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></td></tr></table>
+<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>####3. 在已存在的表上创建索引</p>
+</div><p>####3. 在已存在的表上创建索引</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -354,13 +365,13 @@
 <pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="p">[</span><span class="k">UNIQUE</span><span class="o">|</span><span class="n">FULLTEXT</span><span class="o">|</span><span class="n">SPATIAL</span><span class="p">]</span> <span class="k">INDEX</span> <span class="err">索引名</span>
     <span class="k">ON</span> <span class="err">表名</span><span class="p">(</span><span class="err">字段名</span><span class="p">[(</span><span class="err">长度</span><span class="p">)]</span> <span class="p">[</span><span class="k">ASC</span><span class="o">|</span><span class="k">DESC</span><span class="p">]);</span>
 
-<span class="k">alter</span> <span class="k">table</span> <span class="err">表名</span> <span class="k">ADD</span> <span class="p">[</span><span class="k">UNIQUE</span><span class="o">|</span><span class="n">FULLTEXT</span><span class="o">|</span><span class="n">SPATIAL</span><span class="p">]</span> <span class="k">INDEX</span> <span class="err">索引名</span><span class="p">(</span><span class="err">字段名</span><span class="p">[(</span><span class="err">长度</span><span class="p">)]</span> <span class="p">[</span><span class="k">ASC</span><span class="o">|</span><span class="k">DESC</span><span class="p">]);</span></code></pre></td></tr></table>
+<span class="k">alter</span> <span class="k">table</span> <span class="err">表名</span> <span class="k">ADD</span> <span class="p">[</span><span class="k">UNIQUE</span><span class="o">|</span><span class="n">FULLTEXT</span><span class="o">|</span><span class="n">SPATIAL</span><span class="p">]</span> <span class="k">INDEX</span> <span class="err">索引名</span><span class="p">(</span><span class="err">字段名</span><span class="p">[(</span><span class="err">长度</span><span class="p">)]</span> <span class="p">[</span><span class="k">ASC</span><span class="o">|</span><span class="k">DESC</span><span class="p">]);</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>复制表</p>
+</div><p>复制表</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -373,23 +384,18 @@
 
 <span class="c1">-- 下面两条，复制了表的结构，但是没有内容，也没有复制表的key(约束)
 </span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">t4</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">t2</span> <span class="k">where</span> <span class="mi">1</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
-<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">t5</span> <span class="k">like</span> <span class="n">t2</span><span class="p">;</span></code></pre></td></tr></table>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">t5</span> <span class="k">like</span> <span class="n">t2</span><span class="p">;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>##4. 管理索引</p>
-
+</div><p>##4. 管理索引</p>
 <p>查看索引
 <code>show create table 表名\G</code></p>
-
 <p>测试示例
 <code>explain select * from t2 where id = 1;</code>
 查看查询优化器做了哪些操作</p>
-
 <p><code>DROP INDEX 索引名 ON 表名</code>
 删除索引</p>
-
 <p>##5. 扩展</p>
-
 <p><a href="http://zh-sphinx-doc.readthedocs.org/en/latest/contents.html">Sphinx</a> 一个全文检索引擎，但是不支持中文。
 <a href="http://www.coreseek.cn/">Coreseek</a> 是一个可供企业使用的，基于Sphinx(可独立于Sphinx原始版本运行)的中文全文检索引擎</p>
     </div>
@@ -488,7 +494,10 @@
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

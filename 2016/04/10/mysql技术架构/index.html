@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2016/04/10/mysql%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84/" />
@@ -36,42 +36,36 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
 <meta property="og:title" content="MySQL技术架构概览" />
 <meta property="og:description" content="摘要:
 
-
 学习 MySQL 课程时的相关笔记
 仅仅对 MySQL 的整体做的大概介绍
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2016/04/10/mysql%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84/" />
-<meta property="article:published_time" content="2016-04-10T10:56:54&#43;00:00"/>
-<meta property="article:modified_time" content="2016-04-10T10:56:54&#43;00:00"/>
-
+<meta property="article:published_time" content="2016-04-10T10:56:54+00:00" />
+<meta property="article:modified_time" content="2016-04-10T10:56:54+00:00" />
 <meta itemprop="name" content="MySQL技术架构概览">
 <meta itemprop="description" content="摘要:
-
 
 学习 MySQL 课程时的相关笔记
 仅仅对 MySQL 的整体做的大概介绍
 ">
-
-
 <meta itemprop="datePublished" content="2016-04-10T10:56:54&#43;00:00" />
 <meta itemprop="dateModified" content="2016-04-10T10:56:54&#43;00:00" />
 <meta itemprop="wordCount" content="502">
 
 
 
-<meta itemprop="keywords" content="MySQL," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySQL技术架构概览"/>
 <meta name="twitter:description" content="摘要:
-
 
 学习 MySQL 课程时的相关笔记
 仅仅对 MySQL 的整体做的大概介绍
@@ -157,57 +151,53 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#mysql-逻辑架构">MySQL 逻辑架构</a></li>
-<li><a href="#mysql锁机制">MySQL锁机制</a></li>
-<li><a href="#mysql锁流程">MySQL锁流程</a></li>
-<li><a href="#锁粒度">锁粒度</a>
-<ul>
-<li><a href="#表级锁">表级锁</a></li>
-<li><a href="#表级锁的锁模式">表级锁的锁模式</a></li>
-<li><a href="#行级锁">行级锁</a></li>
-<li><a href="#页面锁">页面锁</a></li>
-</ul></li>
-<li><a href="#mysql事务">MySQL事务</a>
-<ul>
-<li><a href="#定义事务的方法">定义事务的方法</a></li>
-<li><a href="#事务的acid特性">事务的ACID特性</a></li>
-</ul></li>
-<li><a href="#mysql的开发模式">MySQL的开发模式</a>
-<ul>
-<li><a href="#按更新发布分为">按更新发布分为：</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#mysql-逻辑架构">MySQL 逻辑架构</a></li>
+        <li><a href="#mysql锁机制">MySQL锁机制</a></li>
+        <li><a href="#mysql锁流程">MySQL锁流程</a></li>
+        <li><a href="#锁粒度">锁粒度</a>
+          <ul>
+            <li><a href="#表级锁">表级锁</a></li>
+            <li><a href="#表级锁的锁模式">表级锁的锁模式</a></li>
+            <li><a href="#行级锁">行级锁</a></li>
+            <li><a href="#页面锁">页面锁</a></li>
+          </ul>
+        </li>
+        <li><a href="#mysql事务">MySQL事务</a>
+          <ul>
+            <li><a href="#定义事务的方法">定义事务的方法</a></li>
+            <li><a href="#事务的acid特性">事务的ACID特性</a></li>
+          </ul>
+        </li>
+        <li><a href="#mysql的开发模式">MySQL的开发模式</a>
+          <ul>
+            <li><a href="#按更新发布分为">按更新发布分为：</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p><strong>摘要</strong>:</p>
-
 <blockquote>
 <p>学习 MySQL 课程时的相关笔记
 仅仅对 MySQL 的整体做的大概介绍</p>
 </blockquote>
-
 <h2 id="mysql-逻辑架构">MySQL 逻辑架构</h2>
-
-<iframe id="embed_dom" name="embed_dom" frameborder="0" style="border:1px solid #000;display:block;width:500px; height:400px;" src="https://www.processon.com/embed/57e696f4e4b091465ae113e0">
-</iframe>
-
+<!-- raw HTML omitted -->
 <h2 id="mysql锁机制">MySQL锁机制</h2>
-
 <p>元数据锁
 表级锁
 存储引擎内部锁
 全局读锁</p>
-
 <h2 id="mysql锁流程">MySQL锁流程</h2>
-
 <ol>
 <li>SQL分析</li>
 <li>打开表（元数据锁）</li>
@@ -217,59 +207,41 @@
 <li>释放表级锁</li>
 <li>释放元数据锁</li>
 </ol>
-
 <h2 id="锁粒度">锁粒度</h2>
-
 <h3 id="表级锁">表级锁</h3>
-
 <p>开销小，加锁快！锁的粒度大，发送冲突概率高，并发的最低</p>
-
 <h3 id="表级锁的锁模式">表级锁的锁模式</h3>
-
 <p>表共享读锁和表独占写锁</p>
-
 <p>MyISAM只支持表锁</p>
-
 <p>读锁会阻塞写，但是不会阻塞读，写锁则会把读和写都阻塞</p>
-
 <h3 id="行级锁">行级锁</h3>
-
 <p>开销稍大，加锁慢，锁定粒度最小，会出现死锁，发生锁冲突概率最低
 并发度最高</p>
-
 <h3 id="页面锁">页面锁</h3>
-
 <p>开销和加锁时间介于表级锁和行级锁之间，会出现死锁，锁定粒度介于表锁和行锁之间，并发粒度一般</p>
-
 <h2 id="mysql事务">MySQL事务</h2>
-
 <h3 id="定义事务的方法">定义事务的方法</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">start</span> <span class="n">transaction</span><span class="p">;</span>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">start</span> <span class="k">transaction</span><span class="p">;</span>
 <span class="k">SQL</span> <span class="err">语句</span>
-<span class="k">commit</span><span class="p">;</span></code></pre></td></tr></table>
+<span class="k">commit</span><span class="p">;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="事务的acid特性">事务的ACID特性</h3>
-
+</div><h3 id="事务的acid特性">事务的ACID特性</h3>
 <p>原子性 <code>Atomic</code>: 要么全部成功，要么全部回滚
 一致性 <code>Consistency</code>: 数据库总是从一个一致性状态转到另一个一致性状态
 隔离性 <code>Isolation</code>: 通常来讲，一个事务的修改提交以前，对其他事务不可见
 持久性 <code>Durability</code>: 一旦提交，所做的修改就会永久保存到数据库中</p>
-
 <h2 id="mysql的开发模式">MySQL的开发模式</h2>
-
 <p>社区版： 免费，不提供技术支持
 企业版：付费，提供新特性和技术支持</p>
-
 <h3 id="按更新发布分为">按更新发布分为：</h3>
-
 <p>GA(General Availability): 官方推荐的版本
 RC(Release Candidate): 候选版本，最接近正式版本
 beta 和 alpha版本</p>
@@ -369,7 +341,10 @@ beta 和 alpha版本</p>
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

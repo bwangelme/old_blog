@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2020/03/29/review-elk-intro/" />
@@ -34,7 +34,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -46,25 +47,21 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2020/03/29/review-elk-intro/" />
-<meta property="article:published_time" content="2020-03-29T00:10:08&#43;08:00"/>
-<meta property="article:modified_time" content="2020-03-29T00:10:08&#43;08:00"/>
-
+<meta property="article:published_time" content="2020-03-29T00:10:08+08:00" />
+<meta property="article:modified_time" content="2020-03-29T00:10:08+08:00" />
 <meta itemprop="name" content="Review 《Getting started with the Elastic Stackedit》">
 <meta itemprop="description" content="
 
 原文地址: https://www.elastic.co/guide/en/elastic-stack-get-started/6.8/get-started-elastic-stack.html#get-started-elastic-stack
 
 ">
-
-
 <meta itemprop="datePublished" content="2020-03-29T00:10:08&#43;08:00" />
 <meta itemprop="dateModified" content="2020-03-29T00:10:08&#43;08:00" />
 <meta itemprop="wordCount" content="706">
 
 
 
-<meta itemprop="keywords" content="ElasticSearch," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="ElasticSearch," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Review 《Getting started with the Elastic Stackedit》"/>
 <meta name="twitter:description" content="
 
@@ -152,19 +149,21 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#metricbeat">MetricBeat</a>
-<ul>
-<li><a href="#无法创建-kibana-dashboard-的错误">无法创建 Kibana Dashboard 的错误</a></li>
-<li><a href="#修改输出源">修改输出源</a></li>
-</ul></li>
-<li><a href="#logstash">LogStash</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#metricbeat">MetricBeat</a>
+          <ul>
+            <li><a href="#无法创建-kibana-dashboard-的错误">无法创建 Kibana Dashboard 的错误</a></li>
+            <li><a href="#修改输出源">修改输出源</a></li>
+          </ul>
+        </li>
+        <li><a href="#logstash">LogStash</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
@@ -174,11 +173,8 @@
 <li>原文地址: <a href="https://www.elastic.co/guide/en/elastic-stack-get-started/6.8/get-started-elastic-stack.html#get-started-elastic-stack">https://www.elastic.co/guide/en/elastic-stack-get-started/6.8/get-started-elastic-stack.html#get-started-elastic-stack</a></li>
 </ul>
 </blockquote>
-
-<hr />
-
+<hr>
 <p>这篇文章讲的就是通过 <code>ElasticSeach</code>, <code>Kibana</code>, <code>MetricBeat</code>, <code>LogStash</code> 搭建一个简单的监控系统。</p>
-
 <table>
 <thead>
 <tr>
@@ -186,61 +182,47 @@
 <th>说明</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td>ElasticSearch</td>
 <td>存储指标</td>
 </tr>
-
 <tr>
 <td>Kibana</td>
 <td>可视化</td>
 </tr>
-
 <tr>
 <td>MetricBeat</td>
 <td>收集系统指标，并发送到 ES 或 LogStash 中</td>
 </tr>
-
 <tr>
 <td>LogStash</td>
 <td>对指标进行一些转换过滤操作后再发送</td>
 </tr>
 </tbody>
 </table>
-
 <h2 id="metricbeat">MetricBeat</h2>
-
 <h3 id="无法创建-kibana-dashboard-的错误">无法创建 Kibana Dashboard 的错误</h3>
-
 <p><code>metricbeat setup -e</code> 命令会在 Kibana 中创建 Dashboard，但是我通过 brew 安装 MetricBeat 后，运行此命令会报错:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span></pre></td>
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">Skipping loading dashboards, No directory /usr/local/Cellar/metricbeat/6.8.7/kibana/6</pre></td></tr></table>
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">Skipping loading dashboards, No directory /usr/local/Cellar/metricbeat/6.8.7/kibana/6
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>这个目录不知道为什么改名字了，改成了 <code>/usr/local/Cellar/metricbeat/6.8.7/kibana.generated/6/</code></p>
-
+</div><p>这个目录不知道为什么改名字了，改成了 <code>/usr/local/Cellar/metricbeat/6.8.7/kibana.generated/6/</code></p>
 <p>做一个 <code>kibana</code> 到 <code>kibana-generated</code> 的软链接，就可以正常初始化了。</p>
-
 <h3 id="修改输出源">修改输出源</h3>
-
 <p><code>/usr/local/etc/metricbeat/metricbeat.yml</code> 配置文件中的 <code>output.elasticsearch</code>和 <code>output.logstash</code> 定义了输出源。</p>
-
 <h2 id="logstash">LogStash</h2>
-
 <p>Logstash is a powerfull tool that integrates with a wid variety of deployments. It offers a large selection of plugins to help you parse, enrich, transform and buffer data from a variety of source.</p>
-
 <p>启动 LogStash: <code>logstash -f custom-config.conf</code></p>
-
 <p>我们可以写这样一个简单的配置文件:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -275,15 +257,14 @@ output <span class="o">{</span>
     <span class="c1">#user =&gt; &#34;elastic&#34;</span>
     <span class="c1">#password =&gt; &#34;changeme&#34;</span>
   <span class="o">}</span>
-<span class="o">}</span></code></pre></td></tr></table>
+<span class="o">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>上述文件 LogStash 只是做了一个转发，并没有做任何的处理。</p>
-
+</div><p>上述文件 LogStash 只是做了一个转发，并没有做任何的处理。</p>
 <p>我们可以在<code>input</code>和<code>output</code>之间加一个<code>filter</code>部分，处理指标，</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -322,13 +303,13 @@ filter <span class="o">{</span>
   <span class="o">}</span>
 <span class="o">}</span>
 
-output <span class="o">{</span>...<span class="o">}</span></code></pre></td></tr></table>
+output <span class="o">{</span>...<span class="o">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>在 ES 中可以看到更改后的结果</p>
+</div><p>在 ES 中可以看到更改后的结果</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -389,8 +370,8 @@ output <span class="o">{</span>...<span class="o">}</span></code></pre></td></tr
 <td class="lntd">
 <pre class="chroma"><code class="language-sh" data-lang="sh">GET /metricbeat-6.8.7-2020.03.28/_search
 <span class="o">{</span>
-  <span class="s2">&#34;from&#34;</span>: <span class="m">0</span>,
-  <span class="s2">&#34;size&#34;</span>: <span class="m">10</span>,
+  <span class="s2">&#34;from&#34;</span>: 0,
+  <span class="s2">&#34;size&#34;</span>: 10,
   <span class="s2">&#34;sort&#34;</span>: <span class="o">{</span>
     <span class="s2">&#34;@timestamp&#34;</span>: <span class="o">{</span>
       <span class="s2">&#34;order&#34;</span>: <span class="s2">&#34;desc&#34;</span>
@@ -411,31 +392,31 @@ output <span class="o">{</span>...<span class="o">}</span></code></pre></td></tr
           <span class="s2">&#34;@timestamp&#34;</span> : <span class="s2">&#34;2020-03-28T17:04:30.182Z&#34;</span>,
           <span class="s2">&#34;system&#34;</span> : <span class="o">{</span>
             <span class="s2">&#34;process&#34;</span> : <span class="o">{</span>
-              <span class="s2">&#34;pid&#34;</span> : <span class="m">5288</span>,
+              <span class="s2">&#34;pid&#34;</span> : 5288,
               <span class="s2">&#34;cpu&#34;</span> : <span class="o">{</span>
                 <span class="s2">&#34;start_time&#34;</span> : <span class="s2">&#34;2020-03-26T16:43:50.832Z&#34;</span>,
                 <span class="s2">&#34;total&#34;</span> : <span class="o">{</span>
-                  <span class="s2">&#34;value&#34;</span> : <span class="m">52246</span>,
-                  <span class="s2">&#34;pct&#34;</span> : <span class="m">0</span>.0223,
+                  <span class="s2">&#34;value&#34;</span> : 52246,
+                  <span class="s2">&#34;pct&#34;</span> : 0.0223,
                   <span class="s2">&#34;norm&#34;</span> : <span class="o">{</span>
-                    <span class="s2">&#34;pct&#34;</span> : <span class="m">0</span>.0019
+                    <span class="s2">&#34;pct&#34;</span> : 0.0019
                   <span class="o">}</span>
                 <span class="o">}</span>
               <span class="o">}</span>,
               <span class="c1"># 这里输出了 cmdline_path</span>
               <span class="s2">&#34;cmdline_path&#34;</span> : <span class="s2">&#34;/Applications/Visual&#34;</span>,
-              <span class="s2">&#34;ppid&#34;</span> : <span class="m">5278</span>,
+              <span class="s2">&#34;ppid&#34;</span> : 5278,
               <span class="s2">&#34;name&#34;</span> : <span class="s2">&#34;Code Helper (GP&#34;</span>,
               <span class="s2">&#34;memory&#34;</span> : <span class="o">{</span>
-                <span class="s2">&#34;share&#34;</span> : <span class="m">0</span>,
+                <span class="s2">&#34;share&#34;</span> : 0,
                 <span class="s2">&#34;rss&#34;</span> : <span class="o">{</span>
-                  <span class="s2">&#34;bytes&#34;</span> : <span class="m">80519168</span>,
-                  <span class="s2">&#34;pct&#34;</span> : <span class="m">0</span>.0023
+                  <span class="s2">&#34;bytes&#34;</span> : 80519168,
+                  <span class="s2">&#34;pct&#34;</span> : 0.0023
                 <span class="o">}</span>,
                 <span class="s2">&#34;size&#34;</span> : <span class="m">6317944832</span>
               <span class="o">}</span>,
               <span class="s2">&#34;state&#34;</span> : <span class="s2">&#34;running&#34;</span>,
-              <span class="s2">&#34;pgid&#34;</span> : <span class="m">5278</span>,
+              <span class="s2">&#34;pgid&#34;</span> : 5278,
               <span class="s2">&#34;username&#34;</span> : <span class="s2">&#34;michaeltsui&#34;</span>
             <span class="o">}</span>
           <span class="o">}</span>
@@ -443,7 +424,8 @@ output <span class="o">{</span>...<span class="o">}</span></code></pre></td></tr
       <span class="o">}</span>
     <span class="o">]</span>
   <span class="o">}</span>
-<span class="o">}</span></code></pre></td></tr></table>
+<span class="o">}</span>
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -538,7 +520,10 @@ output <span class="o">{</span>...<span class="o">}</span></code></pre></td></tr
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

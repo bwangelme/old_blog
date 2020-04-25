@@ -17,14 +17,14 @@
 
 
 <meta name="author" content="bwangel" /><meta name="description" content=" 摘要:
- Letsencrypt 通过dns记录来验证域名  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+   Letsencrypt 通过dns记录来验证域名  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2017/08/13/letsencrypt-dns-txt/" />
@@ -35,7 +35,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -44,35 +45,34 @@
 摘要:
 
 
+
 Letsencrypt 通过dns记录来验证域名
 
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2017/08/13/letsencrypt-dns-txt/" />
-<meta property="article:published_time" content="2017-08-13T14:04:06&#43;00:00"/>
-<meta property="article:modified_time" content="2017-08-13T14:04:06&#43;00:00"/>
-
+<meta property="article:published_time" content="2017-08-13T14:04:06+00:00" />
+<meta property="article:modified_time" content="2017-08-13T14:04:06+00:00" />
 <meta itemprop="name" content="Letsencrypt通过DNS TXT记录来验证域名有效性">
 <meta itemprop="description" content="
 摘要:
 
 
+
 Letsencrypt 通过dns记录来验证域名
 
 ">
-
-
 <meta itemprop="datePublished" content="2017-08-13T14:04:06&#43;00:00" />
 <meta itemprop="dateModified" content="2017-08-13T14:04:06&#43;00:00" />
 <meta itemprop="wordCount" content="686">
 
 
 
-<meta itemprop="keywords" content="Letsencrypt," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Letsencrypt," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Letsencrypt通过DNS TXT记录来验证域名有效性"/>
 <meta name="twitter:description" content="
 摘要:
+
 
 
 Letsencrypt 通过dns记录来验证域名
@@ -159,49 +159,44 @@ Letsencrypt 通过dns记录来验证域名
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#前言">前言</a></li>
-<li><a href="#利用certbot获取证书">利用certbot获取证书</a></li>
-<li><a href="#添加dns的txt记录">添加DNS的TXT记录</a></li>
-<li><a href="#验证成功">验证成功</a></li>
-<li><a href="#参考文献">参考文献</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#前言">前言</a></li>
+        <li><a href="#利用certbot获取证书">利用certbot获取证书</a></li>
+        <li><a href="#添加dns的txt记录">添加DNS的TXT记录</a></li>
+        <li><a href="#验证成功">验证成功</a></li>
+        <li><a href="#参考文献">参考文献</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <blockquote>
 <p><strong>摘要</strong>:</p>
-
+</blockquote>
+<blockquote>
 <ol>
 <li>Letsencrypt 通过dns记录来验证域名</li>
 </ol>
 </blockquote>
-
 <h2 id="前言">前言</h2>
-
 <p>我们在使用<code>letsencrypt</code>获取免费的HTTPS证书的时候，<code>letsencrypt</code>需要对域名进行验证。默认情况下它的验证方式是这样的：</p>
-
 <ol>
 <li><code>certbot</code>程序在web目录的根目录下放置一个文件。</li>
 <li><code>letsencrypt</code>的服务器通过域名来访问这个文件，来验证你申请的域名是属于你的</li>
 </ol>
-
 <p>但有时候我们想为内网的某台主机设置HTTPS，因为内网的主机无法被<code>letsencrypt</code>的服务器访问到，<code>certbot --nginx certonly</code>就会出现<code>Connection refused</code>的错误。</p>
-
 <p>为了解决上述问题，我们可以更改验证方式，使用DNS记录来验证域名。</p>
-
 <h2 id="利用certbot获取证书">利用certbot获取证书</h2>
-
 <p>运行<code>sudo certbot --manual --preferred-challenges dns certonly</code>命令，输入域名并同意记录本机IP后开始获取证书，接着<code>certbot</code>就会弹出如下的提示：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -220,21 +215,15 @@ IMdfdsfsJDqBRyRaaEgPPQlEuvtxJQAgWZTIVbLuzDi8U
 
 Once this is deployed,
 -------------------------------------------------------------------------------
-Press Enter to Continue</code></pre></td></tr></table>
+Press Enter to Continue
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>此时<code>certbot</code>程序就会暂停，等待我们去添加DNS记录。</p>
-
+</div><p>此时<code>certbot</code>程序就会暂停，等待我们去添加DNS记录。</p>
 <h2 id="添加dns的txt记录">添加DNS的TXT记录</h2>
-
 <p>看到上述的提示后，修改域名的DNS记录，添加一条<code>TXT</code>记录，主机名为<code>_acme-challenge</code>，而其中的内容就是<code>letsencrypt</code>生成的随机字符串<code>IMdfdsfsJDqBRyRaaEgPPQlEuvtxJQAgWZTIVbLuzDi8U</code>。</p>
-
 <h2 id="验证成功">验证成功</h2>
-
 <p>添加好DNS记录后，我们可以通过<code>dig -t txt _acme-challenge.example.com</code>来查看域名的内容，域名生效以后，在<code>certbot</code>程序中下按下回车键，程序继续运行。<code>letsencrypt</code>对DNS记录验证成功，证书就申请成功了。</p>
-
 <h2 id="参考文献">参考文献</h2>
-
 <ol>
 <li><a href="https://certbot.eff.org/docs/using.html#manual">Certbot User Guide</a></li>
 <li><code>certbot -h certonly</code></li>
@@ -335,7 +324,10 @@ Press Enter to Continue</code></pre></td></tr></table>
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

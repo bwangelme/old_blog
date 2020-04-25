@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2019/06/02/review-testify/" />
@@ -34,7 +34,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -46,25 +47,21 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2019/06/02/review-testify/" />
-<meta property="article:published_time" content="2019-06-02T22:41:59&#43;08:00"/>
-<meta property="article:modified_time" content="2019-06-02T22:41:59&#43;08:00"/>
-
+<meta property="article:published_time" content="2019-06-02T22:41:59+08:00" />
+<meta property="article:modified_time" content="2019-06-02T22:41:59+08:00" />
 <meta itemprop="name" content="Review 《github.com/stretchr/testify》">
 <meta itemprop="description" content="
 
 原文地址: https://github.com/stretchr/testify
 
 ">
-
-
 <meta itemprop="datePublished" content="2019-06-02T22:41:59&#43;08:00" />
 <meta itemprop="dateModified" content="2019-06-02T22:41:59&#43;08:00" />
 <meta itemprop="wordCount" content="1097">
 
 
 
-<meta itemprop="keywords" content="翻译,Go," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="翻译,Go," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Review 《github.com/stretchr/testify》"/>
 <meta name="twitter:description" content="
 
@@ -152,16 +149,17 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#assert-http-godoc-org-github-com-stretchr-testify-assert-包"><a href="http://godoc.org/github.com/stretchr/testify/assert">assert</a> 包</a></li>
-<li><a href="#require-http-godoc-org-github-com-stretchr-testify-require-包"><a href="http://godoc.org/github.com/stretchr/testify/require">require</a> 包</a></li>
-<li><a href="#mock-https-godoc-org-github-com-stretchr-testify-mock-包"><a href="https://godoc.org/github.com/stretchr/testify/mock">mock</a> 包</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#asserthttpgodocorggithubcomstretchrtestifyassert-包"><a href="http://godoc.org/github.com/stretchr/testify/assert">assert</a> 包</a></li>
+        <li><a href="#requirehttpgodocorggithubcomstretchrtestifyrequire-包"><a href="http://godoc.org/github.com/stretchr/testify/require">require</a> 包</a></li>
+        <li><a href="#mockhttpsgodocorggithubcomstretchrtestifymock-包"><a href="https://godoc.org/github.com/stretchr/testify/mock">mock</a> 包</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
@@ -171,21 +169,15 @@
 <li>原文地址: <a href="https://github.com/stretchr/testify">https://github.com/stretchr/testify</a></li>
 </ul>
 </blockquote>
-
-<hr />
-
+<hr>
 <p>testify 是一组工具包，它里面的很多工具可以让你更舒适地写 Go 测试代码。</p>
-
 <p>它包含以下特征:</p>
-
 <ul>
 <li><a href="https://github.com/stretchr/testify#assert-package">更好用的 assert</a></li>
 <li><a href="https://github.com/stretchr/testify#mock-package">Mocking</a></li>
 <li><a href="https://github.com/stretchr/testify#suite-package">Testing suite 的接口和函数</a></li>
 </ul>
-
 <p>知识索引:</p>
-
 <ul>
 <li>使用<a href="https://github.com/stretchr/testify#installation">一行代码安装 testify</a>,使用<a href="https://github.com/stretchr/testify#staying-up-to-date">另一行代码</a>来更新它</li>
 <li>在 Go 中写测试代码的相关介绍, 请参考 <a href="http://golang.org/doc/code.html#Testing">http://golang.org/doc/code.html#Testing</a></li>
@@ -193,21 +185,17 @@
 <li>为了让你的测试生活更简单一些，建议使用我们开发的测试工具 <a href="http://github.com/stretchr/gorc">gorc</a></li>
 <li>关于 <a href="http://en.wikipedia.org/wiki/Test-driven_development">Test-Driven Development (TDD)</a> 的一点点介绍</li>
 </ul>
-
-<h2 id="assert-http-godoc-org-github-com-stretchr-testify-assert-包"><a href="http://godoc.org/github.com/stretchr/testify/assert">assert</a> 包</h2>
-
+<h2 id="asserthttpgodocorggithubcomstretchrtestifyassert-包"><a href="http://godoc.org/github.com/stretchr/testify/assert">assert</a> 包</h2>
 <p>assert 包提供了一些有用的方法，可以让你写出更友好的测试代码。它具有以下特性:</p>
-
 <ul>
 <li>打印友好，很容易去阅读错误信息</li>
 <li>可以开发出易阅读的代码</li>
 <li>可以在每个<code>assert</code>后添加一个可选的注解信息</li>
 </ul>
-
 <p>让我们通过一个实际例子来了解它:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -268,18 +256,17 @@
 		<span class="c1">// 现在我们知道 obj2 的值不是 nil了，我们可以在这个基础上**安全地**访问它的字段。
 </span><span class="c1"></span>		<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="s">&#34;Something&#34;</span><span class="p">,</span> <span class="nx">obj2</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span>
 	<span class="p">}</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>每个<code>assert</code>函数都使用 <code>testing.T</code> 来作为它的第一个参数，这就是它通过正常的 go 测试功能将错误输出写出来的方式。</li>
 <li>每个<code>assert</code>函数返回了一个布尔值，表示这个断言成功与否，如果你想在某个断言结果的基础上做出更多的断言，可以用到它的返回值。</li>
 </ul>
-
 <p>如果你使用断言很多次，可以使用如下的代码:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -334,19 +321,16 @@
 	<span class="k">if</span> <span class="nx">assert</span><span class="p">.</span><span class="nf">NotNil</span><span class="p">(</span><span class="nx">obj2</span><span class="p">)</span> <span class="p">{</span>
 		<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="s">&#34;Something&#34;</span><span class="p">,</span> <span class="nx">obj2</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span>
 	<span class="p">}</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="require-http-godoc-org-github-com-stretchr-testify-require-包"><a href="http://godoc.org/github.com/stretchr/testify/require">require</a> 包</h2>
-
+</div><h2 id="requirehttpgodocorggithubcomstretchrtestifyrequire-包"><a href="http://godoc.org/github.com/stretchr/testify/require">require</a> 包</h2>
 <p><code>require</code>包中拥有和<code>assert</code>包相同的全局函数，它和<code>assert</code>的不同在于，它不会再返回一个布尔值表示测试运行成功与否，而是直接结束当前测试</p>
-
 <p>可以参考 <a href="http://golang.org/pkg/testing/#T.FailNow">t.FailNow</a> 函数了解更多的信息</p>
-
 <p>下面是一个<code>require</code>包和<code>assert</code>包的比较示例:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -435,17 +419,15 @@
 </span><span class="c1">//Error Trace:    require_test.go:24
 </span><span class="c1">//Error:          Should be true
 </span><span class="c1">//FAIL
-</span><span class="c1"></span><span class="o">//</span><span class="nx">FAIL</span>    <span class="nx">command</span><span class="o">-</span><span class="nx">line</span><span class="o">-</span><span class="nx">arguments</span>  <span class="mf">0.018</span><span class="nx">s</span></code></pre></td></tr></table>
+</span><span class="c1">//FAIL    command-line-arguments  0.018s
+</span></code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="mock-https-godoc-org-github-com-stretchr-testify-mock-包"><a href="https://godoc.org/github.com/stretchr/testify/mock">mock</a> 包</h2>
-
+</div><h2 id="mockhttpsgodocorggithubcomstretchrtestifymock-包"><a href="https://godoc.org/github.com/stretchr/testify/mock">mock</a> 包</h2>
 <p><code>mock</code>提供了一种机制，可以在编写测试代码的时候轻松编写可用于替代实际对象的模拟对象。</p>
-
 <p>下面是一段示例代码，它测试了一段依赖于外部对象<code>testObj</code>的代码，并且能够设置期望(<code>testify</code>)且断言他们确实发生了。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"></code></pre></td>
+<pre class="chroma"><code></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"></code></pre></td></tr></table>
 </div>
@@ -547,7 +529,10 @@
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

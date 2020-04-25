@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2018/01/30/innodb-row/" />
@@ -35,7 +35,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -43,21 +44,17 @@
 <meta property="og:description" content="简介: 本文主要讲述了 InnoDB 的行如何在数据文件中进行存储的，同时简单分析了 InnoDB 的逻辑存储结构" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2018/01/30/innodb-row/" />
-<meta property="article:published_time" content="2018-01-30T12:51:59&#43;08:00"/>
-<meta property="article:modified_time" content="2018-01-30T12:51:59&#43;08:00"/>
-
+<meta property="article:published_time" content="2018-01-30T12:51:59+08:00" />
+<meta property="article:modified_time" content="2018-01-30T12:51:59+08:00" />
 <meta itemprop="name" content="InnoDB 行记录格式">
 <meta itemprop="description" content="简介: 本文主要讲述了 InnoDB 的行如何在数据文件中进行存储的，同时简单分析了 InnoDB 的逻辑存储结构">
-
-
 <meta itemprop="datePublished" content="2018-01-30T12:51:59&#43;08:00" />
 <meta itemprop="dateModified" content="2018-01-30T12:51:59&#43;08:00" />
-<meta itemprop="wordCount" content="1794">
+<meta itemprop="wordCount" content="1802">
 
 
 
-<meta itemprop="keywords" content="MySQL," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="InnoDB 行记录格式"/>
 <meta name="twitter:description" content="简介: 本文主要讲述了 InnoDB 的行如何在数据文件中进行存储的，同时简单分析了 InnoDB 的逻辑存储结构"/>
 
@@ -141,67 +138,51 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#前言">前言</a></li>
-<li><a href="#innodb-逻辑存储结构">InnoDB 逻辑存储结构</a>
-<ul>
-<li><a href="#表空间">表空间</a></li>
-<li><a href="#段">段</a></li>
-<li><a href="#区">区</a></li>
-<li><a href="#页">页</a></li>
-</ul></li>
-<li><a href="#innodb-行">InnoDB 行</a>
-<ul>
-<li><a href="#char-的行存储结构">Char 的行存储结构</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#前言">前言</a></li>
+        <li><a href="#innodb-逻辑存储结构">InnoDB 逻辑存储结构</a>
+          <ul>
+            <li><a href="#表空间">表空间</a></li>
+            <li><a href="#段">段</a></li>
+            <li><a href="#区">区</a></li>
+            <li><a href="#页">页</a></li>
+          </ul>
+        </li>
+        <li><a href="#innodb-行">InnoDB 行</a>
+          <ul>
+            <li><a href="#char-的行存储结构">Char 的行存储结构</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p><strong>简介</strong>: 本文主要讲述了 InnoDB 的行如何在数据文件中进行存储的，同时简单分析了 InnoDB 的逻辑存储结构</p>
-
 <h2 id="前言">前言</h2>
-
 <p>InnoDB 是 MySQL 的一种面向行(row-oriented)存储引擎，即在其中数据是按照行的形式存储的，那么行又是如何组织的呢？在了解 InnoDB 的行格式之前，我们先简单了解一下 InnoDB 的逻辑存储结构。</p>
-
 <h2 id="innodb-逻辑存储结构">InnoDB 逻辑存储结构</h2>
-
 <p>从 InnoDB 的逻辑存储结构上看，所有的数据都被存储在一个空间中，这个空间就叫做表空间，表空间又是由段(segment)，区(extent)和页(Page)组成的，页在某些文档中也被称为块(block)。它们之间的关系可以用下图表示:</p>
-
-<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-01-11-InnoDB%20%E9%80%BB%E8%BE%91%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84.png" alt="" /></p>
-
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-01-11-InnoDB%20%E9%80%BB%E8%BE%91%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84.png" alt=""></p>
 <h3 id="表空间">表空间</h3>
-
 <p>表空间是 InnoDB 逻辑存储的最高层，所有的数据都放在表空间中。当我们创建一个数据库的时候，它会产生后缀为<code>idb</code>和<code>frm</code>的文件，其中<code>frm</code>文件是MySQL的表和视图结构定义文件，<code>idb</code>文件是MySQL表的数据文件，我们说的表空间就存储在<code>idb</code>文件中。</p>
-
-<p>当我们开启了<code>innodb_file_per_table</code>配置项后，InnoDB 会为每个表分配一个<strong>独立表空间文件</strong>，但是这个文件只存储该表的数据，索引，插入缓存BITMAP等信息，其余信息还存放在<strong>共享表空间文件</strong>中。</p>
-
+<p>当我们开启了<code>innodb_file_per_table</code>配置项后，InnoDB 会为每个表分配一个__独立表空间文件__，但是这个文件只存储该表的数据，索引，插入缓存BITMAP等信息，其余信息还存放在__共享表空间文件__中。</p>
 <p>关于<code>idb</code>和<code>frm</code>文件之间的关系可以用下图来表示:</p>
-
-<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-01-03-122727.jpg" alt="" /></p>
-
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-01-03-122727.jpg" alt=""></p>
 <h3 id="段">段</h3>
-
 <p>InnoDB 的表空间是由各种段组成的，包括数据段，索引段和回滚段等。因为 InnoDB 存储引擎表是索引组织(index organized)的，因此数据段即为B+树的叶子节点，索引段即为B+树的非叶子节点。</p>
-
 <h3 id="区">区</h3>
-
 <p>区的大小为1M</p>
-
 <p>MySQL创建表空间的时候，不先申请一整个区，而是先申请一些碎片页(33个)。如果表的空间持续增加，用完所有碎片页以后，才会去申请区，此时表空间文件(tablename.idb)的大小就会1M，1M地增加。</p>
-
 <p>如果通过区申请空间，那么就会有很多空闲页(<code>&lt;Freshly Allocated Page&gt;</code>)。</p>
-
 <h3 id="页">页</h3>
-
 <p>InnoDB 的区是由页组成的，页主要有以下几种类型:</p>
-
 <table>
 <thead>
 <tr>
@@ -210,68 +191,57 @@
 <th>解释</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td><code>FIL_PAGE_INDEX</code></td>
 <td>0x45BF</td>
 <td>B+树叶节点</td>
 </tr>
-
 <tr>
 <td><code>FIL_PAGE_UNDO_LOG</code></td>
 <td>0x0002</td>
 <td>Undo Log 页</td>
 </tr>
-
 <tr>
 <td><code>FIL_PAGE_INODE</code></td>
 <td>0x0003</td>
 <td>索引节点</td>
 </tr>
-
 <tr>
 <td><code>FIL_PAGE_IBUF_FREE_LIST</code></td>
 <td>0x0004</td>
 <td>Insert Buffer 空闲列表</td>
 </tr>
-
 <tr>
 <td><code>FIL_PAGE_TYPE_ALLOCATED</code></td>
 <td>0x0000</td>
 <td>该页为最新分配</td>
 </tr>
-
 <tr>
 <td><code>FIL_PAGE_IBUF_BITMAP</code></td>
 <td>0x0005</td>
 <td>Insert Buffer 位图</td>
 </tr>
-
 <tr>
 <td><code>FIL_PAGE_TYPE_SYS</code></td>
 <td>0x0006</td>
 <td>系统页</td>
 </tr>
-
 <tr>
 <td><code>FIL_PAGE_TYPE_TRX_SYS</code></td>
 <td>0x0007</td>
 <td>事务系统数据</td>
 </tr>
-
 <tr>
 <td><code>FIL_PAGE_TYPE_FSP_HDR</code></td>
 <td>0x0008</td>
 <td>File Space Header</td>
 </tr>
-
 <tr>
 <td><code>FIL_PAGE_TYPE_XDES</code></td>
 <td>0x0009</td>
 <td>扩展描述页</td>
 </tr>
-
 <tr>
 <td><code>FIL_PAGE_TYPE_BLOB</code></td>
 <td>0x000A</td>
@@ -279,30 +249,26 @@
 </tr>
 </tbody>
 </table>
-
 <h2 id="innodb-行">InnoDB 行</h2>
-
 <h3 id="char-的行存储结构">Char 的行存储结构</h3>
-
 <p>从 MySQL 4.1版本开始，<code>char(N)</code>类型中的<code>N</code>表示的就是字符的长度，而不是字符串的长度。</p>
-
 <p>举个例子，我们创建如下的表:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">test_char</span><span class="p">(</span>
     <span class="o">-&gt;</span> <span class="n">c1</span> <span class="nb">char</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-    <span class="o">-&gt;</span> <span class="p">)</span><span class="n">charset</span><span class="o">=</span><span class="s1">&#39;gbk&#39;</span><span class="p">;</span></code></pre></td></tr></table>
+    <span class="o">-&gt;</span> <span class="p">)</span><span class="n">charset</span><span class="o">=</span><span class="s1">&#39;gbk&#39;</span><span class="p">;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>然后向其中插入数据，并查看其中的数据:</p>
+</div><p>然后向其中插入数据，并查看其中的数据:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -323,43 +289,40 @@
 <span class="o">+</span><span class="c1">------------+----------------------+--------+
 </span><span class="c1"></span><span class="o">|</span>          <span class="mi">3</span> <span class="o">|</span>                    <span class="mi">3</span> <span class="o">|</span> <span class="n">abc</span>    <span class="o">|</span>
 <span class="o">|</span>          <span class="mi">6</span> <span class="o">|</span>                    <span class="mi">3</span> <span class="o">|</span> <span class="err">我们</span>    <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+----------------------+--------+</span></code></pre></td></tr></table>
+<span class="o">+</span><span class="c1">------------+----------------------+--------+
+</span></code></pre></td></tr></table>
 </div>
-</div>
-<p>我们可以看到，<code>我们</code>和<code>abc</code>的字符长度都是3，但是它们的字节长度是不同的。这也就意味着，在数据文件中存储的时候，<code>char</code>类型的字段也是被当做变长字段来存储的。</p>
-
+</div><p>我们可以看到，<code>我们</code>和<code>abc</code>的字符长度都是3，但是它们的字节长度是不同的。这也就意味着，在数据文件中存储的时候，<code>char</code>类型的字段也是被当做变长字段来存储的。</p>
 <p>我们可以通过<code>hexdump</code>命令来查看<code>test_char</code>表对应的数据文件，具体命令如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">hexdump -C -v /usr/local/var/mysql/hp/test_char.ibd <span class="p">|</span>less</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sh" data-lang="sh">hexdump -C -v /usr/local/var/mysql/hp/test_char.ibd <span class="p">|</span>less
+</code></pre></td></tr></table>
 </div>
-</div>
-<p><strong>注意</strong>: 我的 MySQL 开启了<code>innodb_file_per_table</code>选项，所以每个表都会有自己单独的数据文件。上述命令中的<code>/usr/local/var/mysql/hp/test_char.ibd</code>文件是<code>hp</code>数据库中的<code>test_char</code>表的数据文件。</p>
+</div><p><strong>注意</strong>: 我的 MySQL 开启了<code>innodb_file_per_table</code>选项，所以每个表都会有自己单独的数据文件。上述命令中的<code>/usr/local/var/mysql/hp/test_char.ibd</code>文件是<code>hp</code>数据库中的<code>test_char</code>表的数据文件。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">0000c090  01 10 61 62 20 20 06 00  00 00 18 00 20 00 00 00  |..ab  ...... ...|
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">0000c090  01 10 61 62 20 20 06 00  00 00 18 00 20 00 00 00  |..ab  ...... ...|
 0000c0a0  00 06 08 00 00 00 1f 43  fb ba 00 00 01 2f 01 10  |.......C...../..|
 0000c0b0  e6 88 91 e4 bb ac 04 00  00 00 20 ff b3 00 00 00  |.......... .....|
 0000c0c0  00 06 09 00 00 00 1f 44  00 bd 00 00 01 35 01 10  |.......D.....5..|
-0000c0d0  61 62 63 20 00 00 00 00  00 00 00 00 00 00 00 00  |abc ............|</pre></td></tr></table>
+0000c0d0  61 62 63 20 00 00 00 00  00 00 00 00 00 00 00 00  |abc ............|
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>在上面的二进制数据中，<code>c096 - c0b5</code>代表的是<code>c1=我们</code>这一行的数据，它的具体内容如下:</p>
-
+</div><p>在上面的二进制数据中，<code>c096 - c0b5</code>代表的是<code>c1=我们</code>这一行的数据，它的具体内容如下:</p>
 <ul>
 <li><code>c1=我们</code>行数据</li>
 </ul>
-
 <table>
 <thead>
 <tr>
@@ -367,49 +330,40 @@
 <th>具体含义</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td>06</td>
 <td>变长字段c1的长度</td>
 </tr>
-
 <tr>
 <td>00</td>
 <td>NULL标志位</td>
 </tr>
-
 <tr>
 <td>00 00 18 00 20</td>
 <td>Record Header</td>
 </tr>
-
 <tr>
 <td>00 00 00 00 06 08</td>
 <td>隐式创建的行 ID</td>
 </tr>
-
 <tr>
 <td>00 00 00 1f 43 fb</td>
 <td>事务ID</td>
 </tr>
-
 <tr>
 <td>ba 00 00 01 2f 01 10</td>
 <td>回滚指针</td>
 </tr>
-
 <tr>
 <td>e6 88 91 e4 BB AC</td>
 <td>列数据字符串&rsquo;我们&rsquo;</td>
 </tr>
 </tbody>
 </table>
-
 <ul>
 <li><code>c1=abc</code>行数据</li>
 </ul>
-
 <table>
 <thead>
 <tr>
@@ -417,47 +371,38 @@
 <th>具体含义</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td>04</td>
 <td>变长字段c1的长度</td>
 </tr>
-
 <tr>
 <td>00</td>
 <td>NULL标志位</td>
 </tr>
-
 <tr>
 <td>00 00 20 ff b3</td>
 <td>Record Header</td>
 </tr>
-
 <tr>
 <td>00 00 00 00 06 09</td>
 <td>隐式创建的行ID</td>
 </tr>
-
 <tr>
 <td>00 00 00 1f 44 00</td>
 <td>事务ID</td>
 </tr>
-
 <tr>
 <td>bd 00 00 01 35 01 10</td>
 <td>回滚指针</td>
 </tr>
-
 <tr>
 <td>61 62 63 20</td>
 <td>列数据字符串&rsquo;abc&rsquo;，另外加上补全4字符的空格</td>
 </tr>
 </tbody>
 </table>
-
 <p><strong>疑惑</strong>: 这里<code>CHAR</code>类型补全空格的规则是什么（例如中文什么时候会补全？），我还不太了解，如有了解的同学，希望可以指出</p>
-
 <p>从上面的例子分析中，我们可以看到。MySQL 4.1 之后，<code>CHAR(N)</code>类型中的长度N表示的就是字符的长度，所以底层存储的字符数据实际上是变长的，MySQL也是将它按照变长数据的类型来处理的。</p>
     </div>
 
@@ -555,7 +500,10 @@
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

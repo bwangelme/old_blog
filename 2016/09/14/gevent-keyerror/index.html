@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2016/09/14/gevent-keyerror/" />
@@ -35,13 +35,13 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
 <meta property="og:title" content="Gevent 的 KeyError" />
 <meta property="og:description" content="摘要:
-
 
 
 本文翻译自 StackOverFlow 上的一篇答案
@@ -50,31 +50,25 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2016/09/14/gevent-keyerror/" />
-<meta property="article:published_time" content="2016-09-14T15:21:40&#43;00:00"/>
-<meta property="article:modified_time" content="2016-09-14T15:21:40&#43;00:00"/>
-
+<meta property="article:published_time" content="2016-09-14T15:21:40+00:00" />
+<meta property="article:modified_time" content="2016-09-14T15:21:40+00:00" />
 <meta itemprop="name" content="Gevent 的 KeyError">
 <meta itemprop="description" content="摘要:
-
 
 
 本文翻译自 StackOverFlow 上的一篇答案
 本文主要解释了gevent的猴子补丁和一个KeyError之间的关系
 
 ">
-
-
 <meta itemprop="datePublished" content="2016-09-14T15:21:40&#43;00:00" />
 <meta itemprop="dateModified" content="2016-09-14T15:21:40&#43;00:00" />
 <meta itemprop="wordCount" content="1894">
 
 
 
-<meta itemprop="keywords" content="Python,Gevent,stackoverflow,翻译," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Python,Gevent,stackoverflow,翻译," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gevent 的 KeyError"/>
 <meta name="twitter:description" content="摘要:
-
 
 
 本文翻译自 StackOverFlow 上的一篇答案
@@ -162,121 +156,110 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#错误描述">错误描述</a></li>
-<li><a href="#原文翻译">原文翻译</a>
-<ul>
-<li><a href="#简短的回答">简短的回答</a></li>
-<li><a href="#详细的回答">详细的回答</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#错误描述">错误描述</a></li>
+        <li><a href="#原文翻译">原文翻译</a>
+          <ul>
+            <li><a href="#简短的回答">简短的回答</a></li>
+            <li><a href="#详细的回答">详细的回答</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p><strong>摘要</strong>:</p>
-
 <blockquote>
 <ol>
 <li>本文翻译自 StackOverFlow 上的一篇<a href="http://stackoverflow.com/questions/8774958/keyerror-in-module-threading-after-a-successful-py-test-run">答案</a></li>
 <li>本文主要解释了<code>gevent</code>的猴子补丁和一个<code>KeyError</code>之间的关系</li>
 </ol>
 </blockquote>
-
 <h2 id="错误描述">错误描述</h2>
-
 <p>在包含有<code>gevent.monkey.patch_thread()</code>( gevent 的猴子补丁)的程序中，运行时会报出下面的错误：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="ne">Exception</span> <span class="ne">KeyError</span><span class="p">:</span> <span class="ne">KeyError</span><span class="p">(</span><span class="mi">140468381321488</span><span class="p">,)</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span> <span class="s1">&#39;threading&#39;</span> <span class="kn">from</span> <span class="s1">&#39;/usr/lib/python2.7/threading.pyc&#39;</span><span class="o">&gt;</span> <span class="n">ignored</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="ne">Exception</span> <span class="ne">KeyError</span><span class="p">:</span> <span class="ne">KeyError</span><span class="p">(</span><span class="mi">140468381321488</span><span class="p">,)</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span> <span class="s1">&#39;threading&#39;</span> <span class="kn">from</span> <span class="s1">&#39;/usr/lib/python2.7/threading.pyc&#39;</span><span class="o">&gt;</span> <span class="n">ignored</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>解决答案: <a href="http://stackoverflow.com/questions/8774958/keyerror-in-module-threading-after-a-successful-py-test-run">KeyError in module &lsquo;threading&rsquo; after a successful py.test run</a></p>
-
+</div><p>解决答案: <a href="http://stackoverflow.com/questions/8774958/keyerror-in-module-threading-after-a-successful-py-test-run">KeyError in module &lsquo;threading&rsquo; after a successful py.test run</a></p>
 <h2 id="原文翻译">原文翻译</h2>
-
 <p>我观察了同样的主题，然后决定去精确地描述一下到底发生了什么。让我们一起来看一下我的发现，我希望这在以后能够帮助到其他人。</p>
-
 <h3 id="简短的回答">简短的回答</h3>
-
 <p>它的确和<code>threading</code>模块的猴子补丁有关。事实上，我能够轻易地开启这个异常，通过在猴子补丁线程之前导入<code>threading</code>模块。下面这两行代码就足够了：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">threading</span>
-<span class="kn">import</span> <span class="nn">gevent.monkey</span><span class="p">;</span> <span class="n">gevent</span><span class="o">.</span><span class="n">monkey</span><span class="o">.</span><span class="n">patch_thread</span><span class="p">()</span></code></pre></td></tr></table>
+<span class="kn">import</span> <span class="nn">gevent.monkey</span><span class="p">;</span> <span class="n">gevent</span><span class="o">.</span><span class="n">monkey</span><span class="o">.</span><span class="n">patch_thread</span><span class="p">()</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>上面的代码执行的时候，就报出了 &ldquo;忽略了一个<code>KeyError</code>&rdquo; 的信息：</p>
+</div><p>上面的代码执行的时候，就报出了 &ldquo;忽略了一个<code>KeyError</code>&rdquo; 的信息：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">(</span>env<span class="o">)</span>czajnik@autosan: python test.py
-Exception KeyError: KeyError<span class="o">(</span><span class="m">139924387112272</span>,<span class="o">)</span> in &lt;module <span class="s1">&#39;threading&#39;</span> from <span class="s1">&#39;/usr/lib/python2.7/threading.pyc&#39;</span>&gt; ignored</code></pre></td></tr></table>
+Exception KeyError: KeyError<span class="o">(</span>139924387112272,<span class="o">)</span> in &lt;module <span class="s1">&#39;threading&#39;</span> from <span class="s1">&#39;/usr/lib/python2.7/threading.pyc&#39;</span>&gt; ignored
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>如果你交换一下<code>import</code>行的顺序，这个错误信息就会消失了。</p>
-
+</div><p>如果你交换一下<code>import</code>行的顺序，这个错误信息就会消失了。</p>
 <h3 id="详细的回答">详细的回答</h3>
-
 <p>我可以在这里停止我的调试，但是我觉得它值得让我去了解，造成问题的准确的原因是什么？</p>
-
 <p>第一步是去寻找打印这个忽略了异常的信息的代码。这对于我来说找到这个有点困难（在 python 标准库中 grep 查找<code>Exception .*ignored</code>没有返回任何东西），但是 grep CPython 的源码，我最终在<a href="http://svn.python.org/projects/python/tags/r27/Python/errors.c"> Python/error.c </a>文件中找到了一个函数叫做<code>void PyErr_WriteUnraisable(PyObject *obj)</code>，它的注释非常有趣，</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* Call when an exception has occurred but there is no way for Python
-</span><span class="cm">   to handle it.  Examples: exception in __del__ or during GC. */</span></code></pre></td></tr></table>
+</span><span class="cm">   to handle it.  Examples: exception in __del__ or during GC. */</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>我决定去检查谁调用了它，这个利用了<code>gdb</code>的一点功能来实现的，最终得到了如下的C调用栈，</p>
+</div><p>我决定去检查谁调用了它，这个利用了<code>gdb</code>的一点功能来实现的，最终得到了如下的C调用栈，</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span><span class="lnt">6
 </span><span class="lnt">7
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">#0  0x0000000000542c40 in PyErr_WriteUnraisable ()
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">#0  0x0000000000542c40 in PyErr_WriteUnraisable ()
 #1  0x00000000004af2d3 in Py_Finalize ()
 #2  0x00000000004aa72e in Py_Main ()
 #3  0x00007ffff68e576d in __libc_start_main (main=0x41b980 &lt;main&gt;, argc=2,
     ubp_av=0x7fffffffe5f8, init=&lt;optimized out&gt;, fini=&lt;optimized out&gt;,
     rtld_fini=&lt;optimized out&gt;, stack_end=0x7fffffffe5e8) at libc-start.c:226
-#4  0x000000000041b9b1 in _start ()</pre></td></tr></table>
+#4  0x000000000041b9b1 in _start ()
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>现在我们可以清楚地看到异常是在<a href="https://docs.python.org/3/c-api/init.html#Py_Finalize">Py_Finalize</a>执行的时候抛出的，这个调用负责关闭Python解释器，释放已经申请的内存等等。它仅仅在退出前调用。</p>
-
+</div><p>现在我们可以清楚地看到异常是在<a href="https://docs.python.org/3/c-api/init.html#Py_Finalize">Py_Finalize</a>执行的时候抛出的，这个调用负责关闭Python解释器，释放已经申请的内存等等。它仅仅在退出前调用。</p>
 <p>下一步是去查看<code>Py_Finalize()</code>的代码（它存放在<a href="http://svn.python.org/projects/python/tags/r27/Python/pythonrun.c"> Python/pythonrun.c </a>）。  它做的非常靠前的一个调用是<code>wait_for_thread_shutdown()</code>，这个函数非常值得去看一下，因为我们知道问题是关于线程的。</p>
-
 <p>这个函数反过来调用了<code>threading</code>模块中的<code>_shutdown()</code>可调用对象，非常好，我们现在可以返回Python代码了。</p>
-
 <p>查看<code>threading.py</code> ,我发现了如下有趣的部分：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -315,42 +298,37 @@ Exception KeyError: KeyError<span class="o">(</span><span class="m">139924387112
 <span class="c1"># and make it available for the interpreter</span>
 <span class="c1"># (Py_Main) as threading._shutdown.</span>
 
-<span class="n">_shutdown</span> <span class="o">=</span> <span class="n">_MainThread</span><span class="p">()</span><span class="o">.</span><span class="n">exitfunc</span></code></pre></td></tr></table>
+<span class="n">_shutdown</span> <span class="o">=</span> <span class="n">_MainThread</span><span class="p">()</span><span class="o">.</span><span class="n">exitfunc</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>很明显，<code>threading._shutdown()</code>函数调用的作用就是join所有的非服务化(non daemon)的线程，然后删除主线程（这意味着它确切做了什么）。我决定去给<code>threading.py</code>打一点补丁，用<code>try / except</code>包裹整个<code>_exitfunc()</code>函数体，用<code>traceback</code>模块来打印出系统调用栈。这个给出了如下的追踪情况：</p>
+</div><p>很明显，<code>threading._shutdown()</code>函数调用的作用就是join所有的非服务化(non daemon)的线程，然后删除主线程（这意味着它确切做了什么）。我决定去给<code>threading.py</code>打一点补丁，用<code>try / except</code>包裹整个<code>_exitfunc()</code>函数体，用<code>traceback</code>模块来打印出系统调用栈。这个给出了如下的追踪情况：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span><span class="lnt">6
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">Traceback (most recent call last):
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">Traceback (most recent call last):
   File &#34;/usr/lib/python2.7/threading.py&#34;, line 785, in _exitfunc
     self._Thread__delete()
   File &#34;/usr/lib/python2.7/threading.py&#34;, line 639, in __delete
     del _active[_get_ident()]
-KeyError: 26805584</pre></td></tr></table>
+KeyError: 26805584
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>现在我们知道了异常抛出的精确位置了，在<code>Thread__delete()</code>方法内。</p>
-
-<p>接下来的故事在阅读一会<code>threading.py</code>的代码后就变得很明显。<code>_active</code>字典将所有已创建的线程的线程ID(由<code>_get_indent()</code>函数返回)映射到对应的线程实例上。当<code>threading</code>模块载入的时候，<code>_MainThread</code>类的实例总是会被创建，而且会被添加到<code>_active</code>字典中。（甚至没有创建其他线程的时候主线程实例也会创建）。</p>
-
+</div><p>现在我们知道了异常抛出的精确位置了，在<code>Thread__delete()</code>方法内。</p>
+<p>接下来的故事在阅读一会<code>threading.py</code>的代码后就变得很明显。<code>_active</code>字典将所有已创建的线程的线程ID(由<code>_get_indent()</code>函数返回)映射到对应的线程实例上。当<code>threading</code>模块载入的时候，<code> _MainThread</code>类的实例总是会被创建，而且会被添加到<code>_active</code>字典中。（甚至没有创建其他线程的时候主线程实例也会创建）。</p>
 <p>问题是当一个<code>_get_ident()</code>方法被<code>gevent</code>的猴子补丁打过补丁，原来映射的方法<code>thread.get_ident()</code>被猴子补丁替换成了<code>green_thread.get_ident()</code>。明显两个函数调用返回的主线程ID并不相同。</p>
-
 <p>现在，如果一个<code>threading</code>模块在猴子补丁之前被载入，调用<code>_get_ident()</code>会返回主线程实例创建的时候添加到<code>_active</code>中的ID。而打上猴子补丁以后就会返回另外一个值，在调用<code>_eixtfunc()</code>的时候，就会在<code>del _active[_get_ident()]</code>语句上抛出异常。</p>
-
 <p>与上面的情况相反，如果猴子补丁在<code>threading</code>模块载入之前被打上了，所有的就都会正常。因为<code>_MainThread</code>实例被添加到<code>_active</code>中和<code>_get_ident()</code>都是在打补丁之后调用的，这样在清理线程的时候就会返回同样的线程ID。就是这样了。</p>
-
 <p>为了确保以正确的顺序导入模块，我在我的电脑中添加了如下的代码片段，仅仅在打上猴子补丁之前调用：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -359,10 +337,10 @@ KeyError: 26805584</pre></td></tr></table>
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">sys</span>
 <span class="k">if</span> <span class="s1">&#39;threading&#39;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
     <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;threading module loadded before patching!&#39;</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">gevent.monkey</span><span class="p">;</span> <span class="n">gevent</span><span class="o">.</span><span class="n">monkey</span><span class="o">.</span><span class="n">patch_thread</span><span class="p">()</span></code></pre></td></tr></table>
+<span class="kn">import</span> <span class="nn">gevent.monkey</span><span class="p">;</span> <span class="n">gevent</span><span class="o">.</span><span class="n">monkey</span><span class="o">.</span><span class="n">patch_thread</span><span class="p">()</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>希望我的调试经历能够对你有用！</p>
+</div><p>希望我的调试经历能够对你有用！</p>
     </div>
 
     <div class="post-copyright">
@@ -462,7 +440,10 @@ KeyError: 26805584</pre></td></tr></table>
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

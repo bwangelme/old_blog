@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2017/03/27/laptop-server/" />
@@ -34,7 +34,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -46,25 +47,21 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2017/03/27/laptop-server/" />
-<meta property="article:published_time" content="2017-03-27T16:41:36&#43;00:00"/>
-<meta property="article:modified_time" content="2017-03-27T16:41:36&#43;00:00"/>
-
+<meta property="article:published_time" content="2017-03-27T16:41:36+00:00" />
+<meta property="article:modified_time" content="2017-03-27T16:41:36+00:00" />
 <meta itemprop="name" content="【流水账】利用闲置笔记本搭建自己的开发服务器">
 <meta itemprop="description" content="
 对Ubuntu服务器进行基础配置
 配置dnsmasq服务器
 文章没什么技术含量，主要记录一些配置文件的位置
 ">
-
-
 <meta itemprop="datePublished" content="2017-03-27T16:41:36&#43;00:00" />
 <meta itemprop="dateModified" content="2017-03-27T16:41:36&#43;00:00" />
 <meta itemprop="wordCount" content="3457">
 
 
 
-<meta itemprop="keywords" content="Ubuntu,DNS,折腾," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Ubuntu,DNS,折腾," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="【流水账】利用闲置笔记本搭建自己的开发服务器"/>
 <meta name="twitter:description" content="
 对Ubuntu服务器进行基础配置
@@ -152,36 +149,41 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#前言">前言</a></li>
-<li><a href="#基础配置">基础配置</a>
-<ul>
-<li><a href="#设置时间">设置时间</a></li>
-<li><a href="#更改软件源为中科大源">更改软件源为中科大源</a></li>
-<li><a href="#设置关闭盖子不休眠">设置关闭盖子不休眠</a></li>
-</ul></li>
-<li><a href="#配置网络环境">配置网络环境</a>
-<ul>
-<li><a href="#设置dhcp">设置DHCP</a></li>
-<li><a href="#设置默认网关">设置默认网关</a></li>
-<li><a href="#设置路由器">设置路由器</a></li>
-</ul></li>
-<li><a href="#配置dns">配置DNS</a>
-<ul>
-<li><a href="#安装并设置dnsmasq">安装并设置dnsmasq</a></li>
-<li><a href="#设置路由器-1">设置路由器</a></li>
-</ul></li>
-<li><a href="#遇到的一些小坑">遇到的一些小坑</a>
-<ul>
-<li><a href="#dnsmasq没有绑定本地地址">dnsmasq没有绑定本地地址</a></li>
-<li><a href="#ssh出现locale报错">ssh出现locale报错</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#前言">前言</a></li>
+        <li><a href="#基础配置">基础配置</a>
+          <ul>
+            <li><a href="#设置时间">设置时间</a></li>
+            <li><a href="#更改软件源为中科大源">更改软件源为中科大源</a></li>
+            <li><a href="#设置关闭盖子不休眠">设置关闭盖子不休眠</a></li>
+          </ul>
+        </li>
+        <li><a href="#配置网络环境">配置网络环境</a>
+          <ul>
+            <li><a href="#设置dhcp">设置DHCP</a></li>
+            <li><a href="#设置默认网关">设置默认网关</a></li>
+            <li><a href="#设置路由器">设置路由器</a></li>
+          </ul>
+        </li>
+        <li><a href="#配置dns">配置DNS</a>
+          <ul>
+            <li><a href="#安装并设置dnsmasq">安装并设置dnsmasq</a></li>
+            <li><a href="#设置路由器-1">设置路由器</a></li>
+          </ul>
+        </li>
+        <li><a href="#遇到的一些小坑">遇到的一些小坑</a>
+          <ul>
+            <li><a href="#dnsmasq没有绑定本地地址">dnsmasq没有绑定本地地址</a></li>
+            <li><a href="#ssh出现locale报错">ssh出现locale报错</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
@@ -191,74 +193,48 @@
 <li>配置dnsmasq服务器</li>
 <li>文章没什么技术含量，主要记录一些配置文件的位置</li>
 </ol>
-
 <h2 id="前言">前言</h2>
-
 <p>最近新入手了一台MacBook Air，原来的ThinkPad就闲置下来了，感觉一直放着太浪费了，就重装了一个Ubuntu Server 16.04的系统，用来做自己的开发服务器。折腾了几个小时，就都搞定了，特意写下这篇文章，来记录一下自己折腾的过程。</p>
-
 <h2 id="基础配置">基础配置</h2>
-
 <p>服务器安装的过程就不说了，大都是那么几步。有一个奇怪的问题就是安装的时候，需要设置时区，我竟然没有找到东八区，只好先设置了一个太平洋时区，好尴尬，不知道是不是Ubuntu的文本安装界面没有东八区这个选项，还是我英文太差了，没有找到。</p>
-
 <h3 id="设置时间">设置时间</h3>
-
 <p>由于安装时我们设置了错误的时区，所以首先需要调整一下时区。Ubuntu 16.04已经完全集成了Systemd，所以我们只需要通过<code>sudo timedatectl set-timezone Asia/Shanghai</code>命令，就可以将时区设置为亚洲/上海了，同时我们也可以运行<code>sudo timedatectl set-ntp 1</code>命令，打开自动从 NTP 服务器同步时间，一会之后服务器时间就正常了。<code>timedatectl</code>命令还有一个选项是<code>set-local-rtc</code>，用来将硬件时间设置为本地时间，而不是UTC时间，这个选项我默认是关闭的。</p>
-
 <h3 id="更改软件源为中科大源">更改软件源为中科大源</h3>
-
 <p>接下来，就是更改源了，打开<code>/etc/apt/sources.list</code>文件，将所有的<code>us.archive.ubuntu.com</code>替换成<code>mirrors.ustc.edu.cn</code>就可以了，注意这里由于我安装的时候选择的是美国的源，所以域名为<code>us.archive.ubuntu.com</code>，如果选择了其他地方的源，域名可能不一样。</p>
-
 <p>同时要注意，<code>security.ubuntu.com</code>这个源表示的是 Ubuntu 进行安全更新的源，用来推送紧急安全更新的补丁，这个源我建议保持原样，因为紧急安全更新的补丁还是从 Ubuntu 官方下载比较好，不建议从其他地方来下载。</p>
-
 <h3 id="设置关闭盖子不休眠">设置关闭盖子不休眠</h3>
-
 <p>由于我的电脑是笔记本，尽管没有装图形界面，但是在合上盖子之后，系统仍然会自动休眠，所以需要将这个自动休眠的功能关掉。我在网上搜索了一下，在 Askubuntu 上找到了一个相关的<a href="http://askubuntu.com/questions/141866/keep-ubuntu-server-running-on-a-laptop-with-the-lid-closed">问题</a>，按照问题中的答案所说，向<code>/etc/systemd/logind.conf</code>文件中添加一行<code>HandleLidSwitch=ignore</code>，然后重启<code>systemd-logind.service</code>服务，就关闭掉这个功能啦。</p>
-
 <h2 id="配置网络环境">配置网络环境</h2>
-
 <p>将服务器配置好以后，接下来我们就需要配置网络了。</p>
-
 <h3 id="设置dhcp">设置DHCP</h3>
-
 <p>我的笔记本是通过网线连接到路由器上的，所以，首先我们需要将有线网卡通过 DHCP 自动连接网络的功能打开。这里我在网上搜索了一下，搜到了一篇文章：<a href="http://www.ubuntugeek.com/ubuntu-networking-configuration-using-command-line.html">Ubuntu Networking Configuration Using Command Line </a>。这篇文章很详细地介绍了Ubuntu如何设置动态IP和静态IP。我的电脑在刚装好系统的时候，没有任何关于有线网卡的配置文件，仅能够通过<code>ip addr</code>命令来看到当前系统的网卡，在了解到有线网卡的名称为<code>enp12s0</code>之后，我新建了一个文件<code>/etc/network/interfaces.d/enp12s0.conf</code>，然后向其中添加了如下的内容，</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 设置网卡enp12s0在开机的时候通过 DHCP 自动连接到网络。</span>
 auto enp12s0
-iface enp12s0 inet dhcp</code></pre></td></tr></table>
+iface enp12s0 inet dhcp
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>上面两句配置就表示设置网卡enp12s0在开机的时候通过 DHCP 自动连接到网络。</p>
-
+</div><p>上面两句配置就表示设置网卡enp12s0在开机的时候通过 DHCP 自动连接到网络。</p>
 <h3 id="设置默认网关">设置默认网关</h3>
-
 <p>设置好网卡的 DHCP 以后，我的服务器能够 ping 通路由器网关了，但是仍然无法 ping 通外网，显然，这是由于服务器本机的网关没有配置好，后来我又上网去搜索，发现了<a href="http://askubuntu.com/questions/522420/how-to-get-default-gateway-with-a-dhcp">Askubuntu 上一个类似的问题</a>，其中有个答案提到，<code>dhclient</code>只在当前服务器没有设置默认网关的时候，才会设置由 DHCP 服务器提供的路由器地址为默认网关。我通过<code>ip route</code>看了一下我的服务器的路由表，发现默认网关为网卡<code>lo</code>，所以 DHCP 服务器下发下来的网关地址并不会生效。我又在<code>/etc/network/interfaces</code>中添加了如下的配置：<code>post-up route del default dev lo</code>，删除掉默认走<code>lo</code>设备的路由配置。</p>
-
 <p>然后我再来重启电脑，就发现服务器一开机就能够正常 ping 通外网了。</p>
-
 <h3 id="设置路由器">设置路由器</h3>
-
 <p>看到这里，相信大家肯定都有一些疑惑，服务器不应该是默认设置为静态IP吗，为什么你要配置 DHCP 呢。原因就在这一小节，我用的路由器是华硕的RT - N12，它的 DHCP 服务器有一个功能，就是将MAC地址和IP地址进行绑定，所以，我只需要在路由器上配置好MAC地址和IP地址的绑定，这样就相当于起到了静态IP的作用了，而且更改起来也比较方便，不需要服务器和路由器两头改。</p>
-
 <h2 id="配置dns">配置DNS</h2>
-
 <p>由于我访问我的服务器的时候想通过域名来访问(方便以后添加HTTPS证书)，所以我需要在我的内网中自己搭建一个DNS服务器，来负责服务器的域名解析。</p>
-
 <h3 id="安装并设置dnsmasq">安装并设置dnsmasq</h3>
-
 <p>由于我的需求很简单，只需要进行一个域名解析就可以了，所以我选择了<a href="http://www.thekelleys.org.uk/dnsmasq/docs/dnsmasq-man.html">dnsmasq</a>，而不是比较复杂的bind9。</p>
-
 <p><code>dnsmasq</code>在Ubuntu的源中直接有deb安装包，所以我们直接通过<code>sudo apt install dnsmasq</code>命令安装即可。</p>
-
 <p><code>dnsmasq</code>的配置我参考了文章<a href="http://cjting.me/misc/2016-08-20-%E4%BD%BF%E7%94%A8Dnsmasq%E6%90%AD%E5%BB%BA%E5%86%85%E7%BD%91DNS%E6%9C%8D%E5%8A%A1%E5%99%A8.html">使用Dnsmasq搭建内网DNS服务器</a>。使用了如下的配置：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -274,7 +250,7 @@ iface enp12s0 inet dhcp</code></pre></td></tr></table>
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 设置服务器的监听地址为192.168.X.X和127.0.0.1</span>
-listen-address<span class="o">=</span><span class="m">192</span>.168.X.X,127.0.0.1
+listen-address<span class="o">=</span>192.168.X.X,127.0.0.1
 <span class="c1"># 所有没有.号的域名(plain names)都不会向上游DNS Server转发，只查询hosts文件</span>
 domain-needed
 <span class="c1"># 所有保留IP地址段内的反向查询都不会向上游DNS Server转发，只查询hosts文件</span>
@@ -284,45 +260,34 @@ no-resolv
 <span class="c1"># 不要poll /etc/resolver文件的更新</span>
 no-poll
 <span class="c1"># 配置上游服务器为DNSPod的公共DNS</span>
-<span class="nv">server</span><span class="o">=</span><span class="m">119</span>.29.29.29
-<span class="nv">server</span><span class="o">=</span><span class="m">182</span>.254.116.116</code></pre></td></tr></table>
+<span class="nv">server</span><span class="o">=</span>119.29.29.29
+<span class="nv">server</span><span class="o">=</span>182.254.116.116
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>配置好了以后，我们可以通过<code>dnsmasq --test</code>命令来检查<code>dnsmasq</code>的配置文件语法是否正确。</p>
-
+</div><p>配置好了以后，我们可以通过<code>dnsmasq --test</code>命令来检查<code>dnsmasq</code>的配置文件语法是否正确。</p>
 <p>然后我们在服务器的<code>/etc/hosts</code>中添加我们想要设置的解析记录，比如这台服务器我设置了如下的记录：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="m">192</span>.168.X.X dev.bwangel.me</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sh" data-lang="sh">192.168.X.X dev.bwangel.me
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>然后通过<code>sudo systemctl enable dnsmasq &amp;&amp; sudo systemctl restart dnsmasq</code>命令启动<code>dnsmasq</code>服务即可。</p>
-
+</div><p>然后通过<code>sudo systemctl enable dnsmasq &amp;&amp; sudo systemctl restart dnsmasq</code>命令启动<code>dnsmasq</code>服务即可。</p>
 <p>最后我们可以通过<code>dig</code>命令测试一下，运行如下命令: <code>dig dev.bwangel.me @localhost</code>，看返回的IP地址是否和我们设置的解析记录相同。</p>
-
 <h3 id="设置路由器-1">设置路由器</h3>
-
 <p>配置好了DNS服务器以后，我们再来修改路由器的 DHCP 策略，设置下发的DNS服务器IP地址为我们的DNS服务器地址，这样内网中所有的DNS查询都会先经过这台DNS服务器。而我们的<code>dev.bwangel.me</code>域名也就能够成功解析了。至此，我们的开发服务器就已经搭建好了，我们可以通过SSH连接上来，搭建我们想要的服务了。</p>
-
 <h2 id="遇到的一些小坑">遇到的一些小坑</h2>
-
 <h3 id="dnsmasq没有绑定本地地址">dnsmasq没有绑定本地地址</h3>
-
 <p>配置好了 DNS 服务器以后，我在服务器上 ping 百度的时候会一直卡着，但是 ping 公网 IP 却是可以 ping 通的，当时我第一反应就是DNS解析出错了，只是不知道是DNS服务器配置的有问题，还是DNS服务器的IP地址路由器没有正确地下发下来。</p>
-
 <p>接着我就利用dig来测试，发现使用<code>dig www.baidu.com @192.168.X.X</code>命令可以得到正常结果，而<code>dig www.baidu.com @127.0.0.1</code>就会卡着。然后我就觉得应该是dnsmasq没有监听<code>127.0.0.1</code>导致的问题。最后发现服务器DNS的配置文件<code>/etc/resolv.conf</code>中设置的默认DNS为<code>127.0.0.1</code>，而它去查询<code>127.0.0.1</code>的时候会卡着，也不报错，导致服务器不会使用备选的DNS服务器来查询域名，最终导致出现了 ping 百度卡着这种情况。我将dnsmasq的监听地址加上<code>127.0.0.1</code>之后就OK了。</p>
-
 <p>这里还有一点没有搞清楚，路由器的 DHCP 中配置的DNS服务器并没有正确地应用，服务器还是默认遵循<code>/etc/resolv.conf</code>文件中的配置，这个还需要进一步了解一下。</p>
-
 <h3 id="ssh出现locale报错">ssh出现locale报错</h3>
-
 <p>这个问题经常遇到了，在Mac上通过SSH连接到Ubuntu上之后，在安装更新的过程中，出现了如下的报错：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -339,10 +304,10 @@ perl: warning: Please check that your locale settings:
     <span class="nv">LC_MESSAGES</span> <span class="o">=</span> <span class="s2">&#34;zh_CN.UTF-8&#34;</span>,
     <span class="nv">LANG</span> <span class="o">=</span> <span class="s2">&#34;zh_CN.UTF-8&#34;</span>
     are supported and installed on your system.
-perl: warning: Falling back to the standard locale <span class="o">(</span><span class="s2">&#34;C&#34;</span><span class="o">)</span>.</code></pre></td></tr></table>
+perl: warning: Falling back to the standard locale <span class="o">(</span><span class="s2">&#34;C&#34;</span><span class="o">)</span>.
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>这是由于终端SSH的时候，会将本地的locale配置传到服务端上去，我的本地设置的语系是<code>zh_CN.UTF-8</code>，但是服务器上只安装了<code>en_US.UTF-8</code>，所以就会报错提示说找不到语系<code>zh_CN.UTF-8</code>相关的文件。这里我们只需要修改一下服务器的<code>/etc/locale.gen</code>配置文件，将<code>zh_CN.UTF-8</code>相关的配置取消注释，然后再来运行<code>locale-gen</code>命令，就会安装上<code>zh_CN.UTF-8</code>语系相关的文件了，再来运行<code>perl</code>程序就不会报错了。</p>
+</div><p>这是由于终端SSH的时候，会将本地的locale配置传到服务端上去，我的本地设置的语系是<code>zh_CN.UTF-8</code>，但是服务器上只安装了<code>en_US.UTF-8</code>，所以就会报错提示说找不到语系<code>zh_CN.UTF-8</code>相关的文件。这里我们只需要修改一下服务器的<code>/etc/locale.gen</code>配置文件，将<code>zh_CN.UTF-8</code>相关的配置取消注释，然后再来运行<code>locale-gen</code>命令，就会安装上<code>zh_CN.UTF-8</code>语系相关的文件了，再来运行<code>perl</code>程序就不会报错了。</p>
     </div>
 
     <div class="post-copyright">
@@ -441,7 +406,10 @@ perl: warning: Falling back to the standard locale <span class="o">(</span><span
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

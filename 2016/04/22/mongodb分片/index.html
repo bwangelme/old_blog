@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2016/04/22/mongodb%E5%88%86%E7%89%87/" />
@@ -36,40 +36,34 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
 <meta property="og:title" content="MongoDB分片" />
 <meta property="og:description" content="摘要:
 
-
 本文主要讲述MongoDB分片的原理以及MongDB如何配置分片服务，设置ChunkSize大小。
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2016/04/22/mongodb%E5%88%86%E7%89%87/" />
-<meta property="article:published_time" content="2016-04-22T11:18:06&#43;00:00"/>
-<meta property="article:modified_time" content="2016-04-22T11:18:06&#43;00:00"/>
-
+<meta property="article:published_time" content="2016-04-22T11:18:06+00:00" />
+<meta property="article:modified_time" content="2016-04-22T11:18:06+00:00" />
 <meta itemprop="name" content="MongoDB分片">
 <meta itemprop="description" content="摘要:
 
-
 本文主要讲述MongoDB分片的原理以及MongDB如何配置分片服务，设置ChunkSize大小。
 ">
-
-
 <meta itemprop="datePublished" content="2016-04-22T11:18:06&#43;00:00" />
 <meta itemprop="dateModified" content="2016-04-22T11:18:06&#43;00:00" />
 <meta itemprop="wordCount" content="649">
 
 
 
-<meta itemprop="keywords" content="MongoDB," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="MongoDB," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MongoDB分片"/>
 <meta name="twitter:description" content="摘要:
-
 
 本文主要讲述MongoDB分片的原理以及MongDB如何配置分片服务，设置ChunkSize大小。
 "/>
@@ -154,83 +148,77 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#mongodb分片原理概述">MongoDB分片原理概述</a></li>
-<li><a href="#启动过程">启动过程</a>
-<ul>
-<li><a href="#启动两台shard实例">启动两台shard实例</a></li>
-<li><a href="#启动config-server服务器">启动Config Server服务器</a></li>
-<li><a href="#启动mongos服务器">启动MongoS服务器</a></li>
-<li><a href="#为config-server添加分片节点">为COnfig Server添加分片节点</a></li>
-<li><a href="#为config-server设置分片规则">为Config Server设置分片规则</a></li>
-</ul></li>
-<li><a href="#mongodb-chunk规则">MongoDB chunk规则</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#mongodb分片原理概述">MongoDB分片原理概述</a></li>
+        <li><a href="#启动过程">启动过程</a>
+          <ul>
+            <li><a href="#启动两台shard实例">启动两台shard实例</a></li>
+            <li><a href="#启动config-server服务器">启动Config Server服务器</a></li>
+            <li><a href="#启动mongos服务器">启动MongoS服务器</a></li>
+            <li><a href="#为config-server添加分片节点">为COnfig Server添加分片节点</a></li>
+            <li><a href="#为config-server设置分片规则">为Config Server设置分片规则</a></li>
+          </ul>
+        </li>
+        <li><a href="#mongodb-chunk规则">MongoDB chunk规则</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p><strong>摘要</strong>:</p>
-
 <blockquote>
 <p>本文主要讲述MongoDB分片的原理以及MongDB如何配置分片服务，设置ChunkSize大小。</p>
 </blockquote>
-
 <h2 id="mongodb分片原理概述">MongoDB分片原理概述</h2>
-
 <p>分片需要如下要素:</p>
-
 <ol>
 <li>要有N个MongoD服务器存储数据做片节点</li>
 <li>要有Config Server维护meta信息</li>
 <li>要启动MongoS做路由</li>
 <li>要设定好数据的分片规则(Config Server才能维护)</li>
 </ol>
-
 <p>如下图所示</p>
-
-<p><img src="/images/MongoDB_shard_1.png" alt="原理图" /></p>
-
+<p><img src="/images/MongoDB_shard_1.png" alt="原理图"></p>
 <h2 id="启动过程">启动过程</h2>
-
 <h3 id="启动两台shard实例">启动两台shard实例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sh" data-lang="sh">mongod --dbpath /home/m17/ --logpath /home/mlog/m17.log --fork --port <span class="m">27017</span> --smallfiles
-mongod --dbpath /home/m18/ --logpath /home/mlog/m18.log --fork --port <span class="m">27018</span> --smallfiles</code></pre></td></tr></table>
+mongod --dbpath /home/m18/ --logpath /home/mlog/m18.log --fork --port <span class="m">27018</span> --smallfiles
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="启动config-server服务器">启动Config Server服务器</h3>
+</div><h3 id="启动config-server服务器">启动Config Server服务器</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">mongod --dbpath /home/m20/ --logpath /home/mlog/m20.log --fork --port <span class="m">27020</span> --configsvr</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sh" data-lang="sh">mongod --dbpath /home/m20/ --logpath /home/mlog/m20.log --fork --port <span class="m">27020</span> --configsvr
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="启动mongos服务器">启动MongoS服务器</h3>
+</div><h3 id="启动mongos服务器">启动MongoS服务器</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">mongos --logpath /home/mlog/m30.log --port <span class="m">30000</span> --configdb <span class="m">192</span>.168.21.130:27020 --fork</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sh" data-lang="sh">mongos --logpath /home/mlog/m30.log --port <span class="m">30000</span> --configdb 192.168.21.130:27020 --fork
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="为config-server添加分片节点">为COnfig Server添加分片节点</h3>
+</div><h3 id="为config-server添加分片节点">为COnfig Server添加分片节点</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -262,8 +250,8 @@ mongod --dbpath /home/m18/ --logpath /home/mlog/m18.log --fork --port <span clas
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sh" data-lang="sh">root@vv2x:/home/michael# mongo --port <span class="m">30000</span>
-MongoDB shell version: <span class="m">3</span>.2.0
-connecting to: <span class="m">127</span>.0.0.1:30000/test
+MongoDB shell version: 3.2.0
+connecting to: 127.0.0.1:30000/test
 Welcome to the MongoDB shell.
 mongos&gt; sh.addShard<span class="o">(</span><span class="s1">&#39;192.168.21.130:27017&#39;</span><span class="o">)</span><span class="p">;</span>
 <span class="o">{</span> <span class="s2">&#34;shardAdded&#34;</span> : <span class="s2">&#34;shard0000&#34;</span>, <span class="s2">&#34;ok&#34;</span> : <span class="m">1</span> <span class="o">}</span>
@@ -273,9 +261,9 @@ mongos&gt; sh.sta
 mongos&gt; sh.status<span class="o">()</span><span class="p">;</span>
 --- Sharding Status ---
   sharding version: <span class="o">{</span>
-    <span class="s2">&#34;_id&#34;</span> : <span class="m">1</span>,
-    <span class="s2">&#34;minCompatibleVersion&#34;</span> : <span class="m">5</span>,
-    <span class="s2">&#34;currentVersion&#34;</span> : <span class="m">6</span>,
+    <span class="s2">&#34;_id&#34;</span> : 1,
+    <span class="s2">&#34;minCompatibleVersion&#34;</span> : 5,
+    <span class="s2">&#34;currentVersion&#34;</span> : 6,
     <span class="s2">&#34;clusterId&#34;</span> : ObjectId<span class="o">(</span><span class="s2">&#34;57198ba481bf26385e2a2bc1&#34;</span><span class="o">)</span>
 <span class="o">}</span>
   shards:
@@ -289,13 +277,13 @@ mongos&gt; sh.status<span class="o">()</span><span class="p">;</span>
     Failed balancer rounds in last <span class="m">5</span> attempts:  <span class="m">0</span>
     Migration Results <span class="k">for</span> the last <span class="m">24</span> hours:
         No recent migrations
-  databases:</code></pre></td></tr></table>
+  databases:
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="为config-server设置分片规则">为Config Server设置分片规则</h3>
+</div><h3 id="为config-server设置分片规则">为Config Server设置分片规则</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -304,30 +292,29 @@ mongos&gt; sh.status<span class="o">()</span><span class="p">;</span>
 <td class="lntd">
 <pre class="chroma"><code class="language-sh" data-lang="sh">mongos&gt; sh.enableSharding<span class="o">(</span><span class="s1">&#39;shop&#39;</span><span class="o">)</span><span class="p">;</span> <span class="c1">#设置某个数据库开启分片</span>
 <span class="o">{</span> <span class="s2">&#34;ok&#34;</span> : <span class="m">1</span> <span class="o">}</span>
-mongos&gt; sh.shardCollection<span class="o">(</span><span class="s1">&#39;shop.goods&#39;</span>, <span class="o">{</span>goods_id: <span class="m">1</span><span class="o">})</span><span class="p">;</span>
+mongos&gt; sh.shardCollection<span class="o">(</span><span class="s1">&#39;shop.goods&#39;</span>, <span class="o">{</span>goods_id: 1<span class="o">})</span><span class="p">;</span>
 <span class="c1"># 设置某个collection的分片规则，依据goods_id分片, goods_id为片键</span>
-<span class="o">{</span> <span class="s2">&#34;collectionsharded&#34;</span> : <span class="s2">&#34;shop.goods&#34;</span>, <span class="s2">&#34;ok&#34;</span> : <span class="m">1</span> <span class="o">}</span></code></pre></td></tr></table>
+<span class="o">{</span> <span class="s2">&#34;collectionsharded&#34;</span> : <span class="s2">&#34;shop.goods&#34;</span>, <span class="s2">&#34;ok&#34;</span> : <span class="m">1</span> <span class="o">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="mongodb-chunk规则">MongoDB chunk规则</h2>
-
+</div><h2 id="mongodb-chunk规则">MongoDB chunk规则</h2>
 <ul>
 <li>N篇文档形成一个块<code>Chunk</code>， 优先放在某个片上。</li>
 <li>当这片上的chunk，与另一个片的chunk，区别比较大时，(&gt;=3)，会把本片上的chunk，移到另一个片上。</li>
 <li>以chunk为单位，维护片之间的平衡。</li>
 </ul>
-
 <p>更改<code>ChunkSize</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 登陆到MongoS服务器</span>
 use config<span class="p">;</span>
-db.settings.save<span class="o">({</span>_id: <span class="s1">&#39;chunksize&#39;</span>, value: <span class="m">1</span><span class="o">})</span><span class="p">;</span> <span class="c1"># 单位为M</span></code></pre></td></tr></table>
+db.settings.save<span class="o">({</span>_id: <span class="s1">&#39;chunksize&#39;</span>, value: 1<span class="o">})</span><span class="p">;</span> <span class="c1"># 单位为M</span>
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -426,7 +413,10 @@ db.settings.save<span class="o">({</span>_id: <span class="s1">&#39;chunksize&#3
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

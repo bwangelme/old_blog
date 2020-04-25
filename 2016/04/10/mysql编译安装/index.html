@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2016/04/10/mysql%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/" />
@@ -36,40 +36,34 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
 <meta property="og:title" content="MySQL编译安装" />
 <meta property="og:description" content="摘要:
 
-
 这是一篇关于MySQL的文章，主要介绍 MySQL 编译安装
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2016/04/10/mysql%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/" />
-<meta property="article:published_time" content="2016-04-10T10:56:54&#43;00:00"/>
-<meta property="article:modified_time" content="2016-04-10T10:56:54&#43;00:00"/>
-
+<meta property="article:published_time" content="2016-04-10T10:56:54+00:00" />
+<meta property="article:modified_time" content="2016-04-10T10:56:54+00:00" />
 <meta itemprop="name" content="MySQL编译安装">
 <meta itemprop="description" content="摘要:
 
-
 这是一篇关于MySQL的文章，主要介绍 MySQL 编译安装
 ">
-
-
 <meta itemprop="datePublished" content="2016-04-10T10:56:54&#43;00:00" />
 <meta itemprop="dateModified" content="2016-04-10T10:56:54&#43;00:00" />
 <meta itemprop="wordCount" content="634">
 
 
 
-<meta itemprop="keywords" content="MySQL," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySQL编译安装"/>
 <meta name="twitter:description" content="摘要:
-
 
 这是一篇关于MySQL的文章，主要介绍 MySQL 编译安装
 "/>
@@ -154,52 +148,49 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li><a href="#mysql编译安装">MySQL编译安装</a>
-<ul>
-<li><a href="#0-环境准备">0. 环境准备</a></li>
-<li><a href="#1-编译安装mysql">1. 编译安装MySQL</a></li>
-<li><a href="#2-配置mysql">2. 配置MySQL</a></li>
-<li><a href="#3-登陆mysql">3. 登陆MySQL</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#mysql编译安装">MySQL编译安装</a>
+      <ul>
+        <li><a href="#0-环境准备">0. 环境准备</a></li>
+        <li><a href="#1-编译安装mysql">1. 编译安装MySQL</a></li>
+        <li><a href="#2-配置mysql">2. 配置MySQL</a></li>
+        <li><a href="#3-登陆mysql">3. 登陆MySQL</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p><strong>摘要</strong>:</p>
-
 <blockquote>
 <p>这是一篇关于MySQL的文章，主要介绍 MySQL 编译安装</p>
 </blockquote>
-
 <h1 id="mysql编译安装">MySQL编译安装</h1>
-
 <h2 id="0-环境准备">0. 环境准备</h2>
-
 <ul>
 <li>安装依赖包</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sh" data-lang="sh">yum -y remove mysql mysql-server
 rm /etc/my.cnf
-yum install ncurses-devel openssl-devel bison gcc make</code></pre></td></tr></table>
+yum install ncurses-devel openssl-devel bison gcc make
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>编译安装CMake</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -212,13 +203,13 @@ yum install ncurses-devel openssl-devel bison gcc make</code></pre></td></tr></t
 ./configure
 gmake
 make
-make install</code></pre></td></tr></table>
+make install
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="1-编译安装mysql">1. 编译安装MySQL</h2>
+</div><h2 id="1-编译安装mysql">1. 编译安装MySQL</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -269,23 +260,20 @@ cmake <span class="se">\
 </span><span class="se"></span>-DDEFAULT_CHARSET<span class="o">=</span>utf8 <span class="c1"># 字符</span>
 
 make
-make install</code></pre></td></tr></table>
+make install
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="2-配置mysql">2. 配置MySQL</h2>
-
+</div><h2 id="2-配置mysql">2. 配置MySQL</h2>
 <ul>
 <li>/usr/local/mysql/ 目录查看</li>
 </ul>
-
 <p>sql-bench 基本测试工具</p>
-
 <ul>
 <li>初始化</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -294,15 +282,15 @@ make install</code></pre></td></tr></table>
 <pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">cd</span> /usr/local/mysql/
 chown -R mysql:mysql /usr/local/mysql/
 ./srcipts/mysql_install_db --user<span class="o">=</span>mysql --datadir<span class="o">=</span>/usr/local/mysql/data/ <span class="c1"># 初始化脚本</span>
-<span class="c1"># 初始化完成后data下目录就会多出MySQL,performance_shcema目录</span></code></pre></td></tr></table>
+<span class="c1"># 初始化完成后data下目录就会多出MySQL,performance_shcema目录</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>配置文件和启动脚本安装</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -315,15 +303,15 @@ cp support-files/mysql.server /etc/init.d/mysqld
 chmod <span class="m">755</span> /etc/init.d/mysqld
 chkconfig -add mysqld
 chkconfig mysqld on
-service mysqld start</code></pre></td></tr></table>
+service mysqld start
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>查看MySQL进程</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -339,26 +327,26 @@ service mysqld start</code></pre></td></tr></table>
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">[</span>root@localhost mysql<span class="o">]</span><span class="c1"># ps aufx | grep mysql</span>
-root      <span class="m">91734</span>  <span class="m">0</span>.1  <span class="m">0</span>.1  <span class="m">11340</span>  <span class="m">1372</span> pts/1    S    <span class="m">06</span>:57   <span class="m">0</span>:00
+root      <span class="m">91734</span>  0.1  0.1  <span class="m">11340</span>  <span class="m">1372</span> pts/1    S    06:57   0:00
       /bin/sh /usr/local/mysql/bin/mysqld_safe
                             --datadir<span class="o">=</span>/usr/local/mysql/data
                             --pid-file<span class="o">=</span>/usr/local/mysql/data/localhost.localdomain.pid
-mysql     <span class="m">91837</span>  <span class="m">7</span>.8 <span class="m">44</span>.9 <span class="m">1034904</span> <span class="m">452048</span> pts/1  Sl   <span class="m">06</span>:57   <span class="m">0</span>:00
+mysql     <span class="m">91837</span>  7.8 44.9 <span class="m">1034904</span> <span class="m">452048</span> pts/1  Sl   06:57   0:00
       <span class="se">\_</span> /usr/local/mysql/bin/mysqld --basedir<span class="o">=</span>/usr/local/mysql
                                      --datadir<span class="o">=</span>/usr/local/mysql/data
                                      --plugin-dir<span class="o">=</span>/usr/local/mysql/lib/plugin
                                      --user<span class="o">=</span>mysql
                                      <span class="c1">#错误日志文件位置 !!</span>
                                      --log-error<span class="o">=</span>/usr/local/mysql/data/localhost.localdomain.err
-                                     --pid-file<span class="o">=</span>/usr/local/mysql/data/localhost.localdomain.pid</code></pre></td></tr></table>
+                                     --pid-file<span class="o">=</span>/usr/local/mysql/data/localhost.localdomain.pid
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>配置PATH</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -391,37 +379,38 @@ pathmunge /usr/local/mysql/bin after <span class="c1">#此句是我们添加的�
     pathmunge /sbin after
 <span class="k">fi</span>
 
-<span class="nb">source</span> /etc/profile</code></pre></td></tr></table>
+<span class="nb">source</span> /etc/profile
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="3-登陆mysql">3. 登陆MySQL</h2>
-
+</div><h2 id="3-登陆mysql">3. 登陆MySQL</h2>
 <ul>
 <li>指定登陆密码并登陆</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sh" data-lang="sh">mysqladmin -uroot password <span class="s1">&#39;passwd&#39;</span>
-mysql -u root -p</code></pre></td></tr></table>
+mysql -u root -p
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
-<li><p>图形登陆工具</p>
-
+</div><ul>
+<li>
+<p>图形登陆工具</p>
 <ul>
 <li>MySQL WorkBench</li>
 <li>SQLyog</li>
-</ul></li>
-
-<li><p>授权账号进行远程连接</p></li>
+</ul>
+</li>
+<li>
+<p>授权账号进行远程连接</p>
+</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -454,7 +443,8 @@ mysql -u root -p</code></pre></td></tr></table>
 <span class="o">|</span>      <span class="o">|</span>                                           <span class="o">|</span> <span class="n">localhost</span><span class="p">.</span><span class="n">localdomain</span> <span class="o">|</span>
 <span class="o">|</span> <span class="n">xff</span>  <span class="o">|</span> <span class="o">*</span><span class="mi">23</span><span class="n">AE809DDACAF96AF0FD78ED04B6A265E05AA257</span> <span class="o">|</span> <span class="o">%</span>                     <span class="o">|</span>
 <span class="o">+</span><span class="c1">------+-------------------------------------------+-----------------------+
-</span><span class="c1"></span><span class="mi">7</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></td></tr></table>
+</span><span class="c1"></span><span class="mi">7</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -553,7 +543,10 @@ mysql -u root -p</code></pre></td></tr></table>
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

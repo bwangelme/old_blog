@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2019/05/21/review-json-and-go/" />
@@ -34,7 +34,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -46,25 +47,21 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2019/05/21/review-json-and-go/" />
-<meta property="article:published_time" content="2019-05-21T21:40:40&#43;08:00"/>
-<meta property="article:modified_time" content="2019-05-21T21:40:40&#43;08:00"/>
-
+<meta property="article:published_time" content="2019-05-21T21:40:40+08:00" />
+<meta property="article:modified_time" content="2019-05-21T21:40:40+08:00" />
 <meta itemprop="name" content="Review 《JSON and Go》">
 <meta itemprop="description" content="
 
 原文地址: https://blog.golang.org/json-and-go
 
 ">
-
-
 <meta itemprop="datePublished" content="2019-05-21T21:40:40&#43;08:00" />
 <meta itemprop="dateModified" content="2019-05-21T21:40:40&#43;08:00" />
-<meta itemprop="wordCount" content="6080">
+<meta itemprop="wordCount" content="6074">
 
 
 
-<meta itemprop="keywords" content="翻译,Go,JSON," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="翻译,Go,JSON," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Review 《JSON and Go》"/>
 <meta name="twitter:description" content="
 
@@ -152,22 +149,23 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#引言">引言</a></li>
-<li><a href="#encoding">Encoding</a></li>
-<li><a href="#decoding">Decoding</a></li>
-<li><a href="#使用-interface-解析-json-的通用方法">使用 interface{} 解析 JSON 的通用方法</a></li>
-<li><a href="#解码任意数据">解码任意数据</a></li>
-<li><a href="#引用类型">引用类型</a></li>
-<li><a href="#流式编码和解码">流式编码和解码</a></li>
-<li><a href="#参考">参考</a></li>
-<li><a href="#补充-json-marshal">补充 json.Marshal</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#引言">引言</a></li>
+        <li><a href="#encoding">Encoding</a></li>
+        <li><a href="#decoding">Decoding</a></li>
+        <li><a href="#使用-interface-解析-json-的通用方法">使用 interface{} 解析 JSON 的通用方法</a></li>
+        <li><a href="#解码任意数据">解码任意数据</a></li>
+        <li><a href="#引用类型">引用类型</a></li>
+        <li><a href="#流式编码和解码">流式编码和解码</a></li>
+        <li><a href="#参考">参考</a></li>
+        <li><a href="#补充-jsonmarshal">补充 json.Marshal</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
@@ -177,31 +175,25 @@
 <li>原文地址: <a href="https://blog.golang.org/json-and-go">https://blog.golang.org/json-and-go</a></li>
 </ul>
 </blockquote>
-
-<hr />
-
+<hr>
 <h2 id="引言">引言</h2>
-
 <p>JSON (JavaScript Object Notation) 是一种简单的数据交换格式。语法上它很像 JavaScript 的对象和数组。它最常用的场景是 Web 浏览器上的 JavaScript 程序和 Web 后端进行通信。
 在它的官网 <a href="https://json.org">json.org</a> 上，提供了特别清楚和简明的标准定义。</p>
-
 <p>使用 <a href="https://golang.org/pkg/encoding/json/">encoding/json</a>，可以在 Go 程序中快速地读写 JSON 数据。</p>
-
 <h2 id="encoding">Encoding</h2>
-
 <p>我们使用 <a href="https://golang.org/pkg/encoding/json/#Marshal">Marshal</a> 函数来编码 JSON 数据。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Marshal</span><span class="p">(</span><span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Marshal</span><span class="p">(</span><span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>给定一个 Go 数据结构 <code>Message</code>，</p>
+</div><p>给定一个 Go 数据结构 <code>Message</code>，</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -212,80 +204,76 @@
     <span class="nx">Name</span> <span class="kt">string</span>
     <span class="nx">Body</span> <span class="kt">string</span>
     <span class="nx">Time</span> <span class="kt">int64</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>同时创建一个 <code>Message</code> 的实例，</p>
+</div><p>同时创建一个 <code>Message</code> 的实例，</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">m</span> <span class="o">:=</span> <span class="nx">Message</span><span class="p">{</span><span class="s">&#34;Alice&#34;</span><span class="p">,</span> <span class="s">&#34;Hello&#34;</span><span class="p">,</span> <span class="mi">1294706395881547000</span><span class="p">}</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">m</span> <span class="o">:=</span> <span class="nx">Message</span><span class="p">{</span><span class="s">&#34;Alice&#34;</span><span class="p">,</span> <span class="s">&#34;Hello&#34;</span><span class="p">,</span> <span class="mi">1294706395881547000</span><span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>我们可以使用 <code>json.Marshal</code> 来生成一个 JSON 编码版本的<code>m</code></p>
+</div><p>我们可以使用 <code>json.Marshal</code> 来生成一个 JSON 编码版本的<code>m</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">b</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">b</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>在执行了上述操作后，<code>err</code>应该是<code>nil</code>，<code>b</code>应该是一个包含如下数据的<code>[]byte</code>变量，</p>
+</div><p>在执行了上述操作后，<code>err</code>应该是<code>nil</code>，<code>b</code>应该是一个包含如下数据的<code>[]byte</code>变量，</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span></pre></td>
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">b == []byte(`{&#34;Name&#34;:&#34;Alice&#34;,&#34;Body&#34;:&#34;Hello&#34;,&#34;Time&#34;:1294706395881547000}`)</pre></td></tr></table>
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">b == []byte(`{&#34;Name&#34;:&#34;Alice&#34;,&#34;Body&#34;:&#34;Hello&#34;,&#34;Time&#34;:1294706395881547000}`)
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>只有被表示为有效 JSON 的数据数据结构才能被编码：</p>
-
+</div><p>只有被表示为有效 JSON 的数据数据结构才能被编码：</p>
 <ul>
 <li>JSON 对象只支持字符串作为<code>key</code>，如果要编码一个 Map 变量，那么这个 Map 变量必须是<code>map[string]T</code>类型，<code>T</code>可以是 JSON 包支持的任意 Go 类型。</li>
 <li>Channel, complex 和函数类型不能被编码</li>
 <li>循环数据结构是不被支持的，它将会导致 <code>Marshal</code> 函数进入一个死循环。</li>
 <li>指针将会被编码成它指向的值(如果指针是<code>nil</code>的话，将被编码成<code>null</code>)。</li>
 </ul>
-
 <p>JSON 包仅仅会访问结构体中导出的字段(字段名首字母为大写)。因此只有一个结构体的导出字段将会展示在 JSON 输出中。</p>
-
 <h2 id="decoding">Decoding</h2>
-
 <p>我们使用 <a href="https://golang.org/pkg/encoding/json/#Unmarshal">Unmarshal</a> 函数来解码 JSON。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">data</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">,</span> <span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">error</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">data</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">,</span> <span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">error</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>首先我们应该创建一个存储解码数据的变量，</p>
+</div><p>首先我们应该创建一个存储解码数据的变量，</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">m</span> <span class="nx">Message</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">m</span> <span class="nx">Message</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>然后调用 <code>json.Unmarshal</code> 函数，将<code>[]byte</code>类型的 JSON 数据和指向m的指针传递进去。</p>
+</div><p>然后调用 <code>json.Unmarshal</code> 函数，将<code>[]byte</code>类型的 JSON 数据和指向m的指针传递进去。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">m</span><span class="p">)</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">m</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>如果<code>b</code>包含了适合<code>m</code>的有效 JSON 数据，上述函数返回的<code>err</code>应该是<code>nil</code>，b中所存储的数据也应该被存储到了结构体变量<code>m</code>中。变量<code>m</code>中的值如下所示:</p>
+</div><p>如果<code>b</code>包含了适合<code>m</code>的有效 JSON 数据，上述函数返回的<code>err</code>应该是<code>nil</code>，b中所存储的数据也应该被存储到了结构体变量<code>m</code>中。变量<code>m</code>中的值如下所示:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -296,23 +284,21 @@
     <span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;Alice&#34;</span><span class="p">,</span>
     <span class="nx">Body</span><span class="p">:</span> <span class="s">&#34;Hello&#34;</span><span class="p">,</span>
     <span class="nx">Time</span><span class="p">:</span> <span class="mi">1294706395881547000</span><span class="p">,</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p><code>Unmarshal</code>是如何从结构体中找到存储被解码数据的字段的呢？对于一个给定的 Key &ldquo;Foo&rdquo;，<code>Unmarshal</code>将会通过以下的顺序从目的结构体中寻找合适的字段：</p>
-
+</div><p><code>Unmarshal</code>是如何从结构体中找到存储被解码数据的字段的呢？对于一个给定的 Key &ldquo;Foo&rdquo;，<code>Unmarshal</code>将会通过以下的顺序从目的结构体中寻找合适的字段：</p>
 <ol>
 <li>结构体中含有标签 <code>Foo</code> 的 <strong>导出字段</strong> 。(关于结构体字段标签请参考 <a href="https://golang.org/ref/spec#Struct_types">Go spec</a>)</li>
 <li>结构体中名字为<code>Foo</code>的 <strong>导出字段</strong> 。</li>
 <li>结构体中名字为<code>FOO</code>, <code>FoO</code>或其他名字类似于<code>Foo</code>的大小写不敏感的 <strong>导出字段</strong> 。</li>
 </ol>
-
 <ul>
 <li>示例代码:</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -375,35 +361,31 @@
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m1</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span> <span class="s">&#34;Alice&#34;</span><span class="p">)</span>
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m1</span><span class="p">.</span><span class="nx">NAME1</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>当JSON字节中的数据不完全符合 Go 的类型的时候将会发生什么呢？</p>
+</div><p>当JSON字节中的数据不完全符合 Go 的类型的时候将会发生什么呢？</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`{&#34;Name&#34;:&#34;Bob&#34;,&#34;Food&#34;:&#34;Pickle&#34;}`</span><span class="p">)</span>
 <span class="kd">var</span> <span class="nx">m</span> <span class="nx">Message</span>
-<span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">m</span><span class="p">)</span></code></pre></td></tr></table>
+<span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">m</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p><code>Unmarshal</code>仅仅会解码那些在目标变量中能够找到的字段。在上述的代码例子中，只有符合<code>m</code>的字段名才会被解码出来，<code>Food</code>字段将会被忽略。
+</div><p><code>Unmarshal</code>仅仅会解码那些在目标变量中能够找到的字段。在上述的代码例子中，只有符合<code>m</code>的字段名才会被解码出来，<code>Food</code>字段将会被忽略。
 这个特性可以让你在处理大的 JSON 对象的时候，仅仅解析出想要的字段。同时，这也意味着目标结构体变量中 <strong>未导出字段</strong> 的值将不会受到<code>Unmarshal</code>的影响</p>
-
 <p>但如果你在处理 JSON 对象的时候不知道其内部结构，这应该如何处理呢？</p>
-
 <h2 id="使用-interface-解析-json-的通用方法">使用 interface{} 解析 JSON 的通用方法</h2>
-
 <p>空接口类型(<code>interface{}</code>)描述了一个拥有零个方法的类型。每个 Go 类型都至少实现了零个方法所以他们都满足空接口的定义。</p>
-
 <p>空接口类型表现起来就像一个通用的容器类型一样:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -412,24 +394,24 @@
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">i</span> <span class="kd">interface</span><span class="p">{}</span>
 <span class="nx">i</span> <span class="p">=</span> <span class="s">&#34;a string&#34;</span>
 <span class="nx">i</span> <span class="p">=</span> <span class="mi">2011</span>
-<span class="nx">i</span> <span class="p">=</span> <span class="mf">2.777</span></code></pre></td></tr></table>
+<span class="nx">i</span> <span class="p">=</span> <span class="mf">2.777</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>使用类型断言可以访问底层的类型:</p>
+</div><p>使用类型断言可以访问底层的类型:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">r</span> <span class="o">:=</span> <span class="nx">i</span><span class="p">.(</span><span class="kt">float64</span><span class="p">)</span>
-<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;the circle&#39;s area&#34;</span><span class="p">,</span> <span class="nx">math</span><span class="p">.</span><span class="nx">Pi</span><span class="o">*</span><span class="nx">r</span><span class="o">*</span><span class="nx">r</span><span class="p">)</span></code></pre></td></tr></table>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;the circle&#39;s area&#34;</span><span class="p">,</span> <span class="nx">math</span><span class="p">.</span><span class="nx">Pi</span><span class="o">*</span><span class="nx">r</span><span class="o">*</span><span class="nx">r</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>如果底层的类型是未知的，可以使用 <code>Type-Switch</code> 来检测底层类型:</p>
+</div><p>如果底层的类型是未知的，可以使用 <code>Type-Switch</code> 来检测底层类型:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -452,45 +434,42 @@
     <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;i swapped by halves is&#34;</span><span class="p">,</span> <span class="nx">v</span><span class="p">[</span><span class="nx">h</span><span class="p">:]</span><span class="o">+</span><span class="nx">v</span><span class="p">[:</span><span class="nx">h</span><span class="p">])</span>
 <span class="k">default</span><span class="p">:</span>
     <span class="c1">// i isn&#39;t one of the types above
-</span><span class="c1"></span><span class="p">}</span></code></pre></td></tr></table>
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p><code>json</code> 包将会使用<code>map[string]interface{}</code>和<code>[]interface{}</code>值来存储任意类型的 JSON 对象和数组。
+</div><p><code>json</code> 包将会使用<code>map[string]interface{}</code>和<code>[]interface{}</code>值来存储任意类型的 JSON 对象和数组。
 它将会正确地解析有效的 JSON 数据到 <code>interface {}</code> 类型变量中。默认的具体 Go 类型是：</p>
-
 <ul>
 <li><code>bool</code>对应 JSON 布尔值</li>
 <li><code>float64</code> 对应 JSON 数值</li>
 <li><code>string</code> 对应 JSON 字符串</li>
 <li><code>nil</code> 对应 JSON 空值</li>
 </ul>
-
 <h2 id="解码任意数据">解码任意数据</h2>
-
 <p>考虑如下的 JSON 数据，他们存储在变量<code>b</code>中：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`{&#34;Name&#34;:&#34;Wednesday&#34;,&#34;Age&#34;:6,&#34;Parents&#34;:[&#34;Gomez&#34;,&#34;Morticia&#34;]}`</span><span class="p">)</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`{&#34;Name&#34;:&#34;Wednesday&#34;,&#34;Age&#34;:6,&#34;Parents&#34;:[&#34;Gomez&#34;,&#34;Morticia&#34;]}`</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>不需要知道它的具体结构，我们可以通过<code>Unmarshal</code>函数将它解码成一个空接口类型。</p>
+</div><p>不需要知道它的具体结构，我们可以通过<code>Unmarshal</code>函数将它解码成一个空接口类型。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">f</span> <span class="kd">interface</span><span class="p">{}</span>
-<span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">f</span><span class="p">)</span></code></pre></td></tr></table>
+<span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">f</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>此时，变量<code>f</code>中存储的Go的值应该是一个字典，它的键是字符串，值是存储着值的空接口变量</p>
+</div><p>此时，变量<code>f</code>中存储的Go的值应该是一个字典，它的键是字符串，值是存储着值的空接口变量</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -507,22 +486,22 @@
         <span class="kd">interface</span><span class="p">{}(</span><span class="s">&#34;Gomez&#34;</span><span class="p">),</span>
         <span class="kd">interface</span><span class="p">{}(</span><span class="s">&#34;Morticia&#34;</span><span class="p">),</span>
     <span class="p">},</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>我们可以使用类型断言去访问<code>f</code>底层的<code>map[string]interface{}</code>变量。</p>
+</div><p>我们可以使用类型断言去访问<code>f</code>底层的<code>map[string]interface{}</code>变量。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">m</span> <span class="o">:=</span> <span class="nx">f</span><span class="p">.(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">m</span> <span class="o">:=</span> <span class="nx">f</span><span class="p">.(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>然后我们可以使用<code>range</code>语句来迭代这个map，然后使用<code>Type-Switch</code>去访问空接口类型变量底层确切类型的值:</p>
+</div><p>然后我们可以使用<code>range</code>语句来迭代这个map，然后使用<code>Type-Switch</code>去访问空接口类型变量底层确切类型的值:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -563,17 +542,15 @@
     <span class="k">default</span><span class="p">:</span>
         <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="s">&#34;is of type I don&#39;t know how to handle&#34;</span><span class="p">)</span>
     <span class="p">}</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>通过这种方式，可以方便地解析出未知内部结构的 JSON 数据，且仍然能享受到类型安全的好处。</p>
-
+</div><p>通过这种方式，可以方便地解析出未知内部结构的 JSON 数据，且仍然能享受到类型安全的好处。</p>
 <h2 id="引用类型">引用类型</h2>
-
 <p>让我们来定义一个 Go 类型来解码上文中提到的例子:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -608,30 +585,28 @@
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span> <span class="s">&#34;Wednesday&#34;</span><span class="p">)</span>
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Age</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Parents</span><span class="p">,</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;Gomez&#34;</span><span class="p">,</span> <span class="s">&#34;Morticia&#34;</span><span class="p">})</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p><code>Unmarshal</code>函数将数据解码到<code>FamilyMember</code>类型变量中，一切就像我们预期的那样。但如果我们仔细地观察上述代码，可以看到一个重要的细节。我们使用<code>var</code>语句创建了一个<code>FamilyMember</code>类型的变量，然后将这个变量的指针提供给了<code>Unmarshal</code>函数，但同时，这个变量中的<code>Parents</code>字段是<code>nil</code>切片。为了去填充<code>Parents</code>字段，<code>Unmarshal</code>在幕后分配了一个新的切片。这就是典型的<code>Unmarshal</code>函数对引用类型的支持（指针，切片和 map ）。</p>
-
+</div><p><code>Unmarshal</code>函数将数据解码到<code>FamilyMember</code>类型变量中，一切就像我们预期的那样。但如果我们仔细地观察上述代码，可以看到一个重要的细节。我们使用<code>var</code>语句创建了一个<code>FamilyMember</code>类型的变量，然后将这个变量的指针提供给了<code>Unmarshal</code>函数，但同时，这个变量中的<code>Parents</code>字段是<code>nil</code>切片。为了去填充<code>Parents</code>字段，<code>Unmarshal</code>在幕后分配了一个新的切片。这就是典型的<code>Unmarshal</code>函数对引用类型的支持（指针，切片和 map ）。</p>
 <p>考虑要解码如下的数据结构:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Foo</span> <span class="kd">struct</span> <span class="p">{</span>
     <span class="nx">Bar</span> <span class="o">*</span><span class="nx">Bar</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>如果在JSON数据中有一个<code>Bar</code>字段，<code>Unmarshal</code>将会分配一个新的<code>Bar</code>变量并将JSON数据填充到其中。如果没有的话，<code>Bar</code>将会是一个空指针。</p>
-
+</div><p>如果在JSON数据中有一个<code>Bar</code>字段，<code>Unmarshal</code>将会分配一个新的<code>Bar</code>变量并将JSON数据填充到其中。如果没有的话，<code>Bar</code>将会是一个空指针。</p>
 <p>此时一个重要的开发模式就浮现出来了: 如果你有一个应用程序，接收几种不同类型的消息，你可以用如下方式定义一个<code>receiver</code>，</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -640,29 +615,27 @@
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">IncomingMessage</span> <span class="kd">struct</span> <span class="p">{</span>
     <span class="nx">Cmd</span> <span class="o">*</span><span class="nx">Command</span>
     <span class="nx">Msg</span> <span class="o">*</span><span class="nx">Message</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>发送端可以在顶层JSON对象中填充一个<code>Cmd</code>对象或者<code>Msg</code>对象，这个完全由发送端自己来决定。<code>Unmarsha</code>将会将JSON数据解码到<code>IncommingMessage</code>对象中，它仅会为 JSON 对象中检测出来的数据分配数据结构。
+</div><p>发送端可以在顶层JSON对象中填充一个<code>Cmd</code>对象或者<code>Msg</code>对象，这个完全由发送端自己来决定。<code>Unmarsha</code>将会将JSON数据解码到<code>IncommingMessage</code>对象中，它仅会为 JSON 对象中检测出来的数据分配数据结构。
 接收者如果想要知道应该去处理哪个消息，它可以简单地测试一下<code>Cmd</code>或者<code>Msg</code>是否为<code>nil</code>。</p>
-
 <h2 id="流式编码和解码">流式编码和解码</h2>
-
 <p><code>json</code>包提供了<code>Decoder</code>和<code>Encoder</code>类型以支持读/写 JSON 数据流的常见操作。<code>NewDecoder</code>和<code>NewEncoder</code>函数包裹了<code>io.Reader</code>和<code>io.Writer</code>接口类型。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">NewDecoder</span><span class="p">(</span><span class="nx">r</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span><span class="p">)</span> <span class="o">*</span><span class="nx">Decoder</span>
-<span class="kd">func</span> <span class="nf">NewEncoder</span><span class="p">(</span><span class="nx">w</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span><span class="p">)</span> <span class="o">*</span><span class="nx">Encoder</span></code></pre></td></tr></table>
+<span class="kd">func</span> <span class="nf">NewEncoder</span><span class="p">(</span><span class="nx">w</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span><span class="p">)</span> <span class="o">*</span><span class="nx">Encoder</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>下面是一个示例程序，它将会从<code>stdin</code>中读取 JSON 数据，将其解析出来后，移除掉其中的冗余字段，只留下<code>Name</code>，然后将这部分数据再写入到<code>stdout</code>中。</p>
+</div><p>下面是一个示例程序，它将会从<code>stdin</code>中读取 JSON 数据，将其解析出来后，移除掉其中的冗余字段，只留下<code>Name</code>，然后将这部分数据再写入到<code>stdout</code>中。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -719,55 +692,45 @@
 			<span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
 		<span class="p">}</span>
 	<span class="p">}</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>由于<code>io.Reader</code>和<code>io.Writer</code>无处不在，这些<code>Encoder</code>和<code>Decoder</code>能够在广泛的场景中使用，例如读写 HTTP 连接，Websocket 连接，读写文件等。</p>
-
+</div><p>由于<code>io.Reader</code>和<code>io.Writer</code>无处不在，这些<code>Encoder</code>和<code>Decoder</code>能够在广泛的场景中使用，例如读写 HTTP 连接，Websocket 连接，读写文件等。</p>
 <h2 id="参考">参考</h2>
-
 <p>想要了解更多信息请参考 <a href="https://golang.org/pkg/encoding/json/">json 包的文档</a>。示例用法请参考 <a href="https://golang.org/pkg/net/rpc/jsonrpc/">jsonrpc 包的源代码</a> 。</p>
-
 <blockquote>
 <p>作者: Andrew Gerrand</p>
 </blockquote>
-
-<h2 id="补充-json-marshal">补充 json.Marshal</h2>
-
+<h2 id="补充-jsonmarshal">补充 json.Marshal</h2>
 <ul>
 <li>原文地址: <a href="https://golang.org/pkg/encoding/json/#Marshal">https://golang.org/pkg/encoding/json/#Marshal</a></li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Marshal</span><span class="p">(</span><span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Marshal</span><span class="p">(</span><span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p><code>Marshal</code>函数返回<code>v</code>的 JSON 编码。</p>
-
+</div><p><code>Marshal</code>函数返回<code>v</code>的 JSON 编码。</p>
 <p><code>Marshal</code>将会递归地遍历<code>v</code>的值。如果遇到了一个值实现了<code>Marshaler</code>接口，且它不是空指针。那么<code>Marshal</code>将会调用它的<code>MarshalJSON</code>方法来输出 JSON 数据。
 如果该值没有<code>MarshalJSON</code>方法但是实现了<code>encoding.TextMarshaler</code>接口，那么<code>Marshal</code>函数将会调用它的<code>MarshalText</code>方法，并将结果编码成一个 JSON 字符串。
 <code>nil</code>指针异常并不是严格必须的，但是在<code>UnmarshalJSON</code>的行为中模仿了一个类似的，必要的异常。</p>
-
 <p>如果某个值没有实现上文中描述的接口的话，<code>Marshal</code>将会使用下列的类型相关的默认编码。</p>
-
 <ul>
 <li>布尔值将会被编码成 JSON 布尔值</li>
 <li>浮点数，整数，Number 值将会被编码成 JSON 数值</li>
 <li>字符串值将会被编码成 JSON 字符串，并将其强制转换成一个有效的 UTF-8 字符串，将无效的字节替换成 <code>Unicode 替换码点</code>(<code>U+FFFD �</code>)。</li>
 </ul>
-
 <p>尖括号<code>&lt;</code>和<code>&gt;</code>将会被转换成<code>\u003c</code>和<code>\u003e</code>，防止浏览器将 JSON 输出误解释成 HTML。符号<code>&amp;</code>因为同样的原因也会被转换成<code>\u0026</code>。
 如果想要关闭这个转换，可以创建一个<code>Encoder</code>，并调用其<code>SetEscapeHTML(false)</code>方法。</p>
-
 <ul>
 <li>关于<code>SetEscapeHTML</code>的测试函数如下(此为译者补充):</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -830,17 +793,16 @@
 
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nf">Bytes</span><span class="p">(),</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`{&#34;string&#34;:&#34;&lt;p&gt;文本&amp;文本&lt;/p&gt;&#34;}
 </span><span class="s">`</span><span class="p">))</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>数组和切片值将会被编码成 JSON 数组，但<code>[]byte</code>类型值将会被编码成 base64 编码过的字符串。<code>nil</code>的切片值将会被编码成 JSON 空值。</p>
-
+</div><p>数组和切片值将会被编码成 JSON 数组，但<code>[]byte</code>类型值将会被编码成 base64 编码过的字符串。<code>nil</code>的切片值将会被编码成 JSON 空值。</p>
 <ul>
 <li>编码<code>[]byte</code>数据的示例(译者补充):</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -867,23 +829,19 @@
 	<span class="nx">data</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">`{&#34;b&#34;:65,&#34;data&#34;:&#34;%s&#34;}`</span><span class="p">,</span> <span class="nx">b64Content</span><span class="p">))</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>结构体值将会变成编码后的 JSON 对象，每个导出的结构体字段都会变成对象的一个成员，使用字段名作为对象的 key ，除非字段由于以下的某个原因被省略了。</p>
-
-<p>结构体字段的编码可以使用存储在结构体字段标签下的&rdquo;json&rdquo;键格式化字符串来自定义。格式化字符串给定了字段的名称，可选的由逗号分隔的编码选项。为了指定选项，不覆盖默认的名字，格式化字符串的名字可能是空的。</p>
-
-<p>&ldquo;omitempty&rdquo;选项表示在编码的时候，如果该字段的值为空的话，改字段将会被忽略。<code>false</code>，0，空指针，空接口值，还有空数组，切片，map和字符串都会被认为是空值。</p>
-
-<p>还有一个特殊的例子，如果字段标签是&rdquo;-&ldquo;，这个字段将总会被忽略。注意如果想指定字段名为&rdquo;-&ldquo;的话，可以使用&rdquo;-,&ldquo;的形式。</p>
-
+</div><p>结构体值将会变成编码后的 JSON 对象，每个导出的结构体字段都会变成对象的一个成员，使用字段名作为对象的 key ，除非字段由于以下的某个原因被省略了。</p>
+<p>结构体字段的编码可以使用存储在结构体字段标签下的&quot;json&quot;键格式化字符串来自定义。格式化字符串给定了字段的名称，可选的由逗号分隔的编码选项。为了指定选项，不覆盖默认的名字，格式化字符串的名字可能是空的。</p>
+<p>&ldquo;omitempty&quot;选项表示在编码的时候，如果该字段的值为空的话，改字段将会被忽略。<code>false</code>，0，空指针，空接口值，还有空数组，切片，map和字符串都会被认为是空值。</p>
+<p>还有一个特殊的例子，如果字段标签是&rdquo;-&quot;，这个字段将总会被忽略。注意如果想指定字段名为&rdquo;-&ldquo;的话，可以使用&rdquo;-,&ldquo;的形式。</p>
 <ul>
 <li>编码标签的示例代码:</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -944,18 +902,17 @@
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
 
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="s">`{&#34;myName1&#34;:0,&#34;F3&#34;:3,&#34;-&#34;:5}`</span><span class="p">)</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>&ldquo;string&rdquo;选项可以让该字段在 JSON 对象中是以字符串的形式存储的。这个选项仅会在字符串，浮点数，整数和布尔值类型的字段上生效。
+</div><p>&ldquo;string&quot;选项可以让该字段在 JSON 对象中是以字符串的形式存储的。这个选项仅会在字符串，浮点数，整数和布尔值类型的字段上生效。
 在和 JavaScript 程序通信的时候，有时候会用这种扩展等级的通讯。</p>
-
 <ul>
 <li>&ldquo;string&rdquo; 编码标签的示例代码:</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -986,28 +943,27 @@
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
 
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="s">`{&#34;boolVal1&#34;:&#34;false&#34;,&#34;boolVal2&#34;:false}`</span><span class="p">)</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">Int64String</span> <span class="kt">int64</span> <span class="s">`json:&#34;,string&#34;`</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">Int64String</span> <span class="kt">int64</span> <span class="s">`json:&#34;,string&#34;`</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>如果键的名称是非空字符串，且其仅包含Unicode字母，数字和 ASCII 标点符号（引号，反斜杠和逗号除外），那么就会使用这个键的名称。</p>
-
+</div><p>如果键的名称是非空字符串，且其仅包含Unicode字母，数字和 ASCII 标点符号（引号，反斜杠和逗号除外），那么就会使用这个键的名称。</p>
 <p>匿名结构体字段在编码的时候，通常会将其内部的导出字段名放到外部结构体中，这个收到下一段描述的 Go 的可见性规则的约束。
 如果一个匿名结构体字段通过 JSON tag 指定了名称，那么在编码的时候将会使用其名称，而不是再当做匿名来处理。
 对于空接口类型的匿名结构体字段，将会使用它的类型名作为编码名称，而不是当做匿名处理。</p>
-
 <ul>
 <li>匿名结构体字段的示例代码:</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1062,23 +1018,18 @@
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
 
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="s">`{&#34;Power&#34;:1,&#34;Code&#34;:2,&#34;Tires&#34;:{&#34;Number&#34;:2},&#34;Bar&#34;:233}`</span><span class="p">)</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>在选择结构体中哪些字段会被编码或者解码的时候，Go 的结构体字段可见性规则会针对 JSON 做一些修改。如果在同一级别有多个字段名，且那个级别是最少嵌套的(因此将会是通常 Go 规则选择的级别),如下的规则将会被应用:</p>
-
+</div><p>在选择结构体中哪些字段会被编码或者解码的时候，Go 的结构体字段可见性规则会针对 JSON 做一些修改。如果在同一级别有多个字段名，且那个级别是最少嵌套的(因此将会是通常 Go 规则选择的级别),如下的规则将会被应用:</p>
 <ol>
 <li>对于这些字段，如果有任意字段拥有了 JSON tag，那么将会考虑 JSON tag 的字段，即使在多个没有 JSON tag 的字段中存在名称冲突。</li>
 <li>如果仅有一个字段(拥有 JSON tag 或者不符合第一条规则)，那么这个字段将会被选择。</li>
 <li>否则如果有多个字段的话，所有字段都会被忽略，且没有错误发生。</li>
 </ol>
-
-<p>处理匿名结构体字段是 Go 1.1 之后新加的功能，在 Go 1.1 之前，匿名结构体字段将会被忽略。如果要在当前或者更早版本上强制忽略匿名结构体字段，可以使用 JSON tag &ldquo;-&ldquo;。</p>
-
+<p>处理匿名结构体字段是 Go 1.1 之后新加的功能，在 Go 1.1 之前，匿名结构体字段将会被忽略。如果要在当前或者更早版本上强制忽略匿名结构体字段，可以使用 JSON tag &ldquo;-&quot;。</p>
 <p>Map 值将会被编码成 JSON 对象。map 值的key 必须是字符串，整数或者实现了 <code>encoding.TextMarshaler</code> 类型的值。</p>
-
 <p>Map 值的key将会使用以下规则排序，并用其当做 JSON 对象的key，具体取决于上述描述的字符串值的 UTF-8 强制转换。</p>
-
 <blockquote>
 <ul>
 <li>字符串值将会直接使用</li>
@@ -1086,21 +1037,16 @@
 <li>整数值将会被转换成字符串</li>
 </ul>
 </blockquote>
-
 <p>指针值将会被编码成其所指向的值，空指针将会被编码成空 JSON 值<code>null</code>。</p>
-
 <p>接口值将会被编码成接口中所包含的值，<code>nil</code>接口值将会被编码成空 JSON 值<code>null</code>。</p>
-
 <p>Channel，复数和函数类型值不能在 JSON 中编码。尝试去编码这些值将会导致<code>Marshal</code>函数返回<code>UnsupportedTypeError</code>。</p>
-
 <p>JSON 不能代表循环数据结构，且<code>Marshal</code>函数也不能处理他们。为<code>Marshal</code>函数传递一个循环数据结构将会导致无穷的递归。</p>
-
 <ul>
 <li>Marshal 循环结构的示例代码(<code>Marshal</code>循环结构将会导致无穷递归，最终导致OOM错误)</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1211,13 +1157,13 @@
 </span><span class="c1"></span>	<span class="c1">// main.main()
 </span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/main.go:51 +0xad
 </span><span class="c1"></span>	<span class="c1">// FAIL    json_example [build failed]
-</span><span class="c1"></span><span class="p">}</span></code></pre></td></tr></table>
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>Marshal的示例代码:</p>
+</div><p>Marshal的示例代码:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1268,7 +1214,8 @@
 		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;error:&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
 	<span class="p">}</span>
 	<span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -1369,7 +1316,10 @@
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

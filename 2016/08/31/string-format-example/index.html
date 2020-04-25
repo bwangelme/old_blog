@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2016/08/31/string-format-example/" />
@@ -36,42 +36,36 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
 <meta property="og:title" content="Python字符串Format方法示例" />
 <meta property="og:description" content="摘要:
 
-
 本文翻译自Python3文档6.1.3.2. Format examples
 主要讲述了Pythonstr.format()的一些使用方法
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2016/08/31/string-format-example/" />
-<meta property="article:published_time" content="2016-08-31T15:45:41&#43;00:00"/>
-<meta property="article:modified_time" content="2016-08-31T15:45:41&#43;00:00"/>
-
+<meta property="article:published_time" content="2016-08-31T15:45:41+00:00" />
+<meta property="article:modified_time" content="2016-08-31T15:45:41+00:00" />
 <meta itemprop="name" content="Python字符串Format方法示例">
 <meta itemprop="description" content="摘要:
-
 
 本文翻译自Python3文档6.1.3.2. Format examples
 主要讲述了Pythonstr.format()的一些使用方法
 ">
-
-
 <meta itemprop="datePublished" content="2016-08-31T15:45:41&#43;00:00" />
 <meta itemprop="dateModified" content="2016-08-31T15:45:41&#43;00:00" />
 <meta itemprop="wordCount" content="1004">
 
 
 
-<meta itemprop="keywords" content="Python,翻译," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Python,翻译," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python字符串Format方法示例"/>
 <meta name="twitter:description" content="摘要:
-
 
 本文翻译自Python3文档6.1.3.2. Format examples
 主要讲述了Pythonstr.format()的一些使用方法
@@ -157,134 +151,135 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#简单介绍">简单介绍</a></li>
-<li><a href="#示例">示例</a>
-<ul>
-<li><a href="#根据位置来访问参数">根据位置来访问参数:</a></li>
-<li><a href="#根据名字来访问参数">根据名字来访问参数</a></li>
-<li><a href="#访问参数的属性">访问参数的属性</a></li>
-<li><a href="#访问参数的元素">访问参数的元素</a></li>
-<li><a href="#替换-s-和-r">替换<code>%s</code>和<code>%r</code></a></li>
-<li><a href="#对齐文本和指定宽度">对齐文本和指定宽度</a></li>
-<li><a href="#替换-f-f-f-同时指定符号">替换<code>%+f</code>， <code>%-f</code>， <code>% f</code>，同时指定符号</a></li>
-<li><a href="#替换-x-和-o-在不同的进制之间转换值">替换<code>%x</code>和<code>%o</code>，在不同的进制之间转换值</a></li>
-<li><a href="#使用逗号-作为千的分隔">使用逗号<code>,</code>作为千的分隔</a></li>
-<li><a href="#表达一个百分数">表达一个百分数</a></li>
-<li><a href="#使用指定类型的格式化器">使用指定类型的格式化器</a></li>
-<li><a href="#嵌套参数和更复杂的例子">嵌套参数和更复杂的例子</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#简单介绍">简单介绍</a></li>
+        <li><a href="#示例">示例</a>
+          <ul>
+            <li><a href="#根据位置来访问参数">根据位置来访问参数:</a></li>
+            <li><a href="#根据名字来访问参数">根据名字来访问参数</a></li>
+            <li><a href="#访问参数的属性">访问参数的属性</a></li>
+            <li><a href="#访问参数的元素">访问参数的元素</a></li>
+            <li><a href="#替换s和r">替换<code>%s</code>和<code>%r</code></a></li>
+            <li><a href="#对齐文本和指定宽度">对齐文本和指定宽度</a></li>
+            <li><a href="#替换f--f--f同时指定符号">替换<code>%+f</code>， <code>%-f</code>， <code>% f</code>，同时指定符号</a></li>
+            <li><a href="#替换x和o在不同的进制之间转换值">替换<code>%x</code>和<code>%o</code>，在不同的进制之间转换值</a></li>
+            <li><a href="#使用逗号作为千的分隔">使用逗号<code>,</code>作为千的分隔</a></li>
+            <li><a href="#表达一个百分数">表达一个百分数</a></li>
+            <li><a href="#使用指定类型的格式化器">使用指定类型的格式化器</a></li>
+            <li><a href="#嵌套参数和更复杂的例子">嵌套参数和更复杂的例子</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p><strong>摘要</strong>:</p>
-
 <blockquote>
 <p>本文翻译自Python3文档<a href="https://docs.python.org/3/library/string.html#format-examples">6.1.3.2. Format examples</a>
 主要讲述了Python<code>str.format()</code>的一些使用方法</p>
 </blockquote>
-
 <h2 id="简单介绍">简单介绍</h2>
-
 <p>这部分文档包括了<code>str.format()</code>函数的一些语法例子，以及和旧的<code>%</code>格式的一些比较。</p>
-
 <p>在大多数的情况下<code>format</code>的语法和旧的<code>%</code>格式的语法是相似的，除了使用了额外的<code>{}</code>和用<code>:</code>替换<code>%</code>。例如，<code>%03.2f</code>能够被翻译成<code>{:03.2f}</code>。</p>
-
 <p>新的格式化语法也支持新的不同的选择，这些都在下面的例子中进行展示。</p>
-
 <h2 id="示例">示例</h2>
-
 <h3 id="根据位置来访问参数">根据位置来访问参数:</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="s1">&#39;{0}, {1}, {2}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">))</span>
-<span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span></code></pre></td></tr></table>
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="s1">&#39;{}, {}, {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">))</span>  <span class="c1"># 3.1 only</span>
-<span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span></code></pre></td></tr></table>
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="s1">&#39;{2}, {1}, {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">))</span>
-<span class="n">c</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span></code></pre></td></tr></table>
+<span class="n">c</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="s1">&#39;{2}, {1}, {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="s1">&#39;abc&#39;</span><span class="p">))</span>  <span class="c1"># 这里的abc当做参数列表`args`</span>
-<span class="n">c</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span></code></pre></td></tr></table>
+<span class="n">c</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="s1">&#39;{0}{1}{0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;0000&#39;</span><span class="p">,</span> <span class="s1">&#39;1111&#39;</span><span class="p">))</span>  <span class="c1"># 参数的指示符可以被重复</span>
-<span class="mo">000011110000</span></code></pre></td></tr></table>
+<span class="mo">000011110000</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="根据名字来访问参数">根据名字来访问参数</h3>
+</div><h3 id="根据名字来访问参数">根据名字来访问参数</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;Coordinates: {latitude}, {longitude}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">latitude</span><span class="o">=</span><span class="s1">&#39;37.42N&#39;</span><span class="p">,</span> <span class="n">longitude</span><span class="o">=</span><span class="s1">&#39;-115.81W&#39;</span><span class="p">)</span>
-<span class="s1">&#39;Coordinates: 37.42N, -115.81W&#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39;Coordinates: 37.42N, -115.81W&#39;</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="n">coord</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;latitude&#39;</span><span class="p">:</span> <span class="s1">&#39;37.42N&#39;</span><span class="p">,</span> <span class="s1">&#39;longitude&#39;</span><span class="p">:</span> <span class="s1">&#39;-115.81W&#39;</span><span class="p">}</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;Coordinates: {latitude}, {longitude}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">coord</span><span class="p">)</span>  <span class="c1"># 这里的coord被当做了键值对参数</span>
-<span class="s1">&#39;Coordinates: 37.42N, -115.81W&#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39;Coordinates: 37.42N, -115.81W&#39;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="访问参数的属性">访问参数的属性</h3>
+</div><h3 id="访问参数的属性">访问参数的属性</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">3</span><span class="o">-</span><span class="mi">5j</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="s2">&#34;复数C{0}是由实部{0.real}和虚部{0.imag}组成的&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-<span class="s1">&#39;复数C(3-5j)是由实部3.0和虚部-5.0组成的&#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39;复数C(3-5j)是由实部3.0和虚部-5.0组成的&#39;</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -301,104 +296,109 @@
 <span class="o">...</span>         <span class="k">return</span> <span class="s2">&#34;StrPoint({self.x}, {self.y})&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s1">&#39;self&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="p">})</span>
 <span class="o">...</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">str</span><span class="p">(</span><span class="n">Point</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
-<span class="s1">&#39;StrPoint(4, 2)&#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39;StrPoint(4, 2)&#39;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="访问参数的元素">访问参数的元素</h3>
+</div><h3 id="访问参数的元素">访问参数的元素</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="n">coord</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="s2">&#34;X: {0[0]}; Y: {0[1]}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span>
-<span class="s1">&#39;X: 3; Y: 5&#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39;X: 3; Y: 5&#39;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="替换-s-和-r">替换<code>%s</code>和<code>%r</code></h3>
+</div><h3 id="替换s和r">替换<code>%s</code>和<code>%r</code></h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="s2">&#34;repr() show quotes: {!r}， str() doesn&#39;t: {!s}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;test1&#39;</span><span class="p">,</span> <span class="s1">&#39;test2&#39;</span><span class="p">)</span>
-<span class="s2">&#34;repr() show quotes: &#39;test1&#39;， str() doesn&#39;t: test2&#34;</span></code></pre></td></tr></table>
+<span class="s2">&#34;repr() show quotes: &#39;test1&#39;， str() doesn&#39;t: test2&#34;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="对齐文本和指定宽度">对齐文本和指定宽度</h3>
+</div><h3 id="对齐文本和指定宽度">对齐文本和指定宽度</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;{:&lt;30}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;left aligned&#39;</span><span class="p">)</span>
-<span class="s1">&#39;left aligned                  &#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39;left aligned                  &#39;</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;{:&gt;30}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;right aligned&#39;</span><span class="p">)</span>
-<span class="s1">&#39;                 right aligned&#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39;                 right aligned&#39;</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;{:^30}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;center aligned&#39;</span><span class="p">)</span>
-<span class="s1">&#39;        center aligned        &#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39;        center aligned        &#39;</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;{:*^30}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;centered&#39;</span><span class="p">)</span>  <span class="c1"># 使用*作为填充字符</span>
-<span class="s1">&#39;***********centered***********&#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39;***********centered***********&#39;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="替换-f-f-f-同时指定符号">替换<code>%+f</code>， <code>%-f</code>， <code>% f</code>，同时指定符号</h3>
+</div><h3 id="替换f--f--f同时指定符号">替换<code>%+f</code>， <code>%-f</code>， <code>% f</code>，同时指定符号</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;{:+f}, {:+f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mf">3.14</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.14</span><span class="p">)</span>  <span class="c1"># 总是显示符号</span>
-<span class="s1">&#39;+3.140000, -3.140000&#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39;+3.140000, -3.140000&#39;</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;{: f}, {: f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mf">3.14</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.14</span><span class="p">)</span>  <span class="c1"># 在正数前显示一个空格</span>
-<span class="s1">&#39; 3.140000, -3.140000&#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39; 3.140000, -3.140000&#39;</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;{:-f}, {:-f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mf">3.14</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.14</span><span class="p">)</span>  <span class="c1"># 仅仅显示负号，和`%f`相同</span>
-<span class="s1">&#39;3.140000, -3.140000&#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39;3.140000, -3.140000&#39;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="替换-x-和-o-在不同的进制之间转换值">替换<code>%x</code>和<code>%o</code>，在不同的进制之间转换值</h3>
+</div><h3 id="替换x和o在不同的进制之间转换值">替换<code>%x</code>和<code>%o</code>，在不同的进制之间转换值</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -407,11 +407,12 @@
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 格式化同时支持二进制数</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="s2">&#34;int: {0:d}; hex: {0:x}; oct: {0:o}; bin: {0:b}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
-<span class="s1">&#39;int: 42; hex: 2a; oct: 52; bin: 101010&#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39;int: 42; hex: 2a; oct: 52; bin: 101010&#39;</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -420,24 +421,24 @@
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 拥有0x，0o，0b作为前缀</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="s2">&#34;int: {0:d}; hex: {0:#x}; oct: {0:#o}; bin: {0:#b}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
-<span class="s1">&#39;int: 42; hex: 0x2a; oct: 0o52; bin: 0b101010&#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39;int: 42; hex: 0x2a; oct: 0o52; bin: 0b101010&#39;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="使用逗号-作为千的分隔">使用逗号<code>,</code>作为千的分隔</h3>
+</div><h3 id="使用逗号作为千的分隔">使用逗号<code>,</code>作为千的分隔</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;{:,}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">1234567890</span><span class="p">)</span>
-<span class="s1">&#39;1,234,567,890&#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39;1,234,567,890&#39;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="表达一个百分数">表达一个百分数</h3>
+</div><h3 id="表达一个百分数">表达一个百分数</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -446,13 +447,13 @@
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="n">points</span> <span class="o">=</span> <span class="mi">19</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">22</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="s1">&#39;Correct answers: {:.2%}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">points</span><span class="o">/</span><span class="n">total</span><span class="p">)</span>
-<span class="s1">&#39;Correct answers: 86.36%&#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39;Correct answers: 86.36%&#39;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="使用指定类型的格式化器">使用指定类型的格式化器</h3>
+</div><h3 id="使用指定类型的格式化器">使用指定类型的格式化器</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -461,13 +462,13 @@
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">d</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2016</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="s2">&#34;{:%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>   <span class="c1"># %s返回的是时间戳</span>
-<span class="s1">&#39;2016-08-31 15:15:30&#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39;2016-08-31 15:15:30&#39;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="嵌套参数和更复杂的例子">嵌套参数和更复杂的例子</h3>
+</div><h3 id="嵌套参数和更复杂的例子">嵌套参数和更复杂的例子</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -478,31 +479,34 @@
 <span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="s1">&#39;{0:{fill}{align}16}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">align</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="n">align</span><span class="p">))</span>
 <span class="n">left</span><span class="o">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span>
 <span class="o">^^^^^</span><span class="n">center</span><span class="o">^^^^^</span>
-<span class="o">&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span><span class="n">right</span></code></pre></td></tr></table>
+<span class="o">&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</span><span class="n">right</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="n">octets</span> <span class="o">=</span> <span class="p">[</span><span class="mi">192</span><span class="p">,</span> <span class="mi">168</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="s2">&#34;{:02X}{:02X}{:02X}{:02X}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">octets</span><span class="p">)</span>
-<span class="s1">&#39;C0A80001&#39;</span></code></pre></td></tr></table>
+<span class="s1">&#39;C0A80001&#39;</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
-<span class="mi">3232235521</span></code></pre></td></tr></table>
+<span class="mi">3232235521</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -529,7 +533,8 @@
 <span class="o">**</span><span class="mi">8</span><span class="o">**</span> <span class="o">*</span><span class="mh">0X8</span><span class="o">*</span> <span class="mi">0</span><span class="n">o10</span><span class="o">*</span> <span class="mb">0b1000</span>
 <span class="o">**</span><span class="mi">9</span><span class="o">**</span> <span class="o">*</span><span class="mh">0X9</span><span class="o">*</span> <span class="mi">0</span><span class="n">o11</span><span class="o">*</span> <span class="mb">0b1001</span>
 <span class="o">*</span><span class="mi">10</span><span class="o">**</span> <span class="o">*</span><span class="mh">0XA</span><span class="o">*</span> <span class="mi">0</span><span class="n">o12</span><span class="o">*</span> <span class="mb">0b1010</span>
-<span class="o">*</span><span class="mi">11</span><span class="o">**</span> <span class="o">*</span><span class="mh">0XB</span><span class="o">*</span> <span class="mi">0</span><span class="n">o13</span><span class="o">*</span> <span class="mb">0b1011</span></code></pre></td></tr></table>
+<span class="o">*</span><span class="mi">11</span><span class="o">**</span> <span class="o">*</span><span class="mh">0XB</span><span class="o">*</span> <span class="mi">0</span><span class="n">o13</span><span class="o">*</span> <span class="mb">0b1011</span>
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -629,7 +634,10 @@
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

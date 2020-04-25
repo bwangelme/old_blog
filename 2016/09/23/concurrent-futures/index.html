@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2016/09/23/concurrent-futures/" />
@@ -36,40 +36,34 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
 <meta property="og:title" content="Python concurrent.futures 文档翻译" />
 <meta property="og:description" content="摘要:
 
-
 本文主要是对 Python3 标准库 concurrent.futures 文档的翻译
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2016/09/23/concurrent-futures/" />
-<meta property="article:published_time" content="2016-09-23T11:19:16&#43;00:00"/>
-<meta property="article:modified_time" content="2016-09-23T11:19:16&#43;00:00"/>
-
+<meta property="article:published_time" content="2016-09-23T11:19:16+00:00" />
+<meta property="article:modified_time" content="2016-09-23T11:19:16+00:00" />
 <meta itemprop="name" content="Python concurrent.futures 文档翻译">
 <meta itemprop="description" content="摘要:
 
-
 本文主要是对 Python3 标准库 concurrent.futures 文档的翻译
 ">
-
-
 <meta itemprop="datePublished" content="2016-09-23T11:19:16&#43;00:00" />
 <meta itemprop="dateModified" content="2016-09-23T11:19:16&#43;00:00" />
-<meta itemprop="wordCount" content="4731">
+<meta itemprop="wordCount" content="4786">
 
 
 
-<meta itemprop="keywords" content="Python,翻译," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Python,翻译," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python concurrent.futures 文档翻译"/>
 <meta name="twitter:description" content="摘要:
-
 
 本文主要是对 Python3 标准库 concurrent.futures 文档的翻译
 "/>
@@ -154,108 +148,122 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#executor-对象">Executor 对象</a></li>
-<li><a href="#threadpoolexecutor">ThreadPoolExecutor</a>
-<ul>
-<li><a href="#threadpoolexecutor-例子">ThreadPoolExecutor 例子</a></li>
-</ul></li>
-<li><a href="#processpoolexecutor">ProcessPoolExecutor</a>
-<ul>
-<li><a href="#processpoolexecutor-的例子">ProcessPoolExecutor 的例子</a></li>
-</ul></li>
-<li><a href="#future-对象">Future 对象</a></li>
-<li><a href="#模块方法">模块方法</a></li>
-<li><a href="#异常类">异常类</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#executor-对象">Executor 对象</a></li>
+        <li><a href="#threadpoolexecutor">ThreadPoolExecutor</a>
+          <ul>
+            <li><a href="#threadpoolexecutor-例子">ThreadPoolExecutor 例子</a></li>
+          </ul>
+        </li>
+        <li><a href="#processpoolexecutor">ProcessPoolExecutor</a>
+          <ul>
+            <li><a href="#processpoolexecutor-的例子">ProcessPoolExecutor 的例子</a></li>
+          </ul>
+        </li>
+        <li><a href="#future-对象">Future 对象</a></li>
+        <li><a href="#模块方法">模块方法</a></li>
+        <li><a href="#异常类">异常类</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p><strong>摘要</strong>:</p>
-
 <blockquote>
 <p>本文主要是对 Python3 标准库 <a href="https://docs.python.org/3/library/concurrent.futures.html">concurrent.futures</a> 文档的翻译</p>
 </blockquote>
-
 <p>concurrent.futures 模块为异步执行可调用的对象提供了一个高级的接口。</p>
-
 <p>异步执行可以通过线程来实现，使用 <a href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ThreadPoolExecutor">ThreadPoolExecutor</a> 模块，或者使用 <a href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ProcessPoolExecutor">ProcessPoolExecutor</a> 模块通过分离进程来实现。两种实现都有同样的接口，他们都是通过抽象类 <a href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Executor">Executor</a> 来定义的。</p>
-
 <h2 id="executor-对象">Executor 对象</h2>
-
 <blockquote>
 <p><code>class concurrent.futures.Executor</code></p>
-
+</blockquote>
+<blockquote>
 <p>这是一个抽象类，用来提供方法去支持异步地执行调用，它不应该被直接调用，而是应该通过具体的子类来使用。</p>
-
-<p><code>submit(fn, *args, **kwargs)</code>
-&gt; 可调用对象的调度器，<code>fn</code>参数将会以<code>fn(*args, **kwargs)</code>的形式来调用，同时返回一个 Future 对象代表了可调用对象的执行情况。</p>
-
+</blockquote>
+<blockquote>
+<p><code>submit(fn, *args, **kwargs)</code></p>
+<blockquote>
+<p>可调用对象的调度器，<code>fn</code>参数将会以<code>fn(*args, **kwargs)</code>的形式来调用，同时返回一个 Future 对象代表了可调用对象的执行情况。</p>
+</blockquote>
+</blockquote>
+<blockquote>
 <blockquote>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
+<pre class="chroma"><code></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
-     <span class="n">future</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="nb">pow</span><span class="p">,</span> <span class="mi">323</span><span class="p">,</span> <span class="mi">1235</span><span class="p">)</span>
-     <span class="k">print</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-python" data-lang="python"></code></pre></td></tr></table>
 </div>
 </div></blockquote>
-
-<p><code>map(func, *iterables, timeout=None, chunksize=1)</code></p>
-
-<blockquote>
-<p>和<code>map(func, *iterables)</code>函数的作用基本相同，除了<code>func</code>是被异步执行的，而且几个对于<code>func</code>调用可能是同时执行的。这个函数返回的迭代器调用<code>__next__()</code>方法的时候，如果在<code>timeout</code>秒内结果不可用，那么迭代器将会从原始调用的函数向<code>Executor.map()</code>抛出一个<code>concurrent.futures.TimeoutError</code>的异常。<code>timeout</code>既能是一个整数，也能是一个浮点数。如果<code>timeout</code>没有指定的话或者等于 None 的话，那么等待时间就没有限制。如果调用函数抛出了一个异常，那么当迭代器取到这个函数的时候，异常将会被抛出。
-当使用<code>ProcessPoolExecutor</code>的时候，这个方法将<code>iterables</code>切成许多块，然后将这些内容作为分离的任务提交到进程池中。每个块的大概的尺寸能够通过<code>chunksize</code>(大于0的正整数)的参数来指定。当<code>iterables</code>非常大的时候，和<code>chunksize</code>默认等于1相比，将<code>chunksize</code>设置为一个很大的值，将会显著地提升性能。在使用<code>ThreadPoolExecutor</code>的情况下，<code>chunksize</code>的大小没有影响。</p>
-
-<p>Python 3.5新增功能：添加了<code>chunksize</code>参数</p>
 </blockquote>
-
-<p><code>shutdown(wait=True)</code></p>
-
-<blockquote>
-<p>告诉执行器，当当前阻塞的 futures 执行完了以后，它应该释放所有它使用的资源。在<code>shutdown</code>函数之后再来调用<code>Executor.submit()</code>和<code>Executor.map()</code>将会抛出<code>RuntimeError</code></p>
-
-<p>如果<code>wait</code>等于 True 的话，这个方法不会立即返回，而直到所有阻塞的 futures 都返回，而且和这个执行器所有相关的资源都被释放以后，这个函数才会返回。 如果<code>wait</code>设置为 False ，那么这个方法会立刻返回，而和这个执行器所有相关的资源只有等到所有阻塞的 futures 都执行完以后才会被释放。而无论<code>wait</code>参数的值是什么，整个 Python 程序都会等到所有阻塞的 futures 执行完毕以后才会退出。</p>
-
-<p>通过<code>with</code>语句，可以避免明确地来调用这个方法，它在执行完以后将会自动关闭<code>Executor</code>。(调用 Executor.shutdown() 时<code>wait</code>会被设置为True，这将会等待所有 future 执行完毕)</p>
+<p>with ThreadPoolExecutor(max_workers=1) as executor:
+future = executor.submit(pow, 323, 1235)
+print(future.result())</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">shutil</span>
-<span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="n">e</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">,</span> <span class="s1">&#39;src1.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;dest1.txt&#39;</span><span class="p">)</span>
-    <span class="n">e</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">,</span> <span class="s1">&#39;src2.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;dest2.txt&#39;</span><span class="p">)</span>
-    <span class="n">e</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">,</span> <span class="s1">&#39;src3.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;dest3.txt&#39;</span><span class="p">)</span>
-    <span class="n">e</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">,</span> <span class="s1">&#39;src4.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;dest4.txt&#39;</span><span class="p">)</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">
+&gt; `map(func, *iterables, timeout=None, chunksize=1)`
+
+&gt;&gt; 和`map(func, *iterables)`函数的作用基本相同，除了`func`是被异步执行的，而且几个对于`func`调用可能是同时执行的。这个函数返回的迭代器调用`__next__()`方法的时候，如果在`timeout`秒内结果不可用，那么迭代器将会从原始调用的函数向`Executor.map()`抛出一个`concurrent.futures.TimeoutError`的异常。`timeout`既能是一个整数，也能是一个浮点数。如果`timeout`没有指定的话或者等于 None 的话，那么等待时间就没有限制。如果调用函数抛出了一个异常，那么当迭代器取到这个函数的时候，异常将会被抛出。
+&gt;&gt; 当使用`ProcessPoolExecutor`的时候，这个方法将`iterables`切成许多块，然后将这些内容作为分离的任务提交到进程池中。每个块的大概的尺寸能够通过`chunksize`(大于0的正整数)的参数来指定。当`iterables`非常大的时候，和`chunksize`默认等于1相比，将`chunksize`设置为一个很大的值，将会显著地提升性能。在使用`ThreadPoolExecutor`的情况下，`chunksize`的大小没有影响。
+
+&gt;&gt; Python 3.5新增功能：添加了`chunksize`参数
+
+&gt; `shutdown(wait=True)`
+
+&gt;&gt; 告诉执行器，当当前阻塞的 futures 执行完了以后，它应该释放所有它使用的资源。在`shutdown`函数之后再来调用`Executor.submit()`和`Executor.map()`将会抛出`RuntimeError`
+
+&gt;&gt; 如果`wait`等于 True 的话，这个方法不会立即返回，而直到所有阻塞的 futures 都返回，而且和这个执行器所有相关的资源都被释放以后，这个函数才会返回。 如果`wait`设置为 False ，那么这个方法会立刻返回，而和这个执行器所有相关的资源只有等到所有阻塞的 futures 都执行完以后才会被释放。而无论`wait`参数的值是什么，整个 Python 程序都会等到所有阻塞的 futures 执行完毕以后才会退出。
+
+&gt;&gt; 通过`with`语句，可以避免明确地来调用这个方法，它在执行完以后将会自动关闭`Executor`。(调用 Executor.shutdown() 时`wait`会被设置为True，这将会等待所有 future 执行完毕)
+
+&gt;&gt; ```python
+import shutil
+with ThreadPoolExecutor(max_workers=4) as e:
+    e.submit(shutil.copy, &#39;src1.txt&#39;, &#39;dest1.txt&#39;)
+    e.submit(shutil.copy, &#39;src2.txt&#39;, &#39;dest2.txt&#39;)
+    e.submit(shutil.copy, &#39;src3.txt&#39;, &#39;dest3.txt&#39;)
+    e.submit(shutil.copy, &#39;src4.txt&#39;, &#39;dest4.txt&#39;)
+</code></pre></td></tr></table>
 </div>
-</div></blockquote>
-</blockquote>
-
-<h2 id="threadpoolexecutor">ThreadPoolExecutor</h2>
-
+</div><h2 id="threadpoolexecutor">ThreadPoolExecutor</h2>
 <p><code>ThreadPoolExecutor</code>是<code>Executor</code>的子类，使用一个线程池去异步地执行调用。</p>
-
 <p>当一个 Future 关联的调用等待另外一个 Future 的执行结果的时候，死锁就有可能发生，例如下面的例子：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -286,13 +294,13 @@
 
 <span class="n">executor</span> <span class="o">=</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">wait_on_b</span><span class="p">)</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">wait_on_a</span><span class="p">)</span></code></pre></td></tr></table>
+<span class="n">b</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">wait_on_a</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>和这个例子：</p>
+</div><p>和这个例子：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -307,22 +315,22 @@
     <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
 
 <span class="n">executor</span> <span class="o">=</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">wait_on_future</span><span class="p">)</span></code></pre></td></tr></table>
+<span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">wait_on_future</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<blockquote>
+</div><blockquote>
 <p><code>class concurrent.futures.ThreadPoolExecutor(max_workers=None)</code></p>
-
+</blockquote>
+<blockquote>
 <blockquote>
 <p>一个<code>Executor</code>的子类，使用线程池中最多<code>max_workers</code>个线程去异步地执行回调。
 Python 3.5中的改变：如果<code>max_workers</code>参数为None或者没有给定，那么它将会被默认设置成为机器的CPU核数乘5。这里假设<code>ThreadPoolExecutor</code>经常被用来执行IO密集型的工作而不是CPU密集型的工作，工作者的个数应该比<code>ProcessPoolExecutor</code>的工作者的个数要多。</p>
 </blockquote>
 </blockquote>
-
 <h3 id="threadpoolexecutor-例子">ThreadPoolExecutor 例子</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -375,30 +383,26 @@ Python 3.5中的改变：如果<code>max_workers</code>参数为None或者没有
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
             <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%r</span><span class="s1"> generated an exception: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">exc</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%r</span><span class="s1"> page is </span><span class="si">%d</span><span class="s1"> bytes&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span></code></pre></td></tr></table>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%r</span><span class="s1"> page is </span><span class="si">%d</span><span class="s1"> bytes&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="processpoolexecutor">ProcessPoolExecutor</h2>
-
+</div><h2 id="processpoolexecutor">ProcessPoolExecutor</h2>
 <p><code>ProcessPoolExecutor</code> 类是<code>Executor</code>的一个子类，它使用一个进程池来异步地执行调用。<code>ProcessPoolExecutor</code>使用<code>multiprocessing</code>模块，它允许去避免全局解释器锁，但同时也意味着仅仅只有<code>pickable</code>(TODO译者注：这里这个单词的含义我还没理解)对象能够被执行和返回。</p>
-
 <p><code>__main__</code>模块必须能够被作为工作者的子模块导入。这意味着<code>ProcessPoolExecutor</code>将不会在交互式的解释器中工作。</p>
-
 <p>从一个已添加到Executor中的可调用对象中调用<code>Executor</code>或者<code>Future</code>的方法将会导致死锁(TODO译者注：有待实践操作)。</p>
-
 <blockquote>
 <p><code>class concurrent.futures.ProcessPoolExecutor(max_workers=None)</code></p>
-
+</blockquote>
+<blockquote>
 <blockquote>
 <p>一个<code>Executor</code>的子类来异步地执行调用，最多将会使用进程池中<code>max_workers</code>个工作进程。如果<code>max_workers</code>是<code>None</code>或者没有给出的话。它默认将会使用机器CPU的个数来作为最大进程数的值。如果<code>max_workers</code>小于或者等于0，那么将会抛出一个<code>ValueError</code>
 3.3版本中的改变：当一个工作进程被突然终止了后，将会抛出一个<code>BrokenProcessPool</code>的错误。以前的情况是，行为是未定义的但是 Executor 上的操作或者他自己的 future 将会被冻结或者导致死锁。</p>
 </blockquote>
 </blockquote>
-
 <h3 id="processpoolexecutor-的例子">ProcessPoolExecutor 的例子</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -473,81 +477,140 @@ Python 3.5中的改变：如果<code>max_workers</code>参数为None或者没有
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ProcessPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">number</span><span class="p">,</span> <span class="n">prime</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">PRIMES</span><span class="p">,</span> <span class="n">executor</span><span class="o">.</span><span class="nb">map</span><span class="p">(</span><span class="n">is_prime</span><span class="p">,</span> <span class="n">PRIMES</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">number</span><span class="p">,</span> <span class="n">prime</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">PRIMES</span><span class="p">,</span> <span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">is_prime</span><span class="p">,</span> <span class="n">PRIMES</span><span class="p">)):</span>
             <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1"> is prime: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="n">prime</span><span class="p">))</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span></code></pre></td></tr></table>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="future-对象">Future 对象</h2>
-
+</div><h2 id="future-对象">Future 对象</h2>
 <p>Future 类封装了一个可调用对象的异步执行过程，Future 对象是通过<code>Executor.submit()</code>函数来创建的。</p>
-
 <blockquote>
 <p><code>class concurrent.futures.Future</code></p>
-
+</blockquote>
+<blockquote>
 <blockquote>
 <p>封装了一个可调用对象的异步执行过程。Future 实例是通过<code>Executor.submit()</code>方法来创建的，而且不应该被直接创建，除非用来测试。</p>
-
-<p><code>cancel()</code>
-&gt; 尝试去取消相关回调，如果这个回调正在被执行，而且不能被取消，那么这个方法将会返回<code>False</code>，否则这个方法将会取消相应的回调并且返回<code>True</code></p>
-
-<p><code>cancelled()</code>
-&gt; 如果相关回调被成功取消了，那么这个方法将会返回<code>True</code></p>
-
-<p><code>running()</code>
-&gt; 如果相关回调当前正在被执行而且无法取消，那么将会返回<code>True</code></p>
-
-<p><code>done()</code>
-&gt; 如果相关的回调被成功地取消或者已经运行完毕那么将返回<code>True</code></p>
-
-<p><code>result(timeout=None)</code>
-&gt; 返回由相关回调产生的结果。如果这个回调还没有被完成那么这个方法将会等待<code>timeout</code>秒。如果这个回调在<code>timeout</code>秒内还没有返回，一个<code>concurrent.futures.TimeoutError</code>的异常将会被抛出。<code>timeout</code>能够被设置成一个整数或者一个浮点数。如果<code>timeout</code>没有被设置或者其值为<code>None</code>，那么等待时间将没有限制。</p>
-
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><code>cancel()</code></p>
+<blockquote>
+<p>尝试去取消相关回调，如果这个回调正在被执行，而且不能被取消，那么这个方法将会返回<code>False</code>，否则这个方法将会取消相应的回调并且返回<code>True</code></p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><code>cancelled()</code></p>
+<blockquote>
+<p>如果相关回调被成功取消了，那么这个方法将会返回<code>True</code></p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><code>running()</code></p>
+<blockquote>
+<p>如果相关回调当前正在被执行而且无法取消，那么将会返回<code>True</code></p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><code>done()</code></p>
+<blockquote>
+<p>如果相关的回调被成功地取消或者已经运行完毕那么将返回<code>True</code></p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><code>result(timeout=None)</code></p>
+<blockquote>
+<p>返回由相关回调产生的结果。如果这个回调还没有被完成那么这个方法将会等待<code>timeout</code>秒。如果这个回调在<code>timeout</code>秒内还没有返回，一个<code>concurrent.futures.TimeoutError</code>的异常将会被抛出。<code>timeout</code>能够被设置成一个整数或者一个浮点数。如果<code>timeout</code>没有被设置或者其值为<code>None</code>，那么等待时间将没有限制。</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
 <blockquote>
 <p>如果这个 future 在完成之前被取消了，那么将会抛出一个<code>CancelledError</code>的异常。
 如果相关的回调抛出了一个异常，那么这个方法也会相应地抛出这个异常。</p>
 </blockquote>
-
-<p><code>exception(timeout=None)</code>
-&gt; 返回由相关回调抛出的异常。如果相关回调还没有被完成那么这个方法将会等待<code>timeout</code>秒。如果相关回调在<code>timeout</code>秒内还没有被完成，那么将会抛出一个<code>concurrent.futures.TimeoutError</code>的异常。<code>timeout</code>能够被设置成一个整数或者一个浮点数。如果<code>timeout</code>没有被设置或者其值为<code>None</code>，那么等待时间将没有限制。</p>
-
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><code>exception(timeout=None)</code></p>
+<blockquote>
+<p>返回由相关回调抛出的异常。如果相关回调还没有被完成那么这个方法将会等待<code>timeout</code>秒。如果相关回调在<code>timeout</code>秒内还没有被完成，那么将会抛出一个<code>concurrent.futures.TimeoutError</code>的异常。<code>timeout</code>能够被设置成一个整数或者一个浮点数。如果<code>timeout</code>没有被设置或者其值为<code>None</code>，那么等待时间将没有限制。</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
 <blockquote>
 <p>如果这个 future 在完成之前被取消了，那么将会抛出一个<code>CancelledError</code>的异常。
 如果相关回调被完成了且没有抛出异常，None将会被返回。</p>
 </blockquote>
-
-<p><code>add_done_callback(fn)</code>
-&gt; 将可调用对象<code>fn</code>连接到这个 future 上，<code>fn</code>将会在 future 被取消或者结束运行时被调用，而且仅有相关 future 这一个参数。
-&gt; 添加的可调用对象将会以它们被添加的顺序来调用，而且总是在添加它们的那个进程的所属的线程中调用(译者注，可以参考<a href="https://gist.github.com/bwangel23/8c4bd585f6e54c6ec6de336dd73abbe3">这段代码</a>)。如果相关调用<code>fn</code>抛出了一个<code>Exception</code>子类的异常，它将会被记录和忽略。如果相关调用<code>fn</code>抛出了一个<code>BaseException</code>子类的异常，那么行为是未定义的。
-&gt; 如果相关的 future 已经被完成了或者取消了，<code>fn</code>将会被立刻调用。</p>
-
-<p>如下的<code>Future</code>方法意味着可以在单元测试或者<code>Exectuor</code>的实现中使用。</p>
-
-<p><code>set_running_or_notify_cancel()</code>
-&gt; 这个方法应该仅能够被<code>Exectuor</code>的实现(在执行和<code>Future</code>相关的工作之前调用)和单元测试调用。
-&gt; 如果这个方法返回<code>False</code>，那么相关的Future被取消了。即<code>Future.cancel()</code>被调用了而且返回<code>True</code>。任何等待 Future 完成的线程(即通过<code>as_completed</code>或者<code>wait()</code>方法等待)都会被唤醒。
-&gt; 这个方法仅能被调用一次，而且不能在<code>Future.set_result()</code>或者<code>Future.set_exception()</code>被调用了之后调用。</p>
-
-<p><code>set_result(result)</code>
-&gt; 将 future 相关的工作的结果设置成<code>result</code>
-&gt; 这个方法仅仅应该被<code>Exectuor</code>实现的时候和单元测试来调用。</p>
-
-<p><code>set_exception(exception)</code>
-&gt; 将 future 相关的工作的结果设置成异常<code>exception</code>
-&gt; 这个方法仅仅应该被<code>Exectuor</code>实现的时候和单元测试来调用。</p>
 </blockquote>
 </blockquote>
-
-<h2 id="模块方法">模块方法</h2>
-
 <blockquote>
-<p><code>concurrent.futures.wait(fs, timeout=None, return_when=ALL_COMPLETED)</code>
-&gt; 等待由<code>fs</code>(译者注：这里这个<code>fs</code>表示 futures 的意思)给出的 future 实例(可能由不同的 Exectuor 实例创建的)去完成。返回一个命名二元组的集合。在第一个集合元素中，命名为<code>done</code>，包含着那些在<code>wait</code>函数完成之前就已经完成(被完成或者被取消)的 future。第二个集合元素命名为<code>not_done</code>，包含那些未完成的 future。
-&gt; <code>timeout</code>用来控制<code>wait</code>函数在返回之前等待的最大秒数。<code>timeout</code>能够被设置成整数或者浮点数。如果<code>timeout</code>没有被设置或者值为<code>None</code>，那么等待时间将没有限制。
-&gt; <code>return_when</code>代表了函数应该在什么时候返回，它必须被设置成如下值中的一个：</p>
-
+<blockquote>
+<p><code>add_done_callback(fn)</code></p>
+<blockquote>
+<p>将可调用对象<code>fn</code>连接到这个 future 上，<code>fn</code>将会在 future 被取消或者结束运行时被调用，而且仅有相关 future 这一个参数。
+添加的可调用对象将会以它们被添加的顺序来调用，而且总是在添加它们的那个进程的所属的线程中调用(译者注，可以参考<a href="https://gist.github.com/bwangel23/8c4bd585f6e54c6ec6de336dd73abbe3">这段代码</a>)。如果相关调用<code>fn</code>抛出了一个<code>Exception</code>子类的异常，它将会被记录和忽略。如果相关调用<code>fn</code>抛出了一个<code>BaseException</code>子类的异常，那么行为是未定义的。
+如果相关的 future 已经被完成了或者取消了，<code>fn</code>将会被立刻调用。</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>如下的<code>Future</code>方法意味着可以在单元测试或者<code>Exectuor</code>的实现中使用。</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><code>set_running_or_notify_cancel()</code></p>
+<blockquote>
+<p>这个方法应该仅能够被<code>Exectuor</code>的实现(在执行和<code>Future</code>相关的工作之前调用)和单元测试调用。
+如果这个方法返回<code>False</code>，那么相关的Future被取消了。即<code>Future.cancel()</code>被调用了而且返回<code>True</code>。任何等待 Future 完成的线程(即通过<code>as_completed</code>或者<code>wait()</code>方法等待)都会被唤醒。
+这个方法仅能被调用一次，而且不能在<code>Future.set_result()</code>或者<code>Future.set_exception()</code>被调用了之后调用。</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><code>set_result(result)</code></p>
+<blockquote>
+<p>将 future 相关的工作的结果设置成<code>result</code>
+这个方法仅仅应该被<code>Exectuor</code>实现的时候和单元测试来调用。</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><code>set_exception(exception)</code></p>
+<blockquote>
+<p>将 future 相关的工作的结果设置成异常<code>exception</code>
+这个方法仅仅应该被<code>Exectuor</code>实现的时候和单元测试来调用。</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<h2 id="模块方法">模块方法</h2>
+<blockquote>
+<p><code>concurrent.futures.wait(fs, timeout=None, return_when=ALL_COMPLETED)</code></p>
+<blockquote>
+<p>等待由<code>fs</code>(译者注：这里这个<code>fs</code>表示 futures 的意思)给出的 future 实例(可能由不同的 Exectuor 实例创建的)去完成。返回一个命名二元组的集合。在第一个集合元素中，命名为<code>done</code>，包含着那些在<code>wait</code>函数完成之前就已经完成(被完成或者被取消)的 future。第二个集合元素命名为<code>not_done</code>，包含那些未完成的 future。
+<code>timeout</code>用来控制<code>wait</code>函数在返回之前等待的最大秒数。<code>timeout</code>能够被设置成整数或者浮点数。如果<code>timeout</code>没有被设置或者值为<code>None</code>，那么等待时间将没有限制。
+<code>return_when</code>代表了函数应该在什么时候返回，它必须被设置成如下值中的一个：</p>
+</blockquote>
+</blockquote>
+<blockquote>
 <blockquote>
 <table>
 <thead>
@@ -556,18 +619,15 @@ Python 3.5中的改变：如果<code>max_workers</code>参数为None或者没有
 <th>Description</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
 <td>FIRST_COMPLETED</td>
 <td>当任何 future 结束或者被取消的时候，这个函数就会返回</td>
 </tr>
-
 <tr>
 <td>FIRST_EXCEPTION</td>
 <td>当任何 future 通过抛出异常来结束的时候，这个函数就会返回，如果没有任何函数抛出异常，那么它等价与<code>ALL_COMPLETED</code></td>
 </tr>
-
 <tr>
 <td>ALL_COMPLETED</td>
 <td>当所有的 future 都已结束或者被取消的时候，这个函数就会返回。</td>
@@ -575,31 +635,41 @@ Python 3.5中的改变：如果<code>max_workers</code>参数为None或者没有
 </tbody>
 </table>
 </blockquote>
-
-<p><code>concurrent.futures.as_completed(fs, timeout=None)</code>
-&gt; 返回一个在由<code>fs</code>给出的 future 实例(可能由不同的Executor创建的)上的迭代器，当 future 完成的时候(结束或者被取消)，就把这个 future <code>yield</code>回去。如果<code>fs</code>中给出的 future 重复了，那么将仅会被返回一次。任何在<code>as_completed</code>函数调用之前就已经完成或者被取消的 future, 将会首先<code>yield</code>回来。如果<code>__next__()</code>被调用，在<code>timeout</code>秒后结果依然不可达，那么返回的迭代器将会从原始的调用向<code>as_completed</code>抛出一个<code>concurrent.futures.TimeoutError</code>异常。<code>timeout</code>可以被设置成整数或者浮点数。如果<code>timeout</code>没有被指定或者其值为<code>None</code>，那么等待的时间将没有限制。</p>
-
+</blockquote>
+<blockquote>
+<p><code>concurrent.futures.as_completed(fs, timeout=None)</code></p>
+<blockquote>
+<p>返回一个在由<code>fs</code>给出的 future 实例(可能由不同的Executor创建的)上的迭代器，当 future 完成的时候(结束或者被取消)，就把这个 future <code>yield</code>回去。如果<code>fs</code>中给出的 future 重复了，那么将仅会被返回一次。任何在<code>as_completed</code>函数调用之前就已经完成或者被取消的 future, 将会首先<code>yield</code>回来。如果<code>__next__()</code>被调用，在<code>timeout</code>秒后结果依然不可达，那么返回的迭代器将会从原始的调用向<code>as_completed</code>抛出一个<code>concurrent.futures.TimeoutError</code>异常。<code>timeout</code>可以被设置成整数或者浮点数。如果<code>timeout</code>没有被指定或者其值为<code>None</code>，那么等待的时间将没有限制。</p>
+</blockquote>
+</blockquote>
+<blockquote>
 <blockquote>
 <blockquote>
 <p>See also:
 <a href="https://www.python.org/dev/peps/pep-3148">PEP 3148</a> - futures - 执行异步计算
-   这个提案描述了包含在 Python 标准库中的这个特性。</p>
+这个提案描述了包含在 Python 标准库中的这个特性。</p>
 </blockquote>
 </blockquote>
 </blockquote>
-
 <h2 id="异常类">异常类</h2>
-
 <blockquote>
-<p>exception <code>concurrent.futures.CancelledError</code>
-&gt; 当 future 被取消的时候抛出这个异常。</p>
-
-<p>exception <code>concurrent.futures.TimeoutError</code>
-&gt; 当 future 的操作超出给定的<code>timeout</code>时间的时候抛出这个异常。</p>
-
-<p>exception <code>concurrent.futures.process.BrokenProcessPool</code>
-&gt; 派生自<code>RuntimeError</code>，当<code>ProcessPoolExecutor</code>中的一个工作进程以不干净的方式(例如，它是从外部被杀死的)结束的时候，这个异常将会抛出。
-&gt; Python 3.3 后的新特性</p>
+<p>exception <code>concurrent.futures.CancelledError</code></p>
+<blockquote>
+<p>当 future 被取消的时候抛出这个异常。</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>exception <code>concurrent.futures.TimeoutError</code></p>
+<blockquote>
+<p>当 future 的操作超出给定的<code>timeout</code>时间的时候抛出这个异常。</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>exception <code>concurrent.futures.process.BrokenProcessPool</code></p>
+<blockquote>
+<p>派生自<code>RuntimeError</code>，当<code>ProcessPoolExecutor</code>中的一个工作进程以不干净的方式(例如，它是从外部被杀死的)结束的时候，这个异常将会抛出。
+Python 3.3 后的新特性</p>
+</blockquote>
 </blockquote>
     </div>
 
@@ -698,7 +768,10 @@ Python 3.5中的改变：如果<code>max_workers</code>参数为None或者没有
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

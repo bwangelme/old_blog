@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2019/04/08/go-panic/" />
@@ -34,7 +34,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -48,9 +49,8 @@ defer 函数
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2019/04/08/go-panic/" />
-<meta property="article:published_time" content="2019-04-08T22:14:43&#43;08:00"/>
-<meta property="article:modified_time" content="2019-04-08T22:14:43&#43;08:00"/>
-
+<meta property="article:published_time" content="2019-04-08T22:14:43+08:00" />
+<meta property="article:modified_time" content="2019-04-08T22:14:43+08:00" />
 <meta itemprop="name" content="Go Panic 的触发及恢复过程">
 <meta itemprop="description" content="
 
@@ -59,16 +59,13 @@ recover 函数
 defer 函数
 
 ">
-
-
 <meta itemprop="datePublished" content="2019-04-08T22:14:43&#43;08:00" />
 <meta itemprop="dateModified" content="2019-04-08T22:14:43&#43;08:00" />
 <meta itemprop="wordCount" content="432">
 
 
 
-<meta itemprop="keywords" content="ARTS,Go," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="ARTS,Go," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go Panic 的触发及恢复过程"/>
 <meta name="twitter:description" content="
 
@@ -158,16 +155,17 @@ defer 函数
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#panic-过程">Panic 过程</a></li>
-<li><a href="#recover-函数">recover 函数</a></li>
-<li><a href="#defer-函数">defer 函数</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#panic-过程">Panic 过程</a></li>
+        <li><a href="#recover-函数">recover 函数</a></li>
+        <li><a href="#defer-函数">defer 函数</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
@@ -179,23 +177,17 @@ defer 函数
 <li>defer 函数</li>
 </ul>
 </blockquote>
-
 <h2 id="panic-过程">Panic 过程</h2>
-
 <ul>
 <li>当代码触发<code>panic</code>的时候，<code>panic详情</code>就会被初始化。随后程序的控制权从最底端的调用函数一级一级向上传递到最顶端的调用函数。</li>
 <li>到了最顶端调用函数后，控制权会被移交给 Go 语言的运行时系统，Go 语言的运行时系统打印出<code>panic详情</code>，并结束程序的运行。</li>
 <li>在控制权传递的过程中<code>panic详情</code>会被逐渐积累起来。所以最后程序输出<code>panic详情</code>的时候，会从最底端的函数一直输出到最顶端的函数。我们查看调用栈的信息的时候，应该从底部<code>exit status 2</code>这一行向上看。</li>
 </ul>
-
 <h2 id="recover-函数">recover 函数</h2>
-
 <ul>
 <li>因为<code>panic</code>发生的时候，<code>panic</code>函数后面的语句都不会执行了，所以<code>recover</code>函数不能放在<code>panic</code>语句后面执行，而要放在<code>defer</code>函数中执行。</li>
 </ul>
-
 <h2 id="defer-函数">defer 函数</h2>
-
 <ul>
 <li>defer 函数的执行顺序和它的定义顺序是完全相反的</li>
 <li>defer 语句每次执行的时候，Go 会把它携带的 defer 函数及其参数值存储到另一个栈中，这个栈是遵循 FILO(First Input Last Output)原则的。</li>
@@ -298,7 +290,10 @@ defer 函数
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

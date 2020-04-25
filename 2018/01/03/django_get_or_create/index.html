@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2018/01/03/django_get_or_create/" />
@@ -35,7 +35,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -43,21 +44,17 @@
 <meta property="og:description" content="关于 Django 文档get_or_create的解释" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2018/01/03/django_get_or_create/" />
-<meta property="article:published_time" content="2018-01-03T22:31:01&#43;08:00"/>
-<meta property="article:modified_time" content="2018-01-03T22:31:01&#43;08:00"/>
-
+<meta property="article:published_time" content="2018-01-03T22:31:01+08:00" />
+<meta property="article:modified_time" content="2018-01-03T22:31:01+08:00" />
 <meta itemprop="name" content="Django get_or_create 执行过程">
 <meta itemprop="description" content="关于 Django 文档get_or_create的解释">
-
-
 <meta itemprop="datePublished" content="2018-01-03T22:31:01&#43;08:00" />
 <meta itemprop="dateModified" content="2018-01-03T22:31:01&#43;08:00" />
 <meta itemprop="wordCount" content="654">
 
 
 
-<meta itemprop="keywords" content="Python,Django," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Python,Django," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Django get_or_create 执行过程"/>
 <meta name="twitter:description" content="关于 Django 文档get_or_create的解释"/>
 
@@ -141,32 +138,29 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#参考链接">参考链接</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#参考链接">参考链接</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p>关于 Django 文档<code>get_or_create</code>的解释</p>
-
 <p>最近在看 Django的 get_or_create 的文档的时候，发现了这样一句话, <a href="https://docs.djangoproject.com/en/1.11/ref/models/querysets/#get-or-create">文档地址</a>：</p>
-
 <blockquote>
 <p>If you are using MySQL, be sure to use the READ COMMITTED isolation level rather than REPEATABLE READ (the default), otherwise you may see cases where get_or_create will raise an IntegrityError but the object won’t appear in a subsequent get() call.</p>
 </blockquote>
-
 <p>我对于上面这句话的理解就是，如果使用 MySQL的话，需要将数据库的隔离级别从默认的可重复读改成提交读。否则的话，你可能会看到 get_or_create 方法抛出了一个 IntegrityError 异常，但是随后在数据库中查询的时候却找不到你要插入的记录。</p>
-
 <p>我查了一下 get_or_create 的源码：它创建数据库记录的代码是这样的：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -201,36 +195,29 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="o">**</span><span class="n">lookup</span><span class="p">),</span> <span class="bp">False</span>
         <span class="k">except</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
             <span class="k">pass</span>
-        <span class="n">six</span><span class="o">.</span><span class="n">reraise</span><span class="p">(</span><span class="o">*</span><span class="n">exc_info</span><span class="p">)</span></code></pre></td></tr></table>
+        <span class="n">six</span><span class="o">.</span><span class="n">reraise</span><span class="p">(</span><span class="o">*</span><span class="n">exc_info</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>_create_object_from_params 做的事情就是开启一个事务，然后通过 insert 语句插入数据</p>
-
+</div><p>_create_object_from_params 做的事情就是开启一个事务，然后通过 insert 语句插入数据</p>
 <p>文档中这句话针对的应该是这种情况:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">transaction</span>
 <span class="k">with</span> <span class="n">transaction</span><span class="o">.</span><span class="n">atomic</span><span class="p">():</span>
-     <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">nickname</span><span class="o">=</span><span class="s1">&#39;xxx&#39;</span><span class="p">)</span></code></pre></td></tr></table>
+     <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">nickname</span><span class="o">=</span><span class="s1">&#39;xxx&#39;</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>如果将 <code>get_or_create</code>语句包裹在一个事务中，且MySQL的隔离级别设置成可重复读的话，上述语句确实会抛出<code>IntergrityError</code>的异常。</p>
-
+</div><p>如果将 <code>get_or_create</code>语句包裹在一个事务中，且MySQL的隔离级别设置成可重复读的话，上述语句确实会抛出<code>IntergrityError</code>的异常。</p>
 <p>我看了一下<code>get_or_create</code>的实现，它的执行过程应该是这样的:</p>
-
-<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2017-12-15-065033.jpg" alt="" /></p>
-
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2017-12-15-065033.jpg" alt=""></p>
 <p>由于<code>get_or_create</code>实际上执行了三个事务，如果我们没有手动地把它放在一个事务中的话，它应该是不会抛出<code>IntegrityError</code>异常的。如果我们手动地把它放在一个事务中的话，而数据库的隔离级别又是可重复读的话，那么就很容易出现 @LeoJay 所说的情况，数据取又取不出来，存又存不进去。</p>
-
 <p>以上就是我们对于<code>get_or_create</code>的理解，由于我水平有限，不对的地方还请大家指正。</p>
-
 <h2 id="参考链接">参考链接</h2>
-
 <ul>
 <li><a href="https://groups.google.com/forum/#!msg/python-cn/7SYBIPZdnNc/3ha72q7QCgAJ;context-place=forum/python-cn">python-cn 讨论邮件</a></li>
 </ul>
@@ -331,7 +318,10 @@
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

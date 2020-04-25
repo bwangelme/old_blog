@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2016/04/11/git-submodule/" />
@@ -35,7 +35,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -43,36 +44,29 @@
 <meta property="og:description" content="摘要:
 
 
-
 git submodule就是git主仓库在本仓库的配置中记录着子模块仓库对应的名字，路径，远端url，然后创建一个特殊文件去记录子模块仓库目前的commit-id，每次更新子模块就是通过远端路径和commit-id来进行更新
 
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2016/04/11/git-submodule/" />
-<meta property="article:published_time" content="2016-04-11T07:18:43&#43;00:00"/>
-<meta property="article:modified_time" content="2016-04-11T07:18:43&#43;00:00"/>
-
+<meta property="article:published_time" content="2016-04-11T07:18:43+00:00" />
+<meta property="article:modified_time" content="2016-04-11T07:18:43+00:00" />
 <meta itemprop="name" content="Git-submodule">
 <meta itemprop="description" content="摘要:
-
 
 
 git submodule就是git主仓库在本仓库的配置中记录着子模块仓库对应的名字，路径，远端url，然后创建一个特殊文件去记录子模块仓库目前的commit-id，每次更新子模块就是通过远端路径和commit-id来进行更新
 
 ">
-
-
 <meta itemprop="datePublished" content="2016-04-11T07:18:43&#43;00:00" />
 <meta itemprop="dateModified" content="2016-04-11T07:18:43&#43;00:00" />
 <meta itemprop="wordCount" content="536">
 
 
 
-<meta itemprop="keywords" content="Git," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Git," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Git-submodule"/>
 <meta name="twitter:description" content="摘要:
-
 
 
 git submodule就是git主仓库在本仓库的配置中记录着子模块仓库对应的名字，路径，远端url，然后创建一个特殊文件去记录子模块仓库目前的commit-id，每次更新子模块就是通过远端路径和commit-id来进行更新
@@ -159,68 +153,58 @@ git submodule就是git主仓库在本仓库的配置中记录着子模块仓库�
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#参考文章">参考文章</a></li>
-<li><a href="#git-子模块的原理">Git 子模块的原理</a></li>
-<li><a href="#git-子模块的添加">Git 子模块的添加</a></li>
-<li><a href="#git-子模块的初始化及更新">Git 子模块的初始化及更新</a></li>
-<li><a href="#git-子模块的移除">Git 子模块的移除</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#参考文章">参考文章</a></li>
+        <li><a href="#git-子模块的原理">Git 子模块的原理</a></li>
+        <li><a href="#git-子模块的添加">Git 子模块的添加</a></li>
+        <li><a href="#git-子模块的初始化及更新">Git 子模块的初始化及更新</a></li>
+        <li><a href="#git-子模块的移除">Git 子模块的移除</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p><strong>摘要</strong>:</p>
-
 <blockquote>
 <ul>
 <li><code>git submodule</code>就是git主仓库在本仓库的配置中记录着子模块仓库对应的名字，路径，远端url，然后创建一个特殊文件去记录子模块仓库目前的<code>commit-id</code>，每次更新子模块就是通过远端路径和<code>commit-id</code>来进行更新</li>
 </ul>
 </blockquote>
-
 <h2 id="参考文章">参考文章</h2>
-
 <p><a href="http://www.kafeitu.me/git/2012/03/27/git-submodule.html">Git Submodule使用完整教程 - 咖啡兔 - HenryYan</a></p>
-
 <h2 id="git-子模块的原理">Git 子模块的原理</h2>
-
 <p>在<code>.git/config</code>和<code>.gitmodules</code>中记录的子模块仓库的远端地址和路径，然后使用一个特殊的模式为<code>160000</code>的文件来记录子模块仓库当前的<code>commit id</code></p>
-
 <h2 id="git-子模块的添加">Git 子模块的添加</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">git submodule add origin:/submd/repos/lib2.git libs/lib2 <span class="c1"># 添加远端origin上的仓库lib2到当前仓库的libs/lib2位置</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sh" data-lang="sh">git submodule add origin:/submd/repos/lib2.git libs/lib2 <span class="c1"># 添加远端origin上的仓库lib2到当前仓库的libs/lib2位置</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="git-子模块的初始化及更新">Git 子模块的初始化及更新</h2>
-
+</div><h2 id="git-子模块的初始化及更新">Git 子模块的初始化及更新</h2>
 <p><code>git submodule init</code>会初始化当前仓库中存在的子模块(根据.gitmodules文件去查找子模块)。</p>
-
 <p><code>git submodule update</code>就是更新当前仓库存在子模块，拉取最新代码。</p>
-
 <p><code>git submodule update</code>是根据父仓库中记录的子模块仓库的<code>commit-id</code>去更新子模块仓库，如果子模块仓库commit了但是父仓库并没有<code>add</code>，那么<code>git submodule update</code>会还原子模块仓库的提交。</p>
-
 <p><code>git submodule foreach &lt;command&gt;</code> 进入到每个子模块，然后执行<code>&lt;command&gt;</code>命令</p>
-
 <h2 id="git-子模块的移除">Git 子模块的移除</h2>
-
 <p>执行以下命令删除 Git 子模块，相关内容请参考<a href="http://stackoverflow.com/questions/1260748/how-do-i-remove-a-submodule/21211232#21211232">Stack Overflow</a>。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sh" data-lang="sh">git rm the_submodule
-rm -rf .git/modules/the_submodule</code></pre></td></tr></table>
+rm -rf .git/modules/the_submodule
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -319,7 +303,10 @@ rm -rf .git/modules/the_submodule</code></pre></td></tr></table>
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

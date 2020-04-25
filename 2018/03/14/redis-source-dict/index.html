@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2018/03/14/redis-source-dict/" />
@@ -36,36 +36,30 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
 <meta property="og:title" content="Redis 源码阅读之 dict " />
 <meta property="og:description" content="本文主要介绍了 Redis 的基础数据结构 dict 的实现，并描述了其渐进式 rehash 的操作
-
 注意: 本文基于 Redis 3.0.0 的代码进行分析的" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2018/03/14/redis-source-dict/" />
-<meta property="article:published_time" content="2018-03-14T00:14:32&#43;08:00"/>
-<meta property="article:modified_time" content="2018-03-14T00:14:32&#43;08:00"/>
-
+<meta property="article:published_time" content="2018-03-14T00:14:32+08:00" />
+<meta property="article:modified_time" content="2018-03-14T00:14:32+08:00" />
 <meta itemprop="name" content="Redis 源码阅读之 dict ">
 <meta itemprop="description" content="本文主要介绍了 Redis 的基础数据结构 dict 的实现，并描述了其渐进式 rehash 的操作
-
 注意: 本文基于 Redis 3.0.0 的代码进行分析的">
-
-
 <meta itemprop="datePublished" content="2018-03-14T00:14:32&#43;08:00" />
 <meta itemprop="dateModified" content="2018-03-14T00:14:32&#43;08:00" />
-<meta itemprop="wordCount" content="3143">
+<meta itemprop="wordCount" content="3147">
 
 
 
-<meta itemprop="keywords" content="Redis,C语言," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Redis,C语言," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Redis 源码阅读之 dict "/>
 <meta name="twitter:description" content="本文主要介绍了 Redis 的基础数据结构 dict 的实现，并描述了其渐进式 rehash 的操作
-
 注意: 本文基于 Redis 3.0.0 的代码进行分析的"/>
 
 <!--[if lte IE 9]>
@@ -148,39 +142,34 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#dict-介绍">dict 介绍</a></li>
-<li><a href="#dict-的实现">dict 的实现</a></li>
-<li><a href="#dict-的哈希算法">dict 的哈希算法</a></li>
-<li><a href="#dict-解决键冲突的方案">dict 解决键冲突的方案</a></li>
-<li><a href="#渐进式-rehash">渐进式 rehash</a></li>
-<li><a href="#字典迭代器和-rehash-的关系">字典迭代器和 rehash 的关系</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#dict-介绍">dict 介绍</a></li>
+        <li><a href="#dict-的实现">dict 的实现</a></li>
+        <li><a href="#dict-的哈希算法">dict 的哈希算法</a></li>
+        <li><a href="#dict-解决键冲突的方案">dict 解决键冲突的方案</a></li>
+        <li><a href="#渐进式-rehash">渐进式 rehash</a></li>
+        <li><a href="#字典迭代器和-rehash-的关系">字典迭代器和 rehash 的关系</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p>本文主要介绍了 Redis 的基础数据结构 dict 的实现，并描述了其渐进式 rehash 的操作</p>
-
 <p><strong>注意</strong>: 本文基于 Redis 3.0.0 的代码进行分析的</p>
-
 <h2 id="dict-介绍">dict 介绍</h2>
-
 <p>dict 又称符号表(symbol table)，关联数组(associative array)或映射(map)，是一种用于保存键值对的抽象数据结构。</p>
-
 <p>Redis 实现使用的C语言并没有内置 dict 这种数据类型，所以 Redis 实现了自己的 dict。dict 在 Redis 中有广泛的应用，Redis 数据库的底层就是使用字典来实现的，也就是说对数据库的增，删，改，查都是建立在字典之上的。同时，字典也是<code>hash</code>和<code>sorted set</code>等数据结构的底层实现之一。</p>
-
 <h2 id="dict-的实现">dict 的实现</h2>
-
 <p>在 Redis 中，dict 的代码存放在<code>src/dict.c</code>和<code>src/dict.h</code>两个文件中。在<code>src/dict.h</code>中定义了 dict 所用到的结构体，一共有四个:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -285,62 +274,48 @@
 </span><span class="c1"></span>    <span class="n">dictEntry</span> <span class="o">*</span><span class="n">entry</span><span class="p">,</span> <span class="o">*</span><span class="n">nextEntry</span><span class="p">;</span> <span class="c1">// 当前迭代器所指向的哈希表项和下一个哈希表项
 </span><span class="c1"></span>    <span class="cm">/* unsafe iterator fingerprint for misuse detection. */</span>
     <span class="kt">long</span> <span class="kt">long</span> <span class="n">fingerprint</span><span class="p">;</span>  <span class="c1">// 字典的指纹，非安全迭代器中用于鉴别字典是否被修改过
-</span><span class="c1"></span><span class="p">}</span> <span class="n">dictIterator</span><span class="p">;</span></code></pre></td></tr></table>
+</span><span class="c1"></span><span class="p">}</span> <span class="n">dictIterator</span><span class="p">;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>他们之间的关系如图1所示:</p>
-
-<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-03-10-054715.png" alt="图1" /></p>
-
+</div><p>他们之间的关系如图1所示:</p>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-03-10-054715.png" alt="图1"></p>
 <p><strong>图1</strong></p>
-
 <p>当我们向字典中存储键值对(k, v)时，字典通过一定的算法计算出k的索引值，它的计算方法如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"># 先根据哈希算法计算出键k的哈希值，哈希值为unsigned int 类型
+<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 先根据哈希算法计算出键k的哈希值，哈希值为unsigned int 类型
 hash = d-&gt;type-&gt;hashFunction(k)
 # 然后再将哈希值和哈希表的sizemask按位与，获得键k在哈希表中的索引
-idx = hash &amp; d-&gt;ht[table].sizemask</pre></td></tr></table>
+idx = hash &amp; d-&gt;ht[table].sizemask
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>最后按照计算出来的索引值将键值对存储到字典中的哈希表中。</p>
-
+</div><p>最后按照计算出来的索引值将键值对存储到字典中的哈希表中。</p>
 <h2 id="dict-的哈希算法">dict 的哈希算法</h2>
-
 <p>dict 按照使用方式的不同，所采取的哈希算法也不同。Redis目前共使用两种不同的哈希算法：</p>
-
 <ol>
 <li>MurmurHash2 32 bit 算法：这种算法的分布率和速度都非常好， 具体信息请参考 MurmurHash 的主页： <a href="http://code.google.com/p/smhasher/">http://code.google.com/p/smhasher/</a> 。</li>
 <li>基于 djb 算法实现的一个大小写无关散列算法：具体信息请参考 <a href="http://www.cse.yorku.ca/~oz/hash.html">http://www.cse.yorku.ca/~oz/hash.html</a> 。</li>
 </ol>
-
 <ul>
 <li>dict 在命令表以及 Lua 脚本缓存中时，使用了算法2</li>
 <li>dict 在数据库，集群，哈希键和阻塞操作等功能中都使用到了算法1</li>
 </ul>
-
 <h2 id="dict-解决键冲突的方案">dict 解决键冲突的方案</h2>
-
 <p>根据前面的内容所知，向dict中添加键值对时，dict根据键计算出来的索引值将键值对存储到哈希表中。由于哈希表的大小是有限的，所以可能会出现两个键的索引值相同的情况，这种情况也称作键冲突。</p>
-
 <p>当出现键冲突的时候，dict会将两个键值对存放在同一个哈希表的同一个索引下，它们通过单链表的形式组合起来，如图2所示：</p>
-
-<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-03-13-155621.jpg" alt="图2" /></p>
-
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2018-03-13-155621.jpg" alt="图2"></p>
 <p><strong>图2</strong></p>
-
 <p>其中k1和k2计算出来的索引值是相同的，他们被存放到哈希表的同一个索引下，然后通过单链表的形式组合起来。</p>
-
 <p>在 <code>src/dict.c</code>的<code>dictEntry *dictAddRaw(dict *d, void *key)</code>函数中，我们可以看到向单链表中添加元素的过程</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -351,61 +326,61 @@ idx = hash &amp; d-&gt;ht[table].sizemask</pre></td></tr></table>
 <span class="n">entry</span> <span class="o">=</span> <span class="n">zmalloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">entry</span><span class="p">));</span>
 <span class="n">entry</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">ht</span><span class="o">-&gt;</span><span class="n">table</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
 <span class="n">ht</span><span class="o">-&gt;</span><span class="n">table</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="p">;</span>
-<span class="n">ht</span><span class="o">-&gt;</span><span class="n">used</span><span class="o">++</span><span class="p">;</span></code></pre></td></tr></table>
+<span class="n">ht</span><span class="o">-&gt;</span><span class="n">used</span><span class="o">++</span><span class="p">;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>申请一个哈希表项之后，将它的地址存放在哈希表中，同时也使哈希表中原来存在的节点变成它的next节点，即新增元素在单链表的头部。</p>
-
+</div><p>申请一个哈希表项之后，将它的地址存放在哈希表中，同时也使哈希表中原来存在的节点变成它的next节点，即新增元素在单链表的头部。</p>
 <h2 id="渐进式-rehash">渐进式 rehash</h2>
-
 <p>每个dict都有一个负载因子，计算方式如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="n">load_factor</span> <span class="o">=</span> <span class="n">ht</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">used</span> <span class="o">/</span> <span class="n">ht</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="n">load_factor</span> <span class="o">=</span> <span class="n">ht</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">used</span> <span class="o">/</span> <span class="n">ht</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>当 dict 的负载因子过大或过小的时候，Redis 需要为这个 dict 扩展或者收缩哈希表的大小，这个过程叫做 rehash。上文中我们提到每个 dict 都有两个哈希表, <code>ht0</code>和<code>ht1</code>，在这里它们就发挥作用了。rehash 的具体操作如下:</p>
-
+</div><p>当 dict 的负载因子过大或过小的时候，Redis 需要为这个 dict 扩展或者收缩哈希表的大小，这个过程叫做 rehash。上文中我们提到每个 dict 都有两个哈希表, <code>ht0</code>和<code>ht1</code>，在这里它们就发挥作用了。rehash 的具体操作如下:</p>
 <ol>
-<li>设置<code>ht1</code>的size，扩展过程中size为大于<code>ht0.size</code>的最小2次幂，收缩过程中size为大于<code>ht0.used</code>的最小2次幂</li>
-<li>将 dict.rehashidx 设置为0</li>
-
-<li><p>在增删改查的过程中，检查 dict.rehashidx 是否不等于 -1，如果是，那么就执行<code>_dictRehashStep</code>操作，<code>_dictRehashStep</code>的操作如下:</p>
-
+<li>
+<p>设置<code>ht1</code>的size，扩展过程中size为大于<code>ht0.size</code>的最小2次幂，收缩过程中size为大于<code>ht0.used</code>的最小2次幂</p>
+</li>
+<li>
+<p>将 dict.rehashidx 设置为0</p>
+</li>
+<li>
+<p>在增删改查的过程中，检查 dict.rehashidx 是否不等于 -1，如果是，那么就执行<code>_dictRehashStep</code>操作，<code>_dictRehashStep</code>的操作如下:</p>
 <ul>
 <li>如果当前字典上的没有安全迭代器，执行<code>dictRehash</code>操作</li>
 <li><code>dictRehash</code>操作就是从<code>ht0</code>中取出值，重新计算哈希值，然后放到<code>ht1</code>中，并将<code>ht0.used</code>减少。将<code>dict.rehashidx</code>的索引加1。由于在这个过程中重新计算了 key 的哈希值，所以这个过程称为 <strong>rehash</strong></li>
 <li>如果<code>ht0</code>中的所有元素都复制到了<code>ht1</code>中后，Redis 会交换<code>ht1</code>和<code>ht0</code>的地址，然后将<code>ht1</code>置为空表(即存在dictht这个结构体变量，但是里面的dictEntry指针为空，没有任何哈希表项)，同时将<code>dict.rehashidx</code>置为 -1。</li>
 <li>同时<code>dictRehash</code>还有一个限制，每次 rehash 的时候存在一个 <code>empty_visits</code> 限制(empty_visits = 10 * n，n是本次<code>dictRehash</code>操作要 rehash 哈希表项的数量)。如果访问到的空的哈希表项的次数超过了<code>empty_visits</code>，本次 rehash 操作就结束了。</li>
-</ul></li>
+</ul>
+</li>
 </ol>
-
 <ul>
-<li><p>由于 rehash 操作不是一次性做完的，而是在字典的操作中一点一点做的，所以这个过程称作<strong>渐进式rehash</strong></p></li>
-
-<li><p>因为在字典的增删改查操作中执行了 rehash 操作，所以这些操作的行为也会受到影响</p>
-
+<li>
+<p>由于 rehash 操作不是一次性做完的，而是在字典的操作中一点一点做的，所以这个过程称作__渐进式rehash__</p>
+</li>
+<li>
+<p>因为在字典的增删改查操作中执行了 rehash 操作，所以这些操作的行为也会受到影响</p>
 <ul>
 <li>在<code>dictAdd</code>操作中，如果当前字典正在进行 rehash，那么新加的值都会加入到<code>ht1</code>中，这样保证<code>ht0</code>只会减少，不会增加，最终<code>ht0</code>会变成空表</li>
 <li>在<code>dictFind</code>操作中，会在<code>ht0</code>和<code>ht1</code>两个哈希表中查询对应的键</li>
 <li>在<code>dictDelete</code>操作中也回在<code>ht0</code>和<code>ht1</code>中查找对应的键</li>
 <li><code>dictReplace</code>操作调用的是<code>dictFind</code>方法查找对应的键</li>
-</ul></li>
-
-<li><p>在执行 BGSAVE 和 BGREWRITEAOF 命令时，Redis 会提高字典的负载因子。因为在调用这两个命令时，Redis 会为当前进程产生子进程，而很多操作系统采用了写时复制的策略，如果不执行 rehash 操作，会避免不必要的内存写入操作，从而节省一些内存。</p></li>
 </ul>
-
+</li>
+<li>
+<p>在执行 BGSAVE 和 BGREWRITEAOF 命令时，Redis 会提高字典的负载因子。因为在调用这两个命令时，Redis 会为当前进程产生子进程，而很多操作系统采用了写时复制的策略，如果不执行 rehash 操作，会避免不必要的内存写入操作，从而节省一些内存。</p>
+</li>
+</ul>
 <h2 id="字典迭代器和-rehash-的关系">字典迭代器和 rehash 的关系</h2>
-
 <p>在渐进式 rehash 一小节中我们提到，当字典的安全迭代器的数量为0的时候，才会执行 rehash 操作，这是为什么呢？</p>
-
 <p>首先我们可以分析一下字典迭代器的迭代操作，它可以用如下的伪代码来表示:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -440,15 +415,12 @@ idx = hash &amp; d-&gt;ht[table].sizemask</pre></td></tr></table>
 
         <span class="c1"># 处理当前哈希表项的单链表上所有的节点</span>
         <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">table</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span>
-            <span class="n">do_some_thing_with</span><span class="p">(</span><span class="n">node</span><span class="p">)</span></code></pre></td></tr></table>
+            <span class="n">do_some_thing_with</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>假设我们在一个正在进行 rehash 操作的字典上创立了一个安全迭代器，首先执行了<code>dictNext()</code>，获取了<code>ht0</code>中的一个哈希表项<code>he1</code>。接着执行<code>dictAdd()</code>，添加了一个哈希表项。如果<code>dictAdd()</code>函数能够执行 rehash 的话，<code>he1</code>哈希表项可能被从<code>ht0</code>复制到了<code>ht1</code>，从而导致安全迭代器获取了哈希表项<code>he1</code>两次</p>
-
+</div><p>假设我们在一个正在进行 rehash 操作的字典上创立了一个安全迭代器，首先执行了<code>dictNext()</code>，获取了<code>ht0</code>中的一个哈希表项<code>he1</code>。接着执行<code>dictAdd()</code>，添加了一个哈希表项。如果<code>dictAdd()</code>函数能够执行 rehash 的话，<code>he1</code>哈希表项可能被从<code>ht0</code>复制到了<code>ht1</code>，从而导致安全迭代器获取了哈希表项<code>he1</code>两次</p>
 <p>所以当字典中存在安全迭代器的时候，是不能进行 rehash 操作的。</p>
-
 <p>而对于非安全迭代器，Redis 规定在非安全迭代器的生命周期内只能执行<code>dictNext()</code>操作，不能执行其他操作，从而避免了 rehash 操作。</p>
-
 <p>同时 Redis 在创建非安全迭代器的时候会获取 dict 的指纹，在释放非安全迭代器的时候重新获取指纹，检查两次指纹是否相同。如果不同，证明 dict 被修改过，Redis 就会抛出异常。</p>
     </div>
 
@@ -547,7 +519,10 @@ idx = hash &amp; d-&gt;ht[table].sizemask</pre></td></tr></table>
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

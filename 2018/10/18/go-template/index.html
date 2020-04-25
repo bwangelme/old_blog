@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2018/10/18/go-template/" />
@@ -35,7 +35,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -43,21 +44,17 @@
 <meta property="og:description" content="关于 Go 模板的笔记" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2018/10/18/go-template/" />
-<meta property="article:published_time" content="2018-10-18T23:24:24&#43;08:00"/>
-<meta property="article:modified_time" content="2018-10-18T23:24:24&#43;08:00"/>
-
+<meta property="article:published_time" content="2018-10-18T23:24:24+08:00" />
+<meta property="article:modified_time" content="2018-10-18T23:24:24+08:00" />
 <meta itemprop="name" content="Go 模板">
 <meta itemprop="description" content="关于 Go 模板的笔记">
-
-
 <meta itemprop="datePublished" content="2018-10-18T23:24:24&#43;08:00" />
 <meta itemprop="dateModified" content="2018-10-18T23:24:24&#43;08:00" />
 <meta itemprop="wordCount" content="1215">
 
 
 
-<meta itemprop="keywords" content="Template,Go," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Template,Go," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go 模板"/>
 <meta name="twitter:description" content="关于 Go 模板的笔记"/>
 
@@ -141,56 +138,53 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#字段操作">字段操作</a></li>
-<li><a href="#输出嵌套内容">输出嵌套内容</a></li>
-<li><a href="#pipelines">pipelines</a></li>
-<li><a href="#自定义函数">自定义函数</a></li>
-<li><a href="#must">Must</a></li>
-<li><a href="#模板嵌套">模板嵌套</a></li>
-<li><a href="#参考链接">参考链接</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#字段操作">字段操作</a></li>
+        <li><a href="#输出嵌套内容">输出嵌套内容</a></li>
+        <li><a href="#pipelines">pipelines</a></li>
+        <li><a href="#自定义函数">自定义函数</a></li>
+        <li><a href="#must">Must</a></li>
+        <li><a href="#模板嵌套">模板嵌套</a></li>
+        <li><a href="#参考链接">参考链接</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p>关于 Go 模板的笔记</p>
-
 <h2 id="字段操作">字段操作</h2>
-
 <p>Go 语言的模板通过<code>{{}}</code>来插入变量，<code>{{.}}</code>表示当前对象，类似于 C++ 中的 this 或者 Python 中的 self。<code>{{ .FieldName }}</code>用来获取当前对象中的字段<code>FieldName</code>，需要注意的是字段名必须是<code>exported</code>的(即变量的首字母必须是大写)。</p>
-
 <p>如果字段名不是<code>exported</code>的，那么就会有如下错误:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">template</span><span class="p">:</span> <span class="nx">header</span><span class="p">.</span><span class="nx">html</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span> <span class="nx">executing</span> <span class="s">&#34;header.html&#34;</span> <span class="nx">at</span> <span class="p">&lt;.</span><span class="nx">title</span><span class="p">&gt;:</span> <span class="nx">title</span> <span class="nx">is</span> <span class="nx">an</span> <span class="nx">unexported</span> <span class="nx">field</span> <span class="nx">of</span> <span class="kd">struct</span> <span class="kd">type</span> <span class="kd">struct</span> <span class="p">{</span> <span class="nx">Env</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">;</span> <span class="nx">title</span> <span class="kt">string</span> <span class="p">}</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">template</span><span class="p">:</span> <span class="nx">header</span><span class="p">.</span><span class="nx">html</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span> <span class="nx">executing</span> <span class="s">&#34;header.html&#34;</span> <span class="nx">at</span> <span class="p">&lt;.</span><span class="nx">title</span><span class="p">&gt;:</span> <span class="nx">title</span> <span class="nx">is</span> <span class="nx">an</span> <span class="nx">unexported</span> <span class="nx">field</span> <span class="nx">of</span> <span class="kd">struct</span> <span class="kd">type</span> <span class="kd">struct</span> <span class="p">{</span> <span class="nx">Env</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">;</span> <span class="nx">title</span> <span class="kt">string</span> <span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>可以用下面这种形式输出字符串变量<code>string</code></li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="p">{{</span> <span class="s">`string`</span> <span class="p">}}</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="p">{{</span> <span class="s">`string`</span> <span class="p">}}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="输出嵌套内容">输出嵌套内容</h2>
-
+</div><h2 id="输出嵌套内容">输出嵌套内容</h2>
 <p><code>with</code>操作可以更改当前<code>{{ . }}</code>所指向的对象。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -219,20 +213,18 @@
             <span class="s">&#34;Lover&#34;</span><span class="p">:</span> <span class="s">&#34;xff&#34;</span><span class="p">,</span>
         <span class="p">},</span>
     <span class="p">})</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="pipelines">pipelines</h2>
-
+</div><h2 id="pipelines">pipelines</h2>
 <ul>
 <li>在 Go 语言模板中，任何<code>{{}}</code>里面的内容都是pipelines数据</li>
 <li>pipelines数据之间可以通过<code>|</code>联系起来，例如: <code>{{ &quot;&lt;output&gt;&quot; | html }}</code></li>
 </ul>
-
 <h2 id="自定义函数">自定义函数</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -383,19 +375,17 @@
         <span class="nx">Emails</span><span class="p">:</span>  <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;astaxie@beego.me&#34;</span><span class="p">,</span> <span class="s">&#34;astaxie@gmail.com&#34;</span><span class="p">},</span>
         <span class="nx">Friends</span><span class="p">:</span> <span class="p">[]</span><span class="o">*</span><span class="nx">Friend</span><span class="p">{</span><span class="o">&amp;</span><span class="nx">f1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">f2</span><span class="p">}}</span>
     <span class="nx">t</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="nx">p</span><span class="p">)</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>Go 模板包中还提供了许多自定义函数，<a href="https://golang.org/pkg/text/template/#hdr-Functions">相关文档</a></li>
 </ul>
-
 <h2 id="must">Must</h2>
-
 <p><code>Must</code>是一个 helper 函数，用来检查模板编译是否正确，如果不正确就会panic。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -406,13 +396,13 @@
 	<span class="nx">tErr</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;terr&#34;</span><span class="p">)</span>
 	<span class="nx">template</span><span class="p">.</span><span class="nf">Must</span><span class="p">(</span><span class="nx">tErr</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="s">`some error </span><span class="cp">{{</span><span class="nx">text</span><span class="err">}</span><span class="s">`</span><span class="p">))</span>
 <span class="p">}</span>
-<span class="o">//</span> <span class="nx">panic</span><span class="p">:</span> <span class="nx">template</span><span class="p">:</span> <span class="nx">terr</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span> <span class="nx">function</span> <span class="s">&#34;text&#34;</span> <span class="nx">not</span> <span class="nx">defined</span></code></pre></td></tr></table>
+<span class="c1">// panic: template: terr:1: function &#34;text&#34; not defined
+</span></code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="模板嵌套">模板嵌套</h2>
+</div><h2 id="模板嵌套">模板嵌套</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-html" data-lang="html"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -463,11 +453,12 @@
     <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>{{ $key }} -- {{ $val }}<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
     {{ end }}
 <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
-{{ end }}</code></pre></td></tr></table>
+{{ end }}
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -530,10 +521,10 @@
 	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
 	<span class="p">}</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li><code>{{ define &quot;blockname&quot; }}...{{ end }}</code>可以定义一个 block</li>
 <li><code>{{ template &quot;blockname&quot; }}</code> 将会调用一个 block</li>
 <li><code>t.Execute</code>传递的对象并不会直接传递给 block，需要<code>{{ block &quot;body&quot; . }}</code>这样显示传递</li>
@@ -543,7 +534,7 @@
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -604,16 +595,18 @@
     <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
         <span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
     <span class="p">}</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="参考链接">参考链接</h2>
-
+</div><h2 id="参考链接">参考链接</h2>
 <ul>
-<li><p><a href="https://colobu.com/2016/10/09/Go-embedded-template-best-practices/">Go 模板嵌套最佳实践
-</a></p></li>
-
-<li><p><a href="https://github.com/astaxie/build-web-application-with-golang/blob/master/zh/07.4.md#must%E6%93%8D%E4%BD%9C">build-web-application-with-golang 07.4</a></p></li>
+<li>
+<p><a href="https://colobu.com/2016/10/09/Go-embedded-template-best-practices/">Go 模板嵌套最佳实践
+</a></p>
+</li>
+<li>
+<p><a href="https://github.com/astaxie/build-web-application-with-golang/blob/master/zh/07.4.md#must%E6%93%8D%E4%BD%9C">build-web-application-with-golang 07.4</a></p>
+</li>
 </ul>
     </div>
 
@@ -712,7 +705,10 @@
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

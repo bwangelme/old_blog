@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2020/04/14/leetcode-343/" />
@@ -34,7 +34,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -46,25 +47,21 @@ LeetCode 343题
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2020/04/14/leetcode-343/" />
-<meta property="article:published_time" content="2020-04-14T23:43:14&#43;08:00"/>
-<meta property="article:modified_time" content="2020-04-14T23:43:14&#43;08:00"/>
-
+<meta property="article:published_time" content="2020-04-14T23:43:14+08:00" />
+<meta property="article:modified_time" content="2020-04-14T23:43:14+08:00" />
 <meta itemprop="name" content="Leetcode 第343题">
 <meta itemprop="description" content="
 
 LeetCode 343题
 
 ">
-
-
 <meta itemprop="datePublished" content="2020-04-14T23:43:14&#43;08:00" />
 <meta itemprop="dateModified" content="2020-04-14T23:43:14&#43;08:00" />
-<meta itemprop="wordCount" content="446">
+<meta itemprop="wordCount" content="450">
 
 
 
-<meta itemprop="keywords" content="ARTS,LeetCode," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="ARTS,LeetCode," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Leetcode 第343题"/>
 <meta name="twitter:description" content="
 
@@ -152,16 +149,17 @@ LeetCode 343题
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#题目描述">题目描述</a></li>
-<li><a href="#解题思路">解题思路</a></li>
-<li><a href="#代码">代码</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#题目描述">题目描述</a></li>
+        <li><a href="#解题思路">解题思路</a></li>
+        <li><a href="#代码">代码</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
@@ -171,32 +169,23 @@ LeetCode 343题
 <li><a href="https://leetcode.com/problems/integer-break/">LeetCode 343题</a></li>
 </ul>
 </blockquote>
-
-<hr />
-
+<hr>
 <h2 id="题目描述">题目描述</h2>
-
 <p><a href="https://leetcode.com/problems/integer-break/">https://leetcode.com/problems/integer-break/</a></p>
-
 <p><strong>注意:</strong></p>
-
 <ol>
-<li>给定的整数和被分解的整数都是正数，整数应该被分解成<strong>至少</strong>两个整数。</li>
+<li>给定的整数和被分解的整数都是正数，整数应该被分解成__至少__两个整数。</li>
 <li>输入的 n 应该不小于 2，不大于 58</li>
 </ol>
-
 <p><strong>相关主题:</strong></p>
-
 <ul>
 <li>动态规划</li>
 </ul>
-
 <h2 id="解题思路">解题思路</h2>
-
 <p>令求分解整数最大积的函数为 P，初始情况 <code>P(2) = 1</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -215,17 +204,15 @@ LeetCode 343题
     <span class="o">...</span>
     <span class="c1"># 注意 P(1) 是不存在的，为了方便运算，我们将其设置为 1</span>
     <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="p">,</span>
-<span class="p">])</span></code></pre></td></tr></table>
+<span class="p">])</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>从上面的公式可以看出，求出 <code>P(1) ~ P(N-1)</code> 后，才能求 <code>P(N)</code></p>
-
+</div><p>从上面的公式可以看出，求出 <code>P(1) ~ P(N-1)</code> 后，才能求 <code>P(N)</code></p>
 <p>这是<code>P(N)</code>的递归公式，如果用递归实现的话，会存在大量的重复计算，所以我们使用动态规划的方式来解这个题目。</p>
-
 <p>令记录中间结果的表格为<code>dp</code>，<code>dp[n] = P(N)</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -254,13 +241,11 @@ LeetCode 343题
         <span class="c1"># dp[i] 表示上一次(j+1)求出的最大值</span>
         <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
     <span class="p">])</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>整个程序的思路就是，对于输入的正整数N，求出 <code>dp[3] ~ dp[N]</code> 的所有值，然后返回 <code>dp[N]</code> 即可</p>
-
+</div><p>整个程序的思路就是，对于输入的正整数N，求出 <code>dp[3] ~ dp[N]</code> 的所有值，然后返回 <code>dp[N]</code> 即可</p>
 <h2 id="代码">代码</h2>
-
 <p><a href="https://github.com/bwangelme/LeetCode-Go/tree/master/l343">https://github.com/bwangelme/LeetCode-Go/tree/master/l343</a></p>
     </div>
 
@@ -355,7 +340,10 @@ LeetCode 343题
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

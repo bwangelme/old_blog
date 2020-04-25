@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2016/04/10/mysql%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" />
@@ -36,40 +36,34 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
 <meta property="og:title" content="MySQL存储过程" />
 <meta property="og:description" content="摘要:
 
-
 这是一篇关于MySQL的文章，主要介绍 MySQL 存储过程
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2016/04/10/mysql%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" />
-<meta property="article:published_time" content="2016-04-10T10:56:54&#43;00:00"/>
-<meta property="article:modified_time" content="2016-04-10T10:56:54&#43;00:00"/>
-
+<meta property="article:published_time" content="2016-04-10T10:56:54+00:00" />
+<meta property="article:modified_time" content="2016-04-10T10:56:54+00:00" />
 <meta itemprop="name" content="MySQL存储过程">
 <meta itemprop="description" content="摘要:
 
-
 这是一篇关于MySQL的文章，主要介绍 MySQL 存储过程
 ">
-
-
 <meta itemprop="datePublished" content="2016-04-10T10:56:54&#43;00:00" />
 <meta itemprop="dateModified" content="2016-04-10T10:56:54&#43;00:00" />
-<meta itemprop="wordCount" content="1136">
+<meta itemprop="wordCount" content="1137">
 
 
 
-<meta itemprop="keywords" content="MySQL," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySQL存储过程"/>
 <meta name="twitter:description" content="摘要:
-
 
 这是一篇关于MySQL的文章，主要介绍 MySQL 存储过程
 "/>
@@ -154,49 +148,46 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li><a href="#mysql存储过程">MySQL存储过程</a>
-<ul>
-<li><a href="#1-存储过程简介">1. 存储过程简介</a></li>
-<li><a href="#2-创建储存过程">2. 创建储存过程</a></li>
-<li><a href="#3-查看存储过程">3. 查看存储过程</a></li>
-<li><a href="#4-删除存储过程">4. 删除存储过程</a></li>
-<li><a href="#5-流程控制">5. 流程控制</a>
-<ul>
-<li><a href="#5-1-循环">5.1 循环</a></li>
-</ul></li>
-<li><a href="#6-输入输出类型">6. 输入输出类型</a>
-<ul>
-<li><a href="#6-1-参数类型">6.1 参数类型</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#mysql存储过程">MySQL存储过程</a>
+      <ul>
+        <li><a href="#1-存储过程简介">1. 存储过程简介</a></li>
+        <li><a href="#2-创建储存过程">2. 创建储存过程</a></li>
+        <li><a href="#3-查看存储过程">3. 查看存储过程</a></li>
+        <li><a href="#4-删除存储过程">4. 删除存储过程</a></li>
+        <li><a href="#5-流程控制">5. 流程控制</a>
+          <ul>
+            <li><a href="#51-循环">5.1 循环</a></li>
+          </ul>
+        </li>
+        <li><a href="#6-输入输出类型">6. 输入输出类型</a>
+          <ul>
+            <li><a href="#61-参数类型">6.1 参数类型</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p><strong>摘要</strong>:</p>
-
 <blockquote>
 <p>这是一篇关于MySQL的文章，主要介绍 MySQL 存储过程</p>
 </blockquote>
-
 <h1 id="mysql存储过程">MySQL存储过程</h1>
-
 <h2 id="1-存储过程简介">1. 存储过程简介</h2>
-
 <p>代码的封装，具有自己的变量和控制语句</p>
-
 <h2 id="2-创建储存过程">2. 创建储存过程</h2>
-
 <ul>
 <li>基本语法</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -223,65 +214,62 @@
 </span><span class="c1"></span>  <span class="k">delimiter</span> <span class="p">;</span>
 
   <span class="c1">-- 调用
-</span><span class="c1"></span>  <span class="k">call</span> <span class="n">sp_name</span><span class="p">()</span></code></pre></td></tr></table>
+</span><span class="c1"></span>  <span class="k">call</span> <span class="n">sp_name</span><span class="p">()</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="3-查看存储过程">3. 查看存储过程</h2>
-
+</div><h2 id="3-查看存储过程">3. 查看存储过程</h2>
 <ul>
 <li>通过<code>show</code>语句</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span> <span class="k">procedure</span> <span class="n">status</span><span class="err">\</span><span class="k">G</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span> <span class="k">procedure</span> <span class="n">status</span><span class="err">\</span><span class="k">G</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>通过查看系统表</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">desc</span> <span class="n">information_shcema</span><span class="p">.</span><span class="n">routines</span><span class="p">;</span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">information_shcema</span><span class="p">.</span><span class="n">routines</span><span class="err">\</span><span class="k">G</span></code></pre></td></tr></table>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">information_shcema</span><span class="p">.</span><span class="n">routines</span><span class="err">\</span><span class="k">G</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>查看详细状态</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span> <span class="k">create</span> <span class="n">procedure_user</span> <span class="n">procedure_name</span><span class="err">\</span><span class="k">G</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span> <span class="k">create</span> <span class="n">procedure_user</span> <span class="n">procedure_name</span><span class="err">\</span><span class="k">G</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="4-删除存储过程">4. 删除存储过程</h2>
+</div><h2 id="4-删除存储过程">4. 删除存储过程</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">drop</span> <span class="k">procedure</span> <span class="k">if</span> <span class="k">exists</span> <span class="n">database_name</span><span class="p">.</span><span class="n">procedure_name</span><span class="p">;</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">drop</span> <span class="k">procedure</span> <span class="k">if</span> <span class="k">exists</span> <span class="n">database_name</span><span class="p">.</span><span class="n">procedure_name</span><span class="p">;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="5-流程控制">5. 流程控制</h2>
-
-<h3 id="5-1-循环">5.1 循环</h3>
-
+</div><h2 id="5-流程控制">5. 流程控制</h2>
+<h3 id="51-循环">5.1 循环</h3>
 <ul>
 <li>while</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -306,15 +294,15 @@
     <span class="o">-&gt;</span>  <span class="k">set</span> <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
     <span class="o">-&gt;</span> <span class="k">end</span> <span class="n">while</span><span class="p">;</span>
     <span class="o">-&gt;</span> <span class="k">end</span><span class="err">$$</span>
-<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delimiter</span> <span class="p">;</span></code></pre></td></tr></table>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delimiter</span> <span class="p">;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>repeat</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -341,15 +329,15 @@
     <span class="o">-&gt;</span> <span class="k">end</span> <span class="n">repeat</span><span class="p">;</span>
     <span class="o">-&gt;</span> <span class="k">end</span><span class="err">$$</span>
 <span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
-<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delimiter</span> <span class="p">;</span></code></pre></td></tr></table>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delimiter</span> <span class="p">;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>loop</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -374,21 +362,18 @@
     <span class="o">-&gt;</span>   <span class="n">leave</span> <span class="n">xff</span><span class="p">;</span>
     <span class="o">-&gt;</span>  <span class="k">end</span> <span class="k">if</span><span class="p">;</span>
     <span class="o">-&gt;</span> <span class="k">end</span> <span class="n">loop</span><span class="p">;</span>
-    <span class="o">-&gt;</span> <span class="k">end</span><span class="err">$$</span></code></pre></td></tr></table>
+    <span class="o">-&gt;</span> <span class="k">end</span><span class="err">$$</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="6-输入输出类型">6. 输入输出类型</h2>
-
-<h3 id="6-1-参数类型">6.1 参数类型</h3>
-
+</div><h2 id="6-输入输出类型">6. 输入输出类型</h2>
+<h3 id="61-参数类型">6.1 参数类型</h3>
 <ul>
 <li>in</li>
 </ul>
-
 <p>这种类型的参数只在存储过程内部起作用</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -439,6 +424,7 @@
 </span><span class="lnt">49
 </span><span class="lnt">50
 </span><span class="lnt">51
+</span><span class="lnt">52
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">delimiter</span> <span class="err">$$</span>
@@ -491,17 +477,17 @@
 <span class="o">+</span><span class="c1">------+
 </span><span class="c1"></span><span class="o">|</span>   <span class="mi">20</span> <span class="o">|</span>
 <span class="o">+</span><span class="c1">------+
-</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></td></tr></table>
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>out</li>
 </ul>
-
 <p>需要传入一个变量，存储过程会改变这个变量，变量的值是无法传入的</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -592,15 +578,15 @@
 <span class="o">+</span><span class="c1">------+
 </span><span class="c1"></span><span class="o">|</span>  <span class="mi">100</span> <span class="o">|</span>
 <span class="o">+</span><span class="c1">------+
-</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></td></tr></table>
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>in out</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -699,7 +685,8 @@
 <span class="o">+</span><span class="c1">------+
 </span><span class="c1"></span><span class="o">|</span>  <span class="mi">101</span> <span class="o">|</span>
 <span class="o">+</span><span class="c1">------+
-</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span></code></pre></td></tr></table>
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -798,7 +785,10 @@
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

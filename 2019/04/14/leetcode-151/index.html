@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2019/04/14/leetcode-151/" />
@@ -34,7 +34,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -46,25 +47,21 @@ LeetCode 151题
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2019/04/14/leetcode-151/" />
-<meta property="article:published_time" content="2019-04-14T20:44:04&#43;08:00"/>
-<meta property="article:modified_time" content="2019-04-14T20:44:04&#43;08:00"/>
-
+<meta property="article:published_time" content="2019-04-14T20:44:04+08:00" />
+<meta property="article:modified_time" content="2019-04-14T20:44:04+08:00" />
 <meta itemprop="name" content="Leetcode 第151题">
 <meta itemprop="description" content="
 
 LeetCode 151题
 
 ">
-
-
 <meta itemprop="datePublished" content="2019-04-14T20:44:04&#43;08:00" />
 <meta itemprop="dateModified" content="2019-04-14T20:44:04&#43;08:00" />
-<meta itemprop="wordCount" content="512">
+<meta itemprop="wordCount" content="516">
 
 
 
-<meta itemprop="keywords" content="ARTS,LeetCode," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="ARTS,LeetCode," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Leetcode 第151题"/>
 <meta name="twitter:description" content="
 
@@ -152,16 +149,17 @@ LeetCode 151题
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#题目描述">题目描述</a></li>
-<li><a href="#解题思路">解题思路</a></li>
-<li><a href="#代码">代码</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#题目描述">题目描述</a></li>
+        <li><a href="#解题思路">解题思路</a></li>
+        <li><a href="#代码">代码</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
@@ -171,91 +169,79 @@ LeetCode 151题
 <li><a href="https://leetcode.com/problems/reverse-words-in-a-string/">LeetCode 151题</a></li>
 </ul>
 </blockquote>
-
 <h2 id="题目描述">题目描述</h2>
-
 <p>Given an input string, reverse the string word by word.</p>
-
 <ul>
 <li>Example 1:</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">Input: &#34;the sky is blue&#34;
-Output: &#34;blue is sky the&#34;</pre></td></tr></table>
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">Input: &#34;the sky is blue&#34;
+Output: &#34;blue is sky the&#34;
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>Example 2:</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">Input: &#34;  hello world!  &#34;
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">Input: &#34;  hello world!  &#34;
 Output: &#34;world! hello&#34;
-Explanation: Your reversed string should not contain leading or trailing spaces.</pre></td></tr></table>
+Explanation: Your reversed string should not contain leading or trailing spaces.
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>Example 3:</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">Input: &#34;a good   example&#34;
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">Input: &#34;a good   example&#34;
 Output: &#34;example good a&#34;
-Explanation: You need to reduce multiple spaces between two words to a single space in the reversed string.</pre></td></tr></table>
+Explanation: You need to reduce multiple spaces between two words to a single space in the reversed string.
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>Note:</li>
 </ul>
-
 <p>A word is defined as a sequence of non-space characters.
 Input string may contain leading or trailing spaces. However, your reversed string should not contain leading or trailing spaces.
 You need to reduce multiple spaces between two words to a single space in the reversed string.</p>
-
 <ul>
 <li>Follow up:</li>
 </ul>
-
 <p>For C programmers, try to solve it in-place in O(1) extra space.</p>
-
 <h2 id="解题思路">解题思路</h2>
-
 <ul>
-<li>将整个字符串从后向前遍历，将遍历到的<strong>非空格</strong>内容输出到一个临时变量中<code>word</code>。</li>
+<li>将整个字符串从后向前遍历，将遍历到的__非空格__内容输出到一个临时变量中<code>word</code>。</li>
 <li>如果遍历到空格，将<code>word</code>中的内容加上空格后一起输出，同时将<code>word</code>清空。</li>
 <li>遍历完整个字符串后，所有的单词也就被输出了。</li>
 </ul>
-
 <p><strong>注意:</strong></p>
-
 <ul>
 <li>最后要将结果结尾多余的空格切掉</li>
 <li>需要手动处理<code>&quot;&quot;</code>的输入</li>
 </ul>
-
 <h2 id="代码">代码</h2>
-
 <ul>
 <li>solution.go</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -342,15 +328,15 @@ You need to reduce multiple spaces between two words to a single space in the re
 
 	<span class="k">return</span> <span class="nx">result</span>
 
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>solution_test.go</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -381,7 +367,8 @@ You need to reduce multiple spaces between two words to a single space in the re
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">reverseWords</span><span class="p">(</span><span class="s">&#34; &#34;</span><span class="p">),</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">reverseWords</span><span class="p">(</span><span class="s">&#34;the sky is blue&#34;</span><span class="p">),</span> <span class="s">&#34;blue is sky the&#34;</span><span class="p">)</span>
 	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">reverseWords</span><span class="p">(</span><span class="s">&#34;  hello world!  &#34;</span><span class="p">),</span> <span class="s">&#34;world! hello&#34;</span><span class="p">)</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -481,7 +468,10 @@ You need to reduce multiple spaces between two words to a single space in the re
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

@@ -17,14 +17,14 @@
 
 
 <meta name="author" content="bwangel" /><meta name="description" content=" 摘要:
- 本文章的目标是逐步总结Python中collection模块的用法，会不定期进行更新。 目前总结了Counter类的用法  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+   本文章的目标是逐步总结Python中collection模块的用法，会不定期进行更新。 目前总结了Counter类的用法  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2017/08/13/python-collections/" />
@@ -35,7 +35,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -44,37 +45,36 @@
 摘要:
 
 
+
 本文章的目标是逐步总结Python中collection模块的用法，会不定期进行更新。
 目前总结了Counter类的用法
 
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2017/08/13/python-collections/" />
-<meta property="article:published_time" content="2017-08-13T14:06:24&#43;00:00"/>
-<meta property="article:modified_time" content="2017-08-13T14:06:24&#43;00:00"/>
-
+<meta property="article:published_time" content="2017-08-13T14:06:24+00:00" />
+<meta property="article:modified_time" content="2017-08-13T14:06:24+00:00" />
 <meta itemprop="name" content="Python的collections模块小结">
 <meta itemprop="description" content="
 摘要:
+
 
 
 本文章的目标是逐步总结Python中collection模块的用法，会不定期进行更新。
 目前总结了Counter类的用法
 
 ">
-
-
 <meta itemprop="datePublished" content="2017-08-13T14:06:24&#43;00:00" />
 <meta itemprop="dateModified" content="2017-08-13T14:06:24&#43;00:00" />
 <meta itemprop="wordCount" content="1572">
 
 
 
-<meta itemprop="keywords" content="Python,Python标准库," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Python,Python标准库," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python的collections模块小结"/>
 <meta name="twitter:description" content="
 摘要:
+
 
 
 本文章的目标是逐步总结Python中collection模块的用法，会不定期进行更新。
@@ -162,57 +162,47 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#chainmap">ChainMap</a></li>
-<li><a href="#counter">Counter</a>
-<ul>
-<li><a href="#counter的说明">Counter的说明</a></li>
-<li><a href="#counter的常用方法">Counter的常用方法</a>
-<ul>
-<li><a href="#elements">elements()</a></li>
-<li><a href="#most-common-n">most_common([n])</a></li>
-<li><a href="#subtract-iterable-or-mapping">subtract([iterable-or-mapping])</a></li>
-<li><a href="#update-iterable-or-mapping">update([iterable-or-mapping])</a></li>
-</ul></li>
-<li><a href="#counter的其他工作模式">Counter的其他工作模式</a></li>
-<li><a href="#counter上的数学运算">Counter上的数学运算</a></li>
-<li><a href="#注意事项">注意事项</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#chainmap">ChainMap</a></li>
+        <li><a href="#counter">Counter</a>
+          <ul>
+            <li><a href="#counter的说明">Counter的说明</a></li>
+            <li><a href="#counter的常用方法">Counter的常用方法</a></li>
+            <li><a href="#counter的其他工作模式">Counter的其他工作模式</a></li>
+            <li><a href="#counter上的数学运算">Counter上的数学运算</a></li>
+            <li><a href="#注意事项">注意事项</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <blockquote>
 <p><strong>摘要</strong>:</p>
-
+</blockquote>
+<blockquote>
 <ol>
 <li>本文章的目标是逐步总结Python中<a href="http://devdocs.io/python~3.6/library/collections">collection</a>模块的用法，会不定期进行更新。</li>
 <li>目前总结了Counter类的用法</li>
 </ol>
 </blockquote>
-
 <h2 id="chainmap">ChainMap</h2>
-
 <h2 id="counter">Counter</h2>
-
 <h3 id="counter的说明">Counter的说明</h3>
-
 <p><code>Counter</code>是<code>dict</code>的子类，用来统计可哈希的对象。它本身是一个无序集合，使用对象来当做字典的key，对象的次数当做字典的值，它的值可以是0或者负数以内的任何整数。<code>Counter</code>类的功能类似于其他语言中的<code>bags</code>或者<code>multisets</code>类型。</p>
-
 <h3 id="counter的常用方法">Counter的常用方法</h3>
-
 <h4 id="elements">elements()</h4>
-
 <p><code>elements</code>方法用户迭代地展示<code>Counter</code>内的所有元素，按元素的计数重复该元素，如果该元素的计数小于1，那么Counter就会忽略该元素，不进行展示。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -233,15 +223,14 @@
 <span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span> <span class="n">at</span> <span class="mh">0x106063b70</span><span class="o">&gt;</span>
 
 <span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="nb">list</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">elements</span><span class="p">())</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">]</span></code></pre></td></tr></table>
+<span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">]</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h4 id="most-common-n">most_common([n])</h4>
-
+</div><h4 id="most_commonn">most_common([n])</h4>
 <p><code>most_common</code>函数返回<code>Counter</code>中次数最多的N个元素，如果N没有提供或者是<code>None</code>，那么就会返回所有元素。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -254,15 +243,14 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">most_common</span><span class="p">()</span>
 <span class="p">[(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)]</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="p">[(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span></code></pre></td></tr></table>
+<span class="p">[(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h4 id="subtract-iterable-or-mapping">subtract([iterable-or-mapping])</h4>
-
+</div><h4 id="subtractiterable-or-mapping">subtract([iterable-or-mapping])</h4>
 <p><code>substract</code>方法接收一个可迭代或者可映射的对象，针对每个元素减去参数中的元素对应的次数。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -281,15 +269,14 @@
 <span class="c1"># 注意这里减去一个负的次数相当于加上一个正的次数</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">subtract</span><span class="p">({</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">3</span><span class="p">})</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">c</span>
-<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">})</span></code></pre></td></tr></table>
+<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">})</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h4 id="update-iterable-or-mapping">update([iterable-or-mapping])</h4>
-
+</div><h4 id="updateiterable-or-mapping">update([iterable-or-mapping])</h4>
 <p><code>update</code>方法的功能和<code>substract</code>方法的功能正好相反，它接收一个可迭代或者可映射的对象，针对每个元素加上参数中的元素对应的次数。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -300,36 +287,33 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">c</span>
-<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span></code></pre></td></tr></table>
+<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="counter的其他工作模式">Counter的其他工作模式</h3>
-
+</div><h3 id="counter的其他工作模式">Counter的其他工作模式</h3>
 <p>除了上面提到的方法外，<code>Counter</code>类还提供了一些其他的通用模式，让我们可以更方面地进行操作。</p>
-
 <p><strong>说明</strong>：下面代码中全部省略了导入<code>Counter</code>类的过程</p>
-
 <ul>
 <li>统计所有元素的次数之和</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">sum</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-<span class="mi">6</span></code></pre></td></tr></table>
+<span class="mi">6</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>清除所有元素的统计次数</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -340,15 +324,15 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">c</span>
 <span class="n">Counter</span><span class="p">()</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></code></pre></td></tr></table>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>列出所有元素</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -359,15 +343,15 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">list</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
 <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">]</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">set</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>  <span class="c1"># 这里将所有元素以集合的方式来展现</span>
-<span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">}</span></code></pre></td></tr></table>
+<span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>获取Counter中(元素，次数)的元祖</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -384,45 +368,44 @@
 <span class="n">dict_items</span><span class="p">([(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
 <span class="c1"># 将一个(元素，次数)元祖列表转换成Counter</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">Counter</span><span class="p">(</span><span class="nb">dict</span><span class="p">([(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]))</span>
-<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span></code></pre></td></tr></table>
+<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>获取N个次数最少的元素</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">most_common</span><span class="p">()[:</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="p">[(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span></code></pre></td></tr></table>
+<span class="p">[(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>删除掉所有次数小于等于0的元素</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="o">+</span><span class="n">c</span>
-<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span></code></pre></td></tr></table>
+<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="counter上的数学运算">Counter上的数学运算</h3>
-
+</div><h3 id="counter上的数学运算">Counter上的数学运算</h3>
 <p>Counter之间还能进行数学运算，<strong>在数学运算的结果中，次数小于等于0的元素将会被删除掉</strong>。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -445,15 +428,15 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">&amp;</span> <span class="n">f</span>  <span class="c1"># 两个Counter的元素取交集，并且元素的次数取较小的那个</span>
 <span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">|</span> <span class="n">f</span>  <span class="c1"># 两个Counter的元素取并集，并且元素的次数取较大的那个</span>
-<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span></code></pre></td></tr></table>
+<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>单目运算符<code>+</code>或者<code>-</code></li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -464,21 +447,26 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="o">+</span><span class="n">c</span>
 <span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="o">-</span><span class="n">c</span>
-<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">})</span></code></pre></td></tr></table>
+<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">})</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="注意事项">注意事项</h3>
-
+</div><h3 id="注意事项">注意事项</h3>
 <ul>
-<li><p><code>Counter</code>类是字典的子类，它的键和值都没有限制，值一般是一个数字用来表示某个元素出现的次数，但是它可以是任何值</p></li>
-
-<li><p><code>Counter</code>类的<code>most_common</code>方法需要<code>Counter</code>的值是可排序的</p></li>
-
-<li><p>一些便捷操作，比如<code>c[key] += 1</code>仅仅需要值是支持加或者减操作，所以<code>Counter</code>的值支持整型，浮点数，负数等，同样<code>update</code>和<code>subtract</code>方法的输入和输出也支持负数和0。</p></li>
-
-<li><p>集合运算仅仅支持正数，负数和0都会被忽略掉，集合运算理论上对于值没有限制，只要支持加，减，比较操作就可以。</p></li>
-
-<li><p><code>elements()</code>方法需要正数，负数和0将会被忽略掉。</p></li>
+<li>
+<p><code>Counter</code>类是字典的子类，它的键和值都没有限制，值一般是一个数字用来表示某个元素出现的次数，但是它可以是任何值</p>
+</li>
+<li>
+<p><code>Counter</code>类的<code>most_common</code>方法需要<code>Counter</code>的值是可排序的</p>
+</li>
+<li>
+<p>一些便捷操作，比如<code>c[key] += 1</code>仅仅需要值是支持加或者减操作，所以<code>Counter</code>的值支持整型，浮点数，负数等，同样<code>update</code>和<code>subtract</code>方法的输入和输出也支持负数和0。</p>
+</li>
+<li>
+<p>集合运算仅仅支持正数，负数和0都会被忽略掉，集合运算理论上对于值没有限制，只要支持加，减，比较操作就可以。</p>
+</li>
+<li>
+<p><code>elements()</code>方法需要正数，负数和0将会被忽略掉。</p>
+</li>
 </ul>
     </div>
 
@@ -577,7 +565,10 @@
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

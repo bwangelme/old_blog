@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2016/04/10/mysql%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" />
@@ -36,40 +36,34 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
 <meta property="og:title" content="MySQL存储引擎" />
 <meta property="og:description" content="摘要:
 
-
 这是一篇关于MySQL的文章，主要介绍mysql存储引擎
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2016/04/10/mysql%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" />
-<meta property="article:published_time" content="2016-04-10T10:56:54&#43;00:00"/>
-<meta property="article:modified_time" content="2016-04-10T10:56:54&#43;00:00"/>
-
+<meta property="article:published_time" content="2016-04-10T10:56:54+00:00" />
+<meta property="article:modified_time" content="2016-04-10T10:56:54+00:00" />
 <meta itemprop="name" content="MySQL存储引擎">
 <meta itemprop="description" content="摘要:
 
-
 这是一篇关于MySQL的文章，主要介绍mysql存储引擎
 ">
-
-
 <meta itemprop="datePublished" content="2016-04-10T10:56:54&#43;00:00" />
 <meta itemprop="dateModified" content="2016-04-10T10:56:54&#43;00:00" />
 <meta itemprop="wordCount" content="374">
 
 
 
-<meta itemprop="keywords" content="MySQL," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySQL存储引擎"/>
 <meta name="twitter:description" content="摘要:
-
 
 这是一篇关于MySQL的文章，主要介绍mysql存储引擎
 "/>
@@ -154,79 +148,66 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#存储引擎">存储引擎</a></li>
-<li><a href="#选择存储引擎">选择存储引擎</a>
-<ul>
-<li><a href="#myisam-常见">MyISAM (常见)</a></li>
-<li><a href="#innodb-常见">InnoDB (常见)</a></li>
-<li><a href="#memory-常见">Memory (常见)</a></li>
-<li><a href="#ndbcluster">ndbcluster</a></li>
-</ul></li>
-<li><a href="#数据类型">数据类型</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#存储引擎">存储引擎</a></li>
+        <li><a href="#选择存储引擎">选择存储引擎</a>
+          <ul>
+            <li><a href="#myisam-常见">MyISAM (常见)</a></li>
+            <li><a href="#innodb-常见">InnoDB (常见)</a></li>
+            <li><a href="#memory-常见">Memory (常见)</a></li>
+            <li><a href="#ndbcluster">ndbcluster</a></li>
+          </ul>
+        </li>
+        <li><a href="#数据类型">数据类型</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p><strong>摘要</strong>:</p>
-
 <blockquote>
 <p>这是一篇关于MySQL的文章，主要介绍mysql存储引擎</p>
 </blockquote>
-
 <h2 id="存储引擎">存储引擎</h2>
-
 <p>是表的类型，存储数据，简历索引，更新查询数据等技术的实现方法。</p>
-
 <p>MySQL 有多种存储引擎，是插入式存储引擎</p>
-
 <h2 id="选择存储引擎">选择存储引擎</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sql" data-lang="sql"><span class="p">;;</span> <span class="err">查看支持的存储引擎</span>
-<span class="k">show</span> <span class="n">engines</span><span class="err">\</span><span class="k">G</span></code></pre></td></tr></table>
+<span class="k">show</span> <span class="n">engines</span><span class="err">\</span><span class="k">G</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="myisam-常见">MyISAM (常见)</h3>
-
+</div><h3 id="myisam-常见">MyISAM (常见)</h3>
 <p>不支持事务(Transactions)
 不支持保存点(Savepoints)
 不支持外键(Foreign Key)</p>
-
 <p>访问速度快，崩溃修复较差</p>
-
 <h3 id="innodb-常见">InnoDB (常见)</h3>
-
 <p>支持事务(与崩溃修复能力相关)
 支持行级锁粒度
 支持外键</p>
-
 <p>优先选择</p>
-
 <h3 id="memory-常见">Memory (常见)</h3>
-
 <p>将数据放在内存中，只会在磁盘上保存表结构
 支持Hash索引技术</p>
-
 <p>访问速度快，安全没有保障
 使用与临时表和需要快速访问的表</p>
-
 <h3 id="ndbcluster">ndbcluster</h3>
-
 <p>用于集群的存储引擎</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -257,10 +238,10 @@
 <span class="k">default</span><span class="o">-</span><span class="k">storage</span><span class="o">-</span><span class="n">engine</span><span class="o">=</span><span class="n">INNODB</span> <span class="o">#</span><span class="err">修改配置文件中默认搜索引擎</span>
 
 <span class="o">#</span> <span class="err">查看表的信息</span>
-<span class="k">show</span> <span class="k">create</span> <span class="k">table</span> <span class="n">innodb1</span><span class="p">;</span></code></pre></td></tr></table>
+<span class="k">show</span> <span class="k">create</span> <span class="k">table</span> <span class="n">innodb1</span><span class="p">;</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="数据类型">数据类型</h2>
+</div><h2 id="数据类型">数据类型</h2>
     </div>
 
     <div class="post-copyright">
@@ -357,7 +338,10 @@
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

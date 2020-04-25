@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2019/04/28/byte-vs-builder/" />
@@ -35,7 +35,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -44,22 +45,18 @@
 为什么strings.Builder的String()方法比bytes.Buffer的要快？" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2019/04/28/byte-vs-builder/" />
-<meta property="article:published_time" content="2019-04-28T23:48:00&#43;08:00"/>
-<meta property="article:modified_time" content="2019-04-28T23:48:00&#43;08:00"/>
-
+<meta property="article:published_time" content="2019-04-28T23:48:00+08:00" />
+<meta property="article:modified_time" content="2019-04-28T23:48:00+08:00" />
 <meta itemprop="name" content="strings.Builder 转换字符串的时候为什么比 bytes.Buffer 要快">
 <meta itemprop="description" content="strings.Builder和bytes.Buffer底层都是[]byte，
 为什么strings.Builder的String()方法比bytes.Buffer的要快？">
-
-
 <meta itemprop="datePublished" content="2019-04-28T23:48:00&#43;08:00" />
 <meta itemprop="dateModified" content="2019-04-28T23:48:00&#43;08:00" />
 <meta itemprop="wordCount" content="1140">
 
 
 
-<meta itemprop="keywords" content="Go," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Go," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="strings.Builder 转换字符串的时候为什么比 bytes.Buffer 要快"/>
 <meta name="twitter:description" content="strings.Builder和bytes.Buffer底层都是[]byte，
 为什么strings.Builder的String()方法比bytes.Buffer的要快？"/>
@@ -144,74 +141,64 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#unsafe-pointer-的用法">unsafe.Pointer 的用法</a>
-<ul>
-<li><a href="#类型转换模式">类型转换模式</a></li>
-</ul></li>
-<li><a href="#针对-byte-和-string-执行类型转换">针对 []byte 和 string 执行类型转换</a></li>
-<li><a href="#比较-strings-builder-和-bytes-buffer">比较 strings.Builder 和 bytes.Buffer</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#unsafepointer-的用法">unsafe.Pointer 的用法</a>
+          <ul>
+            <li><a href="#类型转换模式">类型转换模式</a></li>
+          </ul>
+        </li>
+        <li><a href="#针对-byte-和-string-执行类型转换">针对 []byte 和 string 执行类型转换</a></li>
+        <li><a href="#比较-stringsbuilder-和-bytesbuffer">比较 strings.Builder 和 bytes.Buffer</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p><code>strings.Builder</code>和<code>bytes.Buffer</code>底层都是<code>[]byte</code>，
 为什么<code>strings.Builder</code>的<code>String()</code>方法比<code>bytes.Buffer</code>的要快？</p>
-
-<hr />
-
-<h2 id="unsafe-pointer-的用法">unsafe.Pointer 的用法</h2>
-
+<hr>
+<h2 id="unsafepointer-的用法">unsafe.Pointer 的用法</h2>
 <p><code>Pointer</code>类型代表了任意一种类型的指针，类型<code>Pointer</code>有四种专属的操作：</p>
-
 <ul>
 <li>任意类型的指针能够被转换成<code>Pointer</code>值</li>
 <li>一个<code>Pointer</code>值能够被转换成任意类型的指针值</li>
 <li>一个<code>uintptr</code>值能够被转换从<code>Pointer</code>值</li>
 <li>一个<code>Pointer</code>值能够被转换成<code>uintptr</code>值</li>
 </ul>
-
 <p>因此<code>Pointer</code>类型允许一个程序绕过类型系统，读，写任意内存。它应该被非常谨慎地使用</p>
-
 <p><code>Pointer</code>通过特定的模式来使用。如果某些代码不以 Go 文档中指定的模式来使用，Go 将无法保证它在现在或者未来是有效的
 下面的每个模式都有非常重要的注意事项。</p>
-
 <p>运行<code>go vet</code>命令可以检测<code>Pointer</code>的用法是否超出 Go 文档中指定的模式，
 但是<code>go vet</code>没有检测到异常并不代表所检测的代码一定是有效的。</p>
-
 <p>下面我们将简单介绍类型转换模式，更多的模式请参考 <a href="https://golang.org/pkg/unsafe/#Pointer">Go Pointer 文档</a></p>
-
 <h3 id="类型转换模式">类型转换模式</h3>
-
 <p>可以通过<code>*T1 =&gt; Pointer =&gt; *T2</code>的方式来完成类型转换。</p>
-
 <p>需要保证<code>T2</code>的内存 &lt;= <code>T1</code>的内存，而且转换以后它们使用的是同一片内存数据。
 这个转换允许将一片内存区中的数据从一种类型变成另外一种类型。
 使用这个转换的一个例子是<code>math.Float64bits</code></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Float64bits</span><span class="p">(</span><span class="nx">f</span> <span class="kt">float64</span><span class="p">)</span> <span class="kt">uint64</span> <span class="p">{</span>
   <span class="k">return</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="kt">uint64</span><span class="p">)(</span><span class="nx">unsafe</span><span class="p">.</span><span class="nf">Pointer</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">f</span><span class="p">))</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="针对-byte-和-string-执行类型转换">针对 []byte 和 string 执行类型转换</h2>
-
+</div><h2 id="针对-byte-和-string-执行类型转换">针对 []byte 和 string 执行类型转换</h2>
 <p>了解了类型转换模式后，我们来看一段 <code>[]byte</code> 转换成 <code>string</code> 的代码:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -268,30 +255,25 @@
 </span><span class="c1"></span>	<span class="c1">//s = HBLLO
 </span><span class="c1"></span>	<span class="c1">//b = [72 66 76 76 79]
 </span><span class="c1"></span>	<span class="c1">//s = WORLD
-</span><span class="c1"></span><span class="p">}</span></code></pre></td></tr></table>
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>可以看到，将<code>b []byte</code>转换成<code>s string</code>后，他们还是用同一片内存空间，
+</div><p>可以看到，将<code>b []byte</code>转换成<code>s string</code>后，他们还是用同一片内存空间，
 所以针对<code>b</code>的改变也会影响到<code>s</code>。
 但是对<code>s</code>重新赋值后，它们所使用的内存空间不同了，所以<code>s</code>改变后，<code>b</code>并不会改变。</p>
-
-<h2 id="比较-strings-builder-和-bytes-buffer">比较 strings.Builder 和 bytes.Buffer</h2>
-
+<h2 id="比较-stringsbuilder-和-bytesbuffer">比较 strings.Builder 和 bytes.Buffer</h2>
 <p><code>strings.Builder</code>和<code>bytes.Buffer</code>底层都是使用<code>[]byte</code>实现的，
 但是<a href="https://gist.github.com/bwangelme/37facf96621fef19e2e70bce7a7b8457">性能测试的结果显示</a>，
 执行<code>String()</code>函数的时候，<code>strings.Builder</code>却比<code>bytes.Buffer</code>快很多。</p>
-
 <p>区别就在于 <code>bytes.Buffer</code> 是重新申请了一块空间，存放生成的<code>string</code>变量，
 而<code>strings.Builder</code>直接将底层的<code>[]byte</code>转换成了<code>string</code>类型返回了回来。</p>
-
 <p>在<code>bytes.Buffer</code>中也说明了，如果想更有效率地(<strong>efficiently</strong>)构建字符串，请使用<code>strings.Builder</code>类型</p>
-
 <ul>
 <li>bytes.Buffer</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -314,15 +296,15 @@
 </span><span class="c1"></span>		<span class="k">return</span> <span class="s">&#34;&lt;nil&gt;&#34;</span>
 	<span class="p">}</span>
 	<span class="k">return</span> <span class="nb">string</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">buf</span><span class="p">[</span><span class="nx">b</span><span class="p">.</span><span class="nx">off</span><span class="p">:])</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>strings.Builder</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -331,7 +313,8 @@
 <pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// String returns the accumulated string.
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">Builder</span><span class="p">)</span> <span class="nf">String</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
 	<span class="k">return</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="kt">string</span><span class="p">)(</span><span class="nx">unsafe</span><span class="p">.</span><span class="nf">Pointer</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">b</span><span class="p">.</span><span class="nx">buf</span><span class="p">))</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -430,7 +413,10 @@
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

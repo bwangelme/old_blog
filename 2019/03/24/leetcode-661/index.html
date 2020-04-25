@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2019/03/24/leetcode-661/" />
@@ -34,7 +34,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -47,9 +48,8 @@ https://leetcode.com/problems/non-decreasing-array/
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2019/03/24/leetcode-661/" />
-<meta property="article:published_time" content="2019-03-24T19:58:39&#43;08:00"/>
-<meta property="article:modified_time" content="2019-03-24T19:58:39&#43;08:00"/>
-
+<meta property="article:published_time" content="2019-03-24T19:58:39+08:00" />
+<meta property="article:modified_time" content="2019-03-24T19:58:39+08:00" />
 <meta itemprop="name" content="Leetcode 661题">
 <meta itemprop="description" content="
 
@@ -57,16 +57,13 @@ LeetCode 661题
 https://leetcode.com/problems/non-decreasing-array/
 
 ">
-
-
 <meta itemprop="datePublished" content="2019-03-24T19:58:39&#43;08:00" />
 <meta itemprop="dateModified" content="2019-03-24T19:58:39&#43;08:00" />
-<meta itemprop="wordCount" content="522">
+<meta itemprop="wordCount" content="526">
 
 
 
-<meta itemprop="keywords" content="ARTS,LeetCode," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="ARTS,LeetCode," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Leetcode 661题"/>
 <meta name="twitter:description" content="
 
@@ -155,16 +152,17 @@ https://leetcode.com/problems/non-decreasing-array/
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#题目">题目</a></li>
-<li><a href="#解题思路">解题思路</a></li>
-<li><a href="#答案">答案</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#题目">题目</a></li>
+        <li><a href="#解题思路">解题思路</a></li>
+        <li><a href="#答案">答案</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
@@ -175,15 +173,12 @@ https://leetcode.com/problems/non-decreasing-array/
 <li><a href="https://leetcode.com/problems/non-decreasing-array/">https://leetcode.com/problems/non-decreasing-array/</a></li>
 </ul>
 </blockquote>
-
 <h2 id="题目">题目</h2>
-
-<p>给定一个数组有N个元素(<code>1 &lt;= N &lt;= 10000</code>)，你的任务是<strong>最多</strong>修改其中的一个元素，将这个数组变成非递减数组。如果可以完成这个任务，函数返回 True，否则返回 False</p>
-
+<p>给定一个数组有N个元素(<code>1 &lt;= N &lt;= 10000</code>)，你的任务是__最多__修改其中的一个元素，将这个数组变成非递减数组。如果可以完成这个任务，函数返回 True，否则返回 False</p>
 <p>非递减数组定义：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -194,44 +189,41 @@ https://leetcode.com/problems/non-decreasing-array/
   <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
       <span class="k">return</span> <span class="bp">False</span>
-  <span class="k">return</span> <span class="bp">True</span></code></pre></td></tr></table>
+  <span class="k">return</span> <span class="bp">True</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<ul>
+</div><ul>
 <li>输入例子1
-
 <ul>
 <li>Input: [4,2,3]</li>
 <li>Output: True</li>
 <li>Explanation: 修改4可以让数组变成非递减数组</li>
-</ul></li>
+</ul>
+</li>
 <li>输入例子2
-
 <ul>
 <li>Input: [4,2,1]</li>
 <li>Output: False</li>
 <li>Explanation: 无法实现修改某个元素让数组变成非递减数组</li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <h2 id="解题思路">解题思路</h2>
-
 <ul>
 <li>遍历整个数组，寻找递减的双数元组</li>
 <li>如果递减双数元组找到了2个及以上，函数返回 False。</li>
 <li>如果递减双数元组找到了0个，返回 True</li>
 <li>如果递减双数元组找到了1个
-
 <ul>
 <li>如果这个元组位于数组的首部或尾部，直接修改其中一个数就可以，返回 True</li>
 <li>如果这个元素位于数组的中间，尝试修改这个元组中的两个数，看能否把这个元组 + 它们前后两个数变成非递减数列</li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <h2 id="答案">答案</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -302,7 +294,8 @@ https://leetcode.com/problems/non-decreasing-array/
 	<span class="p">}</span>
 
 	<span class="k">return</span> <span class="kc">false</span>
-<span class="p">}</span></code></pre></td></tr></table>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -398,7 +391,10 @@ https://leetcode.com/problems/non-decreasing-array/
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

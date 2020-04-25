@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.54.0 with theme even" />
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
 
 
 <link rel="canonical" href="/2016/05/06/npm%E5%B0%8F%E8%AE%B0/" />
@@ -36,40 +36,34 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.6c8ff178.min.css" rel="stylesheet">
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
 <meta property="og:title" content="npm小记" />
 <meta property="og:description" content="摘要:
 
-
 关于npm的小记，记录自己平常学习到的零碎知识点
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2016/05/06/npm%E5%B0%8F%E8%AE%B0/" />
-<meta property="article:published_time" content="2016-05-06T15:10:25&#43;00:00"/>
-<meta property="article:modified_time" content="2016-05-06T15:10:25&#43;00:00"/>
-
+<meta property="article:published_time" content="2016-05-06T15:10:25+00:00" />
+<meta property="article:modified_time" content="2016-05-06T15:10:25+00:00" />
 <meta itemprop="name" content="npm小记">
 <meta itemprop="description" content="摘要:
 
-
 关于npm的小记，记录自己平常学习到的零碎知识点
 ">
-
-
 <meta itemprop="datePublished" content="2016-05-06T15:10:25&#43;00:00" />
 <meta itemprop="dateModified" content="2016-05-06T15:10:25&#43;00:00" />
 <meta itemprop="wordCount" content="710">
 
 
 
-<meta itemprop="keywords" content="Node.js," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="Node.js," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="npm小记"/>
 <meta name="twitter:description" content="摘要:
-
 
 关于npm的小记，记录自己平常学习到的零碎知识点
 "/>
@@ -154,79 +148,89 @@
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#npm-ls">npm ls</a>
-<ul>
-<li><a href="#用法">用法</a></li>
-<li><a href="#说明">说明</a></li>
-</ul></li>
-<li><a href="#npm-registry">npm registry</a></li>
-<li><a href="#npm-缓存">npm 缓存</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#npm-ls">npm ls</a>
+          <ul>
+            <li><a href="#用法">用法</a></li>
+            <li><a href="#说明">说明</a></li>
+          </ul>
+        </li>
+        <li><a href="#npm-registry">npm registry</a></li>
+        <li><a href="#npm-缓存">npm 缓存</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <p><strong>摘要</strong>:</p>
-
 <blockquote>
 <p>关于npm的小记，记录自己平常学习到的零碎知识点</p>
 </blockquote>
-
 <h2 id="npm-ls">npm ls</h2>
-
 <h3 id="用法">用法</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sh" data-lang="sh">    npm ls <span class="o">[[</span>&lt;@scope&gt;<span class="o">]</span>&lt;pkg&gt; ...<span class="o">]</span>
-    别名: list, la, ll</code></pre></td></tr></table>
+    别名: list, la, ll
+</code></pre></td></tr></table>
 </div>
-</div>
-<h3 id="说明">说明</h3>
-
+</div><h3 id="说明">说明</h3>
 <ul>
-<li><p>这条命令将会在stdout中打印出所有已经安装的包和他们的依赖包，以树形目录的形式打印出来。</p></li>
-
-<li><p>位置参数是<code>name@version-range</code>形式的标识符，它将会打印结果，只打印出命名包的路径中所含有的包。</p></li>
-
-<li><p>可以通过加上-g参数来打印全局安装的包。</p></li>
+<li>
+<p>这条命令将会在stdout中打印出所有已经安装的包和他们的依赖包，以树形目录的形式打印出来。</p>
+</li>
+<li>
+<p>位置参数是<code>name@version-range</code>形式的标识符，它将会打印结果，只打印出命名包的路径中所含有的包。</p>
+</li>
+<li>
+<p>可以通过加上-g参数来打印全局安装的包。</p>
+</li>
 </ul>
-
 <h2 id="npm-registry">npm registry</h2>
-
 <ul>
-<li><p>npm模块仓库提供了一个查询服务，叫做registry。例如<a href="https://registry.npmjs.org/">https://registry.npmjs.org/</a></p></li>
-
-<li><p>在网址后面跟上模块名即可以查询相关模块的信息。例如<a href="https://registry.npmjs.org/react">https://registry.npmjs.org/react</a></p></li>
-
-<li><p>在模块名后面还可以跟上版本号，例如<a href="https://registry.npmjs.org/react/v0.14.6">https://registry.npmjs.org/react/v0.14.6</a></p></li>
-
-<li><p>返回的JSON对象里面，有一个dist.tarball属性，是该版本压缩包的地址，将该压缩包解压，即可得到相关模块的源码，npm即通过这种方式来安装模块。</p></li>
+<li>
+<p>npm模块仓库提供了一个查询服务，叫做registry。例如<a href="https://registry.npmjs.org/">https://registry.npmjs.org/</a></p>
+</li>
+<li>
+<p>在网址后面跟上模块名即可以查询相关模块的信息。例如<a href="https://registry.npmjs.org/react">https://registry.npmjs.org/react</a></p>
+</li>
+<li>
+<p>在模块名后面还可以跟上版本号，例如<a href="https://registry.npmjs.org/react/v0.14.6">https://registry.npmjs.org/react/v0.14.6</a></p>
+</li>
+<li>
+<p>返回的JSON对象里面，有一个dist.tarball属性，是该版本压缩包的地址，将该压缩包解压，即可得到相关模块的源码，npm即通过这种方式来安装模块。</p>
+</li>
 </ul>
-
 <h2 id="npm-缓存">npm 缓存</h2>
-
 <ul>
-<li><p>npm的缓存目录在Linux下是$HOME/.npm</p></li>
-
-<li><p>可以通过<code>npm config get cache</code>获取缓存目录</p></li>
-
-<li><p>可以通过<code>npm cache ls</code>查看当前缓存的模块</p></li>
-
-<li><p>可以通过<code>npm cache clean</code>来清除缓存</p></li>
-
-<li><p>在<code>{cache}/{hostname}/{path}/.cache.json</code>文件中，存放了<code>{path}</code>这个模块的版本信息，以及模块最近修改时间和最新一次请求时服务器返回的ETag</p></li>
-
-<li><p>对于一些不关键的操作(例如<code>npm search</code>和<code>npm view</code>)，npm会先查看.cache.json里模块的最近更新时间，跟当前时间的差距，看是不是在可接受的范围内。如果是，就不再向远端服务器请求，而是直接返回.cache.json的数据</p></li>
+<li>
+<p>npm的缓存目录在Linux下是$HOME/.npm</p>
+</li>
+<li>
+<p>可以通过<code>npm config get cache</code>获取缓存目录</p>
+</li>
+<li>
+<p>可以通过<code>npm cache ls</code>查看当前缓存的模块</p>
+</li>
+<li>
+<p>可以通过<code>npm cache clean</code>来清除缓存</p>
+</li>
+<li>
+<p>在<code>{cache}/{hostname}/{path}/.cache.json</code>文件中，存放了<code>{path}</code>这个模块的版本信息，以及模块最近修改时间和最新一次请求时服务器返回的ETag</p>
+</li>
+<li>
+<p>对于一些不关键的操作(例如<code>npm search</code>和<code>npm view</code>)，npm会先查看.cache.json里模块的最近更新时间，跟当前时间的差距，看是不是在可接受的范围内。如果是，就不再向远端服务器请求，而是直接返回.cache.json的数据</p>
+</li>
 </ul>
     </div>
 
@@ -324,7 +328,10 @@
   <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
   <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
-<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
