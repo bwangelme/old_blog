@@ -54,7 +54,7 @@
 ">
 <meta itemprop="datePublished" content="2020-04-22T21:44:44&#43;08:00" />
 <meta itemprop="dateModified" content="2020-04-22T21:44:44&#43;08:00" />
-<meta itemprop="wordCount" content="49">
+<meta itemprop="wordCount" content="767">
 
 
 
@@ -149,7 +149,12 @@
   <ul>
     <li>
       <ul>
-        <li><a href="#介绍服务">介绍服务</a></li>
+        <li><a href="#介绍服务">介绍服务</a>
+          <ul>
+            <li><a href="#通过环境变量发现服务">通过环境变量发现服务</a></li>
+            <li><a href="#通过-dns-发现服务">通过 DNS 发现服务</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
   </ul>
@@ -166,6 +171,243 @@
 <ul>
 <li>kubia-svc.yaml</li>
 </ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Service<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>kubia<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># 会话亲和性，即相同的客户端IP访问同一个 Pod</span><span class="w">
+</span><span class="w">  </span><span class="k">sessionAffinity</span><span class="p">:</span><span class="w"> </span>ClientIP<span class="w">
+</span><span class="w">  </span><span class="c"># 指定服务转发的端口</span><span class="w">
+</span><span class="w">  </span><span class="k">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="k">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span><span class="w">      </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>http-default<span class="w">
+</span><span class="w">      </span><span class="k">targetPort</span><span class="p">:</span><span class="w"> </span>http-default<span class="w">
+</span><span class="w">    </span>- <span class="k">port</span><span class="p">:</span><span class="w"> </span><span class="m">90</span><span class="w">
+</span><span class="w">      </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>http-mux1<span class="w">
+</span><span class="w">      </span><span class="k">targetPort</span><span class="p">:</span><span class="w"> </span>http-mux1<span class="w">
+</span><span class="w">  </span><span class="c"># 查找 Pod 的标签，注意 svc 不会自动创建 Pod，需要先通过 ReplicaSet 创建好 Pod</span><span class="w">
+</span><span class="w">  </span><span class="k">selector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">app</span><span class="p">:</span><span class="w"> </span>kubia<span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建服务</span>
+ø&gt; kubectl create -f kubia-svc.yaml
+service/kuia created
+
+<span class="c1"># 查看我们刚刚创建的服务</span>
+ø&gt; kubectl get svc
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT<span class="o">(</span>S<span class="o">)</span>         AGE
+kubia        ClusterIP   10.66.13.240   &lt;none&gt;        80/TCP,90/TCP   8m48s
+
+<span class="c1"># 到某个 Pod 上执行 curl 命令，访问服务的集群内部端口</span>
+ø&gt; kubectl <span class="nb">exec</span> kubia-zhg6k -- curl -s 10.66.13.240:80
+You<span class="se">\&#39;</span>ve hit kubia-4bv25 on default mux
+ø&gt; kubectl <span class="nb">exec</span> kubia-zhg6k -- curl -s 10.66.13.240:90
+You<span class="se">\&#39;</span>ve hit kubia-7sd67 on mux1
+
+<span class="c1"># 注意，服务的IP是虚拟IP，是 ping 不通的</span>
+ø&gt; kubectl <span class="nb">exec</span> -it kubia-zhg6k bash
+root@kubia-zhg6k:/app# ping 10.66.13.240
+PING 10.66.13.240 <span class="o">(</span>10.66.13.240<span class="o">)</span> 56<span class="o">(</span>84<span class="o">)</span> bytes of data.
+^C
+--- 10.66.13.240 ping statistics ---
+<span class="m">8</span> packets transmitted, <span class="m">0</span> received, 100% packet loss, <span class="nb">time</span> 205ms
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="通过环境变量发现服务">通过环境变量发现服务</h3>
+<p>在 Pod 开始运行的时候，K8S 会初始化一系列的环境变指向现在存在的服务。(故 Pod 要在服务之后创建才能够看到这些环境变量)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 当前集群中存在着两个服务</span>
+ø&gt; kubectl get svc
+NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT<span class="o">(</span>S<span class="o">)</span>         AGE
+kubernetes   ClusterIP   10.66.0.1      &lt;none&gt;        443/TCP         31d
+kubia        ClusterIP   10.66.13.240   &lt;none&gt;        80/TCP,90/TCP   9h
+
+ø&gt; kubectl <span class="nb">exec</span> kubia-zhg6k -- env
+<span class="c1"># KUBIA 服务的环境变量</span>
+<span class="nv">KUBIA_SERVICE_HOST</span><span class="o">=</span>10.66.13.240
+<span class="nv">KUBIA_SERVICE_PORT</span><span class="o">=</span><span class="m">80</span>
+<span class="nv">KUBIA_PORT_80_TCP_PROTO</span><span class="o">=</span>tcp
+<span class="nv">KUBIA_PORT_80_TCP_ADDR</span><span class="o">=</span>10.66.13.240
+<span class="nv">KUBIA_SERVICE_PORT_HTTP_DEFAULT</span><span class="o">=</span><span class="m">80</span>
+<span class="nv">KUBIA_PORT</span><span class="o">=</span>tcp://10.66.13.240:80
+<span class="nv">KUBIA_PORT_90_TCP</span><span class="o">=</span>tcp://10.66.13.240:90
+<span class="nv">KUBIA_PORT_90_TCP_PORT</span><span class="o">=</span><span class="m">90</span>
+<span class="nv">KUBIA_SERVICE_PORT_HTTP_MUX1</span><span class="o">=</span><span class="m">90</span>
+<span class="nv">KUBIA_PORT_80_TCP</span><span class="o">=</span>tcp://10.66.13.240:80
+<span class="nv">KUBIA_PORT_80_TCP_PORT</span><span class="o">=</span><span class="m">80</span>
+<span class="nv">KUBIA_PORT_90_TCP_PROTO</span><span class="o">=</span>tcp
+<span class="nv">KUBIA_PORT_90_TCP_ADDR</span><span class="o">=</span>10.66.13.240
+
+<span class="c1"># Kubenetes 服务的环境变量</span>
+<span class="nv">KUBERNETES_SERVICE_PORT_HTTPS</span><span class="o">=</span><span class="m">443</span>
+<span class="nv">KUBERNETES_SERVICE_HOST</span><span class="o">=</span>10.66.0.1
+<span class="nv">KUBERNETES_PORT_443_TCP</span><span class="o">=</span>tcp://10.66.0.1:443
+<span class="nv">KUBERNETES_PORT_443_TCP_ADDR</span><span class="o">=</span>10.66.0.1
+<span class="nv">KUBERNETES_SERVICE_PORT</span><span class="o">=</span><span class="m">443</span>
+<span class="nv">KUBERNETES_PORT</span><span class="o">=</span>tcp://10.66.0.1:443
+<span class="nv">KUBERNETES_PORT_443_TCP_PROTO</span><span class="o">=</span>tcp
+<span class="nv">KUBERNETES_PORT_443_TCP_PORT</span><span class="o">=</span><span class="m">443</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="通过-dns-发现服务">通过 DNS 发现服务</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 在 kube-system 命名空间中存在着提供 DNS 服务的 Pod</span>
+ø&gt; kcd kube-system
+Context <span class="s2">&#34;gke_braided-turbine-271114_asia-east1-c_demo&#34;</span> modified.
+ø&gt; kubectl get pod
+NAME                                             READY   STATUS    RESTARTS   AGE
+kube-dns-5f886bf8d8-ddzjb                        4/4     Running   <span class="m">0</span>          24d
+kube-dns-5f886bf8d8-pnrts                        4/4     Running   <span class="m">0</span>          26d
+kube-dns-autoscaler-8687c64fc-qknwj              1/1     Running   <span class="m">0</span>          24d
+...
+
+<span class="c1"># 所有 Pod 都默认使用了集群中的 DNS 服务器</span>
+ø&gt; kubectl <span class="nb">exec</span> -it kubia-zhg6k bash
+root@kubia-zhg6k:/app# cat /etc/resolv.conf
+nameserver 10.66.0.10
+search default.svc.cluster.local svc.cluster.local cluster.local asia-east1-c.c.braided-turbine-271114.internal c.braided-turbine-271114.internal google.internal
+options ndots:5
+</code></pre></td></tr></table>
+</div>
+</div><p>集群中的任何一个节点可以通过 全限定域名(FQDN) 来访问服务，它的格式如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">kubia.default.svc.cluster.local
+<span class="o">{</span>服务名称<span class="o">}</span>.<span class="o">{</span>命名空间<span class="o">}</span>.<span class="o">{</span>集群域后缀<span class="o">}</span>
+
+<span class="c1"># 集群域后缀可以省略，命名空间是默认的话也可以省略</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 在任意一个节点上通过 FQDN 访问服务</span>
+root@kubia-zhg6k:/app# curl kubia.default.svc.cluster.local:<span class="nv">$KUBIA_SERVICE_PORT_HTTP_MUX1</span>
+You<span class="err">&#39;</span>ve hit kubia-4bv25 on mux1
+root@kubia-zhg6k:/app# curl kubia.default:<span class="nv">$KUBIA_SERVICE_PORT_HTTP_MUX1</span>
+You got it on mux1, 5.
+root@kubia-zhg6k:/app# curl kubia:<span class="nv">$KUBIA_SERVICE_PORT_HTTP_MUX1</span>
+You got it on mux1, 6.
+</code></pre></td></tr></table>
+</div>
+</div>
     </div>
 
     <div class="post-copyright">
