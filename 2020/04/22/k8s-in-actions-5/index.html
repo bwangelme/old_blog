@@ -54,7 +54,7 @@
 ">
 <meta itemprop="datePublished" content="2020-04-22T21:44:44&#43;08:00" />
 <meta itemprop="dateModified" content="2020-04-22T21:44:44&#43;08:00" />
-<meta itemprop="wordCount" content="767">
+<meta itemprop="wordCount" content="1541">
 
 
 
@@ -153,6 +153,12 @@
           <ul>
             <li><a href="#通过环境变量发现服务">通过环境变量发现服务</a></li>
             <li><a href="#通过-dns-发现服务">通过 DNS 发现服务</a></li>
+          </ul>
+        </li>
+        <li><a href="#连接集群外部的服务">连接集群外部的服务</a>
+          <ul>
+            <li><a href="#创建一个重定向到外部地址的服务">创建一个重定向到外部地址的服务</a></li>
+            <li><a href="#为外部服务创建别名">为外部服务创建别名</a></li>
           </ul>
         </li>
       </ul>
@@ -407,7 +413,283 @@ root@kubia-zhg6k:/app# curl kubia:<span class="nv">$KUBIA_SERVICE_PORT_HTTP_MUX1
 You got it on mux1, 6.
 </code></pre></td></tr></table>
 </div>
+</div><h2 id="连接集群外部的服务">连接集群外部的服务</h2>
+<p>Endpoints 是一种介于服务和 Pod 之间的资源，它是一个存储服务的转发 IP 及端口的列表。它和对应的服务同名。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 查看某个服务的 Endpoints 资源</span>
+ø&gt; kubectl describe svc kubia
+Name:              kubia
+Namespace:         default
+Labels:            &lt;none&gt;
+Annotations:       &lt;none&gt;
+Selector:          <span class="nv">app</span><span class="o">=</span>kubia
+Type:              ClusterIP
+IP:                10.66.13.240
+
+Port:              http-default  80/TCP
+TargetPort:        http-default/TCP
+Endpoints:         10.0.1.23:8080,10.0.2.13:8080,10.0.2.14:8080
+
+Port:              http-mux1  90/TCP
+TargetPort:        http-mux1/TCP
+Endpoints:         10.0.1.23:8090,10.0.2.13:8090,10.0.2.14:8090
+
+Session Affinity:  ClientIP
+Events:            &lt;none&gt;
+
+<span class="c1"># 查看 endpoints 的具体信息</span>
+ø&gt; kubectl get endpoints kubia
+NAME    ENDPOINTS                                                  AGE
+kubia   10.0.1.23:8080,10.0.2.13:8080,10.0.2.14:8080 + <span class="m">3</span> more...   2d
+ø&gt; kubectl describe endpoints kubia
+Name:         kubia
+Namespace:    default
+Labels:       &lt;none&gt;
+Annotations:  &lt;none&gt;
+Subsets:
+  Addresses:          10.0.1.23,10.0.2.13,10.0.2.14
+  NotReadyAddresses:  &lt;none&gt;
+  Ports:
+    Name          Port  Protocol
+    ----          ----  --------
+    http-default  <span class="m">8080</span>  TCP
+    http-mux1     <span class="m">8090</span>  TCP
+
+Events:  &lt;none&gt;
+</code></pre></td></tr></table>
 </div>
+</div><h3 id="创建一个重定向到外部地址的服务">创建一个重定向到外部地址的服务</h3>
+<ul>
+<li>external-service.yaml</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># 这个文件只创建了一个服务，但是没有定义选择器，也就没有创建对应的 Endpoint 资源</span><span class="w">
+</span><span class="w"></span><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Service<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>external-service<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="k">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>创建 external-service 的 Endpoints 资源，它指向了两个外部的 IP 地址</p>
+<ul>
+<li>external-service-endpoints.yaml</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Endpoints<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># 注意要和绑定的目标服务的名称相同</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>external-service<span class="w">
+</span><span class="w"></span><span class="k">subsets</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="k">addresses</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="k">ip</span><span class="p">:</span><span class="w"> </span><span class="m">13.250.94.254</span><span class="w">
+</span><span class="w">    </span>- <span class="k">ip</span><span class="p">:</span><span class="w"> </span><span class="m">13.229.188.59</span><span class="w">
+</span><span class="w">    </span><span class="k">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="k">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>测试:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 客户端访问 external-service 服务会重定向到外部服务上</span>
+ø&gt; kubectl <span class="nb">exec</span> -it kubia-zhg6k bash
+root@kubia-zhg6k:/app# curl -v 10.66.10.171
+* Expire in <span class="m">0</span> ms <span class="k">for</span> <span class="m">6</span> <span class="o">(</span>transfer 0x55b86f259f50<span class="o">)</span>
+*   Trying 10.66.10.171...
+* TCP_NODELAY <span class="nb">set</span>
+* Expire in <span class="m">200</span> ms <span class="k">for</span> <span class="m">4</span> <span class="o">(</span>transfer 0x55b86f259f50<span class="o">)</span>
+* Connected to 10.66.10.171 <span class="o">(</span>10.66.10.171<span class="o">)</span> port <span class="m">80</span> <span class="o">(</span><span class="c1">#0)</span>
+&gt; GET / HTTP/1.1
+&gt; Host: 10.66.10.171
+&gt; User-Agent: curl/7.64.0
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 <span class="m">301</span> Moved Permanently
+&lt; Content-length: <span class="m">0</span>
+&lt; Location: https://10.66.10.171/
+&lt;
+* Connection <span class="c1">#0 to host 10.66.10.171 left intact</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="为外部服务创建别名">为外部服务创建别名</h3>
+<ul>
+<li>external-service-externalname.yaml</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Service<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>external-service-externalname<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">type</span><span class="p">:</span><span class="w"> </span>ExternalName<span class="w">  </span><span class="c"># 外部服务的别名服务需要制定类型为 ExternalName</span><span class="w">
+</span><span class="w">  </span><span class="k">externalName</span><span class="p">:</span><span class="w"> </span>httpbin.org<span class="w">
+</span><span class="w">  </span><span class="k">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="k">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>测试:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 在集群内部可以通过 FQDN 来访问该服务</span>
+ø&gt; kubectl <span class="nb">exec</span> -it kubia-zhg6k bash
+root@kubia-zhg6k:/app# curl external-service-externalname/get
+<span class="o">{</span>
+  <span class="s2">&#34;args&#34;</span>: <span class="o">{}</span>,
+  <span class="s2">&#34;headers&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;Accept&#34;</span>: <span class="s2">&#34;*/*&#34;</span>,
+    <span class="s2">&#34;Host&#34;</span>: <span class="s2">&#34;external-service-externalname&#34;</span>,
+    <span class="s2">&#34;User-Agent&#34;</span>: <span class="s2">&#34;curl/7.64.0&#34;</span>,
+    <span class="s2">&#34;X-Amzn-Trace-Id&#34;</span>: <span class="s2">&#34;Root=1-5ea85513-abbb4098869550459c9a0934&#34;</span>
+  <span class="o">}</span>,
+  <span class="s2">&#34;origin&#34;</span>: <span class="s2">&#34;35.229.134.91&#34;</span>,
+  <span class="s2">&#34;url&#34;</span>: <span class="s2">&#34;http://external-service-externalname/get&#34;</span>
+<span class="o">}</span>
+root@kubia-zhg6k:/app# curl external-service-externalname.default.svc.cluster.local/get
+<span class="o">{</span>
+  <span class="s2">&#34;args&#34;</span>: <span class="o">{}</span>,
+  <span class="s2">&#34;headers&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;Accept&#34;</span>: <span class="s2">&#34;*/*&#34;</span>,
+    <span class="s2">&#34;Host&#34;</span>: <span class="s2">&#34;external-service-externalname.default.svc.cluster.local&#34;</span>,
+    <span class="s2">&#34;User-Agent&#34;</span>: <span class="s2">&#34;curl/7.64.0&#34;</span>,
+    <span class="s2">&#34;X-Amzn-Trace-Id&#34;</span>: <span class="s2">&#34;Root=1-5ea8551c-a7ebbeae3b50c9b6c66240c9&#34;</span>
+  <span class="o">}</span>,
+  <span class="s2">&#34;origin&#34;</span>: <span class="s2">&#34;35.229.134.91&#34;</span>,
+  <span class="s2">&#34;url&#34;</span>: <span class="s2">&#34;http://external-service-externalname.default.svc.cluster.local/get&#34;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>ExternalName</code> 服务仅在 DNS 级别实施，它仅为服务创建了简单的 CNAME DNS 记录。因此链接到该服务的客户端将直接连接到外部服务，完全绕过服务代理。出于这个原因，<code>ExternalName</code> 类别的服务甚至不会获得集群 IP。</p>
     </div>
 
     <div class="post-copyright">
