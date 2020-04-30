@@ -449,7 +449,7 @@ GET /index/type/_mapping
 
 ## ES 的核心数据类型
 
-字符串类型:
+### 简单类型
 
 - text: text 类型被用来索引长文本，在建立索引前会将这个文本进行分词，转化为词的组合，建立索引，允许es来检索这些词语。text 类型不能用来排序和聚合。
 - keyword: keyword 类型不需要进行分词，可以被用来检索，过滤，排序和聚合，keyword 类型字段只能用本身来进行检索。
@@ -457,10 +457,35 @@ GET /index/type/_mapping
 - 日期类型: date
 - 布尔类型: boolean
 - 二进制类型: binary
+- IP地址类型: IPv4, IPv6
+
+### 复杂类型
+
+对象类型/嵌套类型
+
+类型组合起来，就是 Object 类型
+
+```
+PUT /lib5/person/1
+{
+    "name": "Tom",
+    "age": 25,
+    "birthday": "1985-12-12",
+    "address": {
+        "country": "china",
+        "province": "guangdong",
+        "city": "shenzhen"
+    }
+}
+```
+
+### 特殊类型
+
+geo_point & geo_shape / percolator
 
 ## 类型动态映射
 
-创建时会根据这些值自动创建字段类型
+创建时会根据值自动创建字段类型
 
 值|自动创建的字段类型
 ---|---
@@ -479,23 +504,17 @@ index: 表示某个字段是否被索引，没有被索引的字段是不能被�
 analyzer: 分词器
 ignore_above: 索引的字符串超过了这个数字后，就不会被索引了
 
-## Object 类型
+## Mapping 的修改
 
-类型组合起来，就是 Object 类型
++ 新增加字段
 
-```
-PUT /lib5/person/1
-{
-    "name": "Tom",
-    "age": 25,
-    "birthday": "1985-12-12",
-    "address": {
-        "country": "china",
-        "province": "guangdong",
-        "city": "shenzhen"
-    }
-}
-```
+Dynamic 设为 true 时，一旦有新增字段的文档写入，Mapping 也会同时更新。
+Dynamic 设为 false 时，Mapping 不会更新，新增字段也不会被索引，但是信息会出现在 _source 中
+Dynamic 设为 stric 时，文档会写入失败
+
++ 已有字段
+
+对已有字段，一旦已经有数据写入，就不再支持修改字段定义。如果希望改变字段类型，必须重建索引。
 
 # Query DSL
 

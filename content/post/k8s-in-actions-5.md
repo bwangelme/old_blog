@@ -295,4 +295,64 @@ root@kubia-zhg6k:/app# curl external-service-externalname.default.svc.cluster.lo
 }
 ```
 
-`ExternalName` 服务仅在 DNS 级别实施，它仅为服务创建了简单的 CNAME DNS 记录。因此链接到该服务的客户端将直接连接到外部服务，完全绕过服务代理。出于这个原因，`ExternalName` 类别的服务甚至不会获得集群 IP。
+`ExternalName` 服务仅在 DNS 级别实施，它仅为服务创建了简单的 CNAME DNS 记录。因此链接到该服务的客户端将直接连接到外部服务，完全绕过服务代理。出于这个原因，`ExternalName` 类型的服务甚至不会获得集群 IP。
+
+## 将服务暴露给外部客户端
+
+### 通过 NodePort 类型的服务向外暴露
+
+通过创建 NodePort 服务，可以让 Kubernetes 在其所有 __节点__ 上保留一个端口(所有节点都使用相同的端口号)，将传入的连接转发给作为服务部分的 Pod。
+
+### 创建 & 使用 NodePort 类型的服务
+
+```sh
+# 配置 GCK 的防火墙规则，允许外部网络访问 30123 端口
+ø> gcloud compute firewall-rules create kubia-svc-rule --allow=tcp:30123
+Creating firewall...⠧Created [https://www.googleapis.com/compute/v1/projects/braided-turbine-271114/global/firewalls/kubia-svc-rule].
+Creating firewall...done.
+NAME            NETWORK  DIRECTION  PRIORITY  ALLOW      DENY  DISABLED
+kubia-svc-rule  default  INGRESS    1000      tcp:30123        False
+```
+
++ kubia-svc-nodeport.yaml
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubia-nodeport
+spec:
+  type: NodePort
+  ports:
+    - port: 80 # 通过集群内部IP访问的端口
+      targetPort: 8080  # 转发的背后 Pod 服务的端口
+      nodePort: 30123 # 集群节点可访问的端口
+  selector:
+    app: kubia
+```
+
+```sh
+# 创建 NodePort 服务
+ø> kubectl create -f kubia-svc-nodeport.yaml
+service/kubia-nodeport created
+ø> kubectl get svc kubia-nodeport
+NAME             TYPE       CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
+kubia-nodeport   NodePort   10.66.5.6    <none>        80:30123/TCP   9m39s
+
+# 获得所有节点的 IP 地址
+ø> kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="ExternalIP")].address}' | tr ' ' '\n'
+35.234.11.33
+35.234.27.130
+35.229.134.91
+
+# 通过节点访问 NodePort 服务
+ø> curl 35.229.134.91:30123
+You got it on default mux, 9.
+
+# 通过集群内部IP访问 NodePort 服务
+ø> kubectl exec -it kubia-zhg6k bash
+root@kubia-zhg6k:/app# curl 10.66.5.6:80
+You got it on default mux, 10.
+```
+
++ [JSON Path 的文档](https://kubernetes.io/zh/docs/reference/kubectl/jsonpath/)
