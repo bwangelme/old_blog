@@ -2,7 +2,7 @@
 title: "ElasticSearch 学习笔记"
 date: 2020-03-28T17:16:40+08:00
 lastmod: 2020-03-28T17:16:40+08:00
-draft: false
+draft: true
 tags: [ElasticSearch, 笔记]
 author: "bwangel"
 comment: true
@@ -15,49 +15,6 @@ comment: true
 
 ---
 
-# 分词器
-
-## 分词器概述
-
-分词器包含三部分
-
-1. character filter: 分词之前的预处理，过滤掉HTML标签，特殊符号转换等。
-2. tokenizer: 分词
-3. token filter: 标准化，大小写，同义词，单复数转换。
-
-## 分词器的类别
-
-+ `keyword`: 不对输入做任何的处理，直接将输入当做一个 term 输出
-+ `standard`: 对英文按 word 分词，对中文按照汉字分词
-+ ...
-
-## 创建 & 使用分词器
-
-下面为创建索引时指定类型的设置:
-
-为索引创建了 person 类型，其中包含 user 字段
-
-```
-{
-  "mappings": {
-    "person": {
-      "properties": {
-        "user": {
-          "type": "text",
-          "analyzer": "ik_max_word",
-          "search_analyzer": "ik_max_word"
-        },
-      }
-    }
-  }
-}
-
-```
-
-+ search_analyzer 是搜索词的分词器
-+ analyzer 是字段文本的分词器
-
-
 ## ES 6.8 中文分词器 ik 的使用示例
 
 ```sh
@@ -65,7 +22,6 @@ POST /ik-test/fulltext/1
 {
 "content": "美国留给伊拉克的是个烂摊子吗？"
 }
-
 
 POST /ik-test/fulltext/2
 {
@@ -96,134 +52,6 @@ POST /ik-test/fulltext/_search
           "content" : {}
       }
   }
-}
-```
-
-## ES 7.6 分词器的使用示例
-
-```sh
-GET /_analyze
-{
-  "analyzer": "keyword",
-  "text": "Mastering ElasticSearch, elasticsearch in action"
-}
-{
-  "tokens" : [
-    {
-      "token" : "Mastering ElasticSearch, elasticsearch in action",
-      "start_offset" : 0,
-      "end_offset" : 48,
-      "type" : "word",
-      "position" : 0
-    }
-  ]
-}
-
----
-
-GET /_analyze
-{
-  "analyzer": "icu_analyzer",
-  "text": "他说的确实在理"
-}
-{
-  "tokens" : [
-    {
-      "token" : "他",
-      "start_offset" : 0,
-      "end_offset" : 1,
-      "type" : "<IDEOGRAPHIC>",
-      "position" : 0
-    },
-    {
-      "token" : "说的",
-      "start_offset" : 1,
-      "end_offset" : 3,
-      "type" : "<IDEOGRAPHIC>",
-      "position" : 1
-    },
-    {
-      "token" : "确实",
-      "start_offset" : 3,
-      "end_offset" : 5,
-      "type" : "<IDEOGRAPHIC>",
-      "position" : 2
-    },
-    {
-      "token" : "在",
-      "start_offset" : 5,
-      "end_offset" : 6,
-      "type" : "<IDEOGRAPHIC>",
-      "position" : 3
-    },
-    {
-      "token" : "理",
-      "start_offset" : 6,
-      "end_offset" : 7,
-      "type" : "<IDEOGRAPHIC>",
-      "position" : 4
-    }
-  ]
-}
-
-GET /_analyze
-{
-  "analyzer": "standard",
-  "text": "他说的确实在理"
-}
-
-{
-  "tokens" : [
-    {
-      "token" : "他",
-      "start_offset" : 0,
-      "end_offset" : 1,
-      "type" : "<IDEOGRAPHIC>",
-      "position" : 0
-    },
-    {
-      "token" : "说",
-      "start_offset" : 1,
-      "end_offset" : 2,
-      "type" : "<IDEOGRAPHIC>",
-      "position" : 1
-    },
-    {
-      "token" : "的",
-      "start_offset" : 2,
-      "end_offset" : 3,
-      "type" : "<IDEOGRAPHIC>",
-      "position" : 2
-    },
-    {
-      "token" : "确",
-      "start_offset" : 3,
-      "end_offset" : 4,
-      "type" : "<IDEOGRAPHIC>",
-      "position" : 3
-    },
-    {
-      "token" : "实",
-      "start_offset" : 4,
-      "end_offset" : 5,
-      "type" : "<IDEOGRAPHIC>",
-      "position" : 4
-    },
-    {
-      "token" : "在",
-      "start_offset" : 5,
-      "end_offset" : 6,
-      "type" : "<IDEOGRAPHIC>",
-      "position" : 5
-    },
-    {
-      "token" : "理",
-      "start_offset" : 6,
-      "end_offset" : 7,
-      "type" : "<IDEOGRAPHIC>",
-      "position" : 6
-    }
-  ]
 }
 ```
 
@@ -262,6 +90,12 @@ DELETE /ik-test
 ```
 
 # 文档
+
++ Update 和 Index 的区别
+
+Update 会更新已有文档，Index 会删除旧文档，再新建一个新文档，版本号会+1
+
++ Create 和 Update 操作都是通过 POST 请求执行的，PUT 请求执行的是 Index 操作
 
 ```sh
 ## 创建&全量更新文档
@@ -792,7 +626,7 @@ Full text 查询通常被用来在全文字段上进行一些查询。他们理�
 
 ### match 查询
 
-+ 对搜索字符串进行分词，分别查询`name`包含 "zhaoliu", "zhaoming" 这两个关键字的文档。
++ 对搜索字符串进行分词，分别查询`name`包含 "zhaoliu", "zhaoming" 这两个关键字的文档，关键字之间是 or 的关系。
 
 ```sh
 GET /lib3/user/_search
@@ -823,7 +657,7 @@ GET /lib3/user/_search
 
 ### match_phrase
 
-按照从搜索字符串中分析出来的短语去匹配搜索的文档，按照短语顺序查找
+按照从搜索字符串中分析出来的短语去匹配搜索的文档，按照短语顺序查找，terms 之间是 and 的关系
 
 slop 表示结果中的单词移动几次能够匹配短语，这里设置一次就能匹配我们查询的短语。
 
