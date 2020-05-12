@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ElasticSearch 7.6 学习笔记 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.69.2 with theme even" />
+
+
+<link rel="canonical" href="/2020/05/10/es-7-6-note/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4eb71590ad024de2ebb1b5eef94cbb645b7e63e6b9c4c837355530a75e112ce1.css" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+<meta property="og:title" content="ElasticSearch 7.6 学习笔记" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2020/05/10/es-7-6-note/" />
+<meta property="article:published_time" content="2020-05-10T17:28:40+08:00" />
+<meta property="article:modified_time" content="2020-05-10T17:28:40+08:00" />
+<meta itemprop="name" content="ElasticSearch 7.6 学习笔记">
+<meta itemprop="description" content="">
+<meta itemprop="datePublished" content="2020-05-10T17:28:40&#43;08:00" />
+<meta itemprop="dateModified" content="2020-05-10T17:28:40&#43;08:00" />
+<meta itemprop="wordCount" content="3984">
+
+
+
+<meta itemprop="keywords" content="笔记,ElasticSearch," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ElasticSearch 7.6 学习笔记"/>
+<meta name="twitter:description" content=""/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">ElasticSearch 7.6 学习笔记</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-05-10 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#分词器">分词器</a>
+          <ul>
+            <li><a href="#分词器概述">分词器概述</a></li>
+            <li><a href="#分词器的类别">分词器的类别</a></li>
+            <li><a href="#创建--使用分词器">创建 &amp; 使用分词器</a></li>
+            <li><a href="#分词器的使用示例">分词器的使用示例</a></li>
+          </ul>
+        </li>
+        <li><a href="#聚合分析">聚合分析</a></li>
+        <li><a href="#term-查询">Term 查询</a></li>
+        <li><a href="#全文查询">全文查询</a></li>
+        <li><a href="#结构化搜索">结构化搜索</a></li>
+        <li><a href="#搜索的相关性算分">搜索的相关性算分</a></li>
+        <li><a href="#多字符串多字段查询">多字符串多字段查询</a>
+          <ul>
+            <li><a href="#布尔查询">布尔查询</a></li>
+          </ul>
+        </li>
+        <li><a href="#对象及嵌套对象nested">对象及嵌套对象(Nested)</a>
+          <ul>
+            <li><a href="#包含嵌套对象的文档">包含嵌套对象的文档</a></li>
+            <li><a href="#包含对象数组的文档">包含对象数组的文档</a></li>
+            <li><a href="#nested-数据类型">Nested 数据类型</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<p><a href="https://github.com/geektime-geekbang/geektime-ELK">https://github.com/geektime-geekbang/geektime-ELK</a></p>
+</blockquote>
+<hr>
+<h2 id="分词器">分词器</h2>
+<h3 id="分词器概述">分词器概述</h3>
+<p>分词器包含三部分</p>
+<ol>
+<li>character filter: 分词之前的预处理，过滤掉HTML标签，特殊符号转换等。</li>
+<li>tokenizer: 分词</li>
+<li>token filter: 标准化，大小写，同义词，单复数转换。</li>
+</ol>
+<h3 id="分词器的类别">分词器的类别</h3>
+<ul>
+<li><code>keyword</code>: 不对输入做任何的处理，直接将输入当做一个 term 输出</li>
+<li><code>standard</code>: 对英文按 word 分词，对中文按照汉字分词</li>
+<li>&hellip;</li>
+</ul>
+<h3 id="创建--使用分词器">创建 &amp; 使用分词器</h3>
+<p>下面为创建索引时指定类型的设置:</p>
+<p>为索引创建了 person 类型，其中包含 user 字段</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">{</span>
+  <span class="s2">&#34;mappings&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;person&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;properties&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;user&#34;</span>: <span class="o">{</span>
+          <span class="s2">&#34;type&#34;</span>: <span class="s2">&#34;text&#34;</span>,
+          <span class="s2">&#34;analyzer&#34;</span>: <span class="s2">&#34;ik_max_word&#34;</span>,
+          <span class="s2">&#34;search_analyzer&#34;</span>: <span class="s2">&#34;ik_max_word&#34;</span>
+        <span class="o">}</span>,
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>search_analyzer 是搜索词的分词器</li>
+<li>analyzer 是字段文本的分词器</li>
+</ul>
+<h3 id="分词器的使用示例">分词器的使用示例</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /_analyze
+<span class="o">{</span>
+  <span class="s2">&#34;analyzer&#34;</span>: <span class="s2">&#34;keyword&#34;</span>,
+  <span class="s2">&#34;text&#34;</span>: <span class="s2">&#34;Mastering ElasticSearch, elasticsearch in action&#34;</span>
+<span class="o">}</span>
+<span class="o">{</span>
+  <span class="s2">&#34;tokens&#34;</span> : <span class="o">[</span>
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;Mastering ElasticSearch, elasticsearch in action&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 0,
+      <span class="s2">&#34;end_offset&#34;</span> : 48,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;word&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">0</span>
+    <span class="o">}</span>
+  <span class="o">]</span>
+<span class="o">}</span>
+
+---
+
+GET /_analyze
+<span class="o">{</span>
+  <span class="s2">&#34;analyzer&#34;</span>: <span class="s2">&#34;icu_analyzer&#34;</span>,
+  <span class="s2">&#34;text&#34;</span>: <span class="s2">&#34;他说的确实在理&#34;</span>
+<span class="o">}</span>
+<span class="o">{</span>
+  <span class="s2">&#34;tokens&#34;</span> : <span class="o">[</span>
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;他&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 0,
+      <span class="s2">&#34;end_offset&#34;</span> : 1,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;&lt;IDEOGRAPHIC&gt;&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">0</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;说的&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 1,
+      <span class="s2">&#34;end_offset&#34;</span> : 3,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;&lt;IDEOGRAPHIC&gt;&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">1</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;确实&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 3,
+      <span class="s2">&#34;end_offset&#34;</span> : 5,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;&lt;IDEOGRAPHIC&gt;&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">2</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;在&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 5,
+      <span class="s2">&#34;end_offset&#34;</span> : 6,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;&lt;IDEOGRAPHIC&gt;&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">3</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;理&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 6,
+      <span class="s2">&#34;end_offset&#34;</span> : 7,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;&lt;IDEOGRAPHIC&gt;&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">4</span>
+    <span class="o">}</span>
+  <span class="o">]</span>
+<span class="o">}</span>
+
+GET /_analyze
+<span class="o">{</span>
+  <span class="s2">&#34;analyzer&#34;</span>: <span class="s2">&#34;standard&#34;</span>,
+  <span class="s2">&#34;text&#34;</span>: <span class="s2">&#34;他说的确实在理&#34;</span>
+<span class="o">}</span>
+
+<span class="o">{</span>
+  <span class="s2">&#34;tokens&#34;</span> : <span class="o">[</span>
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;他&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 0,
+      <span class="s2">&#34;end_offset&#34;</span> : 1,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;&lt;IDEOGRAPHIC&gt;&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">0</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;说&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 1,
+      <span class="s2">&#34;end_offset&#34;</span> : 2,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;&lt;IDEOGRAPHIC&gt;&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">1</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;的&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 2,
+      <span class="s2">&#34;end_offset&#34;</span> : 3,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;&lt;IDEOGRAPHIC&gt;&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">2</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;确&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 3,
+      <span class="s2">&#34;end_offset&#34;</span> : 4,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;&lt;IDEOGRAPHIC&gt;&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">3</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;实&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 4,
+      <span class="s2">&#34;end_offset&#34;</span> : 5,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;&lt;IDEOGRAPHIC&gt;&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">4</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;在&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 5,
+      <span class="s2">&#34;end_offset&#34;</span> : 6,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;&lt;IDEOGRAPHIC&gt;&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">5</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;理&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 6,
+      <span class="s2">&#34;end_offset&#34;</span> : 7,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;&lt;IDEOGRAPHIC&gt;&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">6</span>
+    <span class="o">}</span>
+  <span class="o">]</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="聚合分析">聚合分析</h2>
+<ul>
+<li>Bucket Aggregation</li>
+</ul>
+<p>将一些列满足特定条件的文档聚合成一个桶</p>
+<ul>
+<li>Metric Aggreation</li>
+</ul>
+<p>一些数学运算，可以对文档的字段进行统计分析</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 根据电影的年份进行分组
+GET movies/_search
+{
+  &#34;size&#34;: 0,
+  &#34;aggs&#34;: {
+    &#34;movie_year&#34;: {
+      &#34;terms&#34;: {
+        &#34;field&#34;: &#34;year&#34;
+      }
+    }
+  }
+}
+
+# 将电影根据年份分组后，再来求每组内的最大年份和最小年份（由于text 类型不能比较，只好求个最大年份）
+GET movies/_search
+{
+  &#34;size&#34;: 0,
+  &#34;aggs&#34;: {
+    &#34;movie_year&#34;: {
+      &#34;terms&#34;: {
+        &#34;field&#34;: &#34;year&#34;
+      },
+      &#34;aggs&#34;: {
+        &#34;max_year&#34;: {
+          &#34;max&#34;: {
+            &#34;field&#34;: &#34;year&#34;
+          }
+        },
+        &#34;min_year&#34;: {
+          &#34;min&#34;: {
+            &#34;field&#34;: &#34;year&#34;
+          }
+        }
+      }
+    }
+  }
+}
+
+# 根据目的地将航班进行分组
+GET kibana_sample_data_flights/_search
+{
+  &#34;size&#34;: 0,
+  &#34;aggs&#34;: {
+    &#34;flight_dest&#34;: {
+      &#34;terms&#34;: {
+        &#34;field&#34;: &#34;DestCountry&#34;,
+        &#34;size&#34;: 10
+      }
+    }
+  }
+}
+
+# 根据目的地将航班进行分组，且在组内输出票价
+GET kibana_sample_data_flights/_search
+{
+  &#34;size&#34;: 0,
+  &#34;aggs&#34;: {
+    &#34;flight_dest&#34;: {
+      &#34;terms&#34;: {
+        &#34;field&#34;: &#34;DestCountry&#34;,
+        &#34;size&#34;: 10
+      },
+      &#34;aggs&#34;: {
+        &#34;avg_price&#34;: {
+          &#34;avg&#34;: {
+            &#34;field&#34;: &#34;AvgTicketPrice&#34;
+          }
+        },
+        &#34;max_price&#34;: {
+          &#34;max&#34;: {
+            &#34;field&#34;: &#34;AvgTicketPrice&#34;
+          }
+        },
+        &#34;min_price&#34;: {
+          &#34;min&#34;: {
+            &#34;field&#34;: &#34;AvgTicketPrice&#34;
+          }
+        }
+      }
+    }
+  }
+}
+
+# 根据目的地将航班进行分桶，再根据目的地天气进行分桶，输出每个组内平均票价的统计值
+GET kibana_sample_data_flights/_search
+{
+  &#34;size&#34;: 0,
+  &#34;aggs&#34;: {
+    &#34;flight_dest&#34;: {
+      &#34;terms&#34;:{
+        &#34;field&#34;: &#34;DestCountry&#34;
+      },
+      &#34;aggs&#34;: {
+        # stats 是 Metric 聚合
+        &#34;stats_price&#34;: {
+          &#34;stats&#34;: {
+            &#34;field&#34;: &#34;AvgTicketPrice&#34;
+          }
+        },
+        &#34;weather&#34;: {
+          &#34;terms&#34;: {
+            &#34;field&#34;: &#34;DestWeather&#34;,
+            &#34;size&#34;: 10
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="term-查询">Term 查询</h2>
+<ul>
+<li>Term Query / Range Query / Exists Query / Prefix Query / Wildcard Query</li>
+</ul>
+<p>Term 是表达语意的最小单位。搜索和利用统计语言模型进行自然语言处理都需要处理 Term。
+Term 查询不做分词，会将输入作为一个整体，在倒排索引中查找准确的词项，并且利用相关度算分公式为每个包含该词的文档进行相关度算分。</p>
+<p>ES 默认为每个 <code>text</code> 字段都新建一个 <code>keyword</code> 字段，可以通过 keyword 进行精确查询。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">POST /products/_search
+{
+    &#34;query&#34;: {
+        &#34;term&#34;: {
+            &#34;productID.keyword&#34;: {
+                &#34;value&#34;: &#34;XHDK-A-1293-#fJ3&#34;
+            }
+        }
+    }
+}
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>通过 <code>constant_score</code> 可以跳过算分步骤</li>
+</ul>
+<h2 id="全文查询">全文查询</h2>
+<ul>
+<li>
+<p>Match Query / Match Phrase Query / Query string Query</p>
+</li>
+<li>
+<p>搜索时会分词，查询字符串先找到一个合适的分词器，生成一个供查询的词项列表， 然后针对每个词项在倒排索引中进行查询。</p>
+</li>
+<li>
+<p>Match 查询的过程</p>
+</li>
+</ul>
+<p><img src="https://passage-1253400711.cos-website.ap-beijing.myqcloud.com/2020-05-10-133801.png" alt=""></p>
+<h2 id="结构化搜索">结构化搜索</h2>
+<p>日期，布尔类型和数字都是结构化的，结构化的数据可以使用 Term 查询。搜索结果只有&quot;是&quot;和&quot;否&quot;两个值。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span><span class="lnt">90
+</span><span class="lnt">91
+</span><span class="lnt">92
+</span><span class="lnt">93
+</span><span class="lnt">94
+</span><span class="lnt">95
+</span><span class="lnt">96
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">POST /products/_bulk
+{&#34;index&#34;: {&#34;_id&#34;: 1}}
+{&#34;price&#34;: 10, &#34;avaliable&#34;: true, &#34;date&#34;: &#34;2019-01-01&#34;, &#34;productID&#34;: &#34;XHDK-A-1293-#f13&#34;}
+{&#34;index&#34;: {&#34;_id&#34;: 2}}
+{&#34;price&#34;: 20, &#34;avaliable&#34;: true, &#34;date&#34;: &#34;2020-01-01&#34;, &#34;productID&#34;: &#34;KDKE-A-1293-#f13&#34;}
+{&#34;index&#34;: {&#34;_id&#34;: 3}}
+{&#34;price&#34;: 30, &#34;avaliable&#34;: true, &#34;productID&#34;: &#34;JODL-A-9947-#f13&#34;}
+{&#34;index&#34;: {&#34;_id&#34;: 4}}
+{&#34;price&#34;: 30, &#34;avaliable&#34;: false, &#34;productID&#34;: &#34;QQPX-R-3956-#f13&#34;}
+
+GET products/_mapping
+
+# 查询某个布尔值字段
+POST products/_search
+{
+  &#34;profile&#34;: &#34;true&#34;,
+  &#34;explain&#34;: true,
+  &#34;query&#34;: {
+    &#34;term&#34;: { &#34;avaliable&#34;: true }
+  }
+}
+
+# 跳过算分步骤的布尔查询
+POST products/_search
+{
+  &#34;profile&#34;: &#34;true&#34;,
+  &#34;explain&#34;: true,
+  &#34;query&#34;: {
+    &#34;constant_score&#34;: {
+      &#34;filter&#34;: {
+        &#34;term&#34;: { &#34;avaliable&#34;: true }
+      }
+    }
+  }
+}
+
+# 数字 Range 查询
+GET products/_search
+{
+  &#34;query&#34;: {
+    &#34;constant_score&#34;: {
+      &#34;filter&#34;: {
+        &#34;range&#34;: {
+          &#34;price&#34;: { &#34;gte&#34;: 20, &#34;lte&#34;: 30 }
+        }
+      }
+    }
+  }
+}
+
+# 日期 range 查询
+# now-1y 表示一年前的今天
+GET products/_search
+{
+  &#34;query&#34;: {
+    &#34;constant_score&#34;: {
+      &#34;filter&#34;: {
+        &#34;range&#34;: {
+          &#34;date&#34;: { &#34;gte&#34;: &#34;now-1y&#34; }
+        }
+      }
+    }
+  }
+}
+
+# 通过 exists 来处理空值
+POST products/_search
+{
+  &#34;query&#34;: {
+    &#34;constant_score&#34;: {
+      &#34;filter&#34;: {
+        &#34;exists&#34;: { &#34;field&#34;: &#34;date&#34; }
+      }
+    }
+  }
+}
+
+# 处理多值字段，Term 查询是包含，而不是等于
+POST /movies/_bulk
+{&#34;index&#34;: {&#34;_id&#34;: 1}}
+{&#34;title&#34;: &#34;Father of the bridge II&#34;, &#34;year&#34;: 1995, &#34;genre&#34;: &#34;Comedy&#34;}
+{&#34;index&#34;: {&#34;_id&#34;: 2}}
+{&#34;title&#34;: &#34;Dave&#34;, &#34;year&#34;: 1993, &#34;genre&#34;: [&#34;Comedy&#34;, &#34;Romance&#34;]}
+
+GET /movies/_mapping
+
+POST /movies/_search
+{
+  &#34;query&#34;: {
+    &#34;constant_score&#34;: {
+      &#34;filter&#34;: {
+        &#34;term&#34;: { &#34;genre.keyword&#34;: &#34;Comedy&#34; }
+      }
+    }
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="搜索的相关性算分">搜索的相关性算分</h2>
+<p>相关性描述的是搜索语句和文档的匹配程度。ES 5之前，默认的相关性算分采用 TF-IDF，现在采用 BM 25。</p>
+<ul>
+<li>词频(Term Frequency): 检索词在一篇文档中出现的频率，<code>检索词出现的次数 / 文档总字数</code></li>
+<li>DF: 检索词在所有文档中出现的频率</li>
+<li>逆文档频率(Inverse Document Frequency): <code>log(全部文档数/检索词出现过的文档总数)</code></li>
+<li>TF-IDF 的本质是将 TF 求和变成了加权求和。<code>TF(Term1) * IDF(Term1) + TF(Term2) * IDF(Term2) ...</code></li>
+</ul>
+<p>Lucene 中的 TF-IDF 评分公式:</p>
+<p><img src="https://passage-1253400711.cos-website.ap-beijing.myqcloud.com/2020-05-11-235000.png" alt=""></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">PUT testscore/_bulk
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 1<span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;we use ElasticSearch to power the search&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 2<span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;we like ElasticSearch&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 3<span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;The scoring of documents is calculated by the scoring formula&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 4<span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;you known, for search&#34;</span><span class="o">}</span>
+
+<span class="c1"># 通过打开 explain，可以看到相关性分的计算过程</span>
+POST testscore/_search
+<span class="o">{</span>
+  <span class="s2">&#34;explain&#34;</span>: true,
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;match&#34;</span>: <span class="o">{</span> <span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;elasticsearch&#34;</span> <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1"># 通过 Boosting 控制相关度</span>
+<span class="c1"># boost &gt; 1 时，打分的相关度相对性提升</span>
+<span class="c1"># 0 &lt; boost &lt; 1 时，打分的权重相对性降低</span>
+<span class="c1"># boost &lt; 0 时，贡献负分</span>
+<span class="c1"># 这里的 negative_boost 就是匹配 &#34;like&#34; term 的文档的相关性分会在最后乘 0.2</span>
+POST testscore/_search
+<span class="o">{</span>
+  <span class="s2">&#34;explain&#34;</span>: true, 
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;boosting&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;positive&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;term&#34;</span>: <span class="o">{</span> <span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;elasticsearch&#34;</span> <span class="o">}</span>
+      <span class="o">}</span>,
+      <span class="s2">&#34;negative&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;term&#34;</span>: <span class="o">{</span> <span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;like&#34;</span> <span class="o">}</span>
+      <span class="o">}</span>,
+      <span class="s2">&#34;negative_boost&#34;</span>: 0.2
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="多字符串多字段查询">多字符串多字段查询</h2>
+<p>在 ES 中，有 Query 和 Filter 两种不同的 Context:</p>
+<ul>
+<li>Query Context: 相关性算分</li>
+<li>Filter Context: 不需要算法(Yes or No)，可以利用 Cache，获得更好的性能</li>
+</ul>
+<h3 id="布尔查询">布尔查询</h3>
+<p>布尔查询是一个或多个查询子句的组合。</p>
+<p>相关性并不是全文本检索的独有特性，也适用于 Yes | No 的子句，匹配的子句越多，相关性越高。如果多条查询语句被合并成一条复合查询语句，例如 bool 查询，则每个查询子句计算出的评分会被合并到总的相关性评分中。</p>
+<table>
+<thead>
+<tr>
+<th>子句</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>must</td>
+<td>必须匹配，贡献算分</td>
+</tr>
+<tr>
+<td>should</td>
+<td>选择性匹配，贡献算分</td>
+</tr>
+<tr>
+<td>must_not</td>
+<td>Filter Context，查询子句，必须不能匹配</td>
+</tr>
+<tr>
+<td>filter</td>
+<td>Filter Context，必须匹配，但不贡献算分</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">POST /products/_bulk
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 1<span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;price&#34;</span>: 10, <span class="s2">&#34;avaliable&#34;</span>: true, <span class="s2">&#34;date&#34;</span>: <span class="s2">&#34;2019-01-01&#34;</span>, <span class="s2">&#34;productID&#34;</span>: <span class="s2">&#34;XHDK-A-1293-#f13&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 2<span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;price&#34;</span>: 20, <span class="s2">&#34;avaliable&#34;</span>: true, <span class="s2">&#34;date&#34;</span>: <span class="s2">&#34;2020-01-01&#34;</span>, <span class="s2">&#34;productID&#34;</span>: <span class="s2">&#34;KDKE-A-1293-#f13&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 3<span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;price&#34;</span>: 30, <span class="s2">&#34;avaliable&#34;</span>: true, <span class="s2">&#34;productID&#34;</span>: <span class="s2">&#34;JODL-A-9947-#f13&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 4<span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;price&#34;</span>: 30, <span class="s2">&#34;avaliable&#34;</span>: false, <span class="s2">&#34;productID&#34;</span>: <span class="s2">&#34;QQPX-R-3956-#f13&#34;</span><span class="o">}</span>
+
+
+<span class="c1"># 布尔查询示例，多个条件之间是 and 的关系。</span>
+<span class="c1"># 每个子句算的分会汇总起来，变成布尔语句的分</span>
+POST /products/_search
+<span class="o">{</span>
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;bool&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;must&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;term&#34;</span>: <span class="o">{</span><span class="s2">&#34;price&#34;</span>: <span class="s2">&#34;30&#34;</span><span class="o">}</span>
+      <span class="o">}</span>,
+      <span class="s2">&#34;filter&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;term&#34;</span>: <span class="o">{</span><span class="s2">&#34;avaliable&#34;</span>: true<span class="o">}</span>
+      <span class="o">}</span>,
+      <span class="s2">&#34;must_not&#34;</span>: <span class="o">[</span>
+        <span class="o">{</span><span class="s2">&#34;range&#34;</span>: <span class="o">{</span> <span class="s2">&#34;price&#34;</span>: <span class="o">{</span><span class="s2">&#34;lte&#34;</span>: 10<span class="o">}</span> <span class="o">}}</span>
+      <span class="o">]</span>,
+      <span class="s2">&#34;should&#34;</span>: <span class="o">[</span>
+        <span class="o">{</span><span class="s2">&#34;term&#34;</span>: <span class="o">{</span><span class="s2">&#34;productID.keyword&#34;</span>: <span class="s2">&#34;JODL-A-9947-#f13&#34;</span><span class="o">}}</span>,
+        <span class="o">{</span><span class="s2">&#34;term&#34;</span>: <span class="o">{</span><span class="s2">&#34;productID.keyword&#34;</span>: <span class="s2">&#34;XHDK-A-1293-#f13&#34;</span><span class="o">}}</span>
+      <span class="o">]</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1"># filter 和 must_not 都是 Filter Context，不会进行相关性算分，可以看到算出的分都是0</span>
+POST /products/_search
+<span class="o">{</span>
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;bool&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;filter&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;term&#34;</span>: <span class="o">{</span><span class="s2">&#34;avaliable&#34;</span>: true<span class="o">}</span>
+      <span class="o">}</span>,
+      <span class="s2">&#34;must_not&#34;</span>: <span class="o">[</span>
+        <span class="o">{</span><span class="s2">&#34;range&#34;</span>: <span class="o">{</span><span class="s2">&#34;price&#34;</span>: <span class="o">{</span><span class="s2">&#34;lte&#34;</span>: 10<span class="o">}}}</span>
+      <span class="o">]</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">POST /blogs/_bulk
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 1<span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;title&#34;</span>: <span class="s2">&#34;Apple iPad&#34;</span>, <span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;Apple iPad,Apple iPad&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 2<span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;title&#34;</span>: <span class="s2">&#34;Apple iPad,Apple iPad&#34;</span>, <span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;Apple iPad&#34;</span><span class="o">}</span>
+
+<span class="c1"># 通过 boost 控制字段的分数，调整字段之间的优先级</span>
+<span class="c1"># 当 title 的 boost 较大时，title 长的文档(2)就会排在前面，反之同理</span>
+POST /blogs/_search
+<span class="o">{</span>
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;bool&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;should&#34;</span>: <span class="o">[</span>
+        <span class="o">{</span>
+          <span class="s2">&#34;match&#34;</span>: <span class="o">{</span>
+            <span class="s2">&#34;title&#34;</span>:<span class="o">{</span>
+              <span class="s2">&#34;query&#34;</span>: <span class="s2">&#34;apple,ipad&#34;</span>,
+              <span class="s2">&#34;boost&#34;</span>: <span class="m">3</span>
+            <span class="o">}}</span>
+        <span class="o">}</span>,
+        <span class="o">{</span>
+          <span class="s2">&#34;match&#34;</span>: <span class="o">{</span>
+            <span class="s2">&#34;content&#34;</span>:<span class="o">{</span>
+              <span class="s2">&#34;query&#34;</span>: <span class="s2">&#34;apple,ipad&#34;</span>,
+              <span class="s2">&#34;boost&#34;</span>: <span class="m">2</span>
+            <span class="o">}}</span>
+        <span class="o">}</span>
+      <span class="o">]</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">POST /news/_bulk
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 1<span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;Apple Mac&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 2<span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;Apple iPad&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 3<span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;Apple employee like Apple Pie and Apple Juice&#34;</span><span class="o">}</span>
+
+
+<span class="c1"># 查询结果中包含了食物信息(3)，我们并不想要这一条</span>
+POST /news/_search
+<span class="o">{</span>
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;bool&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;must&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;match&#34;</span>: <span class="o">{</span><span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;apple&#34;</span><span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1"># 通过布尔查询将 3 去掉</span>
+<span class="c1"># 布尔查询多个子句之间是 and 的关系</span>
+POST /news/_search
+<span class="o">{</span>
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;bool&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;must&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;match&#34;</span>: <span class="o">{</span><span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;apple&#34;</span><span class="o">}</span>
+      <span class="o">}</span>,
+      <span class="s2">&#34;must_not&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;match&#34;</span>: <span class="o">{</span><span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;pie&#34;</span><span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1"># 通过 boosting 降低3的权重，让它排到后面</span>
+POST /news/_search
+<span class="o">{</span>
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;boosting&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;positive&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;match&#34;</span>: <span class="o">{</span><span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;apple&#34;</span><span class="o">}</span>
+      <span class="o">}</span>,
+      <span class="s2">&#34;negative&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;match&#34;</span>: <span class="o">{</span><span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;pie&#34;</span><span class="o">}</span>
+      <span class="o">}</span>,
+      <span class="s2">&#34;negative_boost&#34;</span>: 0.5
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="对象及嵌套对象nested">对象及嵌套对象(Nested)</h2>
+<h3 id="包含嵌套对象的文档">包含嵌套对象的文档</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 创建博客文档
+
+PUT /blog
+{
+  &#34;mappings&#34;: {
+    &#34;properties&#34;: {
+      &#34;content&#34;: {
+        &#34;type&#34;: &#34;text&#34;
+      },
+      &#34;time&#34;: {
+        &#34;type&#34;: &#34;date&#34;
+      },
+      &#34;user&#34;: {
+        &#34;properties&#34;: {
+          &#34;city&#34;: {
+            &#34;type&#34;: &#34;text&#34;
+          },
+          &#34;userid&#34;: {
+            &#34;type&#34;: &#34;long&#34;
+          },
+          &#34;username&#34;: {
+            &#34;type&#34;: &#34;keyword&#34;
+          }
+        }
+      }
+    }
+  }
+}
+
+# 向博客文档中插入数据
+PUT blog/_doc/1
+{
+  &#34;content&#34;: &#34;I Like ElasticSearch&#34;,
+  &#34;time&#34;: &#34;2020-05-10T21:45:12&#34;,
+  &#34;user&#34;: {
+    &#34;userid&#34;: 1,
+    &#34;username&#34;: &#34;Jack&#34;,
+    &#34;city&#34;: &#34;Shanghai&#34;
+  }
+}
+
+# 查询 Blog 信息
+POST blog/_search
+{
+  &#34;query&#34;: {
+    &#34;bool&#34;: {
+      &#34;must&#34;: [
+        {&#34;match&#34;: {&#34;content&#34;: &#34;ElasticSearch&#34;}},
+        {&#34;match&#34;: {&#34;user.username&#34;: &#34;Jack&#34;}}
+      ]
+    }
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="包含对象数组的文档">包含对象数组的文档</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 创建电影的文档
+
+PUT my_movies
+{
+  &#34;mappings&#34;: {
+    &#34;properties&#34;: {
+      &#34;actors&#34;: {
+        &#34;properties&#34;: {
+          &#34;first_name&#34;: {
+            &#34;type&#34;: &#34;keyword&#34;
+          },
+          &#34;last_name&#34;: {
+            &#34;type&#34;: &#34;keyword&#34;
+          }
+        }
+      },
+      &#34;title&#34;: {
+        &#34;type&#34;: &#34;text&#34;,
+        &#34;fields&#34;: {
+          &#34;keyword&#34;: {
+            &#34;type&#34;: &#34;keyword&#34;,
+            &#34;ignore_above&#34;: 256
+          }
+        }
+      }
+    }
+  }
+}
+
+# 写入一条电影信息
+POST my_movies/_doc/1
+{
+  &#34;title&#34;: &#34;Speed&#34;,
+  &#34;actors&#34;: [
+    {&#34;first_name&#34;: &#34;Keanu&#34;, &#34;last_name&#34;: &#34;Reeves&#34;},
+    {&#34;first_name&#34;: &#34;Dennis&#34;, &#34;last_name&#34;: &#34;Hopper&#34;}
+  ]
+}
+
+# 由于 ES 会将数组的每个字段都扁平存储，所以以下查询能查到结果
+# &#34;title&#34;: &#34;speed&#34;
+# &#34;actor.first_name&#34;: [&#34;Keanu&#34;, &#34;Dennis&#34;],
+# &#34;actor.last_name&#34;: [&#34;Reeves&#34;, &#34;Hoppers&#34;]
+GET my_movies/_search
+{
+  &#34;query&#34;: {
+    &#34;bool&#34;: {
+      &#34;must&#34;: [
+        {&#34;match&#34;: {&#34;actors.first_name&#34;: &#34;Keanu&#34;}},
+        {&#34;match&#34;: {&#34;actors.last_name&#34;: &#34;Hopper&#34;}}
+      ]
+    }
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="nested-数据类型">Nested 数据类型</h3>
+<p>Nested 数据类型允许对象数组中的对象被独立索引，在 ES 内部，Nested 文档会被保存在两个 Lucene 文档中，在查询时做 Join 处理。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 创建电影的文档
+
+PUT my_movies
+{
+  &#34;mappings&#34;: {
+    &#34;properties&#34;: {
+      &#34;actors&#34;: {
+        # 注意这里声明了类型为 nested
+        &#34;type&#34;: &#34;nested&#34;,
+        &#34;properties&#34;: {
+          &#34;first_name&#34;: {
+            &#34;type&#34;: &#34;keyword&#34;
+          },
+          &#34;last_name&#34;: {
+            &#34;type&#34;: &#34;keyword&#34;
+          }
+        }
+      },
+      &#34;title&#34;: {
+        &#34;type&#34;: &#34;text&#34;,
+        &#34;fields&#34;: {
+          &#34;keyword&#34;: {
+            &#34;type&#34;: &#34;keyword&#34;,
+            &#34;ignore_above&#34;: 256
+          }
+        }
+      }
+    }
+  }
+}
+
+# 写入一条电影信息
+POST my_movies/_doc/1
+{
+  &#34;title&#34;: &#34;Speed&#34;,
+  &#34;actors&#34;: [
+    {&#34;first_name&#34;: &#34;Keanu&#34;, &#34;last_name&#34;: &#34;Reeves&#34;},
+    {&#34;first_name&#34;: &#34;Dennis&#34;, &#34;last_name&#34;: &#34;Hopper&#34;}
+  ]
+}
+
+# 通过一个嵌套对象字段进行查询
+GET my_movies/_search
+{
+  &#34;query&#34;: {
+    # 声明查询的字段是嵌套字段
+    &#34;nested&#34;: {
+      # 指出嵌套字段的位置
+      &#34;path&#34;: &#34;actors&#34;,
+      # 在嵌套字段内的查询方式
+      &#34;query&#34;: {
+        &#34;bool&#34;: {
+          &#34;should&#34;: [
+            {&#34;match&#34;: {&#34;actors.first_name&#34;: &#34;Keanu&#34;}},
+            {&#34;match&#34;: {&#34;actors.last_name&#34;: &#34;Hopper&#34;}}
+          ]
+        }
+      }
+      # 另一种简单的查询
+      # &#34;query&#34;: {
+      #   &#34;match&#34;: {&#34;actors.first_name&#34;: &#34;Keanu&#34;}
+      # }
+    }
+  }
+}
+
+# 使用 Nested 查询
+GET my_movies/_search
+{
+  &#34;query&#34;:{
+    &#34;nested&#34;: {
+      &#34;path&#34;: &#34;actors&#34;,
+      &#34;query&#34;: {
+        &#34;bool&#34;: {
+          &#34;must&#34;: [
+            {&#34;match&#34;: {&#34;actors.first_name&#34;: &#34;Keanu&#34;}},
+            {&#34;match&#34;: {&#34;actors.last_name&#34;: &#34;Reeves&#34;}}
+          ]
+        }
+      }
+    }
+  }
+}
+
+# 对嵌套对象的字段进行聚合
+GET my_movies/_search
+{
+  &#34;size&#34;: 0,
+  &#34;aggs&#34;: {
+    &#34;actors&#34;: {
+      &#34;nested&#34;: {
+        &#34;path&#34;: &#34;actors&#34;
+      },
+      &#34;aggs&#34;: {
+        &#34;acotr_name&#34;: {
+          &#34;terms&#34;: {
+            &#34;field&#34;: &#34;actors.first_name&#34;,
+            &#34;size&#34;: 10
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-05-10
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E7%AC%94%E8%AE%B0/">笔记</a>
+          <a href="/tags/elasticsearch/">ElasticSearch</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/2020/04/22/k8s-in-actions-5/">
+            <span class="next-text nav-default">《K8S in Actions》 第五章学习笔记</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+    <script src="https://utteranc.es/client.js"
+            repo="anotherbwangel/blog-comment"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.cddea96674a99fd8cea50d36fb19d9c91f497feea4af5ce4596afd2dbaab9202.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>
