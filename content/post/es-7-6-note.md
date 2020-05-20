@@ -876,6 +876,78 @@ GET /artists/_analyze
 }
 ```
 
+## 使用 Search-Template 和 Index-Alias 查询
+
+Search Template 可以定义一个查询，将 __查询优化__ 和 __使用查询__ 这两个工作分开， SearchTemplate 的语法参考[官方文档](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-template.html)。
+
+```sh
+# 定义搜索模板，通过 POST 也可以更新这个模板
+POST _scripts/tmdb
+{
+  "script": {
+    "lang": "mustache",
+    "source": {
+      "_source": [
+        "title", "overview"
+      ]
+    },
+    "size": 20,
+    "query": {
+      "multi_match": {
+        "query": "{{q}}",
+        "fields": ["title", "overview"]
+      }
+    }
+  }
+}
+
+# 使用搜索模板
+POST tmdb/_search/template
+{
+  "id": "tmdb",
+  "params": {
+    "q": "basketball with cartoon aliens"
+  }
+}
+```
+
+Index Alias，为索引创建一个别名，可以实现0停机运维。
+
+```sh
+# 为索引创建一个别名，可以将 tmdb-latest 当做 tmdb 来使用
+POST _aliases
+{
+  "actions": [
+    {
+      "add": {
+        "index": "tmdb",
+        "alias": "tmdb-latest"
+      }
+    }
+  ]
+}
+
+# 为索引创建别名，同时附带过滤条件，tmdb-latest-highrate 这个索引和 tmdb 索引的结构一样，但是只有 2191 个结果。(tmdb 有 3051 个结果)
+POST _aliases
+{
+  "actions": [
+    {
+      "add": {
+        "index": "tmdb",
+        "alias": "tmdb-latest-highrate",
+        "filter": {
+          "range": {
+            "vote_average": {
+              "gte": 6
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
 
 ## 对象及嵌套对象(Nested)
 
