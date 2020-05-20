@@ -49,7 +49,7 @@
 <meta itemprop="description" content="">
 <meta itemprop="datePublished" content="2020-05-10T17:28:40&#43;08:00" />
 <meta itemprop="dateModified" content="2020-05-10T17:28:40&#43;08:00" />
-<meta itemprop="wordCount" content="3984">
+<meta itemprop="wordCount" content="5409">
 
 
 
@@ -160,6 +160,14 @@
             <li><a href="#布尔查询">布尔查询</a></li>
           </ul>
         </li>
+        <li><a href="#单字符串多字段查询">单字符串多字段查询</a>
+          <ul>
+            <li><a href="#场景归纳">场景归纳</a></li>
+            <li><a href="#disjunction-max-query">Disjunction Max Query</a></li>
+          </ul>
+        </li>
+        <li><a href="#多语言及中文分词与检索">多语言及中文分词与检索</a></li>
+        <li><a href="#使用-search-template-和-index-alias-查询">使用 Search-Template 和 Index-Alias 查询</a></li>
         <li><a href="#对象及嵌套对象nested">对象及嵌套对象(Nested)</a>
           <ul>
             <li><a href="#包含嵌套对象的文档">包含嵌套对象的文档</a></li>
@@ -1047,7 +1055,7 @@ POST testscore/_search
 <span class="c1"># 这里的 negative_boost 就是匹配 &#34;like&#34; term 的文档的相关性分会在最后乘 0.2</span>
 POST testscore/_search
 <span class="o">{</span>
-  <span class="s2">&#34;explain&#34;</span>: true, 
+  <span class="s2">&#34;explain&#34;</span>: true,
   <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
     <span class="s2">&#34;boosting&#34;</span>: <span class="o">{</span>
       <span class="s2">&#34;positive&#34;</span>: <span class="o">{</span>
@@ -1374,6 +1382,536 @@ POST /news/_search
       <span class="s2">&#34;negative_boost&#34;</span>: 0.5
     <span class="o">}</span>
   <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="单字符串多字段查询">单字符串多字段查询</h2>
+<h3 id="场景归纳">场景归纳</h3>
+<h4 id="最佳字段-best-fields">最佳字段 (Best Fields)</h4>
+<p>当字段之间相互竞争，又相互管理。例如 title 和 body 这样的字段</p>
+<h4 id="多数字段-most-fields">多数字段 (Most fields)</h4>
+<p>处理英文内容是：一种常见的手段是，在主字段( English Analyzer)上抽取词干，加入同义词，以匹配更多的文档。相同的文本，加入子字段(Standard Analyzer)，以提供更加精确的匹配。其他字段作为匹配文档相关度的信号。匹配字段越多则越好。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">DELETE /titles
+
+<span class="c1"># 这里有两个字段 title, 和 title.std</span>
+PUT /titles
+<span class="o">{</span>
+  <span class="s2">&#34;mappings&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;properties&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;title&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;type&#34;</span>: <span class="s2">&#34;text&#34;</span>,
+        <span class="s2">&#34;analyzer&#34;</span>: <span class="s2">&#34;english&#34;</span>,
+        <span class="s2">&#34;fields&#34;</span>: <span class="o">{</span><span class="s2">&#34;std&#34;</span>: <span class="o">{</span><span class="s2">&#34;type&#34;</span>: <span class="s2">&#34;text&#34;</span>, <span class="s2">&#34;analyzer&#34;</span>: <span class="s2">&#34;standard&#34;</span><span class="o">}}</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+POST titles/_bulk
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>:<span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 1<span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;title&#34;</span>: <span class="s2">&#34;My dog barks&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>:<span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 2<span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;title&#34;</span>: <span class="s2">&#34;I see a lot of barking dogs on the road&#34;</span><span class="o">}</span>
+
+<span class="c1"># 这里会计算两个字段的分，这样更加符合的文档2就会在前面了</span>
+GET titles/_search
+<span class="o">{</span>
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;multi_match&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;query&#34;</span>: <span class="s2">&#34;barking dogs&#34;</span>,
+      <span class="s2">&#34;type&#34;</span>: <span class="s2">&#34;most_fields&#34;</span>,
+      <span class="s2">&#34;fields&#34;</span>: <span class="o">[</span><span class="s2">&#34;title&#34;</span>, <span class="s2">&#34;title.std&#34;</span><span class="o">]</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="混合字段-cross-field">混合字段 (Cross Field)</h4>
+<p>对于某些实体，例如人名，地址，图书信息。需要在多个字段中确定信息，单个字段只能作为整体的一部分。希望在任何列出的字段中找到尽可能多的词。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 跨字段搜索</span>
+
+PUT address/_doc/1
+<span class="o">{</span>
+  <span class="s2">&#34;street&#34;</span>: <span class="s2">&#34;5 Poland Street&#34;</span>,
+  <span class="s2">&#34;city&#34;</span>: <span class="s2">&#34;London&#34;</span>,
+  <span class="s2">&#34;country&#34;</span>: <span class="s2">&#34;United Kingdom&#34;</span>,
+  <span class="s2">&#34;postcode&#34;</span>: <span class="s2">&#34;W1V 3DG&#34;</span>
+<span class="o">}</span>
+
+<span class="c1"># 用一个关键字查询多个字段</span>
+POST address/_search
+<span class="o">{</span>
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;multi_match&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;query&#34;</span>: <span class="s2">&#34;Poland Street W1V&#34;</span>,
+      <span class="s2">&#34;type&#34;</span>: <span class="s2">&#34;cross_fields&#34;</span>,
+      <span class="s2">&#34;operator&#34;</span>: <span class="s2">&#34;and&#34;</span>,
+      <span class="s2">&#34;fields&#34;</span>: <span class="o">[</span><span class="s2">&#34;street&#34;</span>, <span class="s2">&#34;city&#34;</span>, <span class="s2">&#34;country&#34;</span>, <span class="s2">&#34;postcode&#34;</span><span class="o">]</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="disjunction-max-query">Disjunction Max Query</h3>
+<p>将任何与任一查询匹配的文档作为结果返回。采用字段上最匹配的评分作为最终评分返回。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">PUT /blogs/_bulk
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 1<span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;title&#34;</span>: <span class="s2">&#34;Quick brown rabbits&#34;</span>, <span class="s2">&#34;body&#34;</span>: <span class="s2">&#34;Brown rabbitq are commonly seen.&#34;</span><span class="o">}</span>
+<span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 2<span class="o">}}</span>
+<span class="o">{</span><span class="s2">&#34;title&#34;</span>: <span class="s2">&#34;Keeping pets healthy&#34;</span>, <span class="s2">&#34;body&#34;</span>: <span class="s2">&#34;My quick brown fox eats rabbits on a regular basis.&#34;</span><span class="o">}</span>
+
+<span class="c1"># 查询算分过程</span>
+<span class="c1"># 查询 should 语句中的两个查询</span>
+<span class="c1"># 加和两个查询的评分</span>
+<span class="c1"># 乘以匹配语句的总数</span>
+<span class="c1"># 除以所有语句的总数</span>
+
+<span class="c1"># 这里的文档1的两个子句的算分平均分更高，所以1在前面</span>
+POST /blogs/_search
+<span class="o">{</span>
+  <span class="s2">&#34;explain&#34;</span>: true,
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;bool&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;should&#34;</span>: <span class="o">[</span>
+        <span class="o">{</span><span class="s2">&#34;match&#34;</span>: <span class="o">{</span><span class="s2">&#34;title&#34;</span>: <span class="s2">&#34;Brown fox&#34;</span><span class="o">}}</span>,
+        <span class="o">{</span><span class="s2">&#34;match&#34;</span>: <span class="o">{</span><span class="s2">&#34;body&#34;</span>: <span class="s2">&#34;Brown fox&#34;</span><span class="o">}}</span>
+      <span class="o">]</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1"># 这里使用了 dis_max，返回的最终分数算分是根据最高的那个子句的分数得出的</span>
+POST /blogs/_search
+<span class="o">{</span>
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;dis_max&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;queries&#34;</span>: <span class="o">[</span>
+        <span class="o">{</span><span class="s2">&#34;match&#34;</span>: <span class="o">{</span><span class="s2">&#34;title&#34;</span>: <span class="s2">&#34;Brown fox&#34;</span><span class="o">}}</span>,
+        <span class="o">{</span><span class="s2">&#34;match&#34;</span>: <span class="o">{</span><span class="s2">&#34;body&#34;</span>: <span class="s2">&#34;Brown fox&#34;</span><span class="o">}}</span>
+      <span class="o">]</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1"># 获得评分最高的语句后，tie_breaker 将与其他语句的评分相乘，得到最终评分</span>
+POST /blogs/_search
+<span class="o">{</span>
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;dis_max&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;queries&#34;</span>: <span class="o">[</span>
+        <span class="o">{</span><span class="s2">&#34;match&#34;</span>: <span class="o">{</span><span class="s2">&#34;title&#34;</span>: <span class="s2">&#34;Quick pets&#34;</span><span class="o">}}</span>,
+        <span class="o">{</span><span class="s2">&#34;match&#34;</span>: <span class="o">{</span><span class="s2">&#34;body&#34;</span>: <span class="s2">&#34;Quick pets&#34;</span><span class="o">}}</span>
+      <span class="o">]</span>,
+      <span class="s2">&#34;tie_breaker&#34;</span>: 0.7
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="多语言及中文分词与检索">多语言及中文分词与检索</h2>
+<p><a href="https://github.com/bwangelme/es-7.6">Docker ES 集群的配置</a></p>
+<ul>
+<li>使用拼音分词器进行分词</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">PUT /artists/
+<span class="o">{</span>
+  <span class="s2">&#34;settings&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;analysis&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;analyzer&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;user_name_analyzer&#34;</span>: <span class="o">{</span>
+          <span class="s2">&#34;tokenizer&#34;</span>: <span class="s2">&#34;whitespace&#34;</span>,
+          <span class="s2">&#34;filter&#34;</span>: <span class="s2">&#34;pinyin_first_letter_and_full_pinyin_filter&#34;</span>
+        <span class="o">}</span>
+      <span class="o">}</span>,
+      <span class="s2">&#34;filter&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;pinyin_first_letter_and_full_pinyin_filter&#34;</span>: <span class="o">{</span>
+          <span class="s2">&#34;type&#34;</span>: <span class="s2">&#34;pinyin&#34;</span>,
+          <span class="s2">&#34;keep_first_letter&#34;</span>: true,
+          <span class="s2">&#34;keep_full_pinyin&#34;</span>: false,
+          <span class="s2">&#34;keep_none_chinese&#34;</span>: true,
+          <span class="s2">&#34;keep_original&#34;</span>: false,
+          <span class="s2">&#34;limit_first_letter_length&#34;</span>: 16,
+          <span class="s2">&#34;lowercase&#34;</span>: true,
+          <span class="s2">&#34;trim_whitespace&#34;</span>: true,
+          <span class="s2">&#34;keep_none_chinese_in_first_letter&#34;</span>: <span class="nb">true</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+GET /artists/_analyze
+<span class="o">{</span>
+  <span class="s2">&#34;text&#34;</span>: <span class="o">[</span><span class="s2">&#34;刘德华 张学友 郭富城 黎明 四大天王&#34;</span><span class="o">]</span>,
+  <span class="s2">&#34;analyzer&#34;</span>: <span class="s2">&#34;user_name_analyzer&#34;</span>
+<span class="o">}</span>
+<span class="o">{</span>
+  <span class="s2">&#34;tokens&#34;</span> : <span class="o">[</span>
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;ldh&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 0,
+      <span class="s2">&#34;end_offset&#34;</span> : 3,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;word&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">0</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;zxy&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 4,
+      <span class="s2">&#34;end_offset&#34;</span> : 7,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;word&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">1</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;gfc&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 8,
+      <span class="s2">&#34;end_offset&#34;</span> : 11,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;word&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">2</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;lm&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 12,
+      <span class="s2">&#34;end_offset&#34;</span> : 14,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;word&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">3</span>
+    <span class="o">}</span>,
+    <span class="o">{</span>
+      <span class="s2">&#34;token&#34;</span> : <span class="s2">&#34;sdtw&#34;</span>,
+      <span class="s2">&#34;start_offset&#34;</span> : 15,
+      <span class="s2">&#34;end_offset&#34;</span> : 19,
+      <span class="s2">&#34;type&#34;</span> : <span class="s2">&#34;word&#34;</span>,
+      <span class="s2">&#34;position&#34;</span> : <span class="m">4</span>
+    <span class="o">}</span>
+  <span class="o">]</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="使用-search-template-和-index-alias-查询">使用 Search-Template 和 Index-Alias 查询</h2>
+<p>Search Template 可以定义一个查询，将 <strong>查询优化</strong> 和 <strong>使用查询</strong> 这两个工作分开， SearchTemplate 的语法参考<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-template.html">官方文档</a>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 定义搜索模板，通过 POST 也可以更新这个模板</span>
+POST _scripts/tmdb
+<span class="o">{</span>
+  <span class="s2">&#34;script&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;lang&#34;</span>: <span class="s2">&#34;mustache&#34;</span>,
+    <span class="s2">&#34;source&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;_source&#34;</span>: <span class="o">[</span>
+        <span class="s2">&#34;title&#34;</span>, <span class="s2">&#34;overview&#34;</span>
+      <span class="o">]</span>
+    <span class="o">}</span>,
+    <span class="s2">&#34;size&#34;</span>: 20,
+    <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;multi_match&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;query&#34;</span>: <span class="s2">&#34;{{q}}&#34;</span>,
+        <span class="s2">&#34;fields&#34;</span>: <span class="o">[</span><span class="s2">&#34;title&#34;</span>, <span class="s2">&#34;overview&#34;</span><span class="o">]</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1"># 使用搜索模板</span>
+POST tmdb/_search/template
+<span class="o">{</span>
+  <span class="s2">&#34;id&#34;</span>: <span class="s2">&#34;tmdb&#34;</span>,
+  <span class="s2">&#34;params&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;q&#34;</span>: <span class="s2">&#34;basketball with cartoon aliens&#34;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Index Alias，为索引创建一个别名，可以实现0停机运维。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 为索引创建一个别名，可以将 tmdb-latest 当做 tmdb 来使用</span>
+POST _aliases
+<span class="o">{</span>
+  <span class="s2">&#34;actions&#34;</span>: <span class="o">[</span>
+    <span class="o">{</span>
+      <span class="s2">&#34;add&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;index&#34;</span>: <span class="s2">&#34;tmdb&#34;</span>,
+        <span class="s2">&#34;alias&#34;</span>: <span class="s2">&#34;tmdb-latest&#34;</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">]</span>
+<span class="o">}</span>
+
+<span class="c1"># 为索引创建别名，同时附带过滤条件，tmdb-latest-highrate 这个索引和 tmdb 索引的结构一样，但是只有 2191 个结果。(tmdb 有 3051 个结果)</span>
+POST _aliases
+<span class="o">{</span>
+  <span class="s2">&#34;actions&#34;</span>: <span class="o">[</span>
+    <span class="o">{</span>
+      <span class="s2">&#34;add&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;index&#34;</span>: <span class="s2">&#34;tmdb&#34;</span>,
+        <span class="s2">&#34;alias&#34;</span>: <span class="s2">&#34;tmdb-latest-highrate&#34;</span>,
+        <span class="s2">&#34;filter&#34;</span>: <span class="o">{</span>
+          <span class="s2">&#34;range&#34;</span>: <span class="o">{</span>
+            <span class="s2">&#34;vote_average&#34;</span>: <span class="o">{</span>
+              <span class="s2">&#34;gte&#34;</span>: <span class="m">6</span>
+            <span class="o">}</span>
+          <span class="o">}</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">]</span>
 <span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
