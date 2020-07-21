@@ -54,7 +54,7 @@
 ">
 <meta itemprop="datePublished" content="2020-04-22T21:44:44&#43;08:00" />
 <meta itemprop="dateModified" content="2020-04-22T21:44:44&#43;08:00" />
-<meta itemprop="wordCount" content="1960">
+<meta itemprop="wordCount" content="2458">
 
 
 
@@ -165,6 +165,7 @@
           <ul>
             <li><a href="#通过-nodeport-类型的服务向外暴露">通过 NodePort 类型的服务向外暴露</a></li>
             <li><a href="#创建--使用-nodeport-类型的服务">创建 &amp; 使用 NodePort 类型的服务</a></li>
+            <li><a href="#通过负载均衡器将服务暴露出来">通过负载均衡器将服务暴露出来</a></li>
           </ul>
         </li>
       </ul>
@@ -802,6 +803,146 @@ You got it on default mux, 10.
 </div><ul>
 <li><a href="https://kubernetes.io/zh/docs/reference/kubectl/jsonpath/">JSON Path 的文档</a></li>
 </ul>
+<h3 id="通过负载均衡器将服务暴露出来">通过负载均衡器将服务暴露出来</h3>
+<p>在云提供商上运行的 Kubernetes 集群通常支持从云基础架构自动提供负载均衡器。通过指定类型为 <code>LoadBalancer</code>，就可以创建一个负载均衡器。
+它通常拥有自己独一无二的可公开访问的IP地址，并将所有的连接重定向到服务，可以通过负载均衡器的公开IP地址访问服务。</p>
+<p>LoadBalancer 类型的服务是一个具有额外的基础设施提供的负载均衡器 NodePort 服务。使用 <code>kubectl explain</code> 可以看到该服务选择的 <code>NodePort</code> 端口。</p>
+<ul>
+<li>kubia-svc-loadbalancer.yaml</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Service<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>kubia-loadbalancer<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">type</span><span class="p">:</span><span class="w"> </span>LoadBalancer<span class="w">
+</span><span class="w">  </span><span class="k">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="k">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span><span class="w">      </span><span class="k">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">  </span><span class="k">selector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">app</span><span class="p">:</span><span class="w"> </span>kubia<span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 loadbalancer 服务</span>
+ø&gt; kubectl create -f kubia-svc-loadbalancer.yaml
+service/kubia-loadbalancer created
+
+<span class="c1"># 查看创建的 lb 服务，External-IP 要等一会才会出现</span>
+ø&gt; kubectl get svc kubia-loadbalancer
+NAME                 TYPE           CLUSTER-IP    EXTERNAL-IP     PORT<span class="o">(</span>S<span class="o">)</span>        AGE
+kubia-loadbalancer   LoadBalancer   10.66.4.173   35.221.253.22   80:32179/TCP   47s
+<span class="c1"># External-IP 可以访问</span>
+ø&gt; ping 35.221.253.22
+PING 35.221.253.22 <span class="o">(</span>35.221.253.22<span class="o">)</span>: <span class="m">56</span> data bytes
+<span class="m">64</span> bytes from 35.221.253.22: <span class="nv">icmp_seq</span><span class="o">=</span><span class="m">0</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">102</span> <span class="nv">time</span><span class="o">=</span>166.876 ms
+<span class="m">64</span> bytes from 35.221.253.22: <span class="nv">icmp_seq</span><span class="o">=</span><span class="m">1</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">102</span> <span class="nv">time</span><span class="o">=</span>173.021 ms
+^C
+--- 35.221.253.22 ping statistics ---
+<span class="m">2</span> packets transmitted, <span class="m">2</span> packets received, 0.0% packet loss
+round-trip min/avg/max/stddev <span class="o">=</span> 166.876/169.948/173.021/3.072 ms
+
+<span class="c1"># 访问 External-IP 的 80 端口</span>
+ø&gt; http 35.221.253.22
+HTTP/1.1 <span class="m">200</span> OK
+Content-Length: <span class="m">38</span>
+Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+Date: Mon, <span class="m">20</span> Jul <span class="m">2020</span> 23:30:33 GMT
+
+You<span class="se">\&#39;</span>ve hit kubia-6wjvz on default mux
+
+<span class="c1"># 查看负载均衡器的信息</span>
+ø&gt; kubectl describe svc kubia-loadbalancer                                                                 07:39:03 <span class="o">(</span>07-21<span class="o">)</span>
+Name:                     kubia-loadbalancer
+Namespace:                default
+Labels:                   &lt;none&gt;
+Annotations:              &lt;none&gt;
+Selector:                 <span class="nv">app</span><span class="o">=</span>kubia
+Type:                     LoadBalancer
+IP:                       10.66.4.173
+LoadBalancer Ingress:     35.221.253.22
+Port:                     &lt;unset&gt;  80/TCP
+TargetPort:               8080/TCP
+<span class="c1"># 选择了 32179 作为节点端口</span>
+NodePort:                 &lt;unset&gt;  32179/TCP
+Endpoints:                10.0.0.2:8080,10.0.0.3:8080,10.0.0.6:8080
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:
+  Type    Reason                Age   From                Message
+  ----    ------                ----  ----                -------
+  Normal  EnsuringLoadBalancer  15m   service-controller  Ensuring load balancer
+  Normal  EnsuredLoadBalancer   15m   service-controller  Ensured load balancer
+</code></pre></td></tr></table>
+</div>
+</div>
     </div>
 
     <div class="post-copyright">

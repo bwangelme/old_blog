@@ -49,7 +49,7 @@
 <meta itemprop="description" content="">
 <meta itemprop="datePublished" content="2020-05-10T17:28:40&#43;08:00" />
 <meta itemprop="dateModified" content="2020-05-10T17:28:40&#43;08:00" />
-<meta itemprop="wordCount" content="5409">
+<meta itemprop="wordCount" content="5122">
 
 
 
@@ -168,11 +168,11 @@
         </li>
         <li><a href="#多语言及中文分词与检索">多语言及中文分词与检索</a></li>
         <li><a href="#使用-search-template-和-index-alias-查询">使用 Search-Template 和 Index-Alias 查询</a></li>
-        <li><a href="#对象及嵌套对象nested">对象及嵌套对象(Nested)</a>
+        <li><a href="#利用-function-score-query-优化算法">利用 Function-Score-Query 优化算法</a></li>
+        <li><a href="#termphrase-suggester">Term&amp;Phrase Suggester</a>
           <ul>
-            <li><a href="#包含嵌套对象的文档">包含嵌套对象的文档</a></li>
-            <li><a href="#包含对象数组的文档">包含对象数组的文档</a></li>
-            <li><a href="#nested-数据类型">Nested 数据类型</a></li>
+            <li><a href="#term-suggester">Term Suggester</a></li>
+            <li><a href="#phrase-suggester">Phrase Suggester</a></li>
           </ul>
         </li>
       </ul>
@@ -1873,12 +1873,6 @@ POST tmdb/_search/template
 </span><span class="lnt">24
 </span><span class="lnt">25
 </span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 为索引创建一个别名，可以将 tmdb-latest 当做 tmdb 来使用</span>
@@ -1902,21 +1896,14 @@ POST _aliases
       <span class="s2">&#34;add&#34;</span>: <span class="o">{</span>
         <span class="s2">&#34;index&#34;</span>: <span class="s2">&#34;tmdb&#34;</span>,
         <span class="s2">&#34;alias&#34;</span>: <span class="s2">&#34;tmdb-latest-highrate&#34;</span>,
-        <span class="s2">&#34;filter&#34;</span>: <span class="o">{</span>
-          <span class="s2">&#34;range&#34;</span>: <span class="o">{</span>
-            <span class="s2">&#34;vote_average&#34;</span>: <span class="o">{</span>
-              <span class="s2">&#34;gte&#34;</span>: <span class="m">6</span>
-            <span class="o">}</span>
-          <span class="o">}</span>
-        <span class="o">}</span>
+        <span class="s2">&#34;filter&#34;</span>: <span class="o">{</span> <span class="s2">&#34;range&#34;</span>: <span class="o">{</span> <span class="s2">&#34;vote_average&#34;</span>: <span class="o">{</span> <span class="s2">&#34;gte&#34;</span>: <span class="m">6</span> <span class="o">}</span> <span class="o">}</span> <span class="o">}</span>
       <span class="o">}</span>
     <span class="o">}</span>
   <span class="o">]</span>
 <span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="对象及嵌套对象nested">对象及嵌套对象(Nested)</h2>
-<h3 id="包含嵌套对象的文档">包含嵌套对象的文档</h3>
+</div><h2 id="利用-function-score-query-优化算法">利用 Function-Score-Query 优化算法</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -1966,70 +1953,130 @@ POST _aliases
 </span><span class="lnt">45
 </span><span class="lnt">46
 </span><span class="lnt">47
-</span><span class="lnt">48
-</span><span class="lnt">49
-</span><span class="lnt">50
-</span><span class="lnt">51
-</span><span class="lnt">52
-</span><span class="lnt">53
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 创建博客文档
+<pre class="chroma"><code class="language-sh" data-lang="sh">PUT /blogs/_doc/1
+<span class="o">{</span>
+  <span class="s2">&#34;title&#34;</span>: <span class="s2">&#34;About popularity&#34;</span>,
+  <span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;In this post we will talk about...&#34;</span>,
+  <span class="s2">&#34;votes&#34;</span>: <span class="m">0</span>
+<span class="o">}</span>
+PUT /blogs/_doc/2
+<span class="o">{</span>
+  <span class="s2">&#34;title&#34;</span>: <span class="s2">&#34;About popularity&#34;</span>,
+  <span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;In this post we will talk about...&#34;</span>,
+  <span class="s2">&#34;votes&#34;</span>: <span class="m">100</span>
+<span class="o">}</span>
+PUT /blogs/_doc/3
+<span class="o">{</span>
+  <span class="s2">&#34;title&#34;</span>: <span class="s2">&#34;About popularity&#34;</span>,
+  <span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;In this post we will talk about...&#34;</span>,
+  <span class="s2">&#34;votes&#34;</span>: <span class="m">1000000</span>
+<span class="o">}</span>
 
-PUT /blog
-{
-  &#34;mappings&#34;: {
-    &#34;properties&#34;: {
-      &#34;content&#34;: {
-        &#34;type&#34;: &#34;text&#34;
-      },
-      &#34;time&#34;: {
-        &#34;type&#34;: &#34;date&#34;
-      },
-      &#34;user&#34;: {
-        &#34;properties&#34;: {
-          &#34;city&#34;: {
-            &#34;type&#34;: &#34;text&#34;
-          },
-          &#34;userid&#34;: {
-            &#34;type&#34;: &#34;long&#34;
-          },
-          &#34;username&#34;: {
-            &#34;type&#34;: &#34;keyword&#34;
-          }
-        }
-      }
-    }
-  }
-}
-
-# 向博客文档中插入数据
-PUT blog/_doc/1
-{
-  &#34;content&#34;: &#34;I Like ElasticSearch&#34;,
-  &#34;time&#34;: &#34;2020-05-10T21:45:12&#34;,
-  &#34;user&#34;: {
-    &#34;userid&#34;: 1,
-    &#34;username&#34;: &#34;Jack&#34;,
-    &#34;city&#34;: &#34;Shanghai&#34;
-  }
-}
-
-# 查询 Blog 信息
-POST blog/_search
-{
-  &#34;query&#34;: {
-    &#34;bool&#34;: {
-      &#34;must&#34;: [
-        {&#34;match&#34;: {&#34;content&#34;: &#34;ElasticSearch&#34;}},
-        {&#34;match&#34;: {&#34;user.username&#34;: &#34;Jack&#34;}}
-      ]
-    }
-  }
-}
+<span class="c1"># 设置新的相关度分 = 旧相关度分数 * votes</span>
+POST /blogs/_search
+<span class="o">{</span>
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;function_score&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;multi_match&#34;</span>: <span class="o">{</span>
+          <span class="s2">&#34;query&#34;</span>: <span class="s2">&#34;popularity&#34;</span>,
+          <span class="s2">&#34;fields&#34;</span>: <span class="o">[</span><span class="s2">&#34;title&#34;</span>, <span class="s2">&#34;content&#34;</span><span class="o">]</span>
+        <span class="o">}</span>
+      <span class="o">}</span>,
+      <span class="s2">&#34;field_value_factor&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;field&#34;</span>: <span class="s2">&#34;votes&#34;</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+<span class="c1"># 对排序结果进行随机排序</span>
+POST /blogs/_search
+<span class="o">{</span>
+  <span class="s2">&#34;query&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;function_score&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;random_score&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;seed&#34;</span>: <span class="m">234</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="包含对象数组的文档">包含对象数组的文档</h3>
+</div><h2 id="termphrase-suggester">Term&amp;Phrase Suggester</h2>
+<h3 id="term-suggester">Term Suggester</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">POST articles/_bulk
+<span class="o">{</span> <span class="s2">&#34;index&#34;</span>: <span class="o">{}</span> <span class="o">}</span>
+<span class="o">{</span> <span class="s2">&#34;body&#34;</span>: <span class="s2">&#34;lucene is very cool&#34;</span> <span class="o">}</span>
+<span class="o">{</span> <span class="s2">&#34;index&#34;</span>: <span class="o">{}</span> <span class="o">}</span>
+<span class="o">{</span> <span class="s2">&#34;body&#34;</span>: <span class="s2">&#34;Elasticsearch builds on top of lucene&#34;</span> <span class="o">}</span>
+<span class="o">{</span> <span class="s2">&#34;index&#34;</span>: <span class="o">{}</span> <span class="o">}</span>
+<span class="o">{</span> <span class="s2">&#34;body&#34;</span>: <span class="s2">&#34;Elasticsearch rocks&#34;</span> <span class="o">}</span>
+<span class="o">{</span> <span class="s2">&#34;index&#34;</span>: <span class="o">{}</span> <span class="o">}</span>
+<span class="o">{</span> <span class="s2">&#34;body&#34;</span>: <span class="s2">&#34;elastic is the company behind ELK stack&#34;</span> <span class="o">}</span>
+<span class="o">{</span> <span class="s2">&#34;index&#34;</span>: <span class="o">{}</span> <span class="o">}</span>
+<span class="o">{</span> <span class="s2">&#34;body&#34;</span>: <span class="s2">&#34;Elk stack rocks&#34;</span> <span class="o">}</span>
+<span class="o">{</span> <span class="s2">&#34;index&#34;</span>: <span class="o">{}</span> <span class="o">}</span>
+<span class="o">{</span> <span class="s2">&#34;body&#34;</span>: <span class="s2">&#34;elasticsearch is rock solid&#34;</span> <span class="o">}</span>
+
+<span class="c1"># 针对 lucen 会返回一个正确的推荐</span>
+<span class="c1"># 推荐的两种模式</span>
+<span class="c1"># 1. missing，如果关键字没有查询到，那么就返回已有 Token 索引的推荐</span>
+<span class="c1"># 2. Popular，返回索引 Token 出现频率更高的词</span>
+POST /articles/_search
+<span class="o">{</span>
+  <span class="s2">&#34;size&#34;</span>: 1,
+  <span class="s2">&#34;suggest&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;term-suggestion&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;text&#34;</span>: <span class="s2">&#34;lucen hocks&#34;</span>,
+      <span class="s2">&#34;term&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;prefix_length&#34;</span>: 0,
+        <span class="s2">&#34;suggest_mode&#34;</span>: <span class="s2">&#34;popular&#34;</span>,
+        <span class="s2">&#34;field&#34;</span>: <span class="s2">&#34;body&#34;</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="phrase-suggester">Phrase Suggester</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -2071,293 +2118,47 @@ POST blog/_search
 </span><span class="lnt">37
 </span><span class="lnt">38
 </span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span><span class="lnt">48
-</span><span class="lnt">49
-</span><span class="lnt">50
-</span><span class="lnt">51
-</span><span class="lnt">52
-</span><span class="lnt">53
-</span><span class="lnt">54
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 创建电影的文档
+<pre class="chroma"><code class="language-sh" data-lang="sh">POST /articles/_search
+<span class="o">{</span>
+  <span class="s2">&#34;suggest&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;my-suggestion&#34;</span>: <span class="o">{</span>
+      <span class="s2">&#34;text&#34;</span>: <span class="s2">&#34;lucne and elasticsear rock hello world&#34;</span>,
+      <span class="s2">&#34;phrase&#34;</span>: <span class="o">{</span>
+        <span class="s2">&#34;field&#34;</span>: <span class="s2">&#34;body&#34;</span>,
+        <span class="s2">&#34;max_errors&#34;</span>: 2,
+        <span class="s2">&#34;confidence&#34;</span>: 2,
+        <span class="s2">&#34;direct_generator&#34;</span>: <span class="o">[{</span>
+          <span class="s2">&#34;field&#34;</span>: <span class="s2">&#34;body&#34;</span>,
+          <span class="s2">&#34;suggest_mode&#34;</span>: <span class="s2">&#34;always&#34;</span>
+        <span class="o">}]</span>,
+        <span class="s2">&#34;highlight&#34;</span>: <span class="o">{</span>
+          <span class="s2">&#34;pre_tag&#34;</span>: <span class="s2">&#34;&lt;em&gt;&#34;</span>,
+          <span class="s2">&#34;post_tag&#34;</span>: <span class="s2">&#34;&lt;/em&gt;&#34;</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
 
-PUT my_movies
-{
-  &#34;mappings&#34;: {
-    &#34;properties&#34;: {
-      &#34;actors&#34;: {
-        &#34;properties&#34;: {
-          &#34;first_name&#34;: {
-            &#34;type&#34;: &#34;keyword&#34;
-          },
-          &#34;last_name&#34;: {
-            &#34;type&#34;: &#34;keyword&#34;
-          }
-        }
-      },
-      &#34;title&#34;: {
-        &#34;type&#34;: &#34;text&#34;,
-        &#34;fields&#34;: {
-          &#34;keyword&#34;: {
-            &#34;type&#34;: &#34;keyword&#34;,
-            &#34;ignore_above&#34;: 256
-          }
-        }
-      }
-    }
-  }
-}
-
-# 写入一条电影信息
-POST my_movies/_doc/1
-{
-  &#34;title&#34;: &#34;Speed&#34;,
-  &#34;actors&#34;: [
-    {&#34;first_name&#34;: &#34;Keanu&#34;, &#34;last_name&#34;: &#34;Reeves&#34;},
-    {&#34;first_name&#34;: &#34;Dennis&#34;, &#34;last_name&#34;: &#34;Hopper&#34;}
-  ]
-}
-
-# 由于 ES 会将数组的每个字段都扁平存储，所以以下查询能查到结果
-# &#34;title&#34;: &#34;speed&#34;
-# &#34;actor.first_name&#34;: [&#34;Keanu&#34;, &#34;Dennis&#34;],
-# &#34;actor.last_name&#34;: [&#34;Reeves&#34;, &#34;Hoppers&#34;]
-GET my_movies/_search
-{
-  &#34;query&#34;: {
-    &#34;bool&#34;: {
-      &#34;must&#34;: [
-        {&#34;match&#34;: {&#34;actors.first_name&#34;: &#34;Keanu&#34;}},
-        {&#34;match&#34;: {&#34;actors.last_name&#34;: &#34;Hopper&#34;}}
-      ]
-    }
-  }
-}
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="nested-数据类型">Nested 数据类型</h3>
-<p>Nested 数据类型允许对象数组中的对象被独立索引，在 ES 内部，Nested 文档会被保存在两个 Lucene 文档中，在查询时做 Join 处理。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">  1
-</span><span class="lnt">  2
-</span><span class="lnt">  3
-</span><span class="lnt">  4
-</span><span class="lnt">  5
-</span><span class="lnt">  6
-</span><span class="lnt">  7
-</span><span class="lnt">  8
-</span><span class="lnt">  9
-</span><span class="lnt"> 10
-</span><span class="lnt"> 11
-</span><span class="lnt"> 12
-</span><span class="lnt"> 13
-</span><span class="lnt"> 14
-</span><span class="lnt"> 15
-</span><span class="lnt"> 16
-</span><span class="lnt"> 17
-</span><span class="lnt"> 18
-</span><span class="lnt"> 19
-</span><span class="lnt"> 20
-</span><span class="lnt"> 21
-</span><span class="lnt"> 22
-</span><span class="lnt"> 23
-</span><span class="lnt"> 24
-</span><span class="lnt"> 25
-</span><span class="lnt"> 26
-</span><span class="lnt"> 27
-</span><span class="lnt"> 28
-</span><span class="lnt"> 29
-</span><span class="lnt"> 30
-</span><span class="lnt"> 31
-</span><span class="lnt"> 32
-</span><span class="lnt"> 33
-</span><span class="lnt"> 34
-</span><span class="lnt"> 35
-</span><span class="lnt"> 36
-</span><span class="lnt"> 37
-</span><span class="lnt"> 38
-</span><span class="lnt"> 39
-</span><span class="lnt"> 40
-</span><span class="lnt"> 41
-</span><span class="lnt"> 42
-</span><span class="lnt"> 43
-</span><span class="lnt"> 44
-</span><span class="lnt"> 45
-</span><span class="lnt"> 46
-</span><span class="lnt"> 47
-</span><span class="lnt"> 48
-</span><span class="lnt"> 49
-</span><span class="lnt"> 50
-</span><span class="lnt"> 51
-</span><span class="lnt"> 52
-</span><span class="lnt"> 53
-</span><span class="lnt"> 54
-</span><span class="lnt"> 55
-</span><span class="lnt"> 56
-</span><span class="lnt"> 57
-</span><span class="lnt"> 58
-</span><span class="lnt"> 59
-</span><span class="lnt"> 60
-</span><span class="lnt"> 61
-</span><span class="lnt"> 62
-</span><span class="lnt"> 63
-</span><span class="lnt"> 64
-</span><span class="lnt"> 65
-</span><span class="lnt"> 66
-</span><span class="lnt"> 67
-</span><span class="lnt"> 68
-</span><span class="lnt"> 69
-</span><span class="lnt"> 70
-</span><span class="lnt"> 71
-</span><span class="lnt"> 72
-</span><span class="lnt"> 73
-</span><span class="lnt"> 74
-</span><span class="lnt"> 75
-</span><span class="lnt"> 76
-</span><span class="lnt"> 77
-</span><span class="lnt"> 78
-</span><span class="lnt"> 79
-</span><span class="lnt"> 80
-</span><span class="lnt"> 81
-</span><span class="lnt"> 82
-</span><span class="lnt"> 83
-</span><span class="lnt"> 84
-</span><span class="lnt"> 85
-</span><span class="lnt"> 86
-</span><span class="lnt"> 87
-</span><span class="lnt"> 88
-</span><span class="lnt"> 89
-</span><span class="lnt"> 90
-</span><span class="lnt"> 91
-</span><span class="lnt"> 92
-</span><span class="lnt"> 93
-</span><span class="lnt"> 94
-</span><span class="lnt"> 95
-</span><span class="lnt"> 96
-</span><span class="lnt"> 97
-</span><span class="lnt"> 98
-</span><span class="lnt"> 99
-</span><span class="lnt">100
-</span><span class="lnt">101
-</span><span class="lnt">102
-</span><span class="lnt">103
-</span><span class="lnt">104
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 创建电影的文档
-
-PUT my_movies
-{
-  &#34;mappings&#34;: {
-    &#34;properties&#34;: {
-      &#34;actors&#34;: {
-        # 注意这里声明了类型为 nested
-        &#34;type&#34;: &#34;nested&#34;,
-        &#34;properties&#34;: {
-          &#34;first_name&#34;: {
-            &#34;type&#34;: &#34;keyword&#34;
-          },
-          &#34;last_name&#34;: {
-            &#34;type&#34;: &#34;keyword&#34;
-          }
-        }
-      },
-      &#34;title&#34;: {
-        &#34;type&#34;: &#34;text&#34;,
-        &#34;fields&#34;: {
-          &#34;keyword&#34;: {
-            &#34;type&#34;: &#34;keyword&#34;,
-            &#34;ignore_above&#34;: 256
-          }
-        }
-      }
-    }
-  }
-}
-
-# 写入一条电影信息
-POST my_movies/_doc/1
-{
-  &#34;title&#34;: &#34;Speed&#34;,
-  &#34;actors&#34;: [
-    {&#34;first_name&#34;: &#34;Keanu&#34;, &#34;last_name&#34;: &#34;Reeves&#34;},
-    {&#34;first_name&#34;: &#34;Dennis&#34;, &#34;last_name&#34;: &#34;Hopper&#34;}
-  ]
-}
-
-# 通过一个嵌套对象字段进行查询
-GET my_movies/_search
-{
-  &#34;query&#34;: {
-    # 声明查询的字段是嵌套字段
-    &#34;nested&#34;: {
-      # 指出嵌套字段的位置
-      &#34;path&#34;: &#34;actors&#34;,
-      # 在嵌套字段内的查询方式
-      &#34;query&#34;: {
-        &#34;bool&#34;: {
-          &#34;should&#34;: [
-            {&#34;match&#34;: {&#34;actors.first_name&#34;: &#34;Keanu&#34;}},
-            {&#34;match&#34;: {&#34;actors.last_name&#34;: &#34;Hopper&#34;}}
-          ]
-        }
-      }
-      # 另一种简单的查询
-      # &#34;query&#34;: {
-      #   &#34;match&#34;: {&#34;actors.first_name&#34;: &#34;Keanu&#34;}
-      # }
-    }
-  }
-}
-
-# 使用 Nested 查询
-GET my_movies/_search
-{
-  &#34;query&#34;:{
-    &#34;nested&#34;: {
-      &#34;path&#34;: &#34;actors&#34;,
-      &#34;query&#34;: {
-        &#34;bool&#34;: {
-          &#34;must&#34;: [
-            {&#34;match&#34;: {&#34;actors.first_name&#34;: &#34;Keanu&#34;}},
-            {&#34;match&#34;: {&#34;actors.last_name&#34;: &#34;Reeves&#34;}}
-          ]
-        }
-      }
-    }
-  }
-}
-
-# 对嵌套对象的字段进行聚合
-GET my_movies/_search
-{
-  &#34;size&#34;: 0,
-  &#34;aggs&#34;: {
-    &#34;actors&#34;: {
-      &#34;nested&#34;: {
-        &#34;path&#34;: &#34;actors&#34;
-      },
-      &#34;aggs&#34;: {
-        &#34;acotr_name&#34;: {
-          &#34;terms&#34;: {
-            &#34;field&#34;: &#34;actors.first_name&#34;,
-            &#34;size&#34;: 10
-          }
-        }
-      }
-    }
-  }
-}
+<span class="c1">## 返回结果</span>
+<span class="s2">&#34;suggest&#34;</span> : <span class="o">{</span>
+  <span class="s2">&#34;my-suggestion&#34;</span> : <span class="o">[</span>
+    <span class="o">{</span>
+      <span class="s2">&#34;text&#34;</span> : <span class="s2">&#34;lucne and elasticsear rock hello world&#34;</span>,
+      <span class="s2">&#34;offset&#34;</span> : 0,
+      <span class="s2">&#34;length&#34;</span> : 38,
+      <span class="s2">&#34;options&#34;</span> : <span class="o">[</span>
+        <span class="o">{</span>
+          <span class="s2">&#34;text&#34;</span> : <span class="s2">&#34;lucene and elasticsearch rock hello world&#34;</span>,
+          <span class="s2">&#34;highlighted&#34;</span> : <span class="s2">&#34;&lt;em&gt;lucene&lt;/em&gt; and &lt;em&gt;elasticsearch&lt;/em&gt; rock hello world&#34;</span>,
+          <span class="s2">&#34;score&#34;</span> : 1.5788074E-4
+        <span class="o">}</span>
+      <span class="o">]</span>
+    <span class="o">}</span>
+  <span class="o">]</span>
+<span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
 </div>
