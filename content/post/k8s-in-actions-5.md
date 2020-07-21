@@ -356,3 +356,78 @@ You got it on default mux, 10.
 ```
 
 + [JSON Path 的文档](https://kubernetes.io/zh/docs/reference/kubectl/jsonpath/)
+
+### 通过负载均衡器将服务暴露出来
+
+在云提供商上运行的 Kubernetes 集群通常支持从云基础架构自动提供负载均衡器。通过指定类型为 `LoadBalancer`，就可以创建一个负载均衡器。
+它通常拥有自己独一无二的可公开访问的IP地址，并将所有的连接重定向到服务，可以通过负载均衡器的公开IP地址访问服务。
+
+LoadBalancer 类型的服务是一个具有额外的基础设施提供的负载均衡器 NodePort 服务。使用 `kubectl explain` 可以看到该服务选择的 `NodePort` 端口。
+
++ kubia-svc-loadbalancer.yaml
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubia-loadbalancer
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: kubia
+```
+
+```sh
+# 创建 loadbalancer 服务
+ø> kubectl create -f kubia-svc-loadbalancer.yaml
+service/kubia-loadbalancer created
+
+# 查看创建的 lb 服务，External-IP 要等一会才会出现
+ø> kubectl get svc kubia-loadbalancer
+NAME                 TYPE           CLUSTER-IP    EXTERNAL-IP     PORT(S)        AGE
+kubia-loadbalancer   LoadBalancer   10.66.4.173   35.221.253.22   80:32179/TCP   47s
+# External-IP 可以访问
+ø> ping 35.221.253.22
+PING 35.221.253.22 (35.221.253.22): 56 data bytes
+64 bytes from 35.221.253.22: icmp_seq=0 ttl=102 time=166.876 ms
+64 bytes from 35.221.253.22: icmp_seq=1 ttl=102 time=173.021 ms
+^C
+--- 35.221.253.22 ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 166.876/169.948/173.021/3.072 ms
+
+# 访问 External-IP 的 80 端口
+ø> http 35.221.253.22
+HTTP/1.1 200 OK
+Content-Length: 38
+Content-Type: text/plain; charset=utf-8
+Date: Mon, 20 Jul 2020 23:30:33 GMT
+
+You\'ve hit kubia-6wjvz on default mux
+
+# 查看负载均衡器的信息
+ø> kubectl describe svc kubia-loadbalancer                                                                 07:39:03 (07-21)
+Name:                     kubia-loadbalancer
+Namespace:                default
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=kubia
+Type:                     LoadBalancer
+IP:                       10.66.4.173
+LoadBalancer Ingress:     35.221.253.22
+Port:                     <unset>  80/TCP
+TargetPort:               8080/TCP
+# 选择了 32179 作为节点端口
+NodePort:                 <unset>  32179/TCP
+Endpoints:                10.0.0.2:8080,10.0.0.3:8080,10.0.0.6:8080
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:
+  Type    Reason                Age   From                Message
+  ----    ------                ----  ----                -------
+  Normal  EnsuringLoadBalancer  15m   service-controller  Ensuring load balancer
+  Normal  EnsuredLoadBalancer   15m   service-controller  Ensured load balancer
+```
