@@ -54,7 +54,7 @@
 ">
 <meta itemprop="datePublished" content="2020-04-22T21:44:44&#43;08:00" />
 <meta itemprop="dateModified" content="2020-04-22T21:44:44&#43;08:00" />
-<meta itemprop="wordCount" content="2458">
+<meta itemprop="wordCount" content="4255">
 
 
 
@@ -168,6 +168,13 @@
             <li><a href="#通过负载均衡器将服务暴露出来">通过负载均衡器将服务暴露出来</a></li>
           </ul>
         </li>
+        <li><a href="#通过-ingress-暴露服务">通过 Ingress 暴露服务</a>
+          <ul>
+            <li><a href="#创建-ingress-服务">创建 Ingress 服务</a></li>
+            <li><a href="#配置-ingress-处理-tls-传输">配置 Ingress 处理 TLS 传输</a></li>
+          </ul>
+        </li>
+        <li><a href="#pod-就绪后发出信号">Pod 就绪后发出信号</a></li>
       </ul>
     </li>
   </ul>
@@ -942,7 +949,457 @@ Events:
   Normal  EnsuredLoadBalancer   15m   service-controller  Ensured load balancer
 </code></pre></td></tr></table>
 </div>
+</div><h2 id="通过-ingress-暴露服务">通过 Ingress 暴露服务</h2>
+<p>每个 LoadBalancer 服务都需要自己的负载均衡器，以及独有的公有 IP 地址，而 Ingress 只需要一个公网 IP 就能为许多服务提供访问。</p>
+<p>Ingress 控制器不会将请求转发给 Endpoint 服务器，只是通过 EndPoints 服务来选择一个 Pod 的IP，并且将请求转发给 Pod。</p>
+<h3 id="创建-ingress-服务">创建 Ingress 服务</h3>
+<ul>
+<li>kubia-ingress.yaml</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>extensions/v1beta1<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Ingress<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>kubia<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">rules</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="k">host</span><span class="p">:</span><span class="w"> </span>kubia.example.com<span class="w">
+</span><span class="w">      </span><span class="k">http</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">paths</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- <span class="k">path</span><span class="p">:</span><span class="w"> </span>/<span class="w">
+</span><span class="w">            </span><span class="k">backend</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="k">serviceName</span><span class="p">:</span><span class="w"> </span>kubia-nodeport<span class="w">
+</span><span class="w">              </span><span class="k">servicePort</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; kubectl create -f kubia-ingress.yaml
+ingress.extensions/kubia created
+
+<span class="c1"># 查看 Ingress 对外暴露的 IP 地址</span>
+ø&gt; kubectl get ingress
+NAME    HOSTS               ADDRESS        PORTS   AGE
+kubia   kubia.example.com   35.227.198.7   <span class="m">80</span>      74s
+
+<span class="c1"># 在本地设置好 hosts 后，通过域名访问服务</span>
+<span class="nb">echo</span> <span class="s1">&#39;35.227.198.7 kubia.example.com&#39;</span> &gt;&gt; /etc/hosts
+
+ø&gt; http kubia.example.com
+HTTP/1.1 <span class="m">200</span> OK
+Content-Length: <span class="m">44</span>
+Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+Date: Wed, <span class="m">29</span> Jul <span class="m">2020</span> 01:25:25 GMT
+Via: 1.1 google
+
+You<span class="err">&#39;</span>ve hit kubia-zssz2 on default mux by <span class="m">15</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>注意，通过域名访问的时候，服务如果返回500的话，会使用 Ingress 自定义的错误页面，无法看到服务返回的 500 页面。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 服务返回500的情况</span>
+ø&gt; http kubia.example.com
+HTTP/1.1 <span class="m">502</span> Bad Gateway
+Content-Length: <span class="m">332</span>
+Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>UTF-8
+Date: Tue, <span class="m">28</span> Jul <span class="m">2020</span> 15:10:53 GMT
+Referrer-Policy: no-referrer
+
+&lt;html&gt;&lt;head&gt;
+&lt;meta http-equiv<span class="o">=</span><span class="s2">&#34;content-type&#34;</span> <span class="nv">content</span><span class="o">=</span><span class="s2">&#34;text/html;charset=utf-8&#34;</span>&gt;
+&lt;title&gt;502 Server Error&lt;/title&gt;
+&lt;/head&gt;
+&lt;body <span class="nv">text</span><span class="o">=</span><span class="c1">#000000 bgcolor=#ffffff&gt;</span>
+&lt;h1&gt;Error: Server Error&lt;/h1&gt;
+&lt;h2&gt;The server encountered a temporary error and could not <span class="nb">complete</span> your request.&lt;p&gt;Please try again in <span class="m">30</span> seconds.&lt;/h2&gt;
+&lt;h2&gt;&lt;/h2&gt;
+&lt;/body&gt;&lt;/html&gt;
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="配置-ingress-处理-tls-传输">配置 Ingress 处理 TLS 传输</h3>
+<p>创建好证书和秘钥后，存储到 Secert 资源中</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 RSA 秘钥</span>
+ø&gt; openssl genrsa -out tls.key <span class="m">2048</span>
+Generating RSA private key, <span class="m">2048</span> bit long modulus
+...............................................................+++
+....+++
+e is <span class="m">65537</span> <span class="o">(</span>0x10001<span class="o">)</span>
+
+<span class="c1"># 创建证书</span>
+ø&gt; openssl req -new -x509 -sha256 -key tls.key  -out tls.cert -days <span class="m">3650</span> -subj /CN<span class="o">=</span>kubia.example.com
+ø&gt; ls
+tls.cert tls.key
+
+<span class="c1"># 创建 Secret 资源</span>
+ø&gt; k create secret tls tls-secret --cert<span class="o">=</span>tls.cert --key<span class="o">=</span>tls.key
+secret/tls-secret created
+</code></pre></td></tr></table>
+</div>
+</div><p>更新 Ingress 的配置，使用 Secret 配置 HTTPS</p>
+<ul>
+<li>kubia-ingress-tls.yaml</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>extensions/v1beta1<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Ingress<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>kubia<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">tls</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="k">hosts</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- kubia.example.com<span class="w">
+</span><span class="w">      </span><span class="k">secretName</span><span class="p">:</span><span class="w"> </span>tls-secret<span class="w">
+</span><span class="w">  </span><span class="k">rules</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="k">host</span><span class="p">:</span><span class="w"> </span>kubia.example.com<span class="w">
+</span><span class="w">      </span><span class="k">http</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="k">paths</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- <span class="k">path</span><span class="p">:</span><span class="w"> </span>/<span class="w">
+</span><span class="w">            </span><span class="k">backend</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="k">serviceName</span><span class="p">:</span><span class="w"> </span>kubia-nodeport<span class="w">
+</span><span class="w">              </span><span class="k">servicePort</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 更新 ingress 配置</span>
+ø&gt; kubectl apply -f kubia-ingress-tls.yaml
+Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
+ingress.extensions/kubia configured
+
+
+<span class="c1"># 访问我们配置的域名，查看其证书</span>
+ø&gt; curl -k -v https://kubia.example.com/
+*   Trying 35.227.198.7...
+* TCP_NODELAY <span class="nb">set</span>
+* Connected to kubia.example.com <span class="o">(</span>35.227.198.7<span class="o">)</span> port <span class="m">443</span> <span class="o">(</span><span class="c1">#0)</span>
+* ALPN, offering h2
+* ALPN, offering http/1.1
+* successfully <span class="nb">set</span> certificate verify locations:
+*   CAfile: /etc/ssl/cert.pem
+  CApath: none
+* TLSv1.2 <span class="o">(</span>OUT<span class="o">)</span>, TLS handshake, Client hello <span class="o">(</span>1<span class="o">)</span>:
+* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS handshake, Server hello <span class="o">(</span>2<span class="o">)</span>:
+* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS handshake, Certificate <span class="o">(</span>11<span class="o">)</span>:
+* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS handshake, Server key exchange <span class="o">(</span>12<span class="o">)</span>:
+* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS handshake, Server finished <span class="o">(</span>14<span class="o">)</span>:
+* TLSv1.2 <span class="o">(</span>OUT<span class="o">)</span>, TLS handshake, Client key exchange <span class="o">(</span>16<span class="o">)</span>:
+* TLSv1.2 <span class="o">(</span>OUT<span class="o">)</span>, TLS change cipher, Change cipher spec <span class="o">(</span>1<span class="o">)</span>:
+* TLSv1.2 <span class="o">(</span>OUT<span class="o">)</span>, TLS handshake, Finished <span class="o">(</span>20<span class="o">)</span>:
+* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS change cipher, Change cipher spec <span class="o">(</span>1<span class="o">)</span>:
+* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS handshake, Finished <span class="o">(</span>20<span class="o">)</span>:
+* SSL connection using TLSv1.2 / ECDHE-RSA-CHACHA20-POLY1305
+* ALPN, server accepted to use h2
+* Server certificate:
+<span class="c1"># 可以看到 CN 正是我们在创建时声明的CN配置</span>
+*  subject: <span class="nv">CN</span><span class="o">=</span>kubia.example.com
+*  start date: Jul <span class="m">30</span> 15:08:40 <span class="m">2020</span> GMT
+*  expire date: Jul <span class="m">28</span> 15:08:40 <span class="m">2030</span> GMT
+*  issuer: <span class="nv">CN</span><span class="o">=</span>kubia.example.com
+*  SSL certificate verify result: self signed certificate <span class="o">(</span>18<span class="o">)</span>, continuing anyway.
+* Using HTTP2, server supports multi-use
+* Connection state changed <span class="o">(</span>HTTP/2 confirmed<span class="o">)</span>
+* Copying HTTP/2 data in stream buffer to connection buffer after upgrade: <span class="nv">len</span><span class="o">=</span><span class="m">0</span>
+* Using Stream ID: <span class="m">1</span> <span class="o">(</span>easy handle 0x7f869c80fc00<span class="o">)</span>
+&gt; GET / HTTP/2
+&gt; Host: kubia.example.com
+&gt; User-Agent: curl/7.64.1
+&gt; Accept: */*
+&gt;
+* Connection state changed <span class="o">(</span><span class="nv">MAX_CONCURRENT_STREAMS</span> <span class="o">==</span> 100<span class="o">)</span>!
+&lt; HTTP/2 <span class="m">200</span>
+&lt; date: Thu, <span class="m">30</span> Jul <span class="m">2020</span> 15:17:17 GMT
+&lt; content-length: <span class="m">46</span>
+&lt; content-type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+&lt; via: 1.1 google
+&lt; alt-svc: clear
+&lt;
+You<span class="se">\&#39;</span>ve hit kubia-zssz2 on default mux by <span class="m">8026</span>
+* Connection <span class="c1">#0 to host kubia.example.com left intact</span>
+* Closing connection <span class="m">0</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="pod-就绪后发出信号">Pod 就绪后发出信号</h2>
+<p>就绪探测器会定期调用，并确定特定的 pod 是否接收客户端请求。当容器的准备就绪探测返回成功时，表示容器已经准备好接收请求。如果容器报告它未准备就绪，则会从该服务中删除该 Pod。如果 Pod 再次准备就绪，则重新添加 Pod。</p>
+<p>像存活探针一样，就绪探针有三种类型:</p>
+<ol>
+<li>Exec 探针，执行一个进程，容器的状态由命令的退出状态码确定</li>
+<li>HTTP GET 探针，向容器发送 HTTP GET 请求，通过响应的 HTTP 状态代码判断容器是否准备好。</li>
+<li>TCP socket 探针，它打开一个 TCP 连接到容器的指定端口。如果连接已经建立，则认为容器已经准备就绪。</li>
+</ol>
+<p>与存活探针不同，如果容器未通过准备检查，则不会被终止或重新启动。这是存活探针与就绪探针之间的重要区别。</p>
+<ul>
+<li>实验:</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 编辑 rs 的配置文件中 pod 模板的部分，加入就绪探针</span>
+<span class="c1"># 这个就绪探针是一个 exec 类型，检测某个文件是否存在</span>
+TODO
+
+<span class="c1"># 删除已有的 Pod</span>
+ø&gt; kubectl delete pod kubia-bp5xc
+pod <span class="s2">&#34;kubia-bp5xc&#34;</span> deleted
+ø&gt; kubectl delete pod kubia-tt8rl
+pod <span class="s2">&#34;kubia-tt8rl&#34;</span> deleted
+ø&gt; kubectl delete pod kubia-zssz2
+pod <span class="s2">&#34;kubia-zssz2&#34;</span> deleted
+
+<span class="c1"># 查看现在的 Pod，发现都没有处于就绪状态</span>
+ø&gt; kubectl get pods --show-labels
+NAME          READY   STATUS    RESTARTS   AGE   LABELS
+kubia-m7xnj   0/1     Running   <span class="m">0</span>          80s   <span class="nv">app</span><span class="o">=</span>kubia
+kubia-qsrhr   0/1     Running   <span class="m">0</span>          41s   <span class="nv">app</span><span class="o">=</span>kubia
+kubia-wpk4k   0/1     Running   <span class="m">0</span>          46s   <span class="nv">app</span><span class="o">=</span>kubia
+
+<span class="c1"># 令一个 Pod 处于就绪状态</span>
+ø&gt; kubectl <span class="nb">exec</span> kubia-wpk4k -- touch /var/ready
+
+<span class="c1"># 通过 nodeport 暴露的端口访问，发现所有的流量都走到了 kubia-wpk4k 这个 Pod 上</span>
+ø&gt; curl 34.80.233.40:30123
+You ve hit kubia-wpk4k on default mux by <span class="m">65</span>
+ø&gt; curl 34.80.233.40:30123
+You ve hit kubia-wpk4k on default mux by <span class="m">66</span>
+ø&gt; curl 34.80.233.40:30123
+You ve hit kubia-wpk4k on default mux by <span class="m">67</span>
+ø&gt; curl 34.80.233.40:30123
+You ve hit kubia-wpk4k on default mux by <span class="m">77</span>
+ø&gt; curl 34.80.233.40:30123
+You ve hit kubia-wpk4k on default mux by <span class="m">78</span>
+ø&gt; curl 34.80.233.40:30123
+You ve hit kubia-wpk4k on default mux by <span class="m">79</span>
+ø&gt; curl 34.80.233.40:30123
+You ve hit kubia-wpk4k on default mux by <span class="m">80</span>
+
+<span class="c1"># 通过 describe 查看日志，可以看到就绪指针的相关日志</span>
+ø&gt; kubectl describe pod kubia-m7xnj
+Name:           kubia-m7xnj
+Namespace:      default
+Priority:       <span class="m">0</span>
+...
+Events:
+  Type     Reason     Age                 From                                          Message
+  ----     ------     ----                ----                                          -------
+  Normal   Scheduled  11m                 default-scheduler                             Successfully assigned default/kubia-m7xnj to gke-demo-default-pool-ade08258-zjhd
+  Normal   Pulled     11m                 kubelet, gke-demo-default-pool-ade08258-zjhd  Container image <span class="s2">&#34;bwangel/kubia:v0.4&#34;</span> already present on machine
+  Normal   Created    11m                 kubelet, gke-demo-default-pool-ade08258-zjhd  Created container kubia
+  Normal   Started    11m                 kubelet, gke-demo-default-pool-ade08258-zjhd  Started container kubia
+  Warning  Unhealthy  98s <span class="o">(</span>x61 over 11m<span class="o">)</span>  kubelet, gke-demo-default-pool-ade08258-zjhd  Readiness probe failed: ls: cannot access <span class="s1">&#39;/var/ready&#39;</span>: No such file or directory
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>注意事项:</li>
+</ul>
+<ol>
+<li>应该始终定义就绪指针，针对一些启动时间长的应用，如果没有就绪指针，会让客户端请求到达时报错。</li>
+<li>就绪指针不需要关注删除容器的情况，如果删除了 Pod，K8S 会自动将其从服务中移除，不需要通过就绪指针来标记移除。</li>
+</ol>
     </div>
 
     <div class="post-copyright">
