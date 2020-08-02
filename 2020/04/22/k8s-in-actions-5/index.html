@@ -54,7 +54,7 @@
 ">
 <meta itemprop="datePublished" content="2020-04-22T21:44:44&#43;08:00" />
 <meta itemprop="dateModified" content="2020-04-22T21:44:44&#43;08:00" />
-<meta itemprop="wordCount" content="4255">
+<meta itemprop="wordCount" content="5489">
 
 
 
@@ -175,6 +175,13 @@
           </ul>
         </li>
         <li><a href="#pod-就绪后发出信号">Pod 就绪后发出信号</a></li>
+        <li><a href="#使用-headless-服务来发现独立的-pod">使用 headless 服务来发现独立的 Pod</a>
+          <ul>
+            <li><a href="#通过-dns-查找-pod-的-ip">通过 DNS 查找 Pod 的 IP</a></li>
+            <li><a href="#发现所有-pod包括未就绪-pod">发现所有 Pod，包括未就绪 Pod</a></li>
+          </ul>
+        </li>
+        <li><a href="#排除服务故障">排除服务故障</a></li>
       </ul>
     </li>
   </ul>
@@ -926,7 +933,7 @@ Date: Mon, <span class="m">20</span> Jul <span class="m">2020</span> 23:30:33 GM
 You<span class="se">\&#39;</span>ve hit kubia-6wjvz on default mux
 
 <span class="c1"># 查看负载均衡器的信息</span>
-ø&gt; kubectl describe svc kubia-loadbalancer                                                                 07:39:03 <span class="o">(</span>07-21<span class="o">)</span>
+ø&gt; kubectl describe svc kubia-loadbalancer
 Name:                     kubia-loadbalancer
 Namespace:                default
 Labels:                   &lt;none&gt;
@@ -1399,6 +1406,293 @@ Events:
 <ol>
 <li>应该始终定义就绪指针，针对一些启动时间长的应用，如果没有就绪指针，会让客户端请求到达时报错。</li>
 <li>就绪指针不需要关注删除容器的情况，如果删除了 Pod，K8S 会自动将其从服务中移除，不需要通过就绪指针来标记移除。</li>
+</ol>
+<h2 id="使用-headless-服务来发现独立的-pod">使用 headless 服务来发现独立的 Pod</h2>
+<p>在创建服务时，声明 <code>spec.ClusterInfo: None</code> 就可以设置一个服务为 headless 服务。</p>
+<p>当通过 DNS 查询 FQDN 时，常规服务返回的是服务的集群IP，headless 服务返回的是 Pod IP。</p>
+<p>headless 也会提供跨 Pod 的负载均衡，但是是通过 DNS 的轮询机制实现的，而不是像常规服务那样通过服务代理实现的。</p>
+<ul>
+<li>kubia.svc-headless.yaml</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Service<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>kubia-headless<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">clusterIP</span><span class="p">:</span><span class="w"> </span>None<span class="w">
+</span><span class="w">  </span><span class="k">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="k">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span><span class="w">      </span><span class="k">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">  </span><span class="k">selector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="k">app</span><span class="p">:</span><span class="w"> </span>kubia<span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 headless 服务</span>
+ø&gt; kubectl create -f kubia-svc-headless.yaml
+service/kubia-headless created
+
+<span class="c1"># 查看 headless 服务的信息，发现没有 ClusterIP</span>
+ø&gt; kubectl get service
+NAME                            TYPE           CLUSTER-IP     EXTERNAL-IP     PORT<span class="o">(</span>S<span class="o">)</span>         AGE
+external-service                ClusterIP      10.66.10.171   &lt;none&gt;          80/TCP          95d
+external-service-externalname   ExternalName   &lt;none&gt;         httpbin.org     80/TCP          95d
+kubernetes                      ClusterIP      10.66.0.1      &lt;none&gt;          443/TCP         128d
+kubia                           ClusterIP      10.66.13.240   &lt;none&gt;          80/TCP,90/TCP   97d
+kubia-headless                  ClusterIP      None           &lt;none&gt;          80/TCP          11s
+kubia-loadbalancer              LoadBalancer   10.66.4.173    35.221.253.22   80:32179/TCP    12d
+kubia-nodeport                  NodePort       10.66.5.6      &lt;none&gt;          80:30123/TCP    94d
+
+ø&gt; kubectl describe service kubia-headless
+Name:              kubia-headless
+Namespace:         default
+Labels:            &lt;none&gt;
+Annotations:       &lt;none&gt;
+Selector:          <span class="nv">app</span><span class="o">=</span>kubia
+Type:              ClusterIP
+IP:                None
+Port:              &lt;unset&gt;  80/TCP
+TargetPort:        8080/TCP
+Endpoints:         10.0.0.8:8080
+Session Affinity:  None
+Events:            &lt;none&gt;
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="通过-dns-查找-pod-的-ip">通过 DNS 查找 Pod 的 IP</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建一个可以执行 DNS 查找命令的临时 Pod</span>
+ø&gt; kubectl run dnsutils --image<span class="o">=</span>tutum/dnsutils --generator<span class="o">=</span>run-pod/v1 --command -- sleep infinity
+pod/dnsutils created
+
+<span class="c1"># 查看 kubia ReplicaSet，可以看到只有两个 Pod 就绪</span>
+ø&gt; kubectl get rs
+NAME    DESIRED   CURRENT   READY   AGE
+kubia   <span class="m">3</span>         <span class="m">3</span>         <span class="m">2</span>       97d
+
+<span class="c1"># 执行 DNS 查找</span>
+ø&gt; kubectl <span class="nb">exec</span> dnsutils nslookup kubia-headless
+Server:         10.66.0.10
+Address:        10.66.0.10#53
+
+<span class="c1"># 这里只返回了两个 Pod IP，因为 selector=&#34;app=kubia&#34; 的 Pod 只有两个就绪了。</span>
+Name:   kubia-headless.default.svc.cluster.local
+Address: 10.0.0.8
+Name:   kubia-headless.default.svc.cluster.local
+Address: 10.0.2.5
+
+<span class="c1"># 查找常规服务的 DNS，可以看到返回的是服务的集群IP</span>
+ø&gt; kubectl <span class="nb">exec</span> dnsutils nslookup kubia
+Server:         10.66.0.10
+Address:        10.66.0.10#53
+
+Name:   kubia.default.svc.cluster.local
+Address: 10.66.13.240
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="发现所有-pod包括未就绪-pod">发现所有 Pod，包括未就绪 Pod</h3>
+<p>在 K8S 1.17 版本中，在创建 headless 服务中添加<code>publishNotReadyAddresses</code>配置，就可以让 DNS 服务器查找到对应 headless 服务的未就绪 Pod。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Service<span class="w">
+</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>kubia-headless<span class="w">
+</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>...<span class="w">
+</span><span class="w">  </span><span class="k">publishNotReadyAddresses</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">  </span>...<span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># app=kubia 中就绪的 Pod 还是只有两个</span>
+ø&gt; kubectl get rs
+NAME    DESIRED   CURRENT   READY   AGE
+kubia   <span class="m">3</span>         <span class="m">3</span>         <span class="m">2</span>       97d
+
+ø&gt; kubectl <span class="nb">exec</span> dnsutils nslookup kubia-headless
+Server:         10.66.0.10
+Address:        10.66.0.10#53
+
+<span class="c1"># 可以看到此时所有 Pod 的 IP 全部返回了</span>
+Name:   kubia-headless.default.svc.cluster.local
+Address: 10.0.0.8
+Name:   kubia-headless.default.svc.cluster.local
+Address: 10.0.2.4
+Name:   kubia-headless.default.svc.cluster.local
+Address: 10.0.2.5
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://v1-17.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/">publishNotReadyAddresses 的参考文档</a></p>
+<h2 id="排除服务故障">排除服务故障</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 查看 pod 的 IP</span>
+ø&gt; kubectl get pods -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s2">&#34;{range .items[*]}{.metadata.name}--{.status.podIP} {end}&#34;</span> <span class="p">|</span> tr <span class="s1">&#39; &#39;</span> <span class="s1">&#39;\n&#39;</span>
+dnsutils--10.0.0.9
+kubia-m7xnj--10.0.2.4
+kubia-qsrhr--10.0.2.5
+kubia-wpk4k--10.0.0.8
+
+<span class="c1"># 查看所有服务的集群IP</span>
+ø&gt; kubectl get svc
+NAME                            TYPE           CLUSTER-IP     EXTERNAL-IP     PORT<span class="o">(</span>S<span class="o">)</span>         AGE
+...
+kubia                           ClusterIP      10.66.13.240   &lt;none&gt;          80/TCP,90/TCP   97d
+<span class="c1"># headless 服务是没有集群IP的</span>
+kubia-headless                  ClusterIP      None           &lt;none&gt;          80/TCP          44m
+kubia-loadbalancer              LoadBalancer   10.66.4.173    35.221.253.22   80:32179/TCP    12d
+...
+
+<span class="c1"># 在集群内 ping 服务的集群IP，发现是 ping 不通的</span>
+ø&gt; kubectl <span class="nb">exec</span> -it kubia-wpk4k bash                                                                       11:17:47 <span class="o">(</span>08-02<span class="o">)</span>
+root@kubia-wpk4k:/app# ping 10.66.13.240
+PING 10.66.13.240 <span class="o">(</span>10.66.13.240<span class="o">)</span> 56<span class="o">(</span>84<span class="o">)</span> bytes of data.
+^C
+--- 10.66.13.240 ping statistics ---
+<span class="m">6</span> packets transmitted, <span class="m">0</span> received, 100% packet loss, <span class="nb">time</span> 116ms
+</code></pre></td></tr></table>
+</div>
+</div><p>如何排除服务故障:</p>
+<ol>
+<li>确保从集群内连接到服务的集群IP，而不是从外部 (k get svc 可以获得服务的集群IP)</li>
+<li>不要通过 ping 服务 IP 来判断服务是否可以访问( <strong>请记住，服务的集群IP是虚拟IP，是无法 ping 通的</strong> )</li>
+<li>如果已经定义了就绪探针，请确保它返回成功；否则该 Pod 不会成为服务的一部分</li>
+<li>要确认某个容器是服务的一部分，请使用 <code>k get endpoints</code> 来检查服务对应的 endpoints 中存储有该 Pod 的IP及端口。</li>
+<li>如果尝试通过 FQDN 或其中一部分来访问服务（例如，<code>myservice.mynamespace.svc.cluster.local</code> 或 <code>myservice.mynamespace</code>），但并不起作用，请查看是否可以通过其集群IP而不是 FQDN 来访问服务。</li>
+<li>检查是否连接到服务公开的端口，而不是目标端口。</li>
+<li>尝试直接连接到 Pod IP 以确认 pod 正在接收正确端口上的连接。</li>
+<li>如果甚至无法通过 pod 的 IP 访问应用，请确保应用不是仅绑定到 localhost。</li>
 </ol>
     </div>
 
