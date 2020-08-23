@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Review 《Using pipelining to speedup Redis queries》 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="  原文地址: https://redis.io/topics/pipelining  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.74.3 with theme even" />
+
+
+<link rel="canonical" href="/2020/08/22/redis-pipelining/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.0034ec37b35f91907849c9020141a7e99249c6f2301ee1e34aee09cfe5f9ae2e.css" rel="stylesheet">
+<link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
+
+
+<meta property="og:title" content="Review 《Using pipelining to speedup Redis queries》" />
+<meta property="og:description" content="
+
+原文地址: https://redis.io/topics/pipelining
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2020/08/22/redis-pipelining/" />
+<meta property="article:published_time" content="2020-08-22T17:22:37+08:00" />
+<meta property="article:modified_time" content="2020-08-22T17:22:37+08:00" />
+<meta itemprop="name" content="Review 《Using pipelining to speedup Redis queries》">
+<meta itemprop="description" content="
+
+原文地址: https://redis.io/topics/pipelining
+
+">
+<meta itemprop="datePublished" content="2020-08-22T17:22:37+08:00" />
+<meta itemprop="dateModified" content="2020-08-22T17:22:37+08:00" />
+<meta itemprop="wordCount" content="1256">
+
+
+
+<meta itemprop="keywords" content="翻译,Redis," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Review 《Using pipelining to speedup Redis queries》"/>
+<meta name="twitter:description" content="
+
+原文地址: https://redis.io/topics/pipelining
+
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Review 《Using pipelining to speedup Redis queries》</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-08-22 </span>
+        
+          <span class="more-meta"> 约 1256 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#redis-pipelining-是什么">Redis Pipelining 是什么</a></li>
+        <li><a href="#构造一个-pipelining-请求">构造一个 Pipelining 请求</a></li>
+        <li><a href="#使用-pipelining-的注意事项">使用 Pipelining 的注意事项</a></li>
+        <li><a href="#使用-pipelining-的好处">使用 Pipelining 的好处</a>
+          <ul>
+            <li><a href="#客户端的响应时间更短">客户端的响应时间更短</a></li>
+            <li><a href="#提升服务器的性能">提升服务器的性能</a></li>
+          </ul>
+        </li>
+        <li><a href="#其他">其他</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<ul>
+<li>原文地址: <a href="https://redis.io/topics/pipelining">https://redis.io/topics/pipelining</a></li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="redis-pipelining-是什么">Redis Pipelining 是什么</h2>
+<p>在理解 Redis Pipelining 之前，我们需要先弄明白，Redis 是如何执行客户端的命令的。Redis 是一个 TCP 服务器，它和客户端之间通过网络进行通信。当我们在客户端中执行了一条命令后，Redis 通常会执行以下的操作：</p>
+<ol>
+<li>客户端获取 TCP 连接。(新建连接或者获取已有的连接)</li>
+<li>客户端发送一个 Redis 命令给服务端。</li>
+<li>客户端等待读取服务端的响应，并阻塞起来。</li>
+<li>服务端处理客户端的命令，并将命令的响应发送给客户端。</li>
+</ol>
+<p>如果我们要执行4个<code>set</code>命令，那么客户端就会通过 TCP 网络发送4个请求包，接受4个响应包。</p>
+<p>因为 Redis 服务器处理命令的速度通常都是很快的，很多时候时间都是花在了网络IO 上，所以我们可以将多个命令合并成一个网络请求，然后 Redis 服务器会 <strong>按顺序</strong> 返回这 N 个命令的响应。</p>
+<h2 id="构造一个-pipelining-请求">构造一个 Pipelining 请求</h2>
+<p>由于 Redis 的通信协议是基于文本的，所以我们可以直接通过 <a href="https://linux.die.net/man/1/nc">nc</a> 向 Redis 发送一个 Pipelining 请求。</p>
+<p>在下面的例子中，我们向 Redis 服务器发送了两条 <code>INCR</code> 命令，它也 <strong>按顺序</strong> 返回了这两条命令的响应:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; <span class="nb">printf</span> <span class="s2">&#34;INCR &#39;some_key&#39;\r\nINCR &#39;some_key&#39;\r\n&#34;</span> <span class="p">|</span> nc localhost <span class="m">6379</span>
+:1 // 这是第一条命令的响应
+:2 // 这是第二条命令的响应
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="使用-pipelining-的注意事项">使用 Pipelining 的注意事项</h2>
+<p>当客户端使用 Pipelining 的方式发送多个命令过来时，Redis 服务器将会使用内存对响应进行排队(个人猜测对响应结果的排序也是在内存中进行的)。
+所以 Pipelining 请求中不要包含太多的命令，否则会吃服务器很多内存，官方给的建议是一个 Pipelining 请求中最多有 10K 个命令。</p>
+<h2 id="使用-pipelining-的好处">使用 Pipelining 的好处</h2>
+<h3 id="客户端的响应时间更短">客户端的响应时间更短</h3>
+<p>下面是一个简单的压测程序(完整代码见 <a href="https://github.com/bwangelme/GoDemo/blob/7e0fc475f3a1766b61e09db45ae300638c57cb6a/redis_pipelining.go">GitHub</a>)，对比使用 Pipelining 和不使用 Pipelining 的执行时间:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">PingWithPipelining</span><span class="p">(</span><span class="nx">rdb</span> <span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span><span class="p">,</span> <span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">rdb</span><span class="p">.</span><span class="nf">Pipelined</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">pipeliner</span> <span class="nx">redis</span><span class="p">.</span><span class="nx">Pipeliner</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">benchTimes</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="nx">pipeliner</span><span class="p">.</span><span class="nf">Ping</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="kc">nil</span>
+	<span class="p">})</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%v\n&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">PingWithoutPipelining</span><span class="p">(</span><span class="nx">rdb</span> <span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span><span class="p">,</span> <span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">benchTimes</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">rdb</span><span class="p">.</span><span class="nf">Ping</span><span class="p">(</span><span class="nx">ctx</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">log</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%d: %v\n&#34;</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">tt</span> <span class="o">:=</span> <span class="k">range</span> <span class="p">[]</span><span class="kd">struct</span> <span class="p">{</span>
+		<span class="nx">Name</span>     <span class="kt">string</span>
+		<span class="nx">Callback</span> <span class="nx">TestRedisFunc</span>
+	<span class="p">}{</span>
+		<span class="p">{</span>
+			<span class="nx">Name</span><span class="p">:</span>     <span class="s">&#34;WithPipelining&#34;</span><span class="p">,</span>
+			<span class="nx">Callback</span><span class="p">:</span> <span class="nx">PingWithPipelining</span><span class="p">,</span>
+		<span class="p">},</span>
+		<span class="p">{</span>
+			<span class="nx">Name</span><span class="p">:</span>     <span class="s">&#34;WithoutPipelining&#34;</span><span class="p">,</span>
+			<span class="nx">Callback</span><span class="p">:</span> <span class="nx">PingWithoutPipelining</span><span class="p">,</span>
+		<span class="p">},</span>
+	<span class="p">}</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Start %v\n&#34;</span><span class="p">,</span> <span class="nx">tt</span><span class="p">.</span><span class="nx">Name</span><span class="p">)</span>
+		<span class="nx">duration</span> <span class="o">:=</span> <span class="nf">Benchmark</span><span class="p">(</span><span class="nx">tt</span><span class="p">.</span><span class="nx">Callback</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%v Running %d times cost %v\n&#34;</span><span class="p">,</span> <span class="nx">tt</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span> <span class="nx">benchTimes</span><span class="p">,</span> <span class="nx">duration</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>程序的输出如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; go run redis_pipelining.go
+Start WithPipelining
+WithPipelining Running <span class="m">10000</span> <span class="nb">times</span> cost 9.596085ms
+Start WithoutPipelining
+WithoutPipelining Running <span class="m">10000</span> <span class="nb">times</span> cost 263.630767ms
+</code></pre></td></tr></table>
+</div>
+</div><p>在我的电脑上(双核+8G)上，使用 Pipelining 的函数的执行时间比不使用 Pipelining 的函数低了两个数量级。</p>
+<h3 id="提升服务器的性能">提升服务器的性能</h3>
+<p>使用 Pipelining 不仅会节省客户端的执行时间，也会提升服务器的性能。设想一下这两种的情况:</p>
+<ul>
+<li>A: 客户端执行了10000次的 set 命令</li>
+<li>B: 客户端通过 Pipelining 执行了 10000 次的 set 命令</li>
+</ul>
+<p>在 A 场景下，服务器相比 B 场景多执行了很多的网络IO(读取请求和发送响应)。因为服务器的计算资源(CPU，内存)用在处理网络 IO 上了，它处理客户端查询的能力就变差了。</p>
+<p>这是官方给的性能曲线:</p>
+<p><img src="https://passage-1253400711.cos-website.ap-beijing.myqcloud.com/2020-08-23-102526.jpg" alt=""></p>
+<p>横坐标是单次请求中包含的命令数，纵坐标是服务器每秒能够处理的查询数。可以看到客户端使用了 Pipelining 后，服务器每秒能够处理的请求数几乎达到了原来的10倍。</p>
+<h2 id="其他">其他</h2>
+<p>文中还有两段内容，</p>
+<ol>
+<li>Lua 脚本是比 Pipelining 更好的选择，因为在脚本中可以执行一定的逻辑，这样计算就可以完全放在服务端做了，网络通信更少。(个人吐槽，坏处就是开发成本变高了)</li>
+<li>为什么在环回接口执行压测程序，请求还是这么慢，作者的建议是不要将压测程序和服务器放在同一台机器上，因为压测程序也会占用主机的资源，这也会影响服务器的性能。</li>
+</ol>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-08-22
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E7%BF%BB%E8%AF%91/">翻译</a>
+          <a href="/tags/redis/">Redis</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/2020/03/29/review-elk-intro/">
+            <span class="next-text nav-default">Review 《Getting started with the Elastic Stackedit》</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+    <script src="https://utteranc.es/client.js"
+            repo="anotherbwangel/blog-comment"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.2.1/jquery.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/slideout/1.0.1/slideout.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.js" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>
