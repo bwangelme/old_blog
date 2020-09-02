@@ -2,14 +2,13 @@
 title: "More advanced if usage"
 date: 2016-10-03 09:52:51
 tags: [翻译, Bash]
-draft: true
+draft: false
 ---
 
 __摘要__:
 
 > 1. 本文是对[More advanced if usage](http://tldp.org/LDP/Bash-Beginners-Guide/html/sect_07_02.html)的翻译
 > 2. 主要讲述了 Bash 中 if 的一些高级用法
-
 
 <!--more-->
 
