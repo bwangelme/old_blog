@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>More advanced if usage - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="摘要:
+  本文是对More advanced if usage的翻译 主要讲述了 Bash 中 if 的一些高级用法  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
+
+
+<link rel="canonical" href="/2016/10/03/more-advanced-if-usage/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.0034ec37b35f91907849c9020141a7e99249c6f2301ee1e34aee09cfe5f9ae2e.css" rel="stylesheet">
+<link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
+
+
+<meta property="og:title" content="More advanced if usage" />
+<meta property="og:description" content="摘要:
+
+
+本文是对More advanced if usage的翻译
+主要讲述了 Bash 中 if 的一些高级用法
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2016/10/03/more-advanced-if-usage/" />
+<meta property="article:published_time" content="2016-10-03T09:52:51+00:00" />
+<meta property="article:modified_time" content="2016-10-03T09:52:51+00:00" />
+<meta itemprop="name" content="More advanced if usage">
+<meta itemprop="description" content="摘要:
+
+
+本文是对More advanced if usage的翻译
+主要讲述了 Bash 中 if 的一些高级用法
+
+">
+<meta itemprop="datePublished" content="2016-10-03T09:52:51&#43;00:00" />
+<meta itemprop="dateModified" content="2016-10-03T09:52:51&#43;00:00" />
+<meta itemprop="wordCount" content="530">
+
+
+
+<meta itemprop="keywords" content="翻译,Bash," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="More advanced if usage"/>
+<meta name="twitter:description" content="摘要:
+
+
+本文是对More advanced if usage的翻译
+主要讲述了 Bash 中 if 的一些高级用法
+
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">More advanced if usage</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2016-10-03 </span>
+        
+          <span class="more-meta"> 约 530 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#ifthenelse-结构体">if/then/else 结构体</a>
+          <ul>
+            <li><a href="#虚构的例子">虚构的例子</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><strong>摘要</strong>:</p>
+<blockquote>
+<ol>
+<li>本文是对<a href="http://tldp.org/LDP/Bash-Beginners-Guide/html/sect_07_02.html">More advanced if usage</a>的翻译</li>
+<li>主要讲述了 Bash 中 if 的一些高级用法</li>
+</ol>
+</blockquote>
+<h2 id="ifthenelse-结构体">if/then/else 结构体</h2>
+<h3 id="虚构的例子">虚构的例子</h3>
+<p>这是一个结构体，在 if 运行结果为真的时候执行一个动作过程，如果 if 运行结果为假则执行另外一个动作过程。下面是一个例子:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">freddy scripts&gt; <span class="nv">gender</span><span class="o">=</span><span class="s2">&#34;male&#34;</span>
+freddy scripts&gt; <span class="k">if</span> <span class="o">[[</span> <span class="s2">&#34;</span><span class="nv">$gender</span><span class="s2">&#34;</span> <span class="o">==</span> <span class="s2">&#34;f*&#34;</span> <span class="o">]]</span>
+More input&gt; <span class="k">then</span> <span class="nb">echo</span> <span class="s2">&#34;Pleasure to meet you, Madame.&#34;</span>
+More input&gt; <span class="k">else</span> <span class="nb">echo</span> <span class="s2">&#34;How come the lady hasn&#39;t got a drink yet?&#34;</span>
+More input&gt; <span class="k">fi</span>
+How come the lady hasn<span class="err">&#39;</span>t got a drink yet?
+freddy scripts&gt;
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><strong>注意</strong>:
+和 <em>[</em> 相反，<em>[[</em> 阻止变量值的单词分割。所以，如果<code>VAR=&quot;var with spaces&quot;</code>，你不需要在 test 的过程中在<code>$VAR</code>周围使用双引号 - 即使使用引号仍然是一个好习惯。 <em>[[</em> 阻止了文件路径名的扩展，所以如果一个文件字符串中含有通配符的话，它不会去扩展成文件名。使用*[[*，*==* 和 *!=* 会将右边的值解释为 shell 的 <a href="http://tldp.org/LDP/GNU-Linux-Tools-Summary/html/x11655.htm">glob</a> 模式，而不是左边的值。例如：<code>[[ &quot;value&quot; == val* ]]</code></p>
+</blockquote>
+<p>就像下面 then 语句块中列出的连续命令列表一样，else 语句块中可替换的连续命令列表能够拥有任何 Unix 风格的命令来返回一个退出状态。</p>
+<p>另一个例子，从 <a href="http://tldp.org/LDP/Bash-Beginners-Guide/html/sect_07_01.html#sect_07_01_02_01"> Section 7.1.2.1</a> 扩展而来：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">anny ~&gt; su -
+Password:
+<span class="o">[</span>root@elegance root<span class="o">]</span><span class="c1"># if ! grep ^$USER /etc/passwd 1&gt; /dev/null</span>
+&gt; <span class="k">then</span> <span class="nb">echo</span> <span class="s2">&#34;your user account is not managed locally&#34;</span>
+&gt; <span class="k">else</span> <span class="nb">echo</span> <span class="s2">&#34;your account is managed from the local /etc/passwd file&#34;</span>
+&gt; <span class="k">fi</span>
+your account is managed from the <span class="nb">local</span> /etc/passwd file
+<span class="o">[</span>root@elegance root<span class="o">]</span>#
+</code></pre></td></tr></table>
+</div>
+</div><p>我们切换到 root 账户去演示 else 语句的效果 - 你的 root 通常是一个本地账户，而你自己的账户可能通过一个中央系统来管理，就比如一个 LDAP 服务器。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2016-10-03
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E7%BF%BB%E8%AF%91/">翻译</a>
+          <a href="/tags/bash/">Bash</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2016/10/08/mysql-subqueries-in-the-from-clause/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">MySQL from 部分的子查询</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2016/09/11/python_unittesting_run_tests_in_another_module/">
+            <span class="next-text nav-default">Python unittesting: run tests in another module</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+    <script src="https://utteranc.es/client.js"
+            repo="anotherbwangel/blog-comment"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.2.1/jquery.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/slideout/1.0.1/slideout.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.js" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>
