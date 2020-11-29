@@ -54,7 +54,7 @@
 ">
 <meta itemprop="datePublished" content="2020-10-29T09:17:19&#43;08:00" />
 <meta itemprop="dateModified" content="2020-10-29T09:17:19&#43;08:00" />
-<meta itemprop="wordCount" content="64">
+<meta itemprop="wordCount" content="310">
 
 
 
@@ -138,7 +138,7 @@
       <div class="post-meta">
         <span class="post-time"> 2020-10-29 </span>
         
-          <span class="more-meta"> 约 64 字 </span>
+          <span class="more-meta"> 约 310 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -151,6 +151,7 @@
   <ul>
     <li>
       <ul>
+        <li><a href="#如何引用作者的代码">如何引用作者的代码</a></li>
         <li><a href="#14-算法分析">1.4 算法分析</a></li>
         <li><a href="#练习">练习</a></li>
       </ul>
@@ -164,9 +165,90 @@
 <p>第一章基础</p>
 </blockquote>
 <hr>
-<h2 id="14-算法分析">1.4 算法分析</h2>
+<h2 id="如何引用作者的代码">如何引用作者的代码</h2>
+<p>本书作者提供了一些基础类(例如 <code>StdIn</code>)，放在 <a href="https://github.com/kevin-wayne/algs4">Github</a> 上，我们将代码下载下来后，通过 <code>mvn install</code> 命令安装在本地仓库中。</p>
+<p>然后在我们的项目中配置好对 algs4 的依赖，就可以在我们的代码中引用作者提供的基础类了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+	<span class="nt">&lt;groupId&gt;</span>edu.princeton.cs<span class="nt">&lt;/groupId&gt;</span>
+	<span class="nt">&lt;artifactId&gt;</span>algs4<span class="nt">&lt;/artifactId&gt;</span>
+	<span class="nt">&lt;version&gt;</span>1.0.0.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="14-算法分析">1.4 算法分析</h2>
 <p>从许多程序中得到的另一个定量观察是运行时间和输入本身相对无关，它主要取决与问题规模。</p>
-<p>TODO: 1.4.2.3 实验数据的分析</p>
+<p>对增长数量级常见假设的总结:</p>
+<table>
+<thead>
+<tr>
+<th>描述</th>
+<th>增长的数量级</th>
+<th>典型的代码</th>
+<th>说明</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>常数级别</td>
+<td>1</td>
+<td><code>a = b + c;</code></td>
+<td>普通语句</td>
+<td>将两个数相加</td>
+</tr>
+<tr>
+<td>对数级别</td>
+<td>logN</td>
+<td><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2020-11-06-235529.png" alt=""></td>
+<td>二分策略</td>
+<td>二分查找</td>
+</tr>
+<tr>
+<td>线性级别</td>
+<td>N</td>
+<td><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/carbon.png" alt=""></td>
+<td>循环</td>
+<td>找出最大元素</td>
+</tr>
+<tr>
+<td>线性对数级别</td>
+<td>N logN</td>
+<td><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com//2020-11-07-001924.png" alt=""></td>
+<td>分治</td>
+<td>归并排序</td>
+</tr>
+<tr>
+<td>平方级别</td>
+<td>$N^2$</td>
+<td><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com//2020-11-07-000548.png" alt=""></td>
+<td>双层循环</td>
+<td>检查所有元素对</td>
+</tr>
+<tr>
+<td>立方级别</td>
+<td>$N^3$</td>
+<td><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com//2020-11-07-001013.png" alt=""></td>
+<td>三层循环</td>
+<td>检查所有三元组</td>
+</tr>
+<tr>
+<td>指数级别</td>
+<td>$2^N$</td>
+<td>请见第六章</td>
+<td>穷举查找</td>
+<td>检查所有子集</td>
+</tr>
+</tbody>
+</table>
 <h2 id="练习">练习</h2>
 <ul>
 <li>1.4.26</li>
