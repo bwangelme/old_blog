@@ -26,80 +26,85 @@ gRPC 基于 HTTP/2.0，可以在单条 TCP 连接上复用。
 
 __服务而非对象、消息而非引用__
 
-## HTTTP TLS
++ 支持主动健康检查的接口
 
-### CA 机构是什么
+## 服务发现
 
-Certificate Authority，是一个公司或者组织，用于为实体(网站，Email 地址，公司或个人等)提供证书。通过证书认证这些实体。
++ 服务注册
 
-数字证书提供三方面的验证:
+1. 服务启动成功后自动注册到注册中心
+2. 外挂注册，容器中的其他进程检查服务提供者的 healty check 接口，检查成功后，将服务信息发布到 Discover 上。
 
-1. 身份验证(Authentication): 通过提供认证服务，来验证他发给证书的实体。
-2. 加密(Encryption): 提供加密方式，让通信双方在不可信的信道上通信。
-3. 完整性验证(Integrity): 可以对文档进行签名，这样可以确保传输过程中文档不会被修改。
+### 平滑下线 (graceful shutdown)
 
-#### CA 机构的证书分类
+1. 服务收到一个推出信息, `SIG_QUIT` 信号
+2. 服务向注册中心发送一个注销请求，将自己从注册中心删除掉。
+3. 服务将自己的健康检查接口标记为失败
+4. 服务等待两个 health check 的心跳周期
+5. 等请求数，连接数归0时，服务自动推出，如果服务长时间没有推出，发布框架发送 `SIG_KILL` 强制结束服务
 
-证书类型|单域名|多域名|泛域名|多泛域名
----|---|---|---|---
-DV|支持|支持|不支持|不支持
-OV|支持|支持|支持|支持
-EV|支持|支持|不支持|不支持
-举例|www.bwangel.me|`www.bwangel.me`, `www.wbangel1.me`, `www.langel.me`|\*.bwangel.me|\*.bwangel.me, \*.fbangel2.me, \*.wbngel.me
+### 客户端发现 (Client Side)
 
-不论是 DV，OV，还是EV证书，他们的加密效果都是一样的，其区别在于实体认证方式:
+服务启动时，将网络地址写到注册中心的注册表上，服务结束时，会从注册中心的注册表上删除。注册中心会有一个心跳机制，定时检查服务的状态，更新注册表。
 
-1. DV(Domain Validation)，面向个体用户，认证方式为向 whois 信息中的邮箱发送邮件进行验证。
-2. OV(Origanization Validation)，面向企业用户，证书在 DV 证书验证的基础上，还需要公司授权，CA 通过拨打信息库中的公司电话来确认
-3. EV(Extended Validation)，这类证书除了上述两个确认外，还需要公司提供的金融机构的开户许可证，要求十分严格。
+客户端需要连接服务器时，会从注册中心拉到服务的所有地址，然后用一个负载均衡算法去连接服务器。
 
-OV 和 EV 证书相当昂贵，使用方可以为这些颁发出来的证书买保险，一旦 CA 提供的证书出现问题，一张证书的赔偿金可以达到 100w 刀以上。
+### 服务端发现 (Server Side)
 
-### 什么是证书申请文件
+客户端通过向负载均衡器向服务发送请求，这个负载均衡器会查询注册中心的服务注册表，并将请求路由到可用的服务实例上。(Consul Template + Nginx, kubernetes + etcd)
 
-证书申请文件(Certificate Signing Request)，简写为 CSR。
+### Service Mesh
 
-数字证书的核心，其实就是非对称加密，这需要开发者自己保护好私钥的安全。
+将 LB 放到 Pod 中，客户端和 LB 之间走进程间通信。
 
-因此开发者在向 CA 申请证书的时候，开发者首先需要生成一个密钥对。开发者自己保管好私钥，然后将公钥和个人信息发送给 CA 机构，CA 机构通过公钥和你的个人信息最终签发数字证书。
+### 注册中心的选型
 
-而 CSR 文件其实就是一个包含了用户公钥和个人信息的一个数据文件。用户产生出这个 CSR 文件，再把这个 CSR 文件发送给 CA 机构，CA 机构通过 CSR 中的内容来签发出数字证书。
+CAP 理论
+一致性算法: Raft, Paxos
+注册中心: Consul, Zookeeper, etcd, eureka, nacos
 
-### SAN 是什么
+注册中心Feature:
 
-Subject Alternative Name ，多域名证书，一个证书可以保护多个域名。
+1. 服务健康检查
+2. 多数据中心
+3. kv存储服务
+4. 一致性算法
+5. cap
+6. 使用接口(多语言能力)
+7. watch 支持
+8. 自身监控
+9. 安全
 
-Chrome 从58开始 只会检查证书的 SAN 字段，不再检查 Common Name 字段的域名，如果没有设置 SAN 字段，Chrome 连接时会报错 `net:ERR_CERT_COMMON_NAME_INVALID`
+## 多集群
 
-### Chrome 连接 HTTPS 网站的常见错误
+指的是单个机房内的多集群。
+L0 服务，一旦故障影响巨大，考虑同一个业务部署多个集群。
+多集群，多份缓存如何清理缓存: 一个 Daemon 订阅 MySQL Binlog，然后广播到所有集群的 Worker 上。
+业务正交: 两个业务查询的数据完全不同。
 
-1. `net:ERR_CERT_AUTHORITY_INVALID`: 浏览器不认服务器的证书，一般是因为给服务器签发证书的 CA 机构不在浏览器的信任列表中。
-2. `net:ERR_CERT_COMMON_NAME_INVALID`: Common Name 不匹配，即访问的域名和证书中的域名不匹配
+因为业务正交，导致相同业务的不同集群的缓存完全不同，这样在底层业务集群A挂掉时，上层业务A访问底层业务集群B时，会出现大量的缓存 miss，对数据库造成较大压力。
+此时就需要分久必合了，将这两个集群从逻辑上统一成一个，不同上层业务随机地访问不同集群，从而使缓存的差异性降低。
 
-### 如何为特定域名生成一张证书
+如果一个底层业务被太多的上层业务依赖，那就可能使这个底层业务的某些节点连接数非常高，即使在空闲时段，处理 health check 也会消耗大量的资源。此时就需要在上层业务的客户端中均匀地分配节点，尽可能使每个节点的连接数均匀。
 
-详见: https://github.com/bwangelme/Certs
++ 节点分配算法
 
-证书中字段的说明
+```py
+# 每个客户端节点挑选 2~100 个节点进行连接
+# backends 表示所有的服务端节点
+def Subset(backends, client_id, subset_size):
+    # subset_count 表示一个节点集合的节点数量
+    subset_count = len(backends) / subset_size
 
-Field|Meaning|Example
----|---|---
-/C=|Country|GB
-/ST=|State|London
-/L=|Location|London
-/O=|Organization|Global Security
-/OU=|Organizational Unit|IT Department
-/CN=|Common Name|example.com
+    round = client_id / subset_count
+    random.seed(round)
+    random.shuffle(backends)
 
-### 浏览器信任 CA 机构
+    subset_id = client_id % subset_count
 
-基于Chrome 86.0.4240.198
-
-Settings -> Privacy and security -> Security -> Manage certificates -> Authorities -> Import 导入 CA 机构的 pem 文件
-
-基于 Firefox 83.0
-
-Preferences -> Privacy & Security -> Certificates -> View Certificates -> Authorities -> Import
+    start = subset_id * subset_size
+    return backends[start:start + subset_size]
+```
 
 ## HTTP2
 
@@ -119,8 +124,3 @@ Preferences -> Privacy & Security -> Certificates -> View Certificates -> Author
 ## 参考链接
 
 1. [HTTP/2 简介](https://developers.google.com/web/fundamentals/performance/http2?hl=zh-cn)
-2. [细说 CA 和证书](https://www.barretlee.com/blog/2016/04/24/detail-about-ca-and-certs/)
-3. [什么是CSR文件](https://www.jianshu.com/p/66d84ca65f41)
-4. [HowTo: Create CSR using OpenSSL Without Prompt](https://www.shellhacks.com/create-csr-openssl-without-prompt-non-interactive/)
-5. [Openssl生成自签名证书，简单步骤](https://ningyu1.github.io/site/post/51-ssl-cert/)
-6. [使用OpenSSL生成含有Subject Alternative Name(SAN)的证书](http://blog.ideawand.com/2017/11/22/build-certificate-that-support-Subject-Alternative-Name-SAN/)
