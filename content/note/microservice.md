@@ -106,21 +106,12 @@ def Subset(backends, client_id, subset_size):
     return backends[start:start + subset_size]
 ```
 
-## HTTP2
+## 多租户
 
-### 数据流，消息，帧
+流量在进入的时候根据 http header 进行染色。注册中心路由的时候，根据流量的颜色标签，寻找对应颜色节点。
 
-数据流: TCP 连接内的双向数据流，可以承载多个消息
-消息: 代表一个请求或者响应，包含一个或多个帧
-帧: 帧组成消息，HTTP/2通信的最小单位
+### 数据
 
-### 问题
+数据库和 Redis 要根据流量的不同，写入不同的数据库。kafka 要根据流量标签，写入不同的 topic。
 
-1. 如何创建一个 HTTP2 服务器 [Nginx, Golang]
-2. HTTP2 Push 如何配置
-3. 如何创建一个 HTTP2 客户端去连接 HTTP2 服务器
-4. HTTP2 服务器如何做到自动降级 HTTP1
-
-## 参考链接
-
-1. [HTTP/2 简介](https://developers.google.com/web/fundamentals/performance/http2?hl=zh-cn)
+短信，推送网关，要根据不同的流量标签，决定是否真的执行操作，还是仅记录日志。
