@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>《Golang Error》学习笔记 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content=" Golang Error 学习笔记
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
+
+
+<link rel="canonical" href="/note/golang_error/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.0034ec37b35f91907849c9020141a7e99249c6f2301ee1e34aee09cfe5f9ae2e.css" rel="stylesheet">
+<link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
+
+
+<meta property="og:title" content="《Golang Error》学习笔记" />
+<meta property="og:description" content="
+Golang Error 学习笔记
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/note/golang_error/" />
+<meta property="article:published_time" content="2020-12-30T22:28:45+08:00" />
+<meta property="article:modified_time" content="2020-12-30T22:28:45+08:00" />
+<meta itemprop="name" content="《Golang Error》学习笔记">
+<meta itemprop="description" content="
+Golang Error 学习笔记
+">
+<meta itemprop="datePublished" content="2020-12-30T22:28:45&#43;08:00" />
+<meta itemprop="dateModified" content="2020-12-30T22:28:45&#43;08:00" />
+<meta itemprop="wordCount" content="1921">
+
+
+
+<meta itemprop="keywords" content="笔记,Go," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="《Golang Error》学习笔记"/>
+<meta name="twitter:description" content="
+Golang Error 学习笔记
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">《Golang Error》学习笔记</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-12-30 </span>
+        
+          <span class="more-meta"> 约 1921 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#panic-的使用场景">Panic 的使用场景</a></li>
+        <li><a href="#sentinel-error">Sentinel Error</a></li>
+        <li><a href="#struct-error">Struct Error</a></li>
+        <li><a href="#opaque-error">Opaque Error</a></li>
+        <li><a href="#通过消除错误来优化错误处理代码">通过消除错误来优化错误处理代码</a></li>
+        <li><a href="#wrap-errors">Wrap Errors</a>
+          <ul>
+            <li><a href="#pkg-errors-库">pkg errors 库</a></li>
+            <li><a href="#pkg-errors-使用规则">pkg-errors 使用规则</a></li>
+          </ul>
+        </li>
+        <li><a href="#go-113-中新增的错误处理方法">Go 1.13 中新增的错误处理方法</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<p>Golang Error 学习笔记</p>
+</blockquote>
+<hr>
+<h2 id="panic-的使用场景">Panic 的使用场景</h2>
+<ol>
+<li>MySQL 无法链接，redis 可以连接，这时候是可以启动 <strong>读多写少</strong> 的服务的，不用强制 panic ，因为此时服务还是能够通过缓存来工作，数据无法写入，也不会导致写入脏数据。</li>
+<li>配置文件检查失败时，可以执行 Panic</li>
+<li>依赖的 RPC 无法启动时，可以先启动，但是服务会大量报错。</li>
+</ol>
+<p>对于真正出意外的情况，表示不可恢复的程序错误，例如索引越界，不可回复的环境问题，栈溢出，我们才使用 <code>panic</code>，逻辑上的错误，我们应该使用 error 来进行判断。</p>
+<blockquote>
+<p>You only need to check the error value if you care about the result &ndash; Dave</p>
+</blockquote>
+<h2 id="sentinel-error">Sentinel Error</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">os</span>
+
+<span class="kd">var</span> <span class="p">(</span>
+	<span class="nx">ErrInvalid</span> <span class="p">=</span> <span class="nf">errInvalid</span><span class="p">()</span> <span class="c1">// &#34;invalid argument&#34;
+</span><span class="c1"></span>
+	<span class="nx">ErrPermission</span> <span class="p">=</span> <span class="nf">errPermission</span><span class="p">()</span> <span class="c1">// &#34;permission denied&#34;
+</span><span class="c1"></span>	<span class="nx">ErrExist</span>      <span class="p">=</span> <span class="nf">errExist</span><span class="p">()</span>      <span class="c1">// &#34;file already exists&#34;
+</span><span class="c1"></span>	<span class="nx">ErrNotExist</span>   <span class="p">=</span> <span class="nf">errNotExist</span><span class="p">()</span>   <span class="c1">// &#34;file does not exist&#34;
+</span><span class="c1"></span>	<span class="nx">ErrClosed</span>     <span class="p">=</span> <span class="nf">errClosed</span><span class="p">()</span>     <span class="c1">// &#34;file already closed&#34;
+</span><span class="c1"></span>	<span class="nx">ErrNoDeadline</span> <span class="p">=</span> <span class="nf">errNoDeadline</span><span class="p">()</span> <span class="c1">// &#34;file type does not support deadline&#34;
+</span><span class="c1"></span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>预定义的特定错误，我们叫做 <code>Sentinel Error</code>。</p>
+<ol>
+<li>Sentinel Error 会成为 API 的公共部分。</li>
+<li>Sentinel Error 在两个包之间创建了依赖。</li>
+<li>Sentinel Error 让调用者无法返回更多的信息。</li>
+</ol>
+<p>应该尽可能避免 Sentinel Error。</p>
+<h2 id="struct-error">Struct Error</h2>
+<p>定义一个结构体实现 error 接口，里面包含了相关的上下文信息</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">net</span>
+
+<span class="kd">type</span> <span class="nx">OpError</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="c1">// Op is the operation which caused the error, such as
+</span><span class="c1"></span>    <span class="c1">// &#34;read&#34; or &#34;write&#34;.
+</span><span class="c1"></span>    <span class="nx">Op</span> <span class="kt">string</span>
+
+    <span class="c1">// Net is the network type on which this error occurred,
+</span><span class="c1"></span>    <span class="c1">// such as &#34;tcp&#34; or &#34;udp6&#34;.
+</span><span class="c1"></span>    <span class="nx">Net</span> <span class="kt">string</span>
+
+    <span class="c1">// For operations involving a remote network connection, like
+</span><span class="c1"></span>    <span class="c1">// Dial, Read, or Write, Source is the corresponding local
+</span><span class="c1"></span>    <span class="c1">// network address.
+</span><span class="c1"></span>    <span class="nx">Source</span> <span class="nx">Addr</span>
+
+    <span class="c1">// Addr is the network address for which this error occurred.
+</span><span class="c1"></span>    <span class="c1">// For local operations, like Listen or SetDeadline, Addr is
+</span><span class="c1"></span>    <span class="c1">// the address of the local endpoint being manipulated.
+</span><span class="c1"></span>    <span class="c1">// For operations involving a remote network connection, like
+</span><span class="c1"></span>    <span class="c1">// Dial, Read, or Write, Addr is the remote address of that
+</span><span class="c1"></span>    <span class="c1">// connection.
+</span><span class="c1"></span>    <span class="nx">Addr</span> <span class="nx">Addr</span>
+
+    <span class="c1">// Err is the error that occurred during the operation.
+</span><span class="c1"></span>    <span class="nx">Err</span> <span class="kt">error</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="opaque-error">Opaque Error</h2>
+<p>对外暴露一个函数来检测错误的信息，而不是直接暴露 Error 类型给外部。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">temporary</span> <span class="kd">interface</span> <span class="p">{</span>
+    <span class="nf">Temporary</span><span class="p">()</span> <span class="kt">bool</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">IsTemporary</span><span class="p">(</span><span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+    <span class="nx">te</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">err</span><span class="p">.(</span><span class="nx">temporary</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">ok</span> <span class="o">&amp;&amp;</span> <span class="nx">te</span><span class="p">.</span><span class="nf">Temporary</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="通过消除错误来优化错误处理代码">通过消除错误来优化错误处理代码</h2>
+<ul>
+<li>原始代码</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Header</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Key</span><span class="p">,</span> <span class="nx">Value</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">Status</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Code</span>   <span class="kt">int</span>
+	<span class="nx">Reason</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">BadWriteResponse</span><span class="p">(</span><span class="nx">w</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span><span class="p">,</span> <span class="nx">st</span> <span class="nx">Status</span><span class="p">,</span> <span class="nx">headers</span> <span class="p">[]</span><span class="nx">Header</span><span class="p">,</span> <span class="nx">body</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="s">&#34;HTTP/1.1 %d %s\r\n&#34;</span><span class="p">,</span> <span class="nx">st</span><span class="p">.</span><span class="nx">Code</span><span class="p">,</span> <span class="nx">st</span><span class="p">.</span><span class="nx">Reason</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">err</span>
+	<span class="p">}</span>
+
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">h</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">headers</span> <span class="p">{</span>
+		<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="s">&#34;%s: %s\r\n&#34;</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nx">Key</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="k">return</span> <span class="nx">err</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">if</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="s">&#34;\r\n&#34;</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">err</span>
+	<span class="p">}</span>
+
+	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">io</span><span class="p">.</span><span class="nf">Copy</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">err</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>优化后的代码</li>
+</ul>
+<p>通过将错误状态存储起来，后续的调用，如果有错误状态的话，那就不执行写入。
+最后将错误状态返回，错误状态存储的是第一个遇到的错误值，所以这里的代码和原始代码的效果是一样的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">errWriter</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span>
+	<span class="nx">err</span> <span class="kt">error</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="o">*</span><span class="nx">errWriter</span><span class="p">)</span> <span class="nf">Write</span><span class="p">(</span><span class="nx">buf</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="nx">e</span><span class="p">.</span><span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">err</span>
+	<span class="p">}</span>
+
+	<span class="kd">var</span> <span class="nx">n</span> <span class="kt">int</span>
+	<span class="nx">n</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">err</span> <span class="p">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">Writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="nx">buf</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">n</span><span class="p">,</span> <span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">GoodWriteResponse</span><span class="p">(</span><span class="nx">w</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span><span class="p">,</span> <span class="nx">st</span> <span class="nx">Status</span><span class="p">,</span> <span class="nx">headers</span> <span class="p">[]</span><span class="nx">Header</span><span class="p">,</span> <span class="nx">body</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="nx">ew</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">errWriter</span><span class="p">{</span><span class="nx">Writer</span><span class="p">:</span> <span class="nx">w</span><span class="p">}</span>
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">ew</span><span class="p">,</span> <span class="s">&#34;HTTP/1.1 %d %s\r\n&#34;</span><span class="p">,</span> <span class="nx">st</span><span class="p">.</span><span class="nx">Code</span><span class="p">,</span> <span class="nx">st</span><span class="p">.</span><span class="nx">Reason</span><span class="p">)</span>
+
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">h</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">headers</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">ew</span><span class="p">,</span> <span class="s">&#34;%s: %s\r\n&#34;</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nx">Key</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">ew</span><span class="p">,</span> <span class="s">&#34;\r\n&#34;</span><span class="p">)</span>
+	<span class="nx">io</span><span class="p">.</span><span class="nf">Copy</span><span class="p">(</span><span class="nx">ew</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="nx">ew</span><span class="p">.</span><span class="nx">err</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="wrap-errors">Wrap Errors</h2>
+<blockquote>
+<p>You should only handle errors once. Handing an error means inspecting the error value, and making a single decision.</p>
+</blockquote>
+<p>Go 中的错误处理有契约约定，在出现错误的情况下，不能对其他返回值的内容作出任何假设。</p>
+<p>如果代码要吞掉 error，那么也要对相应的返回值负责(例如返回降级后的默认值)。</p>
+<p>日志记录与错误无关且对调试没有帮助的信息应该被视为噪音，应予以质疑。
+记录的原因是因为某些东西失败了，且日志中应该包含了答案。</p>
+<ul>
+<li>错误要被日志记录</li>
+<li>应用程序通过日志记录错误，返回一个降级的值(保证100%的完整性)，且不再往上抛错误</li>
+<li>应用程序单纯地将错误往上抛，不需要做任何处理</li>
+</ul>
+<h3 id="pkg-errors-库">pkg errors 库</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">ReadFile</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">)</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">f</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Wrap</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="s">&#34;open failed&#34;</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="k">defer</span> <span class="nx">f</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+
+    <span class="nx">buf</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Wrap</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="s">&#34;read failed&#34;</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">buf</span><span class="p">,</span> <span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">ReadConfig</span><span class="p">()</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">home</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="s">&#34;HOME&#34;</span><span class="p">)</span>
+    <span class="nx">config</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">ReadFile</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="nx">home</span><span class="p">,</span> <span class="s">&#34;.settings.xml&#34;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nx">config</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">WithMessage</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="s">&#34;counld not read config&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">ReadConfig</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="c1">// Cause 会拿到最底层的错误
+</span><span class="c1"></span>            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;original error: %T %v\n&#34;</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Cause</span><span class="p">(</span><span class="nx">err</span><span class="p">),</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Cause</span><span class="p">(</span><span class="nx">err</span><span class="p">))</span>
+            <span class="c1">// %+v 会打印堆栈信息
+</span><span class="c1"></span>            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;stack trace:\n%+v\n&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+            <span class="nx">os</span><span class="p">.</span><span class="nf">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>输出</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; go run pkgerror.go
+original error: *os.PathError open /home/xuyundong/.settings.xml: no such file or directory
+stack trace:
+open /home/xuyundong/.settings.xml: no such file or directory  <span class="c1"># 这是原始错误</span>
+open failed  <span class="c1"># 这是原始错误包装后的信息</span>
+<span class="c1"># 下面是堆栈信息</span>
+main.ReadFile
+        /home/xuyundong/Github/Golang/GoDemo/pkgerror.go:15
+main.ReadConfig
+        /home/xuyundong/Github/Golang/GoDemo/pkgerror.go:28
+main.main
+        /home/xuyundong/Github/Golang/GoDemo/pkgerror.go:33
+runtime.main
+        /home/xuyundong/.local/go/src/runtime/proc.go:204
+runtime.goexit
+        /home/xuyundong/.local/go/src/runtime/asm_amd64.s:1374
+<span class="c1"># 这是在 wraperror 上又包装的信息</span>
+counld not <span class="nb">read</span> config
+<span class="nb">exit</span> status <span class="m">1</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="pkg-errors-使用规则">pkg-errors 使用规则</h3>
+<ul>
+<li>在应用代码中，使用 errors.New 或者 errors.Errorf 返回错误</li>
+<li>如果调用其他包内的函数(其他包已经保持了堆栈信息)，通常简单的直接返回</li>
+<li>如果和第三方库进行协作(Github 第三方库，公司基础库, 标准库，没有保存堆栈信息)，考虑使用 <code>errors.Wrap</code> 保存根 err 和堆栈信息</li>
+<li>直接返回错误，而不是在每个错误产生的地方打日志</li>
+<li>在程序的顶部，或者工作的 goroutine 顶部(请求入口)，使用 <code>%+v</code> 将堆栈信息打印出来</li>
+<li>可以使用 <code>errors.Cause</code> 获取根 err，将 sentinel error 进行对比</li>
+</ul>
+<p><strong>注意:</strong></p>
+<ol>
+<li><code>Packages that are reusable across many projects only return root error values</code> 基础库(重用性高)不应该 wrap error，只有应用库适合 wrap error</li>
+<li><code>if the error is not going to be handled, wrap and return up the call stack</code> 如果不打算处理错误的话(降级错误)，那么应该 wrap 起来继续往上抛，额外的上下文可以是输入的参数或者失败的 SQL 语句。</li>
+<li><code>Once an error is handled, it is not allowed to be passed up the call stack any longer.</code> 一旦一个错误被处理过了，那就不应该继续往上抛了，返回一个降级的值就可以了。</li>
+</ol>
+<h2 id="go-113-中新增的错误处理方法">Go 1.13 中新增的错误处理方法</h2>
+<p>pkg-errors 的作者 <a href="https://github.com/davecheney">Dave</a> 的意见被 Go 官方采纳，Go 1.13 中新增了一些错误的处理方法 <code>Unwrap</code>，<code>Is</code> 和 <code>As</code></p>
+<ul>
+<li><code>Is</code> 类似于 Python 中的 <code>isubclass</code></li>
+<li><code>As</code> 是检查 error 是否是某个特定类型的 error，如果是的话，那么就返回true，且将参数设置为对应类型的 error</li>
+<li><code>fmt.Errorf</code> 新增 <code>%w</code> 格式字符串，可以将原始错误包裹起来。<a href="https://github.com/bwangelme/go-1.13/blob/6ece83485f77117120693f16ff516c768a31c02a/src/fmt/errors.go#L32">相关源代码</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-12-30
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E7%AC%94%E8%AE%B0/">笔记</a>
+          <a href="/tags/go/">Go</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/note/grpc/">
+            <span class="next-text nav-default">《gRPC》学习笔记</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+    <script src="https://utteranc.es/client.js"
+            repo="anotherbwangel/blog-comment"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.2.1/jquery.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/slideout/1.0.1/slideout.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.js" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>

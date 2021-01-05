@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>《gRPC》学习笔记 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content=" 学习笔记
+ https://grpc.io/docs/what-is-grpc/introduction/
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
+
+
+<link rel="canonical" href="/note/grpc/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.0034ec37b35f91907849c9020141a7e99249c6f2301ee1e34aee09cfe5f9ae2e.css" rel="stylesheet">
+<link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
+
+
+<meta property="og:title" content="《gRPC》学习笔记" />
+<meta property="og:description" content="
+学习笔记
+
+https://grpc.io/docs/what-is-grpc/introduction/" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/note/grpc/" />
+<meta property="article:published_time" content="2020-11-30T22:48:50+08:00" />
+<meta property="article:modified_time" content="2020-11-30T22:48:50+08:00" />
+<meta itemprop="name" content="《gRPC》学习笔记">
+<meta itemprop="description" content="
+学习笔记
+
+https://grpc.io/docs/what-is-grpc/introduction/">
+<meta itemprop="datePublished" content="2020-11-30T22:48:50&#43;08:00" />
+<meta itemprop="dateModified" content="2020-11-30T22:48:50&#43;08:00" />
+<meta itemprop="wordCount" content="1691">
+
+
+
+<meta itemprop="keywords" content="笔记," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="《gRPC》学习笔记"/>
+<meta name="twitter:description" content="
+学习笔记
+
+https://grpc.io/docs/what-is-grpc/introduction/"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">《gRPC》学习笔记</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-11-30 </span>
+        
+          <span class="more-meta"> 约 1691 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#protobuf">Protobuf</a>
+          <ul>
+            <li><a href="#protobuf-生成-go-代码">Protobuf 生成 Go 代码</a></li>
+            <li><a href="#生成文件的路径">生成文件的路径</a></li>
+            <li><a href="#message">Message</a></li>
+            <li><a href="#fields">Fields</a></li>
+            <li><a href="#service">Service</a></li>
+          </ul>
+        </li>
+        <li><a href="#参考链接">参考链接</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<p>学习笔记</p>
+</blockquote>
+<p><a href="https://grpc.io/docs/what-is-grpc/introduction/">https://grpc.io/docs/what-is-grpc/introduction/</a></p>
+<hr>
+<h2 id="protobuf">Protobuf</h2>
+<h3 id="protobuf-生成-go-代码">Protobuf 生成 Go 代码</h3>
+<p><code>protoc</code> 生成 go 代码时依赖插件 <code>protoc-gen-go</code>，它是一个二进制文件，通过以下命令安装。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">go install google.golang.org/protobuf/cmd/protoc-gen-go
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>当调用 <code>protoc</code> 时带有 <code>--go_out</code> 选项时，<code>protoc</code> 就会使用 <code>protoc-gen-go</code> 插件来生成 Go 代码。</li>
+<li><code>protoc</code> 生成的一个 Go 文件(<code>{proto文件的basename}.pb.go</code>)，它的名字和输入的 proto 文件类似，只不过是把后缀换成了 <code>.pb.go</code>。</li>
+</ul>
+<p>proto 文件中应该包含一个选项 <code>go_package</code>，它指定了包含生成的 Go 文件的包名(<code>full import path of the Go package that contains the generated code</code>)。</p>
+<h3 id="生成文件的路径">生成文件的路径</h3>
+<ul>
+<li>
+<p>默认情况下 ，生成的代码存放在 <code>go_packge</code> 定义的目录中。例如声明 <code>go_packge=&quot;example.com/foo/bar&quot;</code>，那么生成的代码路径就是 <code>example.com/foo/bar/foo.pb.go</code>。</p>
+</li>
+<li>
+<p>如果指定了 <code>--go_opt=paths=source_relative</code> 选项，那么生成的 go 文件会存放和 proto 文件相同的路径中。例如 <code>protos/foo.proto</code> 文件就会生成 <code>protos/foo.pb.go</code> 文件，<code>foo.pb.go</code> 中的 <code>package</code> 取的是 <code>go_package</code> 的最后一级路径。</p>
+</li>
+<li>
+<p>当执行以下命令:</p>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">protoc --proto_path=src --go_out=build/gen --go_opt=paths=source_relative src/foo.proto src/bar/baz.proto
+</code></pre></td></tr></table>
+</div>
+</div><p>protoc 将会读取 <code>src/foo.proto</code> 和 <code>src/bar/baz.proto</code> 源文件，生成两个输出文件，<code>build/gen/foo.pb.go</code> 和 <code>build/gen/bar/baz.pb.go</code>。如果 <code>build/gen/bar</code> 目录不存在的话，编译器会自动创建。但如果 <code>build</code> 或 <code>build/gen</code> 目录不存在的话，编译器会报错。</p>
+<h3 id="message">Message</h3>
+<p>proto 文件中的如下定义:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">message Foo {}
+</code></pre></td></tr></table>
+</div>
+</div><p>将会生成一个结构体 <code>Foo</code>，<code>*Foo</code> 类型实现了 <code>proto.Message</code> 接口。<code>proto.Message</code> 接口的 <code>ProtoReflect</code> 方法会返回 <code>protoreflect.Message</code> 接口类型的变量，它提供了一个基于反射 Message 视角。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">message Foo {
+    message Bar
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>proto 文件允许嵌套的 message ，这样在 go 文件中会生成两个类型，<code>Foo</code> 和 <code>Foo_Bar</code></p>
+<h3 id="fields">Fields</h3>
+<p>编译器为 message 中的每个 Field 在 Go 结构体中都会创建一个字段，Go 结构体中的字段始终都会使用驼峰的方式进行命名。proto 文件中的字段使用下划线的方式命名时(<a href="https://developers.google.com/protocol-buffers/docs/style">as it should</a>)，它会自动被转换成驼峰命名，它的转换规则如下:</p>
+<ol>
+<li>第一个字母会是大写用于生命一个导出字段。如果第一个字符是下划线的话，它将会被替换成 <code>X</code>。</li>
+<li>如果内部下划线后面紧跟一个小写字母的话，内部下划线将会被移除，后面的小写字母将会被替换成大写。</li>
+</ol>
+<p>例如，<code>foo_bar_baz</code> 将会变成 <code>FooBarBaz</code> 命名，<code>_my_field_name_2</code> 将会变成 <code>XMyFieldName2</code> 命名。</p>
+<ul>
+<li>Proto2 数值类型对应表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>.proto Type</th>
+<th>Notes</th>
+<th>C++ Type</th>
+<th>Java Type</th>
+<th>Python Type[2]</th>
+<th>Go Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>double</td>
+<td></td>
+<td>double</td>
+<td>double</td>
+<td>float</td>
+<td><code>*float64</code></td>
+</tr>
+<tr>
+<td>float</td>
+<td></td>
+<td>float</td>
+<td>float</td>
+<td>float</td>
+<td><code>*float32</code></td>
+</tr>
+<tr>
+<td>int32</td>
+<td>Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint32 instead.</td>
+<td>int32</td>
+<td>int</td>
+<td>int</td>
+<td><code>*int32</code></td>
+</tr>
+<tr>
+<td>int64</td>
+<td>Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint64 instead.</td>
+<td>int64</td>
+<td>long</td>
+<td>int/long</td>
+<td><code>*int64</code></td>
+</tr>
+<tr>
+<td>uint32</td>
+<td>Uses variable-length encoding.</td>
+<td>uint32</td>
+<td>int[1]</td>
+<td>int/long[3]</td>
+<td><code>*uint32</code></td>
+</tr>
+<tr>
+<td>uint64</td>
+<td>Uses variable-length encoding.</td>
+<td>uint64</td>
+<td>long[1]</td>
+<td>int/long[3]</td>
+<td><code>*uint64</code></td>
+</tr>
+<tr>
+<td>sint32</td>
+<td>Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int32s.</td>
+<td>int32</td>
+<td>int</td>
+<td>int</td>
+<td><code>*int32</code></td>
+</tr>
+<tr>
+<td>sint64</td>
+<td>Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int64s.</td>
+<td>int64</td>
+<td>long</td>
+<td>int/long[3]</td>
+<td><code>*int64</code></td>
+</tr>
+<tr>
+<td>fixed32</td>
+<td>Always four bytes. More efficient than uint32 if values are often greater than 228.</td>
+<td>uint32</td>
+<td>int[1]</td>
+<td>int/long[3]</td>
+<td><code>*uint32</code></td>
+</tr>
+<tr>
+<td>fixed64</td>
+<td>Always eight bytes. More efficient than uint64 if values are often greater than 256.</td>
+<td>uint64</td>
+<td>long[1]</td>
+<td>int/long[3]</td>
+<td><code>*uint64</code></td>
+</tr>
+<tr>
+<td>sfixed32</td>
+<td>Always four bytes.</td>
+<td>int32</td>
+<td>int</td>
+<td>int</td>
+<td><code>*int32</code></td>
+</tr>
+<tr>
+<td>sfixed64</td>
+<td>Always eight bytes.</td>
+<td>int64</td>
+<td>long</td>
+<td>int/long[3]</td>
+<td><code>*int64</code></td>
+</tr>
+<tr>
+<td>bool</td>
+<td></td>
+<td>bool</td>
+<td>boolean</td>
+<td>bool</td>
+<td><code>*bool</code></td>
+</tr>
+<tr>
+<td>string</td>
+<td>A string must always contain UTF-8 encoded or 7-bit ASCII text.</td>
+<td>string</td>
+<td>String</td>
+<td>unicode (Python 2) or str (Python 3)</td>
+<td><code>*string</code></td>
+</tr>
+<tr>
+<td>bytes</td>
+<td>May contain any arbitrary sequence of bytes.</td>
+<td>string</td>
+<td>ByteString</td>
+<td>bytes</td>
+<td>[]byte</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>[1] In Java, unsigned 32-bit and 64-bit integers are represented using their signed counterparts, with the top bit simply being stored in the sign bit.</li>
+<li>[2] In all cases, setting values to a field will perform type checking to make sure it is valid.</li>
+<li>[3] 64-bit or unsigned 32-bit integers are always represented as long when decoded, but can be an int if an int is given when setting the field. In all cases, the value must fit in the type represented when set. See [2].</li>
+</ul>
+<hr>
+<ul>
+<li>proto3 数值类型对应表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>.proto Type</th>
+<th>Notes</th>
+<th>C++ Type</th>
+<th>Java Type</th>
+<th>Python Type[2]</th>
+<th>Go Type</th>
+<th>Ruby Type</th>
+<th>C# Type</th>
+<th>PHP Type</th>
+<th>Dart Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>double</td>
+<td></td>
+<td>double</td>
+<td>double</td>
+<td>float</td>
+<td>float64</td>
+<td>Float</td>
+<td>double</td>
+<td>float</td>
+<td>double</td>
+</tr>
+<tr>
+<td>float</td>
+<td></td>
+<td>float</td>
+<td>float</td>
+<td>float</td>
+<td>float32</td>
+<td>Float</td>
+<td>float</td>
+<td>float</td>
+<td>double</td>
+</tr>
+<tr>
+<td>int32</td>
+<td>Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint32 instead.</td>
+<td>int32</td>
+<td>int</td>
+<td>int</td>
+<td>int32</td>
+<td>Fixnum or Bignum (as required)</td>
+<td>int</td>
+<td>integer</td>
+<td>int</td>
+</tr>
+<tr>
+<td>int64</td>
+<td>Uses variable-length encoding. Inefficient for encoding negative numbers – if your field is likely to have negative values, use sint64 instead.</td>
+<td>int64</td>
+<td>long</td>
+<td>int/long[3]</td>
+<td>int64</td>
+<td>Bignum</td>
+<td>long</td>
+<td>integer/string[5]</td>
+<td>Int64</td>
+</tr>
+<tr>
+<td>uint32</td>
+<td>Uses variable-length encoding.</td>
+<td>uint32</td>
+<td>int[1]</td>
+<td>int/long[3]</td>
+<td>uint32</td>
+<td>Fixnum or Bignum (as required)</td>
+<td>uint</td>
+<td>integer</td>
+<td>int</td>
+</tr>
+<tr>
+<td>uint64</td>
+<td>Uses variable-length encoding.</td>
+<td>uint64</td>
+<td>long[1]</td>
+<td>int/long[3]</td>
+<td>uint64</td>
+<td>Bignum</td>
+<td>ulong</td>
+<td>integer/string[5]</td>
+<td>Int64</td>
+</tr>
+<tr>
+<td>sint32</td>
+<td>Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int32s.</td>
+<td>int32</td>
+<td>int</td>
+<td>int</td>
+<td>int32</td>
+<td>Fixnum or Bignum (as required)</td>
+<td>int</td>
+<td>integer</td>
+<td>int</td>
+</tr>
+<tr>
+<td>sint64</td>
+<td>Uses variable-length encoding. Signed int value. These more efficiently encode negative numbers than regular int64s.</td>
+<td>int64</td>
+<td>long</td>
+<td>int/long[3]</td>
+<td>int64</td>
+<td>Bignum</td>
+<td>long</td>
+<td>integer/string[5]</td>
+<td>Int64</td>
+</tr>
+<tr>
+<td>fixed32</td>
+<td>Always four bytes. More efficient than uint32 if values are often greater than 228.</td>
+<td>uint32</td>
+<td>int[1]</td>
+<td>int/long[3]</td>
+<td>uint32</td>
+<td>Fixnum or Bignum (as required)</td>
+<td>uint</td>
+<td>integer</td>
+<td>int</td>
+</tr>
+<tr>
+<td>fixed64</td>
+<td>Always eight bytes. More efficient than uint64 if values are often greater than 256.</td>
+<td>uint64</td>
+<td>long[1]</td>
+<td>int/long[3]</td>
+<td>uint64</td>
+<td>Bignum</td>
+<td>ulong</td>
+<td>integer/string[5]</td>
+<td>Int64</td>
+</tr>
+<tr>
+<td>sfixed32</td>
+<td>Always four bytes.</td>
+<td>int32</td>
+<td>int</td>
+<td>int</td>
+<td>int32</td>
+<td>Fixnum or Bignum (as required)</td>
+<td>int</td>
+<td>integer</td>
+<td>int</td>
+</tr>
+<tr>
+<td>sfixed64</td>
+<td>Always eight bytes.</td>
+<td>int64</td>
+<td>long</td>
+<td>int/long[3]</td>
+<td>int64</td>
+<td>Bignum</td>
+<td>long</td>
+<td>integer/string[5]</td>
+<td>Int64</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>bool</td>
+<td>boolean</td>
+<td>bool</td>
+<td>bool</td>
+<td>TrueClass/FalseClass</td>
+<td>bool</td>
+<td>boolean</td>
+<td>bool</td>
+<td></td>
+</tr>
+<tr>
+<td>string</td>
+<td>A string must always contain UTF-8 encoded or 7-bit ASCII text, and cannot be longer than 232.</td>
+<td>string</td>
+<td>String</td>
+<td>str/unicode[4]</td>
+<td>string</td>
+<td>String (UTF-8)</td>
+<td>string</td>
+<td>string</td>
+<td>String</td>
+</tr>
+<tr>
+<td>bytes</td>
+<td>May contain any arbitrary sequence of bytes no longer than 232.</td>
+<td>string</td>
+<td>ByteString</td>
+<td>str</td>
+<td>[]byte</td>
+<td>String (ASCII-8BIT)</td>
+<td>ByteString</td>
+<td>string</td>
+<td>List</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>[1] In Java, unsigned 32-bit and 64-bit integers are represented using their signed counterparts, with the top bit simply being stored in the sign bit.</li>
+<li>[2] In all cases, setting values to a field will perform type checking to make sure it is valid.</li>
+<li>[3] 64-bit or unsigned 32-bit integers are always represented as long when decoded, but can be an int if an int is given when setting the field. In all cases, the value must fit in the type represented when set. See [2].</li>
+<li>[4] Python strings are represented as unicode on decode but can be str if an ASCII string is given (this is subject to change).</li>
+<li>[5] Integer is used on 64-bit machines and string is used on 32-bit machines.</li>
+</ul>
+<h3 id="service">Service</h3>
+<p><code>protoc-gen-go</code> 生成器并不会生成 Service 的代码，需要使用 <a href="https://github.com/grpc/grpc-go/tree/master/cmd/protoc-gen-go-grpc">gRPC 插件</a> 去生成。</p>
+<h2 id="参考链接">参考链接</h2>
+<ul>
+<li><a href="https://developers.google.com/protocol-buffers/docs/reference/go-generated">https://developers.google.com/protocol-buffers/docs/reference/go-generated</a></li>
+<li><a href="https://developers.google.com/protocol-buffers/docs/proto#scalar">https://developers.google.com/protocol-buffers/docs/proto#scalar</a></li>
+<li><a href="https://developers.google.com/protocol-buffers/docs/proto3#scalar">https://developers.google.com/protocol-buffers/docs/proto3#scalar</a></li>
+<li><a href="https://grpc.io/docs/what-is-grpc/core-concepts/">https://grpc.io/docs/what-is-grpc/core-concepts/</a></li>
+<li><a href="https://grpc.io/docs/what-is-grpc/introduction/">https://grpc.io/docs/what-is-grpc/introduction/</a></li>
+<li><a href="https://grpc.io/docs/languages/go/quickstart/">https://grpc.io/docs/languages/go/quickstart/</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-11-30
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E7%AC%94%E8%AE%B0/">笔记</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/note/golang_error/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">《Golang Error》学习笔记</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/note/zipkin/">
+            <span class="next-text nav-default">《ZipKin》学习笔记</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+    <script src="https://utteranc.es/client.js"
+            repo="anotherbwangel/blog-comment"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.2.1/jquery.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/slideout/1.0.1/slideout.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.js" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>
