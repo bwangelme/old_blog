@@ -54,7 +54,7 @@
 ">
 <meta itemprop="datePublished" content="2020-10-11T14:47:13&#43;08:00" />
 <meta itemprop="dateModified" content="2020-10-11T14:47:13&#43;08:00" />
-<meta itemprop="wordCount" content="2282">
+<meta itemprop="wordCount" content="2488">
 
 
 
@@ -138,7 +138,7 @@
       <div class="post-meta">
         <span class="post-time"> 2020-10-11 </span>
         
-          <span class="more-meta"> 约 2282 字 </span>
+          <span class="more-meta"> 约 2488 字 </span>
           <span class="more-meta"> 预计阅读 5 分钟 </span>
         
       </div>
@@ -885,8 +885,63 @@ NAME         CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS     CLAIM        
 mongodb-pv   10Gi       RWO,ROX        Retain           Released   default/mongodb-pvc                           12m
 </code></pre></td></tr></table>
 </div>
-</div><p>当我们删除 PVC 之后，可以看到 PV 没有变成可用的状态，而是变成了 <code>Released</code> 状态。这是因为我们在创建PV 时声明它的 RECLAIM POLICY 是 Retain。此时需要系统管理员来确定 PV 中的数据是否还可用，手动回收卷并更改其状态，然后这个PV才能够被重新使用。</p>
+</div><p>当我们删除 PVC 之后，可以看到 PV 没有变成可用的状态，而是变成了 <code>Released</code> 状态。这是因为我们在创建 PV 时声明它的 <code>RECLAIM POLICY</code> 是 <code>Retain</code> 。此时需要系统管理员来确定 PV 中的数据是否还可用，手动回收卷并更改其状态，然后这个PV才能够被重新使用。</p>
 <h2 id="持久卷的动态配置">持久卷的动态配置</h2>
+<p>StorageClass 是一种集群资源，它绑定了一个 <strong>制备程序</strong> ，可以根据 PVC 的申请，来动态地创建 PV 并绑定到实际的存储上。</p>
+<ul>
+<li>持久卷动态配置的完整图示</li>
+</ul>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com//2021-01-08-073419.png" alt=""></p>
+<ul>
+<li>k8s 中有个默认的存储类 (StorageClass) <code>standard</code>，如果 PVC 声明中没有指定存储类，那就使用这个默认的存储类来创建 PV 。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; k get sc standard -o yaml
+allowVolumeExpansion: <span class="nb">true</span>
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+    <span class="c1"># 这个注解声明它是默认的存储类</span>
+    storageclass.kubernetes.io/is-default-class: <span class="s2">&#34;true&#34;</span>
+  creationTimestamp: <span class="s2">&#34;2021-01-03T16:26:12Z&#34;</span>
+  labels:
+    addonmanager.kubernetes.io/mode: EnsureExists
+  name: standard
+  resourceVersion: <span class="s2">&#34;263&#34;</span>
+  selfLink: /apis/storage.k8s.io/v1/storageclasses/standard
+  uid: 278b918a-466e-454b-bab4-f25833314feb
+parameters:
+  type: pd-standard
+provisioner: kubernetes.io/gce-pd  <span class="c1"># 这是它所配置的制备程序</span>
+reclaimPolicy: Delete  <span class="c1"># 声明创建的 PV 的使用策略</span>
+volumeBindingMode: Immediate
+</code></pre></td></tr></table>
+</div>
+</div>
     </div>
 
     <div class="post-copyright">
