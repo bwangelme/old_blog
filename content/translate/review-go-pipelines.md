@@ -3,7 +3,7 @@ title: "Review 《Go Concurrency Patterns: Pipelines and cancellation》"
 date: 2019-04-15T22:35:48+08:00
 lastmod: 2019-04-15T22:35:48+08:00
 draft: false
-tags: [Tag1, Tag2]
+tags: [Go, Concurrency]
 author: "bwangel"
 comment: true
 
@@ -17,18 +17,18 @@ comment: true
 
 在 Go 中没有管道操作的正式定义，它仅仅是众多并发程序中的一种。
 
-非正式地定义是，管道操作可以由一系列用`channel`连接的__stage__组成，每个__stage__是一组运行着相同函数的 Goroutine。
-在每个__stage__中的 Goroutine 中，执行着以下的操作:
+非正式地定义是，管道操作可以由一系列用`channel`连接的 __stage__ 组成，每个 __stage__ 是一组运行着相同函数的 Goroutine。
+在每个 __stage__ 中的 Goroutine 中，执行着以下的操作:
 
 + 通过`inbound` channel 从上游接收值
 + 对输入的值中执行一组操作，通常执行完以后会生成新的值
 + 通过`outbound` channel 向下游发送值
 
-第一个和最后一个__stage__分别通常只有一组`inbound`或`outbound` channel，其他的__stage__可以有任意多个`inbound`和`outbound` channel。第一个__stage__通常叫做`source`或`producer`，最后一个__stage__通常叫做`sink`或`consumer`。
+第一个和最后一个 __stage__ 分别通常只有一组`inbound`或`outbound` channel，其他的 __stage__ 可以有任意多个`inbound`和`outbound` channel。第一个 __stage__ 通常叫做`source`或`producer`，最后一个 __stage__ 通常叫做`sink`或`consumer`。
 
 ## 管道操作的简单例子
 
-下面是一个管道操作的简单例子，一共分为三个__stage__，`gen`，`sq`，`main`。
+下面是一个管道操作的简单例子，一共分为三个 __stage__ ，`gen`，`sq`，`main`。
 
 + `gen` 用来生成数字到管道中
 + `sq` 用来处理管道中的数字
