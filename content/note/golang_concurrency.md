@@ -91,7 +91,13 @@ func main() {
 }
 ```
 
-## To Learn
+## 锁的用法
 
-+ cache line
-+ single machine word
++ 最晚加锁，最早释放
++ 锁里面的代码越段越好，越简单越好
++ 加多把锁的情况下，注意不要产生死锁
+
+## Atomic
+
++ 能用 atomic 尽量用 atomic，它比锁快一个数量级
+
