@@ -101,3 +101,44 @@ func main() {
 
 + 能用 atomic 尽量用 atomic，它比锁快一个数量级
 
+## Atomic
+
++ 能用 atomic 尽量用 atomic，它比锁快一个数量级
+
+### Copy On Write
+
++ Linux 系统下的 Copy On Write
+
+进程在 fork 了子进程后，内核并不会立刻复制子进程的内存页。当父子进程中任意一个进程修改了内存后，内核内核会复制被修改的进程页，这样来节省内存资源。
+
++ Golang 业务中的 Copy On Write
+
+```go
+// Go 业务中的 Copy On Write
+// 当有配置需要更改时，先复制一份，在复制份上执行修改，然后再利用 atomic.Value 这个原子操作修改配置的指针
+func main() {
+    type Map map[string]string
+    var m atomic.Value
+    var mu sync.Mutex // 写协程之间的互斥锁
+
+    read := func(key string) (val string) {
+            m1 := m.Load().(Map)
+            return m1[key]
+    }
+    write := func(key, value string) {
+        mu.Lock()
+        defer mu.Unlock()
+
+        m1 := m.Load().(Map)
+        m2 := make(Map)
+        for k, v := range m1 {
+            m2[k] = v
+        }
+        m2[key] = value
+        m.Store(m2)
+    }
+
+    _, _ = read, write
+}
+```
+
