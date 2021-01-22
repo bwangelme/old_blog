@@ -111,6 +111,8 @@ func main() {
 
 进程在 fork 了子进程后，内核并不会立刻复制子进程的内存页。当父子进程中任意一个进程修改了内存后，内核内核会复制被修改的进程页，这样来节省内存资源。
 
+参考链接: [Redis-关于RDB的几点顿悟-COW](https://blog.csdn.net/Muscleape/article/details/105670481)
+
 + Golang 业务中的 Copy On Write
 
 ```go
