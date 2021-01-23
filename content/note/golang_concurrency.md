@@ -101,10 +101,6 @@ func main() {
 
 + 能用 atomic 尽量用 atomic，它比锁快一个数量级
 
-## Atomic
-
-+ 能用 atomic 尽量用 atomic，它比锁快一个数量级
-
 ### Copy On Write
 
 + Linux 系统下的 Copy On Write
