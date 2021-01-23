@@ -101,10 +101,6 @@ func main() {
 
 + 能用 atomic 尽量用 atomic，它比锁快一个数量级
 
-## Atomic
-
-+ 能用 atomic 尽量用 atomic，它比锁快一个数量级
-
 ### Copy On Write
 
 + Linux 系统下的 Copy On Write
@@ -143,4 +139,13 @@ func main() {
     _, _ = read, write
 }
 ```
+
+### Sync.Pool
+
+sync.Pool 的场景是用来保存和复用临时对象，以减少内存分配，降低 GC 压力。
+
+放进 Pool 中的对象，会说不准在什么时候 GC 掉。
+
+## Context
+
 
