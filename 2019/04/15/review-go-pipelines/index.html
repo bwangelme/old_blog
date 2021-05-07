@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
 
 
 <link rel="canonical" href="/2019/04/15/review-go-pipelines/" />
@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.0034ec37b35f91907849c9020141a7e99249c6f2301ee1e34aee09cfe5f9ae2e.css" rel="stylesheet">
+<link href="/sass/main.min.2f4451a1d8f674750647033034c4291f75031951a6b56bc0af09f16fd22d7960.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -46,22 +46,19 @@
 
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2019/04/15/review-go-pipelines/" />
-<meta property="article:published_time" content="2019-04-15T22:35:48+08:00" />
-<meta property="article:modified_time" content="2019-04-15T22:35:48+08:00" />
+<meta property="og:url" content="/2019/04/15/review-go-pipelines/" /><meta property="article:section" content="translate" />
+<meta property="article:published_time" content="2019-04-15T22:35:48&#43;08:00" />
+<meta property="article:modified_time" content="2019-04-15T22:35:48&#43;08:00" />
+
 <meta itemprop="name" content="Review 《Go Concurrency Patterns: Pipelines and cancellation》">
 <meta itemprop="description" content="
 
 【Go Concurrency Patterns: Pipelines and cancellation】笔记
 
-">
-<meta itemprop="datePublished" content="2019-04-15T22:35:48&#43;08:00" />
+"><meta itemprop="datePublished" content="2019-04-15T22:35:48&#43;08:00" />
 <meta itemprop="dateModified" content="2019-04-15T22:35:48&#43;08:00" />
-<meta itemprop="wordCount" content="1141">
-
-
-
-<meta itemprop="keywords" content="Tag1,Tag2," /><meta name="twitter:card" content="summary"/>
+<meta itemprop="wordCount" content="1077">
+<meta itemprop="keywords" content="Go,Concurrency," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Review 《Go Concurrency Patterns: Pipelines and cancellation》"/>
 <meta name="twitter:description" content="
 
@@ -143,7 +140,7 @@
       <div class="post-meta">
         <span class="post-time"> 2019-04-15 </span>
         
-          <span class="more-meta"> 约 1141 字 </span>
+          <span class="more-meta"> 约 1077 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
@@ -173,16 +170,16 @@
 </blockquote>
 <h2 id="管道操作的定义">管道操作的定义</h2>
 <p>在 Go 中没有管道操作的正式定义，它仅仅是众多并发程序中的一种。</p>
-<p>非正式地定义是，管道操作可以由一系列用<code>channel</code>连接的__stage__组成，每个__stage__是一组运行着相同函数的 Goroutine。
-在每个__stage__中的 Goroutine 中，执行着以下的操作:</p>
+<p>非正式地定义是，管道操作可以由一系列用<code>channel</code>连接的 <strong>stage</strong> 组成，每个 <strong>stage</strong> 是一组运行着相同函数的 Goroutine。
+在每个 <strong>stage</strong> 中的 Goroutine 中，执行着以下的操作:</p>
 <ul>
 <li>通过<code>inbound</code> channel 从上游接收值</li>
 <li>对输入的值中执行一组操作，通常执行完以后会生成新的值</li>
 <li>通过<code>outbound</code> channel 向下游发送值</li>
 </ul>
-<p>第一个和最后一个__stage__分别通常只有一组<code>inbound</code>或<code>outbound</code> channel，其他的__stage__可以有任意多个<code>inbound</code>和<code>outbound</code> channel。第一个__stage__通常叫做<code>source</code>或<code>producer</code>，最后一个__stage__通常叫做<code>sink</code>或<code>consumer</code>。</p>
+<p>第一个和最后一个 <strong>stage</strong> 分别通常只有一组<code>inbound</code>或<code>outbound</code> channel，其他的 <strong>stage</strong> 可以有任意多个<code>inbound</code>和<code>outbound</code> channel。第一个 <strong>stage</strong> 通常叫做<code>source</code>或<code>producer</code>，最后一个 <strong>stage</strong> 通常叫做<code>sink</code>或<code>consumer</code>。</p>
 <h2 id="管道操作的简单例子">管道操作的简单例子</h2>
-<p>下面是一个管道操作的简单例子，一共分为三个__stage__，<code>gen</code>，<code>sq</code>，<code>main</code>。</p>
+<p>下面是一个管道操作的简单例子，一共分为三个 <strong>stage</strong> ，<code>gen</code>，<code>sq</code>，<code>main</code>。</p>
 <ul>
 <li><code>gen</code> 用来生成数字到管道中</li>
 <li><code>sq</code> 用来处理管道中的数字</li>
@@ -453,8 +450,8 @@
 </div>
 <footer class="post-footer">
       <div class="post-tags">
-          <a href="/tags/tag1/">Tag1</a>
-          <a href="/tags/tag2/">Tag2</a>
+          <a href="/tags/go/">Go</a>
+          <a href="/tags/concurrency/">Concurrency</a>
           </div>
       <nav class="post-nav">
         <a class="prev" href="/2019/04/21/go-cli/">
@@ -532,7 +529,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+<script type="text/javascript" src="/js/main.min.2517c0eb67172a0bae917de4af59b10ca2531411a009d4c0b82f5685259e5771.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

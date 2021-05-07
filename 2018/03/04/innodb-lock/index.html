@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
 
 
 <link rel="canonical" href="/2018/03/04/innodb-lock/" />
@@ -36,24 +36,21 @@
 
 
 
-<link href="/sass/main.min.0034ec37b35f91907849c9020141a7e99249c6f2301ee1e34aee09cfe5f9ae2e.css" rel="stylesheet">
+<link href="/sass/main.min.2f4451a1d8f674750647033034c4291f75031951a6b56bc0af09f16fd22d7960.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
 <meta property="og:title" content="InnoDB 锁机制" />
 <meta property="og:description" content="本文试图讲清楚 InnoDB 中存在的各种锁，以及它们锁定的区别。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2018/03/04/innodb-lock/" />
-<meta property="article:published_time" content="2018-03-04T13:22:46+08:00" />
-<meta property="article:modified_time" content="2018-03-04T13:22:46+08:00" />
+<meta property="og:url" content="/2018/03/04/innodb-lock/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2018-03-04T13:22:46&#43;08:00" />
+<meta property="article:modified_time" content="2018-03-04T13:22:46&#43;08:00" />
+
 <meta itemprop="name" content="InnoDB 锁机制">
-<meta itemprop="description" content="本文试图讲清楚 InnoDB 中存在的各种锁，以及它们锁定的区别。">
-<meta itemprop="datePublished" content="2018-03-04T13:22:46&#43;08:00" />
+<meta itemprop="description" content="本文试图讲清楚 InnoDB 中存在的各种锁，以及它们锁定的区别。"><meta itemprop="datePublished" content="2018-03-04T13:22:46&#43;08:00" />
 <meta itemprop="dateModified" content="2018-03-04T13:22:46&#43;08:00" />
-<meta itemprop="wordCount" content="7009">
-
-
-
+<meta itemprop="wordCount" content="7008">
 <meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="InnoDB 锁机制"/>
 <meta name="twitter:description" content="本文试图讲清楚 InnoDB 中存在的各种锁，以及它们锁定的区别。"/>
@@ -132,7 +129,7 @@
       <div class="post-meta">
         <span class="post-time"> 2018-03-04 </span>
         
-          <span class="more-meta"> 约 7009 字 </span>
+          <span class="more-meta"> 约 7008 字 </span>
           <span class="more-meta"> 预计阅读 14 分钟 </span>
         
       </div>
@@ -188,7 +185,7 @@
 <p>　Microsoft SQL Server 在2005版本之前是页锁设计，相对于 MyISAM 并发性能有所提高，但是对于热点数据页的并发问题仍然无能为力。在2005版本中，SQL Server 开始支持乐观并发和悲观并发，在乐观并发下开始支持行级锁。但其实现方式与 InnoDB 完全不同，在 SQL Server 中锁是一种稀缺资源，锁越多开销越大，当锁过多的时候会出现锁升级，从行锁升级到表锁。</p>
 <p>　InnoDB 存储引擎锁的实现和 Oracle 数据库非常类似，提供一致性的非锁定读和行级锁支持。行级锁没有相关额外的开销，可以同时得到并发性和一致性。</p>
 <h2 id="lock-与-latch-的区别">lock 与 latch 的区别</h2>
-<p>　在 MySQL 中 lock 与 latch 都可以被称为&quot;锁&rdquo;，但是它们是不同的东西。</p>
+<p>　在 MySQL 中 lock 与 latch 都可以被称为&quot;锁&quot;，但是它们是不同的东西。</p>
 <ul>
 <li>latch 一般称为闩(shuan, 读一声)锁(轻量级的锁)，它可以分为 mutex(互斥量) 和 rwlock(读写锁) ，它锁定的对象是内存中的共享资源，主要用来保证并发线程操作临界资源的正确性。</li>
 <li>lock 就是锁，它可以分为排他锁，共享锁，意向锁等，它锁定的对象是事务，主要用来锁定数据库中的对象，包括表，页，行等。</li>
@@ -1264,7 +1261,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+<script type="text/javascript" src="/js/main.min.2517c0eb67172a0bae917de4af59b10ca2531411a009d4c0b82f5685259e5771.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

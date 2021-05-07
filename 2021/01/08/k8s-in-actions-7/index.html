@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>《K8s in Actions》第七章学习笔记 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content=" ConfigMap 和 Secret 配置应用程序
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
+
+
+<link rel="canonical" href="/2021/01/08/k8s-in-actions-7/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.2f4451a1d8f674750647033034c4291f75031951a6b56bc0af09f16fd22d7960.css" rel="stylesheet">
+<link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
+
+
+<meta property="og:title" content="《K8s in Actions》第七章学习笔记" />
+<meta property="og:description" content="
+ConfigMap 和 Secret 配置应用程序
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2021/01/08/k8s-in-actions-7/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-01-08T07:51:51&#43;08:00" />
+<meta property="article:modified_time" content="2021-01-08T07:51:51&#43;08:00" />
+
+<meta itemprop="name" content="《K8s in Actions》第七章学习笔记">
+<meta itemprop="description" content="
+ConfigMap 和 Secret 配置应用程序
+"><meta itemprop="datePublished" content="2021-01-08T07:51:51&#43;08:00" />
+<meta itemprop="dateModified" content="2021-01-08T07:51:51&#43;08:00" />
+<meta itemprop="wordCount" content="1457">
+<meta itemprop="keywords" content="Kubenetes,笔记," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="《K8s in Actions》第七章学习笔记"/>
+<meta name="twitter:description" content="
+ConfigMap 和 Secret 配置应用程序
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">《K8s in Actions》第七章学习笔记</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-01-08 </span>
+        
+          <span class="more-meta"> 约 1457 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#配置容器化应用程序">配置容器化应用程序</a></li>
+        <li><a href="#向容器传递命令行参数">向容器传递命令行参数</a></li>
+        <li><a href="#为容器设置环境变量">为容器设置环境变量</a></li>
+        <li><a href="#利用-configmap-解偶配置">利用 ConfigMap 解偶配置</a></li>
+        <li><a href="#使用-secret-给容器传递敏感数据">使用 Secret 给容器传递敏感数据</a>
+          <ul>
+            <li><a href="#默认令牌-secret-介绍">默认令牌 Secret 介绍</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<p>ConfigMap 和 Secret 配置应用程序</p>
+</blockquote>
+<hr>
+<h2 id="配置容器化应用程序">配置容器化应用程序</h2>
+<p>配置应用程序的方法:</p>
+<ol>
+<li>向容器传递命令行参数</li>
+<li>为每个容器设置自定义的环境变量</li>
+<li>通过特殊类型的卷将配置文件挂载到容器中</li>
+</ol>
+<h2 id="向容器传递命令行参数">向容器传递命令行参数</h2>
+<ul>
+<li>ENTRYPOINT 定义容器启动时被调用的可执行程序</li>
+<li>CMD 指定传递给 ENTRYPOINT 的参数</li>
+</ul>
+<p>shell 形式与 exec 形式的主要区别是命令是否在 shell 中调用。</p>
+<ul>
+<li>shell 形式: <code>ENTRYPOINT node app.js</code></li>
+<li>exec 形式: <code>ENTRYPOINT [&quot;node&quot;, &quot;app.js&quot;]</code></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 使用默认的命令行参数</span>
+ø&gt; docker run -it bwangel/fortune:args
+Configured to generate new fortune every <span class="m">10</span> seconds
+Sat Feb <span class="m">13</span> 01:54:01 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
+Sat Feb <span class="m">13</span> 01:54:11 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
+^C
+
+<span class="c1"># 传递命令行参数给容器，覆盖默认的值</span>
+ø&gt; docker run -it bwangel/fortune:args <span class="m">5</span>
+Configured to generate new fortune every <span class="m">5</span> seconds
+Sat Feb <span class="m">13</span> 01:54:23 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
+Sat Feb <span class="m">13</span> 01:54:28 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
+Sat Feb <span class="m">13</span> 01:54:33 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
+Sat Feb <span class="m">13</span> 01:54:38 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
+^C
+</code></pre></td></tr></table>
+</div>
+</div><p>k8s 配置中的 <code>cmd</code> 和 <code>args</code> 选项可以覆盖镜像的 <code>entrypoint</code> 和 <code>cmd</code> 设置。</p>
+<p>注意: 字符串值无需使用引号包裹，数值需要。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">args</span><span class="p">:</span><span class="w">
+</span><span class="w"></span>- <span class="l">foo</span><span class="w">
+</span><span class="w"></span>- <span class="l">bar</span><span class="w">
+</span><span class="w"></span>- <span class="s2">&#34;15&#34;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="为容器设置环境变量">为容器设置环境变量</h2>
+<p>环境变量被设置在 pod 的容器定义中，并非是 pod 级别。k8s 在 pod 中会自动暴露相同命名空间下 Service 的环境变量。所以环境变量可以被看作是注入的配置。</p>
+<p>环境变量的定义中可以使用 <code>$(SOME_ENV)</code> 的形式引用其他环境变量，同样，cmd 和 args 的配置也可以引用其他环境变量。</p>
+<h2 id="利用-configmap-解偶配置">利用 ConfigMap 解偶配置</h2>
+<p>configmap 是一个键值对的表，不同的命名空间下可以有同名的 configmap，通过这种方式将配置和 pod 定义分离开来。</p>
+<p>创建 configmap 的多种来源以及最终存储的值:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">k create configmap my-config --from-file<span class="o">=</span>foo.json --from-file<span class="o">=</span><span class="nv">bar</span><span class="o">=</span>foobar.conf --from-file<span class="o">=</span>config-opts/ --from-literal<span class="o">=</span><span class="nv">some</span><span class="o">=</span>thing
+</code></pre></td></tr></table>
+</div>
+</div><p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com//2021-02-13-112953.png" alt=""></p>
+<p>如果创建的 Pod 中引用的 configMap 不存在，那么引用 configmap 的容器会启动失败，其他容器能够正常启动。
+如果被引用的 configmap 后续又被正常创建了，那么失败的容器后面又可以重新成功运行。</p>
+<p><strong>注意:</strong></p>
+<p><code>envFrom</code> 可以将 configmap 中的配置项设置为环境变量，如果配置项的名称不是一个合法的环境变量名(数字字母+下划线)，那么这个环境变量在创建时就会被自动忽略，且不会发出任何事件通知。</p>
+<ul>
+<li>从本地文件创建 configmap</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># configmap-files 是本地的一个文件夹</span>
+ø&gt; k create configmap fortune-config --from-file<span class="o">=</span>configmap-files
+configmap/fortune-config created
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>检查创建的 configmap 的配置项</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; k get configmap fortune-config -o<span class="o">=</span>yaml
+apiVersion: v1
+<span class="c1"># 注意，配置项中的管道符号`|`表示配置项的值是一个多行字面量</span>
+data:
+  my-nginx-config.conf: <span class="p">|</span>
+    server <span class="o">{</span>
+        listen 80<span class="p">;</span>
+        server_name kubia.example.com<span class="p">;</span>
+
+        gzip on<span class="p">;</span>
+        gzip_types text/plain application/xml<span class="p">;</span>
+
+        location / <span class="o">{</span>
+            root /usr/share/nginx/html<span class="p">;</span>
+            index index.html index.htm<span class="p">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+  sleep-interval: <span class="p">|</span>
+    <span class="m">25</span>
+kind: ConfigMap
+metadata:
+  creationTimestamp: <span class="s2">&#34;2021-02-14T07:09:19Z&#34;</span>
+  name: fortune-config
+  namespace: default
+  resourceVersion: <span class="s2">&#34;15400246&#34;</span>
+  selfLink: /api/v1/namespaces/default/configmaps/fortune-config
+  uid: a0925cca-bf39-4e67-9cd9-c5a6ea1eae83
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>配置卷是通过挂载的方式加入到容器上的，挂载某一文件夹会隐藏该文件夹中已存在的文件。</li>
+</ul>
+<p>mountPath 和 subPath 选项可以指定只挂载文件，而不挂载整个文件夹，这样容器的文件夹就不会覆盖了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">some/image</span><span class="w">
+</span><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">myvolume</span><span class="w">
+</span><span class="w">      </span><span class="c"># 只挂载某个文件，而不是挂载一个文件夹</span><span class="w">
+</span><span class="w">      </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/someconfig.conf</span><span class="w">
+</span><span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="l">myconfig.conf</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>更新配置且不重启容器</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># edit 命令可以修改 configmap 中的配置文件</span>
+ø&gt; k edit configmap fortune-config
+configmap/fortune-config edited
+
+<span class="c1"># 修改完配置后，再通知 nginx 重启应用</span>
+ø&gt; k <span class="nb">exec</span> -it -c web-server fortune-configmap-volume -- nginx -s reload
+2021/02/16 03:39:49 <span class="o">[</span>notice<span class="o">]</span> 43#43: signal process started
+
+<span class="c1"># 这样我们就达到了不重启容器更新配置的目的</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>注意</strong>: configmap 更新时，不同的容器同步配置文件的时间是不同的，因此有可能出现容器间配置文件不一致的情况。</p>
+<p>我们可以看到，被挂载的文件链接到了 <code>..data</code> 文件夹中，而 <code>..data</code> 文件夹又是一个软连接。</p>
+<p>k8s 在更新文件的时候，会先创建好新的文件，再修改 <code>..data</code> 的链接，这样就达到了一次性更新所有文件的目的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; k <span class="nb">exec</span> -it -c web-server fortune-configmap-volume -- ls -lA /etc/nginx/conf.d/               11:42:58 <span class="o">(</span>02-16<span class="o">)</span>
+total <span class="m">4</span>
+drwxr-xr-x    <span class="m">2</span> root     root          <span class="m">4096</span> Feb <span class="m">16</span> 03:39 ..2021_02_16_03_39_25.637552423
+lrwxrwxrwx    <span class="m">1</span> root     root            <span class="m">31</span> Feb <span class="m">16</span> 03:39 ..data -&gt; ..2021_02_16_03_39_25.637552423
+lrwxrwxrwx    <span class="m">1</span> root     root            <span class="m">16</span> Feb <span class="m">16</span> 03:30 gzip.conf -&gt; ..data/gzip.conf
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="使用-secret-给容器传递敏感数据">使用 Secret 给容器传递敏感数据</h2>
+<p>Secret 是一种类似与 Configmap 的资源，它存储的也是键值对的映射，它支持:</p>
+<ol>
+<li>将 Secret 条目作为环境变量传递给容器</li>
+<li>将 Secret 条目暴露为卷中的文件</li>
+</ol>
+<p>同时，为了保证 Secret 的安全性，k8s 仅仅将 Secret 分发到需要访问 Secret 的 pod 的所在节点上，同时，Secert 只会写到节点的内存上，不会写到物理存储上。</p>
+<h3 id="默认令牌-secret-介绍">默认令牌 Secret 介绍</h3>
+<p>TODO</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-01-08
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/kubenetes/">Kubenetes</a>
+          <a href="/tags/%E7%AC%94%E8%AE%B0/">笔记</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2021/05/07/go-build-variable/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Golang 链接时注入额外信息</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2020/11/29/https-generate-cert/">
+            <span class="next-text nav-default">如何生成自签名 HTTPS 证书</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+    <script src="https://utteranc.es/client.js"
+            repo="anotherbwangel/blog-comment"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.2.1/jquery.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/slideout/1.0.1/slideout.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.js" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.2517c0eb67172a0bae917de4af59b10ca2531411a009d4c0b82f5685259e5771.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>

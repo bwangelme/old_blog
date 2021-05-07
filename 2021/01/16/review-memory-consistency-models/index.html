@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Review 《Memory Consistency Models: A Tutorial》 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="  原文地址: https://www.cs.utexas.edu/~bornholt/post/memory-models.html  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
+
+
+<link rel="canonical" href="/2021/01/16/review-memory-consistency-models/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.2f4451a1d8f674750647033034c4291f75031951a6b56bc0af09f16fd22d7960.css" rel="stylesheet">
+<link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
+
+
+<meta property="og:title" content="Review 《Memory Consistency Models: A Tutorial》" />
+<meta property="og:description" content="
+
+原文地址: https://www.cs.utexas.edu/~bornholt/post/memory-models.html
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2021/01/16/review-memory-consistency-models/" /><meta property="article:section" content="translate" />
+<meta property="article:published_time" content="2021-01-16T13:34:40&#43;08:00" />
+<meta property="article:modified_time" content="2021-01-16T13:34:40&#43;08:00" />
+
+<meta itemprop="name" content="Review 《Memory Consistency Models: A Tutorial》">
+<meta itemprop="description" content="
+
+原文地址: https://www.cs.utexas.edu/~bornholt/post/memory-models.html
+
+"><meta itemprop="datePublished" content="2021-01-16T13:34:40&#43;08:00" />
+<meta itemprop="dateModified" content="2021-01-16T13:34:40&#43;08:00" />
+<meta itemprop="wordCount" content="1344">
+<meta itemprop="keywords" content="翻译,Go," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Review 《Memory Consistency Models: A Tutorial》"/>
+<meta name="twitter:description" content="
+
+原文地址: https://www.cs.utexas.edu/~bornholt/post/memory-models.html
+
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Review 《Memory Consistency Models: A Tutorial》</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-01-16 </span>
+        
+          <span class="more-meta"> 约 1344 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#顺序一致性-sequential-consistency">顺序一致性 (Sequential consistency)</a></li>
+        <li><a href="#顺序一致性模型的问题">顺序一致性模型的问题</a></li>
+        <li><a href="#保证一致性-guarantee-coherence">保证一致性 (guarantee coherence)</a></li>
+        <li><a href="#total-store-ordering">Total Store Ordering</a></li>
+        <li><a href="#escaping-through-barriers">Escaping through barriers</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<ul>
+<li>原文地址: <a href="https://www.cs.utexas.edu/~bornholt/post/memory-models.html">https://www.cs.utexas.edu/~bornholt/post/memory-models.html</a></li>
+</ul>
+</blockquote>
+<hr>
+<p>本文的目标: The cause of, and solution to, all your multicore performance problems.</p>
+<h2 id="顺序一致性-sequential-consistency">顺序一致性 (Sequential consistency)</h2>
+<p>顺序一致性是一种直观的并行模型。</p>
+<blockquote>
+<ul>
+<li>a single main memory, and program order define sequential consistency.</li>
+<li>单一主存和按程序顺序执行共同定义了顺序一致性。</li>
+</ul>
+</blockquote>
+<p>定义顺序一致性模型也是 Leslie Lamport 在2013年1月获得图领奖的重要成就之一。</p>
+<p>内存一致性模型是软件和硬件之间的一种契约。硬件承诺仅在这个模型允许的范围内重排序指令。
+同样，软件也承诺这种重排序可能会发生，在编程时会考虑它们。</p>
+<h2 id="顺序一致性模型的问题">顺序一致性模型的问题</h2>
+<p>这个模型的问题就是它运行的太慢了，我们在某一时刻只能运行一个指令，这样就失去了并行运行多个线程的优势。
+当前指令的效果对于其它指令可见之前，无法运行更多的指令。</p>
+<h2 id="保证一致性-guarantee-coherence">保证一致性 (guarantee coherence)</h2>
+<p>两个线程 A 和 B 对同一块内存地址的写入，其他线程看到的写入顺序是一样。它并不保证 A 和 B 谁先发生，但它保证所有其他线程看到的发生顺序是一致的。</p>
+<p>两个CPU 核之间共享的内存是 L3 缓存，通常需要 90 个以上的指令周期才会访问一次 L3 缓存。这对于 CPU 来说是一次昂贵的操作。</p>
+<h2 id="total-store-ordering">Total Store Ordering</h2>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com//2021-01-16-150003.png" alt=""></p>
+<p>与其等待 <strong>写入操作1</strong> 的结果变成了对其他线程可见，我们可以将他的结果存储在 store buffer 中。
+因此指令2 可以立即开始，而不是等待1将它的结果同步到 L3 缓存中。</p>
+<p>因为 store buffer 是在 CPU 核上的，它可以很快速地进行访问。随后，缓存层次结构将会从 store buffer 中拉出 <strong>写入结果</strong> ，并通过缓存将它传递出去。这样 <strong>写入结果</strong> 将会变得对所有线程可见。</p>
+<p>store buffer 允许我们将 <strong>写入操作1</strong> 的结果同步到其他线程可见的延迟隐藏起来。</p>
+<p>允许使用 store buffer 的内存模型被称作 Total Store Ordering (TSO)。TSO 基本保证了和 SC 同样的承诺，除了它运行使用 store buffer 之外。 这些缓冲区隐藏了写入延迟，大大提高了指令的执行速度。</p>
+<h2 id="escaping-through-barriers">Escaping through barriers</h2>
+<p>现代处理器架构都包括了一种同步操作，让它们宽松的内存模型在必要的时候可以收到控制。最常用的操作是 barrier (或者叫 fence)。</p>
+<blockquote>
+<p>A barrier instruction force all memory operation before it to complete before any memory operation after it can begin.</p>
+</blockquote>
+<p>在它之后的内存操作开始执行之前，Barrier 指令强迫它之前的所有的内存操作完成。</p>
+<blockquote>
+<p>That is, a barrier instruction effectively reinstates sequential consistency at a particular point in program execution.</p>
+</blockquote>
+<p>也就是说，barrier 指令在程序执行的特定时间点上，有效地恢复了 <strong>顺序一致性</strong> 的状态。</p>
+<blockquote>
+<p>Barriers are an escape hatch to be used sparingly: they can cost hundreds of cycles.</p>
+</blockquote>
+<p>Barriers 是一个从松散内存模型逃出的逃生口，但是它的代价很昂贵，它会花费数百个指令周期。</p>
+<blockquote>
+<p>A data race is two accesses to the same memory location, of which at least one is a write operation, and with no ordering induced by synchronization.</p>
+</blockquote>
+<p>数据竞争是由于对于同一块内存地区的两次访问导致的，这两次访问至少有一次是写操作，且没有同步原语来控制指令顺序。</p>
+<blockquote>
+<p>In fact, languages such as C++ and Java offer a guarantee known as sequential consistency for data-race-free programs (or the buzzwordy version, “SC for DRF”). This guarantee says that if your program has no data races, the compiler will insert all the necessary fences to preserve the appearance of sequential consistency. If your program does have data races, however, all bets are off, and the compiler is free to do whatever it likes.</p>
+</blockquote>
+<blockquote>
+<p>The intuition is that programs with data races are quite likely to be buggy, and there’s no need to provide strong guarantees for such buggy programs. If a program has deliberate data races, the programmer likely knows what they’re doing anyway, and so can be responsible for memory ordering issues themselves.</p>
+</blockquote>
+<p>事实上，诸如 C++ 和 Java 这种语言，都提供了一个保证。对于没有数据竞争的程序，它们将会插入必要的 fence 指令，确保程序的指令执行顺序看起来和顺序一致性内存模型相同。如果你的程序存在数据竞争，那么这种保证就不存在了，编译器将会做它想做的任何事情。</p>
+<p>我们的直觉是存在数据竞争的程序通常都会有 bug，所以编译器没有必要为一个存在 bug 的程序提供这么强的保证。同时，如果程序确实存在数据竞争，那么程序员通常知道他们做什么，那么这里的指令重排序也可以由程序员自己来负责。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-01-16
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E7%BF%BB%E8%AF%91/">翻译</a>
+          <a href="/tags/go/">Go</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/2020/08/22/redis-pipelining/">
+            <span class="next-text nav-default">Review 《Using pipelining to speedup Redis queries》</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+    <script src="https://utteranc.es/client.js"
+            repo="anotherbwangel/blog-comment"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.2.1/jquery.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/slideout/1.0.1/slideout.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.js" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.2517c0eb67172a0bae917de4af59b10ca2531411a009d4c0b82f5685259e5771.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>

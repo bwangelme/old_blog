@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>《K8s in Actions》第九章学习笔记 - 大白的碎碎念</title>
+  <title>Golang 链接时注入额外信息 - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,18 +16,17 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content="声明式地升级应用
-" /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content="" /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
 
 
-<link rel="canonical" href="/note/k8s-in-actions-9/" />
+<link rel="canonical" href="/2021/05/07/go-build-variable/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -36,27 +35,24 @@
 
 
 
-<link href="/sass/main.min.0034ec37b35f91907849c9020141a7e99249c6f2301ee1e34aee09cfe5f9ae2e.css" rel="stylesheet">
+<link href="/sass/main.min.2f4451a1d8f674750647033034c4291f75031951a6b56bc0af09f16fd22d7960.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
-<meta property="og:title" content="《K8s in Actions》第九章学习笔记" />
-<meta property="og:description" content="声明式地升级应用" />
+<meta property="og:title" content="Golang 链接时注入额外信息" />
+<meta property="og:description" content="" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/note/k8s-in-actions-9/" />
-<meta property="article:published_time" content="2020-10-11T17:52:31+08:00" />
-<meta property="article:modified_time" content="2020-10-11T17:52:31+08:00" />
-<meta itemprop="name" content="《K8s in Actions》第九章学习笔记">
-<meta itemprop="description" content="声明式地升级应用">
-<meta itemprop="datePublished" content="2020-10-11T17:52:31&#43;08:00" />
-<meta itemprop="dateModified" content="2020-10-11T17:52:31&#43;08:00" />
-<meta itemprop="wordCount" content="8">
+<meta property="og:url" content="/2021/05/07/go-build-variable/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-05-07T17:04:21&#43;08:00" />
+<meta property="article:modified_time" content="2021-05-07T17:04:21&#43;08:00" />
 
-
-
-<meta itemprop="keywords" content="Kubenetes,笔记," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="《K8s in Actions》第九章学习笔记"/>
-<meta name="twitter:description" content="声明式地升级应用"/>
+<meta itemprop="name" content="Golang 链接时注入额外信息">
+<meta itemprop="description" content=""><meta itemprop="datePublished" content="2021-05-07T17:04:21&#43;08:00" />
+<meta itemprop="dateModified" content="2021-05-07T17:04:21&#43;08:00" />
+<meta itemprop="wordCount" content="414">
+<meta itemprop="keywords" content="Golang," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Golang 链接时注入额外信息"/>
+<meta name="twitter:description" content=""/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -127,12 +123,12 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">《K8s in Actions》第九章学习笔记</h1>
+      <h1 class="post-title">Golang 链接时注入额外信息</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2020-10-11 </span>
+        <span class="post-time"> 2021-05-07 </span>
         
-          <span class="more-meta"> 约 8 字 </span>
+          <span class="more-meta"> 约 414 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -141,12 +137,70 @@
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">文章目录</h2>
   <div class="post-toc-content">
-    <nav id="TableOfContents"></nav>
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#go-链接时的--x-选项">Go 链接时的 -X 选项</a></li>
+        <li><a href="#运行效果">运行效果</a></li>
+        <li><a href="#参考链接">参考链接</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
   </div>
 </div>
     <div class="post-content">
-      <p>声明式地升级应用</p>
+      <blockquote>
+<p>Go 编译器注入 git 版本，时间等信息到可执行文件中</p>
+</blockquote>
 <hr>
+<h2 id="go-链接时的--x-选项">Go 链接时的 -X 选项</h2>
+<blockquote>
+<p>-X importpath.name=value</p>
+<p>Set the value of the string variable in importpath named name to value.
+This is only effective if the variable is declared in the source code either uninitialized
+or initialized to a constant string expression. -X will not work if the initializer makes
+a function call or refers to other variables.
+Note that before Go 1.5 this option took two separate arguments.</p>
+</blockquote>
+<p><strong>链接:</strong> go 编译工具读取 package main 和它的依赖(是 archive 文件或对象)，将它们组合在一起生成一个可执行文件。</p>
+<p>Go 在链接时支持 <code>-X</code> 选项，它的用法为 <code>-X importpath.name=value</code>，它将会替换 <strong>字符串变量</strong> <code>importpath.name</code>的值，将其设置为<code>value</code>。</p>
+<ul>
+<li>
+<p><strong>注意1</strong>: 只有在<code>importpath.name</code>未初始化或者初始化为常量字符串的时候才会生效。如果 <code>importpath.name</code> 是通过一个函数调用或者变量来初始化的话，<code>-X</code>选项将不会生效。</p>
+</li>
+<li>
+<p><strong>注意2</strong>: <code>value</code>中有空格时， -X 后面的值都要用单引号包起来，例如 <code>-X '${REPO_PATH}/version.BuildTimeStamp=${BuildTimeStamp} UTC'</code></p>
+</li>
+<li>
+<p><strong>注意3</strong>: Go 1.5 版本以下 -X 选项的格式是 <code>-X importpath.name value</code></p>
+</li>
+</ul>
+<h2 id="运行效果">运行效果</h2>
+<ul>
+<li>源码: <a href="https://github.com/bwangelme/build_git_version">bwangelme/build_git_version</a></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; ./build.sh <span class="o">&amp;&amp;</span> ./bin/runme
+Git Version c530ca1
+Build TimeStamp 2021-05-07_04:01:35AM UTC
+Build Go Version go version go1.16 darwin/amd64
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="参考链接">参考链接</h2>
+<ul>
+<li><a href="https://golang.org/cmd/link/">Go cmd Link</a></li>
+<li><a href="https://ms2008.github.io/2018/10/08/golang-build-version/">Golang -ldflags 的一个技巧 go version 信息注入</a></li>
+<li><a href="https://groups.google.com/forum/#!topic/golang-nuts/aNDB4FrmEiA">v1.5 -ldflags -X change breaks when string has a space</a></li>
+</ul>
     </div>
 
     <div class="post-copyright">
@@ -157,7 +211,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2020-10-11
+        2021-05-07
         
     </span>
   </p>
@@ -169,16 +223,15 @@
 </div>
 <footer class="post-footer">
       <div class="post-tags">
-          <a href="/tags/kubenetes/">Kubenetes</a>
-          <a href="/tags/%E7%AC%94%E8%AE%B0/">笔记</a>
+          <a href="/tags/golang/">Golang</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/note/java_alg_1/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">《算法》第一章学习笔记</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
         
+        <a class="next" href="/2021/01/08/k8s-in-actions-7/">
+            <span class="next-text nav-default">《K8s in Actions》第七章学习笔记</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
       </nav>
     </footer>
   </article>
@@ -244,7 +297,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+<script type="text/javascript" src="/js/main.min.2517c0eb67172a0bae917de4af59b10ca2531411a009d4c0b82f5685259e5771.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

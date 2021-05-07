@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.81.0 with theme even" />
 
 
 <link rel="canonical" href="/2019/04/10/go-scheduler-pitfall/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.0034ec37b35f91907849c9020141a7e99249c6f2301ee1e34aee09cfe5f9ae2e.css" rel="stylesheet">
+<link href="/sass/main.min.2f4451a1d8f674750647033034c4291f75031951a6b56bc0af09f16fd22d7960.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -45,19 +45,16 @@
 注意: 这篇文章的答案可以有正确的结果，但解题思路是不对的，正确的思路请参考 关于线程同步操作的一道面试题
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2019/04/10/go-scheduler-pitfall/" />
-<meta property="article:published_time" content="2019-04-10T22:18:53+08:00" />
-<meta property="article:modified_time" content="2019-04-10T22:18:53+08:00" />
+<meta property="og:url" content="/2019/04/10/go-scheduler-pitfall/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2019-04-10T22:18:53&#43;08:00" />
+<meta property="article:modified_time" content="2019-04-10T22:18:53&#43;08:00" />
+
 <meta itemprop="name" content="Go 调度器的一个无法执行陷阱">
 <meta itemprop="description" content="
 注意: 这篇文章的答案可以有正确的结果，但解题思路是不对的，正确的思路请参考 关于线程同步操作的一道面试题
-">
-<meta itemprop="datePublished" content="2019-04-10T22:18:53&#43;08:00" />
+"><meta itemprop="datePublished" content="2019-04-10T22:18:53&#43;08:00" />
 <meta itemprop="dateModified" content="2019-04-10T22:18:53&#43;08:00" />
 <meta itemprop="wordCount" content="1752">
-
-
-
 <meta itemprop="keywords" content="Go,AtomicInteger," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go 调度器的一个无法执行陷阱"/>
 <meta name="twitter:description" content="
@@ -315,7 +312,8 @@ Go 通过这种方式来将执行权切换到 Go 调度器，从而避免通过�
 		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
 			<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">// 加入这条语句
 </span><span class="c1"></span>			<span class="k">continue</span>
-		<span class="p">}</span></code></pre></td></tr></table>
+		<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div>
 <p>如果我们在生产环境中遇到了这个问题的话，正确的做法应该是加入一句 <a href="https://golang.org/pkg/runtime/#Gosched">runtime.Gosched()</a>，如下所示:</p>
@@ -336,7 +334,8 @@ Go 通过这种方式来将执行权切换到 Go 调度器，从而避免通过�
 		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
 			<span class="nx">runtime</span><span class="p">.</span><span class="nf">Gosched</span><span class="p">()</span> <span class="c1">// 加入这条语句
 </span><span class="c1"></span>			<span class="k">continue</span>
-		<span class="p">}</span></code></pre></td></tr></table>
+		<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div>
 <p>这样当<code>Goroutine</code>自旋的时候，就会主动地去启动 Go 调度器，让其他<code>Goroutine</code>获得执行的机会。</p>
@@ -445,7 +444,7 @@ Go 通过这种方式来将执行权切换到 Go 调度器，从而避免通过�
 
 
 
-<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+<script type="text/javascript" src="/js/main.min.2517c0eb67172a0bae917de4af59b10ca2531411a009d4c0b82f5685259e5771.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
