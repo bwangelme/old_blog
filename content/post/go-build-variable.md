@@ -8,8 +8,9 @@ author: "bwangel"
 comment: true
 ---
 
-<!--more-->
 > Go 编译器注入 git 版本，时间等信息到可执行文件中
+
+<!--more-->
 ---
 
 ## Go 链接时的 -X 选项

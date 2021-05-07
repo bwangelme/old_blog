@@ -180,6 +180,3 @@ Secret 是一种类似与 Configmap 的资源，它存储的也是键值对的�
 
 同时，为了保证 Secret 的安全性，k8s 仅仅将 Secret 分发到需要访问 Secret 的 pod 的所在节点上，同时，Secert 只会写到节点的内存上，不会写到物理存储上。
 
-### 默认令牌 Secret 介绍
-
-TODO
