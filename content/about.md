@@ -9,7 +9,6 @@ weight: 40
 
 ## 简介
 
-+ 90后，后端开发工程师, Python
 + 常用 ID: `bwangel`, `bwangel23`, `bwangelme`
 + 联系我: 使用 Vim 中的神秘咒语`G`
 
