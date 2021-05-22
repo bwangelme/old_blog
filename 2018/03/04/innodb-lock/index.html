@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.81.0 with theme even" />
+<meta name="generator" content="Hugo 0.83.1 with theme even" />
 
 
 <link rel="canonical" href="/2018/03/04/innodb-lock/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.2f4451a1d8f674750647033034c4291f75031951a6b56bc0af09f16fd22d7960.css" rel="stylesheet">
+<link href="/sass/main.min.39c60e56f66799a405ded646d800f46e1f2ee0e0d6e2ba42f18764adb1c5d14b.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -50,7 +50,7 @@
 <meta itemprop="name" content="InnoDB 锁机制">
 <meta itemprop="description" content="本文试图讲清楚 InnoDB 中存在的各种锁，以及它们锁定的区别。"><meta itemprop="datePublished" content="2018-03-04T13:22:46&#43;08:00" />
 <meta itemprop="dateModified" content="2018-03-04T13:22:46&#43;08:00" />
-<meta itemprop="wordCount" content="7008">
+<meta itemprop="wordCount" content="6241">
 <meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="InnoDB 锁机制"/>
 <meta name="twitter:description" content="本文试图讲清楚 InnoDB 中存在的各种锁，以及它们锁定的区别。"/>
@@ -129,8 +129,8 @@
       <div class="post-meta">
         <span class="post-time"> 2018-03-04 </span>
         
-          <span class="more-meta"> 约 7008 字 </span>
-          <span class="more-meta"> 预计阅读 14 分钟 </span>
+          <span class="more-meta"> 约 6241 字 </span>
+          <span class="more-meta"> 预计阅读 13 分钟 </span>
         
       </div>
     </header>
@@ -386,115 +386,115 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 事务A用读锁的方式锁定了表 table_lock
-</span><span class="c1"></span><span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">start</span> <span class="k">transaction</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="n">s</span>
-<span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">lock</span> <span class="k">table</span> <span class="n">table_lock</span> <span class="k">read</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">013</span><span class="n">s</span>
-
-<span class="c1">-- 事务B尝试向表 table_lock 中写入数据，它会在插入数据的语句中阻塞住
-</span><span class="c1"></span><span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):(</span><span class="k">none</span><span class="p">)</span><span class="o">&gt;</span> <span class="k">start</span> <span class="k">transaction</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">001</span><span class="n">s</span>
-<span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">insert</span> <span class="n">table_lock</span> <span class="k">select</span> <span class="mi">1</span><span class="p">;</span>
-
-<span class="c1">-- 此时我们查询 informaction_schema 数据中的 INNODB_TRX 表，会发现存在如下两个事务
+</span><span class="c1"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">start</span><span class="w"> </span><span class="k">transaction</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">affected</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="n">s</span><span class="w">
+</span><span class="w"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">lock</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">table_lock</span><span class="w"> </span><span class="k">read</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">affected</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">013</span><span class="n">s</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c1">-- 事务B尝试向表 table_lock 中写入数据，它会在插入数据的语句中阻塞住
+</span><span class="c1"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):(</span><span class="k">none</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="k">start</span><span class="w"> </span><span class="k">transaction</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">affected</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">001</span><span class="n">s</span><span class="w">
+</span><span class="w"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="n">table_lock</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c1">-- 此时我们查询 informaction_schema 数据中的 INNODB_TRX 表，会发现存在如下两个事务
 </span><span class="c1">-- 第一行代表了事务B，可以看到它锁定的表 trx_tables_locked 的数量为0
 </span><span class="c1">-- 第二行代表了事务A，可以看到它锁定的表 trx_tables_locked 的数量为1
-</span><span class="c1"></span><span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">information_schema</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="o">`</span><span class="n">INNODB_TRX</span><span class="o">`</span><span class="err">\</span><span class="k">G</span>
-<span class="o">***************************</span><span class="p">[</span> <span class="mi">1</span><span class="p">.</span> <span class="k">row</span> <span class="p">]</span><span class="o">***************************</span>
-<span class="n">trx_id</span>                     <span class="o">|</span> <span class="mi">421391658438288</span>
-<span class="n">trx_state</span>                  <span class="o">|</span> <span class="n">RUNNING</span>
-<span class="n">trx_started</span>                <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">08</span> <span class="mi">19</span><span class="p">:</span><span class="mi">57</span><span class="p">:</span><span class="mi">28</span>
-<span class="n">trx_requested_lock_id</span>      <span class="o">|</span> <span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span>
-<span class="n">trx_wait_started</span>           <span class="o">|</span> <span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span>
-<span class="n">trx_weight</span>                 <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_mysql_thread_id</span>        <span class="o">|</span> <span class="mi">15</span>
-<span class="n">trx_query</span>                  <span class="o">|</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">table_lock</span> <span class="k">select</span> <span class="mi">2</span>
-<span class="n">trx_operation_state</span>        <span class="o">|</span> <span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span>
-<span class="n">trx_tables_in_use</span>          <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_tables_locked</span>          <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_lock_structs</span>           <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_lock_memory_bytes</span>      <span class="o">|</span> <span class="mi">1136</span>
-<span class="n">trx_rows_locked</span>            <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_rows_modified</span>          <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_concurrency_tickets</span>    <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_isolation_level</span>        <span class="o">|</span> <span class="k">REPEATABLE</span> <span class="k">READ</span>
-<span class="n">trx_unique_checks</span>          <span class="o">|</span> <span class="mi">1</span>
-<span class="n">trx_foreign_key_checks</span>     <span class="o">|</span> <span class="mi">1</span>
-<span class="n">trx_last_foreign_key_error</span> <span class="o">|</span> <span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span>
-<span class="n">trx_adaptive_hash_latched</span>  <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_adaptive_hash_timeout</span>  <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_is_read_only</span>           <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_autocommit_non_locking</span> <span class="o">|</span> <span class="mi">0</span>
-<span class="o">***************************</span><span class="p">[</span> <span class="mi">2</span><span class="p">.</span> <span class="k">row</span> <span class="p">]</span><span class="o">***************************</span>
-<span class="n">trx_id</span>                     <span class="o">|</span> <span class="mi">421391658436448</span>
-<span class="n">trx_state</span>                  <span class="o">|</span> <span class="n">RUNNING</span>
-<span class="n">trx_started</span>                <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">08</span> <span class="mi">19</span><span class="p">:</span><span class="mi">57</span><span class="p">:</span><span class="mi">18</span>
-<span class="n">trx_requested_lock_id</span>      <span class="o">|</span> <span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span>
-<span class="n">trx_wait_started</span>           <span class="o">|</span> <span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span>
-<span class="n">trx_weight</span>                 <span class="o">|</span> <span class="mi">1</span>
-<span class="n">trx_mysql_thread_id</span>        <span class="o">|</span> <span class="mi">6</span>
-<span class="n">trx_query</span>                  <span class="o">|</span> <span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span>
-<span class="n">trx_operation_state</span>        <span class="o">|</span> <span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span>
-<span class="n">trx_tables_in_use</span>          <span class="o">|</span> <span class="mi">1</span>
-<span class="n">trx_tables_locked</span>          <span class="o">|</span> <span class="mi">1</span>
-<span class="n">trx_lock_structs</span>           <span class="o">|</span> <span class="mi">1</span>
-<span class="n">trx_lock_memory_bytes</span>      <span class="o">|</span> <span class="mi">1136</span>
-<span class="n">trx_rows_locked</span>            <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_rows_modified</span>          <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_concurrency_tickets</span>    <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_isolation_level</span>        <span class="o">|</span> <span class="k">REPEATABLE</span> <span class="k">READ</span>
-<span class="n">trx_unique_checks</span>          <span class="o">|</span> <span class="mi">1</span>
-<span class="n">trx_foreign_key_checks</span>     <span class="o">|</span> <span class="mi">1</span>
-<span class="n">trx_last_foreign_key_error</span> <span class="o">|</span> <span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span>
-<span class="n">trx_adaptive_hash_latched</span>  <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_adaptive_hash_timeout</span>  <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_is_read_only</span>           <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_autocommit_non_locking</span> <span class="o">|</span> <span class="mi">0</span>
-<span class="mi">2</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">006</span><span class="n">s</span>
-
-<span class="c1">-- 接着我们在事务A中执行解锁语句，并提交事务A
-</span><span class="c1"></span><span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span> <span class="n">unlock</span> <span class="n">tables</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">011</span><span class="n">s</span>
-<span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">commit</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="n">s</span>
-
-<span class="c1">-- 事务A在解锁了表后，事务B的插入语句立刻就完成了，此时我们再来看 INNODB_TRX 表，发现事务只有一个了:
+</span><span class="c1"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">information_schema</span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">INNODB_TRX</span><span class="o">`</span><span class="err">\</span><span class="k">G</span><span class="w">
+</span><span class="w"></span><span class="o">***************************</span><span class="p">[</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="p">]</span><span class="o">***************************</span><span class="w">
+</span><span class="w"></span><span class="n">trx_id</span><span class="w">                     </span><span class="o">|</span><span class="w"> </span><span class="mi">421391658438288</span><span class="w">
+</span><span class="w"></span><span class="n">trx_state</span><span class="w">                  </span><span class="o">|</span><span class="w"> </span><span class="n">RUNNING</span><span class="w">
+</span><span class="w"></span><span class="n">trx_started</span><span class="w">                </span><span class="o">|</span><span class="w"> </span><span class="mi">2018</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">08</span><span class="w"> </span><span class="mi">19</span><span class="p">:</span><span class="mi">57</span><span class="p">:</span><span class="mi">28</span><span class="w">
+</span><span class="w"></span><span class="n">trx_requested_lock_id</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="n">trx_wait_started</span><span class="w">           </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="n">trx_weight</span><span class="w">                 </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_mysql_thread_id</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="mi">15</span><span class="w">
+</span><span class="w"></span><span class="n">trx_query</span><span class="w">                  </span><span class="o">|</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">table_lock</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="mi">2</span><span class="w">
+</span><span class="w"></span><span class="n">trx_operation_state</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="n">trx_tables_in_use</span><span class="w">          </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_tables_locked</span><span class="w">          </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_lock_structs</span><span class="w">           </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_lock_memory_bytes</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="mi">1136</span><span class="w">
+</span><span class="w"></span><span class="n">trx_rows_locked</span><span class="w">            </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_rows_modified</span><span class="w">          </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_concurrency_tickets</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_isolation_level</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="k">REPEATABLE</span><span class="w"> </span><span class="k">READ</span><span class="w">
+</span><span class="w"></span><span class="n">trx_unique_checks</span><span class="w">          </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="w"></span><span class="n">trx_foreign_key_checks</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="w"></span><span class="n">trx_last_foreign_key_error</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="n">trx_adaptive_hash_latched</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_adaptive_hash_timeout</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_is_read_only</span><span class="w">           </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_autocommit_non_locking</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="o">***************************</span><span class="p">[</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="p">]</span><span class="o">***************************</span><span class="w">
+</span><span class="w"></span><span class="n">trx_id</span><span class="w">                     </span><span class="o">|</span><span class="w"> </span><span class="mi">421391658436448</span><span class="w">
+</span><span class="w"></span><span class="n">trx_state</span><span class="w">                  </span><span class="o">|</span><span class="w"> </span><span class="n">RUNNING</span><span class="w">
+</span><span class="w"></span><span class="n">trx_started</span><span class="w">                </span><span class="o">|</span><span class="w"> </span><span class="mi">2018</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">08</span><span class="w"> </span><span class="mi">19</span><span class="p">:</span><span class="mi">57</span><span class="p">:</span><span class="mi">18</span><span class="w">
+</span><span class="w"></span><span class="n">trx_requested_lock_id</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="n">trx_wait_started</span><span class="w">           </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="n">trx_weight</span><span class="w">                 </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="w"></span><span class="n">trx_mysql_thread_id</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="mi">6</span><span class="w">
+</span><span class="w"></span><span class="n">trx_query</span><span class="w">                  </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="n">trx_operation_state</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="n">trx_tables_in_use</span><span class="w">          </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="w"></span><span class="n">trx_tables_locked</span><span class="w">          </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="w"></span><span class="n">trx_lock_structs</span><span class="w">           </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="w"></span><span class="n">trx_lock_memory_bytes</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="mi">1136</span><span class="w">
+</span><span class="w"></span><span class="n">trx_rows_locked</span><span class="w">            </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_rows_modified</span><span class="w">          </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_concurrency_tickets</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_isolation_level</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="k">REPEATABLE</span><span class="w"> </span><span class="k">READ</span><span class="w">
+</span><span class="w"></span><span class="n">trx_unique_checks</span><span class="w">          </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="w"></span><span class="n">trx_foreign_key_checks</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="w"></span><span class="n">trx_last_foreign_key_error</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="n">trx_adaptive_hash_latched</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_adaptive_hash_timeout</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_is_read_only</span><span class="w">           </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_autocommit_non_locking</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="mi">2</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">006</span><span class="n">s</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c1">-- 接着我们在事务A中执行解锁语句，并提交事务A
+</span><span class="c1"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="n">unlock</span><span class="w"> </span><span class="n">tables</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">affected</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">011</span><span class="n">s</span><span class="w">
+</span><span class="w"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">commit</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">affected</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000</span><span class="n">s</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c1">-- 事务A在解锁了表后，事务B的插入语句立刻就完成了，此时我们再来看 INNODB_TRX 表，发现事务只有一个了:
 </span><span class="c1">-- 第一行代表了事务B，可以看到此时它锁定的表的数量(trx_tables_locked)变成了1
-</span><span class="c1"></span><span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">information_schema</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="o">`</span><span class="n">INNODB_TRX</span><span class="o">`</span><span class="err">\</span><span class="k">G</span>
-<span class="o">***************************</span><span class="p">[</span> <span class="mi">1</span><span class="p">.</span> <span class="k">row</span> <span class="p">]</span><span class="o">***************************</span>
-<span class="n">trx_id</span>                     <span class="o">|</span> <span class="mi">30221</span>
-<span class="n">trx_state</span>                  <span class="o">|</span> <span class="n">RUNNING</span>
-<span class="n">trx_started</span>                <span class="o">|</span> <span class="mi">2018</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">08</span> <span class="mi">19</span><span class="p">:</span><span class="mi">57</span><span class="p">:</span><span class="mi">28</span>
-<span class="n">trx_requested_lock_id</span>      <span class="o">|</span> <span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span>
-<span class="n">trx_wait_started</span>           <span class="o">|</span> <span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span>
-<span class="n">trx_weight</span>                 <span class="o">|</span> <span class="mi">2</span>
-<span class="n">trx_mysql_thread_id</span>        <span class="o">|</span> <span class="mi">15</span>
-<span class="n">trx_query</span>                  <span class="o">|</span> <span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span>
-<span class="n">trx_operation_state</span>        <span class="o">|</span> <span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span>
-<span class="n">trx_tables_in_use</span>          <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_tables_locked</span>          <span class="o">|</span> <span class="mi">1</span>
-<span class="n">trx_lock_structs</span>           <span class="o">|</span> <span class="mi">1</span>
-<span class="n">trx_lock_memory_bytes</span>      <span class="o">|</span> <span class="mi">1136</span>
-<span class="n">trx_rows_locked</span>            <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_rows_modified</span>          <span class="o">|</span> <span class="mi">1</span>
-<span class="n">trx_concurrency_tickets</span>    <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_isolation_level</span>        <span class="o">|</span> <span class="k">REPEATABLE</span> <span class="k">READ</span>
-<span class="n">trx_unique_checks</span>          <span class="o">|</span> <span class="mi">1</span>
-<span class="n">trx_foreign_key_checks</span>     <span class="o">|</span> <span class="mi">1</span>
-<span class="n">trx_last_foreign_key_error</span> <span class="o">|</span> <span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span>
-<span class="n">trx_adaptive_hash_latched</span>  <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_adaptive_hash_timeout</span>  <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_is_read_only</span>           <span class="o">|</span> <span class="mi">0</span>
-<span class="n">trx_autocommit_non_locking</span> <span class="o">|</span> <span class="mi">0</span>
-<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">007</span><span class="n">s</span>
-</code></pre></td></tr></table>
+</span><span class="c1"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">information_schema</span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">INNODB_TRX</span><span class="o">`</span><span class="err">\</span><span class="k">G</span><span class="w">
+</span><span class="w"></span><span class="o">***************************</span><span class="p">[</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="p">]</span><span class="o">***************************</span><span class="w">
+</span><span class="w"></span><span class="n">trx_id</span><span class="w">                     </span><span class="o">|</span><span class="w"> </span><span class="mi">30221</span><span class="w">
+</span><span class="w"></span><span class="n">trx_state</span><span class="w">                  </span><span class="o">|</span><span class="w"> </span><span class="n">RUNNING</span><span class="w">
+</span><span class="w"></span><span class="n">trx_started</span><span class="w">                </span><span class="o">|</span><span class="w"> </span><span class="mi">2018</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">08</span><span class="w"> </span><span class="mi">19</span><span class="p">:</span><span class="mi">57</span><span class="p">:</span><span class="mi">28</span><span class="w">
+</span><span class="w"></span><span class="n">trx_requested_lock_id</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="n">trx_wait_started</span><span class="w">           </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="n">trx_weight</span><span class="w">                 </span><span class="o">|</span><span class="w"> </span><span class="mi">2</span><span class="w">
+</span><span class="w"></span><span class="n">trx_mysql_thread_id</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="mi">15</span><span class="w">
+</span><span class="w"></span><span class="n">trx_query</span><span class="w">                  </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="n">trx_operation_state</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="n">trx_tables_in_use</span><span class="w">          </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_tables_locked</span><span class="w">          </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="w"></span><span class="n">trx_lock_structs</span><span class="w">           </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="w"></span><span class="n">trx_lock_memory_bytes</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="mi">1136</span><span class="w">
+</span><span class="w"></span><span class="n">trx_rows_locked</span><span class="w">            </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_rows_modified</span><span class="w">          </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="w"></span><span class="n">trx_concurrency_tickets</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_isolation_level</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="k">REPEATABLE</span><span class="w"> </span><span class="k">READ</span><span class="w">
+</span><span class="w"></span><span class="n">trx_unique_checks</span><span class="w">          </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="w"></span><span class="n">trx_foreign_key_checks</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="w"></span><span class="n">trx_last_foreign_key_error</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="k">null</span><span class="o">&gt;</span><span class="w">
+</span><span class="w"></span><span class="n">trx_adaptive_hash_latched</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_adaptive_hash_timeout</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_is_read_only</span><span class="w">           </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="n">trx_autocommit_non_locking</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w"></span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">007</span><span class="n">s</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>所有表级别的锁的兼容性如下所示(其中S和X代表表级别的读锁和写锁):</p>
 <table>
@@ -555,13 +555,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">lock_test</span><span class="o">`</span> <span class="p">(</span>
-  <span class="o">`</span><span class="n">id</span><span class="o">`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="n">unsigned</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">)</span>
-<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span>
-
-<span class="k">insert</span> <span class="k">into</span> <span class="n">lock_test</span> <span class="k">select</span> <span class="mi">1</span>
-</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">`</span><span class="n">lock_test</span><span class="o">`</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">lock_test</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>接着我们开启一个事务A，事务A更新表中的记录:</p>
 <div class="highlight"><div class="chroma">
@@ -570,9 +570,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">begin</span><span class="p">;</span>
-<span class="k">update</span> <span class="n">lock_test</span> <span class="k">set</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">4</span> <span class="k">where</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">begin</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="k">update</span><span class="w"> </span><span class="n">lock_test</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>在事务A还未提交的时候，我们再来开启一个事务B，从<code>lock_test</code>表中查询这条记录:</p>
 <div class="highlight"><div class="chroma">
@@ -589,17 +589,17 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">begin</span><span class="p">;</span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">lock_test</span> <span class="k">where</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-
-<span class="o">+</span><span class="c1">------+
-</span><span class="c1"></span><span class="o">|</span> <span class="n">id</span>   <span class="o">|</span>
-<span class="o">|</span><span class="c1">------|
-</span><span class="c1"></span><span class="o">|</span> <span class="mi">1</span>    <span class="o">|</span>
-<span class="o">+</span><span class="c1">------+
-</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">006</span><span class="n">s</span>
-</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">begin</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">lock_test</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">------+
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">id</span><span class="w">   </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="c1">------|
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">    </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">------+
+</span><span class="c1"></span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">006</span><span class="n">s</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>此时无论是在<code>READ COMMITTED</code>隔离级别下，还是在<code>READ REPEATABLE</code>隔离级别下，<code>lock_test</code>表中id为1的记录都能查找到，这是因为数据库事务的隔离性，未提交事务的更改不会影响到其他的事务。</p>
 <p>然后我们把事务A提交，再在事务B中进行查找。</p>
@@ -641,41 +641,41 @@
 </span><span class="lnt">34
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">@@</span><span class="n">tx_isolation</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">------------------+
-</span><span class="c1"></span><span class="o">|</span> <span class="o">@@</span><span class="n">tx_isolation</span>   <span class="o">|</span>
-<span class="o">|</span><span class="c1">------------------|
-</span><span class="c1"></span><span class="o">|</span> <span class="k">REPEATABLE</span><span class="o">-</span><span class="k">READ</span>  <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------------+
-</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">006</span><span class="n">s</span>
-<span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">lock_test</span> <span class="k">where</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">------+
-</span><span class="c1"></span><span class="o">|</span> <span class="n">id</span>   <span class="o">|</span>
-<span class="o">|</span><span class="c1">------|
-</span><span class="c1"></span><span class="o">|</span> <span class="mi">1</span>    <span class="o">|</span>
-<span class="o">+</span><span class="c1">------+
-</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">006</span><span class="n">s</span>
-
-<span class="c1">--------------------------------
-</span><span class="c1"></span>
-<span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">@@</span><span class="n">tx_isolation</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">------------------+
-</span><span class="c1"></span><span class="o">|</span> <span class="o">@@</span><span class="n">tx_isolation</span>   <span class="o">|</span>
-<span class="o">|</span><span class="c1">------------------|
-</span><span class="c1"></span><span class="o">|</span> <span class="k">READ</span><span class="o">-</span><span class="k">COMMITTED</span>   <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------------+
-</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">006</span><span class="n">s</span>
-<span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">lock_test</span> <span class="k">where</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">------+
-</span><span class="c1"></span><span class="o">|</span> <span class="n">id</span>   <span class="o">|</span>
-<span class="o">|</span><span class="c1">------|
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">@@</span><span class="n">tx_isolation</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">------------------+
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="o">@@</span><span class="n">tx_isolation</span><span class="w">   </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="c1">------------------|
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="k">REPEATABLE</span><span class="o">-</span><span class="k">READ</span><span class="w">  </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">------------------+
+</span><span class="c1"></span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">006</span><span class="n">s</span><span class="w">
+</span><span class="w"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">lock_test</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">------+
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">id</span><span class="w">   </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="c1">------|
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="mi">1</span><span class="w">    </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">------+
+</span><span class="c1"></span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">006</span><span class="n">s</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c1">--------------------------------
+</span><span class="c1"></span><span class="w">
+</span><span class="w"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">@@</span><span class="n">tx_isolation</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">------------------+
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="o">@@</span><span class="n">tx_isolation</span><span class="w">   </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="c1">------------------|
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="k">READ</span><span class="o">-</span><span class="k">COMMITTED</span><span class="w">   </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">------------------+
+</span><span class="c1"></span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">006</span><span class="n">s</span><span class="w">
+</span><span class="w"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="p">(</span><span class="k">none</span><span class="p">):</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">lock_test</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">------+
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">id</span><span class="w">   </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="c1">------|
 </span><span class="c1"></span><span class="o">+</span><span class="c1">------+
-</span><span class="c1"></span><span class="mi">0</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">006</span><span class="n">s</span>
-</code></pre></td></tr></table>
+</span><span class="c1"></span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">006</span><span class="n">s</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>此时我们可以看到，事务B在<code>READ COMMITTED</code>和<code>READ REPEATABLE</code>这两种不同的隔离级别下查找的结果不同。这个原因我们在上文中已经提过了，在<code>READ COMMITTED</code>隔离级别下读取的是行记录的最新快照版本，而在<code>READ REPEATABLE</code>隔离级别下读取的是事务开始时行数据版本。</p>
 <p>其实，从数据库理论的角度来看，<code>READ COMMITTED</code>的隔离级别违反了事务的ACID特性中的隔离性。</p>
@@ -777,17 +777,17 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span>
-    <span class="n">r</span><span class="p">.</span><span class="n">trx_id</span> <span class="n">waiting_trx_id</span><span class="p">,</span>
-    <span class="n">r</span><span class="p">.</span><span class="n">trx_mysql_thread_id</span> <span class="n">waiting_thread_thread</span><span class="p">,</span>
-    <span class="n">r</span><span class="p">.</span><span class="n">trx_query</span> <span class="n">waiting_query</span><span class="p">,</span>
-    <span class="n">b</span><span class="p">.</span><span class="n">trx_id</span> <span class="n">blocking_trx_id</span><span class="p">,</span>
-    <span class="n">b</span><span class="p">.</span><span class="n">trx_mysql_thread_id</span> <span class="n">blocking_thread_thread</span><span class="p">,</span>
-    <span class="n">b</span><span class="p">.</span><span class="n">trx_query</span> <span class="n">blocking_query</span>
-<span class="k">from</span> <span class="o">`</span><span class="n">INNODB_LOCK_WAITS</span><span class="o">`</span> <span class="n">w</span>
-<span class="k">inner</span> <span class="k">join</span> <span class="o">`</span><span class="n">INNODB_TRX</span><span class="o">`</span> <span class="n">b</span> <span class="k">on</span> <span class="n">b</span><span class="p">.</span><span class="n">trx_id</span> <span class="o">=</span> <span class="n">w</span><span class="p">.</span><span class="n">blocking_trx_id</span>
-<span class="k">inner</span> <span class="k">join</span> <span class="o">`</span><span class="n">INNODB_TRX</span><span class="o">`</span> <span class="n">r</span> <span class="k">on</span> <span class="n">r</span><span class="p">.</span><span class="n">trx_id</span> <span class="o">=</span> <span class="n">w</span><span class="p">.</span><span class="n">requesting_trx_id</span><span class="err">\</span><span class="k">G</span>
-</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w">
+</span><span class="w">    </span><span class="n">r</span><span class="p">.</span><span class="n">trx_id</span><span class="w"> </span><span class="n">waiting_trx_id</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">r</span><span class="p">.</span><span class="n">trx_mysql_thread_id</span><span class="w"> </span><span class="n">waiting_thread_thread</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">r</span><span class="p">.</span><span class="n">trx_query</span><span class="w"> </span><span class="n">waiting_query</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">b</span><span class="p">.</span><span class="n">trx_id</span><span class="w"> </span><span class="n">blocking_trx_id</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">b</span><span class="p">.</span><span class="n">trx_mysql_thread_id</span><span class="w"> </span><span class="n">blocking_thread_thread</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="n">b</span><span class="p">.</span><span class="n">trx_query</span><span class="w"> </span><span class="n">blocking_query</span><span class="w">
+</span><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="o">`</span><span class="n">INNODB_LOCK_WAITS</span><span class="o">`</span><span class="w"> </span><span class="n">w</span><span class="w">
+</span><span class="w"></span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="o">`</span><span class="n">INNODB_TRX</span><span class="o">`</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">trx_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w</span><span class="p">.</span><span class="n">blocking_trx_id</span><span class="w">
+</span><span class="w"></span><span class="k">inner</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="o">`</span><span class="n">INNODB_TRX</span><span class="o">`</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">trx_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w</span><span class="p">.</span><span class="n">requesting_trx_id</span><span class="err">\</span><span class="k">G</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>上述SQL语句会查找当前正在被阻塞的和阻塞的事务，并将其事务ID，MySQL执行线程ID，正在执行的查询都打印出来。</p>
 <h2 id="自增长与锁">自增长与锁</h2>
@@ -826,8 +826,8 @@
 <pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span> <span class="k">max</span><span class="p">(</span><span class="n">auto_inc_col</span><span class="p">)</span> <span class="k">from</span> <span class="n">t</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="k">max</span><span class="p">(</span><span class="n">auto_inc_col</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="k">update</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>自增长计数器是一种特殊的表锁设计，因为在自增长计数器上的锁不会等到事务结束时才释放，而是在执行完插入语句后就被释放了。这种锁设计称为 <strong>AUTO-INC Locking</strong>。</p>
 <h4 id="轻量级互斥量锁">轻量级互斥量锁</h4>
@@ -868,13 +868,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">primary_table</span><span class="p">(</span>
-                      <span class="o">-&gt;</span> <span class="n">a</span> <span class="nb">int</span> <span class="n">auto_increment</span><span class="p">,</span>
-                      <span class="o">-&gt;</span> <span class="n">b</span> <span class="nb">int</span><span class="p">,</span>
-                      <span class="o">-&gt;</span> <span class="k">key</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
-                      <span class="o">-&gt;</span> <span class="p">);</span>
-<span class="p">(</span><span class="mi">1075</span><span class="p">,</span> <span class="s1">&#39;Incorrect table definition; there can be only one auto column and it must be defined as a key&#39;</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">primary_table</span><span class="p">(</span><span class="w">
+</span><span class="w">                      </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">auto_increment</span><span class="p">,</span><span class="w">
+</span><span class="w">                      </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="nb">int</span><span class="p">,</span><span class="w">
+</span><span class="w">                      </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">key</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">)</span><span class="w">
+</span><span class="w">                      </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="p">(</span><span class="mi">1075</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Incorrect table definition; there can be only one auto column and it must be defined as a key&#39;</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><h2 id="外键与锁">外键与锁</h2>
 <p>在InnoDB中，当我们在子表上添加记录时，会在相应的父表上添加一个共享锁。</p>
@@ -904,27 +904,27 @@
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">show</span> <span class="k">create</span> <span class="k">table</span> <span class="n">child</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">---------+-------------------------------------------------------------------------------+
-</span><span class="c1"></span><span class="o">|</span> <span class="k">Table</span>   <span class="o">|</span> <span class="k">Create</span> <span class="k">Table</span>                                                                  <span class="o">|</span>
-<span class="o">|</span><span class="c1">---------+-------------------------------------------------------------------------------|
-</span><span class="c1"></span><span class="o">|</span> <span class="n">child</span>   <span class="o">|</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">child</span><span class="o">`</span> <span class="p">(</span>                                                        <span class="o">|</span>
-<span class="o">|</span>         <span class="o">|</span>   <span class="o">`</span><span class="n">id</span><span class="o">`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>                                                      <span class="o">|</span>
-<span class="o">|</span>         <span class="o">|</span>   <span class="o">`</span><span class="n">parent_id</span><span class="o">`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>                                               <span class="o">|</span>
-<span class="o">|</span>         <span class="o">|</span>   <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">),</span>                                                         <span class="o">|</span>
-<span class="o">|</span>         <span class="o">|</span>   <span class="k">KEY</span> <span class="o">`</span><span class="n">FK_PARENT</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">parent_id</span><span class="o">`</span><span class="p">),</span>                                              <span class="o">|</span>
-<span class="o">|</span>         <span class="o">|</span>   <span class="k">CONSTRAINT</span> <span class="o">`</span><span class="n">FK_PARENT</span><span class="o">`</span> <span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">parent_id</span><span class="o">`</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="o">`</span><span class="n">parent</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">)</span> <span class="o">|</span>
-<span class="o">|</span>         <span class="o">|</span> <span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span>                                       <span class="o">|</span>
-<span class="o">+</span><span class="c1">---------+-------------------------------------------------------------------------------+
-</span><span class="c1"></span><span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">show</span> <span class="k">create</span> <span class="k">table</span> <span class="n">parent</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">---------+-----------------------------------------+
-</span><span class="c1"></span><span class="o">|</span> <span class="k">Table</span>   <span class="o">|</span> <span class="k">Create</span> <span class="k">Table</span>                            <span class="o">|</span>
-<span class="o">|</span><span class="c1">---------+-----------------------------------------|
-</span><span class="c1"></span><span class="o">|</span> <span class="n">parent</span>  <span class="o">|</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">parent</span><span class="o">`</span> <span class="p">(</span>                 <span class="o">|</span>
-<span class="o">|</span>         <span class="o">|</span>   <span class="o">`</span><span class="n">id</span><span class="o">`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>                <span class="o">|</span>
-<span class="o">|</span>         <span class="o">|</span>   <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">)</span>                    <span class="o">|</span>
-<span class="o">|</span>         <span class="o">|</span> <span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">---------+-----------------------------------------+
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">show</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">child</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">---------+-------------------------------------------------------------------------------+
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="k">Table</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="k">Create</span><span class="w"> </span><span class="k">Table</span><span class="w">                                                                  </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="c1">---------+-------------------------------------------------------------------------------|
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">child</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">`</span><span class="n">child</span><span class="o">`</span><span class="w"> </span><span class="p">(</span><span class="w">                                                        </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w">         </span><span class="o">|</span><span class="w">   </span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">                                                      </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w">         </span><span class="o">|</span><span class="w">   </span><span class="o">`</span><span class="n">parent_id</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">                                               </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w">         </span><span class="o">|</span><span class="w">   </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">),</span><span class="w">                                                         </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w">         </span><span class="o">|</span><span class="w">   </span><span class="k">KEY</span><span class="w"> </span><span class="o">`</span><span class="n">FK_PARENT</span><span class="o">`</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">parent_id</span><span class="o">`</span><span class="p">),</span><span class="w">                                              </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w">         </span><span class="o">|</span><span class="w">   </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="o">`</span><span class="n">FK_PARENT</span><span class="o">`</span><span class="w"> </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">parent_id</span><span class="o">`</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="o">`</span><span class="n">parent</span><span class="o">`</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w">         </span><span class="o">|</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="w">                                       </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">---------+-------------------------------------------------------------------------------+
+</span><span class="c1"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">show</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">parent</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">---------+-----------------------------------------+
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="k">Table</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="k">Create</span><span class="w"> </span><span class="k">Table</span><span class="w">                            </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="c1">---------+-----------------------------------------|
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">parent</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">`</span><span class="n">parent</span><span class="o">`</span><span class="w"> </span><span class="p">(</span><span class="w">                 </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w">         </span><span class="o">|</span><span class="w">   </span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">                </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w">         </span><span class="o">|</span><span class="w">   </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">)</span><span class="w">                    </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w">         </span><span class="o">|</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">---------+-----------------------------------------+
 </span></code></pre></td></tr></table>
 </div>
 </div><p>我们先向父表中插入一条记录: <code>insert into parent select 3</code>。</p>
@@ -942,14 +942,14 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 事务A
-</span><span class="c1"></span>
-<span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">begin</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">006</span><span class="n">s</span>
-<span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">delete</span> <span class="k">from</span> <span class="n">parent</span> <span class="k">where</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">1</span> <span class="k">row</span> <span class="n">affected</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">002</span><span class="n">s</span>
-</code></pre></td></tr></table>
+</span><span class="c1"></span><span class="w">
+</span><span class="w"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">begin</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">affected</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">006</span><span class="n">s</span><span class="w">
+</span><span class="w"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">parent</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="n">affected</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">002</span><span class="n">s</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>然后，我们再开一个事务B，在其中执行，向子表中插入(2, 3)的记录:</p>
 <div class="highlight"><div class="chroma">
@@ -963,12 +963,12 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 事务B
-</span><span class="c1"></span>
-<span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">begin</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">006</span><span class="n">s</span>
-<span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">child</span> <span class="k">select</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">;</span>
-</code></pre></td></tr></table>
+</span><span class="c1"></span><span class="w">
+</span><span class="w"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">begin</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">affected</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">006</span><span class="n">s</span><span class="w">
+</span><span class="w"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">child</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>此时事务B就会阻塞，因为在事务A已经在父表上添加了一个排他行锁。而事务B插入时需要在父表上id=3的行上添加一个共享锁，此时就会阻塞。</p>
 <p>最后，我们把事务A提交，事务B立刻就会报错，提示相关的外键不存在:</p>
@@ -982,11 +982,11 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 事务B
-</span><span class="c1"></span>
-<span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">child</span> <span class="k">select</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">;</span>
-
-<span class="p">(</span><span class="mi">1452</span><span class="p">,</span> <span class="s1">&#39;Cannot add or update a child row: a foreign key constraint fails (`hp`.`child`, CONSTRAINT `FK_PARENT` FOREIGN KEY (`parent_id`) REFERENCES `parent` (`id`))&#39;</span><span class="p">)</span>
-</code></pre></td></tr></table>
+</span><span class="c1"></span><span class="w">
+</span><span class="w"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">child</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="p">(</span><span class="mi">1452</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Cannot add or update a child row: a foreign key constraint fails (`hp`.`child`, CONSTRAINT `FK_PARENT` FOREIGN KEY (`parent_id`) REFERENCES `parent` (`id`))&#39;</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><h2 id="行锁">行锁</h2>
 <h3 id="行锁的三种算法">行锁的三种算法</h3>
@@ -1030,14 +1030,14 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 注意a列上有主键索引，b列上有辅助索引
-</span><span class="c1"></span>
-<span class="k">Create</span> <span class="k">Table</span> <span class="o">|</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">z</span><span class="o">`</span> <span class="p">(</span>
-  <span class="o">`</span><span class="n">a</span><span class="o">`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-  <span class="o">`</span><span class="n">b</span><span class="o">`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
-  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">a</span><span class="o">`</span><span class="p">),</span>
-  <span class="k">KEY</span> <span class="o">`</span><span class="n">b</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">b</span><span class="o">`</span><span class="p">)</span>
-<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span>
-</code></pre></td></tr></table>
+</span><span class="c1"></span><span class="w">
+</span><span class="w"></span><span class="k">Create</span><span class="w"> </span><span class="k">Table</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="o">`</span><span class="n">z</span><span class="o">`</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">a</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="o">`</span><span class="n">b</span><span class="o">`</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">a</span><span class="o">`</span><span class="p">),</span><span class="w">
+</span><span class="w">  </span><span class="k">KEY</span><span class="w"> </span><span class="o">`</span><span class="n">b</span><span class="o">`</span><span class="w"> </span><span class="p">(</span><span class="o">`</span><span class="n">b</span><span class="o">`</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="p">)</span><span class="w"> </span><span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>表<code>z</code>中的数据如下所示:</p>
 <div class="highlight"><div class="chroma">
@@ -1090,9 +1090,9 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 在事务A中执行
-</span><span class="c1"></span>
-<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">z</span> <span class="k">where</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">3</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
-</code></pre></td></tr></table>
+</span><span class="c1"></span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="k">update</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>在执行完上述语句后，我们会在表z中添加上三个锁:</p>
 <ol>
@@ -1128,26 +1128,26 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 下面的语句会阻塞，因为和主键索引中的 Record Lock 锁冲突
-</span><span class="c1"></span><span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">z</span> <span class="k">where</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span> <span class="k">lock</span> <span class="k">in</span> <span class="k">share</span> <span class="k">mode</span><span class="p">;</span>
-<span class="o">^</span><span class="n">Ccancelled</span> <span class="n">query</span>
-<span class="c1">-- 下面的语句会阻塞，因为和辅助索引上的 (1, 3] Next-Lock 锁冲突
-</span><span class="c1"></span><span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">z</span> <span class="k">select</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">;</span>
-<span class="o">^</span><span class="n">Ccancelled</span> <span class="n">query</span>
-<span class="c1">-- 下面的语句会阻塞，因为和辅助索引上的 (3, 6) Gap Lock 锁冲突
-</span><span class="c1"></span><span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">z</span> <span class="k">select</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">;</span>
-<span class="o">^</span><span class="n">Ccancelled</span> <span class="n">query</span>
-
-<span class="c1">-- 以下的三条语句都不会阻塞
-</span><span class="c1"></span><span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">z</span> <span class="k">select</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">1</span> <span class="k">row</span> <span class="n">affected</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">008</span><span class="n">s</span>
-<span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">z</span> <span class="k">select</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">1</span> <span class="k">row</span> <span class="n">affected</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">007</span><span class="n">s</span>
-<span class="n">mysql</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span> <span class="k">insert</span> <span class="k">into</span> <span class="n">z</span> <span class="k">select</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">1</span> <span class="k">row</span> <span class="n">affected</span>
-<span class="n">Time</span><span class="p">:</span> <span class="mi">0</span><span class="p">.</span><span class="mi">007</span><span class="n">s</span>
-</code></pre></td></tr></table>
+</span><span class="c1"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="k">lock</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">share</span><span class="w"> </span><span class="k">mode</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="o">^</span><span class="n">Ccancelled</span><span class="w"> </span><span class="n">query</span><span class="w">
+</span><span class="w"></span><span class="c1">-- 下面的语句会阻塞，因为和辅助索引上的 (1, 3] Next-Lock 锁冲突
+</span><span class="c1"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="o">^</span><span class="n">Ccancelled</span><span class="w"> </span><span class="n">query</span><span class="w">
+</span><span class="w"></span><span class="c1">-- 下面的语句会阻塞，因为和辅助索引上的 (3, 6) Gap Lock 锁冲突
+</span><span class="c1"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="o">^</span><span class="n">Ccancelled</span><span class="w"> </span><span class="n">query</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c1">-- 以下的三条语句都不会阻塞
+</span><span class="c1"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="n">affected</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">008</span><span class="n">s</span><span class="w">
+</span><span class="w"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="n">affected</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">007</span><span class="n">s</span><span class="w">
+</span><span class="w"></span><span class="n">mysql</span><span class="w"> </span><span class="n">root</span><span class="o">@</span><span class="n">localhost</span><span class="p">:</span><span class="n">hp</span><span class="o">&gt;</span><span class="w"> </span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="n">affected</span><span class="w">
+</span><span class="w"></span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">007</span><span class="n">s</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><h2 id="死锁">死锁</h2>
 <p>死锁是指两个或两个以上的事务在执行过程中，因争夺锁资源而造成的一种相互等待的现象。若无外力作用，事务都将无法推进下去。</p>
