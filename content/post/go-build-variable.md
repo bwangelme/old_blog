@@ -3,7 +3,7 @@ title: "Golang 链接时注入额外信息"
 date: 2021-05-07T17:04:21+08:00
 lastmod: 2021-05-07T17:04:21+08:00
 draft: false
-tags: [Golang]
+tags: [go]
 author: "bwangel"
 comment: true
 ---
@@ -16,13 +16,13 @@ comment: true
 ## Go 链接时的 -X 选项
 
 > -X importpath.name=value
-> 
+>
 > Set the value of the string variable in importpath named name to value.
 This is only effective if the variable is declared in the source code either uninitialized
 or initialized to a constant string expression. -X will not work if the initializer makes
 a function call or refers to other variables.
 Note that before Go 1.5 this option took two separate arguments.
- 
+
 __链接:__ go 编译工具读取 package main 和它的依赖(是 archive 文件或对象)，将它们组合在一起生成一个可执行文件。
 
 Go 在链接时支持 `-X` 选项，它的用法为 `-X importpath.name=value`，它将会替换 __字符串变量__ `importpath.name`的值，将其设置为`value`。
