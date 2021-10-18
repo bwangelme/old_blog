@@ -3,10 +3,9 @@ title: "Golang 开发小技巧"
 date: {{ .Date }}
 lastmod: {{ .Date }}
 draft: false
-tags: [tips, Go]
+tags: [tips, go]
 author: "bwangel"
 comment: true
-
 ---
 
 <!--more-->
