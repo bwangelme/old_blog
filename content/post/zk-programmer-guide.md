@@ -4,7 +4,7 @@ title: "《ZooKeeper Programmer's Guide》阅读笔记"
 date: 2019-03-19T14:35:30+08:00
 lastmod: 2019-03-19T14:35:30+08:00
 draft: true
-tags: [Tag1, Tag2]
+tags: [zookeeper]
 author: "bwangel"
 comment: true
 
