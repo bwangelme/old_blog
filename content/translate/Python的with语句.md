@@ -5,7 +5,7 @@ tags: [Python, 翻译]
 author: "bwangel"
 comment: true
 aliases:
-  - /2016/04/25/Python的with语句/
+  - /2016/04/25/python的with语句/
 ---
 
 __摘要__:
