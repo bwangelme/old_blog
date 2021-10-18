@@ -9,8 +9,6 @@ comment: true
 
 ---
 
-Tips
-
 <!--more-->
 
 ---
