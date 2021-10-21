@@ -1,16 +1,15 @@
 ---
-title: "《多级缓存架构》学习笔记"
-date: 2021-02-18T07:00:03+08:00
-lastmod: 2021-02-18T07:00:03+08:00
+title: "Redis 备份机制"
+date: 2021-10-22T00:00:45+08:00
+lastmod: 2021-10-22T00:00:45+08:00
 draft: false
-tags: [笔记, Redis]
+tags: [tips, redis]
 author: "bwangel"
 comment: true
 ---
 
-> 支持高并发，高可用的 Redis 集群多级缓存备份机制
-
 <!--more-->
+
 ---
 
 ## Redis 的 AOF 和 RDB 备份机制
@@ -24,9 +23,7 @@ RDB 比 AOF 恢复要快
 
 RDB 是定时备份，AOF 的每条操作都会写入磁盘(中间有 linux 系统缓存, fsync 会同步系统缓存到磁盘中)，故 RDB 的写入速度要比 AOF 要高。
 
-如果 AOF 和 RDB 备份都存在，那么 redis 优先会从 aof 回复数据文件。
-
-AOF 和 RDB 同时存在的时候，AOF 和 RDB 备份只会有一个在执行。
+如果 AOF 和 RDB 备份都存在，那么 redis 优先会从 AOF 恢复数据文件。
 
 ### RDB 备份
 
@@ -52,10 +49,16 @@ RDB 持久化的工作流程:
 
 ### AOF 备份
 
-AOF 持久化过程:
+配置:
+
+`appendfsync` 表示多长时间执行一次 `fsync` 系统调用，将 os cache 数据写入到磁盘中，默认是 everysec，每秒写一次。
+
+AOF ReWrite 过程:
 
 1. redis fork 一个子进程
 2. 子进程基于当前内存中的数据，构建日志，开始往一个新的临时的 aof 文件中写入日志
-3. redis 主进程，接收到 client 端的写操作之后，往内存中写入日志，同时新的日志也继续写入旧的 aof 文件中
-4. 子进程写完新的日志文件之后，redis 主进程会将内存中的新日志再次追加到新的 aof 文件之中
+3. redis 主进程，接收到 client 端的写操作之后，
+    1. 往旧的 aof 文件中写日志
+    2. 开辟一个新的内存区域，在其中写入日志
+4. 子进程写完新的日志文件之后，redis 主进程会将内存区域中的新日志再次追加到新的 aof 文件之中
 5. 用新的日志文件，替换掉旧的日志文件
