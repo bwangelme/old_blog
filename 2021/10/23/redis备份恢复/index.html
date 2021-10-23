@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Redis 主从同步细节 - 大白的碎碎念</title>
+  <title>Redis 备份恢复的正确步骤 - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -26,7 +26,7 @@
 <meta name="generator" content="Hugo 0.83.1 with theme even" />
 
 
-<link rel="canonical" href="/2021/10/22/redis%E5%90%8C%E6%AD%A5%E7%BB%86%E8%8A%82/" />
+<link rel="canonical" href="/2021/10/23/redis%E5%A4%87%E4%BB%BD%E6%81%A2%E5%A4%8D/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -39,19 +39,19 @@
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
-<meta property="og:title" content="Redis 主从同步细节" />
+<meta property="og:title" content="Redis 备份恢复的正确步骤" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2021/10/22/redis%E5%90%8C%E6%AD%A5%E7%BB%86%E8%8A%82/" /><meta property="article:section" content="tips" />
-<meta property="article:published_time" content="2021-10-22T21:57:55&#43;08:00" />
-<meta property="article:modified_time" content="2021-10-22T21:57:55&#43;08:00" />
+<meta property="og:url" content="/2021/10/23/redis%E5%A4%87%E4%BB%BD%E6%81%A2%E5%A4%8D/" /><meta property="article:section" content="tips" />
+<meta property="article:published_time" content="2021-10-23T17:36:43&#43;08:00" />
+<meta property="article:modified_time" content="2021-10-23T17:36:43&#43;08:00" />
 
-<meta itemprop="name" content="Redis 主从同步细节">
-<meta itemprop="description" content=""><meta itemprop="datePublished" content="2021-10-22T21:57:55&#43;08:00" />
-<meta itemprop="dateModified" content="2021-10-22T21:57:55&#43;08:00" />
-<meta itemprop="wordCount" content="797">
+<meta itemprop="name" content="Redis 备份恢复的正确步骤">
+<meta itemprop="description" content=""><meta itemprop="datePublished" content="2021-10-23T17:36:43&#43;08:00" />
+<meta itemprop="dateModified" content="2021-10-23T17:36:43&#43;08:00" />
+<meta itemprop="wordCount" content="181">
 <meta itemprop="keywords" content="tips,redis," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Redis 主从同步细节"/>
+<meta name="twitter:title" content="Redis 备份恢复的正确步骤"/>
 <meta name="twitter:description" content=""/>
 
 <!--[if lte IE 9]>
@@ -127,13 +127,13 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Redis 主从同步细节</h1>
+      <h1 class="post-title">Redis 备份恢复的正确步骤</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2021-10-22 </span>
+        <span class="post-time"> 2021-10-23 </span>
         
-          <span class="more-meta"> 约 797 字 </span>
-          <span class="more-meta"> 预计阅读 2 分钟 </span>
+          <span class="more-meta"> 约 181 字 </span>
+          <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
     </header>
@@ -145,18 +145,9 @@
   <ul>
     <li>
       <ul>
-        <li><a href="#完整的复制流程">完整的复制流程</a></li>
-        <li><a href="#offset">offset</a></li>
-        <li><a href="#backlog">backlog</a></li>
-        <li><a href="#run-id">run id</a></li>
-        <li><a href="#redis-replication-复制示意图">Redis Replication 复制示意图</a>
-          <ul>
-            <li><a href="#full-resynchronization">Full Resynchronization</a></li>
-            <li><a href="#增量复制">增量复制</a></li>
-          </ul>
-        </li>
-        <li><a href="#无盘化复制">无盘化复制</a></li>
-        <li><a href="#过期-key-处理">过期 key 处理</a></li>
+        <li><a href="#tips">Tips</a></li>
+        <li><a href="#注意">注意</a></li>
+        <li><a href="#原因">原因</a></li>
       </ul>
     </li>
   </ul>
@@ -165,52 +156,19 @@
 </div>
     <div class="post-content">
       <hr>
-<h2 id="完整的复制流程">完整的复制流程</h2>
-<ol>
-<li>slave 启动，获取 master 节点的信息，包括 (master run_id)</li>
-<li>slave 内部有定时任务，每秒检查是否有新的 master 节点，如果发现，就和 master 建立 socket 连接</li>
-<li>slave 节点发送 PSYNC 命令给 master</li>
-<li>口令认证，如果 master 设置了 requirepass，slave 节点必须发送 master auth 的口令过去认证</li>
-<li>master node 执行一次全量复制，将所有数据发送给 slave node</li>
-<li>master node 后续持续将写命令，异步地发送给 slave node</li>
+<h2 id="tips">Tips</h2>
+<ol start="0">
+<li>清空数据目录下的 dump.rdb 和 appendonly.aof 文件</li>
+<li>将备份的 rdb 文件拷贝到 redis 的数据目录下 (<code>dir</code>选项配置了数据目录)</li>
+<li>修改配置文件，设置 <code>appendonly no</code></li>
+<li>启动 redis-server</li>
+<li>通过 redis-cli 开启 appendonly 备份: <code>CONFIG SET appendonly yes</code></li>
+<li>同时修改配置文件，开启 aof 备份</li>
 </ol>
-<h2 id="offset">offset</h2>
-<p>master 和  slave 都会维护一个累加的 offset，master 还会维护每个 slave 的offset，用于沟通数据的差异。</p>
-<h2 id="backlog">backlog</h2>
-<p>master 中有 backlog，默认大小是 1M，主要用于全量复制中断时，做增量复制用的</p>
-<h2 id="run-id">run id</h2>
-<p>master run id 发生变化时， slave 会重新做全量复制</p>
-<h2 id="redis-replication-复制示意图">Redis Replication 复制示意图</h2>
-<p><img src="https://passage-1253400711.cos-website.ap-beijing.myqcloud.com/2021-10-22-143417.png" alt=""></p>
-<h3 id="full-resynchronization">Full Resynchronization</h3>
-<ol>
-<li>master 执行 bgsave，用子进程生成 rdb 快照文件</li>
-<li>master 生成快照文件的同时会将随后的操作指令写在内存缓存中</li>
-<li>master 将 rdb 文件发送给 slave node，如果发送时间超过 repl-timeout （默认是 60s），那么 slave node 就会认为复制失败，可以适当调大这个参数.</li>
-<li><code>client-output-buffer-limit slave 256M 64M 60</code>，如果在复制过程中，内存缓存区持续消耗超过 64M，或一次性超过 256M，那么停止复制，复制失败。</li>
-<li>slave 将 rdb 文件落盘</li>
-<li>slave 从 rdb 文件恢复数据，回复的同时基于旧数据 serve</li>
-<li>如果 slave 开启了 aof 备份，那么恢复成功后会立即执行 BGREWRITEAOF，重写 AOF</li>
-<li>master 在 slave 恢复成功后将内存缓存的指令发送给 slave</li>
-</ol>
-<h3 id="增量复制">增量复制</h3>
-<ol>
-<li>复制过程中，如果因为网络中断复制失败了，slave 重新连接上 master 后，就会触发增量复制。</li>
-<li>slave 启动后会去寻找 replica offset，如果找到了，master 会将 backlog 中存储的数据发送过来。</li>
-<li>如果找不到，master 会开启 full resynchronization</li>
-</ol>
-<h2 id="无盘化复制">无盘化复制</h2>
-<p>两个相关选项:</p>
-<ul>
-<li>repl-diskless-sync</li>
-</ul>
-<p>开启此选项后，rdb 文件在 master 上不会落盘，会直接发送给 slave</p>
-<ul>
-<li>repl-diskless-sync-delay</li>
-</ul>
-<p>开启无盘化复制后，新的 Slave 无法复用之前已经开始的复制任务，只能等待新的复制任务。<code>repl-diskless-sync-delay</code> 设置复制任务在收到 Slave 的请求多久后开始，以等待更多的 Slave 连接，一起发送 rdb 数据。</p>
-<h2 id="过期-key-处理">过期 key 处理</h2>
-<p>Slave 不会主动过期 key，master 在将 key 过期后，会发送 DEL 指令给 Slave</p>
+<h2 id="注意">注意</h2>
+<p>必须要关闭 appendonly 后，rdb 备份才能正确回复，否则恢复出来的数据是空的</p>
+<h2 id="原因">原因</h2>
+<p>redis server 启动后会生成 appendonly.aof 文件，在 dump.rdb 和 appendonly.aof 文件同时存在的时候，会优先恢复 appendonly.aof 文件，由于 appendonly.aof 是空的，redis server 中的数据也会变成空的。</p>
     </div>
 
     <div class="post-copyright">
@@ -221,7 +179,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2021-10-22
+        2021-10-23
         
     </span>
   </p>
@@ -237,13 +195,9 @@
           <a href="/tags/redis/">redis</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/2021/10/23/redis%E5%A4%87%E4%BB%BD%E6%81%A2%E5%A4%8D/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">Redis 备份恢复的正确步骤</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
-        <a class="next" href="/2021/10/22/redis%E5%A4%87%E4%BB%BD%E6%9C%BA%E5%88%B6/">
-            <span class="next-text nav-default">Redis 备份机制</span>
+        
+        <a class="next" href="/2021/10/22/redis%E5%90%8C%E6%AD%A5%E7%BB%86%E8%8A%82/">
+            <span class="next-text nav-default">Redis 主从同步细节</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
