@@ -1,5 +1,5 @@
 ---
-title: "Golang 开发小技巧"
+title: "{{ replace .TranslationBaseName "-" " " | title }}"
 date: {{ .Date }}
 lastmod: {{ .Date }}
 draft: false
