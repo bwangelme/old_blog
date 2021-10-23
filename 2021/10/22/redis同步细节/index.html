@@ -49,7 +49,7 @@
 <meta itemprop="name" content="Redis 主从同步细节">
 <meta itemprop="description" content=""><meta itemprop="datePublished" content="2021-10-22T21:57:55&#43;08:00" />
 <meta itemprop="dateModified" content="2021-10-22T21:57:55&#43;08:00" />
-<meta itemprop="wordCount" content="337">
+<meta itemprop="wordCount" content="797">
 <meta itemprop="keywords" content="tips,redis," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Redis 主从同步细节"/>
 <meta name="twitter:description" content=""/>
@@ -132,8 +132,8 @@
       <div class="post-meta">
         <span class="post-time"> 2021-10-22 </span>
         
-          <span class="more-meta"> 约 337 字 </span>
-          <span class="more-meta"> 预计阅读 1 分钟 </span>
+          <span class="more-meta"> 约 797 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
     </header>
@@ -145,10 +145,14 @@
   <ul>
     <li>
       <ul>
+        <li><a href="#完整的复制流程">完整的复制流程</a></li>
+        <li><a href="#offset">offset</a></li>
+        <li><a href="#backlog">backlog</a></li>
+        <li><a href="#run-id">run id</a></li>
         <li><a href="#redis-replication-复制示意图">Redis Replication 复制示意图</a>
           <ul>
             <li><a href="#full-resynchronization">Full Resynchronization</a></li>
-            <li><a href="#断点重传">断点重传</a></li>
+            <li><a href="#增量复制">增量复制</a></li>
           </ul>
         </li>
         <li><a href="#无盘化复制">无盘化复制</a></li>
@@ -161,21 +165,38 @@
 </div>
     <div class="post-content">
       <hr>
+<h2 id="完整的复制流程">完整的复制流程</h2>
+<ol>
+<li>slave 启动，获取 master 节点的信息，包括 (master run_id)</li>
+<li>slave 内部有定时任务，每秒检查是否有新的 master 节点，如果发现，就和 master 建立 socket 连接</li>
+<li>slave 节点发送 PSYNC 命令给 master</li>
+<li>口令认证，如果 master 设置了 requirepass，slave 节点必须发送 master auth 的口令过去认证</li>
+<li>master node 执行一次全量复制，将所有数据发送给 slave node</li>
+<li>master node 后续持续将写命令，异步地发送给 slave node</li>
+</ol>
+<h2 id="offset">offset</h2>
+<p>master 和  slave 都会维护一个累加的 offset，master 还会维护每个 slave 的offset，用于沟通数据的差异。</p>
+<h2 id="backlog">backlog</h2>
+<p>master 中有 backlog，默认大小是 1M，主要用于全量复制中断时，做增量复制用的</p>
+<h2 id="run-id">run id</h2>
+<p>master run id 发生变化时， slave 会重新做全量复制</p>
 <h2 id="redis-replication-复制示意图">Redis Replication 复制示意图</h2>
 <p><img src="https://passage-1253400711.cos-website.ap-beijing.myqcloud.com/2021-10-22-143417.png" alt=""></p>
 <h3 id="full-resynchronization">Full Resynchronization</h3>
 <ol>
-<li>master 用子线程生成 rdb 快照文件</li>
+<li>master 执行 bgsave，用子进程生成 rdb 快照文件</li>
 <li>master 生成快照文件的同时会将随后的操作指令写在内存缓存中</li>
-<li>master 将 rdb 文件发送给 slave</li>
+<li>master 将 rdb 文件发送给 slave node，如果发送时间超过 repl-timeout （默认是 60s），那么 slave node 就会认为复制失败，可以适当调大这个参数.</li>
+<li><code>client-output-buffer-limit slave 256M 64M 60</code>，如果在复制过程中，内存缓存区持续消耗超过 64M，或一次性超过 256M，那么停止复制，复制失败。</li>
 <li>slave 将 rdb 文件落盘</li>
-<li>slave 从 rdb 文件恢复数据</li>
+<li>slave 从 rdb 文件恢复数据，回复的同时基于旧数据 serve</li>
+<li>如果 slave 开启了 aof 备份，那么恢复成功后会立即执行 BGREWRITEAOF，重写 AOF</li>
 <li>master 在 slave 恢复成功后将内存缓存的指令发送给 slave</li>
 </ol>
-<h3 id="断点重传">断点重传</h3>
+<h3 id="增量复制">增量复制</h3>
 <ol>
-<li>master 和 slave 都会保存 replica offset</li>
-<li>slave 启动后会去寻找 replica offset，如果找到了，master 会将后续指令发过来</li>
+<li>复制过程中，如果因为网络中断复制失败了，slave 重新连接上 master 后，就会触发增量复制。</li>
+<li>slave 启动后会去寻找 replica offset，如果找到了，master 会将 backlog 中存储的数据发送过来。</li>
 <li>如果找不到，master 会开启 full resynchronization</li>
 </ol>
 <h2 id="无盘化复制">无盘化复制</h2>
