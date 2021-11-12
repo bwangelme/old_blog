@@ -55,3 +55,5 @@ enp0s8: flags=4419<UP,BROADCAST,RUNNING,PROMISC,MULTICAST>  mtu 1500
 veth 设备加入 Linux Bridge 后，会自动进入混杂模式，且无法退出。
 
 ## 参考链接
+
++ [《Kubenetes 网络权威指南》](https://book.douban.com/subject/34855927/)
