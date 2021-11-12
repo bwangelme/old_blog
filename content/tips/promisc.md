@@ -52,7 +52,8 @@ enp0s8: flags=4419<UP,BROADCAST,RUNNING,PROMISC,MULTICAST>  mtu 1500
 + `sudo ifconfig enp0s8 promisc` 可以让网卡进入混杂模式
 + `sudo ifconfig enp0s8 -promisc` 可以让网卡退出混杂模式
 
-veth 设备加入 Linux Bridge 后，会自动进入混杂模式，且无法退出。
++ veth 设备加入 Linux Bridge 后，会自动进入混杂模式，且无法退出。
++ 网络设备离开 Linux Bridge 后，会自动退出混杂模式。
 
 ## 参考链接
 
