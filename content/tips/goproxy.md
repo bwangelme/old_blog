@@ -19,7 +19,7 @@ comment: true
 + 查看包的版本信息:
 
 ```
-https://proxy.golang.org/go.etcd.io/etcd/client/v3/@v/v3.0.0-20201116001935-06e48f04865f.info
+curl https://proxy.golang.org/go.etcd.io/etcd/client/v3/@v/v3.0.0-20201116001935-06e48f04865f.info
 ```
 
 + 查看包的依赖 (即获取 go.mod 文件)
