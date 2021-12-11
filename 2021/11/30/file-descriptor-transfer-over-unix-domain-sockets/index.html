@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.83.1 with theme even" />
 
 
 <link rel="canonical" href="/2021/11/30/file-descriptor-transfer-over-unix-domain-sockets/" />
@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.0034ec37b35f91907849c9020141a7e99249c6f2301ee1e34aee09cfe5f9ae2e.css" rel="stylesheet">
+<link href="/sass/main.min.39c60e56f66799a405ded646d800f46e1f2ee0e0d6e2ba42f18764adb1c5d14b.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -47,22 +47,19 @@
 
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2021/11/30/file-descriptor-transfer-over-unix-domain-sockets/" />
-<meta property="article:published_time" content="2021-11-30T11:58:56+08:00" />
-<meta property="article:modified_time" content="2021-11-30T11:58:56+08:00" />
+<meta property="og:url" content="/2021/11/30/file-descriptor-transfer-over-unix-domain-sockets/" /><meta property="article:section" content="translate" />
+<meta property="article:published_time" content="2021-11-30T11:58:56&#43;08:00" />
+<meta property="article:modified_time" content="2021-11-30T11:58:56&#43;08:00" />
+
 <meta itemprop="name" content="Review 《File Descriptor Transfer over Unix Domain Sockets》">
 <meta itemprop="description" content="
 
 使用 Unix 域套接字传输文件描述符
 原文地址: https://copyconstruct.medium.com/file-descriptor-transfer-over-unix-domain-sockets-dcbbf5b3b6ec
 
-">
-<meta itemprop="datePublished" content="2021-11-30T11:58:56&#43;08:00" />
+"><meta itemprop="datePublished" content="2021-11-30T11:58:56&#43;08:00" />
 <meta itemprop="dateModified" content="2021-11-30T11:58:56&#43;08:00" />
-<meta itemprop="wordCount" content="4827">
-
-
-
+<meta itemprop="wordCount" content="4811">
 <meta itemprop="keywords" content="翻译,linux," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Review 《File Descriptor Transfer over Unix Domain Sockets》"/>
 <meta name="twitter:description" content="
@@ -150,7 +147,7 @@
       <div class="post-meta">
         <span class="post-time"> 2021-11-30 </span>
         
-          <span class="more-meta"> 约 4827 字 </span>
+          <span class="more-meta"> 约 4811 字 </span>
           <span class="more-meta"> 预计阅读 10 分钟 </span>
         
       </div>
@@ -204,17 +201,17 @@
 <p><strong>12/31/2020 更新</strong></p>
 <p>如果你使用的是较新的内核（Linux 5.6以上），随着一个新的系统调用 <code>pidfd_getfd</code> 的引入，这种复杂性大部分已经被消除了。更多细节请参考 2020年 12-31 发表的文章<a href="https://copyconstruct.medium.com/seamless-file-descriptor-transfer-between-processes-with-pidfd-and-pidfd-getfd-816afcd19ed4">《用 pidfd 和 pidfd_getfd 在进程间无缝传输文件描述符》</a>。</p>
 </blockquote>
-<p>昨天，我读了一篇惊人的论文，介绍了使用不同协议而且许多不同类型请求（长寿的TCP/UDP会话，涉及大块数据的请求等）的服务在Facebook是如何免中断发布的。</p>
-<p>Facebook 使用的一种技术它们叫做 <code>Socket Takeover</code> 。</p>
+<p>昨天，我读了一篇惊人的论文，介绍了使用不同协议而且服务许多不同类型请求（长寿的TCP/UDP会话，涉及大块数据的请求等）的服务在Facebook是如何免中断发布的。</p>
+<p>Facebook 使用的一种它们叫做 <code>Socket Takeover</code> 的技术。</p>
 <p><code>Socket Takeover</code> 实现了 Proxygen 的零停机重启，它以并行方式启动了一个更新的实例，接管了监听的套接字，当旧的实例进入了优雅关闭阶段。新实例负责为新连接提供服务，并响应来自 L4LB Katran 的健康检查探针。老的连接由老的实例提供服务，直到完全关闭，之后其他机制（例如下游连接重用）开始发挥作用。</p>
 <p>当我们把一个打开的FD从旧的进程传递给新的进程时，传递和接收的进程都共享监听套接字的同一个文件表项，并各自独立地处理接收的连接，在这些连接上提供连接级事务。我们利用了以下Linux内核的特性来实现这一点。</p>
 <p><strong>CMSG</strong>：<code>sendmsg()</code> 的一个功能允许在本地进程之间发送控制信息（通常被称为辅助数据）。在 Level7 LB 进程的重启过程中，我们使用这一机制将所有 VIP ( Virtual IP of service) 的活动的监听套接字的 FD 集合从活动的实例发送至新启动的实例。这些数据是通过 <code>sendmsg</code> 和 <code>recvmsg</code> 在 UNIX 域套接字上交换的。</p>
 <p><strong>SCM_RIGHTS</strong>: 我们设置这个选项来发送打开的文件描述符，其数据部分包含一个打开的FD的整数数组。在接收方，这些 文件描述符的行为就像它们是用 <code>dup(2)</code> 创建的一样。</p>
 <p>我在 Twitter 上收到了一些人的回复，他们对这竟然是可能的表示惊讶。事实上，如果你对Unix域套接字的一些特性不是很熟悉，那么论文中的上述段落可能就很难理解了。</p>
 <p>实际上，在 Unix 域套接字上传输 TCP 套接字是一种久经考验的方法，来实现 <strong>热重启</strong> 或 <strong>零停机时间重启</strong> 。流行的代理，如 HAProxy 和 Envoy ，使用非常类似的机制，将连接从代理的一个实例引流到另一个实例，而不丢弃任何连接。然而，许多类似的功能却并不广为人知。</p>
-<p>在这篇文章中，我想探讨Unix域套接字的一些特性，这些特性使它成为这些场景下的合适候选者，特别是将套接字（或任何文件描述符）从一个进程转移到另一个进程，在这两个进程之间不一定存在父子关系。</p>
+<p>在这篇文章中，我想探讨 Unix 域套接字的一些特性，这些特性使它成为这些场景下的合适候选者，特别是将套接字（或任何文件描述符）从一个进程转移到另一个进程，在这两个进程之间不一定存在父子关系。</p>
 <h2 id="unix-域套接字">Unix 域套接字</h2>
-<p>众所周知，Unix 域套接字允许同一主机系统上的进程之间进行通信。Unix域套接字在许多流行的系统中都有使用。HAProxy、Envoy、AWS的Firecracker虚拟机监视器、Kubernetes、Docker和Istio等等。</p>
+<p>众所周知，Unix 域套接字允许同一主机系统上的进程之间进行通信。Unix域套接字在许多流行的系统中都有使用。HAProxy、Envoy、AWS的 Firecracker 虚拟机监视器、Kubernetes、Docker和 Istio 等等。</p>
 <h3 id="一个简短的教程">一个简短的教程</h3>
 <p>就像网络套接字一样，Unix 域套接字也支持流和数据报文类型。然而，与采用 IP 和端口作为地址的网络套接字不同，Unix域套接字使用路径名作为地址。与网络套接字不同，Unix域套接字的 I/O 不涉及对底层设备的操作（这使得Unix域套接字与网络套接字相比，在同一主机上执行IPC要快很多）。</p>
 <p>用 <code>bind(2)</code> 将一个名字绑定到一个Unix域套接字，在文件系统中创建一个名为 <code>pathname</code> 的套接字文件。然而，这个文件与你可能创建的任何普通文件不同。</p>
@@ -406,7 +403,7 @@ root@5247072fc542:~/uds#
 <p>所以，在 Unix 域套接字上使用 <code>sendmsg</code> 发送文件描述符实际上意味着发送 <strong>文件描述</strong> 的引用。如果进程 A 向 进程 B 发送文件描述符 0 (fd0)，该文件描述符在进程 B 中很可能被数字3(fd3) 所引用。</p>
 <p>发送进程在 Unix 域套接字上调用 <code>sendmsg</code> 发送文件描述符，接收进程在 Unix 域套接字上调用 <code>recvmsg</code> 来接受文件描述符。</p>
 <p>发送进程通过 <code>sendmsg</code> 发送文件描述给接收进程，接收进程通过 <code>recvmsg</code> 接收该文件描述。即使发送进程在发送完成后关闭了该文件描述所对应的文件描述符，而接收进程还未调用 <code>recvmsg</code> 接收它，该文件描述依然对接收进程保持打开状态。</p>
-<p>__发送文件描述符时，文件描述的引用次数会+1,直到文件描述的引用次数下降到0, 内核才会将文件描述从 <code>打开文件表(open file table)</code> 中删除该文件描述。</p>
+<p><strong>发送文件描述符时，文件描述的引用次数会+1,直到文件描述的引用次数下降到0, 内核才会将文件描述从 <code>打开文件表(open file table)</code> 中删除该文件描述。</strong></p>
 <p>即使发送进程在接收进程调用 recvmsg 之前关闭了引用通过 sendmsg 传递的文件描述的文件描述符，该文件描述符仍然对接收进程开放。发送描述符时，描述符的引用次数会增加1。内核只有在引用计数下降到0时才会从其开放文件表中删除文件描述。</p>
 <h3 id="sendmsg-和-recvmsg">sendmsg 和 recvmsg</h3>
 <p>在 Linux 中 <code>sendmsg</code> 函数的签名如下:</p>
@@ -682,7 +679,7 @@ root@5247072fc542:~/uds#
 
 
 
-<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+<script type="text/javascript" src="/js/main.min.2517c0eb67172a0bae917de4af59b10ca2531411a009d4c0b82f5685259e5771.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

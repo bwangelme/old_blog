@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.83.1 with theme even" />
 
 
 <link rel="canonical" href="/2018/10/11/go_mod/" />
@@ -36,25 +36,22 @@
 
 
 
-<link href="/sass/main.min.0034ec37b35f91907849c9020141a7e99249c6f2301ee1e34aee09cfe5f9ae2e.css" rel="stylesheet">
+<link href="/sass/main.min.39c60e56f66799a405ded646d800f46e1f2ee0e0d6e2ba42f18764adb1c5d14b.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
 <meta property="og:title" content="Go mod 说明" />
 <meta property="og:description" content="关于 Go mod 的介绍" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2018/10/11/go_mod/" />
-<meta property="article:published_time" content="2018-10-11T08:44:25+08:00" />
-<meta property="article:modified_time" content="2018-10-11T08:44:25+08:00" />
+<meta property="og:url" content="/2018/10/11/go_mod/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2018-10-11T08:44:25&#43;08:00" />
+<meta property="article:modified_time" content="2018-10-11T08:44:25&#43;08:00" />
+
 <meta itemprop="name" content="Go mod 说明">
-<meta itemprop="description" content="关于 Go mod 的介绍">
-<meta itemprop="datePublished" content="2018-10-11T08:44:25&#43;08:00" />
+<meta itemprop="description" content="关于 Go mod 的介绍"><meta itemprop="datePublished" content="2018-10-11T08:44:25&#43;08:00" />
 <meta itemprop="dateModified" content="2018-10-11T08:44:25&#43;08:00" />
-<meta itemprop="wordCount" content="795">
-
-
-
-<meta itemprop="keywords" content="Go,mod," /><meta name="twitter:card" content="summary"/>
+<meta itemprop="wordCount" content="1879">
+<meta itemprop="keywords" content="go,gomod," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go mod 说明"/>
 <meta name="twitter:description" content="关于 Go mod 的介绍"/>
 
@@ -136,8 +133,8 @@
       <div class="post-meta">
         <span class="post-time"> 2018-10-11 </span>
         
-          <span class="more-meta"> 约 795 字 </span>
-          <span class="more-meta"> 预计阅读 2 分钟 </span>
+          <span class="more-meta"> 约 1879 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
         
       </div>
     </header>
@@ -149,15 +146,17 @@
   <ul>
     <li>
       <ul>
-        <li><a href="#版本号的说明">版本号的说明</a>
-          <ul>
-            <li><a href="#go-mod-版本管理">Go mod 版本管理</a></li>
-            <li><a href="#主版本升级">主版本升级</a></li>
-            <li><a href="#清除依赖">清除依赖</a></li>
-            <li><a href="#go-mod-和-vendoring">Go mod 和 Vendoring</a></li>
-            <li><a href="#其他说明">其他说明</a></li>
-          </ul>
-        </li>
+        <li><a href="#版本号的说明">版本号的说明</a></li>
+        <li><a href="#go-module-模式下的核心原则">Go Module 模式下的核心原则</a></li>
+        <li><a href="#go-mod-版本管理">Go mod 版本管理</a></li>
+        <li><a href="#主版本升级">主版本升级</a></li>
+        <li><a href="#清除依赖">清除依赖</a></li>
+        <li><a href="#go-mod-和-vendoring">Go mod 和 Vendoring</a></li>
+        <li><a href="#安装位置">安装位置</a></li>
+        <li><a href="#查看依赖">查看依赖</a></li>
+        <li><a href="#关于-incompatible-版本标签的说明">关于 incompatible 版本标签的说明</a></li>
+        <li><a href="#版本选择">版本选择</a></li>
+        <li><a href="#参考链接">参考链接</a></li>
       </ul>
     </li>
   </ul>
@@ -178,7 +177,24 @@
 <li>副版本号的增加表示修改了一些内部实现的逻辑，但是对外提供的接口没有改变</li>
 <li>主版本号的增加表示修改了对外提供的接口，主版本之间是可以不兼容的</li>
 </ul>
-<h3 id="go-mod-版本管理">Go mod 版本管理</h3>
+<h2 id="go-module-模式下的核心原则">Go Module 模式下的核心原则</h2>
+<p>Go Module 模式是指 <code>GO111MODULE=on</code> 时:</p>
+<ol>
+<li>一个包的导入路径定义了该包的唯一标识。
+<ul>
+<li>具有不同导入路径的包被视为不同的包。</li>
+<li>具有相同导入路径的包被视为相同的包（即使 VCS 标签说这些包有不同的主要版本，Go 也认为它们是同一个包）。</li>
+</ul>
+</li>
+<li>没有 <code>/vN</code> 的导入路径被视为v1或v0模块，即使导入的包没有选择加入模块模式(无 go.mod 文件)，并且 VCS 标签显示主版本号大于1，Go 也认为其主版本号是 V0 或 V1。</li>
+<li>在一个模块的 go.mod 文件的开头所声明的模块路径（如模块foo/v2）有两层含义。
+<ul>
+<li>对该模块身份的明确声明</li>
+<li>关于该模块该如何被消费代码导入的正确声明</li>
+</ul>
+</li>
+</ol>
+<h2 id="go-mod-版本管理">Go mod 版本管理</h2>
 <ul>
 <li><strong>注意</strong>: 使用 go mod 进行管理的仓库必须放置在<code>GOPATH</code>外</li>
 <li>Go mod 通过 Git 的标签来标记版本 <code>git tag v1.0.0 &amp;&amp; git push --tags</code></li>
@@ -190,7 +206,7 @@
 <li><code>go get package@version</code>表示安装特定版本的的依赖</li>
 <li>Go会将依赖写在仓库下的<code>go.mod</code>和<code>go.sum</code>文件中</li>
 </ul>
-<h3 id="主版本升级">主版本升级</h3>
+<h2 id="主版本升级">主版本升级</h2>
 <ul>
 <li>当仓库的主版本发生变化时，其导入路径也应该随之改变，具体就是将<code>go.mod</code>中的<code>github.com/user/repo</code>改成<code>github.com/user/repo/v2</code></li>
 </ul>
@@ -210,14 +226,14 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>故当一个仓库需要升级某个依赖的主版本时，其代码导入路径要随之改变。如果依赖的API变了，那么仓库也要进行相应的更改。</p>
-<h3 id="清除依赖">清除依赖</h3>
+<h2 id="清除依赖">清除依赖</h2>
 <p><code>go mod tidy</code>命令可以移除<code>go.mod</code>中不再使用的依赖</p>
-<h3 id="go-mod-和-vendoring">Go mod 和 Vendoring</h3>
+<h2 id="go-mod-和-vendoring">Go mod 和 Vendoring</h2>
 <ul>
 <li>Go 1.12 支持使用<code>go mod verdor</code>命令将依赖安装在仓库的<code>vendor</code>目录下</li>
 <li><code>go build</code>命令会忽略掉<code>vendor</code>目录，<code>go build -mod vendor</code>命令会从当前目录的<code>vendor</code>目录下寻找依赖</li>
 </ul>
-<h3 id="其他说明">其他说明</h3>
+<h2 id="安装位置">安装位置</h2>
 <p>Go 将依赖安装在<code>GOPATH/pkg/mod</code>中，并且依赖的每个版本会分开安装</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -238,7 +254,7 @@
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">&gt;&gt;&gt; tree <span class="nv">$GOPATH</span>/pkg/mod/github.com/bwangelme/                         08:42:57 <span class="o">(</span>10-11<span class="o">)</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh">&gt;&gt;&gt; tree <span class="nv">$GOPATH</span>/pkg/mod/github.com/bwangelme/
 /Users/michaeltsui/go/pkg/mod/github.com/bwangelme/
 ├── testmod
 │   └── v2@v2.0.0
@@ -255,7 +271,50 @@
     └── testmod.go
 </code></pre></td></tr></table>
 </div>
+</div><h2 id="查看依赖">查看依赖</h2>
+<ul>
+<li>查看当前仓库依赖的所有 module</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">go list -m -json all
+</code></pre></td></tr></table>
 </div>
+</div><ul>
+<li>查看 github.com 域名下所有的 module</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">go list -m -json &#39;github.com/...&#39;
+</code></pre></td></tr></table>
+</div>
+</div><p><code>-m</code> 选项让 go list 列出所有的 module 而不是包。在这种模式下，<code>go list</code> 的参数可以是模块或模块模式(包含 <code>...</code> 通配符)，<a href="https://go.dev/ref/mod#version-queries">Version Query</a>，或者特殊模式 <code>all</code>(匹配<a href="https://go.dev/ref/mod#glos-build-list">构建列表</a>中的所有模块)。如果没有指定参数，<a href="https://go.dev/ref/mod#glos-main-module">主模块</a>将被列出。</p>
+<h2 id="关于-incompatible-版本标签的说明">关于 incompatible 版本标签的说明</h2>
+<ul>
+<li>被导入的包没有选择加入 module 模式，无 go.mod 文件</li>
+<li>被导入的包有语义化版本号 VCS 标签，且该标签表示的版本主版本号大于1</li>
+<li>Go Module 核心原则第2点生效，导入路径中没有 <code>/vN</code>，它将被视为 v1 或 v0 模块，VCS 标签不生效</li>
+</ul>
+<p>当 Go 处于 Module 模式时，它将假设一个非 module 模式的 V2+ 版本的包不理解 <code>语义化导入版本控制(Semantic Import Versioning)</code>，从而将其视为该包 V1 版本系列的不兼容扩展。<code>incompatible</code> 后缀即表示该包是一个不兼容 V1 旧版本的 V1 扩展版本。</p>
+<h2 id="版本选择">版本选择</h2>
+<p>如果你在你的代码中添加了一个新的导入，而这个导入还没有被 go.mod 中的 require 指令所覆盖。
+大多数go命令如 <code>go build</code> 和 <code>go test</code> 会自动查找合适的模块，并将这个新的直接依赖的最高版本作为 require 指令添加到你的模块的 go.mod 中。</p>
+<p>例如，如果你的新导入对应的依赖 M 包的最新标签发布版本是v1.2.3，你的模块的 go.mod 中将添加指令 <code>require M v1.2.3</code>，这表明模块 M 是一个允许版本 <code>&gt;= v1.2.3</code> 的依赖关系，并且 <code>&lt; v2</code>，因为v2被认为与v1不兼容。</p>
+<p><code>最小版本选择算法 (Minimal Version Selection Algorithm)</code> 被用来选择在构建中使用的所有模块的版本。对于构建中的每个模块，通过最小版本选择算法所选择的版本总是语义上最高的版本，该版本由主模块或其依赖关系中的 require 指令明确列出。</p>
+<p>例如，主模块依赖模块A，而模块A有一个 require D v1.0.0，主模块也依赖模块B，而模块B有一个 require D v1.1.1，那么最小版本选择算法会选择 D 的 v1.1.1 版本用来包含在构建中（因为它是列出的最高 require 版本）。
+即使后来 D 的 v1.2.0 版本发布了，在构建中仍然会选择 v1.1.1。这是一个模块系统如何提供 100% 可重复构建的例子。
+当准备就绪时，模块作者或用户可以选择升级到D的最新可用版本或为D选择一个明确的版本。</p>
+<h2 id="参考链接">参考链接</h2>
+<ul>
+<li><a href="https://go.dev/ref/mod">https://go.dev/ref/mod</a></li>
+<li><a href="https://github.com/golang/go/wiki/Modules">https://github.com/golang/go/wiki/Modules</a></li>
+</ul>
     </div>
 
     <div class="post-copyright">
@@ -278,8 +337,8 @@
 </div>
 <footer class="post-footer">
       <div class="post-tags">
-          <a href="/tags/go/">Go</a>
-          <a href="/tags/mod/">mod</a>
+          <a href="/tags/go/">go</a>
+          <a href="/tags/gomod/">gomod</a>
           </div>
       <nav class="post-nav">
         <a class="prev" href="/2018/10/18/go-template/">
@@ -357,7 +416,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+<script type="text/javascript" src="/js/main.min.2517c0eb67172a0bae917de4af59b10ca2531411a009d4c0b82f5685259e5771.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
