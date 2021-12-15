@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.83.1 with theme even" />
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
 <link rel="canonical" href="/2018/03/05/mysql-foreign-key/" />
@@ -36,21 +36,24 @@
 
 
 
-<link href="/sass/main.min.39c60e56f66799a405ded646d800f46e1f2ee0e0d6e2ba42f18764adb1c5d14b.css" rel="stylesheet">
+<link href="/sass/main.min.0034ec37b35f91907849c9020141a7e99249c6f2301ee1e34aee09cfe5f9ae2e.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
 <meta property="og:title" content="MySQL 外键分析" />
 <meta property="og:description" content="本文主要介绍了 MySQL 外键的一些特性" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2018/03/05/mysql-foreign-key/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2018-03-05T23:42:44&#43;08:00" />
-<meta property="article:modified_time" content="2018-03-05T23:42:44&#43;08:00" />
-
+<meta property="og:url" content="/2018/03/05/mysql-foreign-key/" />
+<meta property="article:published_time" content="2018-03-05T23:42:44+08:00" />
+<meta property="article:modified_time" content="2018-03-05T23:42:44+08:00" />
 <meta itemprop="name" content="MySQL 外键分析">
-<meta itemprop="description" content="本文主要介绍了 MySQL 外键的一些特性"><meta itemprop="datePublished" content="2018-03-05T23:42:44&#43;08:00" />
+<meta itemprop="description" content="本文主要介绍了 MySQL 外键的一些特性">
+<meta itemprop="datePublished" content="2018-03-05T23:42:44&#43;08:00" />
 <meta itemprop="dateModified" content="2018-03-05T23:42:44&#43;08:00" />
-<meta itemprop="wordCount" content="805">
+<meta itemprop="wordCount" content="861">
+
+
+
 <meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySQL 外键分析"/>
 <meta name="twitter:description" content="本文主要介绍了 MySQL 外键的一些特性"/>
@@ -133,7 +136,7 @@
       <div class="post-meta">
         <span class="post-time"> 2018-03-05 </span>
         
-          <span class="more-meta"> 约 805 字 </span>
+          <span class="more-meta"> 约 861 字 </span>
           <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
@@ -171,12 +174,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="p">[</span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="p">[</span><span class="n">symbol</span><span class="p">]]</span><span class="w"> </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">[</span><span class="n">index_name</span><span class="p">]</span><span class="w"> </span><span class="p">(</span><span class="n">index_col_name</span><span class="p">,...)</span><span class="w">
-</span><span class="w"></span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">tbl_name</span><span class="w"> </span><span class="p">(</span><span class="n">index_col_name</span><span class="p">,...)</span><span class="w">
-</span><span class="w">  </span><span class="p">[</span><span class="k">MATCH</span><span class="w"> </span><span class="k">FULL</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">MATCH</span><span class="w"> </span><span class="k">PARTIAL</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">MATCH</span><span class="w"> </span><span class="k">SIMPLE</span><span class="p">]</span><span class="w">
-</span><span class="w">  </span><span class="p">[</span><span class="k">ON</span><span class="w"> </span><span class="k">DELETE</span><span class="w"> </span><span class="k">RESTRICT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">CASCADE</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">NO</span><span class="w"> </span><span class="n">ACTION</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">DEFAULT</span><span class="p">]</span><span class="w">
-</span><span class="w">  </span><span class="p">[</span><span class="k">ON</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="k">RESTRICT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">CASCADE</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">NO</span><span class="w"> </span><span class="n">ACTION</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">DEFAULT</span><span class="p">]</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="p">[</span><span class="k">CONSTRAINT</span> <span class="p">[</span><span class="n">symbol</span><span class="p">]]</span> <span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="p">[</span><span class="n">index_name</span><span class="p">]</span> <span class="p">(</span><span class="n">index_col_name</span><span class="p">,...)</span>
+<span class="k">REFERENCES</span> <span class="n">tbl_name</span> <span class="p">(</span><span class="n">index_col_name</span><span class="p">,...)</span>
+  <span class="p">[</span><span class="k">MATCH</span> <span class="k">FULL</span> <span class="o">|</span> <span class="k">MATCH</span> <span class="k">PARTIAL</span> <span class="o">|</span> <span class="k">MATCH</span> <span class="k">SIMPLE</span><span class="p">]</span>
+  <span class="p">[</span><span class="k">ON</span> <span class="k">DELETE</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">CASCADE</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">DEFAULT</span><span class="p">]</span>
+  <span class="p">[</span><span class="k">ON</span> <span class="k">UPDATE</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">CASCADE</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">DEFAULT</span><span class="p">]</span>
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="reference-option">REFERENCE OPTION</h2>
 <p>一般来说，将被引用的表称为父表，将引用的表称为子表。当我们创建外键约束时，可以使用<code>ON UPDATE</code>和<code>ON DELETE</code>定义当父表发生<code>UPDATE</code>或者<code>DELETE</code>时，对子表做的操作。</p>
@@ -199,10 +202,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">foreign_key_checks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">
-</span><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">LOAD</span><span class="w"> </span><span class="k">DATA</span><span class="p">...</span><span class="w">
-</span><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">foreign_key_checks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">set</span> <span class="n">foreign_key_checks</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">LOAD</span> <span class="k">DATA</span><span class="p">...</span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">set</span> <span class="n">foreign_key_checks</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="参考资料">参考资料</h2>
 <ol>
@@ -311,7 +314,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.2517c0eb67172a0bae917de4af59b10ca2531411a009d4c0b82f5685259e5771.js"></script>
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

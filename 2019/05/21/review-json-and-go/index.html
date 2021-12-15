@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.83.1 with theme even" />
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
 <link rel="canonical" href="/2019/05/21/review-json-and-go/" />
@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.39c60e56f66799a405ded646d800f46e1f2ee0e0d6e2ba42f18764adb1c5d14b.css" rel="stylesheet">
+<link href="/sass/main.min.0034ec37b35f91907849c9020141a7e99249c6f2301ee1e34aee09cfe5f9ae2e.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -46,18 +46,21 @@
 
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2019/05/21/review-json-and-go/" /><meta property="article:section" content="translate" />
-<meta property="article:published_time" content="2019-05-21T21:40:40&#43;08:00" />
-<meta property="article:modified_time" content="2019-05-21T21:40:40&#43;08:00" />
-
+<meta property="og:url" content="/2019/05/21/review-json-and-go/" />
+<meta property="article:published_time" content="2019-05-21T21:40:40+08:00" />
+<meta property="article:modified_time" content="2019-05-21T21:40:40+08:00" />
 <meta itemprop="name" content="Review 《JSON and Go》">
 <meta itemprop="description" content="
 
 原文地址: https://blog.golang.org/json-and-go
 
-"><meta itemprop="datePublished" content="2019-05-21T21:40:40&#43;08:00" />
+">
+<meta itemprop="datePublished" content="2019-05-21T21:40:40&#43;08:00" />
 <meta itemprop="dateModified" content="2019-05-21T21:40:40&#43;08:00" />
-<meta itemprop="wordCount" content="6073">
+<meta itemprop="wordCount" content="6066">
+
+
+
 <meta itemprop="keywords" content="翻译,Go,JSON," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Review 《JSON and Go》"/>
 <meta name="twitter:description" content="
@@ -144,7 +147,7 @@
       <div class="post-meta">
         <span class="post-time"> 2019-05-21 </span>
         
-          <span class="more-meta"> 约 6073 字 </span>
+          <span class="more-meta"> 约 6066 字 </span>
           <span class="more-meta"> 预计阅读 13 分钟 </span>
         
       </div>
@@ -160,7 +163,7 @@
         <li><a href="#引言">引言</a></li>
         <li><a href="#encoding">Encoding</a></li>
         <li><a href="#decoding">Decoding</a></li>
-        <li><a href="#使用-interface-解析-json-的通用方法">使用 interface{} 解析 JSON 的通用方法</a></li>
+        <li><a href="#使用-interface">使用 interface</a></li>
         <li><a href="#解码任意数据">解码任意数据</a></li>
         <li><a href="#引用类型">引用类型</a></li>
         <li><a href="#流式编码和解码">流式编码和解码</a></li>
@@ -383,7 +386,7 @@
 </div><p><code>Unmarshal</code>仅仅会解码那些在目标变量中能够找到的字段。在上述的代码例子中，只有符合<code>m</code>的字段名才会被解码出来，<code>Food</code>字段将会被忽略。
 这个特性可以让你在处理大的 JSON 对象的时候，仅仅解析出想要的字段。同时，这也意味着目标结构体变量中 <strong>未导出字段</strong> 的值将不会受到<code>Unmarshal</code>的影响</p>
 <p>但如果你在处理 JSON 对象的时候不知道其内部结构，这应该如何处理呢？</p>
-<h2 id="使用-interface-解析-json-的通用方法">使用 interface{} 解析 JSON 的通用方法</h2>
+<h2 id="使用-interface">使用 interface</h2>
 <p>空接口类型(<code>interface{}</code>)描述了一个拥有零个方法的类型。每个 Go 类型都至少实现了零个方法所以他们都满足空接口的定义。</p>
 <p>空接口类型表现起来就像一个通用的容器类型一样:</p>
 <div class="highlight"><div class="chroma">
@@ -838,7 +841,7 @@
 </div><p>结构体值将会变成编码后的 JSON 对象，每个导出的结构体字段都会变成对象的一个成员，使用字段名作为对象的 key ，除非字段由于以下的某个原因被省略了。</p>
 <p>结构体字段的编码可以使用存储在结构体字段标签下的&quot;json&quot;键格式化字符串来自定义。格式化字符串给定了字段的名称，可选的由逗号分隔的编码选项。为了指定选项，不覆盖默认的名字，格式化字符串的名字可能是空的。</p>
 <p>&ldquo;omitempty&quot;选项表示在编码的时候，如果该字段的值为空的话，改字段将会被忽略。<code>false</code>，0，空指针，空接口值，还有空数组，切片，map和字符串都会被认为是空值。</p>
-<p>还有一个特殊的例子，如果字段标签是&rdquo;-&quot;，这个字段将总会被忽略。注意如果想指定字段名为&quot;-&ldquo;的话，可以使用&rdquo;-,&ldquo;的形式。</p>
+<p>还有一个特殊的例子，如果字段标签是&rdquo;-&quot;，这个字段将总会被忽略。注意如果想指定字段名为&rdquo;-&ldquo;的话，可以使用&rdquo;-,&ldquo;的形式。</p>
 <ul>
 <li>编码标签的示例代码:</li>
 </ul>
@@ -1323,7 +1326,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.2517c0eb67172a0bae917de4af59b10ca2531411a009d4c0b82f5685259e5771.js"></script>
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
