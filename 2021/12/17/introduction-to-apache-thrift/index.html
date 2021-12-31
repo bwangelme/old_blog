@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Review 《Chapter 1. Introduction to Apache Thrift》 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="  原文地址: https://livebook.manning.com/book/programmers-guide-to-apache-thrift/chapter-1/  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
+
+
+<link rel="canonical" href="/2021/12/17/introduction-to-apache-thrift/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.0034ec37b35f91907849c9020141a7e99249c6f2301ee1e34aee09cfe5f9ae2e.css" rel="stylesheet">
+<link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
+
+
+<meta property="og:title" content="Review 《Chapter 1. Introduction to Apache Thrift》" />
+<meta property="og:description" content="
+
+原文地址: https://livebook.manning.com/book/programmers-guide-to-apache-thrift/chapter-1/
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2021/12/17/introduction-to-apache-thrift/" />
+<meta property="article:published_time" content="2021-12-17T14:38:59+08:00" />
+<meta property="article:modified_time" content="2021-12-17T14:38:59+08:00" />
+<meta itemprop="name" content="Review 《Chapter 1. Introduction to Apache Thrift》">
+<meta itemprop="description" content="
+
+原文地址: https://livebook.manning.com/book/programmers-guide-to-apache-thrift/chapter-1/
+
+">
+<meta itemprop="datePublished" content="2021-12-17T14:38:59&#43;08:00" />
+<meta itemprop="dateModified" content="2021-12-17T14:38:59&#43;08:00" />
+<meta itemprop="wordCount" content="2087">
+
+
+
+<meta itemprop="keywords" content="翻译,Go," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Review 《Chapter 1. Introduction to Apache Thrift》"/>
+<meta name="twitter:description" content="
+
+原文地址: https://livebook.manning.com/book/programmers-guide-to-apache-thrift/chapter-1/
+
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/tips/">
+        <li class="mobile-menu-item">Tips</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tips/">Tips</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Review 《Chapter 1. Introduction to Apache Thrift》</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-12-17 </span>
+        
+          <span class="more-meta"> 约 2087 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#12-与apache-thrift的应用集成">1.2. 与Apache Thrift的应用集成</a>
+          <ul>
+            <li><a href="#121-类型序列化">1.2.1 类型序列化</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<ul>
+<li>原文地址: <a href="https://livebook.manning.com/book/programmers-guide-to-apache-thrift/chapter-1/">https://livebook.manning.com/book/programmers-guide-to-apache-thrift/chapter-1/</a></li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="12-与apache-thrift的应用集成">1.2. 与Apache Thrift的应用集成</h2>
+<p>无论你的应用程序是否使用多平台和语言，它的操作很可能基于网络和时间跨越多个进程。有时，这些进程需要通过磁盘上的文件，内存中的缓冲区，或者网络进行通信。和 IPC (Interprocess communication) 相关的两个核心概念是:</p>
+<ol>
+<li>类型序列化</li>
+<li>服务实现</li>
+</ol>
+<p>让我们依次来考虑这两个问题。</p>
+<h3 id="121-类型序列化">1.2.1 类型序列化</h3>
+<p>序列化是任何跨平台/语言通信的基本功能。例如，想象一下一个音乐行业应用程序，使用 NATS 作为消息系统，在进程之间移动歌曲数据。使用 NATS，该团队可以在他们用 Java 或 Python 编写的远程进程之间快速发送/接收消息。问题是，当歌曲信息在进程之间传递时，程序能读懂另一个进程发送的信息吗？Python 对象和 Java 对象在内存中的表示方式不同。如果 Python 进程发送音乐轨道数据的原始内存信息，就会出现问题。</p>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com//2021-12-17-145118.png" alt=""></p>
+<p>为了解决这个问题，我们需要在信息传输平台上创建一个数据序列化层。有人可能会问，为什么不用 JSON 的形式来回发送一切呢？使用标准格式(例如 JSON) 可能是解决方案的一部分; 然而，我们仍必须回答这样的问题：</p>
+<p>当发送多字段消息时，数据字段如何排序？ 当字段缺失时，会发生什么？一个不直接支持某种数据类型的语言在接收该数据类型的时，会做些什么？这些以及其他的问题，JSON, YAML 或 XML 等数据布局规范都无法解决。对于同一个数据集，不同语言经常产生不同但合法的格式。</p>
+<ul>
+<li><strong>IDL and Types</strong></li>
+</ul>
+<p>Apache Thrift提供了一个模块化的序列化框架来解决这些问题。
+通过Apache Thrift，开发者在接口定义语言（IDL）中定义抽象数据类型。 然后这个IDL可以被编译成任何支持的语言的源代码。 生成的代码为用户定义的所有类型提供完整的序列化和反序列化逻辑。
+Apache Thrift确保任何语言编写的类型都可以被任何其他语言读取。下面的代码显示了一个假设的音乐应用程序的Apache Thrift IDL 类型定义。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">namespace * music
+
+enum PerfRightsOrg {
+    ASCAP = 1
+    BMI = 2
+    SESAC = 3
+    Other = 4
+}
+
+typedef double Minutes
+
+struct MusicTrack {
+    1: string title
+    2: string artist
+    3: string publisher
+    4: string composer
+    5: Minutes duration
+    6: PerfRightsOrg pro
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>有人抱怨说创建 IDL 是一个额外的步骤，减缓了开发进程。我发现恰恰相反。IDL 强迫你独立地小心考虑你的接口设计，而无需关心嘈杂的实现代码。这可能是你花在系统设计上最终要的时间。IDL 也是轻量级，易于修改和实验，并经常作为业务方面的通信工具而发挥作用。</p>
+<p>用户可能会说无模式的系统更加灵活，而 IDL 很坚硬。事实上是，无论你是否记录了你的模式，当你读取和解释数据的时候，你都会需要一个模式。隐含模式会是非常危险的线上错误的来源，而且会给想要操作数据或扩展系统的人造成负担。</p>
+<p>如果，除了读取和写入的代码，除此之外你对你读写的数据没有任何定义。当你想扩展系统的时候进展就会很缓慢。整个系统有多少代码依赖于这样的隐含模式？你如何改变这样一个东西？</p>
+<p>许多无模式的 NoSQL 系统的流行，为 IDL 创造了另外一个角色。你现在可以在一个地方记录你的类型，并在使用消息系统和 NoSQL 存储系统(Redis, MongoDB 或其他 NoSQL 系统)的服务调用中使用这些类型。</p>
+<p>有几个系统反其道而行之，从一个给定的编码方案中生成它们的模式。注释驱动的系统，如Java的JAX-RS，就以这种方式工作。这种方法很容易让实现细节影响接口定义，使可移植性和清晰性受到限制。一般来说，修改实现代码要比修改IDL的工作量大得多。另外，你不能保证另一个供应商的代码生成器会从一个外部模式中创建兼容的代码。当多个供应商参与到一个通信解决方案中时，这就是一个问题。</p>
+<p>Apache Thrift通过提供唯一定义 Schema 来源，即 IDL ，避免了许多这些问题。Apache Thrift提供了独立于供应商的支持，在广泛的编程语言中使用单一的IDL，并且Apache Thrift的跨语言测试套装随着框架的发展不断地验证互操作性。</p>
+<ul>
+<li><strong>Interface evolution (接口演变)</strong></li>
+</ul>
+<p>IDL 创建了一个各方都可以依赖的契约，代码生成器可以用来创建工作的序列化操作，确保契约得到遵守。然而，IDL模式不需要很脆(brittle)。Apache Thrift IDL支持一系列的接口演化功能，如果使用得当，允许添加和删除字段，改变类型，等等。</p>
+<p>对接口进化的支持大大简化了持续的软件维护和扩展的任务。现代工程意识，如微服务、持续集成（CI）和持续交付（CD）要求系统支持增量改进，而不影响平台的其他部分。那些不提供接口进化形式的工具，在改变时往往会 &ldquo;破坏世界&rdquo;。在这样的系统中，改变接口意味着所有使用该接口的客户端和服务器必须重写或重新编译，然后在大爆炸中重新部署。</p>
+<p>Apache Thrift的接口进化功能允许多个接口版本在一个操作环境中无缝共存。这使得增量更新成为可能，使CI/CD管道成为可能，并使各个敏捷团队能够以他们自己的节奏交付商业价值。</p>
+<ul>
+<li><strong>Modular serialization</strong></li>
+</ul>
+<p>Apache Thrift提供了可插拔的序列化器，被称为协议，允许你使用几种序列化格式中的任何一种进行数据交换，包括 Binary (速度快)，compact(体积小)，以及JSON(可读性好)。即使你改变了序列化协议，同样的契约（IDL）也可以保持原样。这种模块化的方法也允许添加自定义的序列化协议。由于Apache Thrift是社区管理和开源的，你可以很容易地改变或增强功能，并在需要时向上游推送（Apache Thrift项目始终欢迎补丁）。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-12-17
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E7%BF%BB%E8%AF%91/">翻译</a>
+          <a href="/tags/go/">Go</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2021/12/17/2-apache-thrift-architecture/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Review 《Chapter 2. Apache Thrift architecture》</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2021/11/30/file-descriptor-transfer-over-unix-domain-sockets/">
+            <span class="next-text nav-default">Review 《File Descriptor Transfer over Unix Domain Sockets》</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+    <script src="https://utteranc.es/client.js"
+            repo="anotherbwangel/blog-comment"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.2.1/jquery.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/slideout/1.0.1/slideout.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.js" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>
