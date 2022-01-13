@@ -16,7 +16,7 @@ weight: 40
 
 ## 友链
 
-+ [SMSLIT](https://www.smslit.top/): 江湖无名，专心练剑！
++ [SMSLIT](https://blog.smslit.cn/): 江湖无名，专心练剑！
 
 ## Blog Logs
 
