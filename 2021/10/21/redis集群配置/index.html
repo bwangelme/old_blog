@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.0034ec37b35f91907849c9020141a7e99249c6f2301ee1e34aee09cfe5f9ae2e.css" rel="stylesheet">
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -96,12 +96,21 @@
         <li class="mobile-menu-item">关于</li>
       </a>
   </ul>
+
+  
+
+
 </nav>
+
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
   <a href="/" class="logo">Keep Foolish</a>
 </div>
+
+
+
+
 
 <nav class="site-navbar">
   <ul id="menu" class="menu">
@@ -122,44 +131,15 @@
       </li>
   </ul>
 </nav>
+
     </header>
 
     <main id="main" class="main">
       <div class="content-wrapper">
         <div id="content" class="content">
           <article class="post">
-    
-    <header class="post-header">
-      <h1 class="post-title">Redis 集群简介</h1>
-
-      <div class="post-meta">
-        <span class="post-time"> 2021-10-21 </span>
-        
-          <span class="more-meta"> 约 585 字 </span>
-          <span class="more-meta"> 预计阅读 2 分钟 </span>
-        
-      </div>
-    </header>
-
-    <div class="post-toc" id="post-toc">
-  <h2 class="post-toc-title">文章目录</h2>
-  <div class="post-toc-content">
-    <nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#为什么要有-redis-集群">为什么要有 Redis 集群</a></li>
-        <li><a href="#redis-集群是为了解决什么问题">Redis 集群是为了解决什么问题</a></li>
-        <li><a href="#redis-replication-是如何工作的">Redis Replication 是如何工作的</a></li>
-        <li><a href="#redis-集群数据备份的配置">Redis 集群数据备份的配置</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-  </div>
-</div>
-    <div class="post-content">
-      <hr>
+  <div class="post-content">
+    <hr>
 <h2 id="为什么要有-redis-集群">为什么要有 Redis 集群</h2>
 <p>redis 单机最多只能支持 1万 到 几万不等的 QPS (根据操作的不同 serve 能力也不同)。如果我们想要支撑更高的 QPS，就需要配置 Redis 集群。</p>
 <h2 id="redis-集群是为了解决什么问题">Redis 集群是为了解决什么问题</h2>
@@ -178,45 +158,8 @@
 <p>Redis 集群做持久化的时候，需要配置 Master 节点的持久化。因为以下原因：</p>
 <p>假设我们配置了 Slave 节点的持久化，而没有配置 Master 节点。当 Master 节点宕机重启后，它会直接认为自己的数据是空的，同时将这个状态同步到 Slave，从而导致集群的数据消失。</p>
 <p>尽管 Master 挂掉以后，Sentinel 会切换 Master，但这有时间成本，如果在 Sentinel 发现之前 Master 就重启了，一样会造成数据丢失。</p>
-    </div>
-
-    <div class="post-copyright">
-  <p class="copyright-item">
-    <span class="item-title">文章作者</span>
-    <span class="item-content">bwangel</span>
-  </p>
-  <p class="copyright-item">
-    <span class="item-title">上次更新</span>
-    <span class="item-content">
-        2021-10-21
-        
-    </span>
-  </p>
-  
-  <p class="copyright-item">
-    <span class="item-title">许可协议</span>
-    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
-  </p>
-</div>
-<footer class="post-footer">
-      <div class="post-tags">
-          <a href="/tags/tips/">tips</a>
-          <a href="/tags/redis/">redis</a>
-          </div>
-      <nav class="post-nav">
-        <a class="prev" href="/2021/10/22/redis%E5%A4%87%E4%BB%BD%E6%9C%BA%E5%88%B6/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">Redis 备份机制</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
-        <a class="next" href="/2021/10/19/go-array-and-nil/">
-            <span class="next-text nav-default">Golang 中空数组是否是 nil</span>
-            <span class="next-text nav-mobile">下一篇</span>
-            <i class="iconfont icon-right"></i>
-          </a>
-      </nav>
-    </footer>
-  </article>
+  </div>
+</article>
         </div>
         
 
@@ -231,6 +174,7 @@
             async>
     </script>
     <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
       </div>
     </main>
 
@@ -259,13 +203,10 @@
   <span class="copyright-year">
     &copy; 
     2016 - 
-    2021
-    <span class="heart">
-      <i class="iconfont icon-heart"></i>
-    </span>
-    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span><a href='https://bwangel.me/about'>bwangel</a></span>
   </span>
 </div>
+
     </footer>
 
     <div class="back-to-top" id="back-to-top">
@@ -279,16 +220,16 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
   <script type="text/javascript">
     window.MathJax = {
-      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
-      TeX: {equationNumbers: {autoNumber: "AMS"}},
-      showProcessingMessages: false,
-      messageStyle: 'none'
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
     };
   </script>
-  <script src="https://cdn.bootcdn.net/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
 
 <script id="baidu_analytics">
   var _hmt = _hmt || [];
