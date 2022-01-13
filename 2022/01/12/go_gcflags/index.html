@@ -54,7 +54,7 @@ Go 链接选项和编译选项的说明
 ">
 <meta itemprop="datePublished" content="2022-01-12T17:56:10&#43;08:00" />
 <meta itemprop="dateModified" content="2022-01-12T17:56:10&#43;08:00" />
-<meta itemprop="wordCount" content="515">
+<meta itemprop="wordCount" content="545">
 
 
 
@@ -152,7 +152,7 @@ Go 链接选项和编译选项的说明
       <div class="post-meta">
         <span class="post-time"> 2022-01-12 </span>
         
-          <span class="more-meta"> 约 515 字 </span>
+          <span class="more-meta"> 约 545 字 </span>
           <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
@@ -169,6 +169,7 @@ Go 链接选项和编译选项的说明
           <ul>
             <li><a href="#pattern">pattern</a></li>
             <li><a href="#arg-list">arg list</a></li>
+            <li><a href="#举例">举例</a></li>
           </ul>
         </li>
         <li><a href="#链接选项">链接选项</a></li>
@@ -185,13 +186,13 @@ Go 链接选项和编译选项的说明
 </blockquote>
 <hr>
 <h2 id="编译选项">编译选项</h2>
-<p>go build 时可以使用 <code>-gcflags</code> 指定编译选项，gcflags 参数的格式是</p>
+<p>go build 时可以使用 <code>-gcflags</code> 指定编译选项，<code>-gcflags</code> 参数的格式是</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">pattern=arg list
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">-gcflags=&#34;pattern=arg list&#34;
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="pattern">pattern</h3>
@@ -222,7 +223,18 @@ Go 链接选项和编译选项的说明
 <li><code>-c int</code>: 编译过程中的并发数，默认是1</li>
 </ul>
 <p>更多编译选项请参考 <code>go tool compile --help</code></p>
-<h2 id="链接选项">链接选项</h2>
+<h3 id="举例">举例</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 为当前模块下的所有包关闭编译优化和内联</span>
+go build -gcflags<span class="o">=</span><span class="s2">&#34;all=-N -l&#34;</span> .
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="链接选项">链接选项</h2>
 <p><code>-ldflags</code> 可以设置链接选项</p>
 <ul>
 <li><code>-w</code> 不生成 DWARF 调试信息</li>
