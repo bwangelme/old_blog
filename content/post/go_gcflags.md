@@ -8,7 +8,7 @@ author: "bwangel"
 comment: true
 ---
 
-Go 链接选项和编译选项的说明
+> Go 链接选项和编译选项的说明
 
 <!--more-->
 
