@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.83.1 with theme even" />
 
 
 <link rel="canonical" href="/2018/01/30/innodb-row/" />
@@ -36,24 +36,21 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
 <meta property="og:title" content="InnoDB 行记录格式" />
 <meta property="og:description" content="简介: 本文主要讲述了 InnoDB 的行如何在数据文件中进行存储的，同时简单分析了 InnoDB 的逻辑存储结构" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2018/01/30/innodb-row/" />
-<meta property="article:published_time" content="2018-01-30T12:51:59+08:00" />
-<meta property="article:modified_time" content="2018-01-30T12:51:59+08:00" />
+<meta property="og:url" content="/2018/01/30/innodb-row/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2018-01-30T12:51:59&#43;08:00" />
+<meta property="article:modified_time" content="2018-01-30T12:51:59&#43;08:00" />
+
 <meta itemprop="name" content="InnoDB 行记录格式">
-<meta itemprop="description" content="简介: 本文主要讲述了 InnoDB 的行如何在数据文件中进行存储的，同时简单分析了 InnoDB 的逻辑存储结构">
-<meta itemprop="datePublished" content="2018-01-30T12:51:59&#43;08:00" />
+<meta itemprop="description" content="简介: 本文主要讲述了 InnoDB 的行如何在数据文件中进行存储的，同时简单分析了 InnoDB 的逻辑存储结构"><meta itemprop="datePublished" content="2018-01-30T12:51:59&#43;08:00" />
 <meta itemprop="dateModified" content="2018-01-30T12:51:59&#43;08:00" />
-<meta itemprop="wordCount" content="1796">
-
-
-
+<meta itemprop="wordCount" content="1976">
 <meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="InnoDB 行记录格式"/>
 <meta name="twitter:description" content="简介: 本文主要讲述了 InnoDB 的行如何在数据文件中进行存储的，同时简单分析了 InnoDB 的逻辑存储结构"/>
@@ -146,7 +143,7 @@
       <div class="post-meta">
         <span class="post-time"> 2018-01-30 </span>
         
-          <span class="more-meta"> 约 1796 字 </span>
+          <span class="more-meta"> 约 1976 字 </span>
           <span class="more-meta"> 预计阅读 4 分钟 </span>
         
       </div>
@@ -276,10 +273,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">test_char</span><span class="p">(</span>
-    <span class="o">-&gt;</span> <span class="n">c1</span> <span class="nb">char</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-    <span class="o">-&gt;</span> <span class="p">)</span><span class="n">charset</span><span class="o">=</span><span class="s1">&#39;gbk&#39;</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">test_char</span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">c1</span><span class="w"> </span><span class="nb">char</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w">
+</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">)</span><span class="n">charset</span><span class="o">=</span><span class="s1">&#39;gbk&#39;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>然后向其中插入数据，并查看其中的数据:</p>
 <div class="highlight"><div class="chroma">
@@ -296,16 +293,16 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">insert</span> <span class="k">into</span> <span class="n">test_char</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;我们&#39;</span><span class="p">);</span>
-<span class="k">insert</span> <span class="k">into</span> <span class="n">test_char</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;abc&#39;</span><span class="p">);</span>
-
-<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="k">length</span><span class="p">(</span><span class="n">c1</span><span class="p">),</span> <span class="k">character_length</span><span class="p">(</span><span class="n">c1</span><span class="p">),</span> <span class="n">c1</span> <span class="k">from</span> <span class="n">test_char</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">------------+----------------------+--------+
-</span><span class="c1"></span><span class="o">|</span> <span class="k">length</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span> <span class="o">|</span> <span class="k">character_length</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span> <span class="o">|</span> <span class="n">c1</span>     <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+----------------------+--------+
-</span><span class="c1"></span><span class="o">|</span>          <span class="mi">3</span> <span class="o">|</span>                    <span class="mi">3</span> <span class="o">|</span> <span class="n">abc</span>    <span class="o">|</span>
-<span class="o">|</span>          <span class="mi">6</span> <span class="o">|</span>                    <span class="mi">3</span> <span class="o">|</span> <span class="err">我们</span>    <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+----------------------+--------+
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">test_char</span><span class="w"> </span><span class="k">values</span><span class="p">(</span><span class="s1">&#39;我们&#39;</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">test_char</span><span class="w"> </span><span class="k">values</span><span class="p">(</span><span class="s1">&#39;abc&#39;</span><span class="p">);</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="k">length</span><span class="p">(</span><span class="n">c1</span><span class="p">),</span><span class="w"> </span><span class="k">character_length</span><span class="p">(</span><span class="n">c1</span><span class="p">),</span><span class="w"> </span><span class="n">c1</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">test_char</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">------------+----------------------+--------+
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="k">length</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">character_length</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">c1</span><span class="w">     </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">------------+----------------------+--------+
+</span><span class="c1"></span><span class="o">|</span><span class="w">          </span><span class="mi">3</span><span class="w"> </span><span class="o">|</span><span class="w">                    </span><span class="mi">3</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">abc</span><span class="w">    </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w">          </span><span class="mi">6</span><span class="w"> </span><span class="o">|</span><span class="w">                    </span><span class="mi">3</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="err">我们</span><span class="w">    </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">------------+----------------------+--------+
 </span></code></pre></td></tr></table>
 </div>
 </div><p>我们可以看到，<code>我们</code>和<code>abc</code>的字符长度都是3，但是它们的字节长度是不同的。这也就意味着，在数据文件中存储的时候，<code>char</code>类型的字段也是被当做变长字段来存储的。</p>
@@ -373,7 +370,7 @@
 </tr>
 <tr>
 <td>e6 88 91 e4 BB AC</td>
-<td>列数据字符串'我们&rsquo;</td>
+<td>列数据字符串&rsquo;我们'</td>
 </tr>
 </tbody>
 </table>
@@ -414,7 +411,7 @@
 </tr>
 <tr>
 <td>61 62 63 20</td>
-<td>列数据字符串&rsquo;abc&rsquo;，另外加上补全4字符的空格</td>
+<td>列数据字符串&rsquo;abc'，另外加上补全4字符的空格</td>
 </tr>
 </tbody>
 </table>
@@ -518,7 +515,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.83.1 with theme even" />
 
 
 <link rel="canonical" href="/2016/04/10/mysql%E8%A7%86%E5%9B%BE/" />
@@ -37,7 +37,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -47,20 +47,17 @@
 这是一篇关于MySQL的文章，主要介绍MySQL视图
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2016/04/10/mysql%E8%A7%86%E5%9B%BE/" />
-<meta property="article:published_time" content="2016-04-10T10:56:54+00:00" />
-<meta property="article:modified_time" content="2016-04-10T10:56:54+00:00" />
+<meta property="og:url" content="/2016/04/10/mysql%E8%A7%86%E5%9B%BE/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2016-04-10T10:56:54&#43;00:00" />
+<meta property="article:modified_time" content="2016-04-10T10:56:54&#43;00:00" />
+
 <meta itemprop="name" content="MySQL视图">
 <meta itemprop="description" content="摘要:
 
 这是一篇关于MySQL的文章，主要介绍MySQL视图
-">
-<meta itemprop="datePublished" content="2016-04-10T10:56:54&#43;00:00" />
+"><meta itemprop="datePublished" content="2016-04-10T10:56:54&#43;00:00" />
 <meta itemprop="dateModified" content="2016-04-10T10:56:54&#43;00:00" />
-<meta itemprop="wordCount" content="468">
-
-
-
+<meta itemprop="wordCount" content="836">
 <meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySQL视图"/>
 <meta name="twitter:description" content="摘要:
@@ -156,8 +153,8 @@
       <div class="post-meta">
         <span class="post-time"> 2016-04-10 </span>
         
-          <span class="more-meta"> 约 468 字 </span>
-          <span class="more-meta"> 预计阅读 1 分钟 </span>
+          <span class="more-meta"> 约 836 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
     </header>
@@ -196,12 +193,12 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="p">[</span><span class="n">ALGORITHM</span> <span class="o">=</span> <span class="err">{</span><span class="n">UNDEFINED</span><span class="o">|</span><span class="n">MERGE</span><span class="o">|</span><span class="n">TEMPTABLE</span><span class="err">}</span><span class="p">]</span>
-  <span class="k">view</span> <span class="err">视图名</span><span class="p">[(</span><span class="err">字段</span><span class="mi">1</span><span class="err">，字段</span><span class="mi">2</span><span class="p">)]</span>
-  <span class="k">as</span> <span class="k">select</span> <span class="err">语句</span>
-  <span class="p">[</span><span class="k">with</span> <span class="p">[</span><span class="k">CASCADED</span><span class="o">|</span><span class="k">LOCAL</span><span class="o">|</span><span class="p">]</span> <span class="k">CHECK</span> <span class="k">OPTION</span><span class="p">]</span>
-
-  <span class="c1">--CHECK OPTION约束虚表的操作
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="p">[</span><span class="n">ALGORITHM</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{</span><span class="n">UNDEFINED</span><span class="o">|</span><span class="n">MERGE</span><span class="o">|</span><span class="n">TEMPTABLE</span><span class="err">}</span><span class="p">]</span><span class="w">
+</span><span class="w">  </span><span class="k">view</span><span class="w"> </span><span class="err">视图名</span><span class="p">[(</span><span class="err">字段</span><span class="mi">1</span><span class="err">，字段</span><span class="mi">2</span><span class="p">)]</span><span class="w">
+</span><span class="w">  </span><span class="k">as</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="err">语句</span><span class="w">
+</span><span class="w">  </span><span class="p">[</span><span class="k">with</span><span class="w"> </span><span class="p">[</span><span class="k">CASCADED</span><span class="o">|</span><span class="k">LOCAL</span><span class="o">|</span><span class="p">]</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="k">OPTION</span><span class="p">]</span><span class="w">
+</span><span class="w">
+</span><span class="w">  </span><span class="c1">--CHECK OPTION约束虚表的操作
 </span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
@@ -210,9 +207,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">view</span> <span class="err">视图名</span>
-  <span class="k">as</span> <span class="k">select</span> <span class="err">语句</span>
-</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span><span class="w"> </span><span class="k">view</span><span class="w"> </span><span class="err">视图名</span><span class="w">
+</span><span class="w">  </span><span class="k">as</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="err">语句</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>建议用一个单独的数据库来存放视图</p>
 <p>##3. 查看视图</p>
@@ -244,30 +241,30 @@
 </span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span> <span class="k">table</span> <span class="n">status</span> <span class="k">from</span> <span class="err">数据库名字\</span><span class="k">G</span>
-
-<span class="o">***************************</span> <span class="mi">1</span><span class="p">.</span> <span class="k">row</span> <span class="o">***************************</span>
-           <span class="n">Name</span><span class="p">:</span> <span class="n">view_user</span>
-         <span class="n">Engine</span><span class="p">:</span> <span class="k">NULL</span>
-        <span class="k">Version</span><span class="p">:</span> <span class="k">NULL</span>
-     <span class="n">Row_format</span><span class="p">:</span> <span class="k">NULL</span>
-           <span class="k">Rows</span><span class="p">:</span> <span class="k">NULL</span>
- <span class="n">Avg_row_length</span><span class="p">:</span> <span class="k">NULL</span>
-    <span class="n">Data_length</span><span class="p">:</span> <span class="k">NULL</span>
-<span class="n">Max_data_length</span><span class="p">:</span> <span class="k">NULL</span>
-   <span class="n">Index_length</span><span class="p">:</span> <span class="k">NULL</span>
-      <span class="n">Data_free</span><span class="p">:</span> <span class="k">NULL</span>
- <span class="n">Auto_increment</span><span class="p">:</span> <span class="k">NULL</span>
-    <span class="n">Create_time</span><span class="p">:</span> <span class="k">NULL</span>
-    <span class="n">Update_time</span><span class="p">:</span> <span class="k">NULL</span>
-     <span class="n">Check_time</span><span class="p">:</span> <span class="k">NULL</span>
-      <span class="k">Collation</span><span class="p">:</span> <span class="k">NULL</span>
-       <span class="n">Checksum</span><span class="p">:</span> <span class="k">NULL</span>
- <span class="n">Create_options</span><span class="p">:</span> <span class="k">NULL</span>
-        <span class="k">Comment</span><span class="p">:</span> <span class="k">VIEW</span>  <span class="c1">--这里表示是视图
-</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span> <span class="n">sec</span><span class="p">)</span>
-
-</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="err">数据库名字\</span><span class="k">G</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="o">***************************</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="o">***************************</span><span class="w">
+</span><span class="w">           </span><span class="n">Name</span><span class="p">:</span><span class="w"> </span><span class="n">view_user</span><span class="w">
+</span><span class="w">         </span><span class="n">Engine</span><span class="p">:</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span><span class="w">        </span><span class="k">Version</span><span class="p">:</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span><span class="w">     </span><span class="n">Row_format</span><span class="p">:</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span><span class="w">           </span><span class="k">Rows</span><span class="p">:</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span><span class="w"> </span><span class="n">Avg_row_length</span><span class="p">:</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span><span class="w">    </span><span class="n">Data_length</span><span class="p">:</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span><span class="w"></span><span class="n">Max_data_length</span><span class="p">:</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span><span class="w">   </span><span class="n">Index_length</span><span class="p">:</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span><span class="w">      </span><span class="n">Data_free</span><span class="p">:</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span><span class="w"> </span><span class="n">Auto_increment</span><span class="p">:</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span><span class="w">    </span><span class="n">Create_time</span><span class="p">:</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span><span class="w">    </span><span class="n">Update_time</span><span class="p">:</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span><span class="w">     </span><span class="n">Check_time</span><span class="p">:</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span><span class="w">      </span><span class="k">Collation</span><span class="p">:</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span><span class="w">       </span><span class="n">Checksum</span><span class="p">:</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span><span class="w"> </span><span class="n">Create_options</span><span class="p">:</span><span class="w"> </span><span class="k">NULL</span><span class="w">
+</span><span class="w">        </span><span class="k">Comment</span><span class="p">:</span><span class="w"> </span><span class="k">VIEW</span><span class="w">  </span><span class="c1">--这里表示是视图
+</span><span class="c1"></span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>查看某一个具体视图</p>
 <div class="highlight"><div class="chroma">
@@ -275,8 +272,8 @@
 <pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span> <span class="k">table</span> <span class="n">status</span> <span class="k">from</span> <span class="k">view</span> <span class="k">like</span> <span class="s1">&#39;view_user&#39;</span><span class="err">\</span><span class="k">G</span>
-</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">view</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="s1">&#39;view_user&#39;</span><span class="err">\</span><span class="k">G</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>查看某个视图的具体信息</p>
 <div class="highlight"><div class="chroma">
@@ -284,8 +281,8 @@
 <pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span> <span class="k">create</span> <span class="k">view</span> <span class="n">view_user</span><span class="err">\</span><span class="k">G</span>
-</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">view</span><span class="w"> </span><span class="n">view_user</span><span class="err">\</span><span class="k">G</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>##4. 修改视图</p>
 <p>###4.1 替换原有视图</p>
@@ -295,9 +292,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">or</span> <span class="k">replace</span> <span class="k">view</span> <span class="n">view_user</span> <span class="k">as</span> <span class="k">select</span>
-    <span class="o">-&gt;</span> <span class="k">Host</span><span class="p">,</span> <span class="k">User</span><span class="p">,</span> <span class="n">Password</span> <span class="k">from</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">replace</span><span class="w"> </span><span class="k">view</span><span class="w"> </span><span class="n">view_user</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="k">select</span><span class="w">
+</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">Host</span><span class="p">,</span><span class="w"> </span><span class="k">User</span><span class="p">,</span><span class="w"> </span><span class="n">Password</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>###4.2 利用<code>alter</code>修改视图</p>
 <div class="highlight"><div class="chroma">
@@ -305,8 +302,8 @@
 <pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">alter</span> <span class="k">view</span> <span class="n">view_user</span> <span class="k">as</span> <span class="k">select</span> <span class="k">Host</span><span class="p">,</span> <span class="k">User</span> <span class="k">from</span> <span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">alter</span><span class="w"> </span><span class="k">view</span><span class="w"> </span><span class="n">view_user</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="k">Host</span><span class="p">,</span><span class="w"> </span><span class="k">User</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>##5. 删除视图</p>
 <div class="highlight"><div class="chroma">
@@ -314,8 +311,8 @@
 <pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DROP</span> <span class="k">VIEW</span> <span class="n">view_name</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">DROP</span><span class="w"> </span><span class="k">VIEW</span><span class="w"> </span><span class="n">view_name</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>##6. 通过视图操作基表</p>
 <p><code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>都可以</p>
@@ -418,7 +415,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

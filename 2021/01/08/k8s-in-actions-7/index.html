@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.83.1 with theme even" />
 
 
 <link rel="canonical" href="/2021/01/08/k8s-in-actions-7/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -45,20 +45,17 @@
 ConfigMap 和 Secret 配置应用程序
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2021/01/08/k8s-in-actions-7/" />
-<meta property="article:published_time" content="2021-01-08T07:51:51+08:00" />
-<meta property="article:modified_time" content="2021-01-08T07:51:51+08:00" />
+<meta property="og:url" content="/2021/01/08/k8s-in-actions-7/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-01-08T07:51:51&#43;08:00" />
+<meta property="article:modified_time" content="2021-01-08T07:51:51&#43;08:00" />
+
 <meta itemprop="name" content="《K8s in Actions》第七章学习笔记">
 <meta itemprop="description" content="
 ConfigMap 和 Secret 配置应用程序
-">
-<meta itemprop="datePublished" content="2021-01-08T07:51:51&#43;08:00" />
+"><meta itemprop="datePublished" content="2021-01-08T07:51:51&#43;08:00" />
 <meta itemprop="dateModified" content="2021-01-08T07:51:51&#43;08:00" />
 <meta itemprop="wordCount" content="1449">
-
-
-
-<meta itemprop="keywords" content="Kubenetes,笔记," /><meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="kubernetes,笔记," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="《K8s in Actions》第七章学习笔记"/>
 <meta name="twitter:description" content="
 ConfigMap 和 Secret 配置应用程序
@@ -244,9 +241,9 @@ Sat Feb <span class="m">13</span> 01:54:38 UTC <span class="m">2021</span> Writi
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">args</span><span class="p">:</span><span class="w">
-</span><span class="w"></span>- foo<span class="w">
-</span><span class="w"></span>- bar<span class="w">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">args</span><span class="p">:</span><span class="w">
+</span><span class="w"></span>- <span class="l">foo</span><span class="w">
+</span><span class="w"></span>- <span class="l">bar</span><span class="w">
 </span><span class="w"></span>- <span class="s2">&#34;15&#34;</span><span class="w">
 </span></code></pre></td></tr></table>
 </div>
@@ -363,14 +360,14 @@ metadata:
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="k">containers</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="k">image</span><span class="p">:</span><span class="w"> </span>some/image<span class="w">
-</span><span class="w">    </span><span class="k">volumeMounts</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>myvolume<span class="w">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">some/image</span><span class="w">
+</span><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">myvolume</span><span class="w">
 </span><span class="w">      </span><span class="c"># 只挂载某个文件，而不是挂载一个文件夹</span><span class="w">
-</span><span class="w">      </span><span class="k">mountPath</span><span class="p">:</span><span class="w"> </span>/etc/someconfig.conf<span class="w">
-</span><span class="w">      </span><span class="k">subPath</span><span class="p">:</span><span class="w"> </span>myconfig.conf<span class="w">
+</span><span class="w">      </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/someconfig.conf</span><span class="w">
+</span><span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="l">myconfig.conf</span><span class="w">
 </span></code></pre></td></tr></table>
 </div>
 </div><ul>
@@ -448,7 +445,7 @@ lrwxrwxrwx    <span class="m">1</span> root     root            <span class="m">
 </div>
 <footer class="post-footer">
       <div class="post-tags">
-          <a href="/tags/kubenetes/">Kubenetes</a>
+          <a href="/tags/kubernetes/">kubernetes</a>
           <a href="/tags/%E7%AC%94%E8%AE%B0/">笔记</a>
           </div>
       <nav class="post-nav">
@@ -525,7 +522,7 @@ lrwxrwxrwx    <span class="m">1</span> root     root            <span class="m">
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
