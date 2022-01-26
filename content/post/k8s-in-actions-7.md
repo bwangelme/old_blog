@@ -3,7 +3,7 @@ title: "《K8s in Actions》第七章学习笔记"
 date: 2021-01-08T07:51:51+08:00
 lastmod: 2021-01-08T07:51:51+08:00
 draft: false
-tags: [kubernetes, 笔记]
+tags: [kubernetes, 杂记]
 author: "bwangel"
 comment: true
 

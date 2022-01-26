@@ -3,7 +3,7 @@ title: "《K8S in Actions》第六章学习笔记"
 date: 2020-10-11T14:47:13+08:00
 lastmod: 2020-10-11T14:47:13+08:00
 draft: false
-tags: [Kubernetes, 笔记]
+tags: [kubernetes, 杂记]
 author: "bwangel"
 comment: true
 
