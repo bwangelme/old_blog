@@ -57,4 +57,4 @@ enp0s8: flags=4419<UP,BROADCAST,RUNNING,PROMISC,MULTICAST>  mtu 1500
 
 ## 参考链接
 
-+ [《Kubenetes 网络权威指南》](https://book.douban.com/subject/34855927/)
++ [《Kubernetes 网络权威指南》](https://book.douban.com/subject/34855927/)

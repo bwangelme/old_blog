@@ -3,7 +3,7 @@ title: "《K8S in Actions》 第四章学习笔记"
 date: 2020-04-01T21:21:52+08:00
 lastmod: 2020-04-01T21:21:52+08:00
 draft: false
-tags: [Kubernetes, 笔记]
+tags: [kubernetes, 杂记]
 author: "bwangel"
 comment: true
 

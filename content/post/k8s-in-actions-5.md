@@ -3,7 +3,7 @@ title: "《K8S in Actions》 第五章学习笔记"
 date: 2020-04-22T21:44:44+08:00
 lastmod: 2020-04-22T21:44:44+08:00
 draft: false
-tags: [Kubernetes, 笔记]
+tags: [kubernetes, 杂记]
 author: "bwangel"
 comment: true
 
@@ -93,7 +93,7 @@ KUBIA_PORT_80_TCP_PORT=80
 KUBIA_PORT_90_TCP_PROTO=tcp
 KUBIA_PORT_90_TCP_ADDR=10.66.13.240
 
-# Kubenetes 服务的环境变量
+# Kubernetes 服务的环境变量
 KUBERNETES_SERVICE_PORT_HTTPS=443
 KUBERNETES_SERVICE_HOST=10.66.0.1
 KUBERNETES_PORT_443_TCP=tcp://10.66.0.1:443
