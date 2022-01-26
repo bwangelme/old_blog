@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>《k8s in actions》第十章杂记 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
+
+
+<link rel="canonical" href="/2022/01/18/k8s-in-actions-10/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
+
+
+<meta property="og:title" content="《k8s in actions》第十章杂记" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2022/01/18/k8s-in-actions-10/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-01-18T10:11:27+08:00" />
+<meta property="article:modified_time" content="2022-01-18T10:11:27+08:00" />
+
+<meta itemprop="name" content="《k8s in actions》第十章杂记">
+<meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-01-18T10:11:27+08:00" />
+<meta itemprop="dateModified" content="2022-01-18T10:11:27+08:00" />
+<meta itemprop="wordCount" content="1960">
+<meta itemprop="keywords" content="kubernetes,杂记," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="《k8s in actions》第十章杂记"/>
+<meta name="twitter:description" content=""/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/tips/">
+        <li class="mobile-menu-item">Tips</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tips/">Tips</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">《k8s in actions》第十章杂记</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2022-01-18 </span>
+        
+          <span class="more-meta"> 约 1960 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#杂记">杂记</a></li>
+        <li><a href="#利用-calico-和-kubeadm-搭建-k8s-集群">利用 calico 和 kubeadm 搭建 K8S 集群</a></li>
+        <li><a href="#实验">实验</a>
+          <ul>
+            <li><a href="#通过-service-访问-pod">通过 Service 访问 Pod</a></li>
+            <li><a href="#通过-srv-dns-记录让-pod-彼此发现">通过 SRV DNS 记录让 pod 彼此发现</a></li>
+            <li><a href="#pod-重用存储">Pod 重用存储</a></li>
+            <li><a href="#通过-kubectl-proxy-访问-pod">通过 kubectl proxy 访问 pod</a></li>
+          </ul>
+        </li>
+        <li><a href="#问题">问题</a>
+          <ul>
+            <li><a href="#安装-flannel-插件失败">安装 flannel 插件失败</a></li>
+            <li><a href="#k8s-拉取镜像失败">k8s 拉取镜像失败</a></li>
+            <li><a href="#创建-statefulset-服务">创建 StatefulSet 服务</a></li>
+            <li><a href="#k-proxy-访问-pod-失败">k proxy 访问 pod 失败</a></li>
+            <li><a href="#跨节点-pod-无法互通">跨节点 Pod 无法互通</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <hr>
+<h2 id="杂记">杂记</h2>
+<ul>
+<li>
+<p>StatefulSet 用于创建有状态的服务，StatefulSet 创建的每个 Pod 都有一个从0开始的顺序索引，这个会体现在 Pod 的名称，主机名和存储上。</p>
+</li>
+<li>
+<p>Pod 挂掉后，这个 Pod 实例会在另一个节点上重建，且新的实例必须和被替换的示例有如下相同的标识:</p>
+<ol>
+<li>相同的名称</li>
+<li>相同的网络标识(主机名/IP)</li>
+<li>相同的状态</li>
+</ol>
+</li>
+<li>
+<p>StatefulSet 的每个 Pod 都会创建一个持久卷声明(Persistent Volume Claim)。</p>
+<ul>
+<li>对 StatefulSet 执行缩容后，Pod 会被删除，但是它对应的持久卷声明不会删除，卷也不会删。需要开发者手动删除 PVC 时卷才会被删除。
+后续对 StatefulSet 执行扩容后，该索引的 Pod 又被创建了，则新 Pod 会使用之前遗留的卷。</li>
+</ul>
+</li>
+<li>
+<p>StatefulSet 保证 Pod 的 at-most-one 语义，即同一个索引的 Pod 最多只会创建一个。</p>
+</li>
+<li>
+<p>删除 Pod 后，API Server 会将 Pod 标记为 Terminating 状态，使用 <code>k get pod</code> 依然能够查询到该 Pod。这是因为 API Server 必须等到 kubelet 报告该 Pod 处于删除状态后，API Server 才会真正删除 Pod 的信息。</p>
+<ul>
+<li>如果整个节点都挂了，确认该 Pod 已经无用了，可以使用 <code>k delete pod xx --force --grace-period 0</code> 删除该 Pod。这样 API Server 就不会等待 kubelet 的等待，直接删除 Pod 的信息</li>
+</ul>
+</li>
+</ul>
+<h2 id="利用-calico-和-kubeadm-搭建-k8s-集群">利用 calico 和 kubeadm 搭建 K8S 集群</h2>
+<ul>
+<li><a href="https://projectcalico.docs.tigera.io/getting-started/kubernetes/quickstart">https://projectcalico.docs.tigera.io/getting-started/kubernetes/quickstart</a></li>
+<li><a href="https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/">https://kubernetes.io/zh/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/</a></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">sudo kubeadm init --apiserver-advertise-address 192.168.57.101 --pod-network-cidr<span class="o">=</span>10.1.0.0/16
+kubeadm join 192.168.57.101:6443 --token efw8cb.x7rt4piplnoehba4 <span class="se">\
+</span><span class="se"></span>        --discovery-token-ca-cert-hash sha256:2939553704626b85761e11beb9230eb1194916d16ce174477591683b7c0b1df2
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>安装 calico 插件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 安装 calico operator</span>
+kubectl create -f conf/calico/tigera-operator.yaml
+<span class="c1"># 安装 自定义资源，注意，我修改了 ipPool.CIDR</span>
+kubectl create -f conf/calico/custom-resources.yaml
+<span class="c1"># 观察 calico 的相关pod，是否都处于 running 状态</span>
+kubectl get pods -n calico-system
+<span class="c1"># 去掉主节点的 taint，可以让 pod 调度上去</span>
+kubectl taint nodes --all node-role.kubernetes.io/master-
+<span class="c1"># 查看节点是否都处于 ready 状态</span>
+kubectl get nodes -o wide
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="实验">实验</h2>
+<h3 id="通过-service-访问-pod">通过 Service 访问 Pod</h3>
+<ol>
+<li>部署一个非 headless 的 Service (即 Service 有 IP)</li>
+<li>通过 Service 的 IP 访问 Pod</li>
+</ol>
+<p>在 pod 内 ping svc 的 IP 超时，怀疑是网络部署的问题 (重新部署 calico 后解决)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">root@dev-d68d66dff-lkfll:~# ping 10.98.169.254
+PING 10.98.169.254 <span class="o">(</span>10.98.169.254<span class="o">)</span> 56<span class="o">(</span>84<span class="o">)</span> bytes of data.
+^C
+--- 10.98.169.254 ping statistics ---
+<span class="m">3</span> packets transmitted, <span class="m">0</span> received, 100% packet loss, <span class="nb">time</span> 2041ms
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="通过-srv-dns-记录让-pod-彼此发现">通过 SRV DNS 记录让 pod 彼此发现</h3>
+<p>statefulset 创建的时候，可以通过 <code>spec.serviceName</code> 字段制定 pod 绑定的 service 名字。</p>
+<p>我们创建了一个名字叫 kubia 的 headless Service。在其他 pod 中，可以通过 SRV 记录查询到 statefulset pod 的 IP</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">root@dev-d68d66dff-j49lc:~# dig SRV kubia.default.svc.cluster.local
+
+<span class="p">;</span> &lt;&lt;&gt;&gt; DiG 9.11.3-1ubuntu1.16-Ubuntu &lt;&lt;&gt;&gt; SRV kubia.default.svc.cluster.local
+<span class="p">;;</span> global options: +cmd
+<span class="p">;;</span> Got answer:
+<span class="p">;;</span> WARNING: .local is reserved <span class="k">for</span> Multicast DNS
+<span class="p">;;</span> You are currently testing what happens when an mDNS query is leaked to DNS
+<span class="p">;;</span> -&gt;&gt;HEADER<span class="s">&lt;&lt;- opco</span>de: QUERY, status: NOERROR, id: <span class="m">3910</span>
+<span class="p">;;</span> flags: qr aa rd<span class="p">;</span> QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: <span class="m">3</span>
+<span class="p">;;</span> WARNING: recursion requested but not available
+
+<span class="p">;;</span> OPT PSEUDOSECTION:
+<span class="p">;</span> EDNS: version: 0, flags:<span class="p">;</span> udp: <span class="m">4096</span>
+<span class="p">;</span> COOKIE: 2ff40eb09b50498b <span class="o">(</span>echoed<span class="o">)</span>
+<span class="p">;;</span> QUESTION SECTION:
+<span class="p">;</span>kubia.default.svc.cluster.local. IN    SRV
+
+<span class="p">;;</span> ANSWER SECTION:
+kubia.default.svc.cluster.local. <span class="m">30</span> IN  SRV     <span class="m">0</span> <span class="m">50</span> <span class="m">80</span> kubia-0.kubia.default.svc.cluster.local.
+kubia.default.svc.cluster.local. <span class="m">30</span> IN  SRV     <span class="m">0</span> <span class="m">50</span> <span class="m">80</span> kubia-1.kubia.default.svc.cluster.local.
+
+<span class="p">;;</span> ADDITIONAL SECTION:
+kubia-1.kubia.default.svc.cluster.local. <span class="m">30</span> IN A 10.1.169.130
+kubia-0.kubia.default.svc.cluster.local. <span class="m">30</span> IN A 10.1.107.193
+
+<span class="p">;;</span> Query time: <span class="m">0</span> msec
+<span class="p">;;</span> SERVER: 10.96.0.10#53<span class="o">(</span>10.96.0.10<span class="o">)</span>
+<span class="p">;;</span> WHEN: Sat Jan <span class="m">22</span> 15:25:04 UTC <span class="m">2022</span>
+<span class="p">;;</span> MSG SIZE  rcvd: <span class="m">362</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="pod-重用存储">Pod 重用存储</h3>
+<ol start="0">
+<li>创建一个 statefulset ，有两个 pod, pod-0 和 pod-1</li>
+<li>在 pod-1 的 volume 中写入内容。</li>
+<li>将 statefulset 的 pod 数改成 1, pod-1 被删除</li>
+<li>将 statefulset 的 pod 数改成 1，新的 pod-1' 被创建</li>
+<li>访问 pod-1'，它的内容和 pod-1 内容一样</li>
+</ol>
+<h3 id="通过-kubectl-proxy-访问-pod">通过 kubectl proxy 访问 pod</h3>
+<ol>
+<li>创建 pod 时要声明 <code>containers[*].ports</code></li>
+<li>启动 kubectl proxy</li>
+<li>在本地访问 pod 暴露的端口， <code>curl localhost:8001/api/v1/namespaces/default/pods/dev-6968fdb999-94ddx/proxy/ip</code>，如果pod 没有声明暴露的端口，默认会使用 80</li>
+</ol>
+<h2 id="问题">问题</h2>
+<h3 id="安装-flannel-插件失败">安装 flannel 插件失败</h3>
+<p>dev pod 在 k8s-node2 上，kubia-1 在 k8s-node2 上，kubia-2 在 k8s-node3 上。</p>
+<p>dev pod 能够和 kubia-1 通信，无法和 kubia-2 通信。其他 pod 也是如此，跨节点的 pod 无法通信。</p>
+<p>查看 <code>kube-flannel-ds</code> 的 pod 日志，发现了如下的报错:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">E0121 01:40:13.395131       <span class="m">1</span> reflector.go:127<span class="o">]</span> github.com/flannel-io/flannel/subnet/kube/kube.go:379: Failed to watch *v1.Node: failed to list *v1.Node: Get <span class="s2">&#34;https://10.96.0.1:443/api/v1/nodes?resourceVersion=4657&#34;</span>: dial tcp 10.96.0.1:443: connect: network is unreachable
+E0121 01:40:56.634458       <span class="m">1</span> reflector.go:127<span class="o">]</span> github.com/flannel-io/flannel/subnet/kube/kube.go:379: Failed to watch *v1.Node: failed to list *v1.Node: Get <span class="s2">&#34;https://10.96.0.1:443/api/v1/nodes?resourceVersion=4657&#34;</span>: dial tcp 10.96.0.1:443: connect: network is unreachable
+</code></pre></td></tr></table>
+</div>
+</div><p>搜索到了相关的 github issue，kubeadm 作者回复说建议换用其他的 CNI 插件 <a href="https://github.com/kubernetes/kubeadm/issues/1817#issuecomment-538311661">链接</a></p>
+<p>参考阅读: <a href="https://www.91the.top/k8s/kubernetes-probelem.html">https://www.91the.top/k8s/kubernetes-probelem.html</a></p>
+<p>TODO: 安装完网络插件后，一定要看 pod 日志中是否有报错，此次安装完 flannel 之后，pod 都显示是 Running 状态，但 pod 日志中有连接超时的错误</p>
+<h3 id="k8s-拉取镜像失败">k8s 拉取镜像失败</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">  Type     Reason     Age               From               Message
+  ----     ------     ----              ----               -------
+  Normal   Scheduled  18s               default-scheduler  Successfully assigned default/dev-79d7bcddc6-q4rz7 to k8s-node2
+  Warning  Failed     13s               kubelet            Failed to pull image <span class="s2">&#34;bwangel/dev:0.1&#34;</span>: rpc error: <span class="nv">code</span> <span class="o">=</span> Unknown <span class="nv">desc</span> <span class="o">=</span> Error response from daemon: pull access denied <span class="k">for</span> bwangel/dev, repository does not exist or may require <span class="s1">&#39;docker login&#39;</span>: denied: requested access to the resource is denied
+  Warning  Failed     13s               kubelet            Error: ErrImagePull
+  Normal   BackOff    13s               kubelet            Back-off pulling image <span class="s2">&#34;bwangel/dev:0.1&#34;</span>
+  Warning  Failed     13s               kubelet            Error: ImagePullBackOff
+  Normal   Pulling    1s <span class="o">(</span>x2 over 18s<span class="o">)</span>  kubelet            Pulling image <span class="s2">&#34;bwangel/dev:0.1&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="创建-statefulset-服务">创建 StatefulSet 服务</h3>
+<p>创建服务时，启动 pod 出现了如下的错误:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">Events:
+  Type     Reason                  Age                   From               Message
+  ----     ------                  ----                  ----               -------
+  Warning  FailedScheduling        3m16s                 default-scheduler  0/3 nodes are available: <span class="m">3</span> pod has unbound immediate PersistentVolumeClaims.
+  Normal   Scheduled               3m15s                 default-scheduler  Successfully assigned default/kubia-0 to k8s-node3
+  Warning  FailedCreatePodSandBox  3m15s                 kubelet            Failed to create pod sandbox: rpc error: <span class="nv">code</span> <span class="o">=</span> Unknown <span class="nv">desc</span> <span class="o">=</span> <span class="o">[</span>failed to <span class="nb">set</span> up sandbox container <span class="s2">&#34;96322b4278a93ee85612b031fdf02d00cee3cbfbb680aa7a62ac5e4a50a6966d&#34;</span> network <span class="k">for</span> pod <span class="s2">&#34;kubia-0&#34;</span>: networkPlugin cni failed to <span class="nb">set</span> up pod <span class="s2">&#34;kubia-0_default&#34;</span> network: unable to allocate IP address: Post <span class="s2">&#34;http://127.0.0.1:6784/ip/96322b4278a93ee85612b031fdf02d00cee3cbfbb680aa7a62ac5e4a50a6966d&#34;</span>: dial tcp 127.0.0.1:6784: connect: connection refused, failed to clean up sandbox container <span class="s2">&#34;96322b4278a93ee85612b031fdf02d00cee3cbfbb680aa7a62ac5e4a50a6966d&#34;</span> network <span class="k">for</span> pod <span class="s2">&#34;kubia-0&#34;</span>: networkPlugin cni failed to teardown pod <span class="s2">&#34;kubia-0_default&#34;</span> network: Delete <span class="s2">&#34;http://127.0.0.1:6784/ip/96322b4278a93ee85612b031fdf02d00cee3cbfbb680aa7a62ac5e4a50a6966d&#34;</span>: dial tcp 127.0.0.1:6784: connect: connection refused<span class="o">]</span>
+  Normal   SandboxChanged          10s <span class="o">(</span>x15 over 3m14s<span class="o">)</span>  kubelet            Pod sandbox changed, it will be killed and re-created.
+</code></pre></td></tr></table>
+</div>
+</div><p>解决方案:</p>
+<ol>
+<li>删掉了 weave CNI 插件</li>
+<li>重新安装 flannel 插件</li>
+</ol>
+<p>安装 flannel 的命令:</p>
+<ol>
+<li>启动 master 节点: <code>sudo kubeadm init --apiserver-advertise-address 192.168.57.101 --pod-network-cidr=10.244.0.0/16</code></li>
+<li>安装 flannel: <code>k apply -f conf/kube-flannel.yml</code> <a href="https://github.com/bwangelme/k8s-in-vagrant/blob/08fe5f9679ad14b52163faff7d503ccfa1c1ca1b/conf/kube-flannel.yml">kube-flannel.yml 文件内容</a></li>
+</ol>
+<h3 id="k-proxy-访问-pod-失败">k proxy 访问 pod 失败</h3>
+<p>使用 <code>k proxy</code> 启动代理服务后，使用 curl 访问 pod 超时</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">ø&gt; curl -m3 -v localhost:8001/api/v1/namespaces/default/pods/kubia-0/proxy/                                   23:02:30 <span class="o">(</span>01-19<span class="o">)</span>
+*   Trying 127.0.0.1...
+* TCP_NODELAY <span class="nb">set</span>
+* Connected to localhost <span class="o">(</span>127.0.0.1<span class="o">)</span> port <span class="m">8001</span> <span class="o">(</span><span class="c1">#0)</span>
+&gt; GET /api/v1/namespaces/default/pods/kubia-0/proxy/ HTTP/1.1
+&gt; Host: localhost:8001
+&gt; User-Agent: curl/7.64.1
+&gt; Accept: */*
+&gt;
+* Operation timed out after <span class="m">3004</span> milliseconds with <span class="m">0</span> bytes received
+* Closing connection <span class="m">0</span>
+curl: <span class="o">(</span>28<span class="o">)</span> Operation timed out after <span class="m">3004</span> milliseconds with <span class="m">0</span> bytes received
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="跨节点-pod-无法互通">跨节点 Pod 无法互通</h3>
+<p><strong>表现</strong></p>
+<ol>
+<li>搭建完 calico 网络，跨节点pod 能够互通的</li>
+<li>过了一段时间后，网络不通。</li>
+<li><code>tigera-operator</code> 中的 Pod <code>tigera-operator-c4b9549c7-scvn22</code> 挂掉了,</li>
+</ol>
+<p>设置了配置文件 <code>/etc/NetworkManager/conf.d/calico.conf</code>，并重启后恢复了，还不了解原因</p>
+<p>查看信息</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">tigera-operator    tigera-operator-c4b9549c7-scvn2           0/1     CrashLoopBackOff   <span class="m">42</span> <span class="o">(</span>3m6s ago<span class="o">)</span>   11h   192.168.57.101   k8s-node1   &lt;none&gt;           &lt;none&gt;
+
+ø&gt; k -n tigera-operator logs tigera-operator-c4b9549c7-scvn2                                                  10:25:35 <span class="o">(</span>01-23<span class="o">)</span>
+2022/01/23 02:22:01 <span class="o">[</span>INFO<span class="o">]</span> Version: v1.23.5
+2022/01/23 02:22:01 <span class="o">[</span>INFO<span class="o">]</span> Go Version: go1.16.7b7
+2022/01/23 02:22:01 <span class="o">[</span>INFO<span class="o">]</span> Go OS/Arch: linux/amd64
+2022/01/23 02:22:01 <span class="o">[</span>ERROR<span class="o">]</span> Get <span class="s2">&#34;https://10.96.0.1:443/api?timeout=32s&#34;</span>: dial tcp 10.96.0.1:443: connect: network is unreachable
+</code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>dev pod 和 kubia-1 属于不通节点，dev ping kubia-1 超时。dev ping 同节点上的 kubia-0 可以成功</li>
+</ol>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-01-18
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/kubernetes/">kubernetes</a>
+          <a href="/tags/%E6%9D%82%E8%AE%B0/">杂记</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2022/01/26/k8s-in-actions-11/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">《K8s in Actions》第十一章杂记</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2022/01/12/go_gcflags/">
+            <span class="next-text nav-default">Go gcflags/ldflags 的说明</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+    <script src="https://utteranc.es/client.js"
+            repo="anotherbwangel/blog-comment"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.2.1/jquery.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/slideout/1.0.1/slideout.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.js" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>

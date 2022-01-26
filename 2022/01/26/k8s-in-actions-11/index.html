@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>《k8s in actions》第十章杂记 - 大白的碎碎念</title>
+  <title>《K8s in Actions》第十一章杂记 - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -23,10 +23,10 @@
 
 
 
-<meta name="generator" content="Hugo 0.83.1 with theme even" />
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
-<link rel="canonical" href="/2022/01/18/k8s_10/" />
+<link rel="canonical" href="/2022/01/26/k8s-in-actions-11/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -39,19 +39,19 @@
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
-<meta property="og:title" content="《k8s in actions》第十章杂记" />
+<meta property="og:title" content="《K8s in Actions》第十一章杂记" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2022/01/18/k8s_10/" /><meta property="article:section" content="tips" />
-<meta property="article:published_time" content="2022-01-18T10:11:27&#43;08:00" />
-<meta property="article:modified_time" content="2022-01-18T10:11:27&#43;08:00" />
+<meta property="og:url" content="/2022/01/26/k8s-in-actions-11/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-01-26T23:08:47+08:00" />
+<meta property="article:modified_time" content="2022-01-26T23:08:47+08:00" />
 
-<meta itemprop="name" content="《k8s in actions》第十章杂记">
-<meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-01-18T10:11:27&#43;08:00" />
-<meta itemprop="dateModified" content="2022-01-18T10:11:27&#43;08:00" />
-<meta itemprop="wordCount" content="574">
+<meta itemprop="name" content="《K8s in Actions》第十一章杂记">
+<meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-01-26T23:08:47+08:00" />
+<meta itemprop="dateModified" content="2022-01-26T23:08:47+08:00" />
+<meta itemprop="wordCount" content="760">
 <meta itemprop="keywords" content="kubernetes,杂记," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="《k8s in actions》第十章杂记"/>
+<meta name="twitter:title" content="《K8s in Actions》第十一章杂记"/>
 <meta name="twitter:description" content=""/>
 
 <!--[if lte IE 9]>
@@ -135,63 +135,137 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <article class="post">
-  <div class="post-content">
-    <hr>
-<h2 id="杂记">杂记</h2>
-<ul>
-<li>
-<p>StatefulSet 用于创建有状态的服务，StatefulSet 创建的每个 Pod 都有一个从0开始的顺序索引，这个会体现在 Pod 的名称，主机名和存储上。</p>
-</li>
-<li>
-<p>Pod 挂掉后，这个 Pod 实例会在另一个节点上重建，且新的实例必须和被替换的示例有如下相同的标识:</p>
-<ol>
-<li>相同的名称</li>
-<li>相同的网络标识(主机名/IP)</li>
-<li>相同的状态</li>
-</ol>
-</li>
-<li>
-<p>StatefulSet 的每个 Pod 都会创建一个持久卷声明(Persistent Volume Claim)。</p>
-<ul>
-<li>对 StatefulSet 执行缩容后，Pod 会被删除，但是它对应的持久卷声明不会删除，卷也不会删。需要开发者手动删除 PVC 时卷才会被删除。
-后续对 StatefulSet 执行扩容后，该索引的 Pod 又被创建了，则新 Pod 会使用之前遗留的卷。</li>
-</ul>
-</li>
-<li>
-<p>StatefulSet 保证 Pod 的 at-most-one 语义，即同一个索引的 Pod 最多只会创建一个。</p>
-</li>
-<li>
-<p>删除 Pod 后，API Server 会将 Pod 标记为 Terminating 状态，使用 <code>k get pod</code> 依然能够查询到该 Pod。这是因为 API Server 必须等到 kubelet 报告该 Pod 处于删除状态后，API Server 才会真正删除 Pod 的信息。</p>
-<ul>
-<li>如果整个节点都挂了，确认该 Pod 已经无用了，可以使用 <code>k delete pod xx --force --grace-period 0</code> 删除该 Pod。这样 API Server 就不会等待 kubelet 的等待，直接删除 Pod 的信息</li>
-</ul>
-</li>
-</ul>
-<h2 id="创建-statefulset-服务">创建 StatefulSet 服务</h2>
-<p>创建服务时，启动 pod 出现了如下的错误:</p>
+    
+    <header class="post-header">
+      <h1 class="post-title">《K8s in Actions》第十一章杂记</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2022-01-26 </span>
+        
+          <span class="more-meta"> 约 760 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#了解-k8s-架构">了解 K8S 架构</a></li>
+        <li><a href="#api-服务器做了什么">API 服务器做了什么</a></li>
+        <li><a href="#调度器">调度器</a></li>
+        <li><a href="#控制器管理器中运行的控制器">控制器管理器中运行的控制器</a></li>
+        <li><a href="#问题">问题</a>
+          <ul>
+            <li><a href="#scheduler-组件挂掉了">scheduler 组件挂掉了</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <hr>
+<h2 id="了解-k8s-架构">了解 K8S 架构</h2>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com//2022-01-27-000255.png" alt="K8S 架构图"></p>
+<p>K8S 系统组件之间只能通过 API Server 通信，它们之间不会直接通信。API Server 是和 etcd 通信的唯一组件。</p>
+<p>检查控制平面组件的状态</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span><span class="lnt">6
-</span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">Events:
-  Type     Reason                  Age                   From               Message
-  ----     ------                  ----                  ----               -------
-  Warning  FailedScheduling        3m16s                 default-scheduler  0/3 nodes are available: <span class="m">3</span> pod has unbound immediate PersistentVolumeClaims.
-  Normal   Scheduled               3m15s                 default-scheduler  Successfully assigned default/kubia-0 to k8s-node3
-  Warning  FailedCreatePodSandBox  3m15s                 kubelet            Failed to create pod sandbox: rpc error: <span class="nv">code</span> <span class="o">=</span> Unknown <span class="nv">desc</span> <span class="o">=</span> <span class="o">[</span>failed to <span class="nb">set</span> up sandbox container <span class="s2">&#34;96322b4278a93ee85612b031fdf02d00cee3cbfbb680aa7a62ac5e4a50a6966d&#34;</span> network <span class="k">for</span> pod <span class="s2">&#34;kubia-0&#34;</span>: networkPlugin cni failed to <span class="nb">set</span> up pod <span class="s2">&#34;kubia-0_default&#34;</span> network: unable to allocate IP address: Post <span class="s2">&#34;http://127.0.0.1:6784/ip/96322b4278a93ee85612b031fdf02d00cee3cbfbb680aa7a62ac5e4a50a6966d&#34;</span>: dial tcp 127.0.0.1:6784: connect: connection refused, failed to clean up sandbox container <span class="s2">&#34;96322b4278a93ee85612b031fdf02d00cee3cbfbb680aa7a62ac5e4a50a6966d&#34;</span> network <span class="k">for</span> pod <span class="s2">&#34;kubia-0&#34;</span>: networkPlugin cni failed to teardown pod <span class="s2">&#34;kubia-0_default&#34;</span> network: Delete <span class="s2">&#34;http://127.0.0.1:6784/ip/96322b4278a93ee85612b031fdf02d00cee3cbfbb680aa7a62ac5e4a50a6966d&#34;</span>: dial tcp 127.0.0.1:6784: connect: connection refused<span class="o">]</span>
-  Normal   SandboxChanged          10s <span class="o">(</span>x15 over 3m14s<span class="o">)</span>  kubelet            Pod sandbox changed, it will be killed and re-created.
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">ø&gt; k get componentstatuses
+Warning: v1 ComponentStatus is deprecated in v1.19+
+NAME                 STATUS      MESSAGE                                                                                       ERROR
+scheduler            Unhealthy   Get <span class="s2">&#34;http://127.0.0.1:10251/healthz&#34;</span>: dial tcp 127.0.0.1:10251: connect: connection refused
+controller-manager   Healthy     ok
+etcd-0               Healthy     <span class="o">{</span><span class="s2">&#34;health&#34;</span>:<span class="s2">&#34;true&#34;</span>,<span class="s2">&#34;reason&#34;</span>:<span class="s2">&#34;&#34;</span><span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
+</div><p><strong>乐观并发控制</strong></p>
+<p>数据中包含一个版本，每次更新时版本会 +1。</p>
+<p>写入时，检查数据库中的版本和被写入的版本之间的差是否等于1，如果不等于，则证明期间该数据被修改过，会拒绝写入。</p>
+<h2 id="api-服务器做了什么">API 服务器做了什么</h2>
+<ol>
+<li>认证插件 <strong>Authentication Plugin</strong></li>
+<li>授权插件 <strong>Authorization Plugin</strong></li>
+<li>准入控制插件 <strong>Admission Control Plugin</strong></li>
+</ol>
+<p>以上每种类型的插件都有多个，API Server 会按顺序执行</p>
+<p>K8S 客户端发送的请求，通过以上三个插件的认证，并完成 <strong>资源认证</strong> 后。API Server 会将对象信息存储到 etcd 中。然后返回一个响应给客户端。</p>
+<p>除此之外，API Server 没有做额外的工作。例如，当创建一个 ReplicaSet 资源的时候，它不会去创建 Pod，也不会去管理服务的节点，那是 Controller Manager (控制器管理器) 的工作。</p>
+<h2 id="调度器">调度器</h2>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2022-01-26-234210.png" alt="调度器结构图"></p>
+<p><strong>默认调度算法</strong></p>
+<ol>
+<li>过滤所有节点
+<ol>
+<li>调度器给节点下发一组配置好的预测函数，这些函数执行完以后。决定该 Pod 能否在当前节点上调度。</li>
+</ol>
+</li>
+<li>选择完节点后，调度器再对节点进行排序，选择一个最合适的节点</li>
+</ol>
+<p><strong>选择调度器</strong></p>
+<p>可以在集群内运行多个调度器</p>
+<p>pod 通过 <code>schedulerName</code> 属性选择调度器。未设置该属性的 Pod 使用默认调度器进行调度。</p>
+<h2 id="控制器管理器中运行的控制器">控制器管理器中运行的控制器</h2>
+<p>控制器执行一个调和循环，将实际的状态调整为期望状态(在资源 spec 中定义)。然后将新的实际状态写入资源的 status 部分。</p>
+<p>因为控制器订阅 API Server 的事件，这不能保证它不会再某些时间漏掉。控制器需要定期执行重新列举操作，确保不会丢掉什么。</p>
+<blockquote>
+<p>如何阅读控制器的源码</p>
+<p>控制器的源码违约 pkg/controller 中</p>
+<p>每个控制器通常有一个构造器，内部会创建一个 <code>Informer</code>。它是个监听器，每次 API 对象有更新就会被调用。</p>
+<p>接着，可以看 worker 方法，每次控制器工作时会调用 worker，实际函数保存在 syncHandler 或类似的字段里，该字段也会在构造器里初始化。</p>
+</blockquote>
+<h2 id="问题">问题</h2>
+<h3 id="scheduler-组件挂掉了">scheduler 组件挂掉了</h3>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-01-26
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
 </div>
-  </div>
-</article>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/kubernetes/">kubernetes</a>
+          <a href="/tags/%E6%9D%82%E8%AE%B0/">杂记</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/2022/01/18/k8s-in-actions-10/">
+            <span class="next-text nav-default">《k8s in actions》第十章杂记</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
         </div>
         
 

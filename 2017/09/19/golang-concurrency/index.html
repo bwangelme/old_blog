@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.83.1 with theme even" />
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
 <link rel="canonical" href="/2017/09/19/golang-concurrency/" />
@@ -44,12 +44,12 @@
 <meta property="og:description" content="简述了 Go 中的 goroutine，channel 和 WaitGroup，并通过例子来展示了这些功能的用法" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2017/09/19/golang-concurrency/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2017-09-19T12:49:42&#43;08:00" />
-<meta property="article:modified_time" content="2017-09-19T12:49:42&#43;08:00" />
+<meta property="article:published_time" content="2017-09-19T12:49:42+08:00" />
+<meta property="article:modified_time" content="2017-09-19T12:49:42+08:00" />
 
 <meta itemprop="name" content="Go的并发编程简述">
-<meta itemprop="description" content="简述了 Go 中的 goroutine，channel 和 WaitGroup，并通过例子来展示了这些功能的用法"><meta itemprop="datePublished" content="2017-09-19T12:49:42&#43;08:00" />
-<meta itemprop="dateModified" content="2017-09-19T12:49:42&#43;08:00" />
+<meta itemprop="description" content="简述了 Go 中的 goroutine，channel 和 WaitGroup，并通过例子来展示了这些功能的用法"><meta itemprop="datePublished" content="2017-09-19T12:49:42+08:00" />
+<meta itemprop="dateModified" content="2017-09-19T12:49:42+08:00" />
 <meta itemprop="wordCount" content="2952">
 <meta itemprop="keywords" content="Go," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go的并发编程简述"/>
@@ -178,7 +178,7 @@
 <p>Go 对于异步编程提供了语言级别的支持，我们可以使用它的 goroutine 很方便地写出异步的代码。首先我们先通过一个简单的例子来认识 Go 的 goroutine。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -222,7 +222,7 @@
 </span><span class="lnt">42
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;fmt&#34;</span>
@@ -286,7 +286,7 @@
 <p>我们可以通过 channel 来改造我们上面的代码，创建一个 channel 在主程序和 goroutine 之间通信，当所有的 goroutine 都完成之后，再来通知主程序退出。改进后的程序代码如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -340,7 +340,7 @@
 </span><span class="lnt">52
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;fmt&#34;</span>
@@ -399,7 +399,7 @@
 <p>完成主程序和协程的同步工作，除了使用 channel 之外，我们还可以使用 Go 的<code>sync.WaitGroup</code>类型，它可以让主程序阻塞地等待一组 goroutine 的结束，它的具体用法如下所示:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -453,7 +453,7 @@
 </span><span class="lnt">52
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;fmt&#34;</span>
@@ -511,7 +511,7 @@
 <p>上面的代码中，我们演示的都是一个 goroutine 中操作一个 channel，当我们需要在 goroutine 中同时操作多个 channel 时该怎么办呢？这就需要用到我们的<code>select</code>语句，<code>select</code>语句和<code>switch</code>语句非常相似，只不过不同的是，<code>select</code>判断的是一个 channel 是否是可读写的，而不是表达式的值。我们可以通过下面的代码来查看<code>select</code>语句的用法:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -588,7 +588,7 @@
 </span><span class="lnt">75
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;fmt&#34;</span>
@@ -671,7 +671,7 @@
 <p>OK，看了上面那么多描述之后，我们可以看一个简单的例子，这个例子来自演讲<a href="https://www.youtube.com/watch?v=QDDwwePbDtw"> Advanced Go Concurrency Patterns </a></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -713,7 +713,7 @@
 </span><span class="lnt">40
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;fmt&#34;</span>

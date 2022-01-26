@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.83.1 with theme even" />
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
 <link rel="canonical" href="/2016/11/09/python-string-encoding/" />
@@ -43,12 +43,12 @@
 <meta property="og:description" content="摘要: Python3 中的字符串 Python2 中的字符串 Python2 中的一个经典编码问题 Python3 中的字符串 要想搞清楚 Python 中的字符串，我觉得还是从3开始说起比较好，3中的字符串的概念变得" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2016/11/09/python-string-encoding/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2016-11-09T07:39:38&#43;00:00" />
-<meta property="article:modified_time" content="2016-11-09T07:39:38&#43;00:00" />
+<meta property="article:published_time" content="2016-11-09T07:39:38+00:00" />
+<meta property="article:modified_time" content="2016-11-09T07:39:38+00:00" />
 
 <meta itemprop="name" content="说说 Python 中的字符串编码">
-<meta itemprop="description" content="摘要: Python3 中的字符串 Python2 中的字符串 Python2 中的一个经典编码问题 Python3 中的字符串 要想搞清楚 Python 中的字符串，我觉得还是从3开始说起比较好，3中的字符串的概念变得"><meta itemprop="datePublished" content="2016-11-09T07:39:38&#43;00:00" />
-<meta itemprop="dateModified" content="2016-11-09T07:39:38&#43;00:00" />
+<meta itemprop="description" content="摘要: Python3 中的字符串 Python2 中的字符串 Python2 中的一个经典编码问题 Python3 中的字符串 要想搞清楚 Python 中的字符串，我觉得还是从3开始说起比较好，3中的字符串的概念变得"><meta itemprop="datePublished" content="2016-11-09T07:39:38+00:00" />
+<meta itemprop="dateModified" content="2016-11-09T07:39:38+00:00" />
 <meta itemprop="wordCount" content="2317">
 <meta itemprop="keywords" content="Python," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="说说 Python 中的字符串编码"/>
@@ -202,13 +202,13 @@
 <p>当我们创建一个新的字符串的时候，字符串会有一个<code>指定编码</code>，既 Python 认为这个字符串是以什么编码来存储的，Python 默认的指定编码我们可以用<code>sys.getdefaultencoding()</code>函数来获取到，比如下面这样：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">sys</span>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">sys</span><span class="o">.</span><span class="n">getdefaultencoding</span><span class="p">()</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="s1">&#39;utf-8&#39;</span> <span class="c1"># 可以看出 Python3 中字符串的指定编码是utf-8</span>
@@ -217,12 +217,12 @@
 </div><p>但是呢，字符串的实际编码并不是说 Python 指定了哪个就是哪个了，这个和系统的默认编码有关，可以通过<code>locale.getdefaultlocale()</code>函数获取到，比如下面这样：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">locale</span>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">locale</span>
 <span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="n">locale</span><span class="o">.</span><span class="n">getdefaultlocale</span><span class="p">()</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="p">(</span><span class="s1">&#39;en_US&#39;</span><span class="p">,</span> <span class="s1">&#39;UTF-8&#39;</span><span class="p">)</span>
 </code></pre></td></tr></table>
@@ -240,11 +240,11 @@
 <p>例如下面这个例子：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">u</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">u</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;gb2312&#39;</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
@@ -252,14 +252,14 @@
 <p>这里有一个经典的问题，比如我写下面这样的语句，</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">u</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">u</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
 <span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
   <span class="n">File</span> <span class="s2">&#34;&lt;stdin&gt;&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
@@ -273,7 +273,7 @@
 <p>接下来，我们来看一个我以前写 Python2 的时候，经常出现的问题：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -282,7 +282,7 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
    
 <span class="n">data</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
@@ -294,14 +294,14 @@
 </div><p>在这个例子中，我想向一个文件中写入一个 Unicode 字符串，但是却抛出了编码问题，</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="err">➜</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">encoding</span> <span class="err">$</span> <span class="n">python2</span> <span class="n">test</span><span class="o">.</span><span class="n">py</span>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="err">➜</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">encoding</span> <span class="err">$</span> <span class="n">python2</span> <span class="n">test</span><span class="o">.</span><span class="n">py</span>
 <span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
   <span class="n">File</span> <span class="s2">&#34;test.py&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">7</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
     <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -313,7 +313,7 @@
 <p>这种方案就是我们在写入文件的时候，不让 Python 自动转换字符串类型，而是我们手动编码成<code>Str</code>字符串，并设置该<code>Str</code>字符串的编码类型为<code>utf-8</code>。代码如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -322,7 +322,7 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
    
 <span class="n">data</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
@@ -335,7 +335,7 @@
 <p>这种方案，就是我们在程序的一开始，就设置 Python 的<code>Str</code>字符串指定编码为<code>utf-8</code>，然后<code>encode()</code>得到的<code>Str</code>对象就是<code>utf-8</code>编码类型了。这个，我们要在我们文件的一开始添加上__魔幻三行__：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -348,11 +348,11 @@
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
    
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="nb">reload</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
+<span class="n">reload</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">setdefaultencoding</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>     <span class="c1"># setdefaultencoding  在被初始化的时被 site.py 掉了</span>
    
 <span class="n">data</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
@@ -364,7 +364,7 @@
 </div><p>当然，更好的方法是将 Python 指定编码设置为系统默认语系的编码，如下所示：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -378,12 +378,12 @@
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
    
 <span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">locale</span>
 <span class="n">c</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">getdefaultlocale</span><span class="p">()</span>
-<span class="nb">reload</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
+<span class="n">reload</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">setdefaultencoding</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
    
 <span class="n">data</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>

@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.83.1 with theme even" />
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
 <link rel="canonical" href="/2016/08/03/python%E7%9A%84%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E8%A7%A3%E6%9E%90/" />
@@ -52,8 +52,8 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2016/08/03/python%E7%9A%84%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E8%A7%A3%E6%9E%90/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2016-08-03T22:29:41&#43;00:00" />
-<meta property="article:modified_time" content="2016-08-03T22:29:41&#43;00:00" />
+<meta property="article:published_time" content="2016-08-03T22:29:41+00:00" />
+<meta property="article:modified_time" content="2016-08-03T22:29:41+00:00" />
 
 <meta itemprop="name" content="Python的命名空间解析">
 <meta itemprop="description" content="摘要:
@@ -64,8 +64,8 @@
 变量查找原则
 分析一个UnboundLocalError的例子
 
-"><meta itemprop="datePublished" content="2016-08-03T22:29:41&#43;00:00" />
-<meta itemprop="dateModified" content="2016-08-03T22:29:41&#43;00:00" />
+"><meta itemprop="datePublished" content="2016-08-03T22:29:41+00:00" />
+<meta itemprop="dateModified" content="2016-08-03T22:29:41+00:00" />
 <meta itemprop="wordCount" content="1746">
 <meta itemprop="keywords" content="Python," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python的命名空间解析"/>
@@ -204,7 +204,7 @@
 <p>首先说什么是命名空间呢！我们知道，在Python中，一切都是对象，然后通过__名字__去引用对象。例如我们执行了一条语句<code>a = 3</code>,Python做的工作就是让名字<code>a</code>去引用一个 Int 对象<code>3</code>。这种名字和对象的对应关系都存储在一个字典中，而这个字典，就叫做命名空间。任何一个模块，类，实例，函数，都有其命名空间，这个命名空间可以通过<code>__dict__</code>来访问。比如下面这段代码：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -213,10 +213,10 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">sys</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">sys</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">m</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="vm">__dict__</span> <span class="ow">is</span> <span class="nb">globals</span><span class="p">())</span>
-<span class="bp">True</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="vm">__dict__</span> <span class="ow">is</span> <span class="nb">globals</span><span class="p">())</span>
+<span class="kc">True</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">3</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
 <span class="mi">32</span>
@@ -227,7 +227,7 @@
 <p>前面我们讲到，每个类，函数，实例，模块都有其命名空间，可以通过<code>__dict__</code>成员来访问，如下面代码所示：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -251,7 +251,7 @@
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">sys</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">sys</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">main_module</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">module_member</span> <span class="o">=</span> <span class="s1">&#39;module&#39;</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="k">class</span> <span class="nc">C</span><span class="p">:</span>
@@ -261,17 +261,17 @@
 <span class="o">&gt;&gt;&gt;</span> <span class="k">def</span> <span class="nf">func</span><span class="p">():</span>
 <span class="o">...</span>     <span class="n">func_member</span> <span class="o">=</span> <span class="s1">&#39;function&#39;</span>
 <span class="o">...</span>     <span class="n">fls</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">_getframe</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">f_locals</span>
-<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="s1">&#39;fls and locals() are same object? </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fls</span> <span class="ow">is</span> <span class="nb">locals</span><span class="p">()))</span>
-<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="n">fls</span><span class="p">[</span><span class="s1">&#39;func_member&#39;</span><span class="p">])</span>
+<span class="o">...</span>     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;fls and locals() are same object? </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fls</span> <span class="ow">is</span> <span class="nb">locals</span><span class="p">()))</span>
+<span class="o">...</span>     <span class="nb">print</span><span class="p">(</span><span class="n">fls</span><span class="p">[</span><span class="s1">&#39;func_member&#39;</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">main_module</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;module_member&#39;</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">main_module</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;module_member&#39;</span><span class="p">])</span>
 <span class="n">module</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;class_member&#39;</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;class_member&#39;</span><span class="p">])</span>
 <span class="k">class</span>
 <span class="err">&gt;&gt;&gt; </span><span class="nc">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;instance_member&#39;</span><span class="p">])</span>
 <span class="n">instance</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">func</span><span class="p">()</span>
-<span class="n">fls</span> <span class="ow">and</span> <span class="nb">locals</span><span class="p">()</span> <span class="n">are</span> <span class="n">same</span> <span class="nb">object</span><span class="err">?</span> <span class="bp">True</span>
+<span class="n">fls</span> <span class="ow">and</span> <span class="nb">locals</span><span class="p">()</span> <span class="n">are</span> <span class="n">same</span> <span class="nb">object</span><span class="err">?</span> <span class="kc">True</span>
 <span class="n">function</span>
 </code></pre></td></tr></table>
 </div>
@@ -283,7 +283,7 @@
 <p>例如下面的一段代码：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -298,13 +298,13 @@
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
 <span class="o">...</span> <span class="n">__builtin__</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;Hello, World!&#39;</span>
 <span class="o">...</span> <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
 <span class="o">...</span>     <span class="n">y</span> <span class="o">=</span> <span class="s1">&#39;abc&#39;</span>
-<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-<span class="o">...</span>     <span class="k">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="o">...</span>     <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="o">...</span>     <span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="o">...</span>     <span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 <span class="o">...</span>
 <span class="o">...</span> <span class="n">test</span><span class="p">()</span>
 <span class="o">...</span>
@@ -318,7 +318,7 @@
 <p>在最后，我们来分析这样一段代码：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -326,9 +326,9 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
 <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;abc&#39;</span>
 
 <span class="n">test</span><span class="p">()</span>
@@ -357,16 +357,16 @@ UnboundLocalError: local variable 'x' referenced before assignment
 <p>在上面的函数中，我们要打印一个名字<code>x</code>，它首先会去本地命名空间中查找，没有找到。然后去当前函数<code>test</code>的作用域中查找，找到了。此时Python解释器就会发现<code>x</code>这个名字还没有添加到local本地命名空间中，就被引用了。所以就会抛出一个异常，说<code>x</code>还未被赋值就被引用了。如果我们把代码改成下面这种形式，发现就可以正常运行了：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
 <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
 <span class="n">test</span><span class="p">()</span>
 </code></pre></td></tr></table>
@@ -377,7 +377,7 @@ UnboundLocalError: local variable 'x' referenced before assignment
 这是因为此时Python解释器查找命名空间的顺序变了。解释器首先会去查找本地命名空间，发现没有，然后去查找函数<code>test</code>的作用域，发现也没有，接着再去查找全局命名空间，此时找到了，就会打印出x的值。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -395,19 +395,19 @@ UnboundLocalError: local variable 'x' referenced before assignment
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">dis</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">dis</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
 <span class="k">def</span> <span class="nf">test_right</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
 <span class="n">dis</span><span class="o">.</span><span class="n">dis</span><span class="p">(</span><span class="n">test_right</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">20</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">20</span><span class="p">)</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="mi">1234</span>
 <span class="k">def</span> <span class="nf">test_error</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;abc&#39;</span>
 
 <span class="n">dis</span><span class="o">.</span><span class="n">dis</span><span class="p">(</span><span class="n">test_error</span><span class="p">)</span>

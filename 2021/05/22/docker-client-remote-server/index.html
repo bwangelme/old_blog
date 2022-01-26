@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.83.1 with theme even" />
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
 <link rel="canonical" href="/2021/05/22/docker-client-remote-server/" />
@@ -48,8 +48,8 @@ Docker 客户端连接远程 Docker Daemon
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2021/05/22/docker-client-remote-server/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2021-05-22T11:41:46&#43;08:00" />
-<meta property="article:modified_time" content="2021-05-22T11:41:46&#43;08:00" />
+<meta property="article:published_time" content="2021-05-22T11:41:46+08:00" />
+<meta property="article:modified_time" content="2021-05-22T11:41:46+08:00" />
 
 <meta itemprop="name" content="Docker 客户端连接远程 Docker Daemon">
 <meta itemprop="description" content="
@@ -57,8 +57,8 @@ Docker 客户端连接远程 Docker Daemon
 Docker 客户端连接远程 Docker Daemon
 参考链接 How to Connect to a Remote Docker Daemon
 
-"><meta itemprop="datePublished" content="2021-05-22T11:41:46&#43;08:00" />
-<meta itemprop="dateModified" content="2021-05-22T11:41:46&#43;08:00" />
+"><meta itemprop="datePublished" content="2021-05-22T11:41:46+08:00" />
+<meta itemprop="dateModified" content="2021-05-22T11:41:46+08:00" />
 <meta itemprop="wordCount" content="449">
 <meta itemprop="keywords" content="Docker," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Docker 客户端连接远程 Docker Daemon"/>
@@ -199,7 +199,7 @@ Docker 客户端连接远程 Docker Daemon
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -209,7 +209,7 @@ Docker 客户端连接远程 Docker Daemon
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 docker service 的配置文件目录</span>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 docker service 的配置文件目录</span>
 sudo mkdir -p /etc/systemd/system/docker.service.d
 <span class="c1"># 修改 docker service 的启动命令，令其监听本地套接字文件和 2375 端口</span>
 sudo cat &gt; /etc/systemd/system/docker.service.d/options.conf <span class="s">&lt;&lt;EOF
@@ -229,11 +229,11 @@ sudo cat &gt; /etc/systemd/system/docker.service.d/options.conf <span class="s">
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">sudo systemctl daemon-reload <span class="c1"># 重新载入 systemd 关于 docker service 的配置</span>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo systemctl daemon-reload <span class="c1"># 重新载入 systemd 关于 docker service 的配置</span>
 sudo systemctl restart docker.service <span class="c1"># 重启 docker service</span>
 </code></pre></td></tr></table>
 </div>
@@ -248,7 +248,7 @@ sudo systemctl restart docker.service <span class="c1"># 重启 docker service</
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -256,7 +256,7 @@ sudo systemctl restart docker.service <span class="c1"># 重启 docker service</
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">ø&gt; DOCKER_HOST=tcp://192.168.56.23:2375 docker images                                                                                                                                                                                                                                                     11:55:17 (05-22)
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">ø&gt; DOCKER_HOST=tcp://192.168.56.23:2375 docker images                                                                                                                                                                                                                                                     11:55:17 (05-22)
 REPOSITORY                        TAG       IMAGE ID       CREATED         SIZE
 ubuntu                            20.04     8e428cff54c8   8 weeks ago     72.9MB
 ubuntu                            latest    8e428cff54c8   8 weeks ago     72.9MB
@@ -267,10 +267,10 @@ docker.elastic.co/kibana/kibana   7.1.0     714b175e84e8   2 years ago     745MB
 </div><p>最后，我在 zshrc 中添加了一条 alias:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">(( $+commands[docker] )) &amp;&amp; alias docker=&#34;DOCKER_HOST=tcp://192.168.56.23:2375 docker&#34;
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">(( $+commands[docker] )) &amp;&amp; alias docker=&#34;DOCKER_HOST=tcp://192.168.56.23:2375 docker&#34;
 </code></pre></td></tr></table>
 </div>
 </div><p>这样在 MacOS 中执行 docker 命令访问的就是 Ubuntu 虚拟机中的 Docker Daemon 了。</p>
