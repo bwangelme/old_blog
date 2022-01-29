@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.0 with theme even" />
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
 <link rel="canonical" href="/2020/08/22/redis-pipelining/" />
@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -46,18 +46,21 @@
 
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2020/08/22/redis-pipelining/" /><meta property="article:section" content="translate" />
+<meta property="og:url" content="/2020/08/22/redis-pipelining/" />
 <meta property="article:published_time" content="2020-08-22T17:22:37+08:00" />
 <meta property="article:modified_time" content="2020-08-22T17:22:37+08:00" />
-
 <meta itemprop="name" content="Review 《Using pipelining to speedup Redis queries》">
 <meta itemprop="description" content="
 
 原文地址: https://redis.io/topics/pipelining
 
-"><meta itemprop="datePublished" content="2020-08-22T17:22:37+08:00" />
-<meta itemprop="dateModified" content="2020-08-22T17:22:37+08:00" />
+">
+<meta itemprop="datePublished" content="2020-08-22T17:22:37&#43;08:00" />
+<meta itemprop="dateModified" content="2020-08-22T17:22:37&#43;08:00" />
 <meta itemprop="wordCount" content="1256">
+
+
+
 <meta itemprop="keywords" content="翻译,Redis," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Review 《Using pipelining to speedup Redis queries》"/>
 <meta name="twitter:description" content="
@@ -169,12 +172,12 @@
 <p>在下面的例子中，我们向 Redis 服务器发送了两条 <code>INCR</code> 命令，它也 <strong>按顺序</strong> 返回了这两条命令的响应:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ø&gt; <span class="nb">printf</span> <span class="s2">&#34;INCR &#39;some_key&#39;\r\nINCR &#39;some_key&#39;\r\n&#34;</span> <span class="p">|</span> nc localhost <span class="m">6379</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; <span class="nb">printf</span> <span class="s2">&#34;INCR &#39;some_key&#39;\r\nINCR &#39;some_key&#39;\r\n&#34;</span> <span class="p">|</span> nc localhost <span class="m">6379</span>
 :1 // 这是第一条命令的响应
 :2 // 这是第二条命令的响应
 </code></pre></td></tr></table>
@@ -187,7 +190,7 @@
 <p>下面是一个简单的压测程序(完整代码见 <a href="https://github.com/bwangelme/GoDemo/blob/7e0fc475f3a1766b61e09db45ae300638c57cb6a/redis_pipelining.go">GitHub</a>)，对比使用 Pipelining 和不使用 Pipelining 的执行时间:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -230,7 +233,7 @@
 </span><span class="lnt">41
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">PingWithPipelining</span><span class="p">(</span><span class="nx">rdb</span> <span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span><span class="p">,</span> <span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">PingWithPipelining</span><span class="p">(</span><span class="nx">rdb</span> <span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span><span class="p">,</span> <span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
 	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">rdb</span><span class="p">.</span><span class="nf">Pipelined</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">pipeliner</span> <span class="nx">redis</span><span class="p">.</span><span class="nx">Pipeliner</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
 		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">benchTimes</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
 			<span class="nx">pipeliner</span><span class="p">.</span><span class="nf">Ping</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
@@ -276,14 +279,14 @@
 </div><p>程序的输出如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ø&gt; go run redis_pipelining.go
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; go run redis_pipelining.go
 Start WithPipelining
 WithPipelining Running <span class="m">10000</span> <span class="nb">times</span> cost 9.596085ms
 Start WithoutPipelining
@@ -369,7 +372,7 @@ WithoutPipelining Running <span class="m">10000</span> <span class="nb">times</s
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

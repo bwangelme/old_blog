@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.0 with theme even" />
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
 <link rel="canonical" href="/note/golang_concurrency/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -45,16 +45,19 @@
 Go 语言并发编程的学习笔记
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/note/golang_concurrency/" /><meta property="article:section" content="note" />
+<meta property="og:url" content="/note/golang_concurrency/" />
 <meta property="article:published_time" content="2021-01-10T22:40:27+08:00" />
 <meta property="article:modified_time" content="2021-01-10T22:40:27+08:00" />
-
 <meta itemprop="name" content="《Go 语言实践 concurrency》学习笔记">
 <meta itemprop="description" content="
 Go 语言并发编程的学习笔记
-"><meta itemprop="datePublished" content="2021-01-10T22:40:27+08:00" />
-<meta itemprop="dateModified" content="2021-01-10T22:40:27+08:00" />
+">
+<meta itemprop="datePublished" content="2021-01-10T22:40:27&#43;08:00" />
+<meta itemprop="dateModified" content="2021-01-10T22:40:27&#43;08:00" />
 <meta itemprop="wordCount" content="858">
+
+
+
 <meta itemprop="keywords" content="笔记,Go," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="《Go 语言实践 concurrency》学习笔记"/>
 <meta name="twitter:description" content="
@@ -161,11 +164,11 @@ Go 语言并发编程的学习笔记
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># ListDirectory 如果要启动 Goroutine，那么也应该给调用者提供停止该 Goroutine 的方法，这里提供了一个回调函数参数，让调用者能够停止该 Goroutine</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># ListDirectory 如果要启动 Goroutine，那么也应该给调用者提供停止该 Goroutine 的方法，这里提供了一个回调函数参数，让调用者能够停止该 Goroutine</span>
 func ListDirectory<span class="o">(</span>dir string, fn func<span class="o">(</span>string<span class="o">))</span>
 </code></pre></td></tr></table>
 </div>
@@ -174,7 +177,7 @@ func ListDirectory<span class="o">(</span>dir string, fn func<span class="o">(</
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -230,7 +233,7 @@ func ListDirectory<span class="o">(</span>dir string, fn func<span class="o">(</
 </span><span class="lnt">54
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Tracker</span> <span class="kd">struct</span> <span class="p">{</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Tracker</span> <span class="kd">struct</span> <span class="p">{</span>
 	<span class="nx">ch</span>   <span class="kd">chan</span> <span class="kt">string</span>
 	<span class="nx">stop</span> <span class="kd">chan</span> <span class="kd">struct</span><span class="p">{}</span>
 <span class="p">}</span>
@@ -307,7 +310,7 @@ func ListDirectory<span class="o">(</span>dir string, fn func<span class="o">(</
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -335,7 +338,7 @@ func ListDirectory<span class="o">(</span>dir string, fn func<span class="o">(</
 </span><span class="lnt">26
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Go 业务中的 Copy On Write
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Go 业务中的 Copy On Write
 </span><span class="c1">// 当有配置需要更改时，先复制一份，在复制份上执行修改，然后再利用 atomic.Value 这个原子操作修改配置的指针
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">type</span> <span class="nx">Map</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span>
@@ -429,7 +432,7 @@ func ListDirectory<span class="o">(</span>dir string, fn func<span class="o">(</
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

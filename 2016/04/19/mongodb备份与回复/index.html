@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.0 with theme even" />
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
 <link rel="canonical" href="/2016/04/19/mongodb%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%9B%9E%E5%A4%8D/" />
@@ -37,7 +37,7 @@
 
 
 
-<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -47,17 +47,20 @@
 主要介绍了JSON/CSV格式备份与二进制格式备份两种方式。
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2016/04/19/mongodb%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%9B%9E%E5%A4%8D/" /><meta property="article:section" content="post" />
+<meta property="og:url" content="/2016/04/19/mongodb%E5%A4%87%E4%BB%BD%E4%B8%8E%E5%9B%9E%E5%A4%8D/" />
 <meta property="article:published_time" content="2016-04-19T11:58:26+00:00" />
 <meta property="article:modified_time" content="2016-04-19T11:58:26+00:00" />
-
 <meta itemprop="name" content="MongoDB备份与回复">
 <meta itemprop="description" content="摘要:
 
 主要介绍了JSON/CSV格式备份与二进制格式备份两种方式。
-"><meta itemprop="datePublished" content="2016-04-19T11:58:26+00:00" />
-<meta itemprop="dateModified" content="2016-04-19T11:58:26+00:00" />
+">
+<meta itemprop="datePublished" content="2016-04-19T11:58:26&#43;00:00" />
+<meta itemprop="dateModified" content="2016-04-19T11:58:26&#43;00:00" />
 <meta itemprop="wordCount" content="309">
+
+
+
 <meta itemprop="keywords" content="MongoDB," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MongoDB备份与回复"/>
 <meta name="twitter:description" content="摘要:
@@ -183,7 +186,7 @@
 <p>MongoDB导出</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -192,7 +195,7 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">mongoexport -d xff -c stu -f _id,name -q <span class="s1">&#39;{_id: {$lte:1000}}&#39;</span> -o ./xff.stu.json
+<pre class="chroma"><code class="language-sh" data-lang="sh">mongoexport -d xff -c stu -f _id,name -q <span class="s1">&#39;{_id: {$lte:1000}}&#39;</span> -o ./xff.stu.json
 
 -d 数据库
 -c 集合名字
@@ -204,7 +207,7 @@
 </div><p>MongoDB导入</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -214,7 +217,7 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">mongoimport -d xff -c stu2 --file ./xff.stu.json
+<pre class="chroma"><code class="language-sh" data-lang="sh">mongoimport -d xff -c stu2 --file ./xff.stu.json
 <span class="c1"># 导入JSON格式</span>
 
 mongoimport -d xff -c stu3 --type<span class="o">=</span>csv --headerline --file ./xff.stutest.csv
@@ -227,13 +230,13 @@ mongoimport -d xff -c stu3 --type<span class="o">=</span>csv --headerline --file
 </div><h1 id="二进制的导入导出">二进制的导入导出</h1>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">mongodump -d xff -o dump
+<pre class="chroma"><code class="language-sh" data-lang="sh">mongodump -d xff -o dump
 
 -d 代表数据库
 -o 代表备份文件的位置
@@ -241,7 +244,7 @@ mongoimport -d xff -c stu3 --type<span class="o">=</span>csv --headerline --file
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -250,7 +253,7 @@ mongoimport -d xff -c stu3 --type<span class="o">=</span>csv --headerline --file
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">mongorestore --dir<span class="o">=</span>dump
+<pre class="chroma"><code class="language-sh" data-lang="sh">mongorestore --dir<span class="o">=</span>dump
 
 <span class="c1"># 恢复dump文件夹中的所有数据库</span>
 
@@ -358,7 +361,7 @@ mongorestore -d xff2 --dir<span class="o">=</span>dump/xff
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
