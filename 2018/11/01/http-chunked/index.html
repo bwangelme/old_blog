@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
 <link rel="canonical" href="/2018/11/01/http-chunked/" />
@@ -36,24 +36,21 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
 <meta property="og:title" content="HTTP 协议中的分块传输编码" />
 <meta property="og:description" content="说明了 HTTP 分块传输编码方式" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2018/11/01/http-chunked/" />
+<meta property="og:url" content="/2018/11/01/http-chunked/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2018-11-01T23:32:43+08:00" />
 <meta property="article:modified_time" content="2018-11-01T23:32:43+08:00" />
+
 <meta itemprop="name" content="HTTP 协议中的分块传输编码">
-<meta itemprop="description" content="说明了 HTTP 分块传输编码方式">
-<meta itemprop="datePublished" content="2018-11-01T23:32:43&#43;08:00" />
-<meta itemprop="dateModified" content="2018-11-01T23:32:43&#43;08:00" />
+<meta itemprop="description" content="说明了 HTTP 分块传输编码方式"><meta itemprop="datePublished" content="2018-11-01T23:32:43+08:00" />
+<meta itemprop="dateModified" content="2018-11-01T23:32:43+08:00" />
 <meta itemprop="wordCount" content="1452">
-
-
-
 <meta itemprop="keywords" content="HTTP," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="HTTP 协议中的分块传输编码"/>
 <meta name="twitter:description" content="说明了 HTTP 分块传输编码方式"/>
@@ -198,7 +195,7 @@
 <p>下面是使用短连接处理HTTP请求的例子，我们写完响应行后立刻将TCP连接关闭了，此时浏览器是能够正确处理这种请求的。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -231,7 +228,7 @@
 </span><span class="lnt">31
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">handleClosedHttpReq</span><span class="p">(</span><span class="nx">conn</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Conn</span><span class="p">)</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">handleClosedHttpReq</span><span class="p">(</span><span class="nx">conn</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Conn</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">buffer</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
     <span class="nx">n</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="nx">buffer</span><span class="p">)</span>
     <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
@@ -269,7 +266,7 @@
 <p>在持久连接模式中，由于服务器不会立刻关闭TCP连接，所以需要在响应中加上一个<code>Content-Length</code>的响应头来表示响应体的长度，让浏览器判断HTTP响应是否结束。如果没有这个响应头的话，浏览器会处于<code>pending</code>的状态。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -285,7 +282,7 @@
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 没有添加 Content-Length 的响应，浏览器会处于 pending 的状态
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 没有添加 Content-Length 的响应，浏览器会处于 pending 的状态
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">handleKeepAliveHttpReq</span><span class="p">(</span><span class="nx">conn</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Conn</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">buffer</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
     <span class="nx">n</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="nx">buffer</span><span class="p">)</span>
@@ -304,7 +301,7 @@
 </div><p><img src="https://passage-1253400711.cos-website.ap-beijing.myqcloud.com/2018-11-01-234251.png" alt="持久连接浏览器pending"></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -321,7 +318,7 @@
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 添加了 Content-Length，浏览器就可以正常处理响应了
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 添加了 Content-Length，浏览器就可以正常处理响应了
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">handleKeepAliveHttpReq</span><span class="p">(</span><span class="nx">conn</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Conn</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">buffer</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
     <span class="nx">n</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="nx">buffer</span><span class="p">)</span>
@@ -348,7 +345,7 @@
 <p>如果需要使用分块传输编码的响应格式，我们需要在HTTP响应中设置响应头<code>Transfer-Encoding: chunked</code>。它的具体传输格式是这样的(注意HTTP响应中换行符是<code>\r\n</code>):</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -363,7 +360,7 @@
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">HTTP/1.1 200 OK\r\n
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">HTTP/1.1 200 OK\r\n
 \r\n
 Transfer-Encoding: chunked\r\n
 ...\r\n
@@ -381,7 +378,7 @@ Transfer-Encoding: chunked\r\n
 </div><h3 id="分块传输编码例子">分块传输编码例子</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -404,7 +401,7 @@ Transfer-Encoding: chunked\r\n
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">handleChunkedHttpResp</span><span class="p">(</span><span class="nx">conn</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Conn</span><span class="p">)</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">handleChunkedHttpResp</span><span class="p">(</span><span class="nx">conn</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Conn</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">buffer</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="mi">1024</span><span class="p">)</span>
     <span class="nx">n</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">conn</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="nx">buffer</span><span class="p">)</span>
     <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
@@ -534,7 +531,7 @@ Transfer-Encoding: chunked\r\n
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

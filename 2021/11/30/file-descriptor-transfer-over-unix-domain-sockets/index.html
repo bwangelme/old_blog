@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
 <link rel="canonical" href="/2021/11/30/file-descriptor-transfer-over-unix-domain-sockets/" />
@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -47,22 +47,19 @@
 
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2021/11/30/file-descriptor-transfer-over-unix-domain-sockets/" />
+<meta property="og:url" content="/2021/11/30/file-descriptor-transfer-over-unix-domain-sockets/" /><meta property="article:section" content="translate" />
 <meta property="article:published_time" content="2021-11-30T11:58:56+08:00" />
 <meta property="article:modified_time" content="2021-11-30T11:58:56+08:00" />
+
 <meta itemprop="name" content="Review 《File Descriptor Transfer over Unix Domain Sockets》">
 <meta itemprop="description" content="
 
 使用 Unix 域套接字传输文件描述符
 原文地址: https://copyconstruct.medium.com/file-descriptor-transfer-over-unix-domain-sockets-dcbbf5b3b6ec
 
-">
-<meta itemprop="datePublished" content="2021-11-30T11:58:56&#43;08:00" />
-<meta itemprop="dateModified" content="2021-11-30T11:58:56&#43;08:00" />
+"><meta itemprop="datePublished" content="2021-11-30T11:58:56+08:00" />
+<meta itemprop="dateModified" content="2021-11-30T11:58:56+08:00" />
 <meta itemprop="wordCount" content="4811">
-
-
-
 <meta itemprop="keywords" content="翻译,linux," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Review 《File Descriptor Transfer over Unix Domain Sockets》"/>
 <meta name="twitter:description" content="
@@ -182,7 +179,7 @@
 <p>一个简单的Go程序在 Unix 域套接字上创建一个监听的 &ldquo;Echo 服务器&rdquo;，如下所示:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -215,7 +212,7 @@
 </span><span class="lnt">31
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;io&#34;</span>
@@ -254,7 +251,7 @@
 <p>当用<code>ls -l</code>查看时，UNIX 域套接字在第一列显示为s类型，而 <code>ls -F</code> 在套接字路径名上附加一个等号（=）。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -275,7 +272,7 @@
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">root@1fd53621847b:~/uds# ./uds
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">root@1fd53621847b:~/uds# ./uds
 ^C
 root@1fd53621847b:~/uds# ls -ls /tmp
 total 0
@@ -305,13 +302,13 @@ root@5247072fc542:~/uds#
 <p>在 Linux 上，Unix 域套接字的地址通过如下的结构来表示:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">struct sockaddr_un {
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">struct sockaddr_un {
       sa_family_t sun_family; /* Always AF_UNIX */
       char sun_path[108]; /* Pathname */
 };
@@ -320,14 +317,14 @@ root@5247072fc542:~/uds#
 </div><p>在 MacOS 上，地址通过如下的结构表示:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">struct sockaddr_un {
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">struct sockaddr_un {
      u_char  sun_len;
      u_char  sun_family;
      char    sun_path[104];
@@ -339,13 +336,13 @@ root@5247072fc542:~/uds#
 <p>对 <code>SO_REUSEPORT</code> 的支持是在 Linux 3.9及以上版本中引入的。然而，在 Linux 上，所有想共享同一地址和端口组合的套接字必须属于共享同一有效UID的进程。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">socktype</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">socktype</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 <span class="kt">int</span> <span class="n">optval</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="n">setsockopt</span><span class="p">(</span><span class="n">sfd</span><span class="p">,</span> <span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">SO_REUSEPORT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">optval</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">optval</span><span class="p">));</span>
 <span class="n">bind</span><span class="p">(</span><span class="n">sfd</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">addr</span><span class="p">,</span> <span class="n">addrlen</span><span class="p">);</span>
@@ -373,14 +370,14 @@ root@5247072fc542:~/uds#
 <p>在 Linux 中 <code>sendmsg</code> 函数的签名如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="n">ssize_t</span> <span class="nf">sendmsg</span><span class="p">(</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="n">ssize_t</span> <span class="nf">sendmsg</span><span class="p">(</span>
     <span class="kt">int</span> <span class="n">socket</span><span class="p">,</span>
     <span class="k">const</span> <span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="n">message</span><span class="p">,</span>
     <span class="kt">int</span> <span class="n">flags</span>
@@ -390,14 +387,14 @@ root@5247072fc542:~/uds#
 </div><p>与 <code>sendmsg</code> 对应的是 <code>recvmsg</code>:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="n">ssize_t</span> <span class="nf">recvmsg</span><span class="p">(</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="n">ssize_t</span> <span class="nf">recvmsg</span><span class="p">(</span>
      <span class="kt">int</span> <span class="n">sockfd</span><span class="p">,</span>
      <span class="k">const</span> <span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="n">msg</span><span class="p">,</span>
      <span class="kt">int</span> <span class="n">flags</span>
@@ -407,7 +404,7 @@ root@5247072fc542:~/uds#
 </div><p>人们可以用 <code>sendmsg</code> 在 Unix 域套接字上传输的特殊消息是由 <code>msghdr</code> 指定的。希望将文件描述发送给另一个进程的进程创建一个 <code>msghdr</code> 结构，其中包含要传递的描述。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -418,7 +415,7 @@ root@5247072fc542:~/uds#
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">msghdr</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">msghdr</span> <span class="p">{</span>
     <span class="kt">void</span>            <span class="o">*</span><span class="n">msg_name</span><span class="p">;</span>      <span class="cm">/* optional address */</span>
     <span class="n">socklen_t</span>       <span class="n">msg_namelen</span><span class="p">;</span>    <span class="cm">/* size of address */</span>
     <span class="k">struct</span>          <span class="n">iovec</span> <span class="o">*</span><span class="n">msg_iov</span><span class="p">;</span> <span class="cm">/* scatter/gather array */</span>
@@ -432,7 +429,7 @@ root@5247072fc542:~/uds#
 </div><p><code>msghdr</code> 结构的 <code>msg_control</code> 成员，其长度为 <code>msg_controllen</code> ，指向一个如下形式的消息缓冲区:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -441,7 +438,7 @@ root@5247072fc542:~/uds#
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">cmsghdr</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">cmsghdr</span> <span class="p">{</span>
     <span class="n">socklen_t</span> <span class="n">cmsg_len</span><span class="p">;</span>    <span class="cm">/* data byte count, including header */</span>
     <span class="kt">int</span>       <span class="n">cmsg_level</span><span class="p">;</span>  <span class="cm">/* originating protocol */</span>
     <span class="kt">int</span>       <span class="n">cmsg_type</span><span class="p">;</span>   <span class="cm">/* protocol-specific type */</span>
@@ -462,7 +459,7 @@ root@5247072fc542:~/uds#
 <p>这三种类型的辅助数组仅应该通过下面的宏定义来访问，而不应该直接使用</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -470,7 +467,7 @@ root@5247072fc542:~/uds#
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">cmsghdr</span> <span class="o">*</span><span class="nf">CMSG_FIRSTHDR</span><span class="p">(</span><span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="n">msgh</span><span class="p">);</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">cmsghdr</span> <span class="o">*</span><span class="nf">CMSG_FIRSTHDR</span><span class="p">(</span><span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="n">msgh</span><span class="p">);</span>
 <span class="k">struct</span> <span class="n">cmsghdr</span> <span class="o">*</span><span class="nf">CMSG_NXTHDR</span><span class="p">(</span><span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="n">msgh</span><span class="p">,</span> <span class="k">struct</span> <span class="n">cmsghdr</span> <span class="o">*</span><span class="n">cmsg</span><span class="p">);</span>
 <span class="n">size_t</span> <span class="nf">CMSG_ALIGN</span><span class="p">(</span><span class="n">size_t</span> <span class="n">length</span><span class="p">);</span>
 <span class="n">size_t</span> <span class="nf">CMSG_SPACE</span><span class="p">(</span><span class="n">size_t</span> <span class="n">length</span><span class="p">);</span>
@@ -484,7 +481,7 @@ root@5247072fc542:~/uds#
 <p><code>cmsghdr</code> 结构体的成员 <code>cmsg_data</code> 可以包含一个进程想要发送的文件描述符的数组。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -493,7 +490,7 @@ root@5247072fc542:~/uds#
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">struct cmsghdr {
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">struct cmsghdr {
     socklen_t cmsg_len;    /* data byte count, including header */
     int       cmsg_level;  /* originating protocol */
     int       cmsg_type;   /* protocol-specific type */
@@ -608,7 +605,7 @@ root@5247072fc542:~/uds#
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

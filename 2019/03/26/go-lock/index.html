@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
 <link rel="canonical" href="/2019/03/26/go-lock/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -45,19 +45,16 @@
 注意: 这篇文章的思路是不正确的，正确的思路请参考 关于线程同步操作的一道面试题
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2019/03/26/go-lock/" />
+<meta property="og:url" content="/2019/03/26/go-lock/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2019-03-26T21:56:43+08:00" />
 <meta property="article:modified_time" content="2019-03-26T21:56:43+08:00" />
+
 <meta itemprop="name" content="线程同步操作面试题使用锁的解法">
 <meta itemprop="description" content="
 注意: 这篇文章的思路是不正确的，正确的思路请参考 关于线程同步操作的一道面试题
-">
-<meta itemprop="datePublished" content="2019-03-26T21:56:43&#43;08:00" />
-<meta itemprop="dateModified" content="2019-03-26T21:56:43&#43;08:00" />
+"><meta itemprop="datePublished" content="2019-03-26T21:56:43+08:00" />
+<meta itemprop="dateModified" content="2019-03-26T21:56:43+08:00" />
 <meta itemprop="wordCount" content="2767">
-
-
-
 <meta itemprop="keywords" content="Go,锁,ARTS," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="线程同步操作面试题使用锁的解法"/>
 <meta name="twitter:description" content="
@@ -196,7 +193,7 @@
 <p>一个错误解法如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -266,7 +263,7 @@
 </span><span class="lnt">68
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;fmt&#34;</span>
@@ -375,7 +372,7 @@
 <p>理解了这个错误之后，我们可以把代码稍微改一下，将<code>index &lt; 30</code>这个比较操作也置于锁的保护中，就能够得到正确的结果了。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -417,7 +414,7 @@
 </span><span class="lnt">40
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;fmt&#34;</span>
@@ -466,7 +463,7 @@
 <p>为了避免这些浪费，我们可以参考 Java 中的公平锁，让解锁的顺序和上锁的顺序匹配，每次只有一个 Goroutine 获得锁资源，大家不必每次都去争抢锁资源。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -565,7 +562,7 @@
 </span><span class="lnt">97
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;fmt&#34;</span>
@@ -792,7 +789,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

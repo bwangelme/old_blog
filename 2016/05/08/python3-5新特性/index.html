@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
 <link rel="canonical" href="/2016/05/08/python3-5%E6%96%B0%E7%89%B9%E6%80%A7/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -49,9 +49,10 @@ Python3.5的新特性，原文地址
 
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2016/05/08/python3-5%E6%96%B0%E7%89%B9%E6%80%A7/" />
+<meta property="og:url" content="/2016/05/08/python3-5%E6%96%B0%E7%89%B9%E6%80%A7/" /><meta property="article:section" content="translate" />
 <meta property="article:published_time" content="2016-05-08T14:27:17+00:00" />
 <meta property="article:modified_time" content="2016-05-08T14:27:17+00:00" />
+
 <meta itemprop="name" content="Python3.5新特性">
 <meta itemprop="description" content="摘要:
 
@@ -59,13 +60,9 @@ Python3.5的新特性，原文地址
 Python3.5的新特性，原文地址
 用async和await等新语法来进行协程编程
 
-">
-<meta itemprop="datePublished" content="2016-05-08T14:27:17&#43;00:00" />
-<meta itemprop="dateModified" content="2016-05-08T14:27:17&#43;00:00" />
+"><meta itemprop="datePublished" content="2016-05-08T14:27:17+00:00" />
+<meta itemprop="dateModified" content="2016-05-08T14:27:17+00:00" />
 <meta itemprop="wordCount" content="966">
-
-
-
 <meta itemprop="keywords" content="Python,翻译," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python3.5新特性"/>
 <meta name="twitter:description" content="摘要:
@@ -172,11 +169,11 @@ Python3.5的新特性，原文地址
 <p>通过<code>async func</code>语法可以声明一个协程函数，如下所示:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">def</span> <span class="nf">coro</span><span class="p">():</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">async</span> <span class="k">def</span> <span class="nf">coro</span><span class="p">():</span>
     <span class="k">return</span> <span class="s1">&#39;span&#39;</span>
 </code></pre></td></tr></table>
 </div>
@@ -185,7 +182,7 @@ Python3.5的新特性，原文地址
 <h3 id="示例-基本的http客户端">示例: 基本的Http客户端</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -209,10 +206,10 @@ Python3.5的新特性，原文地址
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">asyncio</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">asyncio</span>
 
-<span class="n">async</span> <span class="k">def</span> <span class="nf">http_get</span><span class="p">(</span><span class="n">domain</span><span class="p">):</span>
-    <span class="n">reader</span><span class="p">,</span> <span class="n">writer</span> <span class="o">=</span> <span class="n">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">open_connection</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">http_get</span><span class="p">(</span><span class="n">domain</span><span class="p">):</span>
+    <span class="n">reader</span><span class="p">,</span> <span class="n">writer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">open_connection</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
 
     <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
         <span class="sa">b</span><span class="s1">&#39;GET / HTTP/1.1&#39;</span><span class="p">,</span>
@@ -221,8 +218,8 @@ Python3.5的新特性，原文地址
         <span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
     <span class="p">]))</span>
 
-    <span class="n">async</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt;&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt;&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
 
     <span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
@@ -237,7 +234,7 @@ Python3.5的新特性，原文地址
 <p>程序的输入如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -254,7 +251,7 @@ Python3.5的新特性，原文地址
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">&gt;&gt;&gt; b&#39;HTTP/1.1 200 OK\r\n&#39;
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&gt;&gt;&gt; b&#39;HTTP/1.1 200 OK\r\n&#39;
 &gt;&gt;&gt; b&#39;Date: Sun, 08 May 2016 07:33:29 GMT\r\n&#39;
 &gt;&gt;&gt; b&#39;Server: Apache\r\n&#39;
 &gt;&gt;&gt; b&#39;Last-Modified: Tue, 12 Jan 2010 13:48:00 GMT\r\n&#39;
@@ -275,7 +272,7 @@ Python3.5的新特性，原文地址
 <p>除了异步迭代器之外，还有新的语法支持异步的上下文管理器(关于上下文管理器可以参考我的这篇文章<a href="http://www.bwangel.win/2016/04/25/Python%E7%9A%84with%E8%AF%AD%E5%8F%A5/">Python的with语句</a>)，示例程序如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -293,14 +290,14 @@ Python3.5的新特性，原文地址
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="kn">import</span> <span class="nn">asyncio</span>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="kn">import</span> <span class="nn">asyncio</span>
 
-<span class="n">async</span> <span class="k">def</span> <span class="nf">coro</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;coro {}: waiting for lock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-    <span class="n">async</span> <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;coro {}: holding the lock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-        <span class="n">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;coro {}: releasing the lock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">coro</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;coro </span><span class="si">{}</span><span class="s1">: waiting for lock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;coro </span><span class="si">{}</span><span class="s1">: holding the lock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;coro </span><span class="si">{}</span><span class="s1">: releasing the lock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
 
 <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
 <span class="n">lock</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
@@ -316,7 +313,7 @@ Python3.5的新特性，原文地址
 <p>程序的运行结果如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -324,7 +321,7 @@ Python3.5的新特性，原文地址
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">coro 1: waiting for lock
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">coro 1: waiting for lock
 coro 1: holding the lock
 coro 2: waiting for lock
 coro 1: releasing the lock
@@ -396,7 +393,7 @@ coro 2: releasing the lock
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

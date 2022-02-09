@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
 <link rel="canonical" href="/2018/03/14/redis-source-dict/" />
@@ -37,7 +37,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -45,18 +45,15 @@
 <meta property="og:description" content="本文主要介绍了 Redis 的基础数据结构 dict 的实现，并描述了其渐进式 rehash 的操作
 注意: 本文基于 Redis 3.0.0 的代码进行分析的" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2018/03/14/redis-source-dict/" />
+<meta property="og:url" content="/2018/03/14/redis-source-dict/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2018-03-14T00:14:32+08:00" />
 <meta property="article:modified_time" content="2018-03-14T00:14:32+08:00" />
+
 <meta itemprop="name" content="Redis 源码阅读之 dict ">
 <meta itemprop="description" content="本文主要介绍了 Redis 的基础数据结构 dict 的实现，并描述了其渐进式 rehash 的操作
-注意: 本文基于 Redis 3.0.0 的代码进行分析的">
-<meta itemprop="datePublished" content="2018-03-14T00:14:32&#43;08:00" />
-<meta itemprop="dateModified" content="2018-03-14T00:14:32&#43;08:00" />
+注意: 本文基于 Redis 3.0.0 的代码进行分析的"><meta itemprop="datePublished" content="2018-03-14T00:14:32+08:00" />
+<meta itemprop="dateModified" content="2018-03-14T00:14:32+08:00" />
 <meta itemprop="wordCount" content="3147">
-
-
-
 <meta itemprop="keywords" content="Redis,C语言," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Redis 源码阅读之 dict "/>
 <meta name="twitter:description" content="本文主要介绍了 Redis 的基础数据结构 dict 的实现，并描述了其渐进式 rehash 的操作
@@ -185,7 +182,7 @@
 <p>在 Redis 中，dict 的代码存放在<code>src/dict.c</code>和<code>src/dict.h</code>两个文件中。在<code>src/dict.h</code>中定义了 dict 所用到的结构体，一共有四个:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -239,13 +236,13 @@
 </span><span class="lnt">52
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="c1">// 哈希表项
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="c1">// 哈希表项
 </span><span class="c1"></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">dictEntry</span> <span class="p">{</span>
     <span class="kt">void</span> <span class="o">*</span><span class="n">key</span><span class="p">;</span>
     <span class="k">union</span> <span class="p">{</span>
         <span class="kt">void</span> <span class="o">*</span><span class="n">val</span><span class="p">;</span>
-        <span class="n">uint64_t</span> <span class="n">u64</span><span class="p">;</span>
-        <span class="n">int64_t</span> <span class="n">s64</span><span class="p">;</span>
+        <span class="kt">uint64_t</span> <span class="n">u64</span><span class="p">;</span>
+        <span class="kt">int64_t</span> <span class="n">s64</span><span class="p">;</span>
         <span class="kt">double</span> <span class="n">d</span><span class="p">;</span>
     <span class="p">}</span> <span class="n">v</span><span class="p">;</span>
     <span class="k">struct</span> <span class="n">dictEntry</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span> <span class="c1">// 哈希表中是通过单链表解决键索引冲突的，next用来指向同一个键索引下的下一个元素
@@ -299,13 +296,13 @@
 <p>当我们向字典中存储键值对(k, v)时，字典通过一定的算法计算出k的索引值，它的计算方法如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 先根据哈希算法计算出键k的哈希值，哈希值为unsigned int 类型
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 先根据哈希算法计算出键k的哈希值，哈希值为unsigned int 类型
 hash = d-&gt;type-&gt;hashFunction(k)
 # 然后再将哈希值和哈希表的sizemask按位与，获得键k在哈希表中的索引
 idx = hash &amp; d-&gt;ht[table].sizemask
@@ -331,14 +328,14 @@ idx = hash &amp; d-&gt;ht[table].sizemask
 <p>在 <code>src/dict.c</code>的<code>dictEntry *dictAddRaw(dict *d, void *key)</code>函数中，我们可以看到向单链表中添加元素的过程</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* 哈希表通过单链表来解决键冲突，下面的代码向单链表中添加了哈希表节点 */</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* 哈希表通过单链表来解决键冲突，下面的代码向单链表中添加了哈希表节点 */</span>
 <span class="n">entry</span> <span class="o">=</span> <span class="n">zmalloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">entry</span><span class="p">));</span>
 <span class="n">entry</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">ht</span><span class="o">-&gt;</span><span class="n">table</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
 <span class="n">ht</span><span class="o">-&gt;</span><span class="n">table</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="p">;</span>
@@ -350,10 +347,10 @@ idx = hash &amp; d-&gt;ht[table].sizemask
 <p>每个dict都有一个负载因子，计算方式如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="n">load_factor</span> <span class="o">=</span> <span class="n">ht</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">used</span> <span class="o">/</span> <span class="n">ht</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="n">load_factor</span> <span class="o">=</span> <span class="n">ht</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">used</span> <span class="o">/</span> <span class="n">ht</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">size</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>当 dict 的负载因子过大或过小的时候，Redis 需要为这个 dict 扩展或者收缩哈希表的大小，这个过程叫做 rehash。上文中我们提到每个 dict 都有两个哈希表, <code>ht0</code>和<code>ht1</code>，在这里它们就发挥作用了。rehash 的具体操作如下:</p>
@@ -396,7 +393,7 @@ idx = hash &amp; d-&gt;ht[table].sizemask
 <p>首先我们可以分析一下字典迭代器的迭代操作，它可以用如下的伪代码来表示:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -415,7 +412,7 @@ idx = hash &amp; d-&gt;ht[table].sizemask
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">iter_dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">iter_dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
     <span class="c1"># 迭代0号哈希表</span>
     <span class="n">iter_table</span><span class="p">(</span><span class="n">ht</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">table</span><span class="p">)</span>
 
@@ -537,7 +534,7 @@ idx = hash &amp; d-&gt;ht[table].sizemask
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
 <link rel="canonical" href="/2018/03/01/go-binarysearchtree/" />
@@ -36,24 +36,21 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
 <meta property="og:title" content="Go与数据结构之二叉搜索树" />
 <meta property="og:description" content="简介: 利用Go语言实现二叉搜索树并为其编写单元测试" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2018/03/01/go-binarysearchtree/" />
+<meta property="og:url" content="/2018/03/01/go-binarysearchtree/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2018-03-01T22:22:52+08:00" />
 <meta property="article:modified_time" content="2018-03-01T22:22:52+08:00" />
+
 <meta itemprop="name" content="Go与数据结构之二叉搜索树">
-<meta itemprop="description" content="简介: 利用Go语言实现二叉搜索树并为其编写单元测试">
-<meta itemprop="datePublished" content="2018-03-01T22:22:52&#43;08:00" />
-<meta itemprop="dateModified" content="2018-03-01T22:22:52&#43;08:00" />
+<meta itemprop="description" content="简介: 利用Go语言实现二叉搜索树并为其编写单元测试"><meta itemprop="datePublished" content="2018-03-01T22:22:52+08:00" />
+<meta itemprop="dateModified" content="2018-03-01T22:22:52+08:00" />
 <meta itemprop="wordCount" content="2622">
-
-
-
 <meta itemprop="keywords" content="Go," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go与数据结构之二叉搜索树"/>
 <meta name="twitter:description" content="简介: 利用Go语言实现二叉搜索树并为其编写单元测试"/>
@@ -191,7 +188,7 @@
 <p>通过上面的描述，我们了解了二叉搜索树的概念，接下来我们使用 Go 语言来定义二叉搜索树及其上的操作。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -205,7 +202,7 @@
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">TreeNode</span> <span class="kd">struct</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">TreeNode</span> <span class="kd">struct</span> <span class="p">{</span>
 	<span class="nx">elem</span>  <span class="kt">int</span>
 	<span class="nx">left</span>  <span class="o">*</span><span class="nx">TreeNode</span>
 	<span class="nx">right</span> <span class="o">*</span><span class="nx">TreeNode</span>
@@ -225,7 +222,7 @@
 <h3 id="makeempty">MakeEmpty</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -238,7 +235,7 @@
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 创造一棵空树，或者将一棵搜索树清空
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 创造一棵空树，或者将一棵搜索树清空
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">MakeEmpty</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
 	<span class="k">if</span> <span class="nx">tree</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="nf">MakeEmpty</span><span class="p">(</span><span class="nx">tree</span><span class="p">.</span><span class="nx">left</span><span class="p">)</span>
@@ -264,7 +261,7 @@
 <p>二叉搜索树的<code>FindMin</code>操作的实现如下所示：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -277,7 +274,7 @@
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">FindMin</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">FindMin</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
 	<span class="k">if</span> <span class="nx">tree</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="k">return</span> <span class="kc">nil</span>
 	<span class="p">}</span>
@@ -295,7 +292,7 @@
 <p>二叉搜索树的<code>FindMax</code>操作的实现如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -308,7 +305,7 @@
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">FindMax</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">FindMax</span><span class="p">(</span><span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
 	<span class="k">if</span> <span class="nx">tree</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="k">return</span> <span class="kc">nil</span>
 	<span class="p">}</span>
@@ -326,7 +323,7 @@
 <p>二叉搜索树的<code>Find</code>操作的实现如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -342,7 +339,7 @@
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Find</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Find</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
 	<span class="k">if</span> <span class="nx">tree</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="k">return</span> <span class="kc">nil</span>
 	<span class="p">}</span>
@@ -363,7 +360,7 @@
 <p>二叉搜索树的<code>Insert</code>操作的实现如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -381,7 +378,7 @@
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Insert</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Insert</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
 	<span class="k">if</span> <span class="nx">tree</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="nx">tree</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">TreeNode</span><span class="p">{}</span>
 		<span class="nx">tree</span><span class="p">.</span><span class="nx">left</span> <span class="p">=</span> <span class="kc">nil</span>
@@ -405,7 +402,7 @@
 <p>为了验证我们的<code>Insert</code>操作的实现是否正确，我们可以利用 Go 的单元测试来为<code>Insert</code>操作编写测试代码，如下所示:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -428,7 +425,7 @@
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestInsert</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestInsert</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
 	<span class="kd">var</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">=</span> <span class="kc">nil</span>
 
 	<span class="nx">tree</span> <span class="p">=</span> <span class="nf">Insert</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nx">tree</span><span class="p">)</span>
@@ -480,7 +477,7 @@
 <p><code>Delete</code>操作的实现如下所示:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -513,7 +510,7 @@
 </span><span class="lnt">31
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Delete</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Delete</span><span class="p">(</span><span class="nx">elem</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span><span class="p">)</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">{</span>
 	<span class="k">if</span> <span class="nx">tree</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
 		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalf</span><span class="p">(</span><span class="s">&#34;Cannot find element %v in tree %v\n&#34;</span><span class="p">,</span> <span class="nx">elem</span><span class="p">,</span> <span class="nx">tree</span><span class="p">)</span>
 	<span class="p">}</span>
@@ -550,7 +547,7 @@
 <p>我为<code>Delete</code>操作编写了两个单元测试，分别测试删除只有有右子树的节点，和删除有两个子树的节点，测试代码如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -616,7 +613,7 @@
 </span><span class="lnt">64
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestDeleteRight</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestDeleteRight</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
 	<span class="kd">var</span> <span class="nx">tree</span> <span class="o">*</span><span class="nx">TreeNode</span> <span class="p">=</span> <span class="kc">nil</span>
 
 	<span class="c1">// 构造出来的树
@@ -781,7 +778,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

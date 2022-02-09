@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
 <link rel="canonical" href="/2017/12/05/python-upgrade-importerror/" />
@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -46,21 +46,18 @@
 
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2017/12/05/python-upgrade-importerror/" />
+<meta property="og:url" content="/2017/12/05/python-upgrade-importerror/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2017-12-05T22:33:57+08:00" />
 <meta property="article:modified_time" content="2017-12-05T22:33:57+08:00" />
+
 <meta itemprop="name" content="Python Upgrade Importerror">
 <meta itemprop="description" content="
 
 记一次因 Python 升级导致的 ImportError
 
-">
-<meta itemprop="datePublished" content="2017-12-05T22:33:57&#43;08:00" />
-<meta itemprop="dateModified" content="2017-12-05T22:33:57&#43;08:00" />
+"><meta itemprop="datePublished" content="2017-12-05T22:33:57+08:00" />
+<meta itemprop="dateModified" content="2017-12-05T22:33:57+08:00" />
 <meta itemprop="wordCount" content="1573">
-
-
-
 <meta itemprop="keywords" content="Python,ImportError," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python Upgrade Importerror"/>
 <meta name="twitter:description" content="
@@ -193,11 +190,11 @@
 <p>升级完成后重新启动 Django 应用，发现应用启动不起来，uwsgi 报错</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">from _ssl import HAS_SNI, HAS_ECDH, HAS_NPN, HAS_ALPN, HAS_TLSv1_3
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">from _ssl import HAS_SNI, HAS_ECDH, HAS_NPN, HAS_ALPN, HAS_TLSv1_3
 ImportError: cannot import name &#39;HAS_TLSv1_3&#39;
 </code></pre></td></tr></table>
 </div>
@@ -206,13 +203,13 @@ ImportError: cannot import name &#39;HAS_TLSv1_3&#39;
 <p>抛出的异常意思是在<code>_ssl</code>模块中没有<code>HAS_TLSv1_3</code>的属性，于是我就去Python 文档中查询了一下这个属性，它的解释是这样的：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">ssl.HAS_TLSv1_3
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">ssl.HAS_TLSv1_3
 Whether the OpenSSL library has built-in support for the TLS 1.3 protocol.
 
 New in version 3.6.3.
@@ -224,10 +221,10 @@ New in version 3.6.3.
 <p>我们接着再去看抛出异常的那行代码，它在 Python 的标准库的<code>ssl.py</code>的<a href="https://github.com/python/cpython/blob/v3.6.3/Lib/ssl.py#L118">118行</a>，具体内容如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">from _ssl import HAS_SNI, HAS_ECDH, HAS_NPN, HAS_ALPN, HAS_TLSv1_3
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">from _ssl import HAS_SNI, HAS_ECDH, HAS_NPN, HAS_ALPN, HAS_TLSv1_3
 </code></pre></td></tr></table>
 </div>
 </div><p>我们可以看到，抛出异常就是因为Python解释器从<code>_ssl</code>模块中导入<code>HAS_TLSv1_3</code>时，出现了导入异常。</p>
@@ -235,7 +232,7 @@ New in version 3.6.3.
 <p>在它的<a href="https://github.com/python/cpython/blob/v3.6.3/Modules/_ssl.c#L5154-L5206">5154-5206</a>行，我们可以看到它对于<code>_ssl</code>模块的定义：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -262,7 +259,7 @@ New in version 3.6.3.
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="k">static</span> <span class="k">struct</span> <span class="n">PyModuleDef</span> <span class="n">_sslmodule</span> <span class="o">=</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="k">static</span> <span class="k">struct</span> <span class="n">PyModuleDef</span> <span class="n">_sslmodule</span> <span class="o">=</span> <span class="p">{</span>
     <span class="n">PyModuleDef_HEAD_INIT</span><span class="p">,</span>
     <span class="s">&#34;_ssl&#34;</span><span class="p">,</span>
     <span class="n">module_doc</span><span class="p">,</span>
@@ -292,7 +289,7 @@ New in version 3.6.3.
 </div><p>而在它的<a href="https://github.com/python/cpython/blob/v3.6.3/Modules/_ssl.c#L5462-L5468">5642-5468</a>行，我们可以看到<code>_ssl</code>模块中对于<code>HAS_TLSv1_3</code>属性的定义：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -302,7 +299,7 @@ New in version 3.6.3.
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-c" data-lang="c"><span class="cp">#if defined(TLS1_3_VERSION) &amp;&amp; !defined(OPENSSL_NO_TLS1_3)
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cp">#if defined(TLS1_3_VERSION) &amp;&amp; !defined(OPENSSL_NO_TLS1_3)
 </span><span class="cp"></span>    <span class="n">r</span> <span class="o">=</span> <span class="n">Py_True</span><span class="p">;</span>
 <span class="cp">#else
 </span><span class="cp"></span>    <span class="n">r</span> <span class="o">=</span> <span class="n">Py_False</span><span class="p">;</span>
@@ -330,10 +327,10 @@ New in version 3.6.3.
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="kn">from</span> <span class="nn">_ssl</span> <span class="kn">import</span> <span class="n">HAS_SNI</span><span class="p">,</span> <span class="n">HAS_ECDH</span><span class="p">,</span> <span class="n">HAS_NPN</span><span class="p">,</span> <span class="n">HAS_ALPN</span><span class="p">,</span> <span class="n">HAS_TLSv1_3</span>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="kn">from</span> <span class="nn">_ssl</span> <span class="kn">import</span> <span class="n">HAS_SNI</span><span class="p">,</span> <span class="n">HAS_ECDH</span><span class="p">,</span> <span class="n">HAS_NPN</span><span class="p">,</span> <span class="n">HAS_ALPN</span><span class="p">,</span> <span class="n">HAS_TLSv1_3</span>
 </code></pre></td></tr></table>
 </div>
 </div><ul>
@@ -445,7 +442,7 @@ New in version 3.6.3.
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

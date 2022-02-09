@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
 <link rel="canonical" href="/2016/04/10/mysql%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B_%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B/" />
@@ -37,7 +37,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -47,20 +47,17 @@
 这是一篇关于MySQL的文章，主要介绍MySQL数据类型-字符串类型
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2016/04/10/mysql%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B_%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B/" />
+<meta property="og:url" content="/2016/04/10/mysql%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B_%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B1%BB%E5%9E%8B/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2016-04-10T10:56:54+00:00" />
 <meta property="article:modified_time" content="2016-04-10T10:56:54+00:00" />
+
 <meta itemprop="name" content="MySQL数据类型-字符串类型">
 <meta itemprop="description" content="摘要:
 
 这是一篇关于MySQL的文章，主要介绍MySQL数据类型-字符串类型
-">
-<meta itemprop="datePublished" content="2016-04-10T10:56:54&#43;00:00" />
-<meta itemprop="dateModified" content="2016-04-10T10:56:54&#43;00:00" />
-<meta itemprop="wordCount" content="546">
-
-
-
+"><meta itemprop="datePublished" content="2016-04-10T10:56:54+00:00" />
+<meta itemprop="dateModified" content="2016-04-10T10:56:54+00:00" />
+<meta itemprop="wordCount" content="562">
 <meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySQL数据类型-字符串类型"/>
 <meta name="twitter:description" content="摘要:
@@ -156,7 +153,7 @@
       <div class="post-meta">
         <span class="post-time"> 2016-04-10 </span>
         
-          <span class="more-meta"> 约 546 字 </span>
+          <span class="more-meta"> 约 562 字 </span>
           <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
@@ -221,7 +218,7 @@
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -235,19 +232,19 @@
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">table</span> <span class="n">c_v</span><span class="p">(</span>
-    <span class="n">v</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
-    <span class="k">c</span> <span class="nb">char</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-<span class="p">);</span>
-
-<span class="k">insert</span> <span class="k">into</span> <span class="n">c_v</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;ab  &#39;</span><span class="p">,</span> <span class="s1">&#39;ab  &#39;</span><span class="p">)</span>
-
-<span class="k">select</span> <span class="k">length</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="k">length</span><span class="p">(</span><span class="k">c</span><span class="p">)</span> <span class="k">from</span> <span class="n">c_v</span><span class="p">;</span>
-<span class="cm">/* 结果会显示v和c字段长度的不同，char会自动忽略尾部的空格。*/</span>
-
-<span class="k">select</span> <span class="n">concat</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s1">&#39;xff&#39;</span><span class="p">),</span> <span class="n">concat</span><span class="p">(</span><span class="k">c</span><span class="p">,</span> <span class="s1">&#39;xff&#39;</span><span class="p">)</span> <span class="k">from</span> <span class="n">test10</span><span class="p">;</span>
-<span class="cm">/* concat是连接函数，从结果可以看到c后面没有空格。*/</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">c_v</span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="n">v</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span><span class="w">
+</span><span class="w">    </span><span class="k">c</span><span class="w"> </span><span class="nb">char</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="p">);</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">c_v</span><span class="w"> </span><span class="k">values</span><span class="p">(</span><span class="s1">&#39;ab  &#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ab  &#39;</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="k">length</span><span class="p">(</span><span class="n">v</span><span class="p">),</span><span class="w"> </span><span class="k">length</span><span class="p">(</span><span class="k">c</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">c_v</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="cm">/* 结果会显示v和c字段长度的不同，char会自动忽略尾部的空格。*/</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">concat</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;xff&#39;</span><span class="p">),</span><span class="w"> </span><span class="n">concat</span><span class="p">(</span><span class="k">c</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;xff&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">test10</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="cm">/* concat是连接函数，从结果可以看到c后面没有空格。*/</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><h2 id="2-text系列字符串类型">2. TEXT系列字符串类型</h2>
 <table>
@@ -315,7 +312,7 @@
 <p>示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -324,14 +321,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">table</span> <span class="n">student3</span><span class="p">(</span>
-    <span class="o">-&gt;</span> <span class="n">name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
-    <span class="o">-&gt;</span> <span class="n">sex</span> <span class="n">enum</span><span class="p">(</span><span class="s1">&#39;male&#39;</span><span class="p">,</span> <span class="s1">&#39;female&#39;</span><span class="p">),</span>
-    <span class="o">-&gt;</span> <span class="n">hobby</span> <span class="k">set</span><span class="p">(</span><span class="s1">&#39;music&#39;</span><span class="p">,</span> <span class="s1">&#39;book&#39;</span><span class="p">,</span> <span class="s1">&#39;game&#39;</span><span class="p">,</span> <span class="s1">&#39;dance&#39;</span><span class="p">)</span>
-    <span class="o">-&gt;</span> <span class="p">);</span>
-
-<span class="k">insert</span> <span class="k">into</span> <span class="n">student3</span> <span class="k">values</span><span class="p">(</span><span class="s1">&#39;xff&#39;</span><span class="p">,</span> <span class="s1">&#39;female&#39;</span><span class="p">,</span> <span class="s1">&#39;book,game&#39;</span><span class="p">);</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">student3</span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span><span class="w">
+</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="n">enum</span><span class="p">(</span><span class="s1">&#39;male&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;female&#39;</span><span class="p">),</span><span class="w">
+</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">hobby</span><span class="w"> </span><span class="k">set</span><span class="p">(</span><span class="s1">&#39;music&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;book&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;game&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;dance&#39;</span><span class="p">)</span><span class="w">
+</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">);</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">student3</span><span class="w"> </span><span class="k">values</span><span class="p">(</span><span class="s1">&#39;xff&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;female&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;book,game&#39;</span><span class="p">);</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><h2 id="6-建议">6. 建议</h2>
 <p><strong>为了优化存储，任何情况下均应该使用最精确的类型</strong></p>
@@ -433,7 +430,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
