@@ -77,6 +77,19 @@ pod 通过 `schedulerName` 属性选择调度器。未设置该属性的 Pod 使
 > 
 > 接着，可以看 worker 方法，每次控制器工作时会调用 worker，实际函数保存在 syncHandler 或类似的字段里，该字段也会在构造器里初始化。
 
+## 控制器如何协作
+
+![](https://passage-1253400711.cos.ap-beijing.myqcloud.com/2022-02-09-235435.png)
+
+## 了解运行中的 Pod 是什么
+
+Pod 是多个容器的集合，它们共享相同的命名空间。
+
+K8S 创建 Pod 时会创建基础容器 Pause，后续的用户自定义容器都会使用 Pause 容器提供的命名空间。
+
+Pause 容器的生命周期和 Pod 绑定，从 Pod 被调度直到被删除的期间， Pause 容器会一直运行。
+如果 Pod 运行期间 Pause 容器被删除了，kubelet 会重建 Pod 中的所有容器。
+
 ## 问题
 
 ### scheduler 组件挂掉了
