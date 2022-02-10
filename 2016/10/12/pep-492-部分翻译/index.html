@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.83.1 with theme even" />
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
 <link rel="canonical" href="/2016/10/12/pep-492-%E9%83%A8%E5%88%86%E7%BF%BB%E8%AF%91/" />
@@ -50,8 +50,8 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2016/10/12/pep-492-%E9%83%A8%E5%88%86%E7%BF%BB%E8%AF%91/" /><meta property="article:section" content="translate" />
-<meta property="article:published_time" content="2016-10-12T21:53:25&#43;00:00" />
-<meta property="article:modified_time" content="2016-10-12T21:53:25&#43;00:00" />
+<meta property="article:published_time" content="2016-10-12T21:53:25+00:00" />
+<meta property="article:modified_time" content="2016-10-12T21:53:25+00:00" />
 
 <meta itemprop="name" content="PEP 492 部分翻译">
 <meta itemprop="description" content="摘要:
@@ -60,8 +60,8 @@
 针对PEP 492部分进行了翻译
 主要讲述了 Python 的async, await关键字
 
-"><meta itemprop="datePublished" content="2016-10-12T21:53:25&#43;00:00" />
-<meta itemprop="dateModified" content="2016-10-12T21:53:25&#43;00:00" />
+"><meta itemprop="datePublished" content="2016-10-12T21:53:25+00:00" />
+<meta itemprop="dateModified" content="2016-10-12T21:53:25+00:00" />
 <meta itemprop="wordCount" content="3679">
 <meta itemprop="keywords" content="Python,PEP,翻译," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="PEP 492 部分翻译"/>
@@ -169,11 +169,11 @@
 <p>如下的新语法用来去生成一个新的 <em>原生协程</em> :</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="n">async</span> <span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="k">async</span> <span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
     <span class="k">pass</span>
 </code></pre></td></tr></table>
 </div>
@@ -196,15 +196,15 @@
 <p>这是一个在 types 模块中新添加的方法<code>coroutine(fn)</code>。它允许在已经存在的异步IO中 <em>基于生成器的协程</em> 和 本PEP介绍的 <em>原生协程</em> 之间进行交互。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="nd">@types.coroutine</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nd">@types</span><span class="o">.</span><span class="n">coroutine</span>
 <span class="k">def</span> <span class="nf">process_data</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="k">yield</span> <span class="kn">from</span> <span class="nn">read_data</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">read_data</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
     <span class="o">...</span>
 </code></pre></td></tr></table>
 </div>
@@ -215,13 +215,13 @@
 <p>如下的新的await表达式用来获取一个协程执行的结果。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">await</span> <span class="n">db</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s1">&#39;SELECT ...&#39;</span><span class="p">)</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">async</span> <span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">db</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s1">&#39;SELECT ...&#39;</span><span class="p">)</span>
     <span class="o">...</span>
 </code></pre></td></tr></table>
 </div>
@@ -412,7 +412,7 @@ await ::= [&quot;await&quot;] primary
 <p>一个异步的上下文管理器的例子是：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -420,30 +420,30 @@ await ::= [&quot;await&quot;] primary
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="k">class</span> <span class="nc">AsyncContextManager</span><span class="p">:</span>
-    <span class="n">async</span> <span class="k">def</span> <span class="nf">__aenter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">await</span> <span class="n">log</span><span class="p">(</span><span class="s1">&#39;enter context&#39;</span><span class="p">)</span>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="k">class</span> <span class="nc">AsyncContextManager</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="fm">__aenter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">await</span> <span class="n">log</span><span class="p">(</span><span class="s1">&#39;enter context&#39;</span><span class="p">)</span>
 
-    <span class="n">async</span> <span class="k">def</span> <span class="nf">__aexit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
-        <span class="n">await</span> <span class="n">log</span><span class="p">(</span><span class="s1">&#39;exiting context&#39;</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="fm">__aexit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
+        <span class="k">await</span> <span class="n">log</span><span class="p">(</span><span class="s1">&#39;exiting context&#39;</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="新的语法">新的语法</h3>
 <p>针对异步的上下文管理器，一种新的语法被提出来了：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">with</span> <span class="n">EXPR</span> <span class="k">as</span> <span class="n">VAR</span><span class="p">:</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">async</span> <span class="k">with</span> <span class="n">EXPR</span> <span class="k">as</span> <span class="n">VAR</span><span class="p">:</span>
     <span class="n">BLOCK</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>它在语义上等价于：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -459,20 +459,20 @@ await ::= [&quot;await&quot;] primary
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="n">mgr</span> <span class="o">=</span> <span class="p">(</span><span class="n">EXPR</span><span class="p">)</span>
-<span class="n">aexit</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">mgr</span><span class="p">)</span><span class="o">.</span><span class="n">__aexit__</span>
-<span class="n">aenter</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">mgr</span><span class="p">)</span><span class="o">.</span><span class="n">__aenter__</span><span class="p">(</span><span class="n">mgr</span><span class="p">)</span>
-<span class="k">exec</span> <span class="o">=</span> <span class="bp">True</span>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="n">mgr</span> <span class="o">=</span> <span class="p">(</span><span class="n">EXPR</span><span class="p">)</span>
+<span class="n">aexit</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">mgr</span><span class="p">)</span><span class="o">.</span><span class="fm">__aexit__</span>
+<span class="n">aenter</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">mgr</span><span class="p">)</span><span class="o">.</span><span class="fm">__aenter__</span><span class="p">(</span><span class="n">mgr</span><span class="p">)</span>
+<span class="n">exec</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="n">VAR</span> <span class="o">=</span> <span class="n">await</span> <span class="n">aenter</span>
+<span class="n">VAR</span> <span class="o">=</span> <span class="k">await</span> <span class="n">aenter</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="n">block</span>
 <span class="k">except</span><span class="p">:</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">await</span><span class="p">(</span><span class="n">mgr</span><span class="p">,</span> <span class="o">*</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="k">await</span><span class="p">(</span><span class="n">mgr</span><span class="p">,</span> <span class="o">*</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()):</span>
         <span class="k">raise</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">await</span> <span class="n">aexit</span><span class="p">(</span><span class="n">mgr</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">aexit</span><span class="p">(</span><span class="n">mgr</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>就像普通的<code>with</code>语句一样，<code>async with</code>语句也能够指定多个上下文管理器。</p>
@@ -481,7 +481,7 @@ await ::= [&quot;await&quot;] primary
 <p>使用异步的上下文管理器很容易去正确实现协程的数据库事物管理：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -489,33 +489,33 @@ await ::= [&quot;await&quot;] primary
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">async</span> <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
     <span class="o">...</span>
-    <span class="n">async</span> <span class="k">with</span> <span class="n">sesson</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">sesson</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
         <span class="o">...</span>
-        <span class="n">await</span> <span class="n">session</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="o">...</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>同时，代码需要看起来更轻量级一些：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">async</span> <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
     <span class="o">...</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>而不是:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">with</span> <span class="p">(</span><span class="k">yield</span> <span class="kn">from</span> <span class="nn">lock</span><span class="p">):</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">with</span> <span class="p">(</span><span class="k">yield from</span> <span class="n">lock</span><span class="p">):</span>
     <span class="o">...</span>
 </code></pre></td></tr></table>
 </div>
@@ -531,7 +531,7 @@ await ::= [&quot;await&quot;] primary
 <p>一个异步迭代的例子如下所示：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -546,18 +546,18 @@ await ::= [&quot;await&quot;] primary
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">AsyncIterable</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__aiter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">AsyncIterable</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__aiter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="n">async</span> <span class="k">def</span> <span class="nf">__anext__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetch_data</span><span class="p">()</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="fm">__anext__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">fetch_data</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">data</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">StopAsyncIteration</span>
+            <span class="k">raise</span> <span class="ne">StopAsyncIteration</span>
 
-    <span class="n">async</span> <span class="k">def</span> <span class="nf">fetch_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="o">...</span>
 </code></pre></td></tr></table>
 </div>
@@ -565,13 +565,13 @@ await ::= [&quot;await&quot;] primary
 <p>一种通过异步迭代器进行迭代的新的语句被提出来了：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">for</span> <span class="n">TARGET</span> <span class="ow">in</span> <span class="n">ITER</span><span class="p">:</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">async</span> <span class="k">for</span> <span class="n">TARGET</span> <span class="ow">in</span> <span class="n">ITER</span><span class="p">:</span>
     <span class="n">BLOCK</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">BLOCK2</span>
@@ -580,7 +580,7 @@ await ::= [&quot;await&quot;] primary
 </div><p>它在语义上等于：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -592,14 +592,14 @@ await ::= [&quot;await&quot;] primary
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="nb">iter</span> <span class="o">=</span> <span class="p">(</span><span class="n">ITER</span><span class="p">)</span>
-<span class="nb">iter</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="nb">iter</span><span class="p">)</span><span class="o">.</span><span class="n">__aiter__</span><span class="p">(</span><span class="nb">iter</span><span class="p">)</span>
-<span class="n">running</span> <span class="o">=</span> <span class="bp">True</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nb">iter</span> <span class="o">=</span> <span class="p">(</span><span class="n">ITER</span><span class="p">)</span>
+<span class="nb">iter</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="nb">iter</span><span class="p">)</span><span class="o">.</span><span class="fm">__aiter__</span><span class="p">(</span><span class="nb">iter</span><span class="p">)</span>
+<span class="n">running</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">while</span> <span class="n">running</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">TARGET</span> <span class="o">=</span> <span class="n">await</span> <span class="nb">type</span><span class="p">(</span><span class="nb">iter</span><span class="p">)</span><span class="o">.</span><span class="n">__anext__</span><span class="p">(</span><span class="nb">iter</span><span class="p">)</span>
-    <span class="k">except</span> <span class="n">StopAsyncIteration</span><span class="p">:</span>
-        <span class="n">running</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">TARGET</span> <span class="o">=</span> <span class="k">await</span> <span class="nb">type</span><span class="p">(</span><span class="nb">iter</span><span class="p">)</span><span class="o">.</span><span class="fm">__anext__</span><span class="p">(</span><span class="nb">iter</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">StopAsyncIteration</span><span class="p">:</span>
+        <span class="n">running</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">BLOCK</span>
 </code></pre></td></tr></table>
@@ -610,11 +610,11 @@ await ::= [&quot;await&quot;] primary
 <p>使用异步迭代协议可以在迭代期间异步缓存数据：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">cursor</span><span class="p">:</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">async</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">cursor</span><span class="p">:</span>
     <span class="o">...</span>
 </code></pre></td></tr></table>
 </div>
@@ -622,7 +622,7 @@ await ::= [&quot;await&quot;] primary
 <p>如下的代码说明了一种新的异步迭代协议：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -640,39 +640,39 @@ await ::= [&quot;await&quot;] primary
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">Cursor</span><span class="p">:</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">Cursor</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">deque</span><span class="p">()</span>
 
-    <span class="n">async</span> <span class="k">def</span> <span class="nf">_prefetch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_prefetch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="o">...</span>
 
-    <span class="k">def</span> <span class="nf">__aiter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__aiter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="n">async</span> <span class="k">def</span> <span class="nf">__anext__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="fm">__anext__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefetch</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefetch</span><span class="p">()</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">StopAsyncIteration</span>
+                <span class="k">raise</span> <span class="ne">StopAsyncIteration</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
 </code></pre></td></tr></table>
 </div>
 </div><p><code>Cursor</code>类能够按下面的方式进行使用：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">Cursor</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">async</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">Cursor</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>它将会等价于如下的代码：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -682,21 +682,21 @@ await ::= [&quot;await&quot;] primary
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">i</span> <span class="o">=</span> <span class="n">Cursor</span><span class="p">()</span><span class="o">.</span><span class="n">__aiter__</span><span class="p">()</span>
-<span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">i</span> <span class="o">=</span> <span class="n">Cursor</span><span class="p">()</span><span class="o">.</span><span class="fm">__aiter__</span><span class="p">()</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">row</span> <span class="o">=</span> <span class="n">await</span> <span class="n">i</span><span class="o">.</span><span class="n">__anext__</span><span class="p">()</span>
-    <span class="k">except</span> <span class="n">StopAsyncIteration</span><span class="p">:</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="k">await</span> <span class="n">i</span><span class="o">.</span><span class="fm">__anext__</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">StopAsyncIteration</span><span class="p">:</span>
         <span class="k">break</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="例子2">例子2</h3>
 <p>如下的例子是一个使用类将普通迭代器转换成异步的。虽然这并不是一个非常有用的事情，但是如下的代码说明了普通迭代器和异步迭代器之间的关系：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -714,60 +714,60 @@ await ::= [&quot;await&quot;] primary
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">AsyncIteratorWrapper</span><span class="p">:</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">AsyncIteratorWrapper</span><span class="p">:</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__aiter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__aiter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="n">async</span> <span class="k">def</span> <span class="nf">__anext__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="fm">__anext__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">value</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_it</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">StopAsyncIteration</span>
+            <span class="k">raise</span> <span class="ne">StopAsyncIteration</span>
         <span class="k">return</span> <span class="n">value</span>
 
-<span class="n">async</span> <span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">AsyncIteratorWrapper</span><span class="p">(</span><span class="s2">&#34;abc&#34;</span><span class="p">):</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">letter</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">AsyncIteratorWrapper</span><span class="p">(</span><span class="s2">&#34;abc&#34;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">letter</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="为什么是stopasynciteration异常">为什么是<code>StopAsyncIteration</code>异常</h2>
 <p>协程对象内部仍然是基于生成器的。所以，在<code>PEP 479</code>之前，在下面这两种代码中没有基本的区别：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">g1</span><span class="p">():</span>
-    <span class="k">yield</span> <span class="kn">from</span> <span class="nn">fut</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">g1</span><span class="p">():</span>
+    <span class="k">yield from</span> <span class="n">fut</span>
     <span class="k">return</span> <span class="s1">&#39;spam&#39;</span>
 </code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">g2</span><span class="p">():</span>
-    <span class="k">yield</span> <span class="kn">from</span> <span class="nn">fut</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">g2</span><span class="p">():</span>
+    <span class="k">yield from</span> <span class="n">fut</span>
     <span class="k">raise</span> <span class="ne">StopIteration</span><span class="p">(</span><span class="s1">&#39;spam&#39;</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>因为 PEP 479 被接受了，而且默认在协程对象中开启，所以如下的例子将会把它的<code>StopIteration</code>包裹在一个<code>RuntimeError</code>中：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">async</span> <span class="k">def</span> <span class="nf">a1</span><span class="p">():</span>
-    <span class="n">await</span> <span class="n">fut</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">async</span> <span class="k">def</span> <span class="nf">a1</span><span class="p">():</span>
+    <span class="k">await</span> <span class="n">fut</span>
     <span class="k">raise</span> <span class="ne">StopIteration</span><span class="p">(</span><span class="s1">&#39;spam&#39;</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>

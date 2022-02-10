@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.83.1 with theme even" />
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
 <link rel="canonical" href="/2022/01/26/k8s-in-actions-11/" />
@@ -43,13 +43,13 @@
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2022/01/26/k8s-in-actions-11/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2022-01-26T23:08:47&#43;08:00" />
-<meta property="article:modified_time" content="2022-01-26T23:08:47&#43;08:00" />
+<meta property="article:published_time" content="2022-01-26T23:08:47+08:00" />
+<meta property="article:modified_time" content="2022-01-26T23:08:47+08:00" />
 
 <meta itemprop="name" content="《K8s in Actions》第十一章杂记">
-<meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-01-26T23:08:47&#43;08:00" />
-<meta itemprop="dateModified" content="2022-01-26T23:08:47&#43;08:00" />
-<meta itemprop="wordCount" content="911">
+<meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-01-26T23:08:47+08:00" />
+<meta itemprop="dateModified" content="2022-01-26T23:08:47+08:00" />
+<meta itemprop="wordCount" content="952">
 <meta itemprop="keywords" content="kubernetes,杂记," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="《K8s in Actions》第十一章杂记"/>
 <meta name="twitter:description" content=""/>
@@ -142,7 +142,7 @@
       <div class="post-meta">
         <span class="post-time"> 2022-01-26 </span>
         
-          <span class="more-meta"> 约 911 字 </span>
+          <span class="more-meta"> 约 952 字 </span>
           <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
@@ -161,6 +161,7 @@
         <li><a href="#控制器管理器中运行的控制器">控制器管理器中运行的控制器</a></li>
         <li><a href="#控制器如何协作">控制器如何协作</a></li>
         <li><a href="#了解运行中的-pod-是什么">了解运行中的 Pod 是什么</a></li>
+        <li><a href="#跨-pod-网络">跨 Pod 网络</a></li>
         <li><a href="#问题">问题</a>
           <ul>
             <li><a href="#scheduler-组件挂掉了">scheduler 组件挂掉了</a></li>
@@ -180,7 +181,7 @@
 <p>检查控制平面组件的状态</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -188,7 +189,7 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-shell" data-lang="shell">ø&gt; k get componentstatuses
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">ø&gt; k get componentstatuses
 Warning: v1 ComponentStatus is deprecated in v1.19+
 NAME                 STATUS      MESSAGE                                                                                       ERROR
 scheduler            Unhealthy   Get <span class="s2">&#34;http://127.0.0.1:10251/healthz&#34;</span>: dial tcp 127.0.0.1:10251: connect: connection refused
@@ -238,6 +239,8 @@ etcd-0               Healthy     <span class="o">{</span><span class="s2">&#34;h
 <p>K8S 创建 Pod 时会创建基础容器 Pause，后续的用户自定义容器都会使用 Pause 容器提供的命名空间。</p>
 <p>Pause 容器的生命周期和 Pod 绑定，从 Pod 被调度直到被删除的期间， Pause 容器会一直运行。
 如果 Pod 运行期间 Pause 容器被删除了，kubelet 会重建 Pod 中的所有容器。</p>
+<h2 id="跨-pod-网络">跨 Pod 网络</h2>
+<p>K8S 规定 Pod 必须通过非 NAT 网络进行连接，即 Server 看到的 Client IP 和 Client 看到的自身 IP 是相同的。</p>
 <h2 id="问题">问题</h2>
 <h3 id="scheduler-组件挂掉了">scheduler 组件挂掉了</h3>
     </div>

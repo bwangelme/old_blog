@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.83.1 with theme even" />
+<meta name="generator" content="Hugo 0.92.0 with theme even" />
 
 
 <link rel="canonical" href="/2017/08/29/gotour-notes/" />
@@ -51,8 +51,8 @@ Golang的基础语法学习
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2017/08/29/gotour-notes/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2017-08-29T08:32:02&#43;00:00" />
-<meta property="article:modified_time" content="2017-08-29T08:32:02&#43;00:00" />
+<meta property="article:published_time" content="2017-08-29T08:32:02+00:00" />
+<meta property="article:modified_time" content="2017-08-29T08:32:02+00:00" />
 
 <meta itemprop="name" content="Go 学习笔记">
 <meta itemprop="description" content="
@@ -62,8 +62,8 @@ Golang的基础语法学习
 
 Golang的基础语法学习
 
-"><meta itemprop="datePublished" content="2017-08-29T08:32:02&#43;00:00" />
-<meta itemprop="dateModified" content="2017-08-29T08:32:02&#43;00:00" />
+"><meta itemprop="datePublished" content="2017-08-29T08:32:02+00:00" />
+<meta itemprop="dateModified" content="2017-08-29T08:32:02+00:00" />
 <meta itemprop="wordCount" content="11549">
 <meta itemprop="keywords" content="Go,Notes," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go 学习笔记"/>
@@ -263,12 +263,12 @@ Golang的基础语法学习
 <p>如果你只想要取 range 返回的第一个值，可以直接丢掉第二个：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="k">for</span> <span class="nx">key</span> <span class="o">:=</span> <span class="k">range</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;Name&#34;</span><span class="p">:</span> <span class="s">&#34;bwangel&#34;</span><span class="p">}</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">for</span> <span class="nx">key</span> <span class="o">:=</span> <span class="k">range</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;Name&#34;</span><span class="p">:</span> <span class="s">&#34;bwangel&#34;</span><span class="p">}</span> <span class="p">{</span>
   <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
@@ -276,12 +276,12 @@ Golang的基础语法学习
 </div><p>如果你想获取 range 返回的第二个值，需要使用空白标识符<code>_</code>来丢弃第一个:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">value</span> <span class="o">:=</span> <span class="k">range</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}</span> <span class="p">{</span>
   <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
@@ -289,12 +289,12 @@ Golang的基础语法学习
 </div><p>对于字符串，range 分句做了很多事情，它通过解析 UTF-8 编码将字符串按照独立的码点分割开来。对于无效的编码，它认为其是一个独立的字节，并将其转换成了 rune U+FFFD 的形式。其中 rune 是 Go 语言中的一个术语，用来表示单个 Unicode 码点。下面的循环:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="k">for</span> <span class="nx">pos</span><span class="p">,</span> <span class="nx">char</span> <span class="o">:=</span> <span class="k">range</span> <span class="s">&#34;中国\x80汉字&#34;</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">for</span> <span class="nx">pos</span><span class="p">,</span> <span class="nx">char</span> <span class="o">:=</span> <span class="k">range</span> <span class="s">&#34;中国\x80汉字&#34;</span> <span class="p">{</span>
   <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%d: %#U\n&#34;</span><span class="p">,</span> <span class="nx">pos</span><span class="p">,</span> <span class="nx">char</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
@@ -302,14 +302,14 @@ Golang的基础语法学习
 </div><p>将会打印:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">0: U+4E2D <span class="s1">&#39;中&#39;</span>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">0: U+4E2D <span class="s1">&#39;中&#39;</span>
 3: U+56FD <span class="s1">&#39;国&#39;</span>
 6: U+FFFD <span class="s1">&#39;�&#39;</span>
 7: U+6C49 <span class="s1">&#39;汉&#39;</span>
@@ -319,13 +319,13 @@ Golang的基础语法学习
 </div><p>最后，Go 将没有逗号的操作符和<code>++</code>，<code>--</code>视作语句而不是表达式，意味着<code>i++</code>无法成为右值进行赋值。如果你想要累加一个数字并进行赋值，可以考虑使用并行赋值(这样就杜绝了<code>++</code>和<code>--</code>的赋值):</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Reverse a
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Reverse a
 </span><span class="c1"></span><span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">j</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">j</span><span class="p">;</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">j</span> <span class="p">=</span> <span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nx">j</span><span class="o">-</span><span class="mi">1</span> <span class="p">{</span>
     <span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="p">=</span> <span class="nx">a</span><span class="p">[</span><span class="nx">j</span><span class="p">],</span> <span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
 <span class="p">}</span>
@@ -335,7 +335,7 @@ Golang的基础语法学习
 <p>在 Go 语言中，并不需要使用<code>break</code>语句来跳出 switch 语句块，它碰到匹配的 case 子句并运行其中的代码后，就会自动退出。但是可以使用<code>break</code>语句来跳出外层的 for 循环。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -344,7 +344,7 @@ Golang的基础语法学习
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="k">for</span> <span class="nx">i</span><span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">for</span> <span class="nx">i</span><span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
   <span class="k">switch</span> <span class="nx">i</span> <span class="p">{</span>
   <span class="k">case</span> <span class="mi">10</span><span class="p">:</span>
     <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
@@ -356,7 +356,7 @@ Golang的基础语法学习
 </div><p>同时，<code>break</code>语句也可以跳到一个指定的标签上，</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -381,7 +381,7 @@ Golang的基础语法学习
 </span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">//TODO: 下面这段代码还需要去理解一下
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">//TODO: 下面这段代码还需要去理解一下
 </span><span class="c1"></span><span class="nx">Loop</span><span class="p">:</span>
 	<span class="k">for</span> <span class="nx">n</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">n</span> <span class="p">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="nx">src</span><span class="p">);</span> <span class="nx">n</span> <span class="o">+=</span> <span class="nx">size</span> <span class="p">{</span>
 		<span class="k">switch</span> <span class="p">{</span>
@@ -409,7 +409,7 @@ Golang的基础语法学习
 </div><p>最后，我们使用一个比较 byte 切片的函数来结束这一小节，</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -430,7 +430,7 @@ Golang的基础语法学习
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Compare</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Compare</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
 	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="nx">b</span><span class="p">);</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
 		<span class="k">switch</span> <span class="p">{</span>
 		<span class="k">case</span> <span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">&gt;</span> <span class="nx">b</span><span class="p">[</span><span class="nx">i</span><span class="p">]:</span>
@@ -455,7 +455,7 @@ Golang的基础语法学习
 <p>我们可以使用<code>v.(type)</code>来判断一个空接口类型变量的动态类型，当在<code>switch</code>的表达式内声明了一个变量，这个变量将会拥有合适的类型。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -471,7 +471,7 @@ Golang的基础语法学习
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">t</span> <span class="kd">interface</span><span class="p">{}</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">t</span> <span class="kd">interface</span><span class="p">{}</span>
 <span class="nx">t</span> <span class="p">=</span> <span class="nf">functionGetSomeType</span><span class="p">()</span>
 <span class="k">switch</span> <span class="nx">t</span> <span class="o">:=</span> <span class="nx">t</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
 <span class="k">default</span><span class="p">:</span>
@@ -490,7 +490,7 @@ Golang的基础语法学习
 </div><p>如果我们只关心一种类型，可以使用从 switch 语法分句那借来的语法进行类型判断。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -516,7 +516,7 @@ Golang的基础语法学习
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;fmt&#34;</span>
@@ -550,7 +550,7 @@ Golang的基础语法学习
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -593,7 +593,7 @@ Golang的基础语法学习
 </span><span class="lnt">41
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;fmt&#34;</span>
@@ -639,7 +639,7 @@ Golang的基础语法学习
 </div><h3 id="闭包">闭包</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -705,7 +705,7 @@ Golang的基础语法学习
 </span><span class="lnt">64
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;fmt&#34;</span>
@@ -776,7 +776,7 @@ Golang的基础语法学习
 <p>结果参数的名字并不是强制的，但是它可以让代码变得更加清晰。有一版本的<code>io.ReadFull</code>就是这样做的的:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -789,7 +789,7 @@ Golang的基础语法学习
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 注意传入的 buf 是一个数组，这个函数将会最多阅读 len(buf) 个字节到buf中
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 注意传入的 buf 是一个数组，这个函数将会最多阅读 len(buf) 个字节到buf中
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">ReadFull</span><span class="p">(</span><span class="nx">r</span> <span class="nx">Reader</span><span class="p">,</span> <span class="nx">buf</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="nx">n</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">for</span> <span class="nb">len</span><span class="p">(</span><span class="nx">buf</span><span class="p">)</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">err</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">nr</span> <span class="kt">int</span>
@@ -806,10 +806,10 @@ Golang的基础语法学习
 <h3 id="使用new分配">使用<code>new</code>分配</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nb">new</span><span class="p">(</span><span class="nx">Type</span><span class="p">)</span> <span class="o">*</span><span class="nx">Type</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nb">new</span><span class="p">(</span><span class="nx">Type</span><span class="p">)</span> <span class="o">*</span><span class="nx">Type</span>
 </code></pre></td></tr></table>
 </div>
 </div><p><code>new</code>将会生成一个<code>Type</code>的实例，这个实例将会被初始化成对应的0值。<code>sync.Mutex</code>类型的0值是一个未锁定的<code>mutex</code></p>
@@ -817,7 +817,7 @@ Golang的基础语法学习
 <p>有时候我们要初始化一个复合类型，但是它的值我们需要初始化成0值以外的其他值，例如当我们创建一个文件的时候:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -830,7 +830,7 @@ Golang的基础语法学习
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">NewFile</span><span class="p">(</span><span class="nx">fd</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">name</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="nx">File</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">NewFile</span><span class="p">(</span><span class="nx">fd</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">name</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="nx">File</span> <span class="p">{</span>
 	<span class="k">if</span> <span class="nx">fd</span> <span class="p">&lt;</span> <span class="mi">0</span> <span class="p">{</span>
 		<span class="k">return</span> <span class="kc">nil</span>
 	<span class="p">}</span>
@@ -846,7 +846,7 @@ Golang的基础语法学习
 </div><p>上面很多赋值语句显得很冗余，我们可以使用复合字面值来初始化一个复合类型的实例:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -854,7 +854,7 @@ Golang的基础语法学习
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">NewFile</span><span class="p">(</span><span class="nx">fd</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">name</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="nx">File</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">NewFile</span><span class="p">(</span><span class="nx">fd</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">name</span> <span class="kt">string</span><span class="p">)</span> <span class="o">*</span><span class="nx">File</span> <span class="p">{</span>
 	<span class="k">if</span> <span class="nx">fd</span> <span class="p">&lt;</span> <span class="mi">0</span> <span class="p">{</span>
 		<span class="k">return</span> <span class="kc">nil</span>
 	<span class="p">}</span>
@@ -867,17 +867,17 @@ Golang的基础语法学习
 <p>复合字面值的声明我们除了可以按照上面的方式声明外，我们也可以按照键值对的方式来声明:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="k">return</span> <span class="o">&amp;</span><span class="nx">File</span><span class="p">{</span><span class="nx">fd</span><span class="p">:</span> <span class="nx">fd</span><span class="p">,</span> <span class="nx">name</span><span class="p">:</span> <span class="nx">name</span><span class="p">}</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">return</span> <span class="o">&amp;</span><span class="nx">File</span><span class="p">{</span><span class="nx">fd</span><span class="p">:</span> <span class="nx">fd</span><span class="p">,</span> <span class="nx">name</span><span class="p">:</span> <span class="nx">name</span><span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>没有传入的字段将会被初始化成对应的0值，如何它一个字段也没有传入，将会声明一个0值的类型。<code>&amp;File{}</code>等价于<code>new(File)</code>。</p>
 <p>复合字面值也可以用来声明切片，数组和 map。它可以把字段名当做索引或者 map 的键。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -903,7 +903,7 @@ Golang的基础语法学习
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 
@@ -935,7 +935,7 @@ Golang的基础语法学习
 <p>下面的例子展示了制造<code>slice</code>时<code>make</code>和<code>new</code>的不同，</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -948,7 +948,7 @@ Golang的基础语法学习
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// p 是一个指向切片的指针，不过这个切片的三元组描述器都没初始化，所以 *p == nil
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// p 是一个指向切片的指针，不过这个切片的三元组描述器都没初始化，所以 *p == nil
 </span><span class="c1"></span><span class="kd">var</span> <span class="nx">p</span> <span class="o">*</span><span class="p">[]</span><span class="kt">int</span> <span class="p">=</span> <span class="nb">new</span><span class="p">([]</span><span class="kt">int</span><span class="p">)</span>       <span class="c1">// 很少用到
 </span><span class="c1">// v 是一个切片，它的三元组描述器被初始化了，它指向一个容量为100的 int 数组
 </span><span class="c1"></span><span class="kd">var</span> <span class="nx">v</span>  <span class="p">[]</span><span class="kt">int</span> <span class="p">=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
@@ -972,7 +972,7 @@ Golang的基础语法学习
 <p><code>append</code>向切片中添加元素，如果添加元素的长度超出了切片的容量(切片的容量可由cap函数获取)，那么就会重新分配一个切片。<code>append</code>函数会将原始的或者新分配的切片返回。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -987,7 +987,7 @@ Golang的基础语法学习
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 	<span class="nx">s</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;s: %p\n&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">s</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 	<span class="nx">s</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
@@ -1005,24 +1005,24 @@ Golang的基础语法学习
 </div><h3 id="二维切片">二维切片</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Transform</span> <span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span><span class="kt">float64</span>  <span class="c1">// 一个3x3的二维数组
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Transform</span> <span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span><span class="kt">float64</span>  <span class="c1">// 一个3x3的二维数组
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">LinesOfText</span> <span class="p">[][]</span><span class="kt">byte</span>     <span class="c1">// 一个二维切片
 </span></code></pre></td></tr></table>
 </div>
 </div><p>因为切片的长度是由变量确定的(数组的长度是由类型确定的)，所以二维切片的每个内部切片都可以有不同的长度，就像我们声明的<code>LinesOfText</code>类型，它内部的每个切片的长度都是不同的。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">l</span> <span class="o">:=</span> <span class="nx">LinesOfText</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">l</span> <span class="o">:=</span> <span class="nx">LinesOfText</span> <span class="p">{</span>
 	<span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;竹杖芒鞋轻胜马&#34;</span><span class="p">),</span>
 	<span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;一蓑烟雨任平生&#34;</span><span class="p">),</span>
 <span class="p">}</span>
@@ -1032,7 +1032,7 @@ Golang的基础语法学习
 <p>每次单独分配耗时会更多，但是每个内部的一维切片相互独立，不会相互影响。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -1042,7 +1042,7 @@ Golang的基础语法学习
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Allocate the top-level slice.
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Allocate the top-level slice.
 </span><span class="c1"></span><span class="nx">picture</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">uint8</span><span class="p">,</span> <span class="nx">YSize</span><span class="p">)</span> <span class="c1">// One row per unit of y.
 </span><span class="c1">// 在图片上循环，在每一行上分配一个表示当前行像素点的切片
 </span><span class="c1"></span><span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">picture</span> <span class="p">{</span>
@@ -1055,7 +1055,7 @@ Golang的基础语法学习
 </div><p>一次分配耗时会更短，但是内部的每个一维切片不能增加或缩短，否则可能会影响到相邻的一维切片。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1067,7 +1067,7 @@ Golang的基础语法学习
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Allocate the top-level slice
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Allocate the top-level slice
 </span><span class="c1"></span><span class="nx">picture</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([][]</span><span class="kt">uint8</span><span class="p">,</span> <span class="nx">YSize</span><span class="p">)</span> <span class="c1">// One row per unit of y.
 </span><span class="c1">// 一次地分配好图片上所有的像素点
 </span><span class="c1"></span><span class="nx">pixels</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">uint8</span><span class="p">,</span> <span class="nx">XSize</span><span class="o">*</span><span class="nx">YSize</span><span class="p">)</span>
@@ -1085,7 +1085,7 @@ Golang的基础语法学习
 <p><code>map</code>可以使用复合字面值的语法进行声明，使用冒号来分割键和值:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -1094,7 +1094,7 @@ Golang的基础语法学习
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">timeZone</span> <span class="p">=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">timeZone</span> <span class="p">=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span>
 	<span class="s">&#34;UTC&#34;</span><span class="p">:</span> <span class="mi">0</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
 	<span class="s">&#34;EST&#34;</span><span class="p">:</span> <span class="o">-</span><span class="mi">5</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
 	<span class="s">&#34;CST&#34;</span><span class="p">:</span> <span class="o">-</span><span class="mi">6</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
@@ -1106,7 +1106,7 @@ Golang的基础语法学习
 </div><p>如果通过一个不存在的<code>key</code>从<code>map</code>中获取值的时候，<code>map</code>将会返回它的值的零值。<code>timeZone[&quot;NOT_EXIST&quot;] == 0</code>。我们可以通过这个特性来实现<code>set</code>类型。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -1117,7 +1117,7 @@ Golang的基础语法学习
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">attended</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">attended</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">bool</span><span class="p">{</span>
 	<span class="s">&#34;Ann&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
 	<span class="s">&#34;Joe&#34;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
 <span class="p">}</span>
@@ -1131,7 +1131,7 @@ Golang的基础语法学习
 </div><p>有时候我们需要区分<code>map</code>中的一个<code>key</code>是不存在还是它的值就是零值，我们可以使用<code>map[key]</code>返回的第二个返回值进行区分。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1145,7 +1145,7 @@ Golang的基础语法学习
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 	<span class="kd">var</span> <span class="nx">timeZone</span> <span class="p">=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span>
 		<span class="s">&#34;UTC&#34;</span><span class="p">:</span> <span class="mi">0</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
 		<span class="s">&#34;EST&#34;</span><span class="p">:</span> <span class="o">-</span><span class="mi">5</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
@@ -1162,7 +1162,7 @@ Golang的基础语法学习
 </div><p>像上面这种写法我们称之为&quot;comma ok&quot;方言，它可以和<code>if</code>语句一起组成一种优雅的写法:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1178,7 +1178,7 @@ Golang的基础语法学习
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">offset</span><span class="p">(</span><span class="nx">tz</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">offset</span><span class="p">(</span><span class="nx">tz</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
 	<span class="kd">var</span> <span class="nx">timeZone</span> <span class="p">=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span>
 		<span class="s">&#34;UTC&#34;</span><span class="p">:</span> <span class="mi">0</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
 		<span class="s">&#34;EST&#34;</span><span class="p">:</span> <span class="o">-</span><span class="mi">5</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
@@ -1197,19 +1197,19 @@ Golang的基础语法学习
 </div><p>如果只想查看某个<code>key</code>是否在<code>map</code>中存在而不关心它的值的话，我们可以使用<code>_</code>忽略掉值:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">_</span><span class="p">,</span> <span class="nx">present</span> <span class="o">:=</span> <span class="nx">timeZone</span><span class="p">[</span><span class="nx">tz</span><span class="p">]</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">_</span><span class="p">,</span> <span class="nx">present</span> <span class="o">:=</span> <span class="nx">timeZone</span><span class="p">[</span><span class="nx">tz</span><span class="p">]</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>如果想要删除掉<code>map</code>中的某个<code>key</code>，我们可以使用<code>delte</code>內建函数，如果要删除的<code>key</code>在<code>map</code>中不存在的话，它也不会抛出任何异常。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="nb">delete</span><span class="p">(</span><span class="nx">timeZone</span><span class="p">,</span> <span class="s">&#34;PDT&#34;</span><span class="p">)</span>  <span class="c1">// 要删除的 key 不存在
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nb">delete</span><span class="p">(</span><span class="nx">timeZone</span><span class="p">,</span> <span class="s">&#34;PDT&#34;</span><span class="p">)</span>  <span class="c1">// 要删除的 key 不存在
 </span></code></pre></td></tr></table>
 </div>
 </div><h3 id="打印">打印</h3>
@@ -1217,23 +1217,23 @@ Golang的基础语法学习
 <p><code>Print</code>系列函数仅仅会将两边都不是字符串的逗号变成空格。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Print</span><span class="p">(</span><span class="mi">23</span><span class="p">,</span> <span class="s">&#34;hello world&#34;</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span> <span class="c1">// `23hello world42 true`
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Print</span><span class="p">(</span><span class="mi">23</span><span class="p">,</span> <span class="s">&#34;hello world&#34;</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span> <span class="c1">// `23hello world42 true`
 </span></code></pre></td></tr></table>
 </div>
 </div><p><code>Fprint</code>系列的函数的第一个参数是实现了<code>io.Writer</code>接口的对象，变量<code>os.Stdout</code>和<code>os.Stderr</code>都是实现了这个接口的对象。</p>
 <p>在 Go 中，格式化数字的字符串（例如%d）并不会向C语言那样传递是否有符号的标记，或者长度的标记（<code>%u</code>, <code>%lu</code>），它是根据参数的类型来输出对应的结果。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">x</span> <span class="kt">uint64</span> <span class="p">=</span> <span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">64</span> <span class="o">-</span> <span class="mi">1</span> <span class="c1">// x 为64位无符号整数的最大值
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">x</span> <span class="kt">uint64</span> <span class="p">=</span> <span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">64</span> <span class="o">-</span> <span class="mi">1</span> <span class="c1">// x 为64位无符号整数的最大值
 </span><span class="c1"></span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%d %x, %d %x\n&#34;</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nb">int64</span><span class="p">(</span><span class="nx">x</span><span class="p">),</span> <span class="nb">int64</span><span class="p">(</span><span class="nx">x</span><span class="p">))</span> <span class="c1">// 将 x 转换成 int64 类型整数将会溢出
 </span><span class="c1"></span>
 <span class="c1">// 18446744073709551615 ffffffffffffffff, -1 -1
@@ -1242,7 +1242,7 @@ Golang的基础语法学习
 </div><p>关于其他的格式化字符串，说明如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1329,7 +1329,7 @@ Golang的基础语法学习
 </span><span class="lnt">85
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">point</span> <span class="kd">struct</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">point</span> <span class="kd">struct</span> <span class="p">{</span>
 	<span class="nx">x</span><span class="p">,</span> <span class="nx">y</span> <span class="kt">int</span>
 <span class="p">}</span>
 
@@ -1424,7 +1424,7 @@ Golang的基础语法学习
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1445,7 +1445,7 @@ Golang的基础语法学习
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Point 是二维坐标中的一个点
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Point 是二维坐标中的一个点
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">Point</span> <span class="kd">struct</span> <span class="p">{</span>
 	<span class="nx">x</span><span class="p">,</span> <span class="nx">y</span> <span class="kt">int</span>
 <span class="p">}</span>
@@ -1469,14 +1469,14 @@ Golang的基础语法学习
 </div><p>注意在<code>String() string</code>方法中不要再来通过<code>Printf</code>系列的函数打印类型<code>p</code>本身，以免产生递归调用<code>String() string</code>方法的情况。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">MyString</span> <span class="kt">string</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">MyString</span> <span class="kt">string</span>
 
 <span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="nx">MyString</span><span class="p">)</span> <span class="nf">String</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;MyString=%s&#34;</span><span class="p">,</span> <span class="nx">m</span><span class="p">)</span> <span class="c1">// 这里将会产生递归调用的错误
@@ -1486,14 +1486,14 @@ Golang的基础语法学习
 </div><p>如果想要避免上述的错误，只需要将类型<code>MyString</code>转换成基类就可以了</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">MyString</span> <span class="kt">string</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">MyString</span> <span class="kt">string</span>
 
 <span class="kd">func</span> <span class="p">(</span><span class="nx">m</span> <span class="nx">MyString</span><span class="p">)</span> <span class="nf">String</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;MyString=%s&#34;</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">m</span><span class="p">))</span> <span class="c1">// 这里将不再会产生递归调用的错误
@@ -1503,7 +1503,7 @@ Golang的基础语法学习
 </div><p>我们还可以自定义传递任意个参数的打印函数，我们可以通过<code>v ...Type</code>声明一个类型是<code>Type</code>的参数v，表示这个参数有任意个。然后通过<code>v...</code>的方式将这个参数传递到可以接收任意个参数的函数中，<code>v...</code>表示v是多个参数，而不是单个切片参数。如果我们将<code>v</code>的类型声明成<code>interface{}</code>，那么就表示这个参数<code>v</code>可以是任意类型。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1530,7 +1530,7 @@ Golang的基础语法学习
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;fmt&#34;</span>
@@ -1560,7 +1560,7 @@ Golang的基础语法学习
 </div><p>同时，我们也可以直接把切片当做<code>v...</code>传递进入函数中,下面这个获取最小值的整数，我们直接将整个切片传入进去，再返回其中的最小值。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1585,7 +1585,7 @@ Golang的基础语法学习
 </span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;fmt&#34;</span>
@@ -1614,13 +1614,13 @@ Golang的基础语法学习
 <p>Go 中获取整数最大值和最小值的方法：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">const</span> <span class="nx">MaxUint</span> <span class="p">=</span> <span class="p">^</span><span class="nb">uint</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">const</span> <span class="nx">MaxUint</span> <span class="p">=</span> <span class="p">^</span><span class="nb">uint</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="kd">const</span> <span class="nx">MinUint</span> <span class="p">=</span> <span class="mi">0</span>
 <span class="kd">const</span> <span class="nx">MaxInt</span> <span class="p">=</span> <span class="nb">int</span><span class="p">(</span><span class="nx">MaxUint</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span>
 <span class="kd">const</span> <span class="nx">MinInt</span> <span class="p">=</span> <span class="o">-</span><span class="nx">MaxInt</span> <span class="o">-</span> <span class="mi">1</span>
@@ -1629,7 +1629,7 @@ Golang的基础语法学习
 </div><p>整数的取值范围如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -1639,7 +1639,7 @@ Golang的基础语法学习
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">uint8  : <span class="m">0</span> to <span class="m">255</span>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">uint8  : <span class="m">0</span> to <span class="m">255</span>
 uint16 : <span class="m">0</span> to <span class="m">65535</span>
 uint32 : <span class="m">0</span> to <span class="m">4294967295</span>
 uint64 : <span class="m">0</span> to <span class="m">18446744073709551615</span>
@@ -1652,11 +1652,11 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </div><p>Go 中将一个数值赋值给一个整型变量的时候，数值不能超出这个整型变量的范围。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">b</span> <span class="kt">int8</span> <span class="p">=</span> <span class="nb">int8</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">b</span> <span class="kt">int8</span> <span class="p">=</span> <span class="nb">int8</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>
 <span class="c1">// 抛出panic，constant 255 overflows int8
 </span></code></pre></td></tr></table>
 </div>
@@ -1665,17 +1665,17 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 <p>Go 內建的<code>append</code>函数签名如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nb">append</span><span class="p">(</span><span class="nx">slice</span> <span class="p">[]</span><span class="nx">T</span><span class="p">,</span> <span class="nx">elements</span> <span class="o">...</span><span class="nx">T</span><span class="p">)</span> <span class="p">[]</span><span class="nx">T</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nb">append</span><span class="p">(</span><span class="nx">slice</span> <span class="p">[]</span><span class="nx">T</span><span class="p">,</span> <span class="nx">elements</span> <span class="o">...</span><span class="nx">T</span><span class="p">)</span> <span class="p">[]</span><span class="nx">T</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>其中<code>T</code>是一个表示任意类型的占位符，你无法用 Go 语言实现这样一个<code>T</code>由调用者确定的函数，<code>append</code>的实现得到了编译器的支持，所以它是一个內建函数。</p>
 <p>当我们想把两个切片合并的时候，只需要向上面那样通过<code>s...</code>的方式传递切片函数即可，</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -1684,7 +1684,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 	<span class="nx">x</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}</span>
 	<span class="nx">y</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">}</span>
 
@@ -1700,7 +1700,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 <p>使用<code>iota</code>枚举器可以生成若干个枚举的常量。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1753,7 +1753,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </span><span class="lnt">51
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;fmt&#34;</span>
@@ -1810,14 +1810,14 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 <p>变量可以像常量一样初始化，不过它们可以使用在运行时计算值的表达式。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="p">(</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="p">(</span>
 	<span class="nx">home</span>   <span class="p">=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="s">&#34;HOME&#34;</span><span class="p">)</span>
 	<span class="nx">user</span>   <span class="p">=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="s">&#34;USER&#34;</span><span class="p">)</span>
 	<span class="nx">gopath</span> <span class="p">=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="s">&#34;GOPATH&#34;</span><span class="p">)</span>
@@ -1831,7 +1831,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1868,7 +1868,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </span><span class="lnt">35
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;flag&#34;</span>
@@ -1910,7 +1910,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 <p>在一个类型上实现的方法可以细分为__指针类型方法__和__值类型方法__。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1948,7 +1948,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </span><span class="lnt">36
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// ByteSlice 字节切片
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// ByteSlice 字节切片
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">ByteSlice</span> <span class="p">[]</span><span class="kt">byte</span>
 
 <span class="c1">// Append 向 ByteSlice 中添加元素
@@ -2008,12 +2008,12 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 <p>例如下面这段代码中:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">r</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">r</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span>
 <span class="nx">tty</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">OpenFile</span><span class="p">(</span><span class="s">&#34;/dev/tty&#34;</span><span class="p">,</span> <span class="nx">os</span><span class="p">.</span><span class="nx">O_RDWR</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="nx">r</span> <span class="p">=</span> <span class="nx">tyy</span>
 </code></pre></td></tr></table>
@@ -2026,7 +2026,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2038,7 +2038,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 
@@ -2055,7 +2055,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -2064,7 +2064,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">n</span> <span class="kd">interface</span><span class="p">{}</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">n</span> <span class="kd">interface</span><span class="p">{}</span>
 <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">n</span> <span class="o">==</span> <span class="kc">nil</span><span class="p">)</span> <span class="c1">// 输出true
 </span><span class="c1"></span>
 <span class="kd">var</span> <span class="nx">p</span> <span class="o">*</span><span class="kt">int</span> <span class="p">=</span> <span class="kc">nil</span>
@@ -2080,7 +2080,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2122,7 +2122,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </span><span class="lnt">40
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
     <span class="s">&#34;fmt&#34;</span>
@@ -2170,7 +2170,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2201,7 +2201,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </span><span class="lnt">29
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">USB</span> <span class="kd">interface</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">USB</span> <span class="kd">interface</span> <span class="p">{</span>
     <span class="nf">Name</span><span class="p">()</span> <span class="kt">string</span>
     <span class="c1">// 这里在USB接口中嵌入了一个Connector接口，USB接口默认有了Connector接口的方法
 </span><span class="c1"></span>    <span class="nx">Connector</span>
@@ -2237,7 +2237,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 <p>一个类型只要实现了<code>sort.Sort</code>规定的接口（即实现，Len, Less, Swap 这三个方法），就可以被<code>sort.Sort</code>函数调用。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2291,7 +2291,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </span><span class="lnt">52
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;fmt&#34;</span>
@@ -2350,7 +2350,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 <p>当<code>ListenAndServe</code>方法的第二个参数是函数的时候，需要使用<code>http.HandlerFunc</code>做一层代理，即<code>http.HandlerFunc</code>实现了<code>ServeHTTP</code>方法，它在<code>ServeHTTP</code>方法中，再将请求和响应交给传入的函数进行处理。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2410,7 +2410,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </span><span class="lnt">58
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;os&#34;</span>
@@ -2475,7 +2475,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 <p>当我们在开发程序的时候，有时候程序写到一半，需要编译一下验证一下错误。但是这时可能存在一些导入了没有使用的包或者一些定义了但没有使用的变量。为了编译通过，我们通常会把这些包和变量先删除掉，编译过后再添加上，但这样显得太繁琐了，我们可以使用空白标识符来解决这个问题。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2501,7 +2501,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
     <span class="s">&#34;fmt&#34;</span>
@@ -2531,7 +2531,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 <h3 id="使用包的初始化功能">使用包的初始化功能</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2544,7 +2544,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;log&#34;</span>
@@ -2572,7 +2572,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 <h3 id="缓冲区的复用">缓冲区的复用</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2592,7 +2592,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">freeList</span> <span class="p">=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="o">*</span><span class="nx">Buffer</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">freeList</span> <span class="p">=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="o">*</span><span class="nx">Buffer</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 <span class="kd">var</span> <span class="nx">serverChan</span> <span class="p">=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="o">*</span><span class="nx">Buffer</span><span class="p">)</span>
 
 <span class="kd">func</span> <span class="nf">client</span><span class="p">()</span> <span class="p">{</span>
@@ -2614,7 +2614,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2629,7 +2629,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">server</span><span class="p">()</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">server</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">for</span> <span class="p">{</span>
         <span class="nx">b</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">serverChan</span>    <span class="c1">// Wait for work.
 </span><span class="c1"></span>        <span class="nf">process</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span>
@@ -2651,7 +2651,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2683,7 +2683,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </span><span class="lnt">30
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
     <span class="s">&#34;fmt&#34;</span>
@@ -2719,7 +2719,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 <p>ROT13解密的程序</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2765,7 +2765,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </span><span class="lnt">44
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
     <span class="s">&#34;io&#34;</span>
@@ -2814,7 +2814,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </div><h2 id="web-服务器">Web 服务器</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2869,7 +2869,7 @@ int64  : -9223372036854775808 to <span class="m">9223372036854775807</span>
 </span><span class="lnt">53
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;flag&#34;</span>
