@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.0 with theme even" />
+<meta name="generator" content="Hugo 0.83.1 with theme even" />
 
 
 <link rel="canonical" href="/2016/08/05/python%E4%B8%AD%E7%9A%84%E7%94%9F%E6%88%90%E5%99%A8%E5%92%8C%E5%8D%8F%E7%A8%8B/" />
@@ -52,8 +52,8 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2016/08/05/python%E4%B8%AD%E7%9A%84%E7%94%9F%E6%88%90%E5%99%A8%E5%92%8C%E5%8D%8F%E7%A8%8B/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2016-08-05T21:37:41+00:00" />
-<meta property="article:modified_time" content="2016-08-05T21:37:41+00:00" />
+<meta property="article:published_time" content="2016-08-05T21:37:41&#43;00:00" />
+<meta property="article:modified_time" content="2016-08-05T21:37:41&#43;00:00" />
 
 <meta itemprop="name" content="Python中的生成器和协程">
 <meta itemprop="description" content="摘要:
@@ -63,8 +63,8 @@
 生成器和协程的异同
 协程的一些特性
 
-"><meta itemprop="datePublished" content="2016-08-05T21:37:41+00:00" />
-<meta itemprop="dateModified" content="2016-08-05T21:37:41+00:00" />
+"><meta itemprop="datePublished" content="2016-08-05T21:37:41&#43;00:00" />
+<meta itemprop="dateModified" content="2016-08-05T21:37:41&#43;00:00" />
 <meta itemprop="wordCount" content="1722">
 <meta itemprop="keywords" content="Python," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python中的生成器和协程"/>
@@ -219,7 +219,7 @@
 <p>先举个例子，比如下面这个模拟Unix grep的协程:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -235,16 +235,16 @@
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
 
 
 <span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
     <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
-    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
         <span class="n">line</span> <span class="o">=</span> <span class="p">(</span><span class="k">yield</span><span class="p">)</span>
         <span class="n">m</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
 
 
 <span class="n">g</span> <span class="o">=</span> <span class="n">grep</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^abcd&#39;</span><span class="p">)</span>
@@ -268,7 +268,7 @@ TypeError: can't send non-None value to a just-started generator
 <p>但是，每次都这样手动地去启动协程，太容易忘掉了，我们可以去写一个装饰器，加到协程函数上，让其自动启动，代码如下所示:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -294,7 +294,7 @@ TypeError: can't send non-None value to a just-started generator
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
 
 
 <span class="k">def</span> <span class="nf">coroutine</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
@@ -308,11 +308,11 @@ TypeError: can't send non-None value to a just-started generator
 <span class="nd">@coroutine</span>
 <span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
     <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
-    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
         <span class="n">line</span> <span class="o">=</span> <span class="p">(</span><span class="k">yield</span><span class="p">)</span>
         <span class="n">m</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
 
 <span class="n">g</span> <span class="o">=</span> <span class="n">grep</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^abcd&#39;</span><span class="p">)</span>
 
@@ -326,7 +326,7 @@ TypeError: can't send non-None value to a just-started generator
 <p>接下来我们再来说说协程的关闭，还以上面的那个<code>grep</code>协程为例子，由于它的<code>yield</code>语句是写在一个死循环里面的，所以只要我们一直<code>send</code>，这个协程就会一直运行下去，那么该如何停止这个协程呢，其实也很简单，只要调用协程的<code>close</code>函数即可，如下所示：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -352,7 +352,7 @@ TypeError: can't send non-None value to a just-started generator
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
 
 
 <span class="k">def</span> <span class="nf">coroutine</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
@@ -366,11 +366,11 @@ TypeError: can't send non-None value to a just-started generator
 <span class="nd">@coroutine</span>
 <span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
     <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
-    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
         <span class="n">line</span> <span class="o">=</span> <span class="p">(</span><span class="k">yield</span><span class="p">)</span>
         <span class="n">m</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
 
 <span class="n">g</span> <span class="o">=</span> <span class="n">grep</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^abcd&#39;</span><span class="p">)</span>
 <span class="n">g</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;abcd&#39;</span><span class="p">)</span>
@@ -400,7 +400,7 @@ StopIteration:
 <p>除了可以向协程中发送值以外，也可以通过<code>throw</code>函数向协程中抛出异常，而这个异常像普通的异常一样，也可以通过<code>try-except</code>来捕获，请看下面这段代码:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -429,7 +429,7 @@ StopIteration:
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">re</span>
 
 
 <span class="k">def</span> <span class="nf">coroutine</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
@@ -443,15 +443,15 @@ StopIteration:
 <span class="nd">@coroutine</span>
 <span class="k">def</span> <span class="nf">grep</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
     <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
-    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">line</span> <span class="o">=</span> <span class="p">(</span><span class="k">yield</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;I catch you |</span><span class="si">%s</span><span class="s1">| haha!&#39;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;I catch you |</span><span class="si">%s</span><span class="s1">| haha!&#39;</span> <span class="o">%</span> <span class="n">e</span><span class="p">)</span>
             <span class="k">continue</span>
         <span class="n">m</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
 
 <span class="n">g</span> <span class="o">=</span> <span class="n">grep</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^abcd&#39;</span><span class="p">)</span>
 <span class="n">g</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;abcd&#39;</span><span class="p">)</span>
@@ -511,14 +511,20 @@ I catch you |You can't catch me!| haha!
   
 
   
-    <script src="https://utteranc.es/client.js"
-            repo="anotherbwangel/blog-comment"
-            issue-term="pathname"
-            theme="github-light"
-            crossorigin="anonymous"
-            async>
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+  <script src="https://giscus.app/client.js"
+        data-repo="anotherbwangel/blog-comment"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkxNDUyNzQwMDQ="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOCKi0lM4CBFyL"
+        data-mapping="pathname"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+  </script>
 
       </div>
     </main>

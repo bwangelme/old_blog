@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.0 with theme even" />
+<meta name="generator" content="Hugo 0.83.1 with theme even" />
 
 
 <link rel="canonical" href="/2020/04/01/k8s-in-actions-4/" />
@@ -44,12 +44,12 @@
 <meta property="og:description" content="副本机制和其他控制器 &ndash; 部署托管的 Pod" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2020/04/01/k8s-in-actions-4/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2020-04-01T21:21:52+08:00" />
-<meta property="article:modified_time" content="2020-04-01T21:21:52+08:00" />
+<meta property="article:published_time" content="2020-04-01T21:21:52&#43;08:00" />
+<meta property="article:modified_time" content="2020-04-01T21:21:52&#43;08:00" />
 
 <meta itemprop="name" content="《K8S in Actions》 第四章学习笔记">
-<meta itemprop="description" content="副本机制和其他控制器 &ndash; 部署托管的 Pod"><meta itemprop="datePublished" content="2020-04-01T21:21:52+08:00" />
-<meta itemprop="dateModified" content="2020-04-01T21:21:52+08:00" />
+<meta itemprop="description" content="副本机制和其他控制器 &ndash; 部署托管的 Pod"><meta itemprop="datePublished" content="2020-04-01T21:21:52&#43;08:00" />
+<meta itemprop="dateModified" content="2020-04-01T21:21:52&#43;08:00" />
 <meta itemprop="wordCount" content="6659">
 <meta itemprop="keywords" content="kubernetes,杂记," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="《K8S in Actions》 第四章学习笔记"/>
@@ -228,7 +228,7 @@ GET 容器的 HTTP 地址，检查响应码是否是 2xx 或 3xx</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -242,7 +242,7 @@ GET 容器的 HTTP 地址，检查响应码是否是 2xx 或 3xx</li>
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-unhealthy</span><span class="w">
@@ -262,7 +262,7 @@ GET 容器的 HTTP 地址，检查响应码是否是 2xx 或 3xx</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -271,7 +271,7 @@ GET 容器的 HTTP 地址，检查响应码是否是 2xx 或 3xx</li>
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ø&gt; kubectl create -f kubia-liveness.yaml
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; kubectl create -f kubia-liveness.yaml
 pod/kubia-unhealthy created
 
 ø&gt; kubectl get pod
@@ -282,7 +282,7 @@ kubia-unhealthy   0/1     CrashLoopBackOff   <span class="m">11</span>         3
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -349,7 +349,7 @@ kubia-unhealthy   0/1     CrashLoopBackOff   <span class="m">11</span>         3
 </span><span class="lnt">65
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ø&gt; kubectl describe pod kubia-unhealthy
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; kubectl describe pod kubia-unhealthy
 Name:         kubia-unhealthy
 Namespace:    default
 Priority:     <span class="m">0</span>
@@ -423,7 +423,7 @@ Events:
 <h4 id="修改存活探针的选项">修改存活探针的选项</h4>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -432,7 +432,7 @@ Events:
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">spec</span><span class="p">:</span><span class="w">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">spec</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
 </span><span class="w">      </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w">
 </span><span class="w">        </span><span class="nt">httpGet</span><span class="p">:</span><span class="w">
@@ -464,7 +464,7 @@ Events:
 <p>以下是创建一个 ReplicationController 的示例文件</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -487,7 +487,7 @@ Events:
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ReplicationController</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia</span><span class="w">
@@ -516,14 +516,14 @@ Events:
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ø&gt; kubectl get pod --show-labels
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; kubectl get pod --show-labels
 NAME          READY   STATUS              RESTARTS   AGE   LABELS
 kubia-8fnnc   1/1     Running             <span class="m">0</span>          36s   <span class="nv">app</span><span class="o">=</span>kubia
 kubia-gswk6   0/1     ContainerCreating   <span class="m">0</span>          36s   <span class="nv">app</span><span class="o">=</span>kubia
@@ -535,7 +535,7 @@ kubia-q865j   1/1     Running             <span class="m">0</span>          36s 
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -562,7 +562,7 @@ kubia-q865j   1/1     Running             <span class="m">0</span>          36s 
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ø&gt; kubectl describe rc kubia
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; kubectl describe rc kubia
 Name:         kubia
 Namespace:    default
 Selector:     <span class="nv">app</span><span class="o">=</span>kubia
@@ -592,7 +592,7 @@ Events:
 </div><h3 id="通过删除-pod-来看-rc-的自动恢复能力">通过删除 Pod 来看 RC 的自动恢复能力</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -629,7 +629,7 @@ Events:
 </span><span class="lnt">35
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 查看当前所有的 Pod</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 查看当前所有的 Pod</span>
 ø&gt; kubectl get pod --show-labels
 NAME          READY   STATUS    RESTARTS   AGE     LABELS
 kubia-8fnnc   1/1     Running   <span class="m">0</span>          9m36s   <span class="nv">app</span><span class="o">=</span>kubia
@@ -671,7 +671,7 @@ Events:
 <h3 id="通过停止节点来查看-rc-的自动恢复能力">通过停止节点来查看 RC 的自动恢复能力</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -743,7 +743,7 @@ Events:
 </span><span class="lnt">70
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 查看当前 Pod 的状态</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 查看当前 Pod 的状态</span>
 ø&gt; kubectl get pod --show-labels -o<span class="o">=</span>wide
 NAME          READY   STATUS    RESTARTS   AGE     IP         NODE                                  NOMINATED NODE   READINESS GATES   LABELS
 kubia-2c592   1/1     Running   <span class="m">0</span>          3m24s   10.0.2.5   gke-demo-default-pool-ade08258-zjhd   &lt;none&gt;           &lt;none&gt;            <span class="nv">app</span><span class="o">=</span>kubia
@@ -823,7 +823,7 @@ kubia-fxkbc   1/1     Running   <span class="m">0</span>          5m35s   10.0.2
 <p>所以通过更改 Pod 的标签，可以将 Pod 从 RC 中移除。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -883,7 +883,7 @@ kubia-fxkbc   1/1     Running   <span class="m">0</span>          5m35s   10.0.2
 </span><span class="lnt">58
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 为 Pod 新增一个无关标签，并不影响RC</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 为 Pod 新增一个无关标签，并不影响RC</span>
 ø&gt; kubectl label pod kubia-2c592 <span class="nv">foo</span><span class="o">=</span>bar
 pod/kubia-2c592 labeled
 ø&gt; kubectl get pods --show-labels
@@ -946,7 +946,7 @@ kubia-fxkbc   1/1     Running   <span class="m">0</span>          6d23h   <span 
 </div><h3 id="编辑-replicationcontroller">编辑 ReplicationController</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -966,7 +966,7 @@ kubia-fxkbc   1/1     Running   <span class="m">0</span>          6d23h   <span 
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 编辑 RC，在 spec.template.metadata.labels 中新增标签 dae: k8s</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 编辑 RC，在 spec.template.metadata.labels 中新增标签 dae: k8s</span>
 ø&gt; kubectl edit rc kubia
 replicationcontroller/kubia edited
 <span class="c1"># 原有的 Pod 并不会发生改变</span>
@@ -988,7 +988,7 @@ kubia-fxkbc   1/1     Running   <span class="m">0</span>          6d23h   <span 
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1027,7 +1027,7 @@ kubia-fxkbc   1/1     Running   <span class="m">0</span>          6d23h   <span 
 </span><span class="lnt">37
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 编辑 RC，修改 spec.relicas = 10，可以看到 RC 新建了 Pod，让 Pod 总数达到了10个</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 编辑 RC，修改 spec.relicas = 10，可以看到 RC 新建了 Pod，让 Pod 总数达到了10个</span>
 ø&gt; kubectl edit rc kubia
 replicationcontroller/kubia edited
 ø&gt; kubectl get pods --show-labels
@@ -1069,7 +1069,7 @@ kubia-fxkbc   1/1     Running   <span class="m">0</span>          6d23h   <span 
 </div><h3 id="删除-replicationcontroller">删除 ReplicationController</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1086,7 +1086,7 @@ kubia-fxkbc   1/1     Running   <span class="m">0</span>          6d23h   <span 
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># --cascade=true: If true, cascade the deletion of the resources managed by this resource </span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># --cascade=true: If true, cascade the deletion of the resources managed by this resource </span>
 <span class="c1"># (e.g. Pods created by a ReplicationController).  Default true.</span>
 
 <span class="c1"># 通过 --cascade=false 选项，在删除 RC 的时候不删除它管理的 Pod</span>
@@ -1111,7 +1111,7 @@ kubia-fxkbc   1/1     Running   <span class="m">0</span>          7d     <span c
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1132,7 +1132,7 @@ kubia-fxkbc   1/1     Running   <span class="m">0</span>          7d     <span c
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># replicaset 资源属于 apps API 组的 v1beta2 版本</span><span class="w">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># replicaset 资源属于 apps API 组的 v1beta2 版本</span><span class="w">
 </span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1beta2</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ReplicaSet</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
@@ -1158,7 +1158,7 @@ kubia-fxkbc   1/1     Running   <span class="m">0</span>          7d     <span c
 </blockquote>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1203,7 +1203,7 @@ kubia-fxkbc   1/1     Running   <span class="m">0</span>          7d     <span c
 </span><span class="lnt">43
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 ReplicaSet 资源</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 ReplicaSet 资源</span>
 ø&gt; kubectl create -f kubia-replicaset.yaml
 replicaset.apps/kubia created
 
@@ -1252,7 +1252,7 @@ No resources found in default namespace.
 <p>RS 标签选择器的配置文件格式:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -1260,7 +1260,7 @@ No resources found in default namespace.
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">selector</span><span class="p">:</span><span class="w">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">selector</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">app</span><span class="w">
 </span><span class="w">      </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">In</span><span class="w">
@@ -1286,7 +1286,7 @@ No resources found in default namespace.
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1308,7 +1308,7 @@ No resources found in default namespace.
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1beta2</span><span class="w">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1beta2</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">DaemonSet</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">ssd-monitor</span><span class="w">
@@ -1332,7 +1332,7 @@ No resources found in default namespace.
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1370,7 +1370,7 @@ No resources found in default namespace.
 </span><span class="lnt">36
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 DaemonSet</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 DaemonSet</span>
 ø&gt; kubectl create -f ssd-monitor-daemonset.yaml
 daemonset.apps/ssd-monitor created
 
@@ -1417,7 +1417,7 @@ daemonset.extensions <span class="s2">&#34;ssd-monitor&#34;</span> deleted
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1435,7 +1435,7 @@ daemonset.extensions <span class="s2">&#34;ssd-monitor&#34;</span> deleted
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">batch/v1</span><span class="w">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">batch/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Job</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">batch-job</span><span class="w">
@@ -1457,7 +1457,7 @@ daemonset.extensions <span class="s2">&#34;ssd-monitor&#34;</span> deleted
 <p>但 Job Pod 不能使用默认策略，需要明确地将重启策略设置为 <code>OnFailure</code> 或 <code>Never</code>。此设置防止容器在完成任务后重新启动。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1482,7 +1482,7 @@ daemonset.extensions <span class="s2">&#34;ssd-monitor&#34;</span> deleted
 </span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 Job</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 Job</span>
 ø&gt; kubectl create -f exporter.yaml
 job.batch/batch-job created
 
@@ -1513,7 +1513,7 @@ Wed Apr <span class="m">15</span> 13:52:51 UTC <span class="m">2020</span> Finis
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1531,7 +1531,7 @@ Wed Apr <span class="m">15</span> 13:52:51 UTC <span class="m">2020</span> Finis
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">batch/v1</span><span class="w">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">batch/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Job</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">batch-job-parallel</span><span class="w">
@@ -1551,7 +1551,7 @@ Wed Apr <span class="m">15</span> 13:52:51 UTC <span class="m">2020</span> Finis
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1563,7 +1563,7 @@ Wed Apr <span class="m">15</span> 13:52:51 UTC <span class="m">2020</span> Finis
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 可以看到 COMPLETIONS 列是 0/5</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 可以看到 COMPLETIONS 列是 0/5</span>
 ø&gt; kubectl get job
 NAME                 COMPLETIONS   DURATION   AGE
 batch-job-parallel   0/5           6s         6s
@@ -1587,7 +1587,7 @@ batch-job-parallel-qjkkc   1/1     Running     <span class="m">0</span>         
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1608,7 +1608,7 @@ batch-job-parallel-qjkkc   1/1     Running     <span class="m">0</span>         
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">batch/v1beta1</span><span class="w">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">batch/v1beta1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">CronJob</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">batch-job-every-five-minutes</span><span class="w">
@@ -1631,7 +1631,7 @@ batch-job-parallel-qjkkc   1/1     Running     <span class="m">0</span>         
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1663,7 +1663,7 @@ batch-job-parallel-qjkkc   1/1     Running     <span class="m">0</span>         
 </span><span class="lnt">30
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 CronJob</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 CronJob</span>
 ø&gt; kubectl create -f cronjob.yaml
 cronjob.batch/batch-job-every-five-minutes created
 
@@ -1741,14 +1741,20 @@ Wed Apr <span class="m">15</span> 15:30:11 UTC <span class="m">2020</span> Batch
   
 
   
-    <script src="https://utteranc.es/client.js"
-            repo="anotherbwangel/blog-comment"
-            issue-term="pathname"
-            theme="github-light"
-            crossorigin="anonymous"
-            async>
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+  <script src="https://giscus.app/client.js"
+        data-repo="anotherbwangel/blog-comment"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkxNDUyNzQwMDQ="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOCKi0lM4CBFyL"
+        data-mapping="pathname"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+  </script>
 
       </div>
     </main>

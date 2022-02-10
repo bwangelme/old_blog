@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.0 with theme even" />
+<meta name="generator" content="Hugo 0.83.1 with theme even" />
 
 
 <link rel="canonical" href="/2020/05/10/es-7-6-note/" />
@@ -43,12 +43,12 @@
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2020/05/10/es-7-6-note/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2020-05-10T17:28:40+08:00" />
-<meta property="article:modified_time" content="2020-05-10T17:28:40+08:00" />
+<meta property="article:published_time" content="2020-05-10T17:28:40&#43;08:00" />
+<meta property="article:modified_time" content="2020-05-10T17:28:40&#43;08:00" />
 
 <meta itemprop="name" content="ElasticSearch 7.6 学习笔记">
-<meta itemprop="description" content=""><meta itemprop="datePublished" content="2020-05-10T17:28:40+08:00" />
-<meta itemprop="dateModified" content="2020-05-10T17:28:40+08:00" />
+<meta itemprop="description" content=""><meta itemprop="datePublished" content="2020-05-10T17:28:40&#43;08:00" />
+<meta itemprop="dateModified" content="2020-05-10T17:28:40&#43;08:00" />
 <meta itemprop="wordCount" content="5122">
 <meta itemprop="keywords" content="笔记,ElasticSearch," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="ElasticSearch 7.6 学习笔记"/>
@@ -218,7 +218,7 @@
 <p>为索引创建了 person 类型，其中包含 user 字段</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -234,7 +234,7 @@
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="o">{</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="o">{</span>
   <span class="s2">&#34;mappings&#34;</span>: <span class="o">{</span>
     <span class="s2">&#34;person&#34;</span>: <span class="o">{</span>
       <span class="s2">&#34;properties&#34;</span>: <span class="o">{</span>
@@ -257,7 +257,7 @@
 <h3 id="分词器的使用示例">分词器的使用示例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+<pre class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
 </span><span class="lnt">  3
 </span><span class="lnt">  4
@@ -382,7 +382,7 @@
 </span><span class="lnt">123
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">GET /_analyze
+<pre class="chroma"><code class="language-sh" data-lang="sh">GET /_analyze
 <span class="o">{</span>
   <span class="s2">&#34;analyzer&#34;</span>: <span class="s2">&#34;keyword&#34;</span>,
   <span class="s2">&#34;text&#34;</span>: <span class="s2">&#34;Mastering ElasticSearch, elasticsearch in action&#34;</span>
@@ -518,7 +518,7 @@ GET /_analyze
 <p>一些数学运算，可以对文档的字段进行统计分析</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+<pre class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
 </span><span class="lnt">  3
 </span><span class="lnt">  4
@@ -629,7 +629,7 @@ GET /_analyze
 </span><span class="lnt">109
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 根据电影的年份进行分组
+<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 根据电影的年份进行分组
 GET movies/_search
 {
   &#34;size&#34;: 0,
@@ -749,7 +749,7 @@ Term 查询不做分词，会将输入作为一个整体，在倒排索引中查
 <p>ES 默认为每个 <code>text</code> 字段都新建一个 <code>keyword</code> 字段，可以通过 keyword 进行精确查询。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -761,7 +761,7 @@ Term 查询不做分词，会将输入作为一个整体，在倒排索引中查
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">POST /products/_search
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">POST /products/_search
 {
     &#34;query&#34;: {
         &#34;term&#34;: {
@@ -793,7 +793,7 @@ Term 查询不做分词，会将输入作为一个整体，在倒排索引中查
 <p>日期，布尔类型和数字都是结构化的，结构化的数据可以使用 Term 查询。搜索结果只有&quot;是&quot;和&quot;否&quot;两个值。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -891,7 +891,7 @@ Term 查询不做分词，会将输入作为一个整体，在倒排索引中查
 </span><span class="lnt">96
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">POST /products/_bulk
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">POST /products/_bulk
 {&#34;index&#34;: {&#34;_id&#34;: 1}}
 {&#34;price&#34;: 10, &#34;avaliable&#34;: true, &#34;date&#34;: &#34;2019-01-01&#34;, &#34;productID&#34;: &#34;XHDK-A-1293-#f13&#34;}
 {&#34;index&#34;: {&#34;_id&#34;: 2}}
@@ -1001,7 +1001,7 @@ POST /movies/_search
 <p><img src="https://passage-1253400711.cos-website.ap-beijing.myqcloud.com/2020-05-11-235000.png" alt=""></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1042,7 +1042,7 @@ POST /movies/_search
 </span><span class="lnt">39
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">PUT testscore/_bulk
+<pre class="chroma"><code class="language-sh" data-lang="sh">PUT testscore/_bulk
 <span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 1<span class="o">}}</span>
 <span class="o">{</span><span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;we use ElasticSearch to power the search&#34;</span><span class="o">}</span>
 <span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 2<span class="o">}}</span>
@@ -1120,7 +1120,7 @@ POST testscore/_search
 </table>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1170,7 +1170,7 @@ POST testscore/_search
 </span><span class="lnt">48
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">POST /products/_bulk
+<pre class="chroma"><code class="language-sh" data-lang="sh">POST /products/_bulk
 <span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 1<span class="o">}}</span>
 <span class="o">{</span><span class="s2">&#34;price&#34;</span>: 10, <span class="s2">&#34;avaliable&#34;</span>: true, <span class="s2">&#34;date&#34;</span>: <span class="s2">&#34;2019-01-01&#34;</span>, <span class="s2">&#34;productID&#34;</span>: <span class="s2">&#34;XHDK-A-1293-#f13&#34;</span><span class="o">}</span>
 <span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 2<span class="o">}}</span>
@@ -1222,7 +1222,7 @@ POST /products/_search
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1255,7 +1255,7 @@ POST /products/_search
 </span><span class="lnt">31
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">POST /blogs/_bulk
+<pre class="chroma"><code class="language-sh" data-lang="sh">POST /blogs/_bulk
 <span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 1<span class="o">}}</span>
 <span class="o">{</span><span class="s2">&#34;title&#34;</span>: <span class="s2">&#34;Apple iPad&#34;</span>, <span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;Apple iPad,Apple iPad&#34;</span><span class="o">}</span>
 <span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 2<span class="o">}}</span>
@@ -1290,7 +1290,7 @@ POST /blogs/_search
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1344,7 +1344,7 @@ POST /blogs/_search
 </span><span class="lnt">52
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">POST /news/_bulk
+<pre class="chroma"><code class="language-sh" data-lang="sh">POST /news/_bulk
 <span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 1<span class="o">}}</span>
 <span class="o">{</span><span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;Apple Mac&#34;</span><span class="o">}</span>
 <span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 2<span class="o">}}</span>
@@ -1406,7 +1406,7 @@ POST /news/_search
 <p>处理英文内容是：一种常见的手段是，在主字段( English Analyzer)上抽取词干，加入同义词，以匹配更多的文档。相同的文本，加入子字段(Standard Analyzer)，以提供更加精确的匹配。其他字段作为匹配文档相关度的信号。匹配字段越多则越好。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1441,7 +1441,7 @@ POST /news/_search
 </span><span class="lnt">33
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">DELETE /titles
+<pre class="chroma"><code class="language-sh" data-lang="sh">DELETE /titles
 
 <span class="c1"># 这里有两个字段 title, 和 title.std</span>
 PUT /titles
@@ -1480,7 +1480,7 @@ GET titles/_search
 <p>对于某些实体，例如人名，地址，图书信息。需要在多个字段中确定信息，单个字段只能作为整体的一部分。希望在任何列出的字段中找到尽可能多的词。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1504,7 +1504,7 @@ GET titles/_search
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 跨字段搜索</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 跨字段搜索</span>
 
 PUT address/_doc/1
 <span class="o">{</span>
@@ -1532,7 +1532,7 @@ POST address/_search
 <p>将任何与任一查询匹配的文档作为结果返回。采用字段上最匹配的评分作为最终评分返回。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1586,7 +1586,7 @@ POST address/_search
 </span><span class="lnt">52
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">PUT /blogs/_bulk
+<pre class="chroma"><code class="language-sh" data-lang="sh">PUT /blogs/_bulk
 <span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 1<span class="o">}}</span>
 <span class="o">{</span><span class="s2">&#34;title&#34;</span>: <span class="s2">&#34;Quick brown rabbits&#34;</span>, <span class="s2">&#34;body&#34;</span>: <span class="s2">&#34;Brown rabbitq are commonly seen.&#34;</span><span class="o">}</span>
 <span class="o">{</span><span class="s2">&#34;index&#34;</span>: <span class="o">{</span><span class="s2">&#34;_id&#34;</span>: 2<span class="o">}}</span>
@@ -1647,7 +1647,7 @@ POST /blogs/_search
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1720,7 +1720,7 @@ POST /blogs/_search
 </span><span class="lnt">71
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">PUT /artists/
+<pre class="chroma"><code class="language-sh" data-lang="sh">PUT /artists/
 <span class="o">{</span>
   <span class="s2">&#34;settings&#34;</span>: <span class="o">{</span>
     <span class="s2">&#34;analysis&#34;</span>: <span class="o">{</span>
@@ -1797,7 +1797,7 @@ GET /artists/_analyze
 <p>Search Template 可以定义一个查询，将 <strong>查询优化</strong> 和 <strong>使用查询</strong> 这两个工作分开， SearchTemplate 的语法参考<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-template.html">官方文档</a>。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1827,7 +1827,7 @@ GET /artists/_analyze
 </span><span class="lnt">28
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 定义搜索模板，通过 POST 也可以更新这个模板</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 定义搜索模板，通过 POST 也可以更新这个模板</span>
 POST _scripts/tmdb
 <span class="o">{</span>
   <span class="s2">&#34;script&#34;</span>: <span class="o">{</span>
@@ -1860,7 +1860,7 @@ POST tmdb/_search/template
 </div><p>Index Alias，为索引创建一个别名，可以实现0停机运维。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1888,7 +1888,7 @@ POST tmdb/_search/template
 </span><span class="lnt">26
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 为索引创建一个别名，可以将 tmdb-latest 当做 tmdb 来使用</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 为索引创建一个别名，可以将 tmdb-latest 当做 tmdb 来使用</span>
 POST _aliases
 <span class="o">{</span>
   <span class="s2">&#34;actions&#34;</span>: <span class="o">[</span>
@@ -1919,7 +1919,7 @@ POST _aliases
 </div><h2 id="利用-function-score-query-优化算法">利用 Function-Score-Query 优化算法</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1968,7 +1968,7 @@ POST _aliases
 </span><span class="lnt">47
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">PUT /blogs/_doc/1
+<pre class="chroma"><code class="language-sh" data-lang="sh">PUT /blogs/_doc/1
 <span class="o">{</span>
   <span class="s2">&#34;title&#34;</span>: <span class="s2">&#34;About popularity&#34;</span>,
   <span class="s2">&#34;content&#34;</span>: <span class="s2">&#34;In this post we will talk about...&#34;</span>,
@@ -2021,7 +2021,7 @@ POST /blogs/_search
 <h3 id="term-suggester">Term Suggester</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2055,7 +2055,7 @@ POST /blogs/_search
 </span><span class="lnt">32
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">POST articles/_bulk
+<pre class="chroma"><code class="language-sh" data-lang="sh">POST articles/_bulk
 <span class="o">{</span> <span class="s2">&#34;index&#34;</span>: <span class="o">{}</span> <span class="o">}</span>
 <span class="o">{</span> <span class="s2">&#34;body&#34;</span>: <span class="s2">&#34;lucene is very cool&#34;</span> <span class="o">}</span>
 <span class="o">{</span> <span class="s2">&#34;index&#34;</span>: <span class="o">{}</span> <span class="o">}</span>
@@ -2092,7 +2092,7 @@ POST /articles/_search
 </div><h3 id="phrase-suggester">Phrase Suggester</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2133,7 +2133,7 @@ POST /articles/_search
 </span><span class="lnt">39
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">POST /articles/_search
+<pre class="chroma"><code class="language-sh" data-lang="sh">POST /articles/_search
 <span class="o">{</span>
   <span class="s2">&#34;suggest&#34;</span>: <span class="o">{</span>
     <span class="s2">&#34;my-suggestion&#34;</span>: <span class="o">{</span>
@@ -2220,14 +2220,20 @@ POST /articles/_search
   
 
   
-    <script src="https://utteranc.es/client.js"
-            repo="anotherbwangel/blog-comment"
-            issue-term="pathname"
-            theme="github-light"
-            crossorigin="anonymous"
-            async>
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+  <script src="https://giscus.app/client.js"
+        data-repo="anotherbwangel/blog-comment"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkxNDUyNzQwMDQ="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOCKi0lM4CBFyL"
+        data-mapping="pathname"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+  </script>
 
       </div>
     </main>

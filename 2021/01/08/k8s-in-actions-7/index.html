@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.0 with theme even" />
+<meta name="generator" content="Hugo 0.83.1 with theme even" />
 
 
 <link rel="canonical" href="/2021/01/08/k8s-in-actions-7/" />
@@ -46,14 +46,14 @@ ConfigMap 和 Secret 配置应用程序
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2021/01/08/k8s-in-actions-7/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2021-01-08T07:51:51+08:00" />
-<meta property="article:modified_time" content="2021-01-08T07:51:51+08:00" />
+<meta property="article:published_time" content="2021-01-08T07:51:51&#43;08:00" />
+<meta property="article:modified_time" content="2021-01-08T07:51:51&#43;08:00" />
 
 <meta itemprop="name" content="《K8s in Actions》第七章学习笔记">
 <meta itemprop="description" content="
 ConfigMap 和 Secret 配置应用程序
-"><meta itemprop="datePublished" content="2021-01-08T07:51:51+08:00" />
-<meta itemprop="dateModified" content="2021-01-08T07:51:51+08:00" />
+"><meta itemprop="datePublished" content="2021-01-08T07:51:51&#43;08:00" />
+<meta itemprop="dateModified" content="2021-01-08T07:51:51&#43;08:00" />
 <meta itemprop="wordCount" content="1449">
 <meta itemprop="keywords" content="kubernetes,杂记," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="《K8s in Actions》第七章学习笔记"/>
@@ -197,7 +197,7 @@ ConfigMap 和 Secret 配置应用程序
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -214,7 +214,7 @@ ConfigMap 和 Secret 配置应用程序
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 使用默认的命令行参数</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 使用默认的命令行参数</span>
 ø&gt; docker run -it bwangel/fortune:args
 Configured to generate new fortune every <span class="m">10</span> seconds
 Sat Feb <span class="m">13</span> 01:54:01 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
@@ -235,13 +235,13 @@ Sat Feb <span class="m">13</span> 01:54:38 UTC <span class="m">2021</span> Writi
 <p>注意: 字符串值无需使用引号包裹，数值需要。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">args</span><span class="p">:</span><span class="w">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">args</span><span class="p">:</span><span class="w">
 </span><span class="w"></span>- <span class="l">foo</span><span class="w">
 </span><span class="w"></span>- <span class="l">bar</span><span class="w">
 </span><span class="w"></span>- <span class="s2">&#34;15&#34;</span><span class="w">
@@ -255,10 +255,10 @@ Sat Feb <span class="m">13</span> 01:54:38 UTC <span class="m">2021</span> Writi
 <p>创建 configmap 的多种来源以及最终存储的值:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">k create configmap my-config --from-file<span class="o">=</span>foo.json --from-file<span class="o">=</span><span class="nv">bar</span><span class="o">=</span>foobar.conf --from-file<span class="o">=</span>config-opts/ --from-literal<span class="o">=</span><span class="nv">some</span><span class="o">=</span>thing
+<pre class="chroma"><code class="language-sh" data-lang="sh">k create configmap my-config --from-file<span class="o">=</span>foo.json --from-file<span class="o">=</span><span class="nv">bar</span><span class="o">=</span>foobar.conf --from-file<span class="o">=</span>config-opts/ --from-literal<span class="o">=</span><span class="nv">some</span><span class="o">=</span>thing
 </code></pre></td></tr></table>
 </div>
 </div><p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com//2021-02-13-112953.png" alt=""></p>
@@ -271,12 +271,12 @@ Sat Feb <span class="m">13</span> 01:54:38 UTC <span class="m">2021</span> Writi
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># configmap-files 是本地的一个文件夹</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># configmap-files 是本地的一个文件夹</span>
 ø&gt; k create configmap fortune-config --from-file<span class="o">=</span>configmap-files
 configmap/fortune-config created
 </code></pre></td></tr></table>
@@ -286,7 +286,7 @@ configmap/fortune-config created
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -315,7 +315,7 @@ configmap/fortune-config created
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ø&gt; k get configmap fortune-config -o<span class="o">=</span>yaml
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; k get configmap fortune-config -o<span class="o">=</span>yaml
 apiVersion: v1
 <span class="c1"># 注意，配置项中的管道符号`|`表示配置项的值是一个多行字面量</span>
 data:
@@ -350,7 +350,7 @@ metadata:
 <p>mountPath 和 subPath 选项可以指定只挂载文件，而不挂载整个文件夹，这样容器的文件夹就不会覆盖了。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -360,7 +360,7 @@ metadata:
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">spec</span><span class="p">:</span><span class="w">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">spec</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span>- <span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">some/image</span><span class="w">
 </span><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
@@ -375,7 +375,7 @@ metadata:
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -386,7 +386,7 @@ metadata:
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># edit 命令可以修改 configmap 中的配置文件</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># edit 命令可以修改 configmap 中的配置文件</span>
 ø&gt; k edit configmap fortune-config
 configmap/fortune-config edited
 
@@ -402,14 +402,14 @@ configmap/fortune-config edited
 <p>k8s 在更新文件的时候，会先创建好新的文件，再修改 <code>..data</code> 的链接，这样就达到了一次性更新所有文件的目的。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ø&gt; k <span class="nb">exec</span> -it -c web-server fortune-configmap-volume -- ls -lA /etc/nginx/conf.d/               11:42:58 <span class="o">(</span>02-16<span class="o">)</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; k <span class="nb">exec</span> -it -c web-server fortune-configmap-volume -- ls -lA /etc/nginx/conf.d/               11:42:58 <span class="o">(</span>02-16<span class="o">)</span>
 total <span class="m">4</span>
 drwxr-xr-x    <span class="m">2</span> root     root          <span class="m">4096</span> Feb <span class="m">16</span> 03:39 ..2021_02_16_03_39_25.637552423
 lrwxrwxrwx    <span class="m">1</span> root     root            <span class="m">31</span> Feb <span class="m">16</span> 03:39 ..data -&gt; ..2021_02_16_03_39_25.637552423
@@ -468,14 +468,20 @@ lrwxrwxrwx    <span class="m">1</span> root     root            <span class="m">
   
 
   
-    <script src="https://utteranc.es/client.js"
-            repo="anotherbwangel/blog-comment"
-            issue-term="pathname"
-            theme="github-light"
-            crossorigin="anonymous"
-            async>
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+  <script src="https://giscus.app/client.js"
+        data-repo="anotherbwangel/blog-comment"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkxNDUyNzQwMDQ="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOCKi0lM4CBFyL"
+        data-mapping="pathname"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+  </script>
 
       </div>
     </main>

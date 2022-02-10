@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.0 with theme even" />
+<meta name="generator" content="Hugo 0.83.1 with theme even" />
 
 
 <link rel="canonical" href="/2016/10/03/more-advanced-if-usage/" />
@@ -50,8 +50,8 @@
 " />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2016/10/03/more-advanced-if-usage/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2016-10-03T09:52:51+00:00" />
-<meta property="article:modified_time" content="2016-10-03T09:52:51+00:00" />
+<meta property="article:published_time" content="2016-10-03T09:52:51&#43;00:00" />
+<meta property="article:modified_time" content="2016-10-03T09:52:51&#43;00:00" />
 
 <meta itemprop="name" content="More advanced if usage">
 <meta itemprop="description" content="摘要:
@@ -60,9 +60,9 @@
 本文是对More advanced if usage的翻译
 主要讲述了 Bash 中 if 的一些高级用法
 
-"><meta itemprop="datePublished" content="2016-10-03T09:52:51+00:00" />
-<meta itemprop="dateModified" content="2016-10-03T09:52:51+00:00" />
-<meta itemprop="wordCount" content="528">
+"><meta itemprop="datePublished" content="2016-10-03T09:52:51&#43;00:00" />
+<meta itemprop="dateModified" content="2016-10-03T09:52:51&#43;00:00" />
+<meta itemprop="wordCount" content="530">
 <meta itemprop="keywords" content="翻译,Bash," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="More advanced if usage"/>
 <meta name="twitter:description" content="摘要:
@@ -161,7 +161,7 @@
       <div class="post-meta">
         <span class="post-time"> 2016-10-03 </span>
         
-          <span class="more-meta"> 约 528 字 </span>
+          <span class="more-meta"> 约 530 字 </span>
           <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
@@ -198,7 +198,7 @@
 <p>这是一个结构体，在 if 运行结果为真的时候执行一个动作过程，如果 if 运行结果为假则执行另外一个动作过程。下面是一个例子:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -207,7 +207,7 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">freddy scripts&gt; <span class="nv">gender</span><span class="o">=</span><span class="s2">&#34;male&#34;</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh">freddy scripts&gt; <span class="nv">gender</span><span class="o">=</span><span class="s2">&#34;male&#34;</span>
 freddy scripts&gt; <span class="k">if</span> <span class="o">[[</span> <span class="s2">&#34;</span><span class="nv">$gender</span><span class="s2">&#34;</span> <span class="o">==</span> <span class="s2">&#34;f*&#34;</span> <span class="o">]]</span>
 More input&gt; <span class="k">then</span> <span class="nb">echo</span> <span class="s2">&#34;Pleasure to meet you, Madame.&#34;</span>
 More input&gt; <span class="k">else</span> <span class="nb">echo</span> <span class="s2">&#34;How come the lady hasn&#39;t got a drink yet?&#34;</span>
@@ -218,13 +218,13 @@ freddy scripts&gt;
 </div>
 </div><blockquote>
 <p><strong>注意</strong>:
-和 <em>[</em> 相反，<em>[[</em> 阻止变量值的单词分割。所以，如果<code>VAR=&quot;var with spaces&quot;</code>，你不需要在 test 的过程中在<code>$VAR</code>周围使用双引号 - 即使使用引号仍然是一个好习惯。 <em>[[</em> 阻止了文件路径名的扩展，所以如果一个文件字符串中含有通配符的话，它不会去扩展成文件名。使用*[[<em>，</em>==* 和 <em>!=</em> 会将右边的值解释为 shell 的 <a href="http://tldp.org/LDP/GNU-Linux-Tools-Summary/html/x11655.htm">glob</a> 模式，而不是左边的值。例如：<code>[[ &quot;value&quot; == val* ]]</code></p>
+和 <em>[</em> 相反，<em>[[</em> 阻止变量值的单词分割。所以，如果<code>VAR=&quot;var with spaces&quot;</code>，你不需要在 test 的过程中在<code>$VAR</code>周围使用双引号 - 即使使用引号仍然是一个好习惯。 <em>[[</em> 阻止了文件路径名的扩展，所以如果一个文件字符串中含有通配符的话，它不会去扩展成文件名。使用*[[*，*==* 和 *!=* 会将右边的值解释为 shell 的 <a href="http://tldp.org/LDP/GNU-Linux-Tools-Summary/html/x11655.htm">glob</a> 模式，而不是左边的值。例如：<code>[[ &quot;value&quot; == val* ]]</code></p>
 </blockquote>
 <p>就像下面 then 语句块中列出的连续命令列表一样，else 语句块中可替换的连续命令列表能够拥有任何 Unix 风格的命令来返回一个退出状态。</p>
 <p>另一个例子，从 <a href="http://tldp.org/LDP/Bash-Beginners-Guide/html/sect_07_01.html#sect_07_01_02_01"> Section 7.1.2.1</a> 扩展而来：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -234,7 +234,7 @@ freddy scripts&gt;
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">anny ~&gt; su -
+<pre class="chroma"><code class="language-sh" data-lang="sh">anny ~&gt; su -
 Password:
 <span class="o">[</span>root@elegance root<span class="o">]</span><span class="c1"># if ! grep ^$USER /etc/passwd 1&gt; /dev/null</span>
 &gt; <span class="k">then</span> <span class="nb">echo</span> <span class="s2">&#34;your user account is not managed locally&#34;</span>
@@ -290,14 +290,20 @@ your account is managed from the <span class="nb">local</span> /etc/passwd file
   
 
   
-    <script src="https://utteranc.es/client.js"
-            repo="anotherbwangel/blog-comment"
-            issue-term="pathname"
-            theme="github-light"
-            crossorigin="anonymous"
-            async>
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://github.com/utterance">comments powered by utterances.</a></noscript>
+  <script src="https://giscus.app/client.js"
+        data-repo="anotherbwangel/blog-comment"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkxNDUyNzQwMDQ="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOCKi0lM4CBFyL"
+        data-mapping="pathname"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+  </script>
 
       </div>
     </main>
