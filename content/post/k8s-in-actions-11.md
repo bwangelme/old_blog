@@ -90,6 +90,10 @@ K8S 创建 Pod 时会创建基础容器 Pause，后续的用户自定义容器�
 Pause 容器的生命周期和 Pod 绑定，从 Pod 被调度直到被删除的期间， Pause 容器会一直运行。
 如果 Pod 运行期间 Pause 容器被删除了，kubelet 会重建 Pod 中的所有容器。
 
+##  跨 Pod 网络
+
+K8S 规定 Pod 必须通过非 NAT 网络进行连接，即 Server 看到的 Client IP 和 Client 看到的自身 IP 是相同的。
+
 ## 问题
 
 ### scheduler 组件挂掉了
