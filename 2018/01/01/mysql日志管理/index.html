@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.0 with theme even" />
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
 <link rel="canonical" href="/2018/01/01/mysql%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/" />
@@ -36,21 +36,24 @@
 
 
 
-<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
 <meta property="og:title" content="MySQL 日志管理" />
 <meta property="og:description" content="简介: 讲述了MySQL中的日志及配置方式" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2018/01/01/mysql%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/" /><meta property="article:section" content="post" />
+<meta property="og:url" content="/2018/01/01/mysql%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/" />
 <meta property="article:published_time" content="2018-01-01T10:34:15+08:00" />
 <meta property="article:modified_time" content="2018-01-01T10:34:15+08:00" />
-
 <meta itemprop="name" content="MySQL 日志管理">
-<meta itemprop="description" content="简介: 讲述了MySQL中的日志及配置方式"><meta itemprop="datePublished" content="2018-01-01T10:34:15+08:00" />
-<meta itemprop="dateModified" content="2018-01-01T10:34:15+08:00" />
+<meta itemprop="description" content="简介: 讲述了MySQL中的日志及配置方式">
+<meta itemprop="datePublished" content="2018-01-01T10:34:15&#43;08:00" />
+<meta itemprop="dateModified" content="2018-01-01T10:34:15&#43;08:00" />
 <meta itemprop="wordCount" content="1923">
+
+
+
 <meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySQL 日志管理"/>
 <meta name="twitter:description" content="简介: 讲述了MySQL中的日志及配置方式"/>
@@ -229,14 +232,14 @@
 <h3 id="24-启用二进制日志">2.4 启用二进制日志</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 编辑 MySQL 配置文件，添加以下的选项</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 编辑 MySQL 配置文件，添加以下的选项</span>
 
 <span class="o">[</span>mysqld<span class="o">]</span>
 server-id <span class="o">=</span> <span class="m">1</span>
@@ -247,12 +250,12 @@ log-bin<span class="o">[=</span>base_name<span class="o">]</span>
 <p>开启了二进制日志后，会产生如下文件:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">&gt;&gt;&gt; ls /var/log/mysql/mysql-bin.*
+<pre class="chroma"><code class="language-sh" data-lang="sh">&gt;&gt;&gt; ls /var/log/mysql/mysql-bin.*
 /var/log/mysql/mysql-bin.000001  /var/log/mysql/mysql-bin.index
 /var/log/mysql/mysql-bin.000002
 </code></pre></td></tr></table>
@@ -262,14 +265,14 @@ log-bin<span class="o">[=</span>base_name<span class="o">]</span>
 <h3 id="25-暂停二进制日志记录当前会话">2.5 暂停二进制日志记录(当前会话)</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 暂停</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 暂停</span>
 mysql&gt; SET <span class="nv">SQL_LOG_BIN</span><span class="o">=</span>0<span class="p">;</span>
 
 <span class="c1"># 启用</span>
@@ -279,7 +282,7 @@ mysql&gt; SET <span class="nv">SQL_LOG_BIN</span><span class="o">=</span>1<span 
 </div><h3 id="26-查看二进制日志">2.6 查看二进制日志</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -303,7 +306,7 @@ mysql&gt; SET <span class="nv">SQL_LOG_BIN</span><span class="o">=</span>1<span 
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 查看MySQL二进制的日志</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 查看MySQL二进制的日志</span>
 
 &gt; <span class="nb">pwd</span>
 /usr/local/mysql/data
@@ -439,7 +442,7 @@ DELIMITER <span class="p">;</span>
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

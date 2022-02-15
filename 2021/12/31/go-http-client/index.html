@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.0 with theme even" />
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
 <link rel="canonical" href="/2021/12/31/go-http-client/" />
@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -46,18 +46,21 @@
 
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2021/12/31/go-http-client/" /><meta property="article:section" content="translate" />
+<meta property="og:url" content="/2021/12/31/go-http-client/" />
 <meta property="article:published_time" content="2021-12-31T11:01:25+08:00" />
 <meta property="article:modified_time" content="2021-12-31T11:01:25+08:00" />
-
 <meta itemprop="name" content="Review 《Don’t use Go’s default HTTP client (in production)》">
 <meta itemprop="description" content="
 
 原文地址: https://medium.com/@nate510/don-t-use-go-s-default-http-client-4804cb19f779
 
-"><meta itemprop="datePublished" content="2021-12-31T11:01:25+08:00" />
-<meta itemprop="dateModified" content="2021-12-31T11:01:25+08:00" />
+">
+<meta itemprop="datePublished" content="2021-12-31T11:01:25&#43;08:00" />
+<meta itemprop="dateModified" content="2021-12-31T11:01:25&#43;08:00" />
 <meta itemprop="wordCount" content="1561">
+
+
+
 <meta itemprop="keywords" content="翻译,Go,HTTP," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Review 《Don’t use Go’s default HTTP client (in production)》"/>
 <meta name="twitter:description" content="
@@ -164,14 +167,14 @@
 <p>假设你想通过漂亮的 JSON REST API与 <code>spacely-sprockets.com</code> 对话，并查看可用 <code>sprockets</code> 的列表。在 Go 语言中，你可以这样做:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 为了简洁省略了错误检查
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 为了简洁省略了错误检查
 </span><span class="c1"></span><span class="kd">var</span> <span class="nx">sprockets</span> <span class="nx">SprocketsResponse</span>
 <span class="nx">response</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;spacely-sprockets.com/api/sprockets&#34;</span><span class="p">)</span>
 <span class="nx">buf</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
@@ -191,10 +194,10 @@
 当你使用 <code>http.Get(url)</code> 时，你正在使用 <code>http.DefaultClient</code> ，这是一个定义了客户端默认配置的包变量。它的声明是:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">DefaultClient</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">Client</span><span class="p">{}</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">DefaultClient</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">Client</span><span class="p">{}</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>除此之外，<code>http.Client</code> 配置了一个超时时间用来熔断长期运行的连接。这个值的默认值是0，它被解释为 &ldquo;没有超时&rdquo;。
@@ -205,7 +208,7 @@
 <p>这里有一个简单的代码演示了这个问题:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -223,7 +226,7 @@
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 <span class="kn">import</span> <span class="p">(</span>
   <span class="s">&#34;fmt&#34;</span>
   <span class="s">&#34;net/http&#34;</span>
@@ -246,13 +249,13 @@
 <p>解决这个问题的方法是你的场景中定义一个带有合理超时的 <code>http.Client</code> 。下面是一个例子。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">netClient</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">netClient</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{</span>
   <span class="nx">Timeout</span><span class="p">:</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="nx">response</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">netClient</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span>
@@ -261,13 +264,13 @@
 </div><p>这为向 API 发出的请求设置了10秒的超时。如果服务器响应的时间超过了超时时间，Get()将返回错误。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="o">&amp;</span><span class="nx">httpError</span><span class="p">{</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="o">&amp;</span><span class="nx">httpError</span><span class="p">{</span>
   <span class="nx">err</span><span class="p">:</span>     <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#34; (Client.Timeout exceeded while awaiting headers)&#34;</span><span class="p">,</span>
   <span class="nx">timeout</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
 <span class="p">}</span>
@@ -278,7 +281,7 @@
 Go 的 net 包也有一个默认的 Transport 和 Dialer 。下面是一个使用自定义结构的例子。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -291,7 +294,7 @@ Go 的 net 包也有一个默认的 Transport 和 Dialer 。下面是一个使�
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">netTransport</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Transport</span><span class="p">{</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">netTransport</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Transport</span><span class="p">{</span>
   <span class="nx">Dial</span><span class="p">:</span> <span class="p">(</span><span class="o">&amp;</span><span class="nx">net</span><span class="p">.</span><span class="nx">Dialer</span><span class="p">{</span>
     <span class="nx">Timeout</span><span class="p">:</span> <span class="mi">5</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">,</span>
   <span class="p">}).</span><span class="nx">Dial</span><span class="p">,</span>
@@ -379,7 +382,7 @@ Go 的 net 包也有一个默认的 Transport 和 Dialer 。下面是一个使�
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

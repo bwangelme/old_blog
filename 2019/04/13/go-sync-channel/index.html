@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.0 with theme even" />
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
 <link rel="canonical" href="/2019/04/13/go-sync-channel/" />
@@ -35,21 +35,24 @@
 
 
 
-<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
 <meta property="og:title" content="关于线程同步操作的一道面试题" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2019/04/13/go-sync-channel/" /><meta property="article:section" content="post" />
+<meta property="og:url" content="/2019/04/13/go-sync-channel/" />
 <meta property="article:published_time" content="2019-04-13T17:27:36+08:00" />
 <meta property="article:modified_time" content="2019-04-13T17:27:36+08:00" />
-
 <meta itemprop="name" content="关于线程同步操作的一道面试题">
-<meta itemprop="description" content=""><meta itemprop="datePublished" content="2019-04-13T17:27:36+08:00" />
-<meta itemprop="dateModified" content="2019-04-13T17:27:36+08:00" />
+<meta itemprop="description" content="">
+<meta itemprop="datePublished" content="2019-04-13T17:27:36&#43;08:00" />
+<meta itemprop="dateModified" content="2019-04-13T17:27:36&#43;08:00" />
 <meta itemprop="wordCount" content="1806">
+
+
+
 <meta itemprop="keywords" content="Go,Channel," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="关于线程同步操作的一道面试题"/>
 <meta name="twitter:description" content=""/>
@@ -204,18 +207,18 @@
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">threadNum</span><span class="p">,</span> <span class="n">Upstream</span><span class="p">,</span> <span class="n">Downstream</span><span class="p">):</span>
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="k">def</span> <span class="nf">echo</span><span class="p">(</span><span class="n">threadNum</span><span class="p">,</span> <span class="n">Upstream</span><span class="p">,</span> <span class="n">Downstream</span><span class="p">):</span>
   <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
-    <span class="n">wait</span> <span class="n">Upstream</span>  <span class="o">//</span> <span class="n">等待上游的信号</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">threadNum</span><span class="p">)</span>
-    <span class="n">signal</span> <span class="n">Downstream</span> <span class="o">//</span> <span class="n">给下游发送信号</span>
+    <span class="n">wait</span> <span class="n">Upstream</span>  <span class="o">//</span> <span class="err">等待上游的信号</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">threadNum</span><span class="p">)</span>
+    <span class="n">signal</span> <span class="n">Downstream</span> <span class="o">//</span> <span class="err">给下游发送信号</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>其中<code>Upstream</code> 和 <code>Downstream</code> 都表示信号量，<code>A</code> Goroutine 的 <code>Downstream</code> 是 <code>B</code> Goroutine 的 <code>Upstream</code>，依此类推，所有 Goroutine 会形成一个链式的关系。</p>
@@ -224,7 +227,7 @@
 <p>具体代码如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -296,7 +299,7 @@
 </span><span class="lnt">70
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="p">(</span>
 	<span class="s">&#34;fmt&#34;</span>
@@ -389,7 +392,7 @@
 <p>理解了扇入的概念后，上述问题的答案也呼之欲出了。我们可以为<code>A,B,C,...</code>这N个 Goroutine 创建N个 channel。然后通过一个 FanIn 函数将N个 channel 的输出输入到一个 channel 中。具体代码如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -436,7 +439,7 @@
 </span><span class="lnt">45
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kn">import</span> <span class="s">&#34;fmt&#34;</span>
 
@@ -593,7 +596,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.0 with theme even" />
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
 <link rel="canonical" href="/note/grpc/" />
@@ -37,7 +37,7 @@
 
 
 
-<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -47,17 +47,20 @@
 
 https://grpc.io/docs/what-is-grpc/introduction/" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/note/grpc/" /><meta property="article:section" content="note" />
+<meta property="og:url" content="/note/grpc/" />
 <meta property="article:published_time" content="2020-11-30T22:48:50+08:00" />
 <meta property="article:modified_time" content="2020-11-30T22:48:50+08:00" />
-
 <meta itemprop="name" content="《gRPC》学习笔记">
 <meta itemprop="description" content="
 学习笔记
 
-https://grpc.io/docs/what-is-grpc/introduction/"><meta itemprop="datePublished" content="2020-11-30T22:48:50+08:00" />
-<meta itemprop="dateModified" content="2020-11-30T22:48:50+08:00" />
+https://grpc.io/docs/what-is-grpc/introduction/">
+<meta itemprop="datePublished" content="2020-11-30T22:48:50&#43;08:00" />
+<meta itemprop="dateModified" content="2020-11-30T22:48:50&#43;08:00" />
 <meta itemprop="wordCount" content="1691">
+
+
+
 <meta itemprop="keywords" content="笔记," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="《gRPC》学习笔记"/>
 <meta name="twitter:description" content="
@@ -157,10 +160,10 @@ https://grpc.io/docs/what-is-grpc/introduction/"/>
 <p><code>protoc</code> 生成 go 代码时依赖插件 <code>protoc-gen-go</code>，它是一个二进制文件，通过以下命令安装。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">go install google.golang.org/protobuf/cmd/protoc-gen-go
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">go install google.golang.org/protobuf/cmd/protoc-gen-go
 </code></pre></td></tr></table>
 </div>
 </div><ul>
@@ -182,10 +185,10 @@ https://grpc.io/docs/what-is-grpc/introduction/"/>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">protoc --proto_path=src --go_out=build/gen --go_opt=paths=source_relative src/foo.proto src/bar/baz.proto
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">protoc --proto_path=src --go_out=build/gen --go_opt=paths=source_relative src/foo.proto src/bar/baz.proto
 </code></pre></td></tr></table>
 </div>
 </div><p>protoc 将会读取 <code>src/foo.proto</code> 和 <code>src/bar/baz.proto</code> 源文件，生成两个输出文件，<code>build/gen/foo.pb.go</code> 和 <code>build/gen/bar/baz.pb.go</code>。如果 <code>build/gen/bar</code> 目录不存在的话，编译器会自动创建。但如果 <code>build</code> 或 <code>build/gen</code> 目录不存在的话，编译器会报错。</p>
@@ -193,21 +196,21 @@ https://grpc.io/docs/what-is-grpc/introduction/"/>
 <p>proto 文件中的如下定义:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">message Foo {}
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">message Foo {}
 </code></pre></td></tr></table>
 </div>
 </div><p>将会生成一个结构体 <code>Foo</code>，<code>*Foo</code> 类型实现了 <code>proto.Message</code> 接口。<code>proto.Message</code> 接口的 <code>ProtoReflect</code> 方法会返回 <code>protoreflect.Message</code> 接口类型的变量，它提供了一个基于反射 Message 视角。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">message Foo {
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">message Foo {
     message Bar
 }
 </code></pre></td></tr></table>
@@ -650,7 +653,7 @@ https://grpc.io/docs/what-is-grpc/introduction/"/>
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

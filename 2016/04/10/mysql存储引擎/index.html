@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.0 with theme even" />
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
 <link rel="canonical" href="/2016/04/10/mysql%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" />
@@ -37,7 +37,7 @@
 
 
 
-<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -47,17 +47,20 @@
 这是一篇关于MySQL的文章，主要介绍mysql存储引擎
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2016/04/10/mysql%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" /><meta property="article:section" content="post" />
+<meta property="og:url" content="/2016/04/10/mysql%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" />
 <meta property="article:published_time" content="2016-04-10T10:56:54+00:00" />
 <meta property="article:modified_time" content="2016-04-10T10:56:54+00:00" />
-
 <meta itemprop="name" content="MySQL存储引擎">
 <meta itemprop="description" content="摘要:
 
 这是一篇关于MySQL的文章，主要介绍mysql存储引擎
-"><meta itemprop="datePublished" content="2016-04-10T10:56:54+00:00" />
-<meta itemprop="dateModified" content="2016-04-10T10:56:54+00:00" />
-<meta itemprop="wordCount" content="550">
+">
+<meta itemprop="datePublished" content="2016-04-10T10:56:54&#43;00:00" />
+<meta itemprop="dateModified" content="2016-04-10T10:56:54&#43;00:00" />
+<meta itemprop="wordCount" content="374">
+
+
+
 <meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySQL存储引擎"/>
 <meta name="twitter:description" content="摘要:
@@ -153,8 +156,8 @@
       <div class="post-meta">
         <span class="post-time"> 2016-04-10 </span>
         
-          <span class="more-meta"> 约 550 字 </span>
-          <span class="more-meta"> 预计阅读 2 分钟 </span>
+          <span class="more-meta"> 约 374 字 </span>
+          <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
     </header>
@@ -193,13 +196,13 @@
 <h2 id="选择存储引擎">选择存储引擎</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="p">;;</span><span class="w"> </span><span class="err">查看支持的存储引擎</span><span class="w">
-</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="n">engines</span><span class="err">\</span><span class="k">G</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="p">;;</span> <span class="err">查看支持的存储引擎</span>
+<span class="k">show</span> <span class="n">engines</span><span class="err">\</span><span class="k">G</span>
+</code></pre></td></tr></table>
 </div>
 </div><h3 id="myisam-常见">MyISAM (常见)</h3>
 <p>不支持事务(Transactions)
@@ -220,7 +223,7 @@
 <p>用于集群的存储引擎</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -237,22 +240,22 @@
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">#</span><span class="w"> </span><span class="err">查看当前支持的存储引擎</span><span class="w">
-</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="n">variables</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="s1">&#39;have%&#39;</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="err">查看当前存储引擎</span><span class="w">
-</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="n">variables</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="s1">&#39;storage_engine&#39;</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="err">选择存储引擎</span><span class="w">
-</span><span class="w"></span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">innodb1</span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">int</span><span class="p">)</span><span class="n">engine</span><span class="o">=</span><span class="n">innode</span><span class="p">;</span><span class="w"> </span><span class="o">#</span><span class="err">创建表的时候选择</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">my</span><span class="p">.</span><span class="n">cnf</span><span class="w">
-</span><span class="w"></span><span class="p">[</span><span class="n">mysqld</span><span class="p">]</span><span class="w">
-</span><span class="w"></span><span class="k">default</span><span class="o">-</span><span class="k">storage</span><span class="o">-</span><span class="n">engine</span><span class="o">=</span><span class="n">INNODB</span><span class="w"> </span><span class="o">#</span><span class="err">修改配置文件中默认搜索引擎</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="err">查看表的信息</span><span class="w">
-</span><span class="w"></span><span class="k">show</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">innodb1</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="o">#</span> <span class="err">查看当前支持的存储引擎</span>
+<span class="k">show</span> <span class="n">variables</span> <span class="k">like</span> <span class="s1">&#39;have%&#39;</span>
+
+<span class="o">#</span> <span class="err">查看当前存储引擎</span>
+<span class="k">show</span> <span class="n">variables</span> <span class="k">like</span> <span class="s1">&#39;storage_engine&#39;</span>
+
+<span class="o">#</span> <span class="err">选择存储引擎</span>
+<span class="k">create</span> <span class="k">table</span> <span class="n">innodb1</span><span class="p">(</span><span class="n">id</span> <span class="nb">int</span><span class="p">)</span><span class="n">engine</span><span class="o">=</span><span class="n">innode</span><span class="p">;</span> <span class="o">#</span><span class="err">创建表的时候选择</span>
+
+<span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">my</span><span class="p">.</span><span class="n">cnf</span>
+<span class="p">[</span><span class="n">mysqld</span><span class="p">]</span>
+<span class="k">default</span><span class="o">-</span><span class="k">storage</span><span class="o">-</span><span class="n">engine</span><span class="o">=</span><span class="n">INNODB</span> <span class="o">#</span><span class="err">修改配置文件中默认搜索引擎</span>
+
+<span class="o">#</span> <span class="err">查看表的信息</span>
+<span class="k">show</span> <span class="k">create</span> <span class="k">table</span> <span class="n">innodb1</span><span class="p">;</span>
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="数据类型">数据类型</h2>
     </div>
@@ -359,7 +362,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
