@@ -15,7 +15,7 @@ comment: true
 ## Tips
 
 ```
-gh alias set s 'api -X GET search/repositories -f q="$1" --template "{{range .items}}{{ .full_name }}: {{ .description }}{{\"\n\"}}{{ end }}"'
+gh alias set s 'api -X GET search/repositories -f q="$1" --template "{{range .items}}{{ printf \"%v\\n--------------\\n%v\\n\\n\" .full_name .description }}{{ end }}"'
 ```
 
 ## 参考链接
