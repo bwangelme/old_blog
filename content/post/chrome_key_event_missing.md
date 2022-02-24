@@ -8,12 +8,12 @@ author: "bwangel"
 comment: true
 ---
 
-折腾 Ubuntu 的经历
+> 记录一次折腾 Ubuntu 的经历
 
 <!--more-->
 ---
 
-下午升级了 Ubuntu 的一些软件之后，发现 Chrome 中的 vimium-c 插件失效了，按 k 不会向上滑动，而是像按下 tab 按键一样，选中 url 链接。weasd 等字符也是一样，同时飞书中输入不了 weasd 等字符。
+下午升级了 Ubuntu 的一些软件之后，发现 Chrome 中的 vimium-c 插件失效了，按 k 不会向上滑动，而是像按下 tab 按键一样，选中 url 链接。weasd 等字符也是一样，同时飞书中输入不了 wkeasd 等字符。
 
 ## 排查 vimium-c
 
@@ -40,7 +40,7 @@ comment: true
 
 于是用 `ps aufx` 查看所有进程，一个一个地排查所有的进程。
 
-最后发现罪魁祸首是 `orca`(Ubuntu 下屏幕阅读功能的进程)，关掉 Ubuntu 阅读屏幕的辅助功能后，chrome 中就能够正常捕获这些按键的事件了。
+最后发现罪魁祸首是 `orca`(Ubuntu 下屏幕阅读功能的进程) 进程，关掉 Ubuntu 阅读屏幕的辅助功能后，chrome 中就能够正常捕获这些按键的事件了。
 
 ## 参考链接
 
