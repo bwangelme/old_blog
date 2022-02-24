@@ -1,13 +1,17 @@
 ---
-title: "修复 chrome wksda 等按键失效的问题"
+title: "修复 Ubuntu 中 chrome vimium-c 插件失效的问题"
 date: 2022-02-24T22:20:23+08:00
 lastmod: 2022-02-24T22:20:23+08:00
 draft: false
-tags: [笔记, ubuntu]
+tags: [ubuntu, vimium-c]
 author: "bwangel"
 comment: true
 ---
 
+折腾 Ubuntu 的经历
+
+<!--more-->
+---
 
 下午升级了 Ubuntu 的一些软件之后，发现 Chrome 中的 vimium-c 插件失效了，按 k 不会向上滑动，而是像按下 tab 按键一样，选中 url 链接。weasd 等字符也是一样，同时飞书中输入不了 weasd 等字符。
 
