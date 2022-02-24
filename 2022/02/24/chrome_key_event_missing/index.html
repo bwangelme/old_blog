@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>修复 chrome wksda 等按键失效的问题 - 大白的碎碎念</title>
+  <title>修复 Ubuntu 中 chrome vimium-c 插件失效的问题 - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content="下午升级了 Ubuntu 之后，发现 Chrome 中的 vimium-c 插件失效了，按 k 不会向上滑动，而是像按下 tab 按键一样，选中 url 链接。weasd 等字符也是一样，同时飞书中输入不了 weasd" /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content=" 记录一次折腾 Ubuntu 的经历
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
@@ -26,7 +27,7 @@
 <meta name="generator" content="Hugo 0.83.1 with theme even" />
 
 
-<link rel="canonical" href="/note/chrome_key_event_missing/" />
+<link rel="canonical" href="/2022/02/24/chrome_key_event_missing/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -39,20 +40,26 @@
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
-<meta property="og:title" content="修复 chrome wksda 等按键失效的问题" />
-<meta property="og:description" content="下午升级了 Ubuntu 之后，发现 Chrome 中的 vimium-c 插件失效了，按 k 不会向上滑动，而是像按下 tab 按键一样，选中 url 链接。weasd 等字符也是一样，同时飞书中输入不了 weasd" />
+<meta property="og:title" content="修复 Ubuntu 中 chrome vimium-c 插件失效的问题" />
+<meta property="og:description" content="
+记录一次折腾 Ubuntu 的经历
+" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/note/chrome_key_event_missing/" /><meta property="article:section" content="note" />
+<meta property="og:url" content="/2022/02/24/chrome_key_event_missing/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2022-02-24T22:20:23&#43;08:00" />
 <meta property="article:modified_time" content="2022-02-24T22:20:23&#43;08:00" />
 
-<meta itemprop="name" content="修复 chrome wksda 等按键失效的问题">
-<meta itemprop="description" content="下午升级了 Ubuntu 之后，发现 Chrome 中的 vimium-c 插件失效了，按 k 不会向上滑动，而是像按下 tab 按键一样，选中 url 链接。weasd 等字符也是一样，同时飞书中输入不了 weasd"><meta itemprop="datePublished" content="2022-02-24T22:20:23&#43;08:00" />
+<meta itemprop="name" content="修复 Ubuntu 中 chrome vimium-c 插件失效的问题">
+<meta itemprop="description" content="
+记录一次折腾 Ubuntu 的经历
+"><meta itemprop="datePublished" content="2022-02-24T22:20:23&#43;08:00" />
 <meta itemprop="dateModified" content="2022-02-24T22:20:23&#43;08:00" />
-<meta itemprop="wordCount" content="523">
-<meta itemprop="keywords" content="笔记,ubuntu," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="修复 chrome wksda 等按键失效的问题"/>
-<meta name="twitter:description" content="下午升级了 Ubuntu 之后，发现 Chrome 中的 vimium-c 插件失效了，按 k 不会向上滑动，而是像按下 tab 按键一样，选中 url 链接。weasd 等字符也是一样，同时飞书中输入不了 weasd"/>
+<meta itemprop="wordCount" content="540">
+<meta itemprop="keywords" content="ubuntu,vimium-c," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="修复 Ubuntu 中 chrome vimium-c 插件失效的问题"/>
+<meta name="twitter:description" content="
+记录一次折腾 Ubuntu 的经历
+"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -135,32 +142,98 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <article class="post">
-  <div class="post-content">
-    <p>下午升级了 Ubuntu 之后，发现 Chrome 中的 vimium-c 插件失效了，按 k 不会向上滑动，而是像按下 tab 按键一样，选中 url 链接。weasd 等字符也是一样，同时飞书中输入不了 weasd 等字符。</p>
+    
+    <header class="post-header">
+      <h1 class="post-title">修复 Ubuntu 中 chrome vimium-c 插件失效的问题</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2022-02-24 </span>
+        
+          <span class="more-meta"> 约 540 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#排查-vimium-c">排查 vimium-c</a></li>
+        <li><a href="#排查按键映射">排查按键映射</a></li>
+        <li><a href="#最终定位问题">最终定位问题</a></li>
+        <li><a href="#参考链接">参考链接</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<p>记录一次折腾 Ubuntu 的经历</p>
+</blockquote>
+<hr>
+<p>下午升级了 Ubuntu 的一些软件之后，发现 Chrome 中的 vimium-c 插件失效了，按 k 不会向上滑动，而是像按下 tab 按键一样，选中 url 链接。weasd 等字符也是一样，同时飞书中输入不了 wkeasd 等字符。</p>
 <h2 id="排查-vimium-c">排查 vimium-c</h2>
 <p>最开始以为是 vimium-c 软件的 bug，于是去 github 中提 Issue。<a href="https://github.com/gdh1995/vimium-c/issues/558">#558</a></p>
 <p>和作者排查了半天，使用作者提供了 <a href="https://gdh1995.cn/vimium-c/keyboard-test.html">keyboard-test</a> 工具检查按键能否正常工作，最后得出的结论是，</p>
 <ol>
 <li>使用 firefox, chromium 等浏览器依然会遇到这个问题</li>
-<li>换一个用户后，这个问题的解决的。</li>
+<li>换一个用户后，这个问题就解决了。</li>
 </ol>
 <p>由此我认定一定是我的系统配置有问题，和浏览器无关。于是开始排查系统配置</p>
 <h2 id="排查按键映射">排查按键映射</h2>
-<p>一开始以为是 <code>xmodmap</code> 设置的问题，因为我用 xmodmap 改过键，将 caps-lock 改成了 Esc。</p>
+<p>一开始以为是 <code>xmodmap</code> 设置的问题，因为我用 <code>xmodmap</code> 改过键，将 caps-lock 改成了 Esc。</p>
 <p>但是查了半天，发现我原来是用 <code>dconf</code> 改的，并不是用 <code>xmodmap</code>，我把 <code>dconf</code> 中的改键配置删除后，vimium-c 仍然不工作。</p>
 <p>此时我就很无力了，用 <code>ls -al ~/</code> 和 <code>ls -al ~/.config</code> 反复看 HOME 目录下的配置文件，反复想可能是哪个配置文件导致的问题。</p>
 <h2 id="最终定位问题">最终定位问题</h2>
-<p>后来一想，既然这个问题能够复现，燕过留痕。肯定有个进程拦截了这些按键的事件，导致 chrome 出错了。排查进程比排查配置文件范围小了很多，就开始排查进程。</p>
+<p>后来一想，既然这个问题能够复现，燕过留痕，肯定有个进程拦截了这些按键的事件，导致 chrome 出错了。排查进程比排查配置文件范围小了很多，就开始排查进程。</p>
 <p>于是用 <code>ps aufx</code> 查看所有进程，一个一个地排查所有的进程。</p>
-<p>最后发现罪魁祸首是 <code>orca</code>(Ubuntu 下屏幕阅读功能的进程)，关掉 Ubuntu 阅读屏幕的辅助功能后，chrome 中就能够正常捕获这些按键的事件了。</p>
+<p>最后发现罪魁祸首是 <code>orca</code>(Ubuntu 下屏幕阅读功能的进程) 进程，关掉 Ubuntu 阅读屏幕的辅助功能后，chrome 中就能够正常捕获这些按键的事件了。</p>
 <h2 id="参考链接">参考链接</h2>
 <ul>
 <li><a href="https://github.com/gdh1995/vimium-c/issues/558">https://github.com/gdh1995/vimium-c/issues/558</a></li>
 <li><a href="https://manpages.ubuntu.com/manpages/bionic/man1/orca.1.html">https://manpages.ubuntu.com/manpages/bionic/man1/orca.1.html</a></li>
 </ul>
+    </div>
 
-  </div>
-</article>
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-02-24
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/ubuntu/">ubuntu</a>
+          <a href="/tags/vimium-c/">vimium-c</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/2022/01/26/k8s-in-actions-11/">
+            <span class="next-text nav-default">《K8s in Actions》第十一章杂记</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
         </div>
         
 
