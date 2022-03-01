@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ZigZag 变长整数编码 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content=" 变长整数编码的实现
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
+
+
+<link rel="canonical" href="/2022/03/01/variant_zigzag/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
+
+
+<meta property="og:title" content="ZigZag 变长整数编码" />
+<meta property="og:description" content="
+变长整数编码的实现
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2022/03/01/variant_zigzag/" />
+<meta property="article:published_time" content="2022-03-01T20:16:48+08:00" />
+<meta property="article:modified_time" content="2022-03-01T20:16:48+08:00" />
+<meta itemprop="name" content="ZigZag 变长整数编码">
+<meta itemprop="description" content="
+变长整数编码的实现
+">
+<meta itemprop="datePublished" content="2022-03-01T20:16:48&#43;08:00" />
+<meta itemprop="dateModified" content="2022-03-01T20:16:48&#43;08:00" />
+<meta itemprop="wordCount" content="1369">
+
+
+
+<meta itemprop="keywords" content="编码,zigzag," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ZigZag 变长整数编码"/>
+<meta name="twitter:description" content="
+变长整数编码的实现
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/tips/">
+        <li class="mobile-menu-item">Tips</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tips/">Tips</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">ZigZag 变长整数编码</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2022-03-01 </span>
+        
+          <span class="more-meta"> 约 1369 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#介绍">介绍</a></li>
+        <li><a href="#variants-变长整数编码">Variants 变长整数编码</a></li>
+        <li><a href="#variants-编码负数遇到的问题">Variants 编码负数遇到的问题</a></li>
+        <li><a href="#zigzag-编码">ZigZag 编码</a></li>
+        <li><a href="#zigzag-的实现方式">ZigZag 的实现方式</a></li>
+        <li><a href="#实现代码">实现代码</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
+<p>变长整数编码的实现</p>
+</blockquote>
+<hr>
+<h2 id="介绍">介绍</h2>
+<p>Variants + Zigzag 是在 protobuf, thrift, kafka 中使用的一种数字编码方式，它将整数序列化成字节，整数越小，其占用的字节数越少。</p>
+<h2 id="variants-变长整数编码">Variants 变长整数编码</h2>
+<p>Variants 是使用一个或多个字节来序列化整数的一种方法，数值越小，其占用的字节数越少。</p>
+<p>在 Variants 编码中，</p>
+<ol>
+<li>每个字节的最高位保留，成为 msb 位(most significant bit)，它用于表示其后的字节是否和当前字节一起来表示一个整数。</li>
+<li>Variants 使用小端字节序的布局方式，整数的低位放在字节流的高位。</li>
+</ol>
+<p>例如整数 300，它的二进制形式是</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[0000 0001] [0010 1100]
+</code></pre></td></tr></table>
+</div>
+</div><p>其中有效的数据只有前 9 位，即</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[1] [0010 1100]
+</code></pre></td></tr></table>
+</div>
+</div><p>加上 msb 位，因为字节序后续还需要反转字节流，我们将 msb 位先记成 X</p>
+<ul>
+<li><strong>注意:</strong> 第一个字节只有前两位有效的，其他数据位我们都补0</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[X000 0010] [X010 1100]
+</code></pre></td></tr></table>
+</div>
+</div><p>将其按照小端字节序排列，得到</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[X010 1100] [X000 0010]
+</code></pre></td></tr></table>
+</div>
+</div><p>再根据当前字节是否是最后一个，填充上 msb 位，得到 300 的 Variants 编码是</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[1010 1100] [0000 0010]
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="variants-编码负数遇到的问题">Variants 编码负数遇到的问题</h2>
+<p>使用 Variants 对负数进行编码的时候，由于负数使用补码进行编码，越小的负数其对应的无符号数越大，Variants 编码后的字节数越多。</p>
+<p>例如对于一个 64 位整数，-1 的补码用八个字节表示 <code>[1111 1111] [1111 1111] [1111 1111] [1111 1111] [1111 1111] [1111 1111] [1111 1111] [1111 1111]</code>，它经过 Variants 编码后的长度是10个字节。</p>
+<p>由于小负数是很常见的数字，这样就容易造成浪费。</p>
+<p>为了让编码更加高效，Variants 引入了 ZigZag 的编码方式。</p>
+<h2 id="zigzag-编码">ZigZag 编码</h2>
+<p>ZigZag 编码是以一种锯齿形(zig-zags，或者也可以叫之字型)的方式来回穿梭正负整数，将带符号的整数映射为无符号证书，这样可以使绝对值较小的负数仍然享有较小的 Variants 编码值。</p>
+<p>下表是部分数字的 ZigZag 编码结果，看了这个表格后，你应该明白它的名字为什么要叫 ZigZag 了吧 :)</p>
+<table>
+<thead>
+<tr>
+<th>原值</th>
+<th>编码后的值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>-2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>-3</td>
+<td>5</td>
+</tr>
+<tr>
+<td>3</td>
+<td>6</td>
+</tr>
+<tr>
+<td>-4</td>
+<td>7</td>
+</tr>
+<tr>
+<td>4</td>
+<td>8</td>
+</tr>
+<tr>
+<td>-5</td>
+<td>9</td>
+</tr>
+<tr>
+<td>5</td>
+<td>10</td>
+</tr>
+<tr>
+<td>-6</td>
+<td>11</td>
+</tr>
+<tr>
+<td>6</td>
+<td>12</td>
+</tr>
+<tr>
+<td>-7</td>
+<td>13</td>
+</tr>
+<tr>
+<td>7</td>
+<td>14</td>
+</tr>
+<tr>
+<td>-8</td>
+<td>15</td>
+</tr>
+<tr>
+<td>8</td>
+<td>16</td>
+</tr>
+<tr>
+<td>-9</td>
+<td>17</td>
+</tr>
+<tr>
+<td>9</td>
+<td>18</td>
+</tr>
+<tr>
+<td>-10</td>
+<td>19</td>
+</tr>
+<tr>
+<td>10</td>
+<td>20</td>
+</tr>
+<tr>
+<td>2147483647</td>
+<td>4294967294</td>
+</tr>
+<tr>
+<td>-2147483648</td>
+<td>4294967295</td>
+</tr>
+</tbody>
+</table>
+<h2 id="zigzag-的实现方式">ZigZag 的实现方式</h2>
+<p>编码方式: <code>(n &lt;&lt; 1) ^ (n &gt;&gt; (size(n) - 1))</code>
+解码方式: <code>(n &gt;&gt;&gt; 1) ^ -(value &amp; 1)</code></p>
+<ul>
+<li><code>size(n)</code> 表示的是整数 n 的位数</li>
+<li><code>n &gt;&gt;&gt; 1</code> 表示将数字 n 无符号右移一位，最高位补0</li>
+</ul>
+<h2 id="实现代码">实现代码</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">org.example.zigzag</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.nio.ByteBuffer</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.nio.charset.StandardCharsets</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">App</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">byte</span><span class="o">[]</span> <span class="n">HEX_ARRAY</span> <span class="o">=</span> <span class="s">&#34;0123456789ABCDEF&#34;</span><span class="o">.</span><span class="na">getBytes</span><span class="o">(</span><span class="n">StandardCharsets</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">);</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">ByteBuffer</span> <span class="n">buffer</span> <span class="o">=</span> <span class="n">ByteBuffer</span><span class="o">.</span><span class="na">allocate</span><span class="o">(</span><span class="n">10</span><span class="o">);</span>
+
+        <span class="n">App</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="n">App</span><span class="o">();</span>
+        <span class="n">a</span><span class="o">.</span><span class="na">writeVariant</span><span class="o">(-</span><span class="n">23</span><span class="o">,</span> <span class="n">buffer</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;variant bytes is `&#34;</span> <span class="o">+</span> <span class="n">bytesToHex</span><span class="o">(</span><span class="n">buffer</span><span class="o">.</span><span class="na">array</span><span class="o">())</span> <span class="o">+</span> <span class="s">&#34;`&#34;</span><span class="o">);</span>
+
+        <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="na">readVariant</span><span class="o">(</span><span class="n">buffer</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;decode value is &#34;</span> <span class="o">+</span> <span class="n">b</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">readVariant</span><span class="o">(</span><span class="n">ByteBuffer</span> <span class="n">buffer</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">RuntimeException</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">b</span><span class="o">;</span>
+
+        <span class="c1">// 此处重置 bytebuffer 的 pos，否则不会从第0个开始读起
+</span><span class="c1"></span>        <span class="n">buffer</span><span class="o">.</span><span class="na">rewind</span><span class="o">();</span>
+        <span class="c1">// 从字节流中取出一个字节，如果第8位是0的话，表示读取整数结束
+</span><span class="c1"></span>        <span class="k">while</span> <span class="o">(((</span><span class="n">b</span> <span class="o">=</span> <span class="n">buffer</span><span class="o">.</span><span class="na">get</span><span class="o">())</span> <span class="o">&amp;</span> <span class="n">0x80</span><span class="o">)</span> <span class="o">!=</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 取出低7位，并左移 7 位放到 value 中
+</span><span class="c1"></span>            <span class="n">b</span> <span class="o">=</span> <span class="o">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="n">0x7f</span><span class="o">)</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="o">;</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">b</span><span class="o">);</span>
+            <span class="n">value</span> <span class="o">|=</span> <span class="n">b</span><span class="o">;</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="n">7</span><span class="o">;</span>
+            <span class="c1">// 32 位整数最大编码结果是5个字节，在循环中最多只能读4次
+</span><span class="c1"></span>            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="n">28</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="n">RuntimeException</span><span class="o">(</span><span class="s">&#34;illegal bytes&#34;</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="c1">// 最后一次在循环外读取，且由于最后一位最高位是0,也不需要进行去除最高位的操作
+</span><span class="c1"></span>        <span class="n">value</span> <span class="o">|=</span> <span class="n">b</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="o">;</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">value</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">1</span><span class="o">)</span> <span class="o">^</span> <span class="o">-(</span><span class="n">value</span> <span class="o">&amp;</span> <span class="n">1</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeVariant</span><span class="o">(</span><span class="kt">int</span> <span class="n">value</span><span class="o">,</span> <span class="n">ByteBuffer</span> <span class="n">buffer</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="c1">// 将整数 value 进行 zigzag 编码, int 是 32 位，所以这里直接写死了 31
+</span><span class="c1"></span>        <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="o">(</span><span class="n">value</span> <span class="o">&lt;&lt;</span> <span class="n">1</span><span class="o">)</span> <span class="o">^</span> <span class="o">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="n">31</span><span class="o">);</span>
+
+        <span class="c1">// 判断 v 的低7位是否是0
+</span><span class="c1"></span>        <span class="k">while</span> <span class="o">((</span><span class="n">v</span> <span class="o">&amp;</span> <span class="n">0xffffff80</span><span class="o">)</span> <span class="o">!=</span> <span class="n">0L</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 取出 v 的低7位，并在最高位上加上1
+</span><span class="c1"></span>            <span class="kt">byte</span> <span class="n">b</span> <span class="o">=</span> <span class="o">(</span><span class="kt">byte</span><span class="o">)</span> <span class="o">((</span><span class="n">v</span> <span class="o">&amp;</span> <span class="n">0x7f</span><span class="o">)</span> <span class="o">|</span> <span class="n">0x80</span><span class="o">);</span>
+            <span class="c1">// 放到 buffer 中
+</span><span class="c1"></span>            <span class="c1">// 因为是先放整数的低字节位，所以这里实现了小端字节序
+</span><span class="c1"></span>            <span class="n">buffer</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">b</span><span class="o">);</span>
+            <span class="c1">// 将 v 无符号右移 7 位，最高位补 0
+</span><span class="c1"></span>            <span class="n">v</span> <span class="o">&gt;&gt;&gt;=</span> <span class="n">7</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="c1">// 最后取出的 7 位最高位一定是0,且它位于 variant 编码的最后一个字节，需要设置成0
+</span><span class="c1"></span>        <span class="n">buffer</span><span class="o">.</span><span class="na">put</span><span class="o">((</span><span class="kt">byte</span><span class="o">)</span> <span class="n">v</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">bytesToHex</span><span class="o">(</span><span class="kt">byte</span><span class="o">[]</span> <span class="n">bytes</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">byte</span><span class="o">[]</span> <span class="n">hexChars</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="n">bytes</span><span class="o">.</span><span class="na">length</span> <span class="o">*</span> <span class="n">3</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">bytes</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="n">bytes</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">&amp;</span> <span class="n">0xFF</span><span class="o">;</span>
+            <span class="n">hexChars</span><span class="o">[</span><span class="n">j</span> <span class="o">*</span> <span class="n">3</span><span class="o">]</span> <span class="o">=</span> <span class="n">HEX_ARRAY</span><span class="o">[</span><span class="n">v</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">4</span><span class="o">];</span>
+            <span class="n">hexChars</span><span class="o">[</span><span class="n">j</span> <span class="o">*</span> <span class="n">3</span> <span class="o">+</span> <span class="n">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">HEX_ARRAY</span><span class="o">[</span><span class="n">v</span> <span class="o">&amp;</span> <span class="n">0x0F</span><span class="o">];</span>
+            <span class="n">hexChars</span><span class="o">[</span><span class="n">j</span> <span class="o">*</span> <span class="n">3</span> <span class="o">+</span> <span class="n">2</span><span class="o">]</span> <span class="o">=</span> <span class="sc">&#39; &#39;</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="n">hexChars</span><span class="o">,</span> <span class="n">StandardCharsets</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>Output</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">variant bytes is `2D 00 00 00 00 00 00 00 00 00 `
+decode value is -23
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-03-01
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E7%BC%96%E7%A0%81/">编码</a>
+          <a href="/tags/zigzag/">zigzag</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/2022/02/24/chrome_key_event_missing/">
+            <span class="next-text nav-default">修复 Ubuntu 中 chrome vimium-c 插件失效的问题</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+  <script src="https://giscus.app/client.js"
+        data-repo="anotherbwangel/blog-comment"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkxNDUyNzQwMDQ="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOCKi0lM4CBFyL"
+        data-mapping="pathname"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+  </script>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.2.1/jquery.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/slideout/1.0.1/slideout.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.js" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>
