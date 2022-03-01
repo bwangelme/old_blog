@@ -54,7 +54,7 @@
 ">
 <meta itemprop="datePublished" content="2022-03-01T20:16:48&#43;08:00" />
 <meta itemprop="dateModified" content="2022-03-01T20:16:48&#43;08:00" />
-<meta itemprop="wordCount" content="1369">
+<meta itemprop="wordCount" content="1394">
 
 
 
@@ -152,7 +152,7 @@
       <div class="post-meta">
         <span class="post-time"> 2022-03-01 </span>
         
-          <span class="more-meta"> 约 1369 字 </span>
+          <span class="more-meta"> 约 1394 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
@@ -183,9 +183,9 @@
 </blockquote>
 <hr>
 <h2 id="介绍">介绍</h2>
-<p>Variants + Zigzag 是在 protobuf, thrift, kafka 中使用的一种数字编码方式，它将整数序列化成字节，整数越小，其占用的字节数越少。</p>
+<p>Variants + Zigzag 是在 protobuf, thrift, kafka 中使用的一种数字编码方式，它将整数序列化成字节，整数的绝对值越小，其占用的字节数越少。</p>
 <h2 id="variants-变长整数编码">Variants 变长整数编码</h2>
-<p>Variants 是使用一个或多个字节来序列化整数的一种方法，数值越小，其占用的字节数越少。</p>
+<p>Variants 是使用一个或多个字节来序列化整数的一种方法，数值对应的无符号数越小，其占用的字节数越少。</p>
 <p>在 Variants 编码中，</p>
 <ol>
 <li>每个字节的最高位保留，成为 msb 位(most significant bit)，它用于表示其后的字节是否和当前字节一起来表示一个整数。</li>
@@ -245,7 +245,7 @@
 <p>由于小负数是很常见的数字，这样就容易造成浪费。</p>
 <p>为了让编码更加高效，Variants 引入了 ZigZag 的编码方式。</p>
 <h2 id="zigzag-编码">ZigZag 编码</h2>
-<p>ZigZag 编码是以一种锯齿形(zig-zags，或者也可以叫之字型)的方式来回穿梭正负整数，将带符号的整数映射为无符号证书，这样可以使绝对值较小的负数仍然享有较小的 Variants 编码值。</p>
+<p>ZigZag 编码以一种锯齿形(zig-zags，或者也可以叫之字型)的方式来回穿梭正负整数，将带符号的整数映射为无符号证书，这样可以使绝对值较小的负数仍然享有较小的 Variants 编码值。</p>
 <p>下表是部分数字的 ZigZag 编码结果，看了这个表格后，你应该明白它的名字为什么要叫 ZigZag 了吧 :)</p>
 <table>
 <thead>
@@ -350,13 +350,14 @@
 </tbody>
 </table>
 <h2 id="zigzag-的实现方式">ZigZag 的实现方式</h2>
-<p>编码方式: <code>(n &lt;&lt; 1) ^ (n &gt;&gt; (size(n) - 1))</code>
-解码方式: <code>(n &gt;&gt;&gt; 1) ^ -(value &amp; 1)</code></p>
+<p>编码方式: <code>(n &lt;&lt; 1) ^ (n &gt;&gt; (size(n) - 1))</code></p>
+<p>解码方式: <code>(n &gt;&gt;&gt; 1) ^ -(value &amp; 1)</code></p>
 <ul>
 <li><code>size(n)</code> 表示的是整数 n 的位数</li>
 <li><code>n &gt;&gt;&gt; 1</code> 表示将数字 n 无符号右移一位，最高位补0</li>
 </ul>
 <h2 id="实现代码">实现代码</h2>
+<p>下面是对 32 位整数进行编码的代码</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
