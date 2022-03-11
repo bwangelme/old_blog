@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Mariadb 修改 root 密码 - 大白的碎碎念</title>
+  <title>安装 confluent-kafka-python - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -26,7 +26,7 @@
 <meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
-<link rel="canonical" href="/2022/03/09/mariadb-password/" />
+<link rel="canonical" href="/2022/03/11/confluent_python.md/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -39,22 +39,22 @@
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
-<meta property="og:title" content="Mariadb 修改 root 密码" />
+<meta property="og:title" content="安装 confluent-kafka-python" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2022/03/09/mariadb-password/" />
-<meta property="article:published_time" content="2022-03-09T14:26:24+08:00" />
-<meta property="article:modified_time" content="2022-03-09T14:26:24+08:00" />
-<meta itemprop="name" content="Mariadb 修改 root 密码">
+<meta property="og:url" content="/2022/03/11/confluent_python.md/" />
+<meta property="article:published_time" content="2022-03-11T14:34:44+08:00" />
+<meta property="article:modified_time" content="2022-03-11T14:34:44+08:00" />
+<meta itemprop="name" content="安装 confluent-kafka-python">
 <meta itemprop="description" content="">
-<meta itemprop="datePublished" content="2022-03-09T14:26:24&#43;08:00" />
-<meta itemprop="dateModified" content="2022-03-09T14:26:24&#43;08:00" />
-<meta itemprop="wordCount" content="50">
+<meta itemprop="datePublished" content="2022-03-11T14:34:44&#43;08:00" />
+<meta itemprop="dateModified" content="2022-03-11T14:34:44&#43;08:00" />
+<meta itemprop="wordCount" content="128">
 
 
 
-<meta itemprop="keywords" content="tips,mariadb," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Mariadb 修改 root 密码"/>
+<meta itemprop="keywords" content="tips,kafka,python," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="安装 confluent-kafka-python"/>
 <meta name="twitter:description" content=""/>
 
 <!--[if lte IE 9]>
@@ -141,6 +141,9 @@
   <div class="post-content">
     <hr>
 <h2 id="tips">Tips</h2>
+<ul>
+<li>安装 librdkafka</li>
+</ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
@@ -150,21 +153,54 @@
 </span><span class="lnt">5
 </span><span class="lnt">6
 </span><span class="lnt">7
-</span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">FLUSH</span> <span class="k">PRIVILEGES</span><span class="p">;</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 安装 vcpkg</span>
+&gt; git clone https://github.com/microsoft/vcpkg ~/.local/vcpkg
+&gt; ~/.local/vcpkg/bootstrap-vcpkg.sh
 
-
-<span class="c1">-- MySQL 5.7.6 and newer as well as MariaDB 10.1.20 and newer
-</span><span class="c1"></span><span class="k">ALTER</span> <span class="k">USER</span> <span class="s1">&#39;root&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="s1">&#39;new_password&#39;</span><span class="p">;</span>
-
-<span class="c1">-- MySQL 5.7.5 and older as well as MariaDB 10.1.20
-</span><span class="c1"></span><span class="k">SET</span> <span class="n">PASSWORD</span> <span class="k">FOR</span> <span class="s1">&#39;root&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span> <span class="o">=</span> <span class="n">PASSWORD</span><span class="p">(</span><span class="s1">&#39;new_password&#39;</span><span class="p">);</span>
+<span class="c1"># 安装 librdkafka</span>
+&gt; ~/.local/vcpkg/vcpkg
+&gt; ~/.local/vcpkg/vcpkg install librdkafka
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>设置 include path 和 link path</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nb">export</span> <span class="nv">CPATH</span><span class="o">=</span>~/.local/vcpkg/packages/librdkafka_x64-linux/include
+<span class="nb">export</span> <span class="nv">LIBRARY_PATH</span><span class="o">=</span>~/.local/vcpkg/packages/librdkafka_x64-linux/lib
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>GCC uses the following environment variables:</p>
+<ul>
+<li>PATH: For searching the executables and run-time shared libraries (.dll, .so).</li>
+<li>CPATH: For searching the include-paths for headers. It is searched after paths specified in <code>-I&lt;dir&gt;</code> options. <code>C_INCLUDE_PATH</code> and <code>CPLUS_INCLUDE_PATH</code> can be used to specify C and C++ headers if the particular language was indicated in pre-processing.</li>
+<li>LIBRARY_PATH: For searching library-paths for link libraries. It is searched after paths specified in <code>-L&lt;dir&gt;</code> options.</li>
+</ul>
+</blockquote>
+<ul>
+<li>安装 librdkafka</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">pip install -e ~/work/Douban/code/confluent-kafka-python/
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="参考链接">参考链接</h2>
-<p><a href="https://www.digitalocean.com/community/tutorials/how-to-reset-your-mysql-or-mariadb-root-password">https://www.digitalocean.com/community/tutorials/how-to-reset-your-mysql-or-mariadb-root-password</a></p>
+<ul>
+<li><a href="https://www3.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html#zz-1.9">https://www3.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html#zz-1.9</a></li>
+<li><a href="https://github.com/microsoft/vcpkg">https://github.com/microsoft/vcpkg</a></li>
+</ul>
   </div>
 </article>
         </div>
