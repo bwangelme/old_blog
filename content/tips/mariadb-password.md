@@ -3,7 +3,7 @@ title: "Mariadb 修改 root 密码"
 date: 2022-03-09T14:26:24+08:00
 lastmod: 2022-03-09T14:26:24+08:00
 draft: false
-tags: [tips, go]
+tags: [tips, mariadb]
 author: "bwangel"
 comment: true
 ---
