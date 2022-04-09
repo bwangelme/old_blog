@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.0034ec37b35f91907849c9020141a7e99249c6f2301ee1e34aee09cfe5f9ae2e.css" rel="stylesheet">
 <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.1.20/jquery.fancybox.min.css" crossorigin="anonymous" rel="stylesheet">
 
 
@@ -120,21 +120,12 @@ S: go reentrant lock(可重入锁) 简单实现
         <li class="mobile-menu-item">关于</li>
       </a>
   </ul>
-
-  
-
-
 </nav>
-
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
   <a href="/" class="logo">Keep Foolish</a>
 </div>
-
-
-
-
 
 <nav class="site-navbar">
   <ul id="menu" class="menu">
@@ -155,15 +146,44 @@ S: go reentrant lock(可重入锁) 简单实现
       </li>
   </ul>
 </nav>
-
     </header>
 
     <main id="main" class="main">
       <div class="content-wrapper">
         <div id="content" class="content">
           <article class="post">
-  <div class="post-content">
-    <blockquote>
+    
+    <header class="post-header">
+      <h1 class="post-title">ARTS 第二周</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-04-02 </span>
+        
+          <span class="more-meta"> 约 440 字 </span>
+          <span class="more-meta"> 预计阅读 1 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#algorithm">Algorithm</a></li>
+        <li><a href="#review">Review</a></li>
+        <li><a href="#tips">Tips</a></li>
+        <li><a href="#share">Share</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
 <ul>
 <li>【2019年第13周】【2019/03/25 - 2019/03/31 】</li>
 <li>A. LeetCode 8</li>
@@ -193,28 +213,51 @@ S: go reentrant lock(可重入锁) 简单实现
 </ul>
 <p>Go 语言中自身并不提供可重入锁，而且 <a href="https://github.com/golang/go/issues/24192">Go 官方也不愿意添加可重入锁的支持</a>。</p>
 <p>上述文章中使用 <code>sync.mutex</code> 和 <code>sync.cond</code> 实现了简单的可重入锁。主要实现思路就是锁中加一个 Goroutine 的 ID 和 <code>sync/cond</code> 同步条件。对于一个已经加锁的锁来说，如果是拥有者 Goroutine 上锁能够正常上锁。如果是其他 Goroutine 上锁的时候，则会利用<code>cond.wait</code>执行阻塞操作，直到其他 Goroutine 解锁后唤醒当前 Goroutine。</p>
-  </div>
-</article>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-04-02
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/arts/">ARTS</a>
+          <a href="/tags/arts-list/">ARTS-LIST</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2019/04/08/arts-3/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">ARTS 第三周</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2019/03/19/arts-1/">
+            <span class="next-text nav-default">ARTS 第一周</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
         </div>
         
 
   
 
   
-  <script src="https://giscus.app/client.js"
-        data-repo="anotherbwangel/blog-comment"
-        data-repo-id="MDEwOlJlcG9zaXRvcnkxNDUyNzQwMDQ="
-        data-category="Announcements"
-        data-category-id="DIC_kwDOCKi0lM4CBFyL"
-        data-mapping="pathname"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="bottom"
-        data-theme="light"
-        data-lang="zh-CN"
-        crossorigin="anonymous"
-        async>
-  </script>
 
       </div>
     </main>
@@ -244,10 +287,13 @@ S: go reentrant lock(可重入锁) 简单实现
   <span class="copyright-year">
     &copy; 
     2016 - 
-    2022<span class="heart"><i class="iconfont icon-heart"></i></span><span><a href='https://bwangel.me/about'>bwangel</a></span>
+    2022
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href='https://bwangel.me/about'>bwangel</a></span>
   </span>
 </div>
-
     </footer>
 
     <div class="back-to-top" id="back-to-top">
@@ -261,16 +307,16 @@ S: go reentrant lock(可重入锁) 简单实现
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
   <script type="text/javascript">
     window.MathJax = {
-      tex: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        tags: 'ams',
-        }
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {equationNumbers: {autoNumber: "AMS"}},
+      showProcessingMessages: false,
+      messageStyle: 'none'
     };
   </script>
-  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 <script id="baidu_analytics">
   var _hmt = _hmt || [];
