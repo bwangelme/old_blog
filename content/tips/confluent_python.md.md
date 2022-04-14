@@ -37,7 +37,8 @@ export LIBRARY_PATH=~/.local/vcpkg/packages/librdkafka_x64-linux/lib
 >
 > + PATH: For searching the executables and run-time shared libraries (.dll, .so).
 > + CPATH: For searching the include-paths for headers. It is searched after paths specified in `-I<dir>` options. `C_INCLUDE_PATH` and `CPLUS_INCLUDE_PATH` can be used to specify C and C++ headers if the particular language was indicated in pre-processing.
-> + LIBRARY_PATH: For searching library-paths for link libraries. It is searched after paths specified in `-L<dir>` options.
+> + LIBRARY_PATH: For searching library-paths for link libraries. It is searched after paths specified in `-L<dir>` options. 程序编译期查找动态链接库的路径。
+> + LD_LIBRARY_PATH: 程序运行期间查找动态链接库的路径。
 
 + 安装 librdkafka
 
