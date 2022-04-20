@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>GO proxy 的说明 - 大白的碎碎念</title>
+  <title>优雅地关闭 Kafka Broker - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -26,7 +26,7 @@
 <meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
-<link rel="canonical" href="/2021/12/11/goproxy/" />
+<link rel="canonical" href="/2022/04/20/kafka-stop/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -39,22 +39,22 @@
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
-<meta property="og:title" content="GO proxy 的说明" />
+<meta property="og:title" content="优雅地关闭 Kafka Broker" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2021/12/11/goproxy/" />
-<meta property="article:published_time" content="2021-12-11T21:42:46+08:00" />
-<meta property="article:modified_time" content="2021-12-11T21:42:46+08:00" />
-<meta itemprop="name" content="GO proxy 的说明">
+<meta property="og:url" content="/2022/04/20/kafka-stop/" />
+<meta property="article:published_time" content="2022-04-20T17:42:24+08:00" />
+<meta property="article:modified_time" content="2022-04-20T17:42:24+08:00" />
+<meta itemprop="name" content="优雅地关闭 Kafka Broker">
 <meta itemprop="description" content="">
-<meta itemprop="datePublished" content="2021-12-11T21:42:46&#43;08:00" />
-<meta itemprop="dateModified" content="2021-12-11T21:42:46&#43;08:00" />
-<meta itemprop="wordCount" content="294">
+<meta itemprop="datePublished" content="2022-04-20T17:42:24&#43;08:00" />
+<meta itemprop="dateModified" content="2022-04-20T17:42:24&#43;08:00" />
+<meta itemprop="wordCount" content="264">
 
 
 
-<meta itemprop="keywords" content="tips,go,gomod," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="GO proxy 的说明"/>
+<meta itemprop="keywords" content="tips,go," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="优雅地关闭 Kafka Broker"/>
 <meta name="twitter:description" content=""/>
 
 <!--[if lte IE 9]>
@@ -140,12 +140,12 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">GO proxy 的说明</h1>
+      <h1 class="post-title">优雅地关闭 Kafka Broker</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2021-12-11 </span>
+        <span class="post-time"> 2022-04-20 </span>
         
-          <span class="more-meta"> 约 294 字 </span>
+          <span class="more-meta"> 约 264 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -159,8 +159,6 @@
     <li>
       <ul>
         <li><a href="#tips">Tips</a></li>
-        <li><a href="#proxy-测速">Proxy 测速</a></li>
-        <li><a href="#参考链接">参考链接</a></li>
       </ul>
     </li>
   </ul>
@@ -170,30 +168,9 @@
     <div class="post-content">
       <hr>
 <h2 id="tips">Tips</h2>
-<p>查看 GO Proxy 中包的信息:</p>
-<ul>
-<li>查看包的版本信息:</li>
-</ul>
+<p>向进程发送 <code>TERM</code> 信号就可以优雅地关闭 Kafka Broker</p>
+<p>这是 <code>bin/kafka-server-stop.sh</code> 的内容，他的思路就是通过 ps 查找 cmd 中包括 <code>kafka.Kafka</code> 的进程，来寻找进程 ID</p>
 <div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">curl https://proxy.golang.org/go.etcd.io/etcd/client/v3/@v/v3.0.0-20201116001935-06e48f04865f.info
-</code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>查看包的依赖 (即获取 go.mod 文件)</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">curl https://proxy.golang.org/go.etcd.io/etcd/client/v3/@v/v3.0.0-20201116001935-06e48f04865f.mod
-</code></pre></td></tr></table>
-</div>
-</div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -215,88 +192,32 @@
 </span><span class="lnt">18
 </span><span class="lnt">19
 </span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">module go.etcd.io/etcd/client/v3
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">SIGNAL</span><span class="o">=</span><span class="si">${</span><span class="nv">SIGNAL</span><span class="k">:-</span><span class="nv">TERM</span><span class="si">}</span>
 
-go 1.15
+<span class="nv">OSNAME</span><span class="o">=</span><span class="k">$(</span>uname -s<span class="k">)</span>
+<span class="k">if</span> <span class="o">[[</span> <span class="s2">&#34;</span><span class="nv">$OSNAME</span><span class="s2">&#34;</span> <span class="o">==</span> <span class="s2">&#34;OS/390&#34;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="k">if</span> <span class="o">[</span> -z <span class="nv">$JOBNAME</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="nv">JOBNAME</span><span class="o">=</span><span class="s2">&#34;KAFKSTRT&#34;</span>
+    <span class="k">fi</span>
+    <span class="nv">PIDS</span><span class="o">=</span><span class="k">$(</span>ps -A -o pid,jobname,comm <span class="p">|</span> grep -i <span class="nv">$JOBNAME</span> <span class="p">|</span> grep java <span class="p">|</span> grep -v grep <span class="p">|</span> awk <span class="s1">&#39;{print $1}&#39;</span><span class="k">)</span>
+<span class="k">elif</span> <span class="o">[[</span> <span class="s2">&#34;</span><span class="nv">$OSNAME</span><span class="s2">&#34;</span> <span class="o">==</span> <span class="s2">&#34;OS400&#34;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="nv">PIDS</span><span class="o">=</span><span class="k">$(</span>ps -Af <span class="p">|</span> grep -i <span class="s1">&#39;kafka\.Kafka&#39;</span> <span class="p">|</span> grep java <span class="p">|</span> grep -v grep <span class="p">|</span> awk <span class="s1">&#39;{print $2}&#39;</span><span class="k">)</span>
+<span class="k">else</span>
+    <span class="nv">PIDS</span><span class="o">=</span><span class="k">$(</span>ps ax <span class="p">|</span> grep <span class="s1">&#39; kafka\.Kafka &#39;</span> <span class="p">|</span> grep java <span class="p">|</span> grep -v grep <span class="p">|</span> awk <span class="s1">&#39;{print $1}&#39;</span><span class="k">)</span>
+<span class="k">fi</span>
 
-require (
-        github.com/dustin/go-humanize v1.0.0
-        github.com/google/uuid v1.1.2
-        github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
-        github.com/prometheus/client_golang v1.5.1
-        go.etcd.io/etcd/api/v3 v3.5.0-pre
-        go.etcd.io/etcd/pkg/v3 v3.5.0-pre
-        go.uber.org/zap v1.16.0
-        google.golang.org/grpc v1.29.1
-        sigs.k8s.io/yaml v1.2.0
-)
-
-replace (
-        go.etcd.io/etcd/api/v3 =&gt; ../../api
-        go.etcd.io/etcd/pkg/v3 =&gt; ../../pkg
-)
-
-// Bad imports are sometimes causing attempts to pull that code.
-// This makes the error more explicit.
-replace (
-        go.etcd.io/etcd =&gt; ./FORBIDDEN_DEPENDENCY
-        go.etcd.io/etcd/v3 =&gt; ./FORBIDDEN_DEPENDENCY
-        go.etcd.io/tests/v3 =&gt; ./FORBIDDEN_DEPENDENCY
-)
+<span class="k">if</span> <span class="o">[</span> -z <span class="s2">&#34;</span><span class="nv">$PIDS</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+  <span class="nb">echo</span> <span class="s2">&#34;No kafka server to stop&#34;</span>
+  <span class="nb">exit</span> <span class="m">1</span>
+<span class="k">else</span>
+  <span class="nb">kill</span> -s <span class="nv">$SIGNAL</span> <span class="nv">$PIDS</span>
+<span class="k">fi</span>
 </code></pre></td></tr></table>
 </div>
-</div><ul>
-<li>下载包</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">curl https://proxy.golang.org/go.etcd.io/etcd/client/v3/@v/v3.0.0-20201116001935-06e48f04865f.zip
-</code></pre></td></tr></table>
-</div>
-</div><h2 id="proxy-测速">Proxy 测速</h2>
-<p>2021-12-13 日晚安装包 <code>go-git/go-git-fixtures</code> 的时候卡着不动，测了一下两个 proxy 的速度</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; curl https://goproxy.io/github.com/go-git/go-git-fixtures/v4/@v/v4.2.1.zip -o /tmp/pkg.zip
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  <span class="m">2</span> 93.4M    <span class="m">2</span> 2623k    <span class="m">0</span>     <span class="m">0</span>   181k      <span class="m">0</span>  0:08:48  0:00:14  0:08:34  147k
-ø&gt; curl https://goproxy.cn/github.com/go-git/go-git-fixtures/v4/@v/v4.2.1.zip -o /tmp/pkg.zip
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
- <span class="m">10</span> 93.4M   <span class="m">10</span>  9.7M    <span class="m">0</span>     <span class="m">0</span>  3712k      <span class="m">0</span>  0:00:25  0:00:02  0:00:23 3711k
- <span class="m">21</span> 93.4M   <span class="m">21</span> 20.2M    <span class="m">0</span>     <span class="m">0</span>  5605k      <span class="m">0</span>  0:00:17  0:00:03  0:00:14 5603k
-</code></pre></td></tr></table>
-</div>
-</div><p>goproxy.io 的下载速度竟然只有 147k，怪不得安装时会卡住</p>
-<h2 id="参考链接">参考链接</h2>
-<ul>
-<li><a href="https://go.dev/ref/mod">https://go.dev/ref/mod</a></li>
-</ul>
+</div><p>但是 Linux 内核有限制，ps 输出的一行内容不能超过页大小 <code>PAGE_SIZE</code> (4096)，所以如果 kafka 进程的 cmd 过长，可能会导致 ps + grep 失败。</p>
+<p>此时就需要我们手动来找对应的进程，可以通过 <code>ps ax | grep 'kafka'</code> 来寻找对应的进程。</p>
     </div>
 
     <div class="post-copyright">
@@ -307,7 +228,7 @@ replace (
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2021-12-11
+        2022-04-20
         
     </span>
   </p>
@@ -321,16 +242,11 @@ replace (
       <div class="post-tags">
           <a href="/tags/tips/">tips</a>
           <a href="/tags/go/">go</a>
-          <a href="/tags/gomod/">gomod</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/2021/12/15/re-ascii-print/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">匹配所有可打印 Ascii 字符的正则</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
-        <a class="next" href="/2021/12/02/vagrant_add_volume/">
-            <span class="next-text nav-default">Vagrant 添加挂载目录</span>
+        
+        <a class="next" href="/2022/04/20/ubuntu-dns/">
+            <span class="next-text nav-default">Ubuntu 使用默认的 DNS Server 地址</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
