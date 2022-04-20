@@ -43,3 +43,4 @@ sudo systemctl restart NetworkManager
 ## 参考链接
 
 - https://askubuntu.com/a/907249/581894
+- https://www.gabriel.urdhr.fr/2020/03/17/systemd-revolved-dns-configuration-for-vpn/
