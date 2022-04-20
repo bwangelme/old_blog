@@ -153,8 +153,57 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <article class="post">
-  <div class="post-content">
-    <blockquote>
+    
+    <header class="post-header">
+      <h1 class="post-title">Review 《File Descriptor Transfer over Unix Domain Sockets》</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-11-30 </span>
+        
+          <span class="more-meta"> 约 4811 字 </span>
+          <span class="more-meta"> 预计阅读 10 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#unix-域套接字">Unix 域套接字</a>
+          <ul>
+            <li><a href="#一个简短的教程">一个简短的教程</a></li>
+            <li><a href="#socket-文件--普通文件">Socket 文件 != 普通文件</a></li>
+            <li><a href="#使用-bind2-绑定一个已经存在的路径将会失败">使用 bind(2) 绑定一个已经存在的路径将会失败</a></li>
+          </ul>
+        </li>
+        <li><a href="#socketpair">SOCKETPAIR</a></li>
+        <li><a href="#在-unux-域套接字上传输数据">在 Unux 域套接字上传输数据</a>
+          <ul>
+            <li><a href="#file-descriptors文件描述符-vs-file-description-文件描述">File Descriptors(文件描述符) VS File Description (文件描述)</a></li>
+            <li><a href="#sendmsg-和-recvmsg">sendmsg 和 recvmsg</a></li>
+          </ul>
+        </li>
+        <li><a href="#辅助数据传输">辅助数据传输</a>
+          <ul>
+            <li><a href="#scm_rights">SCM_RIGHTS</a></li>
+          </ul>
+        </li>
+        <li><a href="#scm_rights-的陷阱">SCM_RIGHTS 的陷阱</a></li>
+        <li><a href="#什么时候发送文件描述符是有用的">什么时候发送文件描述符是有用的</a></li>
+        <li><a href="#总结">总结</a></li>
+        <li><a href="#references">References:</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <blockquote>
 <ul>
 <li><strong>使用 Unix 域套接字传输文件描述符</strong></li>
 <li>原文地址: <a href="https://copyconstruct.medium.com/file-descriptor-transfer-over-unix-domain-sockets-dcbbf5b3b6ec">https://copyconstruct.medium.com/file-descriptor-transfer-over-unix-domain-sockets-dcbbf5b3b6ec</a></li>
@@ -546,10 +595,49 @@ root@5247072fc542:~/uds#
 <li>The Linux Programming Interface <a href="https://learning.oreilly.com/library/view/the-linux-programming/9781593272203/">https://learning.oreilly.com/library/view/the-linux-programming/9781593272203/</a></li>
 <li>UNIX Network Programming: The Sockets Networking API <a href="https://learning.oreilly.com/library/view/the-sockets-networking/0131411551/">https://learning.oreilly.com/library/view/the-sockets-networking/0131411551/</a></li>
 </ul>
-  </div>
-</article>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-11-30
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E7%BF%BB%E8%AF%91/">翻译</a>
+          <a href="/tags/linux/">linux</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2021/12/17/introduction-to-apache-thrift/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Review 《Chapter 1. Introduction to Apache Thrift》</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2021/01/16/review-memory-consistency-models/">
+            <span class="next-text nav-default">Review 《Memory Consistency Models: A Tutorial》</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
         </div>
         
+
+  
 
   
 
@@ -568,6 +656,7 @@ root@5247072fc542:~/uds#
         crossorigin="anonymous"
         async>
   </script>
+    <noscript>Please enable JavaScript to view the <a href="https://giscus.app/zh-CN">comments powered by giscus.</a></noscript>
 
       </div>
     </main>
@@ -622,7 +711,7 @@ root@5247072fc542:~/uds#
         }
     };
   </script>
-  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+  <script type="text/javascript" async src="/lib/MathJax@3.2.0/es5/tex-mml-chtml.js"></script>
 
 <script id="baidu_analytics">
   var _hmt = _hmt || [];
