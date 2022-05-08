@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>优雅地关闭 Kafka Broker - 大白的碎碎念</title>
+  <title>Ubuntu 必装软件 - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -26,7 +26,7 @@
 <meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
-<link rel="canonical" href="/2022/04/20/kafka-stop/" />
+<link rel="canonical" href="/2022/05/08/ubuntu-debs/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -39,22 +39,22 @@
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
-<meta property="og:title" content="优雅地关闭 Kafka Broker" />
+<meta property="og:title" content="Ubuntu 必装软件" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2022/04/20/kafka-stop/" />
-<meta property="article:published_time" content="2022-04-20T17:42:24+08:00" />
-<meta property="article:modified_time" content="2022-04-20T17:42:24+08:00" />
-<meta itemprop="name" content="优雅地关闭 Kafka Broker">
+<meta property="og:url" content="/2022/05/08/ubuntu-debs/" />
+<meta property="article:published_time" content="2022-05-08T10:42:22+08:00" />
+<meta property="article:modified_time" content="2022-05-08T10:42:22+08:00" />
+<meta itemprop="name" content="Ubuntu 必装软件">
 <meta itemprop="description" content="">
-<meta itemprop="datePublished" content="2022-04-20T17:42:24&#43;08:00" />
-<meta itemprop="dateModified" content="2022-04-20T17:42:24&#43;08:00" />
-<meta itemprop="wordCount" content="264">
+<meta itemprop="datePublished" content="2022-05-08T10:42:22&#43;08:00" />
+<meta itemprop="dateModified" content="2022-05-08T10:42:22&#43;08:00" />
+<meta itemprop="wordCount" content="36">
 
 
 
-<meta itemprop="keywords" content="tips,go," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="优雅地关闭 Kafka Broker"/>
+<meta itemprop="keywords" content="tips,linux," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Ubuntu 必装软件"/>
 <meta name="twitter:description" content=""/>
 
 <!--[if lte IE 9]>
@@ -140,12 +140,12 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">优雅地关闭 Kafka Broker</h1>
+      <h1 class="post-title">Ubuntu 必装软件</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2022-04-20 </span>
+        <span class="post-time"> 2022-05-08 </span>
         
-          <span class="more-meta"> 约 264 字 </span>
+          <span class="more-meta"> 约 36 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -159,6 +159,7 @@
     <li>
       <ul>
         <li><a href="#tips">Tips</a></li>
+        <li><a href="#参考链接">参考链接</a></li>
       </ul>
     </li>
   </ul>
@@ -168,56 +169,26 @@
     <div class="post-content">
       <hr>
 <h2 id="tips">Tips</h2>
-<p>向进程发送 <code>TERM</code> 信号就可以优雅地关闭 Kafka Broker</p>
-<p>这是 <code>bin/kafka-server-stop.sh</code> 的内容，他的思路就是通过 ps 查找 cmd 中包括 <code>kafka.Kafka</code> 的进程，来寻找进程 ID</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="nv">SIGNAL</span><span class="o">=</span><span class="si">${</span><span class="nv">SIGNAL</span><span class="k">:-</span><span class="nv">TERM</span><span class="si">}</span>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># vagrant</span>
 
-<span class="nv">OSNAME</span><span class="o">=</span><span class="k">$(</span>uname -s<span class="k">)</span>
-<span class="k">if</span> <span class="o">[[</span> <span class="s2">&#34;</span><span class="nv">$OSNAME</span><span class="s2">&#34;</span> <span class="o">==</span> <span class="s2">&#34;OS/390&#34;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="k">if</span> <span class="o">[</span> -z <span class="nv">$JOBNAME</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-        <span class="nv">JOBNAME</span><span class="o">=</span><span class="s2">&#34;KAFKSTRT&#34;</span>
-    <span class="k">fi</span>
-    <span class="nv">PIDS</span><span class="o">=</span><span class="k">$(</span>ps -A -o pid,jobname,comm <span class="p">|</span> grep -i <span class="nv">$JOBNAME</span> <span class="p">|</span> grep java <span class="p">|</span> grep -v grep <span class="p">|</span> awk <span class="s1">&#39;{print $1}&#39;</span><span class="k">)</span>
-<span class="k">elif</span> <span class="o">[[</span> <span class="s2">&#34;</span><span class="nv">$OSNAME</span><span class="s2">&#34;</span> <span class="o">==</span> <span class="s2">&#34;OS400&#34;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
-    <span class="nv">PIDS</span><span class="o">=</span><span class="k">$(</span>ps -Af <span class="p">|</span> grep -i <span class="s1">&#39;kafka\.Kafka&#39;</span> <span class="p">|</span> grep java <span class="p">|</span> grep -v grep <span class="p">|</span> awk <span class="s1">&#39;{print $2}&#39;</span><span class="k">)</span>
-<span class="k">else</span>
-    <span class="nv">PIDS</span><span class="o">=</span><span class="k">$(</span>ps ax <span class="p">|</span> grep <span class="s1">&#39; kafka\.Kafka &#39;</span> <span class="p">|</span> grep java <span class="p">|</span> grep -v grep <span class="p">|</span> awk <span class="s1">&#39;{print $1}&#39;</span><span class="k">)</span>
-<span class="k">fi</span>
-
-<span class="k">if</span> <span class="o">[</span> -z <span class="s2">&#34;</span><span class="nv">$PIDS</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-  <span class="nb">echo</span> <span class="s2">&#34;No kafka server to stop&#34;</span>
-  <span class="nb">exit</span> <span class="m">1</span>
-<span class="k">else</span>
-  <span class="nb">kill</span> -s <span class="nv">$SIGNAL</span> <span class="nv">$PIDS</span>
-<span class="k">fi</span>
+curl -fsSL https://apt.releases.hashicorp.com/gpg <span class="p">|</span> sudo apt-key add -
+sudo apt-add-repository <span class="s2">&#34;deb [arch=amd64] https://apt.releases.hashicorp.com </span><span class="k">$(</span>lsb_release -cs<span class="k">)</span><span class="s2"> main&#34;</span><span class="se">\n</span>
+sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install vagrant
 </code></pre></td></tr></table>
 </div>
-</div><p>但是 Linux 内核有限制，ps 输出的一行内容不能超过页大小 <code>PAGE_SIZE</code> (4096)，所以如果 kafka 进程的 cmd 过长，可能会导致 ps + grep 失败。</p>
-<p>此时就需要我们手动来找对应的进程，可以通过 <code>ps ax | grep 'kafka'</code> 来寻找对应的进程。</p>
+</div><h2 id="参考链接">参考链接</h2>
+<ul>
+<li><a href="https://www.vagrantup.com/downloads">Vagrant</a></li>
+</ul>
     </div>
 
     <div class="post-copyright">
@@ -228,7 +199,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-04-20
+        2022-05-08
         
     </span>
   </p>
@@ -241,16 +212,12 @@
 <footer class="post-footer">
       <div class="post-tags">
           <a href="/tags/tips/">tips</a>
-          <a href="/tags/go/">go</a>
+          <a href="/tags/linux/">linux</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/2022/05/08/ubuntu-debs/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">Ubuntu 必装软件</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
-        <a class="next" href="/2022/04/20/ubuntu-dns/">
-            <span class="next-text nav-default">Ubuntu 使用默认的 DNS Server 地址</span>
+        
+        <a class="next" href="/2022/04/20/kafka-stop/">
+            <span class="next-text nav-default">优雅地关闭 Kafka Broker</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
