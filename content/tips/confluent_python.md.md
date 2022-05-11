@@ -22,7 +22,6 @@ comment: true
 > ~/.local/vcpkg/bootstrap-vcpkg.sh
 
 # 安装 librdkafka
-> ~/.local/vcpkg/vcpkg
 > ~/.local/vcpkg/vcpkg install librdkafka
 ```
 
