@@ -49,7 +49,7 @@
 <meta itemprop="description" content="">
 <meta itemprop="datePublished" content="2022-05-12T21:37:49&#43;08:00" />
 <meta itemprop="dateModified" content="2022-05-12T21:37:49&#43;08:00" />
-<meta itemprop="wordCount" content="448">
+<meta itemprop="wordCount" content="517">
 
 
 
@@ -145,8 +145,8 @@
       <div class="post-meta">
         <span class="post-time"> 2022-05-12 </span>
         
-          <span class="more-meta"> 约 448 字 </span>
-          <span class="more-meta"> 预计阅读 1 分钟 </span>
+          <span class="more-meta"> 约 517 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
     </header>
@@ -169,7 +169,7 @@
     <div class="post-content">
       <hr>
 <h2 id="读书">读书</h2>
-<p>读了 <a href="https://book.douban.com/subject/19952400/">《算法》</a> 的 1.2.3 和 1.2.4 节，这部分主要是概念性的，一直在将封装的概念。</p>
+<p>读了 <a href="https://book.douban.com/subject/19952400/">《算法》</a> 的 1.2.3 和 1.2.4 节，这部分主要是概念性的，一直在讲封装的概念。</p>
 <p>将数据结构(或者更多现实中的实体)抽象成类，并暴露接口出来。接口和实现分离，这样我们修改实现时也更容易一些。</p>
 <p>同时 Java 提供了重载的特性，可以相对容易地修改接口。</p>
 <h2 id="tips">Tips</h2>
@@ -193,9 +193,22 @@ index-url = https://private_pypi_domain/simple
 extra_index_url = https://pypi.org/simple
 </code></pre></td></tr></table>
 </div>
-</div><p>发现 registry 是无法控制优先级的，无论如何都会安装 pypi.org 上的包。搜了一下，找到一个相关的问题，<a href="https://stackoverflow.com/questions/67253141/python-pip-priority-order-with-index-url-and-extra-index-url">python-pip-priority-order-with-index-url-and-extra-index-url</a></p>
+</div><p>发现 registry 是无法控制优先级的，交换 index-url 和 extra_index_url，也会安装 pypi.org 上的包。搜了一下，找到一个相关的问题，<a href="https://stackoverflow.com/questions/67253141/python-pip-priority-order-with-index-url-and-extra-index-url">python-pip-priority-order-with-index-url-and-extra-index-url</a></p>
 <p>pypi 从设计上来说，只支持通过 包名称+版本 唯一地定位一个包，它并没有考虑过 registry 之间的优先级。</p>
 <p>所以最终建议是，pip 客户端永远只使用一个 registry 进行安装，不要使用 <code>--extra-index-url</code> 选项，私有 pypi 提供 fallback 功能，当包找不到时再去 pypi.org 中查找。</p>
+<ol start="3">
+<li>hugo 模板中返回当前时间</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">{{ now.Format &#34;2006-01-02&#34; }}
+</code></pre></td></tr></table>
+</div>
+</div><p>now 是一个函数，返回 <code>time.Time</code> 对象，然后再调用它的 <code>Format</code> 方法返回代表日期的字符串。</p>
+<p>see doc in: <a href="https://gohugo.io/functions/now/">https://gohugo.io/functions/now/</a></p>
     </div>
 
     <div class="post-copyright">
