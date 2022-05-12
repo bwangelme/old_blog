@@ -1,29 +1,15 @@
 ---
-title: "ARTS 第一周"
+title: "{{ now.Format "2006年01月02日" }} 打卡 "
 date: {{ .Date }}
 lastmod: {{ .Date }}
-draft: true
-tags: [ARTS, ARTS-LIST]
+draft: false
+tags: [打卡]
 author: "bwangel"
 comment: true
-
 ---
-
-2019年第17周|2019/04/22 -- 2019/03/28
----|---
-Algorithm|LeetCode xxx
-Review|xxx
-Tips|xxx
-Share|xxx
 
 <!--more-->
-
 ---
 
-## Algorithm
 
-## Review
-
-## Tips
-
-## Share
+## 今日学习内容
