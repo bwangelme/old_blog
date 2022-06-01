@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>说说 Python 中的字符串编码 - 大白的碎碎念</title>
+  <title>说说 Python2 中的字符串编码 - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content="摘要: Python3 中的字符串 Python2 中的字符串 Python2 中的一个经典编码问题 Python3 中的字符串 要想搞清楚 Python 中的字符串，我觉得还是从3开始说起比较好，3中的字符串的概念变得" /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content="摘要: Python2 中 Str 和 Unicode 分别存了什么 raw_unicode_escape 编码的作用 Python2 中的一个经典编码问题 Python2 中 Str 和 Unicode 分别存了什么 在 Python2 中，str 存储的是 ascii 编码的字节流，unicode 存储" /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
@@ -39,23 +39,23 @@
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
-<meta property="og:title" content="说说 Python 中的字符串编码" />
-<meta property="og:description" content="摘要: Python3 中的字符串 Python2 中的字符串 Python2 中的一个经典编码问题 Python3 中的字符串 要想搞清楚 Python 中的字符串，我觉得还是从3开始说起比较好，3中的字符串的概念变得" />
+<meta property="og:title" content="说说 Python2 中的字符串编码" />
+<meta property="og:description" content="摘要: Python2 中 Str 和 Unicode 分别存了什么 raw_unicode_escape 编码的作用 Python2 中的一个经典编码问题 Python2 中 Str 和 Unicode 分别存了什么 在 Python2 中，str 存储的是 ascii 编码的字节流，unicode 存储" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2016/11/09/python-string-encoding/" />
 <meta property="article:published_time" content="2016-11-09T07:39:38+00:00" />
-<meta property="article:modified_time" content="2016-11-09T07:39:38+00:00" />
-<meta itemprop="name" content="说说 Python 中的字符串编码">
-<meta itemprop="description" content="摘要: Python3 中的字符串 Python2 中的字符串 Python2 中的一个经典编码问题 Python3 中的字符串 要想搞清楚 Python 中的字符串，我觉得还是从3开始说起比较好，3中的字符串的概念变得">
+<meta property="article:modified_time" content="2022-06-01T13:20:00+00:00" />
+<meta itemprop="name" content="说说 Python2 中的字符串编码">
+<meta itemprop="description" content="摘要: Python2 中 Str 和 Unicode 分别存了什么 raw_unicode_escape 编码的作用 Python2 中的一个经典编码问题 Python2 中 Str 和 Unicode 分别存了什么 在 Python2 中，str 存储的是 ascii 编码的字节流，unicode 存储">
 <meta itemprop="datePublished" content="2016-11-09T07:39:38&#43;00:00" />
-<meta itemprop="dateModified" content="2016-11-09T07:39:38&#43;00:00" />
-<meta itemprop="wordCount" content="2317">
+<meta itemprop="dateModified" content="2022-06-01T13:20:00&#43;00:00" />
+<meta itemprop="wordCount" content="1876">
 
 
 
 <meta itemprop="keywords" content="Python," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="说说 Python 中的字符串编码"/>
-<meta name="twitter:description" content="摘要: Python3 中的字符串 Python2 中的字符串 Python2 中的一个经典编码问题 Python3 中的字符串 要想搞清楚 Python 中的字符串，我觉得还是从3开始说起比较好，3中的字符串的概念变得"/>
+<meta name="twitter:title" content="说说 Python2 中的字符串编码"/>
+<meta name="twitter:description" content="摘要: Python2 中 Str 和 Unicode 分别存了什么 raw_unicode_escape 编码的作用 Python2 中的一个经典编码问题 Python2 中 Str 和 Unicode 分别存了什么 在 Python2 中，str 存储的是 ascii 编码的字节流，unicode 存储"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -140,13 +140,13 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">说说 Python 中的字符串编码</h1>
+      <h1 class="post-title">说说 Python2 中的字符串编码</h1>
 
       <div class="post-meta">
         <span class="post-time"> 2016-11-09 </span>
         
-          <span class="more-meta"> 约 2317 字 </span>
-          <span class="more-meta"> 预计阅读 5 分钟 </span>
+          <span class="more-meta"> 约 1876 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
         
       </div>
     </header>
@@ -158,26 +158,15 @@
   <ul>
     <li>
       <ul>
-        <li><a href="#python3-中的字符串">Python3 中的字符串</a>
-          <ul>
-            <li><a href="#str-和-bytes">Str 和 Bytes</a></li>
-            <li><a href="#指定编码和实际编码">指定编码和实际编码</a></li>
-          </ul>
-        </li>
-        <li><a href="#python2-中的字符串">Python2 中的字符串</a>
-          <ul>
-            <li><a href="#指定编码和实际编码-1">指定编码和实际编码</a></li>
-            <li><a href="#str-和-unicode">Str 和 Unicode</a></li>
-            <li><a href="#encode-和-decode">encode 和 decode</a></li>
-          </ul>
-        </li>
+        <li><a href="#python2-中-str-和-unicode-分别存了什么">Python2 中 Str 和 Unicode 分别存了什么</a></li>
+        <li><a href="#raw_unicode_escape-编码是什么">raw_unicode_escape 编码是什么</a></li>
+        <li><a href="#strencode-和-unicodedecode-发生了什么">str.encode 和 unicode.decode 发生了什么</a></li>
         <li><a href="#python2-中的一个经典问题">Python2 中的一个经典问题</a>
           <ul>
-            <li><a href="#解决方案1-手动编码-unicode">解决方案1: 手动编码 Unicode</a></li>
-            <li><a href="#解决方案2-更改-python-默认的指定编码">解决方案2: 更改 Python 默认的指定编码</a></li>
+            <li><a href="#解决方案1-手动设置-encode-的编码参数">解决方案1: 手动设置 encode 的编码参数</a></li>
+            <li><a href="#解决方案2-更改-python-的默认编码参数">解决方案2: 更改 Python 的默认编码参数</a></li>
           </ul>
         </li>
-        <li><a href="#最后的废话">最后的废话</a></li>
       </ul>
     </li>
   </ul>
@@ -188,71 +177,14 @@
       <p><strong>摘要:</strong></p>
 <blockquote>
 <ul>
-<li>Python3 中的字符串</li>
-<li>Python2 中的字符串</li>
+<li>Python2 中 Str 和 Unicode 分别存了什么</li>
+<li>raw_unicode_escape 编码的作用</li>
 <li>Python2 中的一个经典编码问题</li>
 </ul>
 </blockquote>
 <!-- raw HTML omitted -->
-<h2 id="python3-中的字符串">Python3 中的字符串</h2>
-<p>要想搞清楚 Python 中的字符串，我觉得还是从3开始说起比较好，3中的字符串的概念变得清晰了很多，先搞懂了3，再来看2中的那些弯弯绕或许会更容易一些吧。</p>
-<h3 id="str-和-bytes">Str 和 Bytes</h3>
-<p>Python3 中正式将这两个概念区分开了，Str 表示的是字符串，拥有编码类型，Bytes 表示的是字节流，没有编码类型。</p>
-<p>而<code>S.encode(encoding='utf-8', errors='strict') -&gt; bytes</code>函数，就是将字符串 S 以编码<code>encoding</code>来识别，然后将之编码成<code>Bytes</code>。</p>
-<p>而<code>bytes.decode(self, /, encoding='utf-8', errors='strict')</code>函数，则是以编码<code>encoding</code>来识别字节流bytes，同时将之解码成字符串<code>Str</code>。</p>
-<h3 id="指定编码和实际编码">指定编码和实际编码</h3>
-<p>好吧，<code>指定编码</code>和<code>实际编码</code>这两个术语是否存在我也不确定，这是我自创的，但是我这不是瞎创造新名字， 而是为了和大家解释其中的概念。</p>
-<p>当我们创建一个新的字符串的时候，字符串会有一个<code>指定编码</code>，既 Python 认为这个字符串是以什么编码来存储的，Python 默认的指定编码我们可以用<code>sys.getdefaultencoding()</code>函数来获取到，比如下面这样：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">sys</span>
-
-<span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">sys</span><span class="o">.</span><span class="n">getdefaultencoding</span><span class="p">()</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="s1">&#39;utf-8&#39;</span> <span class="c1"># 可以看出 Python3 中字符串的指定编码是utf-8</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>但是呢，字符串的实际编码并不是说 Python 指定了哪个就是哪个了，这个和系统的默认编码有关，可以通过<code>locale.getdefaultlocale()</code>函数获取到，比如下面这样：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">locale</span>
-<span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="n">locale</span><span class="o">.</span><span class="n">getdefaultlocale</span><span class="p">()</span>
-<span class="n">Out</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="p">(</span><span class="s1">&#39;en_US&#39;</span><span class="p">,</span> <span class="s1">&#39;UTF-8&#39;</span><span class="p">)</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>这里可以看出，我的 Ubuntu 中，默认语言是<code>en_US</code>，默认的编码是<code>UTF-8</code>。</p>
-<h2 id="python2-中的字符串">Python2 中的字符串</h2>
-<h3 id="指定编码和实际编码-1">指定编码和实际编码</h3>
-<p>Python2 中的字符串也有指定编码和实际编码，和上文中的一样，这里就不在赘述。</p>
-<p>不过有一点需要大家注意，Python2 中默认的指定编码是<code>ascii</code>，而系统的默认编码通常都不会是这个(比如我的 Ubuntu 是<code>utf-8</code>)，Python2 在这里就默默地挖下了一个大坑了。</p>
-<h3 id="str-和-unicode">Str 和 Unicode</h3>
-<p>Python2 中的字符串，有两种。<code>str</code>和<code>unicode</code>。但是 Python2 中很坑爹的一点就是它没有表示字节流的对象，所以就由<code>str</code>来友情客串了这个角色，但是<code>str</code>又不能抛弃自己作为字符串的本职工作，所以就造成了一种很坑爹的状况，<code>str</code>既是字符串，又是字节流！文件或者网络IO的时候，要使用<code>str</code>对象(其字节流属性)，但是<code>str</code>对象本身又是有编码类型的(其字符串属性)。</p>
-<h3 id="encode-和-decode">encode 和 decode</h3>
-<h4 id="encode-函数">encode() 函数</h4>
-<p>Python2 中的<code>encode</code>和<code>decode</code>函数和 Python3 中的有些不同，<code>encode</code>函数的声明是这样的：<code>S.encode([encoding[,errors]]) -&gt; object</code>，这个函数的作用是将<code>str</code>或者<code>unicode</code>编码成<code>str</code>，其中<code>encoding</code>参数指定的是编码结果字符串的编码类型，如果<code>encoding</code>没有指定的话，那么编码结果字符串的编码类型取<code>sys.getdefaultencoding()</code>。</p>
-<p>例如下面这个例子：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">u</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;gb2312&#39;</span><span class="p">)</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>这条语句的意思就是将<code>unicode</code>编码成<code>str</code>，指定返回的<code>str</code>对象的编码是 gb2312。</p>
-<p>这里有一个经典的问题，比如我写下面这样的语句，</p>
+<h2 id="python2-中-str-和-unicode-分别存了什么">Python2 中 Str 和 Unicode 分别存了什么</h2>
+<p>在 Python2 中，str 存储的是 ascii 编码的字节流，unicode 存储的是 Unicode 码点</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
@@ -262,18 +194,141 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">u</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
-<span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
-  <span class="n">File</span> <span class="s2">&#34;&lt;stdin&gt;&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">UnicodeEncodeError</span><span class="p">:</span> <span class="s1">&#39;ascii&#39;</span> <span class="n">codec</span> <span class="n">can</span><span class="s1">&#39;t encode characters in position 0-3: ordinal not in range(128)</span>
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="s1">&#39;中&#39;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="s1">&#39;</span><span class="se">\xe4\xb8\xad</span><span class="s1">&#39;</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;中&#39;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="se">\u4e2d</span><span class="s1">&#39;</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>这里它会抛出一个<code>UnicodeEncodeError</code>错误，这是因为第二条语句返回的是一个<code>str</code>对象，它的编码类型取<code>sys.getdefaultencoding()</code>，默认值为<code>ascii</code>，而<code>ascii</code>编码类型是不支持中文的，所以就会抛出一个编码错误。</p>
-<h4 id="decode-函数">decode() 函数</h4>
-<p><code>decode()</code>函数的声明是这样的<code>S.decode([encoding[,errors]]) -&gt; string or unicode</code>，它的作用是将一个<code>str</code>对象解码成<code>unicode</code>对象? 其中<code>encoding</code>参数设置的是被解码字符串的编码类型。而返回的<code>unicode</code>对象的默认编码是 utf-8。</p>
+</div><p>例如上面的例子，我们分别输入了一个汉字 <code>中</code>，<code>str('中')</code> 显示的是 <code>\xe4\xb8\xad</code>，<code>unicode('中')</code> 显示的是 <code>\u4e2d</code>。</p>
+<p>当我们用 str 存储汉字，在终端中输入时，Python 会根据我们系统的编码(通过 <code>locale.getdefaultlocale()</code> 获取)，将其自动 encode 成 ascii 编码的字节流。</p>
+<p>我系统的编码是 <code>utf-8</code>，所以 <code>str('中')</code> 显示的就是 <code>中</code> 经过 utf-8 编码后的内容 <code>\xe4\xb8\xad</code>。</p>
+<p>当我们用 unicode 存储汉字时，Python 会存储这个汉字对应的码点。所以 <code>unicode('中')</code> 显示的是 <code>\u4e2d</code>。</p>
+<h2 id="raw_unicode_escape-编码是什么">raw_unicode_escape 编码是什么</h2>
+<p>raw_unicode_escape 编码的作用是将 unicode 码点变成 <code>\uxxxx</code> 形式的字节流。或者将 <code>\uxxx</code> 形式的字节流转换成 unicode 码点。</p>
+<p>下面的</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;👷&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;raw_unicode_escape&#39;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">U0001f477&#39;</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">s1</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;👷&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;raw_unicode_escape&#39;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="mi">10</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="n">s2</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;中&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;raw_unicode_escape&#39;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="n">s2</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">u4e2d&#39;</span>
+
+<span class="c1"># 注意 s2 的长度是6，它代表了6个字符，而不是一个码点</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="mi">6</span>
+
+<span class="c1"># 将 \u4e2d 字符串变成一个 unicode 码点</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="s1">&#39;</span><span class="se">\u4e2d</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;raw_unicode_escape&#39;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="se">\u4e2d</span><span class="s1">&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>有时候我们想在正则表达式里面写入 unicode 码点，但是 <code>ur</code> 前缀已经在 python3 中废弃了，不建议使用，此时就可以用 <code>raw_unicode_escape</code> 将 str 解码成 unicode</p>
+<p>这是一个匹配所有中日韩字符的正则</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="n">In</span> <span class="p">[</span><span class="mi">18</span><span class="p">]:</span> <span class="sa">r</span><span class="s1">&#39;[\u4e00-\u9fff]+&#39;</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;raw_unicode_escape&#39;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">18</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;[</span><span class="se">\u4e00</span><span class="s1">-</span><span class="se">\u9fff</span><span class="s1">]+&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>TODO</strong>: <code>raw_unicode_escape</code> 和 <code>unicode-escape</code> 这两种编码在 Python2 下的表现似乎是一样的，还没发现它们的区别</p>
+<h2 id="strencode-和-unicodedecode-发生了什么">str.encode 和 unicode.decode 发生了什么</h2>
+<p>正常来说，<code>str</code> 代表字节流，不应该有 <code>encode</code> 函数，<code>unicode</code> 代表文本，不应该有 <code>decode</code> 函数。但它们确实存在，而且表现还很迷惑。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="n">In</span> <span class="p">[</span><span class="mi">21</span><span class="p">]:</span> <span class="s1">&#39;中&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+<span class="o">---------------------------------------------------------------------------</span>
+<span class="ne">UnicodeDecodeError</span>                        <span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">21</span><span class="o">-</span><span class="mf">811e7325</span><span class="n">d0d9</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="o">----&gt;</span> <span class="mi">1</span> <span class="s1">&#39;中&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+
+<span class="ne">UnicodeDecodeError</span><span class="p">:</span> <span class="s1">&#39;ascii&#39;</span> <span class="n">codec</span> <span class="n">can</span><span class="s1">&#39;t decode byte 0xe4 in position 0: ordinal not in range(128)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">22</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;中&#39;</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+<span class="o">---------------------------------------------------------------------------</span>
+<span class="ne">UnicodeEncodeError</span>                        <span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">22</span><span class="o">-</span><span class="mi">2792</span><span class="n">f6c33b1d</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="o">----&gt;</span> <span class="mi">1</span> <span class="sa">u</span><span class="s1">&#39;中&#39;</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+
+<span class="ne">UnicodeEncodeError</span><span class="p">:</span> <span class="s1">&#39;ascii&#39;</span> <span class="n">codec</span> <span class="n">can</span><span class="s1">&#39;t encode character u&#39;</span>\<span class="n">u4e2d</span><span class="s1">&#39; in position 0: ordinal not in range(128)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>例如上面那段代码，<code>str</code> 调用 encode 函数会抛出 <code>UnicodeDecodeError</code> 异常，<code>unicode</code> 调用 decode 函数会抛出 <code>UnicodeEncodeError</code> 异常。我个人理解的原因是:</p>
+<blockquote>
+<ul>
+<li><code>'中'.encode()</code> 实际上调用的是 <code>'中'.decode().encode()</code></li>
+<li><code>u'中'.decode()</code> 实际上调用的是 <code>u'中'.encode().decode()</code></li>
+<li><strong>注意</strong>: 这段内容属于我的个人猜测，目前未找到相关的代码或文章。</li>
+</ul>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="n">S</span><span class="o">.</span><span class="n">encode</span><span class="p">([</span><span class="n">encoding</span><span class="p">[,</span><span class="n">errors</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">object</span>
+<span class="n">S</span><span class="o">.</span><span class="n">decode</span><span class="p">([</span><span class="n">encoding</span><span class="p">[,</span><span class="n">errors</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">object</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>上面是 <code>encode</code> 函数和 <code>decode</code>函数的签名，它们都有一个 <code>encoding</code> 参数，表示执行编解码操作时所用的编码。</p>
+<p>这个参数可以用 <code>sys.getdefaultencoding()</code> 可以获取到，Python2 中它默认是 <code>ascii</code>。</p>
+<p><code>'中'.decode().encode()</code> 在调用 <code>decode</code> 时，使用 <code>ascii</code> 对字节流 <code>'\xe4\xb8\xad'</code> 进行解码，这是一个 utf-8 编码产生的字节流，所以就会抛出 <code>UnicodeDecodeError</code> 异常。</p>
+<p>同理: <code>u'中'.encode().decode()</code> 在调用 <code>encode</code> 时，使用 <code>ascii</code> 对码点 <code>u'\u4e2d'</code> 进行编码，这个码点的范围超出了 128，ascii 编码失败，就会抛出 <code>UnicodeEncodeError</code> 异常。</p>
 <h2 id="python2-中的一个经典问题">Python2 中的一个经典问题</h2>
-<p>接下来，我们来看一个我以前写 Python2 的时候，经常出现的问题：</p>
+<p>接下来，我们来看一个写 Python2 的时候，经常出现的问题：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
@@ -287,9 +342,9 @@
 <td class="lntd">
 <pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-   
+
 <span class="n">data</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
-   
+
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;./file.txt&#34;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
     <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </code></pre></td></tr></table>
@@ -311,9 +366,9 @@
 <span class="ne">UnicodeEncodeError</span><span class="p">:</span> <span class="s1">&#39;ascii&#39;</span> <span class="n">codec</span> <span class="n">can</span><span class="s1">&#39;t encode characters in position 0-3: ordinal not in range(128)</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>这是因为 Python 写入文件的时候将 Unicode 自动转换成了 Str，然后这个 Str 的指定编码为<code>ascii</code>，但是实际内容却是以<code>utf-8</code>来编码的汉字，结果就是抛出编码异常了。</p>
-<h3 id="解决方案1-手动编码-unicode">解决方案1: 手动编码 Unicode</h3>
-<p>这种方案就是我们在写入文件的时候，不让 Python 自动转换字符串类型，而是我们手动编码成<code>Str</code>字符串，并设置该<code>Str</code>字符串的编码类型为<code>utf-8</code>。代码如下：</p>
+</div><p>这是因为 Python 写入文件时，调用 <code>unicode.encode</code> 将 unicode 转换成了 str，<code>unicode.encode</code> 的默认 <code>encodeing</code> 参数是 <code>ascii</code>，编码中文时就会失败了。</p>
+<h3 id="解决方案1-手动设置-encode-的编码参数">解决方案1: 手动设置 encode 的编码参数</h3>
+<p>这种方案就是我们在写入文件的时候，不让 Python 自动转换字符串类型，而是我们手动用 <code>utf-8</code> 将 <code>unicode</code> 编码成 <code>str</code> 字符串，代码如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
@@ -327,15 +382,15 @@
 <td class="lntd">
 <pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-   
+
 <span class="n">data</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
-   
+
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;./file.txt&#34;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
     <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
 </code></pre></td></tr></table>
 </div>
-</div><h3 id="解决方案2-更改-python-默认的指定编码">解决方案2: 更改 Python 默认的指定编码</h3>
-<p>这种方案，就是我们在程序的一开始，就设置 Python 的<code>Str</code>字符串指定编码为<code>utf-8</code>，然后<code>encode()</code>得到的<code>Str</code>对象就是<code>utf-8</code>编码类型了。这个，我们要在我们文件的一开始添加上__魔幻三行__：</p>
+</div><h3 id="解决方案2-更改-python-的默认编码参数">解决方案2: 更改 Python 的默认编码参数</h3>
+<p>这种方案，就是我们在程序的一开始，调用 <code>sys.setdefaultencoding('utf-8')</code>，将 encode 和 decode 函数的默认 <code>encoding</code> 参数设置为 utf-8</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -349,17 +404,19 @@
 </span><span class="lnt"> 9
 </span><span class="lnt">10
 </span><span class="lnt">11
+</span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-   
+
+<span class="c1"># 我愿意称这三行为 魔幻三行</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="nb">reload</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">setdefaultencoding</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>     <span class="c1"># setdefaultencoding  在被初始化的时被 site.py 掉了</span>
-   
+<span class="n">sys</span><span class="o">.</span><span class="n">setdefaultencoding</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
 <span class="n">data</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
-   
+
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;./file.txt&#34;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
     <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
 </code></pre></td></tr></table>
@@ -383,21 +440,19 @@
 <td class="lntd">
 <pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-   
+
 <span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">locale</span>
 <span class="n">c</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">getdefaultlocale</span><span class="p">()</span>
 <span class="nb">reload</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">setdefaultencoding</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-   
+
 <span class="n">data</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
-   
+
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;./file.txt&#34;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
     <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="最后的废话">最后的废话</h2>
-<p>至此，大家可以看到 Python2 中的字符串搞得是有多坑爹，连 Python 官方自己都看不下去了， 2020年就要彻底抛弃它了。所以大家还是踊跃的投入 Python3 的怀抱吧！到此，文章正文就结束了，由于我的水平也一般，文中难免也有错漏之处，欢迎大家踊跃打脸，但是借用春哥的一句话，<a href="https://github.com/openresty/nginx-tutorials/blob/master/zh-cn/00-Foreword01.tut#L51-L52">类似“太烂了！”这样无聊中伤的意见我看还是算了</a>。</p>
-
+</div>
     </div>
 
     <div class="post-copyright">
@@ -408,7 +463,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2016-11-09
+        2022-06-01
         
     </span>
   </p>
