@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.101.0 with theme even" />
 
 
 <link rel="canonical" href="/2020/10/11/k8s-in-actions-6/" />
@@ -45,19 +45,16 @@
 卷: 将磁盘挂载到容器
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2020/10/11/k8s-in-actions-6/" />
+<meta property="og:url" content="/2020/10/11/k8s-in-actions-6/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2020-10-11T14:47:13+08:00" />
 <meta property="article:modified_time" content="2020-10-11T14:47:13+08:00" />
+
 <meta itemprop="name" content="《K8S in Actions》第六章学习笔记">
 <meta itemprop="description" content="
 卷: 将磁盘挂载到容器
-">
-<meta itemprop="datePublished" content="2020-10-11T14:47:13&#43;08:00" />
-<meta itemprop="dateModified" content="2020-10-11T14:47:13&#43;08:00" />
-<meta itemprop="wordCount" content="2488">
-
-
-
+"><meta itemprop="datePublished" content="2020-10-11T14:47:13+08:00" />
+<meta itemprop="dateModified" content="2020-10-11T14:47:13+08:00" />
+<meta itemprop="wordCount" content="2553">
 <meta itemprop="keywords" content="kubernetes,杂记," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="《K8S in Actions》第六章学习笔记"/>
 <meta name="twitter:description" content="
@@ -152,8 +149,8 @@
       <div class="post-meta">
         <span class="post-time"> 2020-10-11 </span>
         
-          <span class="more-meta"> 约 2488 字 </span>
-          <span class="more-meta"> 预计阅读 5 分钟 </span>
+          <span class="more-meta"> 约 2553 字 </span>
+          <span class="more-meta"> 预计阅读 6 分钟 </span>
         
       </div>
     </header>
@@ -218,28 +215,28 @@
 <p><a href="https://github.com/bwangelme/k8s-in-actions/tree/master/fortune">Dockerfile 及容器入口文件</a></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">docker build -t bwangel/fortune .
-docker push bwangel/fortune
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">docker build -t bwangel/fortune .
+</span></span><span class="line"><span class="cl">docker push bwangel/fortune
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>emptyDir 卷是在承载 Pod 的工作节点的实际磁盘上创建的，因此其性能取决与节点磁盘的类型，我们也可以通知 k8s 在 tmfs 文件系统(存在内存而非磁盘)上创建 emptyDir。只需要修改卷的 <code>medium</code> 设置即可:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">volumes</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>html<span class="w">
-</span><span class="w">      </span><span class="k">emptyDir</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="k">medium</span><span class="p">:</span><span class="w"> </span>Memory<span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">html</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">emptyDir</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">medium</span><span class="p">:</span><span class="w"> </span><span class="l">Memory</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="通过端口转发访问-pod">通过端口转发访问 Pod</h3>
 <ul>
@@ -247,7 +244,7 @@ docker push bwangel/fortune
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -269,32 +266,32 @@ docker push bwangel/fortune
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>v1<span class="w">
-</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Pod<span class="w">
-</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>fortune<span class="w">
-</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="k">containers</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="k">image</span><span class="p">:</span><span class="w"> </span>bwangel/fortune<span class="w">
-</span><span class="w">    </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>html-generator<span class="w">
-</span><span class="w">    </span><span class="k">volumeMounts</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>html<span class="w">
-</span><span class="w">      </span><span class="k">mountPath</span><span class="p">:</span><span class="w"> </span>/var/htdocs<span class="w">
-</span><span class="w">  </span>- <span class="k">image</span><span class="p">:</span><span class="w"> </span>nginx<span class="p">:</span>alpine<span class="w">
-</span><span class="w">    </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>web-server<span class="w">
-</span><span class="w">    </span><span class="k">volumeMounts</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>html<span class="w">
-</span><span class="w">      </span><span class="k">mountPath</span><span class="p">:</span><span class="w"> </span>/usr/share/nginx/html<span class="w">
-</span><span class="w">      </span><span class="k">readOnly</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">  </span><span class="k">volumes</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>html<span class="w">
-</span><span class="w">    </span><span class="k">emptyDir</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">fortune</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">bwangel/fortune</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">html-generator</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">html</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/var/htdocs</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">nginx:alpine</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">web-server</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">html</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/usr/share/nginx/html</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">readOnly</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">html</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">emptyDir</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>下面的命令创建了一个 fortune 的 Pod，并设置了本地端口8080 转发到 fortune Pod 的 80 端口</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -310,21 +307,21 @@ docker push bwangel/fortune
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">$ k create -f fortune-pod.yaml
-$ k port-forward fortune 8080:8080
-$ http localhost:8080
-HTTP/1.1 <span class="m">200</span> OK
-Accept-Ranges: bytes
-Connection: keep-alive
-Content-Length: <span class="m">24</span>
-Content-Type: text/html
-Date: Tue, <span class="m">05</span> Jan <span class="m">2021</span> 00:38:47 GMT
-ETag: <span class="s2">&#34;5ff3b512-18&#34;</span>
-Last-Modified: Tue, <span class="m">05</span> Jan <span class="m">2021</span> 00:38:42 GMT
-Server: nginx/1.19.6
-
-You now have Asian Flu.
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ k create -f fortune-pod.yaml
+</span></span><span class="line"><span class="cl">$ k port-forward fortune 8080:8080
+</span></span><span class="line"><span class="cl">$ http localhost:8080
+</span></span><span class="line"><span class="cl">HTTP/1.1 <span class="m">200</span> OK
+</span></span><span class="line"><span class="cl">Accept-Ranges: bytes
+</span></span><span class="line"><span class="cl">Connection: keep-alive
+</span></span><span class="line"><span class="cl">Content-Length: <span class="m">24</span>
+</span></span><span class="line"><span class="cl">Content-Type: text/html
+</span></span><span class="line"><span class="cl">Date: Tue, <span class="m">05</span> Jan <span class="m">2021</span> 00:38:47 GMT
+</span></span><span class="line"><span class="cl">ETag: <span class="s2">&#34;5ff3b512-18&#34;</span>
+</span></span><span class="line"><span class="cl">Last-Modified: Tue, <span class="m">05</span> Jan <span class="m">2021</span> 00:38:42 GMT
+</span></span><span class="line"><span class="cl">Server: nginx/1.19.6
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">You now have Asian Flu.
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="通过-loadbalancer-服务来访问-pod">通过 LoadBalancer 服务来访问 Pod</h3>
 <ul>
@@ -332,7 +329,7 @@ You now have Asian Flu.
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -373,51 +370,51 @@ You now have Asian Flu.
 </span><span class="lnt">39
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>v1<span class="w">
-</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>ReplicationController<span class="w">
-</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>webview<span class="w">
-</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="k">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
-</span><span class="w">  </span><span class="k">template</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="k">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>webview-v1<span class="w">
-</span><span class="w">      </span><span class="k">labels</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="k">app</span><span class="p">:</span><span class="w"> </span>webview<span class="w">
-</span><span class="w">    </span><span class="k">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="k">containers</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="k">image</span><span class="p">:</span><span class="w"> </span>bwangel/fortune<span class="w">
-</span><span class="w">        </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>html-generator<span class="w">
-</span><span class="w">        </span><span class="k">volumeMounts</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>html<span class="w">
-</span><span class="w">          </span><span class="k">mountPath</span><span class="p">:</span><span class="w"> </span>/var/htdocs<span class="w">
-</span><span class="w">      </span>- <span class="k">image</span><span class="p">:</span><span class="w"> </span>nginx<span class="p">:</span>alpine<span class="w">
-</span><span class="w">        </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>web-server<span class="w">
-</span><span class="w">        </span><span class="k">volumeMounts</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>html<span class="w">
-</span><span class="w">          </span><span class="k">mountPath</span><span class="p">:</span><span class="w"> </span>/usr/share/nginx/html<span class="w">
-</span><span class="w">          </span><span class="k">readOnly</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">      </span><span class="k">volumes</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>html<span class="w">
-</span><span class="w">        </span><span class="k">emptyDir</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
-</span><span class="w"></span>---<span class="w">
-</span><span class="w"></span><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>v1<span class="w">
-</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Service<span class="w">
-</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>webview<span class="w">
-</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="k">type</span><span class="p">:</span><span class="w"> </span>LoadBalancer<span class="w">
-</span><span class="w">  </span><span class="k">selector</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="k">app</span><span class="p">:</span><span class="w"> </span>webview<span class="w">
-</span><span class="w">  </span><span class="k">ports</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="k">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
-</span><span class="w">      </span><span class="k">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ReplicationController</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">webview</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">webview-v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">webview</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">bwangel/fortune</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">html-generator</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">html</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/var/htdocs</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">nginx:alpine</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">web-server</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">html</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/usr/share/nginx/html</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">readOnly</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">html</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">emptyDir</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">webview</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">LoadBalancer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">webview</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>下面的命令创建了一个名为 webview 的 Loadbalancer 服务和一个名为 webview 的 RC，我们可以通过 LoadBalancer 的外部IP 访问到 Pod。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -435,30 +432,30 @@ You now have Asian Flu.
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; k create -f 6chapter/webview-svc.yaml
-ø&gt; k get svc webview
-NAME      TYPE           CLUSTER-IP    EXTERNAL-IP    PORT<span class="o">(</span>S<span class="o">)</span>        AGE
-webview   LoadBalancer   10.3.242.84   34.84.233.43   80:31870/TCP   9m21s
-ø&gt; http 34.84.233.43
-HTTP/1.1 <span class="m">200</span> OK
-Accept-Ranges: bytes
-Connection: keep-alive
-Content-Length: <span class="m">51</span>
-Content-Type: text/html
-Date: Tue, <span class="m">05</span> Jan <span class="m">2021</span> 00:43:12 GMT
-ETag: <span class="s2">&#34;5ff3b61c-33&#34;</span>
-Last-Modified: Tue, <span class="m">05</span> Jan <span class="m">2021</span> 00:43:08 GMT
-Server: nginx/1.19.6
-
-You<span class="s1">&#39;ll feel much better once you&#39;</span>ve given up hope.
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ø&gt; k create -f 6chapter/webview-svc.yaml
+</span></span><span class="line"><span class="cl">ø&gt; k get svc webview
+</span></span><span class="line"><span class="cl">NAME      TYPE           CLUSTER-IP    EXTERNAL-IP    PORT<span class="o">(</span>S<span class="o">)</span>        AGE
+</span></span><span class="line"><span class="cl">webview   LoadBalancer   10.3.242.84   34.84.233.43   80:31870/TCP   9m21s
+</span></span><span class="line"><span class="cl">ø&gt; http 34.84.233.43
+</span></span><span class="line"><span class="cl">HTTP/1.1 <span class="m">200</span> OK
+</span></span><span class="line"><span class="cl">Accept-Ranges: bytes
+</span></span><span class="line"><span class="cl">Connection: keep-alive
+</span></span><span class="line"><span class="cl">Content-Length: <span class="m">51</span>
+</span></span><span class="line"><span class="cl">Content-Type: text/html
+</span></span><span class="line"><span class="cl">Date: Tue, <span class="m">05</span> Jan <span class="m">2021</span> 00:43:12 GMT
+</span></span><span class="line"><span class="cl">ETag: <span class="s2">&#34;5ff3b61c-33&#34;</span>
+</span></span><span class="line"><span class="cl">Last-Modified: Tue, <span class="m">05</span> Jan <span class="m">2021</span> 00:43:08 GMT
+</span></span><span class="line"><span class="cl">Server: nginx/1.19.6
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">You<span class="s1">&#39;ll feel much better once you&#39;</span>ve given up hope.
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="访问工作节点文件系统上的文件">访问工作节点文件系统上的文件</h2>
 <p>hostPath 卷可以让 Pod 读取/写入 工作节点的文件系统。</p>
 <p>从下面的例子中可以看到，系统的 fluentd-gke-jvbcc Pod 使用 hostPath 卷来读取工作节点上的 <code>/var/log</code> 和 <code>/var/lib/docker/containers</code> 等目录。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -489,41 +486,41 @@ You<span class="s1">&#39;ll feel much better once you&#39;</span>ve given up hop
 </span><span class="lnt">29
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">ø&gt; kubectl describe pod fluentd-gke-jvbcc --namespace kube-system
-Name:                 fluentd-gke-jvbcc
-...
-Volumes:
-  varrun:
-    Type:          HostPath (bare host directory volume)
-    Path:          /var/run/google-fluentd
-    HostPathType:
-  varlog:
-    Type:          HostPath (bare host directory volume)
-    Path:          /var/log
-    HostPathType:
-  varlibdockercontainers:
-    Type:          HostPath (bare host directory volume)
-    Path:          /var/lib/docker/containers
-    HostPathType:
-  input-config-volume:
-    Type:      ConfigMap (a volume populated by a ConfigMap)
-    Name:      fluentd-gke-input-config-v1.2.9
-    Optional:  false
-  config-volume:
-    Type:      ConfigMap (a volume populated by a ConfigMap)
-    Name:      fluentd-gke-config-v1.2.9
-    Optional:  false
-  fluentd-gke-token-299pv:
-    Type:        Secret (a volume populated by a Secret)
-    SecretName:  fluentd-gke-token-299pv
-    Optional:    false
-...
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ø&gt; kubectl describe pod fluentd-gke-jvbcc --namespace kube-system
+</span></span><span class="line"><span class="cl">Name:                 fluentd-gke-jvbcc
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">Volumes:
+</span></span><span class="line"><span class="cl">  varrun:
+</span></span><span class="line"><span class="cl">    Type:          HostPath (bare host directory volume)
+</span></span><span class="line"><span class="cl">    Path:          /var/run/google-fluentd
+</span></span><span class="line"><span class="cl">    HostPathType:
+</span></span><span class="line"><span class="cl">  varlog:
+</span></span><span class="line"><span class="cl">    Type:          HostPath (bare host directory volume)
+</span></span><span class="line"><span class="cl">    Path:          /var/log
+</span></span><span class="line"><span class="cl">    HostPathType:
+</span></span><span class="line"><span class="cl">  varlibdockercontainers:
+</span></span><span class="line"><span class="cl">    Type:          HostPath (bare host directory volume)
+</span></span><span class="line"><span class="cl">    Path:          /var/lib/docker/containers
+</span></span><span class="line"><span class="cl">    HostPathType:
+</span></span><span class="line"><span class="cl">  input-config-volume:
+</span></span><span class="line"><span class="cl">    Type:      ConfigMap (a volume populated by a ConfigMap)
+</span></span><span class="line"><span class="cl">    Name:      fluentd-gke-input-config-v1.2.9
+</span></span><span class="line"><span class="cl">    Optional:  false
+</span></span><span class="line"><span class="cl">  config-volume:
+</span></span><span class="line"><span class="cl">    Type:      ConfigMap (a volume populated by a ConfigMap)
+</span></span><span class="line"><span class="cl">    Name:      fluentd-gke-config-v1.2.9
+</span></span><span class="line"><span class="cl">    Optional:  false
+</span></span><span class="line"><span class="cl">  fluentd-gke-token-299pv:
+</span></span><span class="line"><span class="cl">    Type:        Secret (a volume populated by a Secret)
+</span></span><span class="line"><span class="cl">    SecretName:  fluentd-gke-token-299pv
+</span></span><span class="line"><span class="cl">    Optional:    false
+</span></span><span class="line"><span class="cl">...
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="使用持久化存储">使用持久化存储</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -532,21 +529,21 @@ Volumes:
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 GCE 持久磁盘存储</span>
-gcloud compute disks create --size<span class="o">=</span>10Gib --zone<span class="o">=</span>asia-northeast1-a mongodb
-
-<span class="c1"># 下面的命令可以查看 Pod 被调度到了哪一个节点上</span>
-ø&gt; k get pod -o wide gitrepo-volume-pod
-NAME                 READY   STATUS    RESTARTS   AGE   IP         NODE                                   NOMINATED NODE   READINESS GATES
-gitrepo-volume-pod   1/1     Running   <span class="m">0</span>          31h   10.0.0.7   gke-kubia-default-pool-83589229-zfw4   &lt;none&gt;           &lt;none&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 创建 GCE 持久磁盘存储</span>
+</span></span><span class="line"><span class="cl">gcloud compute disks create --size<span class="o">=</span>10Gib --zone<span class="o">=</span>asia-northeast1-a mongodb
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 下面的命令可以查看 Pod 被调度到了哪一个节点上</span>
+</span></span><span class="line"><span class="cl">ø&gt; k get pod -o wide gitrepo-volume-pod
+</span></span><span class="line"><span class="cl">NAME                 READY   STATUS    RESTARTS   AGE   IP         NODE                                   NOMINATED NODE   READINESS GATES
+</span></span><span class="line"><span class="cl">gitrepo-volume-pod   1/1     Running   <span class="m">0</span>          31h   10.0.0.7   gke-kubia-default-pool-83589229-zfw4   &lt;none&gt;           &lt;none&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>mongodb-pod-gcepd.yaml</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -569,35 +566,35 @@ gitrepo-volume-pod   1/1     Running   <span class="m">0</span>          31h   1
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>v1<span class="w">
-</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Pod<span class="w">
-</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>mongodb<span class="w">
-</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="k">volumes</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>mongodb-data<span class="w">
-</span><span class="w">    </span><span class="c"># 声明卷的类型和它使用的文件系统</span><span class="w">
-</span><span class="w">    </span><span class="k">gcePersistentDisk</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="k">pdName</span><span class="p">:</span><span class="w"> </span>mongodb<span class="w">
-</span><span class="w">      </span><span class="k">fsType</span><span class="p">:</span><span class="w"> </span>ext4<span class="w">
-</span><span class="w">  </span><span class="k">containers</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="k">image</span><span class="p">:</span><span class="w"> </span>mongo<span class="w">
-</span><span class="w">    </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>mongodb<span class="w">
-</span><span class="w">    </span><span class="c"># 根据卷的名字将卷挂载到容器上</span><span class="w">
-</span><span class="w">    </span><span class="k">volumeMounts</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>mongodb-data<span class="w">
-</span><span class="w">      </span><span class="k">mountPath</span><span class="p">:</span><span class="w"> </span>/data/db<span class="w">
-</span><span class="w">    </span><span class="k">ports</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="k">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">27017</span><span class="w">
-</span><span class="w">      </span><span class="k">protocol</span><span class="p">:</span><span class="w"> </span>TCP<span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">mongodb</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">mongodb-data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 声明卷的类型和它使用的文件系统</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">gcePersistentDisk</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">pdName</span><span class="p">:</span><span class="w"> </span><span class="l">mongodb</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">fsType</span><span class="p">:</span><span class="w"> </span><span class="l">ext4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">mongo</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">mongodb</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 根据卷的名字将卷挂载到容器上</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">mongodb-data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/data/db</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">27017</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>操作实录</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -630,38 +627,38 @@ gitrepo-volume-pod   1/1     Running   <span class="m">0</span>          31h   1
 </span><span class="lnt">31
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 mongodb Pod</span>
-ø&gt; k create -f 6chapter/mongodb-pod-gcepd.yaml
-pod/mongodb created
-<span class="c1"># 查看 Pod 状态，已经成功运行了</span>
-ø&gt; k get pods mongodb
-NAME                 READY   STATUS    RESTARTS   AGE
-mongodb              1/1     Running   <span class="m">0</span>          60s
-<span class="c1"># 登录 Mongodb 数据库</span>
-ø&gt; k <span class="nb">exec</span> -it mongodb -- mongo
-&gt; use mystore
-switched to db mystore
-<span class="c1"># 向数据库中写入数据</span>
-&gt; db.foo.insert<span class="o">({</span><span class="s1">&#39;name&#39;</span>: <span class="s1">&#39;foo&#39;</span><span class="o">})</span>
-WriteResult<span class="o">({</span> <span class="s2">&#34;nInserted&#34;</span> : <span class="m">1</span> <span class="o">})</span>
-&gt; db.foo.find<span class="o">()</span>
-<span class="o">{</span> <span class="s2">&#34;_id&#34;</span> : ObjectId<span class="o">(</span><span class="s2">&#34;5ff64ad47af44ac9535a9abe&#34;</span><span class="o">)</span>, <span class="s2">&#34;name&#34;</span> : <span class="s2">&#34;foo&#34;</span> <span class="o">}</span>
-&gt;
-bye
-<span class="c1"># 删除 Pod 并重建</span>
-ø&gt; k delete pod mongodb
-pod <span class="s2">&#34;mongodb&#34;</span> deleted
-ø&gt; k create -f 6chapter/mongodb-pod-gcepd.yaml
-pod/mongodb created
-<span class="c1"># 重新登录 MongoDB 进行查找，发现之前创建的记录还在</span>
-ø&gt; k <span class="nb">exec</span> -it mongodb -- mongo
-&gt; use mystore
-switched to db mystore
-&gt; db.foo.find<span class="o">()</span>
-<span class="o">{</span> <span class="s2">&#34;_id&#34;</span> : ObjectId<span class="o">(</span><span class="s2">&#34;5ff64ad47af44ac9535a9abe&#34;</span><span class="o">)</span>, <span class="s2">&#34;name&#34;</span> : <span class="s2">&#34;foo&#34;</span> <span class="o">}</span>
-&gt;
-bye
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 创建 mongodb Pod</span>
+</span></span><span class="line"><span class="cl">ø&gt; k create -f 6chapter/mongodb-pod-gcepd.yaml
+</span></span><span class="line"><span class="cl">pod/mongodb created
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看 Pod 状态，已经成功运行了</span>
+</span></span><span class="line"><span class="cl">ø&gt; k get pods mongodb
+</span></span><span class="line"><span class="cl">NAME                 READY   STATUS    RESTARTS   AGE
+</span></span><span class="line"><span class="cl">mongodb              1/1     Running   <span class="m">0</span>          60s
+</span></span><span class="line"><span class="cl"><span class="c1"># 登录 Mongodb 数据库</span>
+</span></span><span class="line"><span class="cl">ø&gt; k <span class="nb">exec</span> -it mongodb -- mongo
+</span></span><span class="line"><span class="cl">&gt; use mystore
+</span></span><span class="line"><span class="cl">switched to db mystore
+</span></span><span class="line"><span class="cl"><span class="c1"># 向数据库中写入数据</span>
+</span></span><span class="line"><span class="cl">&gt; db.foo.insert<span class="o">({</span><span class="s1">&#39;name&#39;</span>: <span class="s1">&#39;foo&#39;</span><span class="o">})</span>
+</span></span><span class="line"><span class="cl">WriteResult<span class="o">({</span> <span class="s2">&#34;nInserted&#34;</span> : <span class="m">1</span> <span class="o">})</span>
+</span></span><span class="line"><span class="cl">&gt; db.foo.find<span class="o">()</span>
+</span></span><span class="line"><span class="cl"><span class="o">{</span> <span class="s2">&#34;_id&#34;</span> : ObjectId<span class="o">(</span><span class="s2">&#34;5ff64ad47af44ac9535a9abe&#34;</span><span class="o">)</span>, <span class="s2">&#34;name&#34;</span> : <span class="s2">&#34;foo&#34;</span> <span class="o">}</span>
+</span></span><span class="line"><span class="cl">&gt;
+</span></span><span class="line"><span class="cl">bye
+</span></span><span class="line"><span class="cl"><span class="c1"># 删除 Pod 并重建</span>
+</span></span><span class="line"><span class="cl">ø&gt; k delete pod mongodb
+</span></span><span class="line"><span class="cl">pod <span class="s2">&#34;mongodb&#34;</span> deleted
+</span></span><span class="line"><span class="cl">ø&gt; k create -f 6chapter/mongodb-pod-gcepd.yaml
+</span></span><span class="line"><span class="cl">pod/mongodb created
+</span></span><span class="line"><span class="cl"><span class="c1"># 重新登录 MongoDB 进行查找，发现之前创建的记录还在</span>
+</span></span><span class="line"><span class="cl">ø&gt; k <span class="nb">exec</span> -it mongodb -- mongo
+</span></span><span class="line"><span class="cl">&gt; use mystore
+</span></span><span class="line"><span class="cl">switched to db mystore
+</span></span><span class="line"><span class="cl">&gt; db.foo.find<span class="o">()</span>
+</span></span><span class="line"><span class="cl"><span class="o">{</span> <span class="s2">&#34;_id&#34;</span> : ObjectId<span class="o">(</span><span class="s2">&#34;5ff64ad47af44ac9535a9abe&#34;</span><span class="o">)</span>, <span class="s2">&#34;name&#34;</span> : <span class="s2">&#34;foo&#34;</span> <span class="o">}</span>
+</span></span><span class="line"><span class="cl">&gt;
+</span></span><span class="line"><span class="cl">bye
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="从底层技术解耦-pod">从底层技术解耦 Pod</h2>
 <h3 id="持久卷和持久卷声明的工作模式">持久卷和持久卷声明的工作模式</h3>
@@ -684,7 +681,7 @@ bye
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -702,27 +699,27 @@ bye
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>v1<span class="w">
-</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>PersistentVolume<span class="w">
-</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>mongodb-pv<span class="w">
-</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="k">capacity</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="k">storage</span><span class="p">:</span><span class="w"> </span>10Gi<span class="w">
-</span><span class="w">  </span><span class="c"># 声明持久卷的访问模式，单节点读写和多节点只读</span><span class="w">
-</span><span class="w">  </span><span class="k">accessModes</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- ReadWriteOnce<span class="w">
-</span><span class="w">  </span>- ReadOnlyMany<span class="w">
-</span><span class="w">  </span><span class="c"># pvc 删除后，保留 pv</span><span class="w">
-</span><span class="w">  </span><span class="k">persistentVolumeReclaimPolicy</span><span class="p">:</span><span class="w"> </span>Retain<span class="w">
-</span><span class="w">  </span><span class="k">gcePersistentDisk</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="k">pdName</span><span class="p">:</span><span class="w"> </span>mongodb<span class="w">
-</span><span class="w">    </span><span class="k">fsType</span><span class="p">:</span><span class="w"> </span>ext4<span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">PersistentVolume</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">mongodb-pv</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">capacity</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l">10Gi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 声明持久卷的访问模式，单节点读写和多节点只读</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">accessModes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">ReadWriteOnce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">ReadOnlyMany</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># pvc 删除后，保留 pv</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">persistentVolumeReclaimPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">Retain</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">gcePersistentDisk</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">pdName</span><span class="p">:</span><span class="w"> </span><span class="l">mongodb</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">fsType</span><span class="p">:</span><span class="w"> </span><span class="l">ext4</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -730,13 +727,13 @@ bye
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; k create -f 6chapter/mongodb-pv-gcepd.yaml
-persistentvolume/mongodb-pv created
-<span class="c1"># 查看持久卷，可以看到持久卷的状态是 Available</span>
-ø&gt; k get pv
-NAME         CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE
-mongodb-pv   10Gi       RWO,ROX        Retain           Available                                   3s
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ø&gt; k create -f 6chapter/mongodb-pv-gcepd.yaml
+</span></span><span class="line"><span class="cl">persistentvolume/mongodb-pv created
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看持久卷，可以看到持久卷的状态是 Available</span>
+</span></span><span class="line"><span class="cl">ø&gt; k get pv
+</span></span><span class="line"><span class="cl">NAME         CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE
+</span></span><span class="line"><span class="cl">mongodb-pv   10Gi       RWO,ROX        Retain           Available                                   3s
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="创建持久卷声明">创建持久卷声明</h3>
 <ul>
@@ -744,7 +741,7 @@ mongodb-pv   10Gi       RWO,ROX        Retain           Available               
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -758,23 +755,23 @@ mongodb-pv   10Gi       RWO,ROX        Retain           Available               
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>v1<span class="w">
-</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>PersistentVolumeClaim<span class="w">
-</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>mongodb-pvc<span class="w">
-</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="c"># 声明需要的 pv 的特征，存储是1Gi，访问模式是单节点读写</span><span class="w">
-</span><span class="w">  </span><span class="k">resources</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="k">requests</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="k">storage</span><span class="p">:</span><span class="w"> </span>1Gi<span class="w">
-</span><span class="w">  </span><span class="k">accessModes</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- ReadWriteOnce<span class="w">
-</span><span class="w">  </span><span class="k">storageClassName</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">PersistentVolumeClaim</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">mongodb-pvc</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 声明需要的 pv 的特征，存储是1Gi，访问模式是单节点读写</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">requests</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="l">1Gi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">accessModes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">ReadWriteOnce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">storageClassName</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -786,17 +783,17 @@ mongodb-pv   10Gi       RWO,ROX        Retain           Available               
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 pvc</span>
-ø&gt; k create -f 6chapter/mongodb-pvc.yaml
-persistentvolumeclaim/mongodb-pvc created
-ø&gt; k get pvc
-NAME          STATUS   VOLUME       CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-mongodb-pvc   Bound    mongodb-pv   10Gi       RWO,ROX                       3s
-<span class="c1"># 查看pv，可以看到它的状态已经变成了 Bound，且被绑定到了 default/mongodb-pvc 上</span>
-ø&gt; k get pv
-NAME         CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                 STORAGECLASS   REASON   AGE
-mongodb-pv   10Gi       RWO,ROX        Retain           Bound    default/mongodb-pvc                           3m51s
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 创建 pvc</span>
+</span></span><span class="line"><span class="cl">ø&gt; k create -f 6chapter/mongodb-pvc.yaml
+</span></span><span class="line"><span class="cl">persistentvolumeclaim/mongodb-pvc created
+</span></span><span class="line"><span class="cl">ø&gt; k get pvc
+</span></span><span class="line"><span class="cl">NAME          STATUS   VOLUME       CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+</span></span><span class="line"><span class="cl">mongodb-pvc   Bound    mongodb-pv   10Gi       RWO,ROX                       3s
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看pv，可以看到它的状态已经变成了 Bound，且被绑定到了 default/mongodb-pvc 上</span>
+</span></span><span class="line"><span class="cl">ø&gt; k get pv
+</span></span><span class="line"><span class="cl">NAME         CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                 STORAGECLASS   REASON   AGE
+</span></span><span class="line"><span class="cl">mongodb-pv   10Gi       RWO,ROX        Retain           Bound    default/mongodb-pvc                           3m51s
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="在-pod-中使用-持久卷声明">在 Pod 中使用 持久卷声明</h3>
 <ul>
@@ -804,7 +801,7 @@ mongodb-pv   10Gi       RWO,ROX        Retain           Bound    default/mongodb
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -825,30 +822,30 @@ mongodb-pv   10Gi       RWO,ROX        Retain           Bound    default/mongodb
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="k">apiVersion</span><span class="p">:</span><span class="w"> </span>v1<span class="w">
-</span><span class="w"></span><span class="k">kind</span><span class="p">:</span><span class="w"> </span>Pod<span class="w">
-</span><span class="w"></span><span class="k">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>mongodb<span class="w">
-</span><span class="w"></span><span class="k">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="k">containers</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="k">image</span><span class="p">:</span><span class="w"> </span>mongo<span class="w">
-</span><span class="w">    </span><span class="k">name</span><span class="p">:</span><span class="w"> </span>mongodb<span class="w">
-</span><span class="w">    </span><span class="k">volumeMounts</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>mongodb-data<span class="w">
-</span><span class="w">      </span><span class="k">mountPath</span><span class="p">:</span><span class="w"> </span>/data/db<span class="w">
-</span><span class="w">    </span><span class="k">ports</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="k">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">27017</span><span class="w">
-</span><span class="w">      </span><span class="k">protocol</span><span class="p">:</span><span class="w"> </span>TCP<span class="w">
-</span><span class="w">  </span><span class="c"># 将刚刚创建的 PVC 声明为一种卷</span><span class="w">
-</span><span class="w">  </span><span class="k">volumes</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="k">name</span><span class="p">:</span><span class="w"> </span>mongodb-data<span class="w">
-</span><span class="w">    </span><span class="k">persistentVolumeClaim</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span><span class="k">claimName</span><span class="p">:</span><span class="w"> </span>mongodb-pvc<span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">mongodb</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">mongo</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">mongodb</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">mongodb-data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/data/db</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">27017</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 将刚刚创建的 PVC 声明为一种卷</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">mongodb-data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">claimName</span><span class="p">:</span><span class="w"> </span><span class="l">mongodb-pvc</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -862,24 +859,24 @@ mongodb-pv   10Gi       RWO,ROX        Retain           Bound    default/mongodb
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 Pod</span>
-ø&gt; k create -f 6chapter/mongodb-pod-pvc.yaml
-pod/mongodb created
-<span class="c1"># 登录 mongodb，查询我们之前创建的数据</span>
-ø&gt; k <span class="nb">exec</span> -it mongodb -- mongo
-&gt; use mystore
-switched to db mystore
-<span class="c1"># 可以看到之前创建的数据仍然存在</span>
-&gt; db.foo.find<span class="o">()</span>
-<span class="o">{</span> <span class="s2">&#34;_id&#34;</span> : ObjectId<span class="o">(</span><span class="s2">&#34;5ff64ad47af44ac9535a9abe&#34;</span><span class="o">)</span>, <span class="s2">&#34;name&#34;</span> : <span class="s2">&#34;foo&#34;</span> <span class="o">}</span>
-&gt;
-bye
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 创建 Pod</span>
+</span></span><span class="line"><span class="cl">ø&gt; k create -f 6chapter/mongodb-pod-pvc.yaml
+</span></span><span class="line"><span class="cl">pod/mongodb created
+</span></span><span class="line"><span class="cl"><span class="c1"># 登录 mongodb，查询我们之前创建的数据</span>
+</span></span><span class="line"><span class="cl">ø&gt; k <span class="nb">exec</span> -it mongodb -- mongo
+</span></span><span class="line"><span class="cl">&gt; use mystore
+</span></span><span class="line"><span class="cl">switched to db mystore
+</span></span><span class="line"><span class="cl"><span class="c1"># 可以看到之前创建的数据仍然存在</span>
+</span></span><span class="line"><span class="cl">&gt; db.foo.find<span class="o">()</span>
+</span></span><span class="line"><span class="cl"><span class="o">{</span> <span class="s2">&#34;_id&#34;</span> : ObjectId<span class="o">(</span><span class="s2">&#34;5ff64ad47af44ac9535a9abe&#34;</span><span class="o">)</span>, <span class="s2">&#34;name&#34;</span> : <span class="s2">&#34;foo&#34;</span> <span class="o">}</span>
+</span></span><span class="line"><span class="cl">&gt;
+</span></span><span class="line"><span class="cl">bye
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="删除持久卷声明">删除持久卷声明</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -889,15 +886,15 @@ bye
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; k delete pod mongodb
-pod <span class="s2">&#34;mongodb&#34;</span> deleted
-<span class="m">2598</span> <span class="o">(</span>lazyubuntu<span class="o">)</span> ~/Github/k8s-in-actions <span class="o">(</span>master<span class="o">)</span>
-ø&gt; k delete pvc mongodb-pvc
-persistentvolumeclaim <span class="s2">&#34;mongodb-pvc&#34;</span> deleted
-ø&gt; k get pv
-NAME         CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS     CLAIM                 STORAGECLASS   REASON   AGE
-mongodb-pv   10Gi       RWO,ROX        Retain           Released   default/mongodb-pvc                           12m
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ø&gt; k delete pod mongodb
+</span></span><span class="line"><span class="cl">pod <span class="s2">&#34;mongodb&#34;</span> deleted
+</span></span><span class="line"><span class="cl"><span class="m">2598</span> <span class="o">(</span>lazyubuntu<span class="o">)</span> ~/Github/k8s-in-actions <span class="o">(</span>master<span class="o">)</span>
+</span></span><span class="line"><span class="cl">ø&gt; k delete pvc mongodb-pvc
+</span></span><span class="line"><span class="cl">persistentvolumeclaim <span class="s2">&#34;mongodb-pvc&#34;</span> deleted
+</span></span><span class="line"><span class="cl">ø&gt; k get pv
+</span></span><span class="line"><span class="cl">NAME         CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS     CLAIM                 STORAGECLASS   REASON   AGE
+</span></span><span class="line"><span class="cl">mongodb-pv   10Gi       RWO,ROX        Retain           Released   default/mongodb-pvc                           12m
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>当我们删除 PVC 之后，可以看到 PV 没有变成可用的状态，而是变成了 <code>Released</code> 状态。这是因为我们在创建 PV 时声明它的 <code>RECLAIM POLICY</code> 是 <code>Retain</code> 。此时需要系统管理员来确定 PV 中的数据是否还可用，手动回收卷并更改其状态，然后这个PV才能够被重新使用。</p>
 <h2 id="持久卷的动态配置">持久卷的动态配置</h2>
@@ -911,7 +908,7 @@ mongodb-pv   10Gi       RWO,ROX        Retain           Released   default/mongo
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -933,27 +930,27 @@ mongodb-pv   10Gi       RWO,ROX        Retain           Released   default/mongo
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; k get sc standard -o yaml
-allowVolumeExpansion: <span class="nb">true</span>
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  annotations:
-    <span class="c1"># 这个注解声明它是默认的存储类</span>
-    storageclass.kubernetes.io/is-default-class: <span class="s2">&#34;true&#34;</span>
-  creationTimestamp: <span class="s2">&#34;2021-01-03T16:26:12Z&#34;</span>
-  labels:
-    addonmanager.kubernetes.io/mode: EnsureExists
-  name: standard
-  resourceVersion: <span class="s2">&#34;263&#34;</span>
-  selfLink: /apis/storage.k8s.io/v1/storageclasses/standard
-  uid: 278b918a-466e-454b-bab4-f25833314feb
-parameters:
-  type: pd-standard
-provisioner: kubernetes.io/gce-pd  <span class="c1"># 这是它所配置的制备程序</span>
-reclaimPolicy: Delete  <span class="c1"># 声明创建的 PV 的使用策略</span>
-volumeBindingMode: Immediate
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ø&gt; k get sc standard -o yaml
+</span></span><span class="line"><span class="cl">allowVolumeExpansion: <span class="nb">true</span>
+</span></span><span class="line"><span class="cl">apiVersion: storage.k8s.io/v1
+</span></span><span class="line"><span class="cl">kind: StorageClass
+</span></span><span class="line"><span class="cl">metadata:
+</span></span><span class="line"><span class="cl">  annotations:
+</span></span><span class="line"><span class="cl">    <span class="c1"># 这个注解声明它是默认的存储类</span>
+</span></span><span class="line"><span class="cl">    storageclass.kubernetes.io/is-default-class: <span class="s2">&#34;true&#34;</span>
+</span></span><span class="line"><span class="cl">  creationTimestamp: <span class="s2">&#34;2021-01-03T16:26:12Z&#34;</span>
+</span></span><span class="line"><span class="cl">  labels:
+</span></span><span class="line"><span class="cl">    addonmanager.kubernetes.io/mode: EnsureExists
+</span></span><span class="line"><span class="cl">  name: standard
+</span></span><span class="line"><span class="cl">  resourceVersion: <span class="s2">&#34;263&#34;</span>
+</span></span><span class="line"><span class="cl">  selfLink: /apis/storage.k8s.io/v1/storageclasses/standard
+</span></span><span class="line"><span class="cl">  uid: 278b918a-466e-454b-bab4-f25833314feb
+</span></span><span class="line"><span class="cl">parameters:
+</span></span><span class="line"><span class="cl">  type: pd-standard
+</span></span><span class="line"><span class="cl">provisioner: kubernetes.io/gce-pd  <span class="c1"># 这是它所配置的制备程序</span>
+</span></span><span class="line"><span class="cl">reclaimPolicy: Delete  <span class="c1"># 声明创建的 PV 的使用策略</span>
+</span></span><span class="line"><span class="cl">volumeBindingMode: Immediate
+</span></span></code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -1063,7 +1060,7 @@ volumeBindingMode: Immediate
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

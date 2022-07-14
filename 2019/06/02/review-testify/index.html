@@ -16,14 +16,14 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content="  原文地址: https://github.com/stretchr/testify  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content=" 原文地址: https://github.com/stretchr/testify " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.101.0 with theme even" />
 
 
 <link rel="canonical" href="/2019/06/02/review-testify/" />
@@ -46,21 +46,18 @@
 
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2019/06/02/review-testify/" />
+<meta property="og:url" content="/2019/06/02/review-testify/" /><meta property="article:section" content="translate" />
 <meta property="article:published_time" content="2019-06-02T22:41:59+08:00" />
 <meta property="article:modified_time" content="2019-06-02T22:41:59+08:00" />
+
 <meta itemprop="name" content="Review 《github.com/stretchr/testify》">
 <meta itemprop="description" content="
 
 原文地址: https://github.com/stretchr/testify
 
-">
-<meta itemprop="datePublished" content="2019-06-02T22:41:59&#43;08:00" />
-<meta itemprop="dateModified" content="2019-06-02T22:41:59&#43;08:00" />
+"><meta itemprop="datePublished" content="2019-06-02T22:41:59+08:00" />
+<meta itemprop="dateModified" content="2019-06-02T22:41:59+08:00" />
 <meta itemprop="wordCount" content="1097">
-
-
-
 <meta itemprop="keywords" content="翻译,Go," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Review 《github.com/stretchr/testify》"/>
 <meta name="twitter:description" content="
@@ -211,7 +208,7 @@
 <p>让我们通过一个实际例子来了解它:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -243,37 +240,37 @@
 </span><span class="lnt">30
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">testify_exam</span>
-
-<span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;testing&#34;</span>
-
-	<span class="s">&#34;github.com/stretchr/testify/assert&#34;</span>
-<span class="p">)</span>
-
-<span class="kd">func</span> <span class="nf">TestSomething</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-	<span class="c1">// 测试相等
-</span><span class="c1"></span>	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="s">&#34;they should be equal&#34;</span><span class="p">)</span>
-
-	<span class="c1">// 测试不相等
-</span><span class="c1"></span>	<span class="nx">assert</span><span class="p">.</span><span class="nf">NotEqual</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="mi">456</span><span class="p">,</span> <span class="s">&#34;they should not be equal&#34;</span><span class="p">)</span>
-
-	<span class="kd">var</span> <span class="nx">obj</span> <span class="kd">chan</span> <span class="kd">struct</span><span class="p">{}</span>
-	<span class="c1">// 测试 nil，常用于错误值的判断
-</span><span class="c1"></span>	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">obj</span><span class="p">)</span>
-
-	<span class="nx">obj2</span> <span class="o">:=</span> <span class="kd">struct</span> <span class="p">{</span>
-		<span class="nx">Value</span> <span class="kt">string</span>
-	<span class="p">}{</span>
-		<span class="nx">Value</span><span class="p">:</span> <span class="s">&#34;Something&#34;</span><span class="p">,</span>
-	<span class="p">}</span>
-	<span class="c1">// 测试不为 nil，常用于你希望返回的结果值拥有某些东西的时候
-</span><span class="c1"></span>	<span class="k">if</span> <span class="nx">assert</span><span class="p">.</span><span class="nf">NotNil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">obj2</span><span class="p">)</span> <span class="p">{</span>
-		<span class="c1">// 现在我们知道 obj2 的值不是 nil了，我们可以在这个基础上**安全地**访问它的字段。
-</span><span class="c1"></span>		<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="s">&#34;Something&#34;</span><span class="p">,</span> <span class="nx">obj2</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">testify_exam</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;testing&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/stretchr/testify/assert&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">TestSomething</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// 测试相等
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="s">&#34;they should be equal&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">// 测试不相等
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">assert</span><span class="p">.</span><span class="nf">NotEqual</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="mi">456</span><span class="p">,</span> <span class="s">&#34;they should not be equal&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">obj</span> <span class="kd">chan</span> <span class="kd">struct</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// 测试 nil，常用于错误值的判断
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">obj</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">obj2</span> <span class="o">:=</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Value</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Value</span><span class="p">:</span> <span class="s">&#34;Something&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// 测试不为 nil，常用于你希望返回的结果值拥有某些东西的时候
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">if</span> <span class="nx">assert</span><span class="p">.</span><span class="nf">NotNil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">obj2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="c1">// 现在我们知道 obj2 的值不是 nil了，我们可以在这个基础上**安全地**访问它的字段。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="s">&#34;Something&#34;</span><span class="p">,</span> <span class="nx">obj2</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>每个<code>assert</code>函数都使用 <code>testing.T</code> 来作为它的第一个参数，这就是它通过正常的 go 测试功能将错误输出写出来的方式。</li>
@@ -282,7 +279,7 @@
 <p>如果你使用断言很多次，可以使用如下的代码:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -311,34 +308,34 @@
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">testify_exam</span>
-
-<span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;testing&#34;</span>
-
-	<span class="s">&#34;github.com/stretchr/testify/assert&#34;</span>
-<span class="p">)</span>
-
-<span class="kd">func</span> <span class="nf">TestEasyAssert</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">assert</span> <span class="o">:=</span> <span class="nx">assert</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span>
-
-	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="mi">123</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="s">&#34;they should be equal&#34;</span><span class="p">)</span>
-
-	<span class="nx">assert</span><span class="p">.</span><span class="nf">NotEqual</span><span class="p">(</span><span class="mi">123</span><span class="p">,</span> <span class="mi">456</span><span class="p">,</span> <span class="s">&#34;they should not be equal&#34;</span><span class="p">)</span>
-
-	<span class="kd">var</span> <span class="nx">obj</span> <span class="kd">chan</span> <span class="kd">struct</span><span class="p">{}</span>
-	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span>
-
-	<span class="nx">obj2</span> <span class="o">:=</span> <span class="kd">struct</span> <span class="p">{</span>
-		<span class="nx">Value</span> <span class="kt">string</span>
-	<span class="p">}{</span>
-		<span class="nx">Value</span><span class="p">:</span> <span class="s">&#34;Something&#34;</span><span class="p">,</span>
-	<span class="p">}</span>
-	<span class="k">if</span> <span class="nx">assert</span><span class="p">.</span><span class="nf">NotNil</span><span class="p">(</span><span class="nx">obj2</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="s">&#34;Something&#34;</span><span class="p">,</span> <span class="nx">obj2</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">testify_exam</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;testing&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/stretchr/testify/assert&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">TestEasyAssert</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">assert</span> <span class="o">:=</span> <span class="nx">assert</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="mi">123</span><span class="p">,</span> <span class="mi">123</span><span class="p">,</span> <span class="s">&#34;they should be equal&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">NotEqual</span><span class="p">(</span><span class="mi">123</span><span class="p">,</span> <span class="mi">456</span><span class="p">,</span> <span class="s">&#34;they should not be equal&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">obj</span> <span class="kd">chan</span> <span class="kd">struct</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">obj2</span> <span class="o">:=</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Value</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Value</span><span class="p">:</span> <span class="s">&#34;Something&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">assert</span><span class="p">.</span><span class="nf">NotNil</span><span class="p">(</span><span class="nx">obj2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="s">&#34;Something&#34;</span><span class="p">,</span> <span class="nx">obj2</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="requirehttpgodocorggithubcomstretchrtestifyrequire-包"><a href="http://godoc.org/github.com/stretchr/testify/require">require</a> 包</h2>
 <p><code>require</code>包中拥有和<code>assert</code>包相同的全局函数，它和<code>assert</code>的不同在于，它不会再返回一个布尔值表示测试运行成功与否，而是直接结束当前测试</p>
@@ -346,7 +343,7 @@
 <p>下面是一个<code>require</code>包和<code>assert</code>包的比较示例:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -392,60 +389,60 @@
 </span><span class="lnt">44
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">testify_exam</span>
-
-<span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;sync/atomic&#34;</span>
-	<span class="s">&#34;testing&#34;</span>
-
-	<span class="s">&#34;github.com/stretchr/testify/assert&#34;</span>
-	<span class="s">&#34;github.com/stretchr/testify/require&#34;</span>
-<span class="p">)</span>
-
-<span class="c1">// `require.True` 失败后会将测试 TestEx1 停掉，不会再执行后面的 require.Equal 断言
-</span><span class="c1">// `assert.True` 失败后并不会将 TestEx2 停掉，在后面的断言中，Add 依然会被执行，
-</span><span class="c1">// 所以 Add 会在 TestEx2 中执行一次， count 的最终结果是1
-</span><span class="c1"></span>
-<span class="kd">var</span> <span class="nx">count</span> <span class="kt">int32</span> <span class="p">=</span> <span class="mi">0</span>
-
-<span class="kd">func</span> <span class="nf">Add</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
-	<span class="nx">atomic</span><span class="p">.</span><span class="nf">AddInt32</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">count</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-	<span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="nf">TestEx1</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">require</span><span class="p">.</span><span class="nf">True</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
-	<span class="nx">require</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="nf">TestEx2</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">assert</span><span class="p">.</span><span class="nf">True</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
-	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
-	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">count</span><span class="p">,</span> <span class="nb">int32</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-<span class="p">}</span>
-
-<span class="c1">// 下面是程序的运行结果
-</span><span class="c1">//&gt;&gt;&gt; go test -v testify_exam/require_test.go                                                                                                                      23:30:19 (06-02)
-</span><span class="c1">//=== RUN   TestEx1
-</span><span class="c1">//--- FAIL: TestEx1 (0.00s)
-</span><span class="c1">//Error Trace:    require_test.go:19
-</span><span class="c1">//Error:          Should be true
-</span><span class="c1">//=== RUN   TestEx2
-</span><span class="c1">//--- FAIL: TestEx2 (0.00s)
-</span><span class="c1">//Error Trace:    require_test.go:24
-</span><span class="c1">//Error:          Should be true
-</span><span class="c1">//FAIL
-</span><span class="c1">//FAIL    command-line-arguments  0.018s
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">testify_exam</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;sync/atomic&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;testing&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/stretchr/testify/assert&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/stretchr/testify/require&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// `require.True` 失败后会将测试 TestEx1 停掉，不会再执行后面的 require.Equal 断言
+</span></span></span><span class="line"><span class="cl"><span class="c1">// `assert.True` 失败后并不会将 TestEx2 停掉，在后面的断言中，Add 依然会被执行，
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 所以 Add 会在 TestEx2 中执行一次， count 的最终结果是1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">count</span> <span class="kt">int32</span> <span class="p">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">Add</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">atomic</span><span class="p">.</span><span class="nf">AddInt32</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">count</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">TestEx1</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">require</span><span class="p">.</span><span class="nf">True</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">require</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">TestEx2</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">True</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nf">Add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">count</span><span class="p">,</span> <span class="nb">int32</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 下面是程序的运行结果
+</span></span></span><span class="line"><span class="cl"><span class="c1">//&gt;&gt;&gt; go test -v testify_exam/require_test.go                                                                                                                      23:30:19 (06-02)
+</span></span></span><span class="line"><span class="cl"><span class="c1">//=== RUN   TestEx1
+</span></span></span><span class="line"><span class="cl"><span class="c1">//--- FAIL: TestEx1 (0.00s)
+</span></span></span><span class="line"><span class="cl"><span class="c1">//Error Trace:    require_test.go:19
+</span></span></span><span class="line"><span class="cl"><span class="c1">//Error:          Should be true
+</span></span></span><span class="line"><span class="cl"><span class="c1">//=== RUN   TestEx2
+</span></span></span><span class="line"><span class="cl"><span class="c1">//--- FAIL: TestEx2 (0.00s)
+</span></span></span><span class="line"><span class="cl"><span class="c1">//Error Trace:    require_test.go:24
+</span></span></span><span class="line"><span class="cl"><span class="c1">//Error:          Should be true
+</span></span></span><span class="line"><span class="cl"><span class="c1">//FAIL
+</span></span></span><span class="line"><span class="cl"><span class="c1">//FAIL    command-line-arguments  0.018s
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="mockhttpsgodocorggithubcomstretchrtestifymock-包"><a href="https://godoc.org/github.com/stretchr/testify/mock">mock</a> 包</h2>
 <p><code>mock</code>提供了一种机制，可以在编写测试代码的时候轻松编写可用于替代实际对象的模拟对象。</p>
 <p>下面是一段示例代码，它测试了一段依赖于外部对象<code>testObj</code>的代码，并且能够设置期望(<code>testify</code>)且断言他们确实发生了。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code></code></pre></td>
+<pre tabindex="0" class="chroma"><code></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"></code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -555,7 +552,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
