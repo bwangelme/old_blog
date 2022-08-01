@@ -16,6 +16,24 @@ comment: true
 
 查看 GO Proxy 中包的信息:
 
++ 查看包的版本列表
+
+```
+ø> curl https://proxy.golang.org/go.etcd.io/etcd/client/v3/@v/list
+v3.5.0-beta.4
+v3.5.4
+v3.5.2
+v3.5.0-alpha.0
+v3.5.0-rc.0
+v3.5.3
+v3.5.0
+v3.5.1
+v3.5.0-beta.2
+v3.6.0-alpha.0
+v3.5.0-rc.1
+v3.5.0-beta.3
+```
+
 + 查看包的版本信息:
 
 ```
