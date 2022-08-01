@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Cluster Pods - 大白的碎碎念</title>
+  <title>pkg/errors 和 go1.13 中 errors 库发展历史 - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -26,7 +26,7 @@
 <meta name="generator" content="Hugo 0.101.0 with theme even" />
 
 
-<link rel="canonical" href="/2022/07/13/cluster-pods.md/" />
+<link rel="canonical" href="/2022/08/01/golang-err/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -39,19 +39,19 @@
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
-<meta property="og:title" content="Cluster Pods" />
+<meta property="og:title" content="pkg/errors 和 go1.13 中 errors 库发展历史" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2022/07/13/cluster-pods.md/" /><meta property="article:section" content="tips" />
-<meta property="article:published_time" content="2022-07-13T20:23:33+08:00" />
-<meta property="article:modified_time" content="2022-07-13T20:23:33+08:00" />
+<meta property="og:url" content="/2022/08/01/golang-err/" /><meta property="article:section" content="tips" />
+<meta property="article:published_time" content="2022-08-01T10:23:16+08:00" />
+<meta property="article:modified_time" content="2022-08-01T10:23:16+08:00" />
 
-<meta itemprop="name" content="Cluster Pods">
-<meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-07-13T20:23:33+08:00" />
-<meta itemprop="dateModified" content="2022-07-13T20:23:33+08:00" />
-<meta itemprop="wordCount" content="108">
-<meta itemprop="keywords" content="tips,k8s,prom," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Cluster Pods"/>
+<meta itemprop="name" content="pkg/errors 和 go1.13 中 errors 库发展历史">
+<meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-08-01T10:23:16+08:00" />
+<meta itemprop="dateModified" content="2022-08-01T10:23:16+08:00" />
+<meta itemprop="wordCount" content="394">
+<meta itemprop="keywords" content="tips,go," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="pkg/errors 和 go1.13 中 errors 库发展历史"/>
 <meta name="twitter:description" content=""/>
 
 <!--[if lte IE 9]>
@@ -137,12 +137,12 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Cluster Pods</h1>
+      <h1 class="post-title">pkg/errors 和 go1.13 中 errors 库发展历史</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2022-07-13 </span>
+        <span class="post-time"> 2022-08-01 </span>
         
-          <span class="more-meta"> 约 108 字 </span>
+          <span class="more-meta"> 约 394 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -167,43 +167,26 @@
       <hr>
 <h2 id="tips">Tips</h2>
 <ul>
-<li>统计集群中运行 pod 的数量</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sum(kube_pod_status_phase{phase=&#34;Running&#34;})
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>kube_pod_container_status_ready</code> 指标有 <code>namespace</code>, <code>cluster</code>, <code>phase</code> Label 可以对指标进行筛选，其他的看起来都是 prom 相关的</p>
-<p>phase 有五种: Pending|Running|Succeeded|Failed|Unknown</p>
+<li>pkg/errors 的设计思路是，将 err 设计成一个链表，每次需要返回 error 的时候，调用 <code>errors.Wrap(err, &quot;message %v&quot;, value)</code>，生成一个新的 error，并将新 error 追加到链表尾部。这个 error 可以附加一些额外的信息和栈信息，</li>
+<li>pkg/errors 提供了 <code>Cause</code> 接口和 <code>errors.Cause</code> 函数，<code>Cause</code> 接口返回 err 包裹的接口，<code>errors.Cause</code> 函数返回错误链表中链表头的错误</li>
+<li>golang 1.13 中，将 pkg/errors 的设计思路纳入到了标准库中 <code>errors</code>
 <ul>
-<li>统计处于 Running 和 Succeeded 状态的 Pod，某些 Job 执行成功后是 Succeed 状态</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sum(kube_pod_status_phase{phase=~&#34;Running|Succeeded&#34;})
-</span></span></code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>按 namespace 统计集群中运行 pod 的数量，并按逆序排序</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sort_desc(sum(kube_pod_status_phase{phase=&#34;Running&#34;}) by (namespace))
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="参考链接">参考链接</h2>
+<li>go 标准库采用了链表链接 error 的设计思路</li>
+<li>go 标准库没有使用 pkg/errors 的 <code>Cause</code> 接口，而是使用了新接口 <code>Unwrap</code>，这样导致无法和旧的使用 <code>pkg/errors</code> 的代码兼容</li>
+<li>go 标准库提供了处理错误的三个函数:
 <ul>
-<li><a href="https://github.com/kubernetes/kube-state-metrics/blob/master/docs/pod-metrics.md">Pod Metrics</a></li>
+<li><code>errors.Unwrap(err error) error</code> 返回 <code>err</code> 链表头的 error (即原始 error)</li>
+<li><code>errors.Is(err error, target error) bool</code> 遍历 <code>err</code> 链表中的每一个错误和 <code>target</code> 进行比较, 判断 <code>err</code> 链表中是否存在和 <code>target</code> 相等的错误，如果有，返回 <code>true</code>，否则返回 <code>false</code></li>
+<li><code>errors.As(err error, target interface{}) bool</code>，从 <code>err</code> 链表中找到第一个可以赋值给 <code>target</code> 的错误，并将其赋值给 <code>target</code>，如果赋值成功，返回 <code>true</code>，否则返回 <code>fasle</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="参考链接">参考链接</h2>
+<ul>
+<li><a href="https://dr-knz.net/cockroachdb-errors-std-api.html">The Go standard error APIs The CockroachDB errors library, part 1/</a></li>
+<li><a href="https://github.com/golang/go/blob/dev.boringcrypto.go1.17/src/errors/wrap.go">go1.17 source code errors/wrap.go</a></li>
 </ul>
     </div>
 
@@ -215,7 +198,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-07-13
+        2022-08-01
         
     </span>
   </p>
@@ -228,17 +211,12 @@
 <footer class="post-footer">
       <div class="post-tags">
           <a href="/tags/tips/">tips</a>
-          <a href="/tags/k8s/">k8s</a>
-          <a href="/tags/prom/">prom</a>
+          <a href="/tags/go/">go</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/2022/08/01/golang-err/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">pkg/errors 和 go1.13 中 errors 库发展历史</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
-        <a class="next" href="/2022/07/07/process-block/">
-            <span class="next-text nav-default">进程卡住如何 debug</span>
+        
+        <a class="next" href="/2022/07/13/cluster-pods.md/">
+            <span class="next-text nav-default">Cluster Pods</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
