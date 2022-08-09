@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Ubuntu 下 Docker 设置 Registry - 大白的碎碎念</title>
+  <title>Linux 中查看发送信号的快捷键 - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -26,7 +26,7 @@
 <meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
-<link rel="canonical" href="/2022/08/09/docker-registry/" />
+<link rel="canonical" href="/2022/08/09/stty/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -39,22 +39,22 @@
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
-<meta property="og:title" content="Ubuntu 下 Docker 设置 Registry" />
+<meta property="og:title" content="Linux 中查看发送信号的快捷键" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2022/08/09/docker-registry/" />
-<meta property="article:published_time" content="2022-08-09T21:14:49+08:00" />
-<meta property="article:modified_time" content="2022-08-09T21:14:49+08:00" />
-<meta itemprop="name" content="Ubuntu 下 Docker 设置 Registry">
+<meta property="og:url" content="/2022/08/09/stty/" />
+<meta property="article:published_time" content="2022-08-09T21:43:40+08:00" />
+<meta property="article:modified_time" content="2022-08-09T21:43:40+08:00" />
+<meta itemprop="name" content="Linux 中查看发送信号的快捷键">
 <meta itemprop="description" content="">
-<meta itemprop="datePublished" content="2022-08-09T21:14:49&#43;08:00" />
-<meta itemprop="dateModified" content="2022-08-09T21:14:49&#43;08:00" />
-<meta itemprop="wordCount" content="322">
+<meta itemprop="datePublished" content="2022-08-09T21:43:40&#43;08:00" />
+<meta itemprop="dateModified" content="2022-08-09T21:43:40&#43;08:00" />
+<meta itemprop="wordCount" content="387">
 
 
 
-<meta itemprop="keywords" content="tips,docker," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Ubuntu 下 Docker 设置 Registry"/>
+<meta itemprop="keywords" content="tips,go," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Linux 中查看发送信号的快捷键"/>
 <meta name="twitter:description" content=""/>
 
 <!--[if lte IE 9]>
@@ -140,12 +140,12 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Ubuntu 下 Docker 设置 Registry</h1>
+      <h1 class="post-title">Linux 中查看发送信号的快捷键</h1>
 
       <div class="post-meta">
         <span class="post-time"> 2022-08-09 </span>
         
-          <span class="more-meta"> 约 322 字 </span>
+          <span class="more-meta"> 约 387 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -158,8 +158,7 @@
   <ul>
     <li>
       <ul>
-        <li><a href="#docker-配置-registry-mirror">docker 配置 registry-mirror</a></li>
-        <li><a href="#dockerd-使用-http-代理">dockerd 使用 http 代理</a></li>
+        <li><a href="#tips">Tips</a></li>
         <li><a href="#参考链接">参考链接</a></li>
       </ul>
     </li>
@@ -168,103 +167,53 @@
   </div>
 </div>
     <div class="post-content">
-      <blockquote>
+      <hr>
+<h2 id="tips">Tips</h2>
+<p><code>stty</code>命令的作用是 <code>change and print terminal line settings</code>，查看或修改 Linux 终端的配置。</p>
+<p>今天遇到的需求是想查一下 <code>Ctrl-C</code> 按键发送的系统信号 ( <a href="https://man7.org/linux/man-pages/man7/signal.7.html">man 7 signal</a>)，搜了一下发现 stty 是最方便的查询命令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; stty -a
+speed <span class="m">38400</span> baud<span class="p">;</span> rows 68<span class="p">;</span> columns 128<span class="p">;</span> <span class="nv">line</span> <span class="o">=</span> 0<span class="p">;</span>
+
+<span class="c1">####################  我们主要关心这两行的内容</span>
+<span class="nv">intr</span> <span class="o">=</span> ^C<span class="p">;</span> <span class="nv">quit</span> <span class="o">=</span> ^<span class="se">\;</span> <span class="nv">erase</span> <span class="o">=</span> ^?<span class="p">;</span> <span class="nb">kill</span> <span class="o">=</span> ^U<span class="p">;</span> <span class="nv">eof</span> <span class="o">=</span> ^D<span class="p">;</span> <span class="nv">eol</span> <span class="o">=</span> &lt;undef&gt;<span class="p">;</span> <span class="nv">eol2</span> <span class="o">=</span> &lt;undef&gt;<span class="p">;</span> <span class="nv">swtch</span> <span class="o">=</span> &lt;undef&gt;<span class="p">;</span> <span class="nv">start</span> <span class="o">=</span> ^Q<span class="p">;</span> <span class="nv">stop</span> <span class="o">=</span> ^S<span class="p">;</span>
+<span class="nv">susp</span> <span class="o">=</span> ^Z<span class="p">;</span> <span class="nv">rprnt</span> <span class="o">=</span> ^R<span class="p">;</span> <span class="nv">werase</span> <span class="o">=</span> ^W<span class="p">;</span> <span class="nv">lnext</span> <span class="o">=</span> ^V<span class="p">;</span> <span class="nv">discard</span> <span class="o">=</span> ^O<span class="p">;</span> <span class="nv">min</span> <span class="o">=</span> 1<span class="p">;</span> <span class="nb">time</span> <span class="o">=</span> 0<span class="p">;</span>
+<span class="c1">####################</span>
+
+-parenb -parodd -cmspar cs8 -hupcl -cstopb cread -clocal -crtscts
+-ignbrk -brkint -ignpar -parmrk -inpck -istrip -inlcr -igncr icrnl -ixon -ixoff -iuclc -ixany -imaxbel -iutf8
+opost -olcuc -ocrnl onlcr -onocr -onlret -ofill -ofdel nl0 cr0 tab0 bs0 vt0 ff0
+isig icanon iexten <span class="nb">echo</span> echoe echok -echonl -noflsh -xcase -tostop -echoprt echoctl echoke -flusho -extproc
+</code></pre></td></tr></table>
+</div>
+</div><p>stty 输出的解释如下:</p>
 <ul>
-<li>docker 拉取镜像怎么办?
-<ul>
-<li>
-<ol>
-<li>设置 registry-mirror</li>
-</ol>
-</li>
-<li>
-<ol start="2">
-<li>为 dockerd 设置 http 代理</li>
-</ol>
-</li>
-</ul>
-</li>
-<li>鉴于很多厂商不再提供公共的 docker registry，提供服务的拉取镜像速度也很慢，建议使用第二种解决方案</li>
-</ul>
-</blockquote>
-<hr>
-<h2 id="docker-配置-registry-mirror">docker 配置 registry-mirror</h2>
-<ul>
-<li>执行 <code>systemctl cat docker | grep Exec</code> 查看 dockerd 的启动命令，确认启动时没有指定 <code>registry-mirror</code> 选项</li>
+<li><code>^C</code> (ctrl+c) 发送 interrupt 信号</li>
+<li><code>^\</code> (ctr+) 发送 quit 信号</li>
+<li><code>^?</code> 清除上一个输入的字符</li>
+<li><code>^U</code> 删除当前行</li>
+<li><code>^D</code> 输入 EOF 字符(结束当前输入)</li>
+<li><code>^S</code> 暂停输出</li>
+<li><code>^Q</code> 在暂停输出后，重新开始输出</li>
+<li><code>^Z</code> 发送一个 terminal stop 信号</li>
+<li><code>^W</code> 删除最近输入的一个单词</li>
 </ul>
 <div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">ø&gt; systemctl cat docker | grep Exec
-ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
-ExecReload=/bin/kill -s HUP $MAINPID
-</code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>向 <code>/etc/docker/daemon.json</code> 写入以下内容</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">{
-  &#34;registry-mirrors&#34;: [
-    &#34;https://hub-mirror.c.163.com&#34;,
-    &#34;https://mirror.baidubce.com&#34;
-  ]
-}
-</code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>重新启动服务</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo systemctl daemon-reload
-sudo systemctl restart docker
-</code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>检查配置是否成功</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">docker info | grep -A 3 &#39;Registry Mirrors:&#39;
-</code></pre></td></tr></table>
-</div>
-</div><h2 id="dockerd-使用-http-代理">dockerd 使用 http 代理</h2>
-<ul>
-<li>在执行 <code>docker pull</code> 的时候，拉取镜像的过程实际是由 dockerd 执行，因此，想要在访问 <code>docker.io</code> 时加上代理，就需要通过 <code>http_proxy</code> 环境变量为 dockerd 配置代理</li>
-<li>修改 systemd 配置，并写入代理配置</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">sudo mkdir -p /etc/systemd/system/docker.service.d
-sudo touch /etc/systemd/system/docker.service.d/proxy.conf
-</code></pre></td></tr></table>
-</div>
-</div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -272,40 +221,20 @@ sudo touch /etc/systemd/system/docker.service.d/proxy.conf
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">[Service]
-Environment=&#34;HTTP_PROXY=http://proxy.example.com:8080/&#34;
-Environment=&#34;HTTPS_PROXY=http://proxy.example.com:8080/&#34;
-Environment=&#34;NO_PROXY=localhost,127.0.0.1,.example.com&#34;
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">while true;do
+    date;
+    sleep 1
+done
 </code></pre></td></tr></table>
 </div>
 </div><ul>
-<li>重新启动服务</li>
+<li>(我用上面的代码测试 <code>^S</code> 和 <code>^Q</code> 发现不生效)</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo systemctl daemon-reload
-sudo systemctl restart docker
-</code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>检查配置是否成功</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">docker info | grep -A 3 &#39;Proxy&#39;
-</code></pre></td></tr></table>
-</div>
-</div><h2 id="参考链接">参考链接</h2>
+<p>stty 其他输入的含义，请参考 <a href="https://linux.die.net/man/1/stty">man 1 stty</a></p>
+<h2 id="参考链接">参考链接</h2>
 <ul>
-<li><a href="https://yeasy.gitbook.io/docker_practice/install/mirror">镜像加速器</a></li>
-<li><a href="https://note.qidong.name/2020/05/docker-proxy/">Docker的三种网络代理配置</a></li>
+<li><a href="https://unix.stackexchange.com/a/362579/191858">List of terminal generated signals (eg Ctrl-C -&gt; SIGINT)</a></li>
+<li><a href="https://linux.die.net/man/1/stty">man 1 stty</a></li>
 </ul>
     </div>
 
@@ -330,16 +259,12 @@ sudo systemctl restart docker
 <footer class="post-footer">
       <div class="post-tags">
           <a href="/tags/tips/">tips</a>
-          <a href="/tags/docker/">docker</a>
+          <a href="/tags/go/">go</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/2022/08/09/stty/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">Linux 中查看发送信号的快捷键</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
-        <a class="next" href="/2022/08/01/golang-err/">
-            <span class="next-text nav-default">pkg/errors 和 go1.13 中 errors 库发展历史</span>
+        
+        <a class="next" href="/2022/08/09/docker-registry/">
+            <span class="next-text nav-default">Ubuntu 下 Docker 设置 Registry</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
