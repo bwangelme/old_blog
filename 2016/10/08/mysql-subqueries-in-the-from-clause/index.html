@@ -17,14 +17,14 @@
 
 
 <meta name="author" content="bwangel" /><meta name="description" content="摘要:
-MySQL 语句中 from 部分的子查询 " /><meta name="keywords" content="Hugo, blog, bwangel" />
+  MySQL 语句中 from 部分的子查询  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
 <link rel="canonical" href="/2016/10/08/mysql-subqueries-in-the-from-clause/" />
@@ -48,19 +48,22 @@ MySQL 语句中 from 部分的子查询
 
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2016/10/08/mysql-subqueries-in-the-from-clause/" /><meta property="article:section" content="post" />
+<meta property="og:url" content="/2016/10/08/mysql-subqueries-in-the-from-clause/" />
 <meta property="article:published_time" content="2016-10-08T20:28:45+00:00" />
 <meta property="article:modified_time" content="2016-10-08T20:28:45+00:00" />
-
 <meta itemprop="name" content="MySQL from 部分的子查询">
 <meta itemprop="description" content="摘要:
 
 
 MySQL 语句中 from 部分的子查询
 
-"><meta itemprop="datePublished" content="2016-10-08T20:28:45+00:00" />
-<meta itemprop="dateModified" content="2016-10-08T20:28:45+00:00" />
+">
+<meta itemprop="datePublished" content="2016-10-08T20:28:45&#43;00:00" />
+<meta itemprop="dateModified" content="2016-10-08T20:28:45&#43;00:00" />
 <meta itemprop="wordCount" content="647">
+
+
+
 <meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySQL from 部分的子查询"/>
 <meta name="twitter:description" content="摘要:
@@ -204,27 +207,27 @@ MySQL 语句中 from 部分的子查询
 <p>为了方便演示，我们假设创建了这样的一个表。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">t1</span><span class="p">(</span><span class="n">s1</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span><span class="w"> </span><span class="n">s2</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">s3</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">);</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t1</span><span class="p">(</span><span class="n">s1</span> <span class="nb">INT</span><span class="p">,</span> <span class="n">s2</span> <span class="nb">CHAR</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">s3</span> <span class="nb">FLOAT</span><span class="p">);</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>然后我们向其中插入了如下的数据：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">t1</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">t1</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>最后我们执行一个如下的查询：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -235,57 +238,57 @@ MySQL 语句中 from 部分的子查询
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="n">sb1</span><span class="p">,</span><span class="w"> </span><span class="n">sb2</span><span class="p">,</span><span class="w"> </span><span class="n">sb3</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">s1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">sb1</span><span class="p">,</span><span class="w"> </span><span class="n">s2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">sb2</span><span class="p">,</span><span class="w"> </span><span class="n">s3</span><span class="o">*</span><span class="mi">2</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">sb3</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">t1</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">sb</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">sb1</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">------+------+------+
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">sb1</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="n">sb2</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="n">sb3</span><span class="w">  </span><span class="o">|</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">------+------+------+
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w">    </span><span class="mi">2</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="mi">2</span><span class="w">    </span><span class="o">|</span><span class="w">    </span><span class="mi">4</span><span class="w"> </span><span class="o">|</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">------+------+------+
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">sb1</span><span class="p">,</span> <span class="n">sb2</span><span class="p">,</span> <span class="n">sb3</span>
+    <span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">s1</span> <span class="k">AS</span> <span class="n">sb1</span><span class="p">,</span> <span class="n">s2</span> <span class="k">AS</span> <span class="n">sb2</span><span class="p">,</span> <span class="n">s3</span><span class="o">*</span><span class="mi">2</span> <span class="k">AS</span> <span class="n">sb3</span> <span class="k">FROM</span> <span class="n">t1</span><span class="p">)</span> <span class="k">AS</span> <span class="n">sb</span>
+    <span class="k">WHERE</span> <span class="n">sb1</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">------+------+------+
+</span><span class="c1"></span><span class="o">|</span> <span class="n">sb1</span>  <span class="o">|</span> <span class="n">sb2</span>  <span class="o">|</span> <span class="n">sb3</span>  <span class="o">|</span>
+<span class="o">+</span><span class="c1">------+------+------+
+</span><span class="c1"></span><span class="o">|</span>    <span class="mi">2</span> <span class="o">|</span> <span class="mi">2</span>    <span class="o">|</span>    <span class="mi">4</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">------+------+------+
+</span><span class="c1"></span><span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>可以看到这里将子查询的结果构造成一个表 sb，并从中进行第二步的筛选。</p>
 <h3 id="从一个表中选出最后几个元素">从一个表中选出最后几个元素</h3>
 <p>如果我们想要选出某个表中最后几行怎么办呢，我今天就遇到了这个问题，感觉下面这个子查询的方式最令我满意：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">tmp_table</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">DESC</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">50</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="n">sub</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">ASC</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="p">(</span>
+    <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">tmp_table</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">id</span> <span class="k">DESC</span> <span class="k">LIMIT</span> <span class="mi">50</span>
+    <span class="p">)</span> <span class="n">sub</span>
+    <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">id</span> <span class="k">ASC</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>在上面的例子中，我们首先在子查询中查询最后50行，但此时查询结果是逆序的。然后我们再在外面的查询中再来重新排序一遍，变成正序排列，此时我们就能获得<code>tmp_table</code>表中的最后50行了。</p>
 <h3 id="选出分组求和的平均数">选出分组求和的平均数</h3>
 <p>这是 MySQL 官方文档上给出的一个例子，如果我们想要取出分组了的表的一组和的平均值，那么该怎么做呢？首先，这样查询肯定是错误的：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="k">AVG</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="k">column</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">column1</span><span class="p">;</span><span class="w">  </span><span class="c1">-- error
-</span></span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="k">AVG</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="k">column</span> <span class="mi">1</span><span class="p">))</span> <span class="k">FROM</span> <span class="n">t1</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">column1</span><span class="p">;</span>  <span class="c1">-- error
+</span></code></pre></td></tr></table>
 </div>
 </div><p>此时我们就可以用到我们的子查询的语法了，我们可以这样写：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="k">AVG</span><span class="p">(</span><span class="n">sum_column1</span><span class="p">)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">column1</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">sum_column1</span><span class="p">)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">column1</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">t1</span><span class="p">;</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="k">AVG</span><span class="p">(</span><span class="n">sum_column1</span><span class="p">)</span>
+    <span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="k">SUM</span><span class="p">(</span><span class="n">column1</span><span class="p">)</span> <span class="k">AS</span> <span class="n">sum_column1</span><span class="p">)</span>
+        <span class="k">FROM</span> <span class="n">t1</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">column1</span><span class="p">)</span> <span class="k">AS</span> <span class="n">t1</span><span class="p">;</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>这里需要注意的是，在子查询中使用的<code>sum_column1</code>列在外部查询中也可以被识别出来。</p>
 <h2 id="参考链接">参考链接：</h2>
@@ -399,7 +402,7 @@ MySQL 语句中 from 部分的子查询
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
 <link rel="canonical" href="/2022/01/12/go_gcflags/" />
@@ -45,16 +45,19 @@
 Go 链接选项和编译选项的说明
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2022/01/12/go_gcflags/" /><meta property="article:section" content="post" />
+<meta property="og:url" content="/2022/01/12/go_gcflags/" />
 <meta property="article:published_time" content="2022-01-12T17:56:10+08:00" />
 <meta property="article:modified_time" content="2022-01-12T17:56:10+08:00" />
-
 <meta itemprop="name" content="Go gcflags/ldflags 的说明">
 <meta itemprop="description" content="
 Go 链接选项和编译选项的说明
-"><meta itemprop="datePublished" content="2022-01-12T17:56:10+08:00" />
-<meta itemprop="dateModified" content="2022-01-12T17:56:10+08:00" />
+">
+<meta itemprop="datePublished" content="2022-01-12T17:56:10&#43;08:00" />
+<meta itemprop="dateModified" content="2022-01-12T17:56:10&#43;08:00" />
 <meta itemprop="wordCount" content="545">
+
+
+
 <meta itemprop="keywords" content="dlv,go," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go gcflags/ldflags 的说明"/>
 <meta name="twitter:description" content="
@@ -186,11 +189,11 @@ Go 链接选项和编译选项的说明
 <p>go build 时可以使用 <code>-gcflags</code> 指定编译选项，<code>-gcflags</code> 参数的格式是</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">-gcflags=&#34;pattern=arg list&#34;
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">-gcflags=&#34;pattern=arg list&#34;
+</code></pre></td></tr></table>
 </div>
 </div><h3 id="pattern">pattern</h3>
 <p>pattern 是选择包的模式，它可以有以下几种定义:</p>
@@ -223,13 +226,13 @@ Go 链接选项和编译选项的说明
 <h3 id="举例">举例</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 为当前模块下的所有包关闭编译优化和内联</span>
-</span></span><span class="line"><span class="cl">go build -gcflags<span class="o">=</span><span class="s2">&#34;all=-N -l&#34;</span> .
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 为当前模块下的所有包关闭编译优化和内联</span>
+go build -gcflags<span class="o">=</span><span class="s2">&#34;all=-N -l&#34;</span> .
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="链接选项">链接选项</h2>
 <p><code>-ldflags</code> 可以设置链接选项</p>
@@ -240,15 +243,15 @@ Go 链接选项和编译选项的说明
 <p><code>-w</code> 和 <code>-s</code> 通常一起使用，用来减少可执行文件的体积。但删除了调试信息后，可执行文件将无法使用 gdb/dlv 调试</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ø&gt; go build -ldflags<span class="o">=</span><span class="s2">&#34;-w -s&#34;</span> ./abc.go
-</span></span><span class="line"><span class="cl">ø&gt; dlv <span class="nb">exec</span> ./abc
-</span></span><span class="line"><span class="cl">could not launch process: could not open debug info
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-shell" data-lang="shell">ø&gt; go build -ldflags<span class="o">=</span><span class="s2">&#34;-w -s&#34;</span> ./abc.go
+ø&gt; dlv <span class="nb">exec</span> ./abc
+could not launch process: could not open debug info
+</code></pre></td></tr></table>
 </div>
 </div><p>注意： 使用 <code>go run main.go</code> 运行的进程，也无法用 <code>dlv attach ${pid}</code> 调试，因为找不到代码的符号信息。</p>
 <h2 id="参考链接">参考链接</h2>
@@ -367,7 +370,7 @@ Go 链接选项和编译选项的说明
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
