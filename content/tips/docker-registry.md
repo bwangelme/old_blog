@@ -13,7 +13,7 @@ comment: true
 > - docker 拉取镜像怎么办?
 >   - 1. 设置 registry-mirror
 >   - 2. 为 dockerd 设置 http 代理
-> - 鉴于很多厂商不再提供公共的 docker registry，提供服务的拉取镜像速度也很慢，建议使用第二种解决方案
+> - 鉴于很多厂商不再提供公共的 docker registry，提供服务的也都对下载速度进行了限制，建议使用第二种解决方案
 
 ---
 
@@ -53,6 +53,14 @@ sudo systemctl restart docker
 ```
 docker info | grep -A 3 'Registry Mirrors:'
 ```
+
+- 速度限制
+
+目前找到的可用的公共 registry-mirror 一共有三个
+
+`https://hub-mirror.c.163.com`, `https://mirror.baidubce.com`, `https://xxx.mirror.aliyuncs.com` (需要登录阿里云后获取)
+
+他们都存在限速，最高下载速度是每秒 500k 左右。
 
 ## dockerd 使用 http 代理
 
