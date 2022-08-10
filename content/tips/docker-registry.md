@@ -29,7 +29,7 @@ ExecReload=/bin/kill -s HUP $MAINPID
 
 - 向 `/etc/docker/daemon.json` 写入以下内容
 
-```
+```sh
 sudo mkdir -p /etc/docker
 sudo tee /etc/docker/daemon.json <<-'EOF'
 {
@@ -43,7 +43,7 @@ EOF
 
 - 重新启动服务
 
-```
+```sh
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
@@ -58,9 +58,15 @@ docker info | grep -A 3 'Registry Mirrors:'
 
 目前找到的可用的公共 registry-mirror 一共有三个
 
-`https://hub-mirror.c.163.com`, `https://mirror.baidubce.com`, `https://xxx.mirror.aliyuncs.com` (需要登录阿里云后获取)
+- `https://hub-mirror.c.163.com`
+- `https://mirror.baidubce.com`
+- `https://xxx.mirror.aliyuncs.com` (需要登录阿里云后获取)
 
 他们都存在限速，最高下载速度是每秒 500k 左右。
+
+- 镜像更新不及时
+
+有些较新的镜像，例如 `golang:1.19`， registry mirror 中并没有，最终还是会从 `registry-1.docker.io` 去拉取镜像
 
 ## dockerd 使用 http 代理
 
