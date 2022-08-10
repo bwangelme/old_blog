@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.101.0 with theme even" />
 
 
 <link rel="canonical" href="/2018/10/11/go_mod/" />
@@ -43,17 +43,14 @@
 <meta property="og:title" content="Go mod 说明" />
 <meta property="og:description" content="关于 Go mod 的介绍" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2018/10/11/go_mod/" />
+<meta property="og:url" content="/2018/10/11/go_mod/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2018-10-11T08:44:25+08:00" />
 <meta property="article:modified_time" content="2018-10-11T08:44:25+08:00" />
+
 <meta itemprop="name" content="Go mod 说明">
-<meta itemprop="description" content="关于 Go mod 的介绍">
-<meta itemprop="datePublished" content="2018-10-11T08:44:25&#43;08:00" />
-<meta itemprop="dateModified" content="2018-10-11T08:44:25&#43;08:00" />
+<meta itemprop="description" content="关于 Go mod 的介绍"><meta itemprop="datePublished" content="2018-10-11T08:44:25+08:00" />
+<meta itemprop="dateModified" content="2018-10-11T08:44:25+08:00" />
 <meta itemprop="wordCount" content="1879">
-
-
-
 <meta itemprop="keywords" content="go,gomod," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go mod 说明"/>
 <meta name="twitter:description" content="关于 Go mod 的介绍"/>
@@ -226,17 +223,17 @@
 <p>在Golang中，一个依赖可以同时存在两个主版本不同的<code>import</code>。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">import</span> <span class="p">(</span>
-    <span class="s">&#34;github.com/user/repo&#34;</span>
-    <span class="nx">repov2</span> <span class="s">&#34;github.com/user/repo/v2&#34;</span>
-<span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="s">&#34;github.com/user/repo&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">repov2</span> <span class="s">&#34;github.com/user/repo/v2&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>故当一个仓库需要升级某个依赖的主版本时，其代码导入路径要随之改变。如果依赖的API变了，那么仓库也要进行相应的更改。</p>
 <h2 id="清除依赖">清除依赖</h2>
@@ -250,7 +247,7 @@
 <p>Go 将依赖安装在<code>GOPATH/pkg/mod</code>中，并且依赖的每个版本会分开安装</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -267,22 +264,22 @@
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">&gt;&gt;&gt; tree <span class="nv">$GOPATH</span>/pkg/mod/github.com/bwangelme/
-/Users/michaeltsui/go/pkg/mod/github.com/bwangelme/
-├── testmod
-│   └── v2@v2.0.0
-│       ├── README.md
-│       ├── go.mod
-│       └── testmod.go
-├── testmod@v1.0.0
-│   ├── README.md
-│   ├── go.mod
-│   └── testmod.go
-└── testmod@v1.0.1
-    ├── README.md
-    ├── go.mod
-    └── testmod.go
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">&gt;&gt;&gt; tree <span class="nv">$GOPATH</span>/pkg/mod/github.com/bwangelme/
+</span></span><span class="line"><span class="cl">/Users/michaeltsui/go/pkg/mod/github.com/bwangelme/
+</span></span><span class="line"><span class="cl">├── testmod
+</span></span><span class="line"><span class="cl">│   └── v2@v2.0.0
+</span></span><span class="line"><span class="cl">│       ├── README.md
+</span></span><span class="line"><span class="cl">│       ├── go.mod
+</span></span><span class="line"><span class="cl">│       └── testmod.go
+</span></span><span class="line"><span class="cl">├── testmod@v1.0.0
+</span></span><span class="line"><span class="cl">│   ├── README.md
+</span></span><span class="line"><span class="cl">│   ├── go.mod
+</span></span><span class="line"><span class="cl">│   └── testmod.go
+</span></span><span class="line"><span class="cl">└── testmod@v1.0.1
+</span></span><span class="line"><span class="cl">    ├── README.md
+</span></span><span class="line"><span class="cl">    ├── go.mod
+</span></span><span class="line"><span class="cl">    └── testmod.go
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="查看依赖">查看依赖</h2>
 <ul>
@@ -290,22 +287,22 @@
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">go list -m -json all
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">go list -m -json all
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>查看 github.com 域名下所有的 module</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">go list -m -json &#39;github.com/...&#39;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">go list -m -json &#39;github.com/...&#39;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>-m</code> 选项让 go list 列出所有的 module 而不是包。在这种模式下，<code>go list</code> 的参数可以是模块或模块模式(包含 <code>...</code> 通配符)，<a href="https://go.dev/ref/mod#version-queries">Version Query</a>，或者特殊模式 <code>all</code>(匹配<a href="https://go.dev/ref/mod#glos-build-list">构建列表</a>中的所有模块)。如果没有指定参数，<a href="https://go.dev/ref/mod#glos-main-module">主模块</a>将被列出。</p>
 <h2 id="关于-incompatible-版本标签的说明">关于 incompatible 版本标签的说明</h2>
@@ -435,7 +432,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
