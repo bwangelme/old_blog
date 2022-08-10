@@ -30,12 +30,15 @@ ExecReload=/bin/kill -s HUP $MAINPID
 - 向 `/etc/docker/daemon.json` 写入以下内容
 
 ```
+sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json <<-'EOF'
 {
   "registry-mirrors": [
     "https://hub-mirror.c.163.com",
     "https://mirror.baidubce.com"
   ]
 }
+EOF
 ```
 
 - 重新启动服务
@@ -59,13 +62,12 @@ docker info | grep -A 3 'Registry Mirrors:'
 ```sh
 sudo mkdir -p /etc/systemd/system/docker.service.d
 sudo touch /etc/systemd/system/docker.service.d/proxy.conf
-```
-
-```
+sudo tee /etc/systemd/system/docker.service.d/proxy.conf <<-'EOF'
 [Service]
 Environment="HTTP_PROXY=http://proxy.example.com:8080/"
 Environment="HTTPS_PROXY=http://proxy.example.com:8080/"
 Environment="NO_PROXY=localhost,127.0.0.1,.example.com"
+EOF
 ```
 
 - 重新启动服务
