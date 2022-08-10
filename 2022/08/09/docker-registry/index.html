@@ -49,7 +49,7 @@
 <meta itemprop="name" content="Ubuntu 下 Docker 设置 Registry">
 <meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-08-09T21:14:49+08:00" />
 <meta itemprop="dateModified" content="2022-08-09T21:14:49+08:00" />
-<meta itemprop="wordCount" content="400">
+<meta itemprop="wordCount" content="448">
 <meta itemprop="keywords" content="tips,docker," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Ubuntu 下 Docker 设置 Registry"/>
 <meta name="twitter:description" content=""/>
@@ -142,7 +142,7 @@
       <div class="post-meta">
         <span class="post-time"> 2022-08-09 </span>
         
-          <span class="more-meta"> 约 400 字 </span>
+          <span class="more-meta"> 约 448 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -217,15 +217,15 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo mkdir -p /etc/docker
-</span></span><span class="line"><span class="cl">sudo tee /etc/docker/daemon.json &lt;&lt;-&#39;EOF&#39;
-</span></span><span class="line"><span class="cl">{
-</span></span><span class="line"><span class="cl">  &#34;registry-mirrors&#34;: [
-</span></span><span class="line"><span class="cl">    &#34;https://hub-mirror.c.163.com&#34;,
-</span></span><span class="line"><span class="cl">    &#34;https://mirror.baidubce.com&#34;
-</span></span><span class="line"><span class="cl">  ]
-</span></span><span class="line"><span class="cl">}
-</span></span><span class="line"><span class="cl">EOF
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo mkdir -p /etc/docker
+</span></span><span class="line"><span class="cl">sudo tee /etc/docker/daemon.json <span class="s">&lt;&lt;-&#39;EOF&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s">{
+</span></span></span><span class="line"><span class="cl"><span class="s">  &#34;registry-mirrors&#34;: [
+</span></span></span><span class="line"><span class="cl"><span class="s">    &#34;https://hub-mirror.c.163.com&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="s">    &#34;https://mirror.baidubce.com&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">  ]
+</span></span></span><span class="line"><span class="cl"><span class="s">}
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
@@ -237,7 +237,7 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl daemon-reload
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo systemctl daemon-reload
 </span></span><span class="line"><span class="cl">sudo systemctl restart docker
 </span></span></code></pre></td></tr></table>
 </div>
@@ -256,8 +256,16 @@
 <li>速度限制</li>
 </ul>
 <p>目前找到的可用的公共 registry-mirror 一共有三个</p>
-<p><code>https://hub-mirror.c.163.com</code>, <code>https://mirror.baidubce.com</code>, <code>https://xxx.mirror.aliyuncs.com</code> (需要登录阿里云后获取)</p>
+<ul>
+<li><code>https://hub-mirror.c.163.com</code></li>
+<li><code>https://mirror.baidubce.com</code></li>
+<li><code>https://xxx.mirror.aliyuncs.com</code> (需要登录阿里云后获取)</li>
+</ul>
 <p>他们都存在限速，最高下载速度是每秒 500k 左右。</p>
+<ul>
+<li>镜像更新不及时</li>
+</ul>
+<p>有些较新的镜像，例如 <code>golang:1.19</code>， registry mirror 中并没有，最终还是会从 <code>registry-1.docker.io</code> 去拉取镜像</p>
 <h2 id="dockerd-使用-http-代理">dockerd 使用 http 代理</h2>
 <ul>
 <li>在执行 <code>docker pull</code> 的时候，拉取镜像的过程实际是由 dockerd 执行，因此，想要在访问 <code>docker.io</code> 时加上代理，就需要通过 <code>http_proxy</code> 环境变量为 dockerd 配置代理</li>
