@@ -49,7 +49,7 @@
 <meta itemprop="name" content="Ubuntu 下 Docker 设置 Registry">
 <meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-08-09T21:14:49+08:00" />
 <meta itemprop="dateModified" content="2022-08-09T21:14:49+08:00" />
-<meta itemprop="wordCount" content="341">
+<meta itemprop="wordCount" content="400">
 <meta itemprop="keywords" content="tips,docker," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Ubuntu 下 Docker 设置 Registry"/>
 <meta name="twitter:description" content=""/>
@@ -142,7 +142,7 @@
       <div class="post-meta">
         <span class="post-time"> 2022-08-09 </span>
         
-          <span class="more-meta"> 约 341 字 </span>
+          <span class="more-meta"> 约 400 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -181,7 +181,7 @@
 </li>
 </ul>
 </li>
-<li>鉴于很多厂商不再提供公共的 docker registry，提供服务的拉取镜像速度也很慢，建议使用第二种解决方案</li>
+<li>鉴于很多厂商不再提供公共的 docker registry，提供服务的也都对下载速度进行了限制，建议使用第二种解决方案</li>
 </ul>
 </blockquote>
 <hr>
@@ -252,7 +252,13 @@
 <pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker info | grep -A 3 &#39;Registry Mirrors:&#39;
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="dockerd-使用-http-代理">dockerd 使用 http 代理</h2>
+</div><ul>
+<li>速度限制</li>
+</ul>
+<p>目前找到的可用的公共 registry-mirror 一共有三个</p>
+<p><code>https://hub-mirror.c.163.com</code>, <code>https://mirror.baidubce.com</code>, <code>https://xxx.mirror.aliyuncs.com</code> (需要登录阿里云后获取)</p>
+<p>他们都存在限速，最高下载速度是每秒 500k 左右。</p>
+<h2 id="dockerd-使用-http-代理">dockerd 使用 http 代理</h2>
 <ul>
 <li>在执行 <code>docker pull</code> 的时候，拉取镜像的过程实际是由 dockerd 执行，因此，想要在访问 <code>docker.io</code> 时加上代理，就需要通过 <code>http_proxy</code> 环境变量为 dockerd 配置代理</li>
 <li>修改 systemd 配置，并写入代理配置</li>
