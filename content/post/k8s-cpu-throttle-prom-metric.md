@@ -14,7 +14,7 @@ comment: true
 <!--more-->
 ---
 
-## 观察容器 CPU THrottling 的指标
+## 观察容器 CPU Throttling 的指标
 
 k8s 中为每个 Pod 提供了限制 CPU 资源的选项，当 POD 使用的 CPU 资源超出设置的 limit 时，会发生 Throttling 的情况，即进程被分配的 CPU 时间片被夺走了。
 
