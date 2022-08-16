@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
 <link rel="canonical" href="/2016/11/09/python-string-encoding/" />
@@ -42,14 +42,17 @@
 <meta property="og:title" content="说说 Python2 中的字符串编码" />
 <meta property="og:description" content="摘要: Python2 中 Str 和 Unicode 分别存了什么 raw_unicode_escape 编码的作用 Python2 中的一个经典编码问题 Python2 中 Str 和 Unicode 分别存了什么 在 Python2 中，str 存储的是 ascii 编码的字节流，unicode 存储" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2016/11/09/python-string-encoding/" /><meta property="article:section" content="post" />
+<meta property="og:url" content="/2016/11/09/python-string-encoding/" />
 <meta property="article:published_time" content="2016-11-09T07:39:38+00:00" />
 <meta property="article:modified_time" content="2022-06-01T13:20:00+00:00" />
-
 <meta itemprop="name" content="说说 Python2 中的字符串编码">
-<meta itemprop="description" content="摘要: Python2 中 Str 和 Unicode 分别存了什么 raw_unicode_escape 编码的作用 Python2 中的一个经典编码问题 Python2 中 Str 和 Unicode 分别存了什么 在 Python2 中，str 存储的是 ascii 编码的字节流，unicode 存储"><meta itemprop="datePublished" content="2016-11-09T07:39:38+00:00" />
-<meta itemprop="dateModified" content="2022-06-01T13:20:00+00:00" />
+<meta itemprop="description" content="摘要: Python2 中 Str 和 Unicode 分别存了什么 raw_unicode_escape 编码的作用 Python2 中的一个经典编码问题 Python2 中 Str 和 Unicode 分别存了什么 在 Python2 中，str 存储的是 ascii 编码的字节流，unicode 存储">
+<meta itemprop="datePublished" content="2016-11-09T07:39:38&#43;00:00" />
+<meta itemprop="dateModified" content="2022-06-01T13:20:00&#43;00:00" />
 <meta itemprop="wordCount" content="1876">
+
+
+
 <meta itemprop="keywords" content="Python," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="说说 Python2 中的字符串编码"/>
 <meta name="twitter:description" content="摘要: Python2 中 Str 和 Unicode 分别存了什么 raw_unicode_escape 编码的作用 Python2 中的一个经典编码问题 Python2 中 Str 和 Unicode 分别存了什么 在 Python2 中，str 存储的是 ascii 编码的字节流，unicode 存储"/>
@@ -184,19 +187,19 @@
 <p>在 Python2 中，str 存储的是 ascii 编码的字节流，unicode 存储的是 Unicode 码点</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="s1">&#39;中&#39;</span>
-</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="s1">&#39;</span><span class="se">\xe4\xb8\xad</span><span class="s1">&#39;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;中&#39;</span>
-</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="se">\u4e2d</span><span class="s1">&#39;</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="s1">&#39;中&#39;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="s1">&#39;</span><span class="se">\xe4\xb8\xad</span><span class="s1">&#39;</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;中&#39;</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="se">\u4e2d</span><span class="s1">&#39;</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>例如上面的例子，我们分别输入了一个汉字 <code>中</code>，<code>str('中')</code> 显示的是 <code>\xe4\xb8\xad</code>，<code>unicode('中')</code> 显示的是 <code>\u4e2d</code>。</p>
 <p>当我们用 str 存储汉字，在终端中输入时，Python 会根据我们系统的编码(通过 <code>locale.getdefaultlocale()</code> 获取)，将其自动 encode 成 ascii 编码的字节流。</p>
@@ -207,7 +210,7 @@
 <p>下面的</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -229,46 +232,46 @@
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;👷&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;raw_unicode_escape&#39;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">U0001f477&#39;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">s1</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;👷&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;raw_unicode_escape&#39;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="mi">10</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="n">s2</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;中&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;raw_unicode_escape&#39;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="n">s2</span>
-</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">u4e2d&#39;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 注意 s2 的长度是6，它代表了6个字符，而不是一个码点</span>
-</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="mi">6</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 将 \u4e2d 字符串变成一个 unicode 码点</span>
-</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="s1">&#39;</span><span class="se">\u4e2d</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;raw_unicode_escape&#39;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="se">\u4e2d</span><span class="s1">&#39;</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;👷&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;raw_unicode_escape&#39;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">10</span><span class="p">]:</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">U0001f477&#39;</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">11</span><span class="p">]:</span> <span class="n">s1</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;👷&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;raw_unicode_escape&#39;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="nb">len</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">12</span><span class="p">]:</span> <span class="mi">10</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="n">s2</span> <span class="o">=</span> <span class="sa">u</span><span class="s1">&#39;中&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;raw_unicode_escape&#39;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="n">s2</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">u4e2d&#39;</span>
+
+<span class="c1"># 注意 s2 的长度是6，它代表了6个字符，而不是一个码点</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="mi">6</span>
+
+<span class="c1"># 将 \u4e2d 字符串变成一个 unicode 码点</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="s1">&#39;</span><span class="se">\u4e2d</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;raw_unicode_escape&#39;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;</span><span class="se">\u4e2d</span><span class="s1">&#39;</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>有时候我们想在正则表达式里面写入 unicode 码点，但是 <code>ur</code> 前缀已经在 python3 中废弃了，不建议使用，此时就可以用 <code>raw_unicode_escape</code> 将 str 解码成 unicode</p>
 <p>这是一个匹配所有中日韩字符的正则</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">18</span><span class="p">]:</span> <span class="sa">r</span><span class="s1">&#39;[\u4e00-\u9fff]+&#39;</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;raw_unicode_escape&#39;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">18</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;[</span><span class="se">\u4e00</span><span class="s1">-</span><span class="se">\u9fff</span><span class="s1">]+&#39;</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="n">In</span> <span class="p">[</span><span class="mi">18</span><span class="p">]:</span> <span class="sa">r</span><span class="s1">&#39;[\u4e00-\u9fff]+&#39;</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;raw_unicode_escape&#39;</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">18</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;[</span><span class="se">\u4e00</span><span class="s1">-</span><span class="se">\u9fff</span><span class="s1">]+&#39;</span>
+</code></pre></td></tr></table>
 </div>
 </div><p><strong>TODO</strong>: <code>raw_unicode_escape</code> 和 <code>unicode-escape</code> 这两种编码在 Python2 下的表现似乎是一样的，还没发现它们的区别</p>
 <h2 id="strencode-和-unicodedecode-发生了什么">str.encode 和 unicode.decode 发生了什么</h2>
 <p>正常来说，<code>str</code> 代表字节流，不应该有 <code>encode</code> 函数，<code>unicode</code> 代表文本，不应该有 <code>decode</code> 函数。但它们确实存在，而且表现还很迷惑。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -285,22 +288,22 @@
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">21</span><span class="p">]:</span> <span class="s1">&#39;中&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="o">---------------------------------------------------------------------------</span>
-</span></span><span class="line"><span class="cl"><span class="ne">UnicodeDecodeError</span>                        <span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">21</span><span class="o">-</span><span class="mf">811e7325</span><span class="n">d0d9</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="o">----&gt;</span> <span class="mi">1</span> <span class="s1">&#39;中&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="ne">UnicodeDecodeError</span><span class="p">:</span> <span class="s1">&#39;ascii&#39;</span> <span class="n">codec</span> <span class="n">can</span><span class="s1">&#39;t decode byte 0xe4 in position 0: ordinal not in range(128)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">22</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;中&#39;</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="o">---------------------------------------------------------------------------</span>
-</span></span><span class="line"><span class="cl"><span class="ne">UnicodeEncodeError</span>                        <span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">22</span><span class="o">-</span><span class="mi">2792</span><span class="n">f6c33b1d</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="o">----&gt;</span> <span class="mi">1</span> <span class="sa">u</span><span class="s1">&#39;中&#39;</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="ne">UnicodeEncodeError</span><span class="p">:</span> <span class="s1">&#39;ascii&#39;</span> <span class="n">codec</span> <span class="n">can</span><span class="s1">&#39;t encode character u&#39;</span>\<span class="n">u4e2d</span><span class="s1">&#39; in position 0: ordinal not in range(128)</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="n">In</span> <span class="p">[</span><span class="mi">21</span><span class="p">]:</span> <span class="s1">&#39;中&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+<span class="o">---------------------------------------------------------------------------</span>
+<span class="ne">UnicodeDecodeError</span>                        <span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">21</span><span class="o">-</span><span class="mf">811e7325</span><span class="n">d0d9</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="o">----&gt;</span> <span class="mi">1</span> <span class="s1">&#39;中&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+
+<span class="ne">UnicodeDecodeError</span><span class="p">:</span> <span class="s1">&#39;ascii&#39;</span> <span class="n">codec</span> <span class="n">can</span><span class="s1">&#39;t decode byte 0xe4 in position 0: ordinal not in range(128)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">22</span><span class="p">]:</span> <span class="sa">u</span><span class="s1">&#39;中&#39;</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+<span class="o">---------------------------------------------------------------------------</span>
+<span class="ne">UnicodeEncodeError</span>                        <span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">22</span><span class="o">-</span><span class="mi">2792</span><span class="n">f6c33b1d</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="o">----&gt;</span> <span class="mi">1</span> <span class="sa">u</span><span class="s1">&#39;中&#39;</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+
+<span class="ne">UnicodeEncodeError</span><span class="p">:</span> <span class="s1">&#39;ascii&#39;</span> <span class="n">codec</span> <span class="n">can</span><span class="s1">&#39;t encode character u&#39;</span>\<span class="n">u4e2d</span><span class="s1">&#39; in position 0: ordinal not in range(128)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>例如上面那段代码，<code>str</code> 调用 encode 函数会抛出 <code>UnicodeDecodeError</code> 异常，<code>unicode</code> 调用 decode 函数会抛出 <code>UnicodeEncodeError</code> 异常。我个人理解的原因是:</p>
 <blockquote>
@@ -312,13 +315,13 @@
 </blockquote>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="n">S</span><span class="o">.</span><span class="n">encode</span><span class="p">([</span><span class="n">encoding</span><span class="p">[,</span><span class="n">errors</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">object</span>
-</span></span><span class="line"><span class="cl"><span class="n">S</span><span class="o">.</span><span class="n">decode</span><span class="p">([</span><span class="n">encoding</span><span class="p">[,</span><span class="n">errors</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">object</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="n">S</span><span class="o">.</span><span class="n">encode</span><span class="p">([</span><span class="n">encoding</span><span class="p">[,</span><span class="n">errors</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">object</span>
+<span class="n">S</span><span class="o">.</span><span class="n">decode</span><span class="p">([</span><span class="n">encoding</span><span class="p">[,</span><span class="n">errors</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">object</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>上面是 <code>encode</code> 函数和 <code>decode</code>函数的签名，它们都有一个 <code>encoding</code> 参数，表示执行编解码操作时所用的编码。</p>
 <p>这个参数可以用 <code>sys.getdefaultencoding()</code> 可以获取到，Python2 中它默认是 <code>ascii</code>。</p>
@@ -328,7 +331,7 @@
 <p>接下来，我们来看一个写 Python2 的时候，经常出现的问题：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -337,38 +340,38 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="ch">#!/usr/bin/env python</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># -*- coding: utf-8 -*-</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">data</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;./file.txt&#34;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;./file.txt&#34;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>在这个例子中，我想向一个文件中写入一个 Unicode 字符串，但是却抛出了编码问题，</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="err">➜</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">encoding</span> <span class="err">$</span> <span class="n">python2</span> <span class="n">test</span><span class="o">.</span><span class="n">py</span>
-</span></span><span class="line"><span class="cl"><span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">  <span class="n">File</span> <span class="s2">&#34;test.py&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">7</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="ne">UnicodeEncodeError</span><span class="p">:</span> <span class="s1">&#39;ascii&#39;</span> <span class="n">codec</span> <span class="n">can</span><span class="s1">&#39;t encode characters in position 0-3: ordinal not in range(128)</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="err">➜</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">encoding</span> <span class="err">$</span> <span class="n">python2</span> <span class="n">test</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="s2">&#34;test.py&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">7</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="ne">UnicodeEncodeError</span><span class="p">:</span> <span class="s1">&#39;ascii&#39;</span> <span class="n">codec</span> <span class="n">can</span><span class="s1">&#39;t encode characters in position 0-3: ordinal not in range(128)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>这是因为 Python 写入文件时，调用 <code>unicode.encode</code> 将 unicode 转换成了 str，<code>unicode.encode</code> 的默认 <code>encodeing</code> 参数是 <code>ascii</code>，编码中文时就会失败了。</p>
 <h3 id="解决方案1-手动设置-encode-的编码参数">解决方案1: 手动设置 encode 的编码参数</h3>
 <p>这种方案就是我们在写入文件的时候，不让 Python 自动转换字符串类型，而是我们手动用 <code>utf-8</code> 将 <code>unicode</code> 编码成 <code>str</code> 字符串，代码如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -377,20 +380,20 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="ch">#!/usr/bin/env python</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># -*- coding: utf-8 -*-</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">data</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;./file.txt&#34;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;./file.txt&#34;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+</code></pre></td></tr></table>
 </div>
 </div><h3 id="解决方案2-更改-python-的默认编码参数">解决方案2: 更改 Python 的默认编码参数</h3>
 <p>这种方案，就是我们在程序的一开始，调用 <code>sys.setdefaultencoding('utf-8')</code>，将 encode 和 decode 函数的默认 <code>encoding</code> 参数设置为 utf-8</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -404,24 +407,24 @@
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="ch">#!/usr/bin/env python</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># -*- coding: utf-8 -*-</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 我愿意称这三行为 魔幻三行</span>
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
-</span></span><span class="line"><span class="cl"><span class="n">reload</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">sys</span><span class="o">.</span><span class="n">setdefaultencoding</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">data</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;./file.txt&#34;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># 我愿意称这三行为 魔幻三行</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="nb">reload</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">setdefaultencoding</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;./file.txt&#34;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>当然，更好的方法是将 Python 指定编码设置为系统默认语系的编码，如下所示：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -435,19 +438,19 @@
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="ch">#!/usr/bin/env python</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># -*- coding: utf-8 -*-</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">locale</span>
-</span></span><span class="line"><span class="cl"><span class="n">c</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">getdefaultlocale</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="n">reload</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="n">sys</span><span class="o">.</span><span class="n">setdefaultencoding</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">data</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;./file.txt&#34;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">locale</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">getdefaultlocale</span><span class="p">()</span>
+<span class="nb">reload</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">setdefaultencoding</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="sa">u</span><span class="s2">&#34;中国汉字&#34;</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&#34;./file.txt&#34;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -556,7 +559,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

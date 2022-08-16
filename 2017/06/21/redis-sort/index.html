@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
 <link rel="canonical" href="/2017/06/21/redis-sort/" />
@@ -45,16 +45,19 @@
 sort命令是Redis中最强大的命令之一，本文试图通过一些例子来总结Redis Sort的常用方法。
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2017/06/21/redis-sort/" /><meta property="article:section" content="post" />
+<meta property="og:url" content="/2017/06/21/redis-sort/" />
 <meta property="article:published_time" content="2017-06-21T13:29:08+00:00" />
 <meta property="article:modified_time" content="2017-06-21T13:29:08+00:00" />
-
 <meta itemprop="name" content="Redis Sort 命令简介">
 <meta itemprop="description" content="
 sort命令是Redis中最强大的命令之一，本文试图通过一些例子来总结Redis Sort的常用方法。
-"><meta itemprop="datePublished" content="2017-06-21T13:29:08+00:00" />
-<meta itemprop="dateModified" content="2017-06-21T13:29:08+00:00" />
+">
+<meta itemprop="datePublished" content="2017-06-21T13:29:08&#43;00:00" />
+<meta itemprop="dateModified" content="2017-06-21T13:29:08&#43;00:00" />
 <meta itemprop="wordCount" content="1189">
+
+
+
 <meta itemprop="keywords" content="Redis," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Redis Sort 命令简介"/>
 <meta name="twitter:description" content="
@@ -179,7 +182,7 @@ sort命令是Redis中最强大的命令之一，本文试图通过一些例子�
 <h2 id="对列表排序的简单例子">对列表排序的简单例子</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -190,22 +193,22 @@ sort命令是Redis中最强大的命令之一，本文试图通过一些例子�
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">127.0.0.1:6379&gt; RPUSH users <span class="m">3</span> <span class="m">4</span> <span class="m">5</span> <span class="m">1</span> <span class="m">33</span> <span class="m">8</span>
-</span></span><span class="line"><span class="cl"><span class="o">(</span>integer<span class="o">)</span> <span class="m">6</span>
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; SORT users
-</span></span><span class="line"><span class="cl">1<span class="o">)</span> <span class="s2">&#34;1&#34;</span>
-</span></span><span class="line"><span class="cl">2<span class="o">)</span> <span class="s2">&#34;3&#34;</span>
-</span></span><span class="line"><span class="cl">3<span class="o">)</span> <span class="s2">&#34;4&#34;</span>
-</span></span><span class="line"><span class="cl">4<span class="o">)</span> <span class="s2">&#34;5&#34;</span>
-</span></span><span class="line"><span class="cl">5<span class="o">)</span> <span class="s2">&#34;8&#34;</span>
-</span></span><span class="line"><span class="cl">6<span class="o">)</span> <span class="s2">&#34;33&#34;</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">127.0.0.1:6379&gt; RPUSH users <span class="m">3</span> <span class="m">4</span> <span class="m">5</span> <span class="m">1</span> <span class="m">33</span> <span class="m">8</span>
+<span class="o">(</span>integer<span class="o">)</span> <span class="m">6</span>
+127.0.0.1:6379&gt; SORT users
+1<span class="o">)</span> <span class="s2">&#34;1&#34;</span>
+2<span class="o">)</span> <span class="s2">&#34;3&#34;</span>
+3<span class="o">)</span> <span class="s2">&#34;4&#34;</span>
+4<span class="o">)</span> <span class="s2">&#34;5&#34;</span>
+5<span class="o">)</span> <span class="s2">&#34;8&#34;</span>
+6<span class="o">)</span> <span class="s2">&#34;33&#34;</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>在上面的例子中，我们对一系列的数字进行了排序，得到了排序后的结果。</p>
 <h2 id="列表排序的更高级的例子">列表排序的更高级的例子</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -214,14 +217,14 @@ sort命令是Redis中最强大的命令之一，本文试图通过一些例子�
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">127.0.0.1:6379&gt; RPUSH users <span class="m">3</span> <span class="m">4</span> <span class="m">5</span> <span class="m">1</span> <span class="m">33</span> <span class="m">8</span>
-</span></span><span class="line"><span class="cl"><span class="o">(</span>integer<span class="o">)</span> <span class="m">6</span>
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; SORT users limit <span class="m">1</span> <span class="m">4</span> asc alpha
-</span></span><span class="line"><span class="cl">1<span class="o">)</span> <span class="s2">&#34;3&#34;</span>
-</span></span><span class="line"><span class="cl">2<span class="o">)</span> <span class="s2">&#34;33&#34;</span>
-</span></span><span class="line"><span class="cl">3<span class="o">)</span> <span class="s2">&#34;4&#34;</span>
-</span></span><span class="line"><span class="cl">4<span class="o">)</span> <span class="s2">&#34;5&#34;</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash">127.0.0.1:6379&gt; RPUSH users <span class="m">3</span> <span class="m">4</span> <span class="m">5</span> <span class="m">1</span> <span class="m">33</span> <span class="m">8</span>
+<span class="o">(</span>integer<span class="o">)</span> <span class="m">6</span>
+127.0.0.1:6379&gt; SORT users limit <span class="m">1</span> <span class="m">4</span> asc alpha
+1<span class="o">)</span> <span class="s2">&#34;3&#34;</span>
+2<span class="o">)</span> <span class="s2">&#34;33&#34;</span>
+3<span class="o">)</span> <span class="s2">&#34;4&#34;</span>
+4<span class="o">)</span> <span class="s2">&#34;5&#34;</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>在上面的例子中，我们使用了三个参数，<code>limit</code>, <code>asc</code>和<code>alpha</code>。
 <code>limit</code>表示对结果进行分页，其中<code>1</code>表示页数，<code>4</code>表示一页中元素的个数。
@@ -230,7 +233,7 @@ sort命令是Redis中最强大的命令之一，本文试图通过一些例子�
 <h2 id="基于引用对象进行排序">基于引用对象进行排序</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -249,30 +252,30 @@ sort命令是Redis中最强大的命令之一，本文试图通过一些例子�
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 首先添加一组用户ID</span>
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; RPUSH users <span class="m">13</span> <span class="m">84</span> <span class="m">23</span> <span class="m">454</span>
-</span></span><span class="line"><span class="cl"><span class="o">(</span>integer<span class="o">)</span> <span class="m">4</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 然后添加一些user_age:id key用来表示用户的年龄</span>
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; <span class="nb">set</span> user_age:13 <span class="m">20</span>
-</span></span><span class="line"><span class="cl">OK
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; <span class="nb">set</span> user_age:84 <span class="m">23</span>
-</span></span><span class="line"><span class="cl">OK
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; <span class="nb">set</span> user_age:23 <span class="m">34</span>
-</span></span><span class="line"><span class="cl">OK
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; <span class="nb">set</span> user_age:454 <span class="m">11</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 使用sort命令基于用户年龄对用户进行排序</span>
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; sort users by user_age:* desc
-</span></span><span class="line"><span class="cl">1<span class="o">)</span> <span class="s2">&#34;23&#34;</span>
-</span></span><span class="line"><span class="cl">2<span class="o">)</span> <span class="s2">&#34;84&#34;</span>
-</span></span><span class="line"><span class="cl">3<span class="o">)</span> <span class="s2">&#34;13&#34;</span>
-</span></span><span class="line"><span class="cl">4<span class="o">)</span> <span class="s2">&#34;454&#34;</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 首先添加一组用户ID</span>
+127.0.0.1:6379&gt; RPUSH users <span class="m">13</span> <span class="m">84</span> <span class="m">23</span> <span class="m">454</span>
+<span class="o">(</span>integer<span class="o">)</span> <span class="m">4</span>
+<span class="c1"># 然后添加一些user_age:id key用来表示用户的年龄</span>
+127.0.0.1:6379&gt; <span class="nb">set</span> user_age:13 <span class="m">20</span>
+OK
+127.0.0.1:6379&gt; <span class="nb">set</span> user_age:84 <span class="m">23</span>
+OK
+127.0.0.1:6379&gt; <span class="nb">set</span> user_age:23 <span class="m">34</span>
+OK
+127.0.0.1:6379&gt; <span class="nb">set</span> user_age:454 <span class="m">11</span>
+<span class="c1"># 使用sort命令基于用户年龄对用户进行排序</span>
+127.0.0.1:6379&gt; sort users by user_age:* desc
+1<span class="o">)</span> <span class="s2">&#34;23&#34;</span>
+2<span class="o">)</span> <span class="s2">&#34;84&#34;</span>
+3<span class="o">)</span> <span class="s2">&#34;13&#34;</span>
+4<span class="o">)</span> <span class="s2">&#34;454&#34;</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>在上面的例子中，我们使用一些值<code>user_age:*</code>，来对列表进行排序。
 我们通过<code>sort</code>命令强大的<code>by</code>参数来设置排序的规则。<code>by</code>参数除了可以指定基于键值对数据进行排序外，也可以基于哈希对象进行排序，请看下面这个例子:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -298,31 +301,31 @@ sort命令是Redis中最强大的命令之一，本文试图通过一些例子�
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 添加一组用户ID</span>
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; RPUSH users <span class="m">13</span> <span class="m">84</span> <span class="m">23</span> <span class="m">454</span>
-</span></span><span class="line"><span class="cl"><span class="o">(</span>integer<span class="o">)</span> <span class="m">4</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 添加了一组哈希对象来表示用户</span>
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; hmset user:13 age <span class="m">20</span> name user_13
-</span></span><span class="line"><span class="cl">OK
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; hmset user:84 age <span class="m">23</span> name user_84
-</span></span><span class="line"><span class="cl">OK
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; hmset user:23 age <span class="m">34</span> name user_23
-</span></span><span class="line"><span class="cl">OK
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; hmset user:454 age <span class="m">11</span> name user_454
-</span></span><span class="line"><span class="cl">OK
-</span></span><span class="line"><span class="cl"><span class="c1"># 基于哈希对象的来对上面的例子进行排序</span>
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; sort users by user:*-&gt;age
-</span></span><span class="line"><span class="cl">1<span class="o">)</span> <span class="s2">&#34;454&#34;</span>
-</span></span><span class="line"><span class="cl">2<span class="o">)</span> <span class="s2">&#34;13&#34;</span>
-</span></span><span class="line"><span class="cl">3<span class="o">)</span> <span class="s2">&#34;84&#34;</span>
-</span></span><span class="line"><span class="cl">4<span class="o">)</span> <span class="s2">&#34;23&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 基于哈希对象的来对上面的例子进行排序，并获取用户名称</span>
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; sort users by user:*-&gt;age get user:*-&gt;name
-</span></span><span class="line"><span class="cl">1<span class="o">)</span> <span class="s2">&#34;user_454&#34;</span>
-</span></span><span class="line"><span class="cl">2<span class="o">)</span> <span class="s2">&#34;user_13&#34;</span>
-</span></span><span class="line"><span class="cl">3<span class="o">)</span> <span class="s2">&#34;user_84&#34;</span>
-</span></span><span class="line"><span class="cl">4<span class="o">)</span> <span class="s2">&#34;user_23&#34;</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 添加一组用户ID</span>
+127.0.0.1:6379&gt; RPUSH users <span class="m">13</span> <span class="m">84</span> <span class="m">23</span> <span class="m">454</span>
+<span class="o">(</span>integer<span class="o">)</span> <span class="m">4</span>
+<span class="c1"># 添加了一组哈希对象来表示用户</span>
+127.0.0.1:6379&gt; hmset user:13 age <span class="m">20</span> name user_13
+OK
+127.0.0.1:6379&gt; hmset user:84 age <span class="m">23</span> name user_84
+OK
+127.0.0.1:6379&gt; hmset user:23 age <span class="m">34</span> name user_23
+OK
+127.0.0.1:6379&gt; hmset user:454 age <span class="m">11</span> name user_454
+OK
+<span class="c1"># 基于哈希对象的来对上面的例子进行排序</span>
+127.0.0.1:6379&gt; sort users by user:*-&gt;age
+1<span class="o">)</span> <span class="s2">&#34;454&#34;</span>
+2<span class="o">)</span> <span class="s2">&#34;13&#34;</span>
+3<span class="o">)</span> <span class="s2">&#34;84&#34;</span>
+4<span class="o">)</span> <span class="s2">&#34;23&#34;</span>
+<span class="c1"># 基于哈希对象的来对上面的例子进行排序，并获取用户名称</span>
+127.0.0.1:6379&gt; sort users by user:*-&gt;age get user:*-&gt;name
+1<span class="o">)</span> <span class="s2">&#34;user_454&#34;</span>
+2<span class="o">)</span> <span class="s2">&#34;user_13&#34;</span>
+3<span class="o">)</span> <span class="s2">&#34;user_84&#34;</span>
+4<span class="o">)</span> <span class="s2">&#34;user_23&#34;</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>在这个例子中，<code>users</code>是一个列表用来表示用户ID，<code>user:*</code>为哈希对象用来表示用户。
 在第一个<code>sort</code>命令中，我们基于用户哈希对象的<code>age</code>字段来进行排序，得到的结果为排序过后的用户ID列表。
@@ -331,7 +334,7 @@ sort命令是Redis中最强大的命令之一，本文试图通过一些例子�
 <h2 id="存储查询结果">存储查询结果</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -350,24 +353,24 @@ sort命令是Redis中最强大的命令之一，本文试图通过一些例子�
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 添加一组用户ID</span>
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; RPUSH users <span class="m">13</span> <span class="m">84</span> <span class="m">23</span> <span class="m">454</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 添加一组key用来表示用户年龄</span>
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; <span class="nb">set</span> user_age:13 <span class="m">20</span>
-</span></span><span class="line"><span class="cl">OK
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; <span class="nb">set</span> user_age:84 <span class="m">23</span>
-</span></span><span class="line"><span class="cl">OK
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; <span class="nb">set</span> user_age:23 <span class="m">34</span>
-</span></span><span class="line"><span class="cl">OK
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; <span class="nb">set</span> user_age:454 <span class="m">11</span>
-</span></span><span class="line"><span class="cl">OK
-</span></span><span class="line"><span class="cl"><span class="c1"># 根据用户年龄对用户ID进行排序，并将排序结果存储在users_sort_result所代表的列表中</span>
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; SORT users by user_age:* desc store users_sort_result
-</span></span><span class="line"><span class="cl"><span class="o">(</span>integer<span class="o">)</span> <span class="m">4</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 为排序结果设置过期时间</span>
-</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; expire users_sort_result <span class="m">30</span>
-</span></span><span class="line"><span class="cl"><span class="o">(</span>integer<span class="o">)</span> <span class="m">1</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 添加一组用户ID</span>
+127.0.0.1:6379&gt; RPUSH users <span class="m">13</span> <span class="m">84</span> <span class="m">23</span> <span class="m">454</span>
+<span class="c1"># 添加一组key用来表示用户年龄</span>
+127.0.0.1:6379&gt; <span class="nb">set</span> user_age:13 <span class="m">20</span>
+OK
+127.0.0.1:6379&gt; <span class="nb">set</span> user_age:84 <span class="m">23</span>
+OK
+127.0.0.1:6379&gt; <span class="nb">set</span> user_age:23 <span class="m">34</span>
+OK
+127.0.0.1:6379&gt; <span class="nb">set</span> user_age:454 <span class="m">11</span>
+OK
+<span class="c1"># 根据用户年龄对用户ID进行排序，并将排序结果存储在users_sort_result所代表的列表中</span>
+127.0.0.1:6379&gt; SORT users by user_age:* desc store users_sort_result
+<span class="o">(</span>integer<span class="o">)</span> <span class="m">4</span>
+<span class="c1"># 为排序结果设置过期时间</span>
+127.0.0.1:6379&gt; expire users_sort_result <span class="m">30</span>
+<span class="o">(</span>integer<span class="o">)</span> <span class="m">1</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>在上面的例子中，我们根据用户年龄对用户ID进行了排序，同时为排序结果设置了一个过期时间，这样我们就可以将排序结果缓存起来了。
 然后每回获取排序结果的时候，我们可以先查缓存，如果缓存不存在的话，则进行排序。
@@ -478,7 +481,7 @@ sort命令是Redis中最强大的命令之一，本文试图通过一些例子�
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
 <link rel="canonical" href="/2022/08/09/stty/" />
@@ -42,14 +42,17 @@
 <meta property="og:title" content="Linux 中查看发送信号的快捷键" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2022/08/09/stty/" /><meta property="article:section" content="tips" />
+<meta property="og:url" content="/2022/08/09/stty/" />
 <meta property="article:published_time" content="2022-08-09T21:43:40+08:00" />
 <meta property="article:modified_time" content="2022-08-09T21:43:40+08:00" />
-
 <meta itemprop="name" content="Linux 中查看发送信号的快捷键">
-<meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-08-09T21:43:40+08:00" />
-<meta itemprop="dateModified" content="2022-08-09T21:43:40+08:00" />
+<meta itemprop="description" content="">
+<meta itemprop="datePublished" content="2022-08-09T21:43:40&#43;08:00" />
+<meta itemprop="dateModified" content="2022-08-09T21:43:40&#43;08:00" />
 <meta itemprop="wordCount" content="382">
+
+
+
 <meta itemprop="keywords" content="tips,go," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Linux 中查看发送信号的快捷键"/>
 <meta name="twitter:description" content=""/>
@@ -170,7 +173,7 @@
 <p>今天遇到的需求是想查一下 <code>Ctrl-C</code> 按键发送的系统信号 ( <a href="https://man7.org/linux/man-pages/man7/signal.7.html">man 7 signal</a> )，搜了一下发现 stty 是最方便的查询命令</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -184,19 +187,19 @@
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ø&gt; stty -a
-</span></span><span class="line"><span class="cl">speed <span class="m">38400</span> baud<span class="p">;</span> rows 68<span class="p">;</span> columns 128<span class="p">;</span> <span class="nv">line</span> <span class="o">=</span> 0<span class="p">;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">####################  我们主要关心这两行的内容</span>
-</span></span><span class="line"><span class="cl"><span class="nv">intr</span> <span class="o">=</span> ^C<span class="p">;</span> <span class="nv">quit</span> <span class="o">=</span> ^<span class="se">\;</span> <span class="nv">erase</span> <span class="o">=</span> ^?<span class="p">;</span> <span class="nb">kill</span> <span class="o">=</span> ^U<span class="p">;</span> <span class="nv">eof</span> <span class="o">=</span> ^D<span class="p">;</span> <span class="nv">eol</span> <span class="o">=</span> &lt;undef&gt;<span class="p">;</span> <span class="nv">eol2</span> <span class="o">=</span> &lt;undef&gt;<span class="p">;</span> <span class="nv">swtch</span> <span class="o">=</span> &lt;undef&gt;<span class="p">;</span> <span class="nv">start</span> <span class="o">=</span> ^Q<span class="p">;</span> <span class="nv">stop</span> <span class="o">=</span> ^S<span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="nv">susp</span> <span class="o">=</span> ^Z<span class="p">;</span> <span class="nv">rprnt</span> <span class="o">=</span> ^R<span class="p">;</span> <span class="nv">werase</span> <span class="o">=</span> ^W<span class="p">;</span> <span class="nv">lnext</span> <span class="o">=</span> ^V<span class="p">;</span> <span class="nv">discard</span> <span class="o">=</span> ^O<span class="p">;</span> <span class="nv">min</span> <span class="o">=</span> 1<span class="p">;</span> <span class="nb">time</span> <span class="o">=</span> 0<span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="c1">####################</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">-parenb -parodd -cmspar cs8 -hupcl -cstopb cread -clocal -crtscts
-</span></span><span class="line"><span class="cl">-ignbrk -brkint -ignpar -parmrk -inpck -istrip -inlcr -igncr icrnl -ixon -ixoff -iuclc -ixany -imaxbel -iutf8
-</span></span><span class="line"><span class="cl">opost -olcuc -ocrnl onlcr -onocr -onlret -ofill -ofdel nl0 cr0 tab0 bs0 vt0 ff0
-</span></span><span class="line"><span class="cl">isig icanon iexten <span class="nb">echo</span> echoe echok -echonl -noflsh -xcase -tostop -echoprt echoctl echoke -flusho -extproc
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; stty -a
+speed <span class="m">38400</span> baud<span class="p">;</span> rows 68<span class="p">;</span> columns 128<span class="p">;</span> <span class="nv">line</span> <span class="o">=</span> 0<span class="p">;</span>
+
+<span class="c1">####################  我们主要关心这两行的内容</span>
+<span class="nv">intr</span> <span class="o">=</span> ^C<span class="p">;</span> <span class="nv">quit</span> <span class="o">=</span> ^<span class="se">\;</span> <span class="nv">erase</span> <span class="o">=</span> ^?<span class="p">;</span> <span class="nb">kill</span> <span class="o">=</span> ^U<span class="p">;</span> <span class="nv">eof</span> <span class="o">=</span> ^D<span class="p">;</span> <span class="nv">eol</span> <span class="o">=</span> &lt;undef&gt;<span class="p">;</span> <span class="nv">eol2</span> <span class="o">=</span> &lt;undef&gt;<span class="p">;</span> <span class="nv">swtch</span> <span class="o">=</span> &lt;undef&gt;<span class="p">;</span> <span class="nv">start</span> <span class="o">=</span> ^Q<span class="p">;</span> <span class="nv">stop</span> <span class="o">=</span> ^S<span class="p">;</span>
+<span class="nv">susp</span> <span class="o">=</span> ^Z<span class="p">;</span> <span class="nv">rprnt</span> <span class="o">=</span> ^R<span class="p">;</span> <span class="nv">werase</span> <span class="o">=</span> ^W<span class="p">;</span> <span class="nv">lnext</span> <span class="o">=</span> ^V<span class="p">;</span> <span class="nv">discard</span> <span class="o">=</span> ^O<span class="p">;</span> <span class="nv">min</span> <span class="o">=</span> 1<span class="p">;</span> <span class="nb">time</span> <span class="o">=</span> 0<span class="p">;</span>
+<span class="c1">####################</span>
+
+-parenb -parodd -cmspar cs8 -hupcl -cstopb cread -clocal -crtscts
+-ignbrk -brkint -ignpar -parmrk -inpck -istrip -inlcr -igncr icrnl -ixon -ixoff -iuclc -ixany -imaxbel -iutf8
+opost -olcuc -ocrnl onlcr -onocr -onlret -ofill -ofdel nl0 cr0 tab0 bs0 vt0 ff0
+isig icanon iexten <span class="nb">echo</span> echoe echok -echonl -noflsh -xcase -tostop -echoprt echoctl echoke -flusho -extproc
+</code></pre></td></tr></table>
 </div>
 </div><p>stty 输出的解释如下:</p>
 <ul>
@@ -212,17 +215,17 @@
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">while true;do
-</span></span><span class="line"><span class="cl">    date;
-</span></span><span class="line"><span class="cl">    sleep 1
-</span></span><span class="line"><span class="cl">done
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">while true;do
+    date;
+    sleep 1
+done
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>(我用上面的代码测试 <code>^S</code> 和 <code>^Q</code>, 发现不生效)</li>
@@ -259,7 +262,11 @@
           <a href="/tags/go/">go</a>
           </div>
       <nav class="post-nav">
-        
+        <a class="prev" href="/2022/08/16/ls-tips.md/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">ls Tips</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
         <a class="next" href="/2022/08/09/docker-registry/">
             <span class="next-text nav-default">Ubuntu 下 Docker 设置 Registry</span>
             <span class="next-text nav-mobile">下一篇</span>
@@ -336,7 +343,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

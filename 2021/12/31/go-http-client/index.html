@@ -16,14 +16,14 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content=" 原文地址: https://medium.com/@nate510/don-t-use-go-s-default-http-client-4804cb19f779 " /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content="  原文地址: https://medium.com/@nate510/don-t-use-go-s-default-http-client-4804cb19f779  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
 <link rel="canonical" href="/2021/12/31/go-http-client/" />
@@ -46,18 +46,21 @@
 
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2021/12/31/go-http-client/" /><meta property="article:section" content="translate" />
+<meta property="og:url" content="/2021/12/31/go-http-client/" />
 <meta property="article:published_time" content="2021-12-31T11:01:25+08:00" />
 <meta property="article:modified_time" content="2021-12-31T11:01:25+08:00" />
-
 <meta itemprop="name" content="Review 《Don’t use Go’s default HTTP client (in production)》">
 <meta itemprop="description" content="
 
 原文地址: https://medium.com/@nate510/don-t-use-go-s-default-http-client-4804cb19f779
 
-"><meta itemprop="datePublished" content="2021-12-31T11:01:25+08:00" />
-<meta itemprop="dateModified" content="2021-12-31T11:01:25+08:00" />
+">
+<meta itemprop="datePublished" content="2021-12-31T11:01:25&#43;08:00" />
+<meta itemprop="dateModified" content="2021-12-31T11:01:25&#43;08:00" />
 <meta itemprop="wordCount" content="1561">
+
+
+
 <meta itemprop="keywords" content="翻译,Go,HTTP," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Review 《Don’t use Go’s default HTTP client (in production)》"/>
 <meta name="twitter:description" content="
@@ -194,19 +197,19 @@
 <p>假设你想通过漂亮的 JSON REST API与 <code>spacely-sprockets.com</code> 对话，并查看可用 <code>sprockets</code> 的列表。在 Go 语言中，你可以这样做:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 为了简洁省略了错误检查
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">var</span> <span class="nx">sprockets</span> <span class="nx">SprocketsResponse</span>
-</span></span><span class="line"><span class="cl"><span class="nx">response</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;spacely-sprockets.com/api/sprockets&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nx">buf</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">buf</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">sprockets</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 为了简洁省略了错误检查
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">sprockets</span> <span class="nx">SprocketsResponse</span>
+<span class="nx">response</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;spacely-sprockets.com/api/sprockets&#34;</span><span class="p">)</span>
+<span class="nx">buf</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
+<span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">buf</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">sprockets</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>编写你的代码（请有适当的错误处理），编译，然后运行。
 一切都很顺利。现在，你拿着你的API包，把它加入一个网络应用程序中。你的应用程序的一个页面通过调用 API 向用户显示 Spacely Sprockets 的库存列表。</p>
@@ -221,11 +224,11 @@
 当你使用 <code>http.Get(url)</code> 时，你正在使用 <code>http.DefaultClient</code> ，这是一个定义了客户端默认配置的包变量。它的声明是:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">DefaultClient</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">Client</span><span class="p">{}</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">DefaultClient</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">Client</span><span class="p">{}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>除此之外，<code>http.Client</code> 配置了一个超时时间用来熔断长期运行的连接。这个值的默认值是0，它被解释为 &ldquo;没有超时&rdquo;。
 这对软件包来说可能是一个合理的默认值，但它是一个讨厌的陷阱，也是我们的应用程序在上述例子中停止响应的原因。
@@ -235,7 +238,7 @@
 <p>这里有一个简单的代码演示了这个问题:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -253,62 +256,62 @@
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
-</span></span><span class="line"><span class="cl">  <span class="s">&#34;fmt&#34;</span>
-</span></span><span class="line"><span class="cl">  <span class="s">&#34;net/http&#34;</span>
-</span></span><span class="line"><span class="cl">  <span class="s">&#34;net/http/httptest&#34;</span>
-</span></span><span class="line"><span class="cl">  <span class="s">&#34;time&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">svr</span> <span class="o">:=</span> <span class="nx">httptest</span><span class="p">.</span><span class="nf">NewServer</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">HandlerFunc</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Hour</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}))</span>
-</span></span><span class="line"><span class="cl">  <span class="k">defer</span> <span class="nx">svr</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;making request&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">http</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">svr</span><span class="p">.</span><span class="nx">URL</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;finished request&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kn">import</span> <span class="p">(</span>
+  <span class="s">&#34;fmt&#34;</span>
+  <span class="s">&#34;net/http&#34;</span>
+  <span class="s">&#34;net/http/httptest&#34;</span>
+  <span class="s">&#34;time&#34;</span>
+<span class="p">)</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">svr</span> <span class="o">:=</span> <span class="nx">httptest</span><span class="p">.</span><span class="nf">NewServer</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">HandlerFunc</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Hour</span><span class="p">)</span>
+  <span class="p">}))</span>
+  <span class="k">defer</span> <span class="nx">svr</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+  <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;making request&#34;</span><span class="p">)</span>
+  <span class="nx">http</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">svr</span><span class="p">.</span><span class="nx">URL</span><span class="p">)</span>
+  <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;finished request&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>启动之后，这个程序会请求一个 sleep 1小时的接口。随后，这个程序也会阻塞一个小时，然后退出。</p>
 <h2 id="解决方案">解决方案</h2>
 <p>解决这个问题的方法是你的场景中定义一个带有合理超时的 <code>http.Client</code> 。下面是一个例子。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">netClient</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">Timeout</span><span class="p">:</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="nx">response</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">netClient</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">netClient</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{</span>
+  <span class="nx">Timeout</span><span class="p">:</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="nx">response</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">netClient</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>这为向 API 发出的请求设置了10秒的超时。如果服务器响应的时间超过了超时时间，Get()将返回错误。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="o">&amp;</span><span class="nx">httpError</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">err</span><span class="p">:</span>     <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#34; (Client.Timeout exceeded while awaiting headers)&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">timeout</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="o">&amp;</span><span class="nx">httpError</span><span class="p">{</span>
+  <span class="nx">err</span><span class="p">:</span>     <span class="nx">err</span><span class="p">.</span><span class="nf">Error</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#34; (Client.Timeout exceeded while awaiting headers)&#34;</span><span class="p">,</span>
+  <span class="nx">timeout</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>如果你需要对请求生命周期进行更精细的控制，你可以另外指定一个自定义的 <code>net.Transport</code> 和 <code>net.Dialer</code>。
 <code>Transport</code> 是一个客户端用来管理底层TCP连接的结构，它的 <code>Dialer</code> 是一个管理建立连接的结构。
 Go 的 net 包也有一个默认的 Transport 和 Dialer 。下面是一个使用自定义结构的例子。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -321,18 +324,18 @@ Go 的 net 包也有一个默认的 Transport 和 Dialer 。下面是一个使�
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">netTransport</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Transport</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">Dial</span><span class="p">:</span> <span class="p">(</span><span class="o">&amp;</span><span class="nx">net</span><span class="p">.</span><span class="nx">Dialer</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">Timeout</span><span class="p">:</span> <span class="mi">5</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}).</span><span class="nx">Dial</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">TLSHandshakeTimeout</span><span class="p">:</span> <span class="mi">5</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">netClient</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">Timeout</span><span class="p">:</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">Transport</span><span class="p">:</span> <span class="nx">netTransport</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="nx">response</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">netClient</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">netTransport</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Transport</span><span class="p">{</span>
+  <span class="nx">Dial</span><span class="p">:</span> <span class="p">(</span><span class="o">&amp;</span><span class="nx">net</span><span class="p">.</span><span class="nx">Dialer</span><span class="p">{</span>
+    <span class="nx">Timeout</span><span class="p">:</span> <span class="mi">5</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">,</span>
+  <span class="p">}).</span><span class="nx">Dial</span><span class="p">,</span>
+  <span class="nx">TLSHandshakeTimeout</span><span class="p">:</span> <span class="mi">5</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">netClient</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{</span>
+  <span class="nx">Timeout</span><span class="p">:</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="nx">Transport</span><span class="p">:</span> <span class="nx">netTransport</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="nx">response</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">netClient</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>这段代码将为 TCP 连接和 TLS 握手设置超时上限，还设置了一个端到端的请求超时。如果需要的话，你还可以使用其他配置选项，如 <code>keep-alive</code> 超时。</p>
 <h2 id="总结">总结</h2>
@@ -445,7 +448,7 @@ Go 的 net 包也有一个默认的 Transport 和 Dialer 。下面是一个使�
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

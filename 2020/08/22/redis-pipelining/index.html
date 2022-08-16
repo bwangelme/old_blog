@@ -16,14 +16,14 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content=" 原文地址: https://redis.io/topics/pipelining " /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content="  原文地址: https://redis.io/topics/pipelining  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.68.3 with theme even" />
 
 
 <link rel="canonical" href="/2020/08/22/redis-pipelining/" />
@@ -46,18 +46,21 @@
 
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2020/08/22/redis-pipelining/" /><meta property="article:section" content="translate" />
+<meta property="og:url" content="/2020/08/22/redis-pipelining/" />
 <meta property="article:published_time" content="2020-08-22T17:22:37+08:00" />
 <meta property="article:modified_time" content="2020-08-22T17:22:37+08:00" />
-
 <meta itemprop="name" content="Review 《Using pipelining to speedup Redis queries》">
 <meta itemprop="description" content="
 
 原文地址: https://redis.io/topics/pipelining
 
-"><meta itemprop="datePublished" content="2020-08-22T17:22:37+08:00" />
-<meta itemprop="dateModified" content="2020-08-22T17:22:37+08:00" />
+">
+<meta itemprop="datePublished" content="2020-08-22T17:22:37&#43;08:00" />
+<meta itemprop="dateModified" content="2020-08-22T17:22:37&#43;08:00" />
 <meta itemprop="wordCount" content="1256">
+
+
+
 <meta itemprop="keywords" content="翻译,Redis," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Review 《Using pipelining to speedup Redis queries》"/>
 <meta name="twitter:description" content="
@@ -205,15 +208,15 @@
 <p>在下面的例子中，我们向 Redis 服务器发送了两条 <code>INCR</code> 命令，它也 <strong>按顺序</strong> 返回了这两条命令的响应:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ø&gt; <span class="nb">printf</span> <span class="s2">&#34;INCR &#39;some_key&#39;\r\nINCR &#39;some_key&#39;\r\n&#34;</span> <span class="p">|</span> nc localhost <span class="m">6379</span>
-</span></span><span class="line"><span class="cl">:1 // 这是第一条命令的响应
-</span></span><span class="line"><span class="cl">:2 // 这是第二条命令的响应
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; <span class="nb">printf</span> <span class="s2">&#34;INCR &#39;some_key&#39;\r\nINCR &#39;some_key&#39;\r\n&#34;</span> <span class="p">|</span> nc localhost <span class="m">6379</span>
+:1 // 这是第一条命令的响应
+:2 // 这是第二条命令的响应
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="使用-pipelining-的注意事项">使用 Pipelining 的注意事项</h2>
 <p>当客户端使用 Pipelining 的方式发送多个命令过来时，Redis 服务器将会使用内存对响应进行排队(个人猜测对响应结果的排序也是在内存中进行的)。
@@ -223,7 +226,7 @@
 <p>下面是一个简单的压测程序(完整代码见 <a href="https://github.com/bwangelme/GoDemo/blob/7e0fc475f3a1766b61e09db45ae300638c57cb6a/redis_pipelining.go">GitHub</a>)，对比使用 Pipelining 和不使用 Pipelining 的执行时间:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -266,65 +269,65 @@
 </span><span class="lnt">41
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">PingWithPipelining</span><span class="p">(</span><span class="nx">rdb</span> <span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span><span class="p">,</span> <span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">rdb</span><span class="p">.</span><span class="nf">Pipelined</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">pipeliner</span> <span class="nx">redis</span><span class="p">.</span><span class="nx">Pipeliner</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">benchTimes</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">pipeliner</span><span class="p">.</span><span class="nf">Ping</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">		<span class="p">}</span>
-</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="kc">nil</span>
-</span></span><span class="line"><span class="cl">	<span class="p">})</span>
-</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">log</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%v\n&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">PingWithoutPipelining</span><span class="p">(</span><span class="nx">rdb</span> <span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span><span class="p">,</span> <span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">benchTimes</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">rdb</span><span class="p">.</span><span class="nf">Ping</span><span class="p">(</span><span class="nx">ctx</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">log</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%d: %v\n&#34;</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">		<span class="p">}</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">tt</span> <span class="o">:=</span> <span class="k">range</span> <span class="p">[]</span><span class="kd">struct</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Name</span>     <span class="kt">string</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Callback</span> <span class="nx">TestRedisFunc</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}{</span>
-</span></span><span class="line"><span class="cl">		<span class="p">{</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">Name</span><span class="p">:</span>     <span class="s">&#34;WithPipelining&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">Callback</span><span class="p">:</span> <span class="nx">PingWithPipelining</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">		<span class="p">},</span>
-</span></span><span class="line"><span class="cl">		<span class="p">{</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">Name</span><span class="p">:</span>     <span class="s">&#34;WithoutPipelining&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">Callback</span><span class="p">:</span> <span class="nx">PingWithoutPipelining</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">		<span class="p">},</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Start %v\n&#34;</span><span class="p">,</span> <span class="nx">tt</span><span class="p">.</span><span class="nx">Name</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">duration</span> <span class="o">:=</span> <span class="nf">Benchmark</span><span class="p">(</span><span class="nx">tt</span><span class="p">.</span><span class="nx">Callback</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%v Running %d times cost %v\n&#34;</span><span class="p">,</span> <span class="nx">tt</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span> <span class="nx">benchTimes</span><span class="p">,</span> <span class="nx">duration</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">PingWithPipelining</span><span class="p">(</span><span class="nx">rdb</span> <span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span><span class="p">,</span> <span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">rdb</span><span class="p">.</span><span class="nf">Pipelined</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">pipeliner</span> <span class="nx">redis</span><span class="p">.</span><span class="nx">Pipeliner</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">benchTimes</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+			<span class="nx">pipeliner</span><span class="p">.</span><span class="nf">Ping</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
+		<span class="p">}</span>
+		<span class="k">return</span> <span class="kc">nil</span>
+	<span class="p">})</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%v\n&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">PingWithoutPipelining</span><span class="p">(</span><span class="nx">rdb</span> <span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span><span class="p">,</span> <span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">benchTimes</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">rdb</span><span class="p">.</span><span class="nf">Ping</span><span class="p">(</span><span class="nx">ctx</span><span class="p">).</span><span class="nf">Result</span><span class="p">()</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">log</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%d: %v\n&#34;</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+
+	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">tt</span> <span class="o">:=</span> <span class="k">range</span> <span class="p">[]</span><span class="kd">struct</span> <span class="p">{</span>
+		<span class="nx">Name</span>     <span class="kt">string</span>
+		<span class="nx">Callback</span> <span class="nx">TestRedisFunc</span>
+	<span class="p">}{</span>
+		<span class="p">{</span>
+			<span class="nx">Name</span><span class="p">:</span>     <span class="s">&#34;WithPipelining&#34;</span><span class="p">,</span>
+			<span class="nx">Callback</span><span class="p">:</span> <span class="nx">PingWithPipelining</span><span class="p">,</span>
+		<span class="p">},</span>
+		<span class="p">{</span>
+			<span class="nx">Name</span><span class="p">:</span>     <span class="s">&#34;WithoutPipelining&#34;</span><span class="p">,</span>
+			<span class="nx">Callback</span><span class="p">:</span> <span class="nx">PingWithoutPipelining</span><span class="p">,</span>
+		<span class="p">},</span>
+	<span class="p">}</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Start %v\n&#34;</span><span class="p">,</span> <span class="nx">tt</span><span class="p">.</span><span class="nx">Name</span><span class="p">)</span>
+		<span class="nx">duration</span> <span class="o">:=</span> <span class="nf">Benchmark</span><span class="p">(</span><span class="nx">tt</span><span class="p">.</span><span class="nx">Callback</span><span class="p">)</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;%v Running %d times cost %v\n&#34;</span><span class="p">,</span> <span class="nx">tt</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span> <span class="nx">benchTimes</span><span class="p">,</span> <span class="nx">duration</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>程序的输出如下:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ø&gt; go run redis_pipelining.go
-</span></span><span class="line"><span class="cl">Start WithPipelining
-</span></span><span class="line"><span class="cl">WithPipelining Running <span class="m">10000</span> <span class="nb">times</span> cost 9.596085ms
-</span></span><span class="line"><span class="cl">Start WithoutPipelining
-</span></span><span class="line"><span class="cl">WithoutPipelining Running <span class="m">10000</span> <span class="nb">times</span> cost 263.630767ms
-</span></span></code></pre></td></tr></table>
+<pre class="chroma"><code class="language-sh" data-lang="sh">ø&gt; go run redis_pipelining.go
+Start WithPipelining
+WithPipelining Running <span class="m">10000</span> <span class="nb">times</span> cost 9.596085ms
+Start WithoutPipelining
+WithoutPipelining Running <span class="m">10000</span> <span class="nb">times</span> cost 263.630767ms
+</code></pre></td></tr></table>
 </div>
 </div><p>在我的电脑上(双核+8G)上，使用 Pipelining 的函数的执行时间比不使用 Pipelining 的函数低了两个数量级。</p>
 <h3 id="提升服务器的性能">提升服务器的性能</h3>
@@ -450,7 +453,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
