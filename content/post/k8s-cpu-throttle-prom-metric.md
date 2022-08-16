@@ -9,6 +9,8 @@ comment: true
 
 ---
 
+> 解释了一下观察 CPU Throttling 情况的指标
+
 <!--more-->
 ---
 
