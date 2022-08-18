@@ -61,6 +61,8 @@ kube_pod_labels{
 }
 ```
 
+`instance` label 表示 kube-state-metrics 的 IP 地址。
+
 ```
 rate(container_cpu_cfs_throttled_periods_total{pod="http-bin-867bc77ld45d", image=""}[5m])
     * on(pod) group_left(label_app, label_owner)
@@ -78,6 +80,9 @@ kube_pod_labels{namespace="default", pod="http-bin-867bc77ld45d"}
     ```
     Error executing query: found duplicate series for the match group {pod="http-bin-867bc77ld45d"} on the left hand-side of the operation: [{...}, {...}];many-to-many matching not allowed: matching labels must be unique on one side
     ```
+- 正常情况下，`kube_pod_label` 针对同一个 pod 只有一个，但是当 kube-state-metrics 重启的时候，由于 kube-state-metrics 的 IP 地址变了，`kube_pod_label` 就会出现 pod 相同，但是 `instance` 不同的指标。所以，最好还是要保证和 `kube_pod_labels` 相乘的指标针对同一个 pod 只有一个，否则当 kube-state-metrics 重启时，相乘的计算公式就会出现以下两种错误。
+    - many * many 的错误
+    - one * group_left() many 的错误
 
 为 cpu throttled 指标加上 pod label 后，我们再根据 k8s app sum 一下，就得到我们最终想要的结果了
 
