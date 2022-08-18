@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.101.0 with theme even" />
 
 
 <link rel="canonical" href="/2022/08/09/docker-registry/" />
@@ -42,17 +42,14 @@
 <meta property="og:title" content="Ubuntu 下 Docker 设置 Registry" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2022/08/09/docker-registry/" />
+<meta property="og:url" content="/2022/08/09/docker-registry/" /><meta property="article:section" content="tips" />
 <meta property="article:published_time" content="2022-08-09T21:14:49+08:00" />
 <meta property="article:modified_time" content="2022-08-09T21:14:49+08:00" />
+
 <meta itemprop="name" content="Ubuntu 下 Docker 设置 Registry">
-<meta itemprop="description" content="">
-<meta itemprop="datePublished" content="2022-08-09T21:14:49&#43;08:00" />
-<meta itemprop="dateModified" content="2022-08-09T21:14:49&#43;08:00" />
+<meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-08-09T21:14:49+08:00" />
+<meta itemprop="dateModified" content="2022-08-09T21:14:49+08:00" />
 <meta itemprop="wordCount" content="448">
-
-
-
 <meta itemprop="keywords" content="tips,docker," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Ubuntu 下 Docker 设置 Registry"/>
 <meta name="twitter:description" content=""/>
@@ -194,22 +191,22 @@
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">ø&gt; systemctl cat docker | grep Exec
-ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
-ExecReload=/bin/kill -s HUP $MAINPID
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ø&gt; systemctl cat docker | grep Exec
+</span></span><span class="line"><span class="cl">ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+</span></span><span class="line"><span class="cl">ExecReload=/bin/kill -s HUP $MAINPID
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>向 <code>/etc/docker/daemon.json</code> 写入以下内容</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -220,40 +217,40 @@ ExecReload=/bin/kill -s HUP $MAINPID
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">sudo mkdir -p /etc/docker
-sudo tee /etc/docker/daemon.json <span class="s">&lt;&lt;-&#39;EOF&#39;
-</span><span class="s">{
-</span><span class="s">  &#34;registry-mirrors&#34;: [
-</span><span class="s">    &#34;https://hub-mirror.c.163.com&#34;,
-</span><span class="s">    &#34;https://mirror.baidubce.com&#34;
-</span><span class="s">  ]
-</span><span class="s">}
-</span><span class="s">EOF</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo mkdir -p /etc/docker
+</span></span><span class="line"><span class="cl">sudo tee /etc/docker/daemon.json <span class="s">&lt;&lt;-&#39;EOF&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s">{
+</span></span></span><span class="line"><span class="cl"><span class="s">  &#34;registry-mirrors&#34;: [
+</span></span></span><span class="line"><span class="cl"><span class="s">    &#34;https://hub-mirror.c.163.com&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="s">    &#34;https://mirror.baidubce.com&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">  ]
+</span></span></span><span class="line"><span class="cl"><span class="s">}
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>重新启动服务</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">sudo systemctl daemon-reload
-sudo systemctl restart docker
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo systemctl daemon-reload
+</span></span><span class="line"><span class="cl">sudo systemctl restart docker
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>检查配置是否成功</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">docker info | grep -A 3 &#39;Registry Mirrors:&#39;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker info | grep -A 3 &#39;Registry Mirrors:&#39;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>速度限制</li>
@@ -276,7 +273,7 @@ sudo systemctl restart docker
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -286,39 +283,39 @@ sudo systemctl restart docker
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-sh" data-lang="sh">sudo mkdir -p /etc/systemd/system/docker.service.d
-sudo touch /etc/systemd/system/docker.service.d/proxy.conf
-sudo tee /etc/systemd/system/docker.service.d/proxy.conf <span class="s">&lt;&lt;-&#39;EOF&#39;
-</span><span class="s">[Service]
-</span><span class="s">Environment=&#34;HTTP_PROXY=http://proxy.example.com:8080/&#34;
-</span><span class="s">Environment=&#34;HTTPS_PROXY=http://proxy.example.com:8080/&#34;
-</span><span class="s">Environment=&#34;NO_PROXY=localhost,127.0.0.1,.example.com&#34;
-</span><span class="s">EOF</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo mkdir -p /etc/systemd/system/docker.service.d
+</span></span><span class="line"><span class="cl">sudo touch /etc/systemd/system/docker.service.d/proxy.conf
+</span></span><span class="line"><span class="cl">sudo tee /etc/systemd/system/docker.service.d/proxy.conf <span class="s">&lt;&lt;-&#39;EOF&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s">[Service]
+</span></span></span><span class="line"><span class="cl"><span class="s">Environment=&#34;HTTP_PROXY=http://proxy.example.com:8080/&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">Environment=&#34;HTTPS_PROXY=http://proxy.example.com:8080/&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">Environment=&#34;NO_PROXY=localhost,127.0.0.1,.example.com&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>重新启动服务</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">sudo systemctl daemon-reload
-sudo systemctl restart docker
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl daemon-reload
+</span></span><span class="line"><span class="cl">sudo systemctl restart docker
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>检查配置是否成功</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">docker info | grep -A 3 &#39;Proxy&#39;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker info | grep -A 3 &#39;Proxy&#39;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="参考链接">参考链接</h2>
 <ul>
@@ -432,7 +429,7 @@ sudo systemctl restart docker
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

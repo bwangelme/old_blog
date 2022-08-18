@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.101.0 with theme even" />
 
 
 <link rel="canonical" href="/2022/07/13/cluster-pods.md/" />
@@ -42,17 +42,14 @@
 <meta property="og:title" content="Cluster Pods" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2022/07/13/cluster-pods.md/" />
+<meta property="og:url" content="/2022/07/13/cluster-pods.md/" /><meta property="article:section" content="tips" />
 <meta property="article:published_time" content="2022-07-13T20:23:33+08:00" />
 <meta property="article:modified_time" content="2022-07-13T20:23:33+08:00" />
+
 <meta itemprop="name" content="Cluster Pods">
-<meta itemprop="description" content="">
-<meta itemprop="datePublished" content="2022-07-13T20:23:33&#43;08:00" />
-<meta itemprop="dateModified" content="2022-07-13T20:23:33&#43;08:00" />
+<meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-07-13T20:23:33+08:00" />
+<meta itemprop="dateModified" content="2022-07-13T20:23:33+08:00" />
 <meta itemprop="wordCount" content="108">
-
-
-
 <meta itemprop="keywords" content="tips,k8s,prom," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Cluster Pods"/>
 <meta name="twitter:description" content=""/>
@@ -174,11 +171,11 @@
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">sum(kube_pod_status_phase{phase=&#34;Running&#34;})
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sum(kube_pod_status_phase{phase=&#34;Running&#34;})
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>kube_pod_container_status_ready</code> 指标有 <code>namespace</code>, <code>cluster</code>, <code>phase</code> Label 可以对指标进行筛选，其他的看起来都是 prom 相关的</p>
 <p>phase 有五种: Pending|Running|Succeeded|Failed|Unknown</p>
@@ -187,22 +184,22 @@
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">sum(kube_pod_status_phase{phase=~&#34;Running|Succeeded&#34;})
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sum(kube_pod_status_phase{phase=~&#34;Running|Succeeded&#34;})
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>按 namespace 统计集群中运行 pod 的数量，并按逆序排序</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">sort_desc(sum(kube_pod_status_phase{phase=&#34;Running&#34;}) by (namespace))
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sort_desc(sum(kube_pod_status_phase{phase=&#34;Running&#34;}) by (namespace))
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="参考链接">参考链接</h2>
 <ul>
@@ -316,7 +313,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

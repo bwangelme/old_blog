@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.68.3 with theme even" />
+<meta name="generator" content="Hugo 0.101.0 with theme even" />
 
 
 <link rel="canonical" href="/2022/08/16/k8s-cpu-throttle-prom-metric/" />
@@ -45,19 +45,16 @@
 解释了一下观察 CPU Throttling 情况的指标
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2022/08/16/k8s-cpu-throttle-prom-metric/" />
+<meta property="og:url" content="/2022/08/16/k8s-cpu-throttle-prom-metric/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2022-08-16T23:14:25+08:00" />
 <meta property="article:modified_time" content="2022-08-16T23:14:25+08:00" />
+
 <meta itemprop="name" content="K8S 中观察 CPU Throttling 情况的指标">
 <meta itemprop="description" content="
 解释了一下观察 CPU Throttling 情况的指标
-">
-<meta itemprop="datePublished" content="2022-08-16T23:14:25&#43;08:00" />
-<meta itemprop="dateModified" content="2022-08-16T23:14:25&#43;08:00" />
-<meta itemprop="wordCount" content="891">
-
-
-
+"><meta itemprop="datePublished" content="2022-08-16T23:14:25+08:00" />
+<meta itemprop="dateModified" content="2022-08-16T23:14:25+08:00" />
+<meta itemprop="wordCount" content="1050">
 <meta itemprop="keywords" content="kubernetes,prom," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="K8S 中观察 CPU Throttling 情况的指标"/>
 <meta name="twitter:description" content="
@@ -152,8 +149,8 @@
       <div class="post-meta">
         <span class="post-time"> 2022-08-16 </span>
         
-          <span class="more-meta"> 约 891 字 </span>
-          <span class="more-meta"> 预计阅读 2 分钟 </span>
+          <span class="more-meta"> 约 1050 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
     </header>
@@ -226,7 +223,7 @@ $$</p>
 <p><code>kube_pod_label</code> 是 <a href="https://github.com/kubernetes/kube-state-metrics">kube-state-metrics</a> 提供的指标，它将 k8s label 转换成 prometheus 指标，每个 pod 上的 k8s label 都在 prom 指标中变成 <code>label_xx</code> 的形式。例如我们假设某个 pod 有 app 和 owner 两个 k8s label，那么它的 prom 指标如下</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -235,26 +232,27 @@ $$</p>
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">kube_pod_labels{
-    cluster=&#34;local&#34;, container=&#34;kube-state-metrics&#34;, endpoint=&#34;http&#34;,
-    instance=&#34;172.19.2.101:8080&#34;, job=&#34;kube-state-metrics&#34;, label_app=&#34;http-bin&#34;,
-    label_owner=&#34;xyd&#34;, namespace=&#34;default&#34;,
-    pod=&#34;http-bin-867bc77ld45d&#34;, prometheus=&#34;monitoring/kube-prom-kube-prometheus-prometheus&#34;,
-    uid=&#34;7b9c5473-1455-454d-b5a3-69f08dc99bb1&#34;
-}
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">kube_pod_labels{
+</span></span><span class="line"><span class="cl">    cluster=&#34;local&#34;, container=&#34;kube-state-metrics&#34;, endpoint=&#34;http&#34;,
+</span></span><span class="line"><span class="cl">    instance=&#34;172.19.2.101:8080&#34;, job=&#34;kube-state-metrics&#34;, label_app=&#34;http-bin&#34;,
+</span></span><span class="line"><span class="cl">    label_owner=&#34;xyd&#34;, namespace=&#34;default&#34;,
+</span></span><span class="line"><span class="cl">    pod=&#34;http-bin-867bc77ld45d&#34;, prometheus=&#34;monitoring/kube-prom-kube-prometheus-prometheus&#34;,
+</span></span><span class="line"><span class="cl">    uid=&#34;7b9c5473-1455-454d-b5a3-69f08dc99bb1&#34;
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
+</div><p><code>instance</code> label 表示 kube-state-metrics 的 IP 地址。</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">rate(container_cpu_cfs_throttled_periods_total{pod=&#34;http-bin-867bc77ld45d&#34;, image=&#34;&#34;}[5m])
-    * on(pod) group_left(label_app, label_owner)
-kube_pod_labels{namespace=&#34;default&#34;, pod=&#34;http-bin-867bc77ld45d&#34;}
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">rate(container_cpu_cfs_throttled_periods_total{pod=&#34;http-bin-867bc77ld45d&#34;, image=&#34;&#34;}[5m])
+</span></span><span class="line"><span class="cl">    * on(pod) group_left(label_app, label_owner)
+</span></span><span class="line"><span class="cl">kube_pod_labels{namespace=&#34;default&#34;, pod=&#34;http-bin-867bc77ld45d&#34;}
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>上面的计算公式中，</p>
 <ul>
@@ -268,18 +266,24 @@ kube_pod_labels{namespace=&#34;default&#34;, pod=&#34;http-bin-867bc77ld45d&#34;
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">Error executing query: found duplicate series for the match group {pod=&#34;http-bin-867bc77ld45d&#34;} on the left hand-side of the operation: [{...}, {...}];many-to-many matching not allowed: matching labels must be unique on one side
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Error executing query: found duplicate series for the match group {pod=&#34;http-bin-867bc77ld45d&#34;} on the left hand-side of the operation: [{...}, {...}];many-to-many matching not allowed: matching labels must be unique on one side
+</span></span></code></pre></td></tr></table>
 </div>
 </div></li>
+<li>正常情况下，<code>kube_pod_label</code> 针对同一个 pod 只有一个，但是当 kube-state-metrics 重启的时候，由于 kube-state-metrics 的 IP 地址变了，<code>kube_pod_label</code> 就会出现 pod 相同，但是 <code>instance</code> 不同的指标。所以，最好还是要保证和 <code>kube_pod_labels</code> 相乘的指标针对同一个 pod 只有一个，否则当 kube-state-metrics 重启时，相乘的计算公式就会出现以下两种错误。
+<ul>
+<li>many * many 的错误</li>
+<li>one * group_left() many 的错误</li>
+</ul>
+</li>
 </ul>
 <p>为 cpu throttled 指标加上 pod label 后，我们再根据 k8s app sum 一下，就得到我们最终想要的结果了</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -292,18 +296,18 @@ kube_pod_labels{namespace=&#34;default&#34;, pod=&#34;http-bin-867bc77ld45d&#34;
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">sum(
-    rate(container_cpu_cfs_throttled_periods_total{namespace=&#34;default&#34;, image=&#34;&#34;}[5m])
-        * on(pod) group_left(label_app, label_owner)
-    kube_pod_labels{namespace=&#34;default&#34;}
-) by (label_app, label_owner)
-  /
-sum(
-    rate(container_cpu_cfs_periods_total{namespace=&#34;default&#34;, image=&#34;&#34;}[5m])
-        * on(pod) group_left(label_app, label_owner)
-    kube_pod_labels{namespace=&#34;default&#34;}
-) by (label_app, label_owner)
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sum(
+</span></span><span class="line"><span class="cl">    rate(container_cpu_cfs_throttled_periods_total{namespace=&#34;default&#34;, image=&#34;&#34;}[5m])
+</span></span><span class="line"><span class="cl">        * on(pod) group_left(label_app, label_owner)
+</span></span><span class="line"><span class="cl">    kube_pod_labels{namespace=&#34;default&#34;}
+</span></span><span class="line"><span class="cl">) by (label_app, label_owner)
+</span></span><span class="line"><span class="cl">  /
+</span></span><span class="line"><span class="cl">sum(
+</span></span><span class="line"><span class="cl">    rate(container_cpu_cfs_periods_total{namespace=&#34;default&#34;, image=&#34;&#34;}[5m])
+</span></span><span class="line"><span class="cl">        * on(pod) group_left(label_app, label_owner)
+</span></span><span class="line"><span class="cl">    kube_pod_labels{namespace=&#34;default&#34;}
+</span></span><span class="line"><span class="cl">) by (label_app, label_owner)
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>上述指标按 <code>label_app</code> 和 <code>label_owner</code> 这两个维度，求和了一下符合筛选标签的所有 pod 的 CPU Throttling 时间片的百分比。</p>
     </div>
@@ -409,7 +413,7 @@ sum(
 
 
 
-<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
