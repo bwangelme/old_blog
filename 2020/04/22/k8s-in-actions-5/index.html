@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.2 with theme even" />
+<meta name="generator" content="Hugo 0.101.0 with theme even" />
 
 
 <link rel="canonical" href="/2020/04/22/k8s-in-actions-5/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -54,12 +54,23 @@
 服务：让客户端发现 Pod 并与之通信
 "><meta itemprop="datePublished" content="2020-04-22T21:44:44+08:00" />
 <meta itemprop="dateModified" content="2020-04-22T21:44:44+08:00" />
-<meta itemprop="wordCount" content="5490">
+<meta itemprop="wordCount" content="5516">
 <meta itemprop="keywords" content="kubernetes,杂记," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="《K8S in Actions》 第五章学习笔记"/>
 <meta name="twitter:description" content="
 服务：让客户端发现 Pod 并与之通信
 "/>
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -149,8 +160,8 @@
       <div class="post-meta">
         <span class="post-time"> 2020-04-22 </span>
         
-          <span class="more-meta"> 约 5490 字 </span>
-          <span class="more-meta"> 预计阅读 11 分钟 </span>
+          <span class="more-meta"> 约 5516 字 </span>
+          <span class="more-meta"> 预计阅读 12 分钟 </span>
         
       </div>
     </header>
@@ -233,25 +244,25 @@
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="c"># 会话亲和性，即相同的客户端IP访问同一个 Pod</span><span class="w">
-</span><span class="w">  </span><span class="nt">sessionAffinity</span><span class="p">:</span><span class="w"> </span><span class="l">ClientIP</span><span class="w">
-</span><span class="w">  </span><span class="c"># 指定服务转发的端口</span><span class="w">
-</span><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
-</span><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">http-default</span><span class="w">
-</span><span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="l">http-default</span><span class="w">
-</span><span class="w">    </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">90</span><span class="w">
-</span><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">http-mux1</span><span class="w">
-</span><span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="l">http-mux1</span><span class="w">
-</span><span class="w">  </span><span class="c"># 查找 Pod 的标签，注意 svc 不会自动创建 Pod，需要先通过 ReplicaSet 创建好 Pod</span><span class="w">
-</span><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">kubia</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 会话亲和性，即相同的客户端IP访问同一个 Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">sessionAffinity</span><span class="p">:</span><span class="w"> </span><span class="l">ClientIP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 指定服务转发的端口</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">http-default</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="l">http-default</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">90</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">http-mux1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="l">http-mux1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 查找 Pod 的标签，注意 svc 不会自动创建 Pod，需要先通过 ReplicaSet 创建好 Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">kubia</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -279,29 +290,29 @@
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建服务</span>
-ø&gt; kubectl create -f kubia-svc.yaml
-service/kuia created
-
-<span class="c1"># 查看我们刚刚创建的服务</span>
-ø&gt; kubectl get svc
-NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT<span class="o">(</span>S<span class="o">)</span>         AGE
-kubia        ClusterIP   10.66.13.240   &lt;none&gt;        80/TCP,90/TCP   8m48s
-
-<span class="c1"># 到某个 Pod 上执行 curl 命令，访问服务的集群内部端口</span>
-ø&gt; kubectl <span class="nb">exec</span> kubia-zhg6k -- curl -s 10.66.13.240:80
-You<span class="se">\&#39;</span>ve hit kubia-4bv25 on default mux
-ø&gt; kubectl <span class="nb">exec</span> kubia-zhg6k -- curl -s 10.66.13.240:90
-You<span class="se">\&#39;</span>ve hit kubia-7sd67 on mux1
-
-<span class="c1"># 注意，服务的IP是虚拟IP，是 ping 不通的</span>
-ø&gt; kubectl <span class="nb">exec</span> -it kubia-zhg6k bash
-root@kubia-zhg6k:/app# ping 10.66.13.240
-PING 10.66.13.240 <span class="o">(</span>10.66.13.240<span class="o">)</span> 56<span class="o">(</span>84<span class="o">)</span> bytes of data.
-^C
---- 10.66.13.240 ping statistics ---
-<span class="m">8</span> packets transmitted, <span class="m">0</span> received, 100% packet loss, <span class="nb">time</span> 205ms
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 创建服务</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl create -f kubia-svc.yaml
+</span></span><span class="line"><span class="cl">service/kuia created
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看我们刚刚创建的服务</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl get svc
+</span></span><span class="line"><span class="cl">NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT<span class="o">(</span>S<span class="o">)</span>         AGE
+</span></span><span class="line"><span class="cl">kubia        ClusterIP   10.66.13.240   &lt;none&gt;        80/TCP,90/TCP   8m48s
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 到某个 Pod 上执行 curl 命令，访问服务的集群内部端口</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl <span class="nb">exec</span> kubia-zhg6k -- curl -s 10.66.13.240:80
+</span></span><span class="line"><span class="cl">You<span class="se">\&#39;</span>ve hit kubia-4bv25 on default mux
+</span></span><span class="line"><span class="cl">ø&gt; kubectl <span class="nb">exec</span> kubia-zhg6k -- curl -s 10.66.13.240:90
+</span></span><span class="line"><span class="cl">You<span class="se">\&#39;</span>ve hit kubia-7sd67 on mux1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 注意，服务的IP是虚拟IP，是 ping 不通的</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl <span class="nb">exec</span> -it kubia-zhg6k bash
+</span></span><span class="line"><span class="cl">root@kubia-zhg6k:/app# ping 10.66.13.240
+</span></span><span class="line"><span class="cl">PING 10.66.13.240 <span class="o">(</span>10.66.13.240<span class="o">)</span> 56<span class="o">(</span>84<span class="o">)</span> bytes of data.
+</span></span><span class="line"><span class="cl">^C
+</span></span><span class="line"><span class="cl">--- 10.66.13.240 ping statistics ---
+</span></span><span class="line"><span class="cl"><span class="m">8</span> packets transmitted, <span class="m">0</span> received, 100% packet loss, <span class="nb">time</span> 205ms
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="通过环境变量发现服务">通过环境变量发现服务</h3>
 <p>在 Pod 开始运行的时候，K8S 会初始化一系列的环境变指向现在存在的服务。(故 Pod 要在服务之后创建才能够看到这些环境变量)</p>
@@ -340,38 +351,38 @@ PING 10.66.13.240 <span class="o">(</span>10.66.13.240<span class="o">)</span> 5
 </span><span class="lnt">31
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 当前集群中存在着两个服务</span>
-ø&gt; kubectl get svc
-NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT<span class="o">(</span>S<span class="o">)</span>         AGE
-kubernetes   ClusterIP   10.66.0.1      &lt;none&gt;        443/TCP         31d
-kubia        ClusterIP   10.66.13.240   &lt;none&gt;        80/TCP,90/TCP   9h
-
-ø&gt; kubectl <span class="nb">exec</span> kubia-zhg6k -- env
-<span class="c1"># KUBIA 服务的环境变量</span>
-<span class="nv">KUBIA_SERVICE_HOST</span><span class="o">=</span>10.66.13.240
-<span class="nv">KUBIA_SERVICE_PORT</span><span class="o">=</span><span class="m">80</span>
-<span class="nv">KUBIA_PORT_80_TCP_PROTO</span><span class="o">=</span>tcp
-<span class="nv">KUBIA_PORT_80_TCP_ADDR</span><span class="o">=</span>10.66.13.240
-<span class="nv">KUBIA_SERVICE_PORT_HTTP_DEFAULT</span><span class="o">=</span><span class="m">80</span>
-<span class="nv">KUBIA_PORT</span><span class="o">=</span>tcp://10.66.13.240:80
-<span class="nv">KUBIA_PORT_90_TCP</span><span class="o">=</span>tcp://10.66.13.240:90
-<span class="nv">KUBIA_PORT_90_TCP_PORT</span><span class="o">=</span><span class="m">90</span>
-<span class="nv">KUBIA_SERVICE_PORT_HTTP_MUX1</span><span class="o">=</span><span class="m">90</span>
-<span class="nv">KUBIA_PORT_80_TCP</span><span class="o">=</span>tcp://10.66.13.240:80
-<span class="nv">KUBIA_PORT_80_TCP_PORT</span><span class="o">=</span><span class="m">80</span>
-<span class="nv">KUBIA_PORT_90_TCP_PROTO</span><span class="o">=</span>tcp
-<span class="nv">KUBIA_PORT_90_TCP_ADDR</span><span class="o">=</span>10.66.13.240
-
-<span class="c1"># Kubernetes 服务的环境变量</span>
-<span class="nv">KUBERNETES_SERVICE_PORT_HTTPS</span><span class="o">=</span><span class="m">443</span>
-<span class="nv">KUBERNETES_SERVICE_HOST</span><span class="o">=</span>10.66.0.1
-<span class="nv">KUBERNETES_PORT_443_TCP</span><span class="o">=</span>tcp://10.66.0.1:443
-<span class="nv">KUBERNETES_PORT_443_TCP_ADDR</span><span class="o">=</span>10.66.0.1
-<span class="nv">KUBERNETES_SERVICE_PORT</span><span class="o">=</span><span class="m">443</span>
-<span class="nv">KUBERNETES_PORT</span><span class="o">=</span>tcp://10.66.0.1:443
-<span class="nv">KUBERNETES_PORT_443_TCP_PROTO</span><span class="o">=</span>tcp
-<span class="nv">KUBERNETES_PORT_443_TCP_PORT</span><span class="o">=</span><span class="m">443</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 当前集群中存在着两个服务</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl get svc
+</span></span><span class="line"><span class="cl">NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT<span class="o">(</span>S<span class="o">)</span>         AGE
+</span></span><span class="line"><span class="cl">kubernetes   ClusterIP   10.66.0.1      &lt;none&gt;        443/TCP         31d
+</span></span><span class="line"><span class="cl">kubia        ClusterIP   10.66.13.240   &lt;none&gt;        80/TCP,90/TCP   9h
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">ø&gt; kubectl <span class="nb">exec</span> kubia-zhg6k -- env
+</span></span><span class="line"><span class="cl"><span class="c1"># KUBIA 服务的环境变量</span>
+</span></span><span class="line"><span class="cl"><span class="nv">KUBIA_SERVICE_HOST</span><span class="o">=</span>10.66.13.240
+</span></span><span class="line"><span class="cl"><span class="nv">KUBIA_SERVICE_PORT</span><span class="o">=</span><span class="m">80</span>
+</span></span><span class="line"><span class="cl"><span class="nv">KUBIA_PORT_80_TCP_PROTO</span><span class="o">=</span>tcp
+</span></span><span class="line"><span class="cl"><span class="nv">KUBIA_PORT_80_TCP_ADDR</span><span class="o">=</span>10.66.13.240
+</span></span><span class="line"><span class="cl"><span class="nv">KUBIA_SERVICE_PORT_HTTP_DEFAULT</span><span class="o">=</span><span class="m">80</span>
+</span></span><span class="line"><span class="cl"><span class="nv">KUBIA_PORT</span><span class="o">=</span>tcp://10.66.13.240:80
+</span></span><span class="line"><span class="cl"><span class="nv">KUBIA_PORT_90_TCP</span><span class="o">=</span>tcp://10.66.13.240:90
+</span></span><span class="line"><span class="cl"><span class="nv">KUBIA_PORT_90_TCP_PORT</span><span class="o">=</span><span class="m">90</span>
+</span></span><span class="line"><span class="cl"><span class="nv">KUBIA_SERVICE_PORT_HTTP_MUX1</span><span class="o">=</span><span class="m">90</span>
+</span></span><span class="line"><span class="cl"><span class="nv">KUBIA_PORT_80_TCP</span><span class="o">=</span>tcp://10.66.13.240:80
+</span></span><span class="line"><span class="cl"><span class="nv">KUBIA_PORT_80_TCP_PORT</span><span class="o">=</span><span class="m">80</span>
+</span></span><span class="line"><span class="cl"><span class="nv">KUBIA_PORT_90_TCP_PROTO</span><span class="o">=</span>tcp
+</span></span><span class="line"><span class="cl"><span class="nv">KUBIA_PORT_90_TCP_ADDR</span><span class="o">=</span>10.66.13.240
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Kubernetes 服务的环境变量</span>
+</span></span><span class="line"><span class="cl"><span class="nv">KUBERNETES_SERVICE_PORT_HTTPS</span><span class="o">=</span><span class="m">443</span>
+</span></span><span class="line"><span class="cl"><span class="nv">KUBERNETES_SERVICE_HOST</span><span class="o">=</span>10.66.0.1
+</span></span><span class="line"><span class="cl"><span class="nv">KUBERNETES_PORT_443_TCP</span><span class="o">=</span>tcp://10.66.0.1:443
+</span></span><span class="line"><span class="cl"><span class="nv">KUBERNETES_PORT_443_TCP_ADDR</span><span class="o">=</span>10.66.0.1
+</span></span><span class="line"><span class="cl"><span class="nv">KUBERNETES_SERVICE_PORT</span><span class="o">=</span><span class="m">443</span>
+</span></span><span class="line"><span class="cl"><span class="nv">KUBERNETES_PORT</span><span class="o">=</span>tcp://10.66.0.1:443
+</span></span><span class="line"><span class="cl"><span class="nv">KUBERNETES_PORT_443_TCP_PROTO</span><span class="o">=</span>tcp
+</span></span><span class="line"><span class="cl"><span class="nv">KUBERNETES_PORT_443_TCP_PORT</span><span class="o">=</span><span class="m">443</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="通过-dns-发现服务">通过 DNS 发现服务</h3>
 <div class="highlight"><div class="chroma">
@@ -394,23 +405,23 @@ kubia        ClusterIP   10.66.13.240   &lt;none&gt;        80/TCP,90/TCP   9h
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 在 kube-system 命名空间中存在着提供 DNS 服务的 Pod</span>
-ø&gt; kcd kube-system
-Context <span class="s2">&#34;gke_braided-turbine-271114_asia-east1-c_demo&#34;</span> modified.
-ø&gt; kubectl get pod
-NAME                                             READY   STATUS    RESTARTS   AGE
-kube-dns-5f886bf8d8-ddzjb                        4/4     Running   <span class="m">0</span>          24d
-kube-dns-5f886bf8d8-pnrts                        4/4     Running   <span class="m">0</span>          26d
-kube-dns-autoscaler-8687c64fc-qknwj              1/1     Running   <span class="m">0</span>          24d
-...
-
-<span class="c1"># 所有 Pod 都默认使用了集群中的 DNS 服务器</span>
-ø&gt; kubectl <span class="nb">exec</span> -it kubia-zhg6k bash
-root@kubia-zhg6k:/app# cat /etc/resolv.conf
-nameserver 10.66.0.10
-search default.svc.cluster.local svc.cluster.local cluster.local asia-east1-c.c.braided-turbine-271114.internal c.braided-turbine-271114.internal google.internal
-options ndots:5
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 在 kube-system 命名空间中存在着提供 DNS 服务的 Pod</span>
+</span></span><span class="line"><span class="cl">ø&gt; kcd kube-system
+</span></span><span class="line"><span class="cl">Context <span class="s2">&#34;gke_braided-turbine-271114_asia-east1-c_demo&#34;</span> modified.
+</span></span><span class="line"><span class="cl">ø&gt; kubectl get pod
+</span></span><span class="line"><span class="cl">NAME                                             READY   STATUS    RESTARTS   AGE
+</span></span><span class="line"><span class="cl">kube-dns-5f886bf8d8-ddzjb                        4/4     Running   <span class="m">0</span>          24d
+</span></span><span class="line"><span class="cl">kube-dns-5f886bf8d8-pnrts                        4/4     Running   <span class="m">0</span>          26d
+</span></span><span class="line"><span class="cl">kube-dns-autoscaler-8687c64fc-qknwj              1/1     Running   <span class="m">0</span>          24d
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 所有 Pod 都默认使用了集群中的 DNS 服务器</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl <span class="nb">exec</span> -it kubia-zhg6k bash
+</span></span><span class="line"><span class="cl">root@kubia-zhg6k:/app# cat /etc/resolv.conf
+</span></span><span class="line"><span class="cl">nameserver 10.66.0.10
+</span></span><span class="line"><span class="cl">search default.svc.cluster.local svc.cluster.local cluster.local asia-east1-c.c.braided-turbine-271114.internal c.braided-turbine-271114.internal google.internal
+</span></span><span class="line"><span class="cl">options ndots:5
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>集群中的任何一个节点可以通过 全限定域名(FQDN) 来访问服务，它的格式如下:</p>
 <div class="highlight"><div class="chroma">
@@ -421,11 +432,11 @@ options ndots:5
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">kubia.default.svc.cluster.local
-<span class="o">{</span>服务名称<span class="o">}</span>.<span class="o">{</span>命名空间<span class="o">}</span>.<span class="o">{</span>集群域后缀<span class="o">}</span>
-
-<span class="c1"># 集群域后缀可以省略，命名空间是默认的话也可以省略</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">kubia.default.svc.cluster.local
+</span></span><span class="line"><span class="cl"><span class="o">{</span>服务名称<span class="o">}</span>.<span class="o">{</span>命名空间<span class="o">}</span>.<span class="o">{</span>集群域后缀<span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 集群域后缀可以省略，命名空间是默认的话也可以省略</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -438,14 +449,14 @@ options ndots:5
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 在任意一个节点上通过 FQDN 访问服务</span>
-root@kubia-zhg6k:/app# curl kubia.default.svc.cluster.local:<span class="nv">$KUBIA_SERVICE_PORT_HTTP_MUX1</span>
-You<span class="err">&#39;</span>ve hit kubia-4bv25 on mux1
-root@kubia-zhg6k:/app# curl kubia.default:<span class="nv">$KUBIA_SERVICE_PORT_HTTP_MUX1</span>
-You got it on mux1, 5.
-root@kubia-zhg6k:/app# curl kubia:<span class="nv">$KUBIA_SERVICE_PORT_HTTP_MUX1</span>
-You got it on mux1, 6.
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 在任意一个节点上通过 FQDN 访问服务</span>
+</span></span><span class="line"><span class="cl">root@kubia-zhg6k:/app# curl kubia.default.svc.cluster.local:<span class="nv">$KUBIA_SERVICE_PORT_HTTP_MUX1</span>
+</span></span><span class="line"><span class="cl">You<span class="err">&#39;</span>ve hit kubia-4bv25 on mux1
+</span></span><span class="line"><span class="cl">root@kubia-zhg6k:/app# curl kubia.default:<span class="nv">$KUBIA_SERVICE_PORT_HTTP_MUX1</span>
+</span></span><span class="line"><span class="cl">You got it on mux1, 5.
+</span></span><span class="line"><span class="cl">root@kubia-zhg6k:/app# curl kubia:<span class="nv">$KUBIA_SERVICE_PORT_HTTP_MUX1</span>
+</span></span><span class="line"><span class="cl">You got it on mux1, 6.
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="连接集群外部的服务">连接集群外部的服务</h2>
 <p>Endpoints 是一种介于服务和 Pod 之间的资源，它是一个存储服务的转发 IP 及端口的列表。它和对应的服务同名。</p>
@@ -493,47 +504,47 @@ You got it on mux1, 6.
 </span><span class="lnt">40
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 查看某个服务的 Endpoints 资源</span>
-ø&gt; kubectl describe svc kubia
-Name:              kubia
-Namespace:         default
-Labels:            &lt;none&gt;
-Annotations:       &lt;none&gt;
-Selector:          <span class="nv">app</span><span class="o">=</span>kubia
-Type:              ClusterIP
-IP:                10.66.13.240
-
-Port:              http-default  80/TCP
-TargetPort:        http-default/TCP
-Endpoints:         10.0.1.23:8080,10.0.2.13:8080,10.0.2.14:8080
-
-Port:              http-mux1  90/TCP
-TargetPort:        http-mux1/TCP
-Endpoints:         10.0.1.23:8090,10.0.2.13:8090,10.0.2.14:8090
-
-Session Affinity:  ClientIP
-Events:            &lt;none&gt;
-
-<span class="c1"># 查看 endpoints 的具体信息</span>
-ø&gt; kubectl get endpoints kubia
-NAME    ENDPOINTS                                                  AGE
-kubia   10.0.1.23:8080,10.0.2.13:8080,10.0.2.14:8080 + <span class="m">3</span> more...   2d
-ø&gt; kubectl describe endpoints kubia
-Name:         kubia
-Namespace:    default
-Labels:       &lt;none&gt;
-Annotations:  &lt;none&gt;
-Subsets:
-  Addresses:          10.0.1.23,10.0.2.13,10.0.2.14
-  NotReadyAddresses:  &lt;none&gt;
-  Ports:
-    Name          Port  Protocol
-    ----          ----  --------
-    http-default  <span class="m">8080</span>  TCP
-    http-mux1     <span class="m">8090</span>  TCP
-
-Events:  &lt;none&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 查看某个服务的 Endpoints 资源</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl describe svc kubia
+</span></span><span class="line"><span class="cl">Name:              kubia
+</span></span><span class="line"><span class="cl">Namespace:         default
+</span></span><span class="line"><span class="cl">Labels:            &lt;none&gt;
+</span></span><span class="line"><span class="cl">Annotations:       &lt;none&gt;
+</span></span><span class="line"><span class="cl">Selector:          <span class="nv">app</span><span class="o">=</span>kubia
+</span></span><span class="line"><span class="cl">Type:              ClusterIP
+</span></span><span class="line"><span class="cl">IP:                10.66.13.240
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Port:              http-default  80/TCP
+</span></span><span class="line"><span class="cl">TargetPort:        http-default/TCP
+</span></span><span class="line"><span class="cl">Endpoints:         10.0.1.23:8080,10.0.2.13:8080,10.0.2.14:8080
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Port:              http-mux1  90/TCP
+</span></span><span class="line"><span class="cl">TargetPort:        http-mux1/TCP
+</span></span><span class="line"><span class="cl">Endpoints:         10.0.1.23:8090,10.0.2.13:8090,10.0.2.14:8090
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Session Affinity:  ClientIP
+</span></span><span class="line"><span class="cl">Events:            &lt;none&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看 endpoints 的具体信息</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl get endpoints kubia
+</span></span><span class="line"><span class="cl">NAME    ENDPOINTS                                                  AGE
+</span></span><span class="line"><span class="cl">kubia   10.0.1.23:8080,10.0.2.13:8080,10.0.2.14:8080 + <span class="m">3</span> more...   2d
+</span></span><span class="line"><span class="cl">ø&gt; kubectl describe endpoints kubia
+</span></span><span class="line"><span class="cl">Name:         kubia
+</span></span><span class="line"><span class="cl">Namespace:    default
+</span></span><span class="line"><span class="cl">Labels:       &lt;none&gt;
+</span></span><span class="line"><span class="cl">Annotations:  &lt;none&gt;
+</span></span><span class="line"><span class="cl">Subsets:
+</span></span><span class="line"><span class="cl">  Addresses:          10.0.1.23,10.0.2.13,10.0.2.14
+</span></span><span class="line"><span class="cl">  NotReadyAddresses:  &lt;none&gt;
+</span></span><span class="line"><span class="cl">  Ports:
+</span></span><span class="line"><span class="cl">    Name          Port  Protocol
+</span></span><span class="line"><span class="cl">    ----          ----  --------
+</span></span><span class="line"><span class="cl">    http-default  <span class="m">8080</span>  TCP
+</span></span><span class="line"><span class="cl">    http-mux1     <span class="m">8090</span>  TCP
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Events:  &lt;none&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="创建一个重定向到外部地址的服务">创建一个重定向到外部地址的服务</h3>
 <ul>
@@ -551,15 +562,15 @@ Events:  &lt;none&gt;
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># 这个文件只创建了一个服务，但是没有定义选择器，也就没有创建对应的 Endpoint 资源</span><span class="w">
-</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">external-service</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># 这个文件只创建了一个服务，但是没有定义选择器，也就没有创建对应的 Endpoint 资源</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">external-service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>创建 external-service 的 Endpoints 资源，它指向了两个外部的 IP 地址</p>
 <ul>
@@ -580,18 +591,18 @@ Events:  &lt;none&gt;
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Endpoints</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="c"># 注意要和绑定的目标服务的名称相同</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">external-service</span><span class="w">
-</span><span class="w"></span><span class="nt">subsets</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="nt">addresses</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="nt">ip</span><span class="p">:</span><span class="w"> </span><span class="m">13.250.94.254</span><span class="w">
-</span><span class="w">    </span>- <span class="nt">ip</span><span class="p">:</span><span class="w"> </span><span class="m">13.229.188.59</span><span class="w">
-</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Endpoints</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 注意要和绑定的目标服务的名称相同</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">external-service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">subsets</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">addresses</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">ip</span><span class="p">:</span><span class="w"> </span><span class="m">13.250.94.254</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">ip</span><span class="p">:</span><span class="w"> </span><span class="m">13.229.188.59</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>测试:</p>
 <div class="highlight"><div class="chroma">
@@ -616,25 +627,25 @@ Events:  &lt;none&gt;
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 客户端访问 external-service 服务会重定向到外部服务上</span>
-ø&gt; kubectl <span class="nb">exec</span> -it kubia-zhg6k bash
-root@kubia-zhg6k:/app# curl -v 10.66.10.171
-* Expire in <span class="m">0</span> ms <span class="k">for</span> <span class="m">6</span> <span class="o">(</span>transfer 0x55b86f259f50<span class="o">)</span>
-*   Trying 10.66.10.171...
-* TCP_NODELAY <span class="nb">set</span>
-* Expire in <span class="m">200</span> ms <span class="k">for</span> <span class="m">4</span> <span class="o">(</span>transfer 0x55b86f259f50<span class="o">)</span>
-* Connected to 10.66.10.171 <span class="o">(</span>10.66.10.171<span class="o">)</span> port <span class="m">80</span> <span class="o">(</span><span class="c1">#0)</span>
-&gt; GET / HTTP/1.1
-&gt; Host: 10.66.10.171
-&gt; User-Agent: curl/7.64.0
-&gt; Accept: */*
-&gt;
-&lt; HTTP/1.1 <span class="m">301</span> Moved Permanently
-&lt; Content-length: <span class="m">0</span>
-&lt; Location: https://10.66.10.171/
-&lt;
-* Connection <span class="c1">#0 to host 10.66.10.171 left intact</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 客户端访问 external-service 服务会重定向到外部服务上</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl <span class="nb">exec</span> -it kubia-zhg6k bash
+</span></span><span class="line"><span class="cl">root@kubia-zhg6k:/app# curl -v 10.66.10.171
+</span></span><span class="line"><span class="cl">* Expire in <span class="m">0</span> ms <span class="k">for</span> <span class="m">6</span> <span class="o">(</span>transfer 0x55b86f259f50<span class="o">)</span>
+</span></span><span class="line"><span class="cl">*   Trying 10.66.10.171...
+</span></span><span class="line"><span class="cl">* TCP_NODELAY <span class="nb">set</span>
+</span></span><span class="line"><span class="cl">* Expire in <span class="m">200</span> ms <span class="k">for</span> <span class="m">4</span> <span class="o">(</span>transfer 0x55b86f259f50<span class="o">)</span>
+</span></span><span class="line"><span class="cl">* Connected to 10.66.10.171 <span class="o">(</span>10.66.10.171<span class="o">)</span> port <span class="m">80</span> <span class="o">(</span><span class="c1">#0)</span>
+</span></span><span class="line"><span class="cl">&gt; GET / HTTP/1.1
+</span></span><span class="line"><span class="cl">&gt; Host: 10.66.10.171
+</span></span><span class="line"><span class="cl">&gt; User-Agent: curl/7.64.0
+</span></span><span class="line"><span class="cl">&gt; Accept: */*
+</span></span><span class="line"><span class="cl">&gt;
+</span></span><span class="line"><span class="cl">&lt; HTTP/1.1 <span class="m">301</span> Moved Permanently
+</span></span><span class="line"><span class="cl">&lt; Content-length: <span class="m">0</span>
+</span></span><span class="line"><span class="cl">&lt; Location: https://10.66.10.171/
+</span></span><span class="line"><span class="cl">&lt;
+</span></span><span class="line"><span class="cl">* Connection <span class="c1">#0 to host 10.66.10.171 left intact</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="为外部服务创建别名">为外部服务创建别名</h3>
 <ul>
@@ -653,16 +664,16 @@ root@kubia-zhg6k:/app# curl -v 10.66.10.171
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">external-service-externalname</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">ExternalName </span><span class="w"> </span><span class="c"># 外部服务的别名服务需要制定类型为 ExternalName</span><span class="w">
-</span><span class="w">  </span><span class="nt">externalName</span><span class="p">:</span><span class="w"> </span><span class="l">httpbin.org</span><span class="w">
-</span><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">external-service-externalname</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">ExternalName </span><span class="w"> </span><span class="c"># 外部服务的别名服务需要制定类型为 ExternalName</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">externalName</span><span class="p">:</span><span class="w"> </span><span class="l">httpbin.org</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>测试:</p>
 <div class="highlight"><div class="chroma">
@@ -695,33 +706,33 @@ root@kubia-zhg6k:/app# curl -v 10.66.10.171
 </span><span class="lnt">26
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 在集群内部可以通过 FQDN 来访问该服务</span>
-ø&gt; kubectl <span class="nb">exec</span> -it kubia-zhg6k bash
-root@kubia-zhg6k:/app# curl external-service-externalname/get
-<span class="o">{</span>
-  <span class="s2">&#34;args&#34;</span>: <span class="o">{}</span>,
-  <span class="s2">&#34;headers&#34;</span>: <span class="o">{</span>
-    <span class="s2">&#34;Accept&#34;</span>: <span class="s2">&#34;*/*&#34;</span>,
-    <span class="s2">&#34;Host&#34;</span>: <span class="s2">&#34;external-service-externalname&#34;</span>,
-    <span class="s2">&#34;User-Agent&#34;</span>: <span class="s2">&#34;curl/7.64.0&#34;</span>,
-    <span class="s2">&#34;X-Amzn-Trace-Id&#34;</span>: <span class="s2">&#34;Root=1-5ea85513-abbb4098869550459c9a0934&#34;</span>
-  <span class="o">}</span>,
-  <span class="s2">&#34;origin&#34;</span>: <span class="s2">&#34;35.229.134.91&#34;</span>,
-  <span class="s2">&#34;url&#34;</span>: <span class="s2">&#34;http://external-service-externalname/get&#34;</span>
-<span class="o">}</span>
-root@kubia-zhg6k:/app# curl external-service-externalname.default.svc.cluster.local/get
-<span class="o">{</span>
-  <span class="s2">&#34;args&#34;</span>: <span class="o">{}</span>,
-  <span class="s2">&#34;headers&#34;</span>: <span class="o">{</span>
-    <span class="s2">&#34;Accept&#34;</span>: <span class="s2">&#34;*/*&#34;</span>,
-    <span class="s2">&#34;Host&#34;</span>: <span class="s2">&#34;external-service-externalname.default.svc.cluster.local&#34;</span>,
-    <span class="s2">&#34;User-Agent&#34;</span>: <span class="s2">&#34;curl/7.64.0&#34;</span>,
-    <span class="s2">&#34;X-Amzn-Trace-Id&#34;</span>: <span class="s2">&#34;Root=1-5ea8551c-a7ebbeae3b50c9b6c66240c9&#34;</span>
-  <span class="o">}</span>,
-  <span class="s2">&#34;origin&#34;</span>: <span class="s2">&#34;35.229.134.91&#34;</span>,
-  <span class="s2">&#34;url&#34;</span>: <span class="s2">&#34;http://external-service-externalname.default.svc.cluster.local/get&#34;</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 在集群内部可以通过 FQDN 来访问该服务</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl <span class="nb">exec</span> -it kubia-zhg6k bash
+</span></span><span class="line"><span class="cl">root@kubia-zhg6k:/app# curl external-service-externalname/get
+</span></span><span class="line"><span class="cl"><span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;args&#34;</span>: <span class="o">{}</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;headers&#34;</span>: <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;Accept&#34;</span>: <span class="s2">&#34;*/*&#34;</span>,
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;Host&#34;</span>: <span class="s2">&#34;external-service-externalname&#34;</span>,
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;User-Agent&#34;</span>: <span class="s2">&#34;curl/7.64.0&#34;</span>,
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;X-Amzn-Trace-Id&#34;</span>: <span class="s2">&#34;Root=1-5ea85513-abbb4098869550459c9a0934&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">}</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;origin&#34;</span>: <span class="s2">&#34;35.229.134.91&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;url&#34;</span>: <span class="s2">&#34;http://external-service-externalname/get&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">root@kubia-zhg6k:/app# curl external-service-externalname.default.svc.cluster.local/get
+</span></span><span class="line"><span class="cl"><span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;args&#34;</span>: <span class="o">{}</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;headers&#34;</span>: <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;Accept&#34;</span>: <span class="s2">&#34;*/*&#34;</span>,
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;Host&#34;</span>: <span class="s2">&#34;external-service-externalname.default.svc.cluster.local&#34;</span>,
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;User-Agent&#34;</span>: <span class="s2">&#34;curl/7.64.0&#34;</span>,
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;X-Amzn-Trace-Id&#34;</span>: <span class="s2">&#34;Root=1-5ea8551c-a7ebbeae3b50c9b6c66240c9&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">}</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;origin&#34;</span>: <span class="s2">&#34;35.229.134.91&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;url&#34;</span>: <span class="s2">&#34;http://external-service-externalname.default.svc.cluster.local/get&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>ExternalName</code> 服务仅在 DNS 级别实施，它仅为服务创建了简单的 CNAME DNS 记录。因此链接到该服务的客户端将直接连接到外部服务，完全绕过服务代理。出于这个原因，<code>ExternalName</code> 类型的服务甚至不会获得集群 IP。</p>
 <h2 id="将服务暴露给外部客户端">将服务暴露给外部客户端</h2>
@@ -738,13 +749,13 @@ root@kubia-zhg6k:/app# curl external-service-externalname.default.svc.cluster.lo
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 配置 GCK 的防火墙规则，允许外部网络访问 30123 端口</span>
-ø&gt; gcloud compute firewall-rules create kubia-svc-rule --allow<span class="o">=</span>tcp:30123
-Creating firewall...⠧Created <span class="o">[</span>https://www.googleapis.com/compute/v1/projects/braided-turbine-271114/global/firewalls/kubia-svc-rule<span class="o">]</span>.
-Creating firewall...done.
-NAME            NETWORK  DIRECTION  PRIORITY  ALLOW      DENY  DISABLED
-kubia-svc-rule  default  INGRESS    <span class="m">1000</span>      tcp:30123        False
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 配置 GCK 的防火墙规则，允许外部网络访问 30123 端口</span>
+</span></span><span class="line"><span class="cl">ø&gt; gcloud compute firewall-rules create kubia-svc-rule --allow<span class="o">=</span>tcp:30123
+</span></span><span class="line"><span class="cl">Creating firewall...⠧Created <span class="o">[</span>https://www.googleapis.com/compute/v1/projects/braided-turbine-271114/global/firewalls/kubia-svc-rule<span class="o">]</span>.
+</span></span><span class="line"><span class="cl">Creating firewall...done.
+</span></span><span class="line"><span class="cl">NAME            NETWORK  DIRECTION  PRIORITY  ALLOW      DENY  DISABLED
+</span></span><span class="line"><span class="cl">kubia-svc-rule  default  INGRESS    <span class="m">1000</span>      tcp:30123        False
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>kubia-svc-nodeport.yaml</li>
@@ -765,19 +776,19 @@ kubia-svc-rule  default  INGRESS    <span class="m">1000</span>      tcp:30123  
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-nodeport</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">NodePort</span><span class="w">
-</span><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w"> </span><span class="c"># 通过集群内部IP访问的端口</span><span class="w">
-</span><span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">  </span><span class="c"># 转发的背后 Pod 服务的端口</span><span class="w">
-</span><span class="w">      </span><span class="nt">nodePort</span><span class="p">:</span><span class="w"> </span><span class="m">30123</span><span class="w"> </span><span class="c"># 集群节点可访问的端口</span><span class="w">
-</span><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">kubia</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-nodeport</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">NodePort</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w"> </span><span class="c"># 通过集群内部IP访问的端口</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">  </span><span class="c"># 转发的背后 Pod 服务的端口</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">nodePort</span><span class="p">:</span><span class="w"> </span><span class="m">30123</span><span class="w"> </span><span class="c"># 集群节点可访问的端口</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">kubia</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -804,28 +815,28 @@ kubia-svc-rule  default  INGRESS    <span class="m">1000</span>      tcp:30123  
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 NodePort 服务</span>
-ø&gt; kubectl create -f kubia-svc-nodeport.yaml
-service/kubia-nodeport created
-ø&gt; kubectl get svc kubia-nodeport
-NAME             TYPE       CLUSTER-IP   EXTERNAL-IP   PORT<span class="o">(</span>S<span class="o">)</span>        AGE
-kubia-nodeport   NodePort   10.66.5.6    &lt;none&gt;        80:30123/TCP   9m39s
-
-<span class="c1"># 获得所有节点的 IP 地址</span>
-ø&gt; kubectl get nodes -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.items[*].status.addresses[?(@.type==&#34;ExternalIP&#34;)].address}&#39;</span> <span class="p">|</span> tr <span class="s1">&#39; &#39;</span> <span class="s1">&#39;\n&#39;</span>
-35.234.11.33
-35.234.27.130
-35.229.134.91
-
-<span class="c1"># 通过节点访问 NodePort 服务</span>
-ø&gt; curl 35.229.134.91:30123
-You got it on default mux, 9.
-
-<span class="c1"># 通过集群内部IP访问 NodePort 服务</span>
-ø&gt; kubectl <span class="nb">exec</span> -it kubia-zhg6k bash
-root@kubia-zhg6k:/app# curl 10.66.5.6:80
-You got it on default mux, 10.
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 创建 NodePort 服务</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl create -f kubia-svc-nodeport.yaml
+</span></span><span class="line"><span class="cl">service/kubia-nodeport created
+</span></span><span class="line"><span class="cl">ø&gt; kubectl get svc kubia-nodeport
+</span></span><span class="line"><span class="cl">NAME             TYPE       CLUSTER-IP   EXTERNAL-IP   PORT<span class="o">(</span>S<span class="o">)</span>        AGE
+</span></span><span class="line"><span class="cl">kubia-nodeport   NodePort   10.66.5.6    &lt;none&gt;        80:30123/TCP   9m39s
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 获得所有节点的 IP 地址</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl get nodes -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.items[*].status.addresses[?(@.type==&#34;ExternalIP&#34;)].address}&#39;</span> <span class="p">|</span> tr <span class="s1">&#39; &#39;</span> <span class="s1">&#39;\n&#39;</span>
+</span></span><span class="line"><span class="cl">35.234.11.33
+</span></span><span class="line"><span class="cl">35.234.27.130
+</span></span><span class="line"><span class="cl">35.229.134.91
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 通过节点访问 NodePort 服务</span>
+</span></span><span class="line"><span class="cl">ø&gt; curl 35.229.134.91:30123
+</span></span><span class="line"><span class="cl">You got it on default mux, 9.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 通过集群内部IP访问 NodePort 服务</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl <span class="nb">exec</span> -it kubia-zhg6k bash
+</span></span><span class="line"><span class="cl">root@kubia-zhg6k:/app# curl 10.66.5.6:80
+</span></span><span class="line"><span class="cl">You got it on default mux, 10.
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li><a href="https://kubernetes.io/zh/docs/reference/kubectl/jsonpath/">JSON Path 的文档</a></li>
@@ -852,18 +863,18 @@ You got it on default mux, 10.
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-loadbalancer</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">LoadBalancer</span><span class="w">
-</span><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
-</span><span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
-</span><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">kubia</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-loadbalancer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">LoadBalancer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">kubia</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -918,56 +929,56 @@ You got it on default mux, 10.
 </span><span class="lnt">49
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 loadbalancer 服务</span>
-ø&gt; kubectl create -f kubia-svc-loadbalancer.yaml
-service/kubia-loadbalancer created
-
-<span class="c1"># 查看创建的 lb 服务，External-IP 要等一会才会出现</span>
-ø&gt; kubectl get svc kubia-loadbalancer
-NAME                 TYPE           CLUSTER-IP    EXTERNAL-IP     PORT<span class="o">(</span>S<span class="o">)</span>        AGE
-kubia-loadbalancer   LoadBalancer   10.66.4.173   35.221.253.22   80:32179/TCP   47s
-<span class="c1"># External-IP 可以访问</span>
-ø&gt; ping 35.221.253.22
-PING 35.221.253.22 <span class="o">(</span>35.221.253.22<span class="o">)</span>: <span class="m">56</span> data bytes
-<span class="m">64</span> bytes from 35.221.253.22: <span class="nv">icmp_seq</span><span class="o">=</span><span class="m">0</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">102</span> <span class="nv">time</span><span class="o">=</span>166.876 ms
-<span class="m">64</span> bytes from 35.221.253.22: <span class="nv">icmp_seq</span><span class="o">=</span><span class="m">1</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">102</span> <span class="nv">time</span><span class="o">=</span>173.021 ms
-^C
---- 35.221.253.22 ping statistics ---
-<span class="m">2</span> packets transmitted, <span class="m">2</span> packets received, 0.0% packet loss
-round-trip min/avg/max/stddev <span class="o">=</span> 166.876/169.948/173.021/3.072 ms
-
-<span class="c1"># 访问 External-IP 的 80 端口</span>
-ø&gt; http 35.221.253.22
-HTTP/1.1 <span class="m">200</span> OK
-Content-Length: <span class="m">38</span>
-Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
-Date: Mon, <span class="m">20</span> Jul <span class="m">2020</span> 23:30:33 GMT
-
-You<span class="se">\&#39;</span>ve hit kubia-6wjvz on default mux
-
-<span class="c1"># 查看负载均衡器的信息</span>
-ø&gt; kubectl describe svc kubia-loadbalancer
-Name:                     kubia-loadbalancer
-Namespace:                default
-Labels:                   &lt;none&gt;
-Annotations:              &lt;none&gt;
-Selector:                 <span class="nv">app</span><span class="o">=</span>kubia
-Type:                     LoadBalancer
-IP:                       10.66.4.173
-LoadBalancer Ingress:     35.221.253.22
-Port:                     &lt;unset&gt;  80/TCP
-TargetPort:               8080/TCP
-<span class="c1"># 选择了 32179 作为节点端口</span>
-NodePort:                 &lt;unset&gt;  32179/TCP
-Endpoints:                10.0.0.2:8080,10.0.0.3:8080,10.0.0.6:8080
-Session Affinity:         None
-External Traffic Policy:  Cluster
-Events:
-  Type    Reason                Age   From                Message
-  ----    ------                ----  ----                -------
-  Normal  EnsuringLoadBalancer  15m   service-controller  Ensuring load balancer
-  Normal  EnsuredLoadBalancer   15m   service-controller  Ensured load balancer
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 创建 loadbalancer 服务</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl create -f kubia-svc-loadbalancer.yaml
+</span></span><span class="line"><span class="cl">service/kubia-loadbalancer created
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看创建的 lb 服务，External-IP 要等一会才会出现</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl get svc kubia-loadbalancer
+</span></span><span class="line"><span class="cl">NAME                 TYPE           CLUSTER-IP    EXTERNAL-IP     PORT<span class="o">(</span>S<span class="o">)</span>        AGE
+</span></span><span class="line"><span class="cl">kubia-loadbalancer   LoadBalancer   10.66.4.173   35.221.253.22   80:32179/TCP   47s
+</span></span><span class="line"><span class="cl"><span class="c1"># External-IP 可以访问</span>
+</span></span><span class="line"><span class="cl">ø&gt; ping 35.221.253.22
+</span></span><span class="line"><span class="cl">PING 35.221.253.22 <span class="o">(</span>35.221.253.22<span class="o">)</span>: <span class="m">56</span> data bytes
+</span></span><span class="line"><span class="cl"><span class="m">64</span> bytes from 35.221.253.22: <span class="nv">icmp_seq</span><span class="o">=</span><span class="m">0</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">102</span> <span class="nv">time</span><span class="o">=</span>166.876 ms
+</span></span><span class="line"><span class="cl"><span class="m">64</span> bytes from 35.221.253.22: <span class="nv">icmp_seq</span><span class="o">=</span><span class="m">1</span> <span class="nv">ttl</span><span class="o">=</span><span class="m">102</span> <span class="nv">time</span><span class="o">=</span>173.021 ms
+</span></span><span class="line"><span class="cl">^C
+</span></span><span class="line"><span class="cl">--- 35.221.253.22 ping statistics ---
+</span></span><span class="line"><span class="cl"><span class="m">2</span> packets transmitted, <span class="m">2</span> packets received, 0.0% packet loss
+</span></span><span class="line"><span class="cl">round-trip min/avg/max/stddev <span class="o">=</span> 166.876/169.948/173.021/3.072 ms
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 访问 External-IP 的 80 端口</span>
+</span></span><span class="line"><span class="cl">ø&gt; http 35.221.253.22
+</span></span><span class="line"><span class="cl">HTTP/1.1 <span class="m">200</span> OK
+</span></span><span class="line"><span class="cl">Content-Length: <span class="m">38</span>
+</span></span><span class="line"><span class="cl">Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+</span></span><span class="line"><span class="cl">Date: Mon, <span class="m">20</span> Jul <span class="m">2020</span> 23:30:33 GMT
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">You<span class="se">\&#39;</span>ve hit kubia-6wjvz on default mux
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看负载均衡器的信息</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl describe svc kubia-loadbalancer
+</span></span><span class="line"><span class="cl">Name:                     kubia-loadbalancer
+</span></span><span class="line"><span class="cl">Namespace:                default
+</span></span><span class="line"><span class="cl">Labels:                   &lt;none&gt;
+</span></span><span class="line"><span class="cl">Annotations:              &lt;none&gt;
+</span></span><span class="line"><span class="cl">Selector:                 <span class="nv">app</span><span class="o">=</span>kubia
+</span></span><span class="line"><span class="cl">Type:                     LoadBalancer
+</span></span><span class="line"><span class="cl">IP:                       10.66.4.173
+</span></span><span class="line"><span class="cl">LoadBalancer Ingress:     35.221.253.22
+</span></span><span class="line"><span class="cl">Port:                     &lt;unset&gt;  80/TCP
+</span></span><span class="line"><span class="cl">TargetPort:               8080/TCP
+</span></span><span class="line"><span class="cl"><span class="c1"># 选择了 32179 作为节点端口</span>
+</span></span><span class="line"><span class="cl">NodePort:                 &lt;unset&gt;  32179/TCP
+</span></span><span class="line"><span class="cl">Endpoints:                10.0.0.2:8080,10.0.0.3:8080,10.0.0.6:8080
+</span></span><span class="line"><span class="cl">Session Affinity:         None
+</span></span><span class="line"><span class="cl">External Traffic Policy:  Cluster
+</span></span><span class="line"><span class="cl">Events:
+</span></span><span class="line"><span class="cl">  Type    Reason                Age   From                Message
+</span></span><span class="line"><span class="cl">  ----    ------                ----  ----                -------
+</span></span><span class="line"><span class="cl">  Normal  EnsuringLoadBalancer  15m   service-controller  Ensuring load balancer
+</span></span><span class="line"><span class="cl">  Normal  EnsuredLoadBalancer   15m   service-controller  Ensured load balancer
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="通过-ingress-暴露服务">通过 Ingress 暴露服务</h2>
 <p>每个 LoadBalancer 服务都需要自己的负载均衡器，以及独有的公有 IP 地址，而 Ingress 只需要一个公网 IP 就能为许多服务提供访问。</p>
@@ -993,20 +1004,20 @@ Events:
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">extensions/v1beta1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Ingress</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">rules</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l">kubia.example.com</span><span class="w">
-</span><span class="w">      </span><span class="nt">http</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="nt">paths</span><span class="p">:</span><span class="w">
-</span><span class="w">          </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
-</span><span class="w">            </span><span class="nt">backend</span><span class="p">:</span><span class="w">
-</span><span class="w">              </span><span class="nt">serviceName</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-nodeport</span><span class="w">
-</span><span class="w">              </span><span class="nt">servicePort</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">extensions/v1beta1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Ingress</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">rules</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l">kubia.example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">http</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">paths</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">backend</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nt">serviceName</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-nodeport</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nt">servicePort</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1031,26 +1042,26 @@ Events:
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ø&gt; kubectl create -f kubia-ingress.yaml
-ingress.extensions/kubia created
-
-<span class="c1"># 查看 Ingress 对外暴露的 IP 地址</span>
-ø&gt; kubectl get ingress
-NAME    HOSTS               ADDRESS        PORTS   AGE
-kubia   kubia.example.com   35.227.198.7   <span class="m">80</span>      74s
-
-<span class="c1"># 在本地设置好 hosts 后，通过域名访问服务</span>
-<span class="nb">echo</span> <span class="s1">&#39;35.227.198.7 kubia.example.com&#39;</span> &gt;&gt; /etc/hosts
-
-ø&gt; http kubia.example.com
-HTTP/1.1 <span class="m">200</span> OK
-Content-Length: <span class="m">44</span>
-Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
-Date: Wed, <span class="m">29</span> Jul <span class="m">2020</span> 01:25:25 GMT
-Via: 1.1 google
-
-You<span class="err">&#39;</span>ve hit kubia-zssz2 on default mux by <span class="m">15</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ø&gt; kubectl create -f kubia-ingress.yaml
+</span></span><span class="line"><span class="cl">ingress.extensions/kubia created
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看 Ingress 对外暴露的 IP 地址</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl get ingress
+</span></span><span class="line"><span class="cl">NAME    HOSTS               ADDRESS        PORTS   AGE
+</span></span><span class="line"><span class="cl">kubia   kubia.example.com   35.227.198.7   <span class="m">80</span>      74s
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 在本地设置好 hosts 后，通过域名访问服务</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;35.227.198.7 kubia.example.com&#39;</span> &gt;&gt; /etc/hosts
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">ø&gt; http kubia.example.com
+</span></span><span class="line"><span class="cl">HTTP/1.1 <span class="m">200</span> OK
+</span></span><span class="line"><span class="cl">Content-Length: <span class="m">44</span>
+</span></span><span class="line"><span class="cl">Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+</span></span><span class="line"><span class="cl">Date: Wed, <span class="m">29</span> Jul <span class="m">2020</span> 01:25:25 GMT
+</span></span><span class="line"><span class="cl">Via: 1.1 google
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">You<span class="err">&#39;</span>ve hit kubia-zssz2 on default mux by <span class="m">15</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>注意，通过域名访问的时候，服务如果返回500的话，会使用 Ingress 自定义的错误页面，无法看到服务返回的 500 页面。</p>
 <div class="highlight"><div class="chroma">
@@ -1074,24 +1085,24 @@ You<span class="err">&#39;</span>ve hit kubia-zssz2 on default mux by <span clas
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 服务返回500的情况</span>
-ø&gt; http kubia.example.com
-HTTP/1.1 <span class="m">502</span> Bad Gateway
-Content-Length: <span class="m">332</span>
-Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>UTF-8
-Date: Tue, <span class="m">28</span> Jul <span class="m">2020</span> 15:10:53 GMT
-Referrer-Policy: no-referrer
-
-&lt;html&gt;&lt;head&gt;
-&lt;meta http-equiv<span class="o">=</span><span class="s2">&#34;content-type&#34;</span> <span class="nv">content</span><span class="o">=</span><span class="s2">&#34;text/html;charset=utf-8&#34;</span>&gt;
-&lt;title&gt;502 Server Error&lt;/title&gt;
-&lt;/head&gt;
-&lt;body <span class="nv">text</span><span class="o">=</span><span class="c1">#000000 bgcolor=#ffffff&gt;</span>
-&lt;h1&gt;Error: Server Error&lt;/h1&gt;
-&lt;h2&gt;The server encountered a temporary error and could not <span class="nb">complete</span> your request.&lt;p&gt;Please try again in <span class="m">30</span> seconds.&lt;/h2&gt;
-&lt;h2&gt;&lt;/h2&gt;
-&lt;/body&gt;&lt;/html&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 服务返回500的情况</span>
+</span></span><span class="line"><span class="cl">ø&gt; http kubia.example.com
+</span></span><span class="line"><span class="cl">HTTP/1.1 <span class="m">502</span> Bad Gateway
+</span></span><span class="line"><span class="cl">Content-Length: <span class="m">332</span>
+</span></span><span class="line"><span class="cl">Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>UTF-8
+</span></span><span class="line"><span class="cl">Date: Tue, <span class="m">28</span> Jul <span class="m">2020</span> 15:10:53 GMT
+</span></span><span class="line"><span class="cl">Referrer-Policy: no-referrer
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;html&gt;&lt;head&gt;
+</span></span><span class="line"><span class="cl">&lt;meta http-equiv<span class="o">=</span><span class="s2">&#34;content-type&#34;</span> <span class="nv">content</span><span class="o">=</span><span class="s2">&#34;text/html;charset=utf-8&#34;</span>&gt;
+</span></span><span class="line"><span class="cl">&lt;title&gt;502 Server Error&lt;/title&gt;
+</span></span><span class="line"><span class="cl">&lt;/head&gt;
+</span></span><span class="line"><span class="cl">&lt;body <span class="nv">text</span><span class="o">=</span><span class="c1">#000000 bgcolor=#ffffff&gt;</span>
+</span></span><span class="line"><span class="cl">&lt;h1&gt;Error: Server Error&lt;/h1&gt;
+</span></span><span class="line"><span class="cl">&lt;h2&gt;The server encountered a temporary error and could not <span class="nb">complete</span> your request.&lt;p&gt;Please try again in <span class="m">30</span> seconds.&lt;/h2&gt;
+</span></span><span class="line"><span class="cl">&lt;h2&gt;&lt;/h2&gt;
+</span></span><span class="line"><span class="cl">&lt;/body&gt;&lt;/html&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="配置-ingress-处理-tls-传输">配置 Ingress 处理 TLS 传输</h3>
 <p>创建好证书和秘钥后，存储到 Secert 资源中</p>
@@ -1114,22 +1125,22 @@ Referrer-Policy: no-referrer
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 RSA 秘钥</span>
-ø&gt; openssl genrsa -out tls.key <span class="m">2048</span>
-Generating RSA private key, <span class="m">2048</span> bit long modulus
-...............................................................+++
-....+++
-e is <span class="m">65537</span> <span class="o">(</span>0x10001<span class="o">)</span>
-
-<span class="c1"># 创建证书</span>
-ø&gt; openssl req -new -x509 -sha256 -key tls.key  -out tls.cert -days <span class="m">3650</span> -subj /CN<span class="o">=</span>kubia.example.com
-ø&gt; ls
-tls.cert tls.key
-
-<span class="c1"># 创建 Secret 资源</span>
-ø&gt; k create secret tls tls-secret --cert<span class="o">=</span>tls.cert --key<span class="o">=</span>tls.key
-secret/tls-secret created
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 创建 RSA 秘钥</span>
+</span></span><span class="line"><span class="cl">ø&gt; openssl genrsa -out tls.key <span class="m">2048</span>
+</span></span><span class="line"><span class="cl">Generating RSA private key, <span class="m">2048</span> bit long modulus
+</span></span><span class="line"><span class="cl">...............................................................+++
+</span></span><span class="line"><span class="cl">....+++
+</span></span><span class="line"><span class="cl">e is <span class="m">65537</span> <span class="o">(</span>0x10001<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 创建证书</span>
+</span></span><span class="line"><span class="cl">ø&gt; openssl req -new -x509 -sha256 -key tls.key  -out tls.cert -days <span class="m">3650</span> -subj /CN<span class="o">=</span>kubia.example.com
+</span></span><span class="line"><span class="cl">ø&gt; ls
+</span></span><span class="line"><span class="cl">tls.cert tls.key
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 创建 Secret 资源</span>
+</span></span><span class="line"><span class="cl">ø&gt; k create secret tls tls-secret --cert<span class="o">=</span>tls.cert --key<span class="o">=</span>tls.key
+</span></span><span class="line"><span class="cl">secret/tls-secret created
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>更新 Ingress 的配置，使用 Secret 配置 HTTPS</p>
 <ul>
@@ -1156,24 +1167,24 @@ secret/tls-secret created
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">extensions/v1beta1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Ingress</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">tls</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="nt">hosts</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="l">kubia.example.com</span><span class="w">
-</span><span class="w">      </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l">tls-secret</span><span class="w">
-</span><span class="w">  </span><span class="nt">rules</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l">kubia.example.com</span><span class="w">
-</span><span class="w">      </span><span class="nt">http</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="nt">paths</span><span class="p">:</span><span class="w">
-</span><span class="w">          </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
-</span><span class="w">            </span><span class="nt">backend</span><span class="p">:</span><span class="w">
-</span><span class="w">              </span><span class="nt">serviceName</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-nodeport</span><span class="w">
-</span><span class="w">              </span><span class="nt">servicePort</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">extensions/v1beta1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Ingress</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">tls</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">hosts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">kubia.example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l">tls-secret</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">rules</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l">kubia.example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">http</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">paths</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span>- <span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">backend</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nt">serviceName</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-nodeport</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nt">servicePort</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1234,62 +1245,62 @@ secret/tls-secret created
 </span><span class="lnt">55
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 更新 ingress 配置</span>
-ø&gt; kubectl apply -f kubia-ingress-tls.yaml
-Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
-ingress.extensions/kubia configured
-
-
-<span class="c1"># 访问我们配置的域名，查看其证书</span>
-ø&gt; curl -k -v https://kubia.example.com/
-*   Trying 35.227.198.7...
-* TCP_NODELAY <span class="nb">set</span>
-* Connected to kubia.example.com <span class="o">(</span>35.227.198.7<span class="o">)</span> port <span class="m">443</span> <span class="o">(</span><span class="c1">#0)</span>
-* ALPN, offering h2
-* ALPN, offering http/1.1
-* successfully <span class="nb">set</span> certificate verify locations:
-*   CAfile: /etc/ssl/cert.pem
-  CApath: none
-* TLSv1.2 <span class="o">(</span>OUT<span class="o">)</span>, TLS handshake, Client hello <span class="o">(</span>1<span class="o">)</span>:
-* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS handshake, Server hello <span class="o">(</span>2<span class="o">)</span>:
-* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS handshake, Certificate <span class="o">(</span>11<span class="o">)</span>:
-* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS handshake, Server key exchange <span class="o">(</span>12<span class="o">)</span>:
-* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS handshake, Server finished <span class="o">(</span>14<span class="o">)</span>:
-* TLSv1.2 <span class="o">(</span>OUT<span class="o">)</span>, TLS handshake, Client key exchange <span class="o">(</span>16<span class="o">)</span>:
-* TLSv1.2 <span class="o">(</span>OUT<span class="o">)</span>, TLS change cipher, Change cipher spec <span class="o">(</span>1<span class="o">)</span>:
-* TLSv1.2 <span class="o">(</span>OUT<span class="o">)</span>, TLS handshake, Finished <span class="o">(</span>20<span class="o">)</span>:
-* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS change cipher, Change cipher spec <span class="o">(</span>1<span class="o">)</span>:
-* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS handshake, Finished <span class="o">(</span>20<span class="o">)</span>:
-* SSL connection using TLSv1.2 / ECDHE-RSA-CHACHA20-POLY1305
-* ALPN, server accepted to use h2
-* Server certificate:
-<span class="c1"># 可以看到 CN 正是我们在创建时声明的CN配置</span>
-*  subject: <span class="nv">CN</span><span class="o">=</span>kubia.example.com
-*  start date: Jul <span class="m">30</span> 15:08:40 <span class="m">2020</span> GMT
-*  expire date: Jul <span class="m">28</span> 15:08:40 <span class="m">2030</span> GMT
-*  issuer: <span class="nv">CN</span><span class="o">=</span>kubia.example.com
-*  SSL certificate verify result: self signed certificate <span class="o">(</span>18<span class="o">)</span>, continuing anyway.
-* Using HTTP2, server supports multi-use
-* Connection state changed <span class="o">(</span>HTTP/2 confirmed<span class="o">)</span>
-* Copying HTTP/2 data in stream buffer to connection buffer after upgrade: <span class="nv">len</span><span class="o">=</span><span class="m">0</span>
-* Using Stream ID: <span class="m">1</span> <span class="o">(</span>easy handle 0x7f869c80fc00<span class="o">)</span>
-&gt; GET / HTTP/2
-&gt; Host: kubia.example.com
-&gt; User-Agent: curl/7.64.1
-&gt; Accept: */*
-&gt;
-* Connection state changed <span class="o">(</span><span class="nv">MAX_CONCURRENT_STREAMS</span> <span class="o">==</span> 100<span class="o">)</span>!
-&lt; HTTP/2 <span class="m">200</span>
-&lt; date: Thu, <span class="m">30</span> Jul <span class="m">2020</span> 15:17:17 GMT
-&lt; content-length: <span class="m">46</span>
-&lt; content-type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
-&lt; via: 1.1 google
-&lt; alt-svc: clear
-&lt;
-You<span class="se">\&#39;</span>ve hit kubia-zssz2 on default mux by <span class="m">8026</span>
-* Connection <span class="c1">#0 to host kubia.example.com left intact</span>
-* Closing connection <span class="m">0</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 更新 ingress 配置</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl apply -f kubia-ingress-tls.yaml
+</span></span><span class="line"><span class="cl">Warning: kubectl apply should be used on resource created by either kubectl create --save-config or kubectl apply
+</span></span><span class="line"><span class="cl">ingress.extensions/kubia configured
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 访问我们配置的域名，查看其证书</span>
+</span></span><span class="line"><span class="cl">ø&gt; curl -k -v https://kubia.example.com/
+</span></span><span class="line"><span class="cl">*   Trying 35.227.198.7...
+</span></span><span class="line"><span class="cl">* TCP_NODELAY <span class="nb">set</span>
+</span></span><span class="line"><span class="cl">* Connected to kubia.example.com <span class="o">(</span>35.227.198.7<span class="o">)</span> port <span class="m">443</span> <span class="o">(</span><span class="c1">#0)</span>
+</span></span><span class="line"><span class="cl">* ALPN, offering h2
+</span></span><span class="line"><span class="cl">* ALPN, offering http/1.1
+</span></span><span class="line"><span class="cl">* successfully <span class="nb">set</span> certificate verify locations:
+</span></span><span class="line"><span class="cl">*   CAfile: /etc/ssl/cert.pem
+</span></span><span class="line"><span class="cl">  CApath: none
+</span></span><span class="line"><span class="cl">* TLSv1.2 <span class="o">(</span>OUT<span class="o">)</span>, TLS handshake, Client hello <span class="o">(</span>1<span class="o">)</span>:
+</span></span><span class="line"><span class="cl">* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS handshake, Server hello <span class="o">(</span>2<span class="o">)</span>:
+</span></span><span class="line"><span class="cl">* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS handshake, Certificate <span class="o">(</span>11<span class="o">)</span>:
+</span></span><span class="line"><span class="cl">* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS handshake, Server key exchange <span class="o">(</span>12<span class="o">)</span>:
+</span></span><span class="line"><span class="cl">* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS handshake, Server finished <span class="o">(</span>14<span class="o">)</span>:
+</span></span><span class="line"><span class="cl">* TLSv1.2 <span class="o">(</span>OUT<span class="o">)</span>, TLS handshake, Client key exchange <span class="o">(</span>16<span class="o">)</span>:
+</span></span><span class="line"><span class="cl">* TLSv1.2 <span class="o">(</span>OUT<span class="o">)</span>, TLS change cipher, Change cipher spec <span class="o">(</span>1<span class="o">)</span>:
+</span></span><span class="line"><span class="cl">* TLSv1.2 <span class="o">(</span>OUT<span class="o">)</span>, TLS handshake, Finished <span class="o">(</span>20<span class="o">)</span>:
+</span></span><span class="line"><span class="cl">* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS change cipher, Change cipher spec <span class="o">(</span>1<span class="o">)</span>:
+</span></span><span class="line"><span class="cl">* TLSv1.2 <span class="o">(</span>IN<span class="o">)</span>, TLS handshake, Finished <span class="o">(</span>20<span class="o">)</span>:
+</span></span><span class="line"><span class="cl">* SSL connection using TLSv1.2 / ECDHE-RSA-CHACHA20-POLY1305
+</span></span><span class="line"><span class="cl">* ALPN, server accepted to use h2
+</span></span><span class="line"><span class="cl">* Server certificate:
+</span></span><span class="line"><span class="cl"><span class="c1"># 可以看到 CN 正是我们在创建时声明的CN配置</span>
+</span></span><span class="line"><span class="cl">*  subject: <span class="nv">CN</span><span class="o">=</span>kubia.example.com
+</span></span><span class="line"><span class="cl">*  start date: Jul <span class="m">30</span> 15:08:40 <span class="m">2020</span> GMT
+</span></span><span class="line"><span class="cl">*  expire date: Jul <span class="m">28</span> 15:08:40 <span class="m">2030</span> GMT
+</span></span><span class="line"><span class="cl">*  issuer: <span class="nv">CN</span><span class="o">=</span>kubia.example.com
+</span></span><span class="line"><span class="cl">*  SSL certificate verify result: self signed certificate <span class="o">(</span>18<span class="o">)</span>, continuing anyway.
+</span></span><span class="line"><span class="cl">* Using HTTP2, server supports multi-use
+</span></span><span class="line"><span class="cl">* Connection state changed <span class="o">(</span>HTTP/2 confirmed<span class="o">)</span>
+</span></span><span class="line"><span class="cl">* Copying HTTP/2 data in stream buffer to connection buffer after upgrade: <span class="nv">len</span><span class="o">=</span><span class="m">0</span>
+</span></span><span class="line"><span class="cl">* Using Stream ID: <span class="m">1</span> <span class="o">(</span>easy handle 0x7f869c80fc00<span class="o">)</span>
+</span></span><span class="line"><span class="cl">&gt; GET / HTTP/2
+</span></span><span class="line"><span class="cl">&gt; Host: kubia.example.com
+</span></span><span class="line"><span class="cl">&gt; User-Agent: curl/7.64.1
+</span></span><span class="line"><span class="cl">&gt; Accept: */*
+</span></span><span class="line"><span class="cl">&gt;
+</span></span><span class="line"><span class="cl">* Connection state changed <span class="o">(</span><span class="nv">MAX_CONCURRENT_STREAMS</span> <span class="o">==</span> 100<span class="o">)</span>!
+</span></span><span class="line"><span class="cl">&lt; HTTP/2 <span class="m">200</span>
+</span></span><span class="line"><span class="cl">&lt; date: Thu, <span class="m">30</span> Jul <span class="m">2020</span> 15:17:17 GMT
+</span></span><span class="line"><span class="cl">&lt; content-length: <span class="m">46</span>
+</span></span><span class="line"><span class="cl">&lt; content-type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+</span></span><span class="line"><span class="cl">&lt; via: 1.1 google
+</span></span><span class="line"><span class="cl">&lt; alt-svc: clear
+</span></span><span class="line"><span class="cl">&lt;
+</span></span><span class="line"><span class="cl">You<span class="se">\&#39;</span>ve hit kubia-zssz2 on default mux by <span class="m">8026</span>
+</span></span><span class="line"><span class="cl">* Connection <span class="c1">#0 to host kubia.example.com left intact</span>
+</span></span><span class="line"><span class="cl">* Closing connection <span class="m">0</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="pod-就绪后发出信号">Pod 就绪后发出信号</h2>
 <p>就绪探测器会定期调用，并确定特定的 pod 是否接收客户端请求。当容器的准备就绪探测返回成功时，表示容器已经准备好接收请求。如果容器报告它未准备就绪，则会从该服务中删除该 Pod。如果 Pod 再次准备就绪，则重新添加 Pod。</p>
@@ -1359,59 +1370,59 @@ You<span class="se">\&#39;</span>ve hit kubia-zssz2 on default mux by <span clas
 </span><span class="lnt">52
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 编辑 rs 的配置文件中 pod 模板的部分，加入就绪探针</span>
-<span class="c1"># 这个就绪探针是一个 exec 类型，检测某个文件是否存在</span>
-TODO
-
-<span class="c1"># 删除已有的 Pod</span>
-ø&gt; kubectl delete pod kubia-bp5xc
-pod <span class="s2">&#34;kubia-bp5xc&#34;</span> deleted
-ø&gt; kubectl delete pod kubia-tt8rl
-pod <span class="s2">&#34;kubia-tt8rl&#34;</span> deleted
-ø&gt; kubectl delete pod kubia-zssz2
-pod <span class="s2">&#34;kubia-zssz2&#34;</span> deleted
-
-<span class="c1"># 查看现在的 Pod，发现都没有处于就绪状态</span>
-ø&gt; kubectl get pods --show-labels
-NAME          READY   STATUS    RESTARTS   AGE   LABELS
-kubia-m7xnj   0/1     Running   <span class="m">0</span>          80s   <span class="nv">app</span><span class="o">=</span>kubia
-kubia-qsrhr   0/1     Running   <span class="m">0</span>          41s   <span class="nv">app</span><span class="o">=</span>kubia
-kubia-wpk4k   0/1     Running   <span class="m">0</span>          46s   <span class="nv">app</span><span class="o">=</span>kubia
-
-<span class="c1"># 令一个 Pod 处于就绪状态</span>
-ø&gt; kubectl <span class="nb">exec</span> kubia-wpk4k -- touch /var/ready
-
-<span class="c1"># 通过 nodeport 暴露的端口访问，发现所有的流量都走到了 kubia-wpk4k 这个 Pod 上</span>
-ø&gt; curl 34.80.233.40:30123
-You ve hit kubia-wpk4k on default mux by <span class="m">65</span>
-ø&gt; curl 34.80.233.40:30123
-You ve hit kubia-wpk4k on default mux by <span class="m">66</span>
-ø&gt; curl 34.80.233.40:30123
-You ve hit kubia-wpk4k on default mux by <span class="m">67</span>
-ø&gt; curl 34.80.233.40:30123
-You ve hit kubia-wpk4k on default mux by <span class="m">77</span>
-ø&gt; curl 34.80.233.40:30123
-You ve hit kubia-wpk4k on default mux by <span class="m">78</span>
-ø&gt; curl 34.80.233.40:30123
-You ve hit kubia-wpk4k on default mux by <span class="m">79</span>
-ø&gt; curl 34.80.233.40:30123
-You ve hit kubia-wpk4k on default mux by <span class="m">80</span>
-
-<span class="c1"># 通过 describe 查看日志，可以看到就绪指针的相关日志</span>
-ø&gt; kubectl describe pod kubia-m7xnj
-Name:           kubia-m7xnj
-Namespace:      default
-Priority:       <span class="m">0</span>
-...
-Events:
-  Type     Reason     Age                 From                                          Message
-  ----     ------     ----                ----                                          -------
-  Normal   Scheduled  11m                 default-scheduler                             Successfully assigned default/kubia-m7xnj to gke-demo-default-pool-ade08258-zjhd
-  Normal   Pulled     11m                 kubelet, gke-demo-default-pool-ade08258-zjhd  Container image <span class="s2">&#34;bwangel/kubia:v0.4&#34;</span> already present on machine
-  Normal   Created    11m                 kubelet, gke-demo-default-pool-ade08258-zjhd  Created container kubia
-  Normal   Started    11m                 kubelet, gke-demo-default-pool-ade08258-zjhd  Started container kubia
-  Warning  Unhealthy  98s <span class="o">(</span>x61 over 11m<span class="o">)</span>  kubelet, gke-demo-default-pool-ade08258-zjhd  Readiness probe failed: ls: cannot access <span class="s1">&#39;/var/ready&#39;</span>: No such file or directory
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 编辑 rs 的配置文件中 pod 模板的部分，加入就绪探针</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 这个就绪探针是一个 exec 类型，检测某个文件是否存在</span>
+</span></span><span class="line"><span class="cl">TODO
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 删除已有的 Pod</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl delete pod kubia-bp5xc
+</span></span><span class="line"><span class="cl">pod <span class="s2">&#34;kubia-bp5xc&#34;</span> deleted
+</span></span><span class="line"><span class="cl">ø&gt; kubectl delete pod kubia-tt8rl
+</span></span><span class="line"><span class="cl">pod <span class="s2">&#34;kubia-tt8rl&#34;</span> deleted
+</span></span><span class="line"><span class="cl">ø&gt; kubectl delete pod kubia-zssz2
+</span></span><span class="line"><span class="cl">pod <span class="s2">&#34;kubia-zssz2&#34;</span> deleted
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看现在的 Pod，发现都没有处于就绪状态</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl get pods --show-labels
+</span></span><span class="line"><span class="cl">NAME          READY   STATUS    RESTARTS   AGE   LABELS
+</span></span><span class="line"><span class="cl">kubia-m7xnj   0/1     Running   <span class="m">0</span>          80s   <span class="nv">app</span><span class="o">=</span>kubia
+</span></span><span class="line"><span class="cl">kubia-qsrhr   0/1     Running   <span class="m">0</span>          41s   <span class="nv">app</span><span class="o">=</span>kubia
+</span></span><span class="line"><span class="cl">kubia-wpk4k   0/1     Running   <span class="m">0</span>          46s   <span class="nv">app</span><span class="o">=</span>kubia
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 令一个 Pod 处于就绪状态</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl <span class="nb">exec</span> kubia-wpk4k -- touch /var/ready
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 通过 nodeport 暴露的端口访问，发现所有的流量都走到了 kubia-wpk4k 这个 Pod 上</span>
+</span></span><span class="line"><span class="cl">ø&gt; curl 34.80.233.40:30123
+</span></span><span class="line"><span class="cl">You ve hit kubia-wpk4k on default mux by <span class="m">65</span>
+</span></span><span class="line"><span class="cl">ø&gt; curl 34.80.233.40:30123
+</span></span><span class="line"><span class="cl">You ve hit kubia-wpk4k on default mux by <span class="m">66</span>
+</span></span><span class="line"><span class="cl">ø&gt; curl 34.80.233.40:30123
+</span></span><span class="line"><span class="cl">You ve hit kubia-wpk4k on default mux by <span class="m">67</span>
+</span></span><span class="line"><span class="cl">ø&gt; curl 34.80.233.40:30123
+</span></span><span class="line"><span class="cl">You ve hit kubia-wpk4k on default mux by <span class="m">77</span>
+</span></span><span class="line"><span class="cl">ø&gt; curl 34.80.233.40:30123
+</span></span><span class="line"><span class="cl">You ve hit kubia-wpk4k on default mux by <span class="m">78</span>
+</span></span><span class="line"><span class="cl">ø&gt; curl 34.80.233.40:30123
+</span></span><span class="line"><span class="cl">You ve hit kubia-wpk4k on default mux by <span class="m">79</span>
+</span></span><span class="line"><span class="cl">ø&gt; curl 34.80.233.40:30123
+</span></span><span class="line"><span class="cl">You ve hit kubia-wpk4k on default mux by <span class="m">80</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 通过 describe 查看日志，可以看到就绪指针的相关日志</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl describe pod kubia-m7xnj
+</span></span><span class="line"><span class="cl">Name:           kubia-m7xnj
+</span></span><span class="line"><span class="cl">Namespace:      default
+</span></span><span class="line"><span class="cl">Priority:       <span class="m">0</span>
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">Events:
+</span></span><span class="line"><span class="cl">  Type     Reason     Age                 From                                          Message
+</span></span><span class="line"><span class="cl">  ----     ------     ----                ----                                          -------
+</span></span><span class="line"><span class="cl">  Normal   Scheduled  11m                 default-scheduler                             Successfully assigned default/kubia-m7xnj to gke-demo-default-pool-ade08258-zjhd
+</span></span><span class="line"><span class="cl">  Normal   Pulled     11m                 kubelet, gke-demo-default-pool-ade08258-zjhd  Container image <span class="s2">&#34;bwangel/kubia:v0.4&#34;</span> already present on machine
+</span></span><span class="line"><span class="cl">  Normal   Created    11m                 kubelet, gke-demo-default-pool-ade08258-zjhd  Created container kubia
+</span></span><span class="line"><span class="cl">  Normal   Started    11m                 kubelet, gke-demo-default-pool-ade08258-zjhd  Started container kubia
+</span></span><span class="line"><span class="cl">  Warning  Unhealthy  98s <span class="o">(</span>x61 over 11m<span class="o">)</span>  kubelet, gke-demo-default-pool-ade08258-zjhd  Readiness probe failed: ls: cannot access <span class="s1">&#39;/var/ready&#39;</span>: No such file or directory
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>注意事项:</li>
@@ -1442,18 +1453,18 @@ Events:
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-headless</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">clusterIP</span><span class="p">:</span><span class="w"> </span><span class="l">None</span><span class="w">
-</span><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
-</span><span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
-</span><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">kubia</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-headless</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">clusterIP</span><span class="p">:</span><span class="w"> </span><span class="l">None</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">80</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">kubia</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1487,35 +1498,35 @@ Events:
 </span><span class="lnt">28
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建 headless 服务</span>
-ø&gt; kubectl create -f kubia-svc-headless.yaml
-service/kubia-headless created
-
-<span class="c1"># 查看 headless 服务的信息，发现没有 ClusterIP</span>
-ø&gt; kubectl get service
-NAME                            TYPE           CLUSTER-IP     EXTERNAL-IP     PORT<span class="o">(</span>S<span class="o">)</span>         AGE
-external-service                ClusterIP      10.66.10.171   &lt;none&gt;          80/TCP          95d
-external-service-externalname   ExternalName   &lt;none&gt;         httpbin.org     80/TCP          95d
-kubernetes                      ClusterIP      10.66.0.1      &lt;none&gt;          443/TCP         128d
-kubia                           ClusterIP      10.66.13.240   &lt;none&gt;          80/TCP,90/TCP   97d
-kubia-headless                  ClusterIP      None           &lt;none&gt;          80/TCP          11s
-kubia-loadbalancer              LoadBalancer   10.66.4.173    35.221.253.22   80:32179/TCP    12d
-kubia-nodeport                  NodePort       10.66.5.6      &lt;none&gt;          80:30123/TCP    94d
-
-ø&gt; kubectl describe service kubia-headless
-Name:              kubia-headless
-Namespace:         default
-Labels:            &lt;none&gt;
-Annotations:       &lt;none&gt;
-Selector:          <span class="nv">app</span><span class="o">=</span>kubia
-Type:              ClusterIP
-IP:                None
-Port:              &lt;unset&gt;  80/TCP
-TargetPort:        8080/TCP
-Endpoints:         10.0.0.8:8080
-Session Affinity:  None
-Events:            &lt;none&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 创建 headless 服务</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl create -f kubia-svc-headless.yaml
+</span></span><span class="line"><span class="cl">service/kubia-headless created
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看 headless 服务的信息，发现没有 ClusterIP</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl get service
+</span></span><span class="line"><span class="cl">NAME                            TYPE           CLUSTER-IP     EXTERNAL-IP     PORT<span class="o">(</span>S<span class="o">)</span>         AGE
+</span></span><span class="line"><span class="cl">external-service                ClusterIP      10.66.10.171   &lt;none&gt;          80/TCP          95d
+</span></span><span class="line"><span class="cl">external-service-externalname   ExternalName   &lt;none&gt;         httpbin.org     80/TCP          95d
+</span></span><span class="line"><span class="cl">kubernetes                      ClusterIP      10.66.0.1      &lt;none&gt;          443/TCP         128d
+</span></span><span class="line"><span class="cl">kubia                           ClusterIP      10.66.13.240   &lt;none&gt;          80/TCP,90/TCP   97d
+</span></span><span class="line"><span class="cl">kubia-headless                  ClusterIP      None           &lt;none&gt;          80/TCP          11s
+</span></span><span class="line"><span class="cl">kubia-loadbalancer              LoadBalancer   10.66.4.173    35.221.253.22   80:32179/TCP    12d
+</span></span><span class="line"><span class="cl">kubia-nodeport                  NodePort       10.66.5.6      &lt;none&gt;          80:30123/TCP    94d
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">ø&gt; kubectl describe service kubia-headless
+</span></span><span class="line"><span class="cl">Name:              kubia-headless
+</span></span><span class="line"><span class="cl">Namespace:         default
+</span></span><span class="line"><span class="cl">Labels:            &lt;none&gt;
+</span></span><span class="line"><span class="cl">Annotations:       &lt;none&gt;
+</span></span><span class="line"><span class="cl">Selector:          <span class="nv">app</span><span class="o">=</span>kubia
+</span></span><span class="line"><span class="cl">Type:              ClusterIP
+</span></span><span class="line"><span class="cl">IP:                None
+</span></span><span class="line"><span class="cl">Port:              &lt;unset&gt;  80/TCP
+</span></span><span class="line"><span class="cl">TargetPort:        8080/TCP
+</span></span><span class="line"><span class="cl">Endpoints:         10.0.0.8:8080
+</span></span><span class="line"><span class="cl">Session Affinity:  None
+</span></span><span class="line"><span class="cl">Events:            &lt;none&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="通过-dns-查找-pod-的-ip">通过 DNS 查找 Pod 的 IP</h3>
 <div class="highlight"><div class="chroma">
@@ -1549,34 +1560,34 @@ Events:            &lt;none&gt;
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 创建一个可以执行 DNS 查找命令的临时 Pod</span>
-ø&gt; kubectl run dnsutils --image<span class="o">=</span>tutum/dnsutils --generator<span class="o">=</span>run-pod/v1 --command -- sleep infinity
-pod/dnsutils created
-
-<span class="c1"># 查看 kubia ReplicaSet，可以看到只有两个 Pod 就绪</span>
-ø&gt; kubectl get rs
-NAME    DESIRED   CURRENT   READY   AGE
-kubia   <span class="m">3</span>         <span class="m">3</span>         <span class="m">2</span>       97d
-
-<span class="c1"># 执行 DNS 查找</span>
-ø&gt; kubectl <span class="nb">exec</span> dnsutils nslookup kubia-headless
-Server:         10.66.0.10
-Address:        10.66.0.10#53
-
-<span class="c1"># 这里只返回了两个 Pod IP，因为 selector=&#34;app=kubia&#34; 的 Pod 只有两个就绪了。</span>
-Name:   kubia-headless.default.svc.cluster.local
-Address: 10.0.0.8
-Name:   kubia-headless.default.svc.cluster.local
-Address: 10.0.2.5
-
-<span class="c1"># 查找常规服务的 DNS，可以看到返回的是服务的集群IP</span>
-ø&gt; kubectl <span class="nb">exec</span> dnsutils nslookup kubia
-Server:         10.66.0.10
-Address:        10.66.0.10#53
-
-Name:   kubia.default.svc.cluster.local
-Address: 10.66.13.240
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 创建一个可以执行 DNS 查找命令的临时 Pod</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl run dnsutils --image<span class="o">=</span>tutum/dnsutils --generator<span class="o">=</span>run-pod/v1 --command -- sleep infinity
+</span></span><span class="line"><span class="cl">pod/dnsutils created
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看 kubia ReplicaSet，可以看到只有两个 Pod 就绪</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl get rs
+</span></span><span class="line"><span class="cl">NAME    DESIRED   CURRENT   READY   AGE
+</span></span><span class="line"><span class="cl">kubia   <span class="m">3</span>         <span class="m">3</span>         <span class="m">2</span>       97d
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 执行 DNS 查找</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl <span class="nb">exec</span> dnsutils nslookup kubia-headless
+</span></span><span class="line"><span class="cl">Server:         10.66.0.10
+</span></span><span class="line"><span class="cl">Address:        10.66.0.10#53
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 这里只返回了两个 Pod IP，因为 selector=&#34;app=kubia&#34; 的 Pod 只有两个就绪了。</span>
+</span></span><span class="line"><span class="cl">Name:   kubia-headless.default.svc.cluster.local
+</span></span><span class="line"><span class="cl">Address: 10.0.0.8
+</span></span><span class="line"><span class="cl">Name:   kubia-headless.default.svc.cluster.local
+</span></span><span class="line"><span class="cl">Address: 10.0.2.5
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查找常规服务的 DNS，可以看到返回的是服务的集群IP</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl <span class="nb">exec</span> dnsutils nslookup kubia
+</span></span><span class="line"><span class="cl">Server:         10.66.0.10
+</span></span><span class="line"><span class="cl">Address:        10.66.0.10#53
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Name:   kubia.default.svc.cluster.local
+</span></span><span class="line"><span class="cl">Address: 10.66.13.240
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="发现所有-pod包括未就绪-pod">发现所有 Pod，包括未就绪 Pod</h3>
 <p>在 K8S 1.17 版本中，在创建 headless 服务中添加<code>publishNotReadyAddresses</code>配置，就可以让 DNS 服务器查找到对应 headless 服务的未就绪 Pod。</p>
@@ -1592,15 +1603,15 @@ Address: 10.66.13.240
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-headless</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="l">...</span><span class="w">
-</span><span class="w">  </span><span class="nt">publishNotReadyAddresses</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="w">  </span><span class="l">...</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-headless</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">publishNotReadyAddresses</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="l">...</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1622,23 +1633,23 @@ Address: 10.66.13.240
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># app=kubia 中就绪的 Pod 还是只有两个</span>
-ø&gt; kubectl get rs
-NAME    DESIRED   CURRENT   READY   AGE
-kubia   <span class="m">3</span>         <span class="m">3</span>         <span class="m">2</span>       97d
-
-ø&gt; kubectl <span class="nb">exec</span> dnsutils nslookup kubia-headless
-Server:         10.66.0.10
-Address:        10.66.0.10#53
-
-<span class="c1"># 可以看到此时所有 Pod 的 IP 全部返回了</span>
-Name:   kubia-headless.default.svc.cluster.local
-Address: 10.0.0.8
-Name:   kubia-headless.default.svc.cluster.local
-Address: 10.0.2.4
-Name:   kubia-headless.default.svc.cluster.local
-Address: 10.0.2.5
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># app=kubia 中就绪的 Pod 还是只有两个</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl get rs
+</span></span><span class="line"><span class="cl">NAME    DESIRED   CURRENT   READY   AGE
+</span></span><span class="line"><span class="cl">kubia   <span class="m">3</span>         <span class="m">3</span>         <span class="m">2</span>       97d
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">ø&gt; kubectl <span class="nb">exec</span> dnsutils nslookup kubia-headless
+</span></span><span class="line"><span class="cl">Server:         10.66.0.10
+</span></span><span class="line"><span class="cl">Address:        10.66.0.10#53
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 可以看到此时所有 Pod 的 IP 全部返回了</span>
+</span></span><span class="line"><span class="cl">Name:   kubia-headless.default.svc.cluster.local
+</span></span><span class="line"><span class="cl">Address: 10.0.0.8
+</span></span><span class="line"><span class="cl">Name:   kubia-headless.default.svc.cluster.local
+</span></span><span class="line"><span class="cl">Address: 10.0.2.4
+</span></span><span class="line"><span class="cl">Name:   kubia-headless.default.svc.cluster.local
+</span></span><span class="line"><span class="cl">Address: 10.0.2.5
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><a href="https://v1-17.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/">publishNotReadyAddresses 的参考文档</a></p>
 <h2 id="排除服务故障">排除服务故障</h2>
@@ -1670,31 +1681,31 @@ Address: 10.0.2.5
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 查看 pod 的 IP</span>
-ø&gt; kubectl get pods -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s2">&#34;{range .items[*]}{.metadata.name}--{.status.podIP} {end}&#34;</span> <span class="p">|</span> tr <span class="s1">&#39; &#39;</span> <span class="s1">&#39;\n&#39;</span>
-dnsutils--10.0.0.9
-kubia-m7xnj--10.0.2.4
-kubia-qsrhr--10.0.2.5
-kubia-wpk4k--10.0.0.8
-
-<span class="c1"># 查看所有服务的集群IP</span>
-ø&gt; kubectl get svc
-NAME                            TYPE           CLUSTER-IP     EXTERNAL-IP     PORT<span class="o">(</span>S<span class="o">)</span>         AGE
-...
-kubia                           ClusterIP      10.66.13.240   &lt;none&gt;          80/TCP,90/TCP   97d
-<span class="c1"># headless 服务是没有集群IP的</span>
-kubia-headless                  ClusterIP      None           &lt;none&gt;          80/TCP          44m
-kubia-loadbalancer              LoadBalancer   10.66.4.173    35.221.253.22   80:32179/TCP    12d
-...
-
-<span class="c1"># 在集群内 ping 服务的集群IP，发现是 ping 不通的</span>
-ø&gt; kubectl <span class="nb">exec</span> -it kubia-wpk4k bash                                                                       11:17:47 <span class="o">(</span>08-02<span class="o">)</span>
-root@kubia-wpk4k:/app# ping 10.66.13.240
-PING 10.66.13.240 <span class="o">(</span>10.66.13.240<span class="o">)</span> 56<span class="o">(</span>84<span class="o">)</span> bytes of data.
-^C
---- 10.66.13.240 ping statistics ---
-<span class="m">6</span> packets transmitted, <span class="m">0</span> received, 100% packet loss, <span class="nb">time</span> 116ms
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 查看 pod 的 IP</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl get pods -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s2">&#34;{range .items[*]}{.metadata.name}--{.status.podIP} {end}&#34;</span> <span class="p">|</span> tr <span class="s1">&#39; &#39;</span> <span class="s1">&#39;\n&#39;</span>
+</span></span><span class="line"><span class="cl">dnsutils--10.0.0.9
+</span></span><span class="line"><span class="cl">kubia-m7xnj--10.0.2.4
+</span></span><span class="line"><span class="cl">kubia-qsrhr--10.0.2.5
+</span></span><span class="line"><span class="cl">kubia-wpk4k--10.0.0.8
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看所有服务的集群IP</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl get svc
+</span></span><span class="line"><span class="cl">NAME                            TYPE           CLUSTER-IP     EXTERNAL-IP     PORT<span class="o">(</span>S<span class="o">)</span>         AGE
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">kubia                           ClusterIP      10.66.13.240   &lt;none&gt;          80/TCP,90/TCP   97d
+</span></span><span class="line"><span class="cl"><span class="c1"># headless 服务是没有集群IP的</span>
+</span></span><span class="line"><span class="cl">kubia-headless                  ClusterIP      None           &lt;none&gt;          80/TCP          44m
+</span></span><span class="line"><span class="cl">kubia-loadbalancer              LoadBalancer   10.66.4.173    35.221.253.22   80:32179/TCP    12d
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 在集群内 ping 服务的集群IP，发现是 ping 不通的</span>
+</span></span><span class="line"><span class="cl">ø&gt; kubectl <span class="nb">exec</span> -it kubia-wpk4k bash                                                                       11:17:47 <span class="o">(</span>08-02<span class="o">)</span>
+</span></span><span class="line"><span class="cl">root@kubia-wpk4k:/app# ping 10.66.13.240
+</span></span><span class="line"><span class="cl">PING 10.66.13.240 <span class="o">(</span>10.66.13.240<span class="o">)</span> 56<span class="o">(</span>84<span class="o">)</span> bytes of data.
+</span></span><span class="line"><span class="cl">^C
+</span></span><span class="line"><span class="cl">--- 10.66.13.240 ping statistics ---
+</span></span><span class="line"><span class="cl"><span class="m">6</span> packets transmitted, <span class="m">0</span> received, 100% packet loss, <span class="nb">time</span> 116ms
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如何排除服务故障:</p>
 <ol>
@@ -1814,7 +1825,7 @@ PING 10.66.13.240 <span class="o">(</span>10.66.13.240<span class="o">)</span> 5
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

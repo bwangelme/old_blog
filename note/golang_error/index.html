@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.2 with theme even" />
+<meta name="generator" content="Hugo 0.101.0 with theme even" />
 
 
 <link rel="canonical" href="/note/golang_error/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -60,6 +60,17 @@ Golang Error 学习笔记
 <meta name="twitter:description" content="
 Golang Error 学习笔记
 "/>
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -211,18 +222,18 @@ Golang Error 学习笔记
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">os</span>
-
-<span class="kd">var</span> <span class="p">(</span>
-	<span class="nx">ErrInvalid</span> <span class="p">=</span> <span class="nf">errInvalid</span><span class="p">()</span> <span class="c1">// &#34;invalid argument&#34;
-</span><span class="c1"></span>
-	<span class="nx">ErrPermission</span> <span class="p">=</span> <span class="nf">errPermission</span><span class="p">()</span> <span class="c1">// &#34;permission denied&#34;
-</span><span class="c1"></span>	<span class="nx">ErrExist</span>      <span class="p">=</span> <span class="nf">errExist</span><span class="p">()</span>      <span class="c1">// &#34;file already exists&#34;
-</span><span class="c1"></span>	<span class="nx">ErrNotExist</span>   <span class="p">=</span> <span class="nf">errNotExist</span><span class="p">()</span>   <span class="c1">// &#34;file does not exist&#34;
-</span><span class="c1"></span>	<span class="nx">ErrClosed</span>     <span class="p">=</span> <span class="nf">errClosed</span><span class="p">()</span>     <span class="c1">// &#34;file already closed&#34;
-</span><span class="c1"></span>	<span class="nx">ErrNoDeadline</span> <span class="p">=</span> <span class="nf">errNoDeadline</span><span class="p">()</span> <span class="c1">// &#34;file type does not support deadline&#34;
-</span><span class="c1"></span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">os</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ErrInvalid</span> <span class="p">=</span> <span class="nf">errInvalid</span><span class="p">()</span> <span class="c1">// &#34;invalid argument&#34;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ErrPermission</span> <span class="p">=</span> <span class="nf">errPermission</span><span class="p">()</span> <span class="c1">// &#34;permission denied&#34;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">ErrExist</span>      <span class="p">=</span> <span class="nf">errExist</span><span class="p">()</span>      <span class="c1">// &#34;file already exists&#34;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">ErrNotExist</span>   <span class="p">=</span> <span class="nf">errNotExist</span><span class="p">()</span>   <span class="c1">// &#34;file does not exist&#34;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">ErrClosed</span>     <span class="p">=</span> <span class="nf">errClosed</span><span class="p">()</span>     <span class="c1">// &#34;file already closed&#34;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">ErrNoDeadline</span> <span class="p">=</span> <span class="nf">errNoDeadline</span><span class="p">()</span> <span class="c1">// &#34;file type does not support deadline&#34;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>预定义的特定错误，我们叫做 <code>Sentinel Error</code>。</p>
 <ol>
@@ -264,34 +275,34 @@ Golang Error 学习笔记
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">net</span>
-
-<span class="kd">type</span> <span class="nx">OpError</span> <span class="kd">struct</span> <span class="p">{</span>
-    <span class="c1">// Op is the operation which caused the error, such as
-</span><span class="c1"></span>    <span class="c1">// &#34;read&#34; or &#34;write&#34;.
-</span><span class="c1"></span>    <span class="nx">Op</span> <span class="kt">string</span>
-
-    <span class="c1">// Net is the network type on which this error occurred,
-</span><span class="c1"></span>    <span class="c1">// such as &#34;tcp&#34; or &#34;udp6&#34;.
-</span><span class="c1"></span>    <span class="nx">Net</span> <span class="kt">string</span>
-
-    <span class="c1">// For operations involving a remote network connection, like
-</span><span class="c1"></span>    <span class="c1">// Dial, Read, or Write, Source is the corresponding local
-</span><span class="c1"></span>    <span class="c1">// network address.
-</span><span class="c1"></span>    <span class="nx">Source</span> <span class="nx">Addr</span>
-
-    <span class="c1">// Addr is the network address for which this error occurred.
-</span><span class="c1"></span>    <span class="c1">// For local operations, like Listen or SetDeadline, Addr is
-</span><span class="c1"></span>    <span class="c1">// the address of the local endpoint being manipulated.
-</span><span class="c1"></span>    <span class="c1">// For operations involving a remote network connection, like
-</span><span class="c1"></span>    <span class="c1">// Dial, Read, or Write, Addr is the remote address of that
-</span><span class="c1"></span>    <span class="c1">// connection.
-</span><span class="c1"></span>    <span class="nx">Addr</span> <span class="nx">Addr</span>
-
-    <span class="c1">// Err is the error that occurred during the operation.
-</span><span class="c1"></span>    <span class="nx">Err</span> <span class="kt">error</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">net</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">OpError</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Op is the operation which caused the error, such as
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// &#34;read&#34; or &#34;write&#34;.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">Op</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Net is the network type on which this error occurred,
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// such as &#34;tcp&#34; or &#34;udp6&#34;.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">Net</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// For operations involving a remote network connection, like
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// Dial, Read, or Write, Source is the corresponding local
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// network address.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">Source</span> <span class="nx">Addr</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Addr is the network address for which this error occurred.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// For local operations, like Listen or SetDeadline, Addr is
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// the address of the local endpoint being manipulated.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// For operations involving a remote network connection, like
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// Dial, Read, or Write, Addr is the remote address of that
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// connection.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">Addr</span> <span class="nx">Addr</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Err is the error that occurred during the operation.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">Err</span> <span class="kt">error</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="opaque-error">Opaque Error</h2>
 <p>对外暴露一个函数来检测错误的信息，而不是直接暴露 Error 类型给外部。</p>
@@ -307,15 +318,15 @@ Golang Error 学习笔记
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">temporary</span> <span class="kd">interface</span> <span class="p">{</span>
-    <span class="nf">Temporary</span><span class="p">()</span> <span class="kt">bool</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="nf">IsTemporary</span><span class="p">(</span><span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
-    <span class="nx">te</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">err</span><span class="p">.(</span><span class="nx">temporary</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nx">ok</span> <span class="o">&amp;&amp;</span> <span class="nx">te</span><span class="p">.</span><span class="nf">Temporary</span><span class="p">()</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">temporary</span> <span class="kd">interface</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">Temporary</span><span class="p">()</span> <span class="kt">bool</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">IsTemporary</span><span class="p">(</span><span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">te</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">err</span><span class="p">.(</span><span class="nx">temporary</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">ok</span> <span class="o">&amp;&amp;</span> <span class="nx">te</span><span class="p">.</span><span class="nf">Temporary</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="通过消除错误来优化错误处理代码">通过消除错误来优化错误处理代码</h2>
 <ul>
@@ -354,36 +365,36 @@ Golang Error 学习笔记
 </span><span class="lnt">29
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Header</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Key</span><span class="p">,</span> <span class="nx">Value</span> <span class="kt">string</span>
-<span class="p">}</span>
-
-<span class="kd">type</span> <span class="nx">Status</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Code</span>   <span class="kt">int</span>
-	<span class="nx">Reason</span> <span class="kt">string</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="nf">BadWriteResponse</span><span class="p">(</span><span class="nx">w</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span><span class="p">,</span> <span class="nx">st</span> <span class="nx">Status</span><span class="p">,</span> <span class="nx">headers</span> <span class="p">[]</span><span class="nx">Header</span><span class="p">,</span> <span class="nx">body</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="s">&#34;HTTP/1.1 %d %s\r\n&#34;</span><span class="p">,</span> <span class="nx">st</span><span class="p">.</span><span class="nx">Code</span><span class="p">,</span> <span class="nx">st</span><span class="p">.</span><span class="nx">Reason</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">err</span>
-	<span class="p">}</span>
-
-	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">h</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">headers</span> <span class="p">{</span>
-		<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="s">&#34;%s: %s\r\n&#34;</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nx">Key</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span>
-		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-			<span class="k">return</span> <span class="nx">err</span>
-		<span class="p">}</span>
-	<span class="p">}</span>
-
-	<span class="k">if</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="s">&#34;\r\n&#34;</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">err</span>
-	<span class="p">}</span>
-
-	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">io</span><span class="p">.</span><span class="nf">Copy</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span>
-	<span class="k">return</span> <span class="nx">err</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Header</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">Key</span><span class="p">,</span> <span class="nx">Value</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Status</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">Code</span>   <span class="kt">int</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">Reason</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">BadWriteResponse</span><span class="p">(</span><span class="nx">w</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span><span class="p">,</span> <span class="nx">st</span> <span class="nx">Status</span><span class="p">,</span> <span class="nx">headers</span> <span class="p">[]</span><span class="nx">Header</span><span class="p">,</span> <span class="nx">body</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="s">&#34;HTTP/1.1 %d %s\r\n&#34;</span><span class="p">,</span> <span class="nx">st</span><span class="p">.</span><span class="nx">Code</span><span class="p">,</span> <span class="nx">st</span><span class="p">.</span><span class="nx">Reason</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nx">err</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">h</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">headers</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="s">&#34;%s: %s\r\n&#34;</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nx">Key</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="k">return</span> <span class="nx">err</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="s">&#34;\r\n&#34;</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nx">err</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">io</span><span class="p">.</span><span class="nf">Copy</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">err</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>优化后的代码</li>
@@ -422,35 +433,35 @@ Golang Error 学习笔记
 </span><span class="lnt">28
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">errWriter</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span>
-	<span class="nx">err</span> <span class="kt">error</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="o">*</span><span class="nx">errWriter</span><span class="p">)</span> <span class="nf">Write</span><span class="p">(</span><span class="nx">buf</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">if</span> <span class="nx">e</span><span class="p">.</span><span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">err</span>
-	<span class="p">}</span>
-
-	<span class="kd">var</span> <span class="nx">n</span> <span class="kt">int</span>
-	<span class="nx">n</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">err</span> <span class="p">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">Writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="nx">buf</span><span class="p">)</span>
-	<span class="k">return</span> <span class="nx">n</span><span class="p">,</span> <span class="kc">nil</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="nf">GoodWriteResponse</span><span class="p">(</span><span class="nx">w</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span><span class="p">,</span> <span class="nx">st</span> <span class="nx">Status</span><span class="p">,</span> <span class="nx">headers</span> <span class="p">[]</span><span class="nx">Header</span><span class="p">,</span> <span class="nx">body</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-	<span class="nx">ew</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">errWriter</span><span class="p">{</span><span class="nx">Writer</span><span class="p">:</span> <span class="nx">w</span><span class="p">}</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">ew</span><span class="p">,</span> <span class="s">&#34;HTTP/1.1 %d %s\r\n&#34;</span><span class="p">,</span> <span class="nx">st</span><span class="p">.</span><span class="nx">Code</span><span class="p">,</span> <span class="nx">st</span><span class="p">.</span><span class="nx">Reason</span><span class="p">)</span>
-
-	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">h</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">headers</span> <span class="p">{</span>
-		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">ew</span><span class="p">,</span> <span class="s">&#34;%s: %s\r\n&#34;</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nx">Key</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span>
-	<span class="p">}</span>
-
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">ew</span><span class="p">,</span> <span class="s">&#34;\r\n&#34;</span><span class="p">)</span>
-	<span class="nx">io</span><span class="p">.</span><span class="nf">Copy</span><span class="p">(</span><span class="nx">ew</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span>
-
-	<span class="k">return</span> <span class="nx">ew</span><span class="p">.</span><span class="nx">err</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">errWriter</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">err</span> <span class="kt">error</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">e</span> <span class="o">*</span><span class="nx">errWriter</span><span class="p">)</span> <span class="nf">Write</span><span class="p">(</span><span class="nx">buf</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">e</span><span class="p">.</span><span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">err</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">n</span> <span class="kt">int</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">n</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">err</span> <span class="p">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">Writer</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="nx">buf</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">n</span><span class="p">,</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">GoodWriteResponse</span><span class="p">(</span><span class="nx">w</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span><span class="p">,</span> <span class="nx">st</span> <span class="nx">Status</span><span class="p">,</span> <span class="nx">headers</span> <span class="p">[]</span><span class="nx">Header</span><span class="p">,</span> <span class="nx">body</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ew</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">errWriter</span><span class="p">{</span><span class="nx">Writer</span><span class="p">:</span> <span class="nx">w</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">ew</span><span class="p">,</span> <span class="s">&#34;HTTP/1.1 %d %s\r\n&#34;</span><span class="p">,</span> <span class="nx">st</span><span class="p">.</span><span class="nx">Code</span><span class="p">,</span> <span class="nx">st</span><span class="p">.</span><span class="nx">Reason</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">h</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">headers</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">ew</span><span class="p">,</span> <span class="s">&#34;%s: %s\r\n&#34;</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nx">Key</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nx">Value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">ew</span><span class="p">,</span> <span class="s">&#34;\r\n&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">io</span><span class="p">.</span><span class="nf">Copy</span><span class="p">(</span><span class="nx">ew</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">ew</span><span class="p">.</span><span class="nx">err</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="wrap-errors">Wrap Errors</h2>
 <blockquote>
@@ -500,37 +511,37 @@ Golang Error 学习笔记
 </span><span class="lnt">30
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">ReadFile</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">)</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">f</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Wrap</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="s">&#34;open failed&#34;</span><span class="p">)</span>
-        <span class="p">}</span>
-    <span class="k">defer</span> <span class="nx">f</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-
-    <span class="nx">buf</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Wrap</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="s">&#34;read failed&#34;</span><span class="p">)</span>
-        <span class="p">}</span>
-    <span class="k">return</span> <span class="nx">buf</span><span class="p">,</span> <span class="kc">nil</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="nf">ReadConfig</span><span class="p">()</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">home</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="s">&#34;HOME&#34;</span><span class="p">)</span>
-    <span class="nx">config</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">ReadFile</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="nx">home</span><span class="p">,</span> <span class="s">&#34;.settings.xml&#34;</span><span class="p">))</span>
-    <span class="k">return</span> <span class="nx">config</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">WithMessage</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="s">&#34;counld not read config&#34;</span><span class="p">)</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">ReadConfig</span><span class="p">()</span>
-    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-            <span class="c1">// Cause 会拿到最底层的错误
-</span><span class="c1"></span>            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;original error: %T %v\n&#34;</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Cause</span><span class="p">(</span><span class="nx">err</span><span class="p">),</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Cause</span><span class="p">(</span><span class="nx">err</span><span class="p">))</span>
-            <span class="c1">// %+v 会打印堆栈信息
-</span><span class="c1"></span>            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;stack trace:\n%+v\n&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-            <span class="nx">os</span><span class="p">.</span><span class="nf">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">ReadFile</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">)</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">f</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Wrap</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="s">&#34;open failed&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">defer</span> <span class="nx">f</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nx">buf</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Wrap</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="s">&#34;read failed&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">buf</span><span class="p">,</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">ReadConfig</span><span class="p">()</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">home</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Getenv</span><span class="p">(</span><span class="s">&#34;HOME&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">config</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">ReadFile</span><span class="p">(</span><span class="nx">filepath</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="nx">home</span><span class="p">,</span> <span class="s">&#34;.settings.xml&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">config</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">WithMessage</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="s">&#34;counld not read config&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">ReadConfig</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// Cause 会拿到最底层的错误
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;original error: %T %v\n&#34;</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Cause</span><span class="p">(</span><span class="nx">err</span><span class="p">),</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Cause</span><span class="p">(</span><span class="nx">err</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// %+v 会打印堆栈信息
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;stack trace:\n%+v\n&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">os</span><span class="p">.</span><span class="nf">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>输出</li>
@@ -558,26 +569,26 @@ Golang Error 学习笔记
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ø&gt; go run pkgerror.go
-original error: *os.PathError open /home/xuyundong/.settings.xml: no such file or directory
-stack trace:
-open /home/xuyundong/.settings.xml: no such file or directory  <span class="c1"># 这是原始错误</span>
-open failed  <span class="c1"># 这是原始错误包装后的信息</span>
-<span class="c1"># 下面是堆栈信息</span>
-main.ReadFile
-        /home/xuyundong/Github/Golang/GoDemo/pkgerror.go:15
-main.ReadConfig
-        /home/xuyundong/Github/Golang/GoDemo/pkgerror.go:28
-main.main
-        /home/xuyundong/Github/Golang/GoDemo/pkgerror.go:33
-runtime.main
-        /home/xuyundong/.local/go/src/runtime/proc.go:204
-runtime.goexit
-        /home/xuyundong/.local/go/src/runtime/asm_amd64.s:1374
-<span class="c1"># 这是在 wraperror 上又包装的信息</span>
-counld not <span class="nb">read</span> config
-<span class="nb">exit</span> status <span class="m">1</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ø&gt; go run pkgerror.go
+</span></span><span class="line"><span class="cl">original error: *os.PathError open /home/xuyundong/.settings.xml: no such file or directory
+</span></span><span class="line"><span class="cl">stack trace:
+</span></span><span class="line"><span class="cl">open /home/xuyundong/.settings.xml: no such file or directory  <span class="c1"># 这是原始错误</span>
+</span></span><span class="line"><span class="cl">open failed  <span class="c1"># 这是原始错误包装后的信息</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 下面是堆栈信息</span>
+</span></span><span class="line"><span class="cl">main.ReadFile
+</span></span><span class="line"><span class="cl">        /home/xuyundong/Github/Golang/GoDemo/pkgerror.go:15
+</span></span><span class="line"><span class="cl">main.ReadConfig
+</span></span><span class="line"><span class="cl">        /home/xuyundong/Github/Golang/GoDemo/pkgerror.go:28
+</span></span><span class="line"><span class="cl">main.main
+</span></span><span class="line"><span class="cl">        /home/xuyundong/Github/Golang/GoDemo/pkgerror.go:33
+</span></span><span class="line"><span class="cl">runtime.main
+</span></span><span class="line"><span class="cl">        /home/xuyundong/.local/go/src/runtime/proc.go:204
+</span></span><span class="line"><span class="cl">runtime.goexit
+</span></span><span class="line"><span class="cl">        /home/xuyundong/.local/go/src/runtime/asm_amd64.s:1374
+</span></span><span class="line"><span class="cl"><span class="c1"># 这是在 wraperror 上又包装的信息</span>
+</span></span><span class="line"><span class="cl">counld not <span class="nb">read</span> config
+</span></span><span class="line"><span class="cl"><span class="nb">exit</span> status <span class="m">1</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="pkg-errors-使用规则">pkg-errors 使用规则</h3>
 <ul>
@@ -708,7 +719,7 @@ counld not <span class="nb">read</span> config
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

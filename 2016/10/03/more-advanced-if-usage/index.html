@@ -17,14 +17,14 @@
 
 
 <meta name="author" content="bwangel" /><meta name="description" content="摘要:
-  本文是对More advanced if usage的翻译 主要讲述了 Bash 中 if 的一些高级用法  " /><meta name="keywords" content="Hugo, blog, bwangel" />
+本文是对More advanced if usage的翻译 主要讲述了 Bash 中 if 的一些高级用法 " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.92.2 with theme even" />
+<meta name="generator" content="Hugo 0.101.0 with theme even" />
 
 
 <link rel="canonical" href="/2016/10/03/more-advanced-if-usage/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -72,6 +72,17 @@
 主要讲述了 Bash 中 if 的一些高级用法
 
 "/>
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -207,14 +218,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">freddy scripts&gt; <span class="nv">gender</span><span class="o">=</span><span class="s2">&#34;male&#34;</span>
-freddy scripts&gt; <span class="k">if</span> <span class="o">[[</span> <span class="s2">&#34;</span><span class="nv">$gender</span><span class="s2">&#34;</span> <span class="o">==</span> <span class="s2">&#34;f*&#34;</span> <span class="o">]]</span>
-More input&gt; <span class="k">then</span> <span class="nb">echo</span> <span class="s2">&#34;Pleasure to meet you, Madame.&#34;</span>
-More input&gt; <span class="k">else</span> <span class="nb">echo</span> <span class="s2">&#34;How come the lady hasn&#39;t got a drink yet?&#34;</span>
-More input&gt; <span class="k">fi</span>
-How come the lady hasn<span class="err">&#39;</span>t got a drink yet?
-freddy scripts&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">freddy scripts&gt; <span class="nv">gender</span><span class="o">=</span><span class="s2">&#34;male&#34;</span>
+</span></span><span class="line"><span class="cl">freddy scripts&gt; <span class="k">if</span> <span class="o">[[</span> <span class="s2">&#34;</span><span class="nv">$gender</span><span class="s2">&#34;</span> <span class="o">==</span> <span class="s2">&#34;f*&#34;</span> <span class="o">]]</span>
+</span></span><span class="line"><span class="cl">More input&gt; <span class="k">then</span> <span class="nb">echo</span> <span class="s2">&#34;Pleasure to meet you, Madame.&#34;</span>
+</span></span><span class="line"><span class="cl">More input&gt; <span class="k">else</span> <span class="nb">echo</span> <span class="s2">&#34;How come the lady hasn&#39;t got a drink yet?&#34;</span>
+</span></span><span class="line"><span class="cl">More input&gt; <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">How come the lady hasn<span class="err">&#39;</span>t got a drink yet?
+</span></span><span class="line"><span class="cl">freddy scripts&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><blockquote>
 <p><strong>注意</strong>:
@@ -234,15 +245,15 @@ freddy scripts&gt;
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">anny ~&gt; su -
-Password:
-<span class="o">[</span>root@elegance root<span class="o">]</span><span class="c1"># if ! grep ^$USER /etc/passwd 1&gt; /dev/null</span>
-&gt; <span class="k">then</span> <span class="nb">echo</span> <span class="s2">&#34;your user account is not managed locally&#34;</span>
-&gt; <span class="k">else</span> <span class="nb">echo</span> <span class="s2">&#34;your account is managed from the local /etc/passwd file&#34;</span>
-&gt; <span class="k">fi</span>
-your account is managed from the <span class="nb">local</span> /etc/passwd file
-<span class="o">[</span>root@elegance root<span class="o">]</span><span class="c1">#</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">anny ~&gt; su -
+</span></span><span class="line"><span class="cl">Password:
+</span></span><span class="line"><span class="cl"><span class="o">[</span>root@elegance root<span class="o">]</span><span class="c1"># if ! grep ^$USER /etc/passwd 1&gt; /dev/null</span>
+</span></span><span class="line"><span class="cl">&gt; <span class="k">then</span> <span class="nb">echo</span> <span class="s2">&#34;your user account is not managed locally&#34;</span>
+</span></span><span class="line"><span class="cl">&gt; <span class="k">else</span> <span class="nb">echo</span> <span class="s2">&#34;your account is managed from the local /etc/passwd file&#34;</span>
+</span></span><span class="line"><span class="cl">&gt; <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">your account is managed from the <span class="nb">local</span> /etc/passwd file
+</span></span><span class="line"><span class="cl"><span class="o">[</span>root@elegance root<span class="o">]</span><span class="c1">#</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>我们切换到 root 账户去演示 else 语句的效果 - 你的 root 通常是一个本地账户，而你自己的账户可能通过一个中央系统来管理，就比如一个 LDAP 服务器。</p>
     </div>
@@ -352,7 +363,7 @@ your account is managed from the <span class="nb">local</span> /etc/passwd file
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

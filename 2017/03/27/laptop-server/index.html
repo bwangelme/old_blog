@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.2 with theme even" />
+<meta name="generator" content="Hugo 0.101.0 with theme even" />
 
 
 <link rel="canonical" href="/2017/03/27/laptop-server/" />
@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -65,6 +65,17 @@
 配置dnsmasq服务器
 文章没什么技术含量，主要记录一些配置文件的位置
 "/>
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -228,10 +239,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 设置网卡enp12s0在开机的时候通过 DHCP 自动连接到网络。</span>
-auto enp12s0
-iface enp12s0 inet dhcp
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 设置网卡enp12s0在开机的时候通过 DHCP 自动连接到网络。</span>
+</span></span><span class="line"><span class="cl">auto enp12s0
+</span></span><span class="line"><span class="cl">iface enp12s0 inet dhcp
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>上面两句配置就表示设置网卡enp12s0在开机的时候通过 DHCP 自动连接到网络。</p>
 <h3 id="设置默认网关">设置默认网关</h3>
@@ -262,20 +273,20 @@ iface enp12s0 inet dhcp
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 设置服务器的监听地址为192.168.X.X和127.0.0.1</span>
-listen-address<span class="o">=</span>192.168.X.X,127.0.0.1
-<span class="c1"># 所有没有.号的域名(plain names)都不会向上游DNS Server转发，只查询hosts文件</span>
-domain-needed
-<span class="c1"># 所有保留IP地址段内的反向查询都不会向上游DNS Server转发，只查询hosts文件</span>
-bogus-priv
-<span class="c1"># 不要读取/etc/resolver中的DNS Server的配置</span>
-no-resolv
-<span class="c1"># 不要poll /etc/resolver文件的更新</span>
-no-poll
-<span class="c1"># 配置上游服务器为DNSPod的公共DNS</span>
-<span class="nv">server</span><span class="o">=</span>119.29.29.29
-<span class="nv">server</span><span class="o">=</span>182.254.116.116
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 设置服务器的监听地址为192.168.X.X和127.0.0.1</span>
+</span></span><span class="line"><span class="cl">listen-address<span class="o">=</span>192.168.X.X,127.0.0.1
+</span></span><span class="line"><span class="cl"><span class="c1"># 所有没有.号的域名(plain names)都不会向上游DNS Server转发，只查询hosts文件</span>
+</span></span><span class="line"><span class="cl">domain-needed
+</span></span><span class="line"><span class="cl"><span class="c1"># 所有保留IP地址段内的反向查询都不会向上游DNS Server转发，只查询hosts文件</span>
+</span></span><span class="line"><span class="cl">bogus-priv
+</span></span><span class="line"><span class="cl"><span class="c1"># 不要读取/etc/resolver中的DNS Server的配置</span>
+</span></span><span class="line"><span class="cl">no-resolv
+</span></span><span class="line"><span class="cl"><span class="c1"># 不要poll /etc/resolver文件的更新</span>
+</span></span><span class="line"><span class="cl">no-poll
+</span></span><span class="line"><span class="cl"><span class="c1"># 配置上游服务器为DNSPod的公共DNS</span>
+</span></span><span class="line"><span class="cl"><span class="nv">server</span><span class="o">=</span>119.29.29.29
+</span></span><span class="line"><span class="cl"><span class="nv">server</span><span class="o">=</span>182.254.116.116
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>配置好了以后，我们可以通过<code>dnsmasq --test</code>命令来检查<code>dnsmasq</code>的配置文件语法是否正确。</p>
 <p>然后我们在服务器的<code>/etc/hosts</code>中添加我们想要设置的解析记录，比如这台服务器我设置了如下的记录：</p>
@@ -284,8 +295,8 @@ no-poll
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">192.168.X.X dev.bwangel.me
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">192.168.X.X dev.bwangel.me
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>然后通过<code>sudo systemctl enable dnsmasq &amp;&amp; sudo systemctl restart dnsmasq</code>命令启动<code>dnsmasq</code>服务即可。</p>
 <p>最后我们可以通过<code>dig</code>命令测试一下，运行如下命令: <code>dig dev.bwangel.me @localhost</code>，看返回的IP地址是否和我们设置的解析记录相同。</p>
@@ -310,15 +321,15 @@ no-poll
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">perl: warning: Setting locale failed.
-perl: warning: Please check that your locale settings:
-    <span class="nv">LANGUAGE</span> <span class="o">=</span> <span class="o">(</span><span class="nb">unset</span><span class="o">)</span>,
-    <span class="nv">LC_ALL</span> <span class="o">=</span> <span class="o">(</span><span class="nb">unset</span><span class="o">)</span>,
-    <span class="nv">LC_MESSAGES</span> <span class="o">=</span> <span class="s2">&#34;zh_CN.UTF-8&#34;</span>,
-    <span class="nv">LANG</span> <span class="o">=</span> <span class="s2">&#34;zh_CN.UTF-8&#34;</span>
-    are supported and installed on your system.
-perl: warning: Falling back to the standard locale <span class="o">(</span><span class="s2">&#34;C&#34;</span><span class="o">)</span>.
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">perl: warning: Setting locale failed.
+</span></span><span class="line"><span class="cl">perl: warning: Please check that your locale settings:
+</span></span><span class="line"><span class="cl">    <span class="nv">LANGUAGE</span> <span class="o">=</span> <span class="o">(</span><span class="nb">unset</span><span class="o">)</span>,
+</span></span><span class="line"><span class="cl">    <span class="nv">LC_ALL</span> <span class="o">=</span> <span class="o">(</span><span class="nb">unset</span><span class="o">)</span>,
+</span></span><span class="line"><span class="cl">    <span class="nv">LC_MESSAGES</span> <span class="o">=</span> <span class="s2">&#34;zh_CN.UTF-8&#34;</span>,
+</span></span><span class="line"><span class="cl">    <span class="nv">LANG</span> <span class="o">=</span> <span class="s2">&#34;zh_CN.UTF-8&#34;</span>
+</span></span><span class="line"><span class="cl">    are supported and installed on your system.
+</span></span><span class="line"><span class="cl">perl: warning: Falling back to the standard locale <span class="o">(</span><span class="s2">&#34;C&#34;</span><span class="o">)</span>.
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>这是由于终端SSH的时候，会将本地的locale配置传到服务端上去，我的本地设置的语系是<code>zh_CN.UTF-8</code>，但是服务器上只安装了<code>en_US.UTF-8</code>，所以就会报错提示说找不到语系<code>zh_CN.UTF-8</code>相关的文件。这里我们只需要修改一下服务器的<code>/etc/locale.gen</code>配置文件，将<code>zh_CN.UTF-8</code>相关的配置取消注释，然后再来运行<code>locale-gen</code>命令，就会安装上<code>zh_CN.UTF-8</code>语系相关的文件了，再来运行<code>perl</code>程序就不会报错了。</p>
     </div>
@@ -429,7 +440,7 @@ perl: warning: Falling back to the standard locale <span class="o">(</span><span
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
