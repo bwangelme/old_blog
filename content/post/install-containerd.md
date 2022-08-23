@@ -63,11 +63,11 @@ tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.1.1.tgz
 
 ## containerd 客户端的说明
 
-Name|Community|API	Target|Web site
----|---|---|---
-ctr|containerd|Native|For debugging only|(None, see ctr --help to learn the usage)
-nerdctl|containerd (non-core)|Native|General-purpose|https://github.com/containerd/nerdctl
-crictl|Kubernetes SIG-node|CRI|For debugging only|https://github.com/kubernetes-sigs/cri-tools/blob/master/docs/crictl.md
+Name      | Community             | API    | Target             | Web site                                    |
+----------|-----------------------|------- | -------------------|---------------------------------------------|
+`ctr`     | containerd            | Native | For debugging only | (None, see `ctr --help` to learn the usage) |
+`nerdctl` | containerd (non-core) | Native | General-purpose    | https://github.com/containerd/nerdctl       |
+`crictl`  | Kubernetes SIG-node   | CRI    | For debugging only | https://github.com/kubernetes-sigs/cri-tools/blob/master/docs/crictl.md |
 
 一共有三种命令行工具可以和 containerd 交互:
 
