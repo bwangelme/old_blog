@@ -116,7 +116,7 @@ systemctl daemon-reload
 systemctl restart containerd
 ```
 
-此时再执行 `sudo crictl pull k8s.gcr.io/kube-controller-manager:v1.24.4` 就可以成功拉取到 k8s 相关的镜像了, 此时就能够正常地和 `kubeadm` 交互了
+此时再执行 `sudo crictl pull k8s.gcr.io/kube-controller-manager:v1.24.4` 就可以成功拉取到 k8s 相关的镜像了, 也能够正常地和 `kubeadm` 交互了
 
 ### 设置 client 侧的环境变量
 
