@@ -16,14 +16,14 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content=" 记一次因 Python 升级导致的 ImportError " /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content="  记一次因 Python 升级导致的 ImportError  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2017/12/05/python-upgrade-importerror/" />
@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -194,9 +194,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">from _ssl import HAS_SNI, HAS_ECDH, HAS_NPN, HAS_ALPN, HAS_TLSv1_3
-</span></span><span class="line"><span class="cl">ImportError: cannot import name &#39;HAS_TLSv1_3&#39;
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">from _ssl import HAS_SNI, HAS_ECDH, HAS_NPN, HAS_ALPN, HAS_TLSv1_3
+ImportError: cannot import name &#39;HAS_TLSv1_3&#39;
+</code></pre></td></tr></table>
 </div>
 </div><h1 id="原因分析">原因分析</h1>
 <h2 id="从异常入手查找原因">从异常入手查找原因</h2>
@@ -209,11 +209,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ssl.HAS_TLSv1_3
-</span></span><span class="line"><span class="cl">Whether the OpenSSL library has built-in support for the TLS 1.3 protocol.
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">New in version 3.6.3.
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">ssl.HAS_TLSv1_3
+Whether the OpenSSL library has built-in support for the TLS 1.3 protocol.
+
+New in version 3.6.3.
+</code></pre></td></tr></table>
 </div>
 </div><p>看到<code>New in version 3.6.3.</code>的字样，再去查系统的升级记录，我发现刚刚执行的升级中就把宿主机的 Python 从3.6.2升级到了3.6.3，此时我隐隐约约觉得就是因为此次升级导致了 uwsgi 启动时的报错。</p>
 <p>但我升级的是宿主机的 Python，它又是如何影响到了 Virtualenv 中的 Python 呢？各位别急，我们接着往下挖。</p>
@@ -224,8 +224,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">from _ssl import HAS_SNI, HAS_ECDH, HAS_NPN, HAS_ALPN, HAS_TLSv1_3
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">from _ssl import HAS_SNI, HAS_ECDH, HAS_NPN, HAS_ALPN, HAS_TLSv1_3
+</code></pre></td></tr></table>
 </div>
 </div><p>我们可以看到，抛出异常就是因为Python解释器从<code>_ssl</code>模块中导入<code>HAS_TLSv1_3</code>时，出现了导入异常。</p>
 <p>而<code>_ssl</code>模块是用C语言编写的，它被编译进入了Python解释器中，它的代码位于 Python 源码的 <a href="https://github.com/python/cpython/blob/v3.6.3/Lib/ssl.py">Modules/_ssl.c</a> 文件中。</p>
@@ -259,32 +259,32 @@
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">PyModuleDef</span> <span class="n">_sslmodule</span> <span class="o">=</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">PyModuleDef_HEAD_INIT</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="s">&#34;_ssl&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="n">module_doc</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="n">PySSL_methods</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nb">NULL</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nb">NULL</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nb">NULL</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nb">NULL</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">...</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">PyMODINIT_FUNC</span>
-</span></span><span class="line"><span class="cl"><span class="n">PyInit__ssl</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">PyObject</span> <span class="o">*</span><span class="n">m</span><span class="p">,</span> <span class="o">*</span><span class="n">d</span><span class="p">,</span> <span class="o">*</span><span class="n">r</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">...</span>
-</span></span><span class="line"><span class="cl">  
-</span></span><span class="line"><span class="cl">    <span class="c1">// _ssl 模块在这里定义，指针m代表了_ssl模块
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">m</span> <span class="o">=</span> <span class="n">PyModule_Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">_sslmodule</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">...</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="k">static</span> <span class="k">struct</span> <span class="n">PyModuleDef</span> <span class="n">_sslmodule</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">PyModuleDef_HEAD_INIT</span><span class="p">,</span>
+    <span class="s">&#34;_ssl&#34;</span><span class="p">,</span>
+    <span class="n">module_doc</span><span class="p">,</span>
+    <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">PySSL_methods</span><span class="p">,</span>
+    <span class="nb">NULL</span><span class="p">,</span>
+    <span class="nb">NULL</span><span class="p">,</span>
+    <span class="nb">NULL</span><span class="p">,</span>
+    <span class="nb">NULL</span>
+<span class="p">};</span>
+
+<span class="p">...</span>
+
+<span class="n">PyMODINIT_FUNC</span>
+<span class="n">PyInit__ssl</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">m</span><span class="p">,</span> <span class="o">*</span><span class="n">d</span><span class="p">,</span> <span class="o">*</span><span class="n">r</span><span class="p">;</span>
+    <span class="p">...</span>
+  
+    <span class="c1">// _ssl 模块在这里定义，指针m代表了_ssl模块
+</span><span class="c1"></span>    <span class="n">m</span> <span class="o">=</span> <span class="n">PyModule_Create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">_sslmodule</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="p">...</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>而在它的<a href="https://github.com/python/cpython/blob/v3.6.3/Modules/_ssl.c#L5462-L5468">5642-5468</a>行，我们可以看到<code>_ssl</code>模块中对于<code>HAS_TLSv1_3</code>属性的定义：</p>
 <div class="highlight"><div class="chroma">
@@ -299,15 +299,15 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#if defined(TLS1_3_VERSION) &amp;&amp; !defined(OPENSSL_NO_TLS1_3)
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="n">r</span> <span class="o">=</span> <span class="n">Py_True</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="cp">#else
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="n">r</span> <span class="o">=</span> <span class="n">Py_False</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="cp">#endif
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="n">Py_INCREF</span><span class="p">(</span><span class="n">r</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// 下面这条语句向_ssl模块中添加了布尔值 HAS_TLSv1_3
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">PyModule_AddObject</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="s">&#34;HAS_TLSv1_3&#34;</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cp">#if defined(TLS1_3_VERSION) &amp;&amp; !defined(OPENSSL_NO_TLS1_3)
+</span><span class="cp"></span>    <span class="n">r</span> <span class="o">=</span> <span class="n">Py_True</span><span class="p">;</span>
+<span class="cp">#else
+</span><span class="cp"></span>    <span class="n">r</span> <span class="o">=</span> <span class="n">Py_False</span><span class="p">;</span>
+<span class="cp">#endif
+</span><span class="cp"></span>    <span class="n">Py_INCREF</span><span class="p">(</span><span class="n">r</span><span class="p">);</span>
+    <span class="c1">// 下面这条语句向_ssl模块中添加了布尔值 HAS_TLSv1_3
+</span><span class="c1"></span>    <span class="n">PyModule_AddObject</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="s">&#34;HAS_TLSv1_3&#34;</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>上述的代码主要就是判断当前系统是否支持 TLS 1.3版本，并向<code>_ssl</code>模块添加了一个布尔值<code>HAS_TLSv1_3</code>来表明当前系统是否支持 TLS 1.3版本。</p>
 <h2 id="错误复现">错误复现</h2>
@@ -330,8 +330,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">_ssl</span> <span class="kn">import</span> <span class="n">HAS_SNI</span><span class="p">,</span> <span class="n">HAS_ECDH</span><span class="p">,</span> <span class="n">HAS_NPN</span><span class="p">,</span> <span class="n">HAS_ALPN</span><span class="p">,</span> <span class="n">HAS_TLSv1_3</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="kn">from</span> <span class="nn">_ssl</span> <span class="kn">import</span> <span class="n">HAS_SNI</span><span class="p">,</span> <span class="n">HAS_ECDH</span><span class="p">,</span> <span class="n">HAS_NPN</span><span class="p">,</span> <span class="n">HAS_ALPN</span><span class="p">,</span> <span class="n">HAS_TLSv1_3</span>
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>Python 3.6.2 的解释器从解释器內建的模块<code>_ssl</code>中导入<code>HAS_TLSv1_3</code></li>
@@ -450,7 +450,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

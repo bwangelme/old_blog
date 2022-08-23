@@ -17,7 +17,7 @@
 
 
 <meta name="author" content="bwangel" /><meta name="description" content="摘要:
-主要讲述了编译安装 Nginx
+ 主要讲述了编译安装 Nginx
 " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2016/04/10/nginx_install/" />
@@ -37,7 +37,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -189,11 +189,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">tar -xvf tar_ball/pcre-8.38.tar.gz
-</span></span><span class="line"><span class="cl"><span class="nb">cd</span> pcre-8.38/
-</span></span><span class="line"><span class="cl">./configure --prefix<span class="o">=</span>/usr/local/pcre-8.38
-</span></span><span class="line"><span class="cl">make <span class="o">&amp;&amp;</span> make install
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">tar -xvf tar_ball/pcre-8.38.tar.gz
+<span class="nb">cd</span> pcre-8.38/
+./configure --prefix<span class="o">=</span>/usr/local/pcre-8.38
+make <span class="o">&amp;&amp;</span> make install
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="编译安装-nginx">编译安装 Nginx</h2>
 <div class="highlight"><div class="chroma">
@@ -228,35 +228,35 @@
 </span><span class="lnt">28
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">yum install openssl openssl-devel
-</span></span><span class="line"><span class="cl">groupadd www
-</span></span><span class="line"><span class="cl">useradd -g www www -s /sbin/nologin
-</span></span><span class="line"><span class="cl">tar -xvf tar_ball/nginx-1.9.12.tar.gz
-</span></span><span class="line"><span class="cl"><span class="nb">cd</span> nginx-1.9.12/
-</span></span><span class="line"><span class="cl">  
-</span></span><span class="line"><span class="cl"><span class="c1"># 注意转义符号后面不要跟空格</span>
-</span></span><span class="line"><span class="cl"><span class="o">[</span>root@localhost nginx-1.9.12<span class="o">]</span><span class="c1"># ./configure \</span>
-</span></span><span class="line"><span class="cl">&gt; --prefix<span class="o">=</span>/usr/local/nginx-1.9.12 <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>&gt; --user<span class="o">=</span>www <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>&gt; --group<span class="o">=</span>www <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>&gt; --with-http_ssl_module <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>&gt; --with-http_flv_module <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>&gt; --with-http_stub_status_module <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>&gt; --with-http_gzip_static_module <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>&gt; --with-pcre<span class="o">=</span>/root/source/pcre-8.38/  <span class="c1"># 注意要指定pcre源码包位置</span>
-</span></span><span class="line"><span class="cl">   
-</span></span><span class="line"><span class="cl">make
-</span></span><span class="line"><span class="cl">make install
-</span></span><span class="line"><span class="cl">   
-</span></span><span class="line"><span class="cl"><span class="c1"># 启动并测试</span>
-</span></span><span class="line"><span class="cl">/usr/local/nginx-1.9.12/sbin/nginx -t  <span class="c1"># 测试配置文件</span>
-</span></span><span class="line"><span class="cl">/usr/local/nginx-1.9.12/sbin/nginx  <span class="c1"># 启动Nginx</span>
-</span></span><span class="line"><span class="cl">lsof -i:80  <span class="c1"># 查看80端口占用情况</span>
-</span></span><span class="line"><span class="cl">elinks -dump http://localhost  <span class="c1"># 用elinks测试本机</span>
-</span></span><span class="line"><span class="cl">   
-</span></span><span class="line"><span class="cl">vim /etc/profile
-</span></span><span class="line"><span class="cl">  pathmunge /usr/local/nginx-1.9.12/sbin/ after  <span class="c1"># 添加Nginx可执行文件的PATH</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">yum install openssl openssl-devel
+groupadd www
+useradd -g www www -s /sbin/nologin
+tar -xvf tar_ball/nginx-1.9.12.tar.gz
+<span class="nb">cd</span> nginx-1.9.12/
+  
+<span class="c1"># 注意转义符号后面不要跟空格</span>
+<span class="o">[</span>root@localhost nginx-1.9.12<span class="o">]</span><span class="c1"># ./configure \</span>
+&gt; --prefix<span class="o">=</span>/usr/local/nginx-1.9.12 <span class="se">\
+</span><span class="se"></span>&gt; --user<span class="o">=</span>www <span class="se">\
+</span><span class="se"></span>&gt; --group<span class="o">=</span>www <span class="se">\
+</span><span class="se"></span>&gt; --with-http_ssl_module <span class="se">\
+</span><span class="se"></span>&gt; --with-http_flv_module <span class="se">\
+</span><span class="se"></span>&gt; --with-http_stub_status_module <span class="se">\
+</span><span class="se"></span>&gt; --with-http_gzip_static_module <span class="se">\
+</span><span class="se"></span>&gt; --with-pcre<span class="o">=</span>/root/source/pcre-8.38/  <span class="c1"># 注意要指定pcre源码包位置</span>
+   
+make
+make install
+   
+<span class="c1"># 启动并测试</span>
+/usr/local/nginx-1.9.12/sbin/nginx -t  <span class="c1"># 测试配置文件</span>
+/usr/local/nginx-1.9.12/sbin/nginx  <span class="c1"># 启动Nginx</span>
+lsof -i:80  <span class="c1"># 查看80端口占用情况</span>
+elinks -dump http://localhost  <span class="c1"># 用elinks测试本机</span>
+   
+vim /etc/profile
+  pathmunge /usr/local/nginx-1.9.12/sbin/ after  <span class="c1"># 添加Nginx可执行文件的PATH</span>
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -365,7 +365,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

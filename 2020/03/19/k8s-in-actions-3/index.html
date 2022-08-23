@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2020/03/19/k8s-in-actions-3/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -54,7 +54,7 @@ Pod - 运行于 Kubernetes 中的容器
 Pod - 运行于 Kubernetes 中的容器
 "><meta itemprop="datePublished" content="2020-03-19T00:03:01+08:00" />
 <meta itemprop="dateModified" content="2020-03-19T00:03:01+08:00" />
-<meta itemprop="wordCount" content="2726">
+<meta itemprop="wordCount" content="2679">
 <meta itemprop="keywords" content="kubernetes,杂记," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="《K8S in Actions》 第三章学习笔记"/>
 <meta name="twitter:description" content="
@@ -149,7 +149,7 @@ Pod - 运行于 Kubernetes 中的容器
       <div class="post-meta">
         <span class="post-time"> 2020-03-19 </span>
         
-          <span class="more-meta"> 约 2726 字 </span>
+          <span class="more-meta"> 约 2679 字 </span>
           <span class="more-meta"> 预计阅读 6 分钟 </span>
         
       </div>
@@ -241,16 +241,16 @@ Pod - 运行于 Kubernetes 中的容器
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 输出一个 Pod 的 yaml 配置</span>
-</span></span><span class="line"><span class="cl"><span class="sb">`</span>kubectl get pod podName -o<span class="o">=</span>yaml<span class="sb">`</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 获取配置的文档</span>
-</span></span><span class="line"><span class="cl"><span class="sb">`</span>kubectl explain pod<span class="sb">`</span>
-</span></span><span class="line"><span class="cl"><span class="sb">`</span>kubectl explain pod.spec.containers<span class="sb">`</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 通过 manifest 创建一个 Pod</span>
-</span></span><span class="line"><span class="cl"><span class="sb">`</span>kubectl create -f somefile.yaml<span class="sb">`</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 输出一个 Pod 的 yaml 配置</span>
+<span class="sb">`</span>kubectl get pod podName -o<span class="o">=</span>yaml<span class="sb">`</span>
+
+<span class="c1"># 获取配置的文档</span>
+<span class="sb">`</span>kubectl explain pod<span class="sb">`</span>
+<span class="sb">`</span>kubectl explain pod.spec.containers<span class="sb">`</span>
+
+<span class="c1"># 通过 manifest 创建一个 Pod</span>
+<span class="sb">`</span>kubectl create -f somefile.yaml<span class="sb">`</span>
+</code></pre></td></tr></table>
 </div>
 </div><h3 id="manifest-说明">Manifest 说明</h3>
 <div class="highlight"><div class="chroma">
@@ -354,104 +354,104 @@ Pod - 运行于 Kubernetes 中的容器
 </span><span class="lnt">97
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">apiVersion: v1
-</span></span><span class="line"><span class="cl">kind: Pod
-</span></span><span class="line"><span class="cl">metadata:
-</span></span><span class="line"><span class="cl">  annotations:
-</span></span><span class="line"><span class="cl">    kubernetes.io/limit-ranger: &#39;LimitRanger plugin set: cpu request for container
-</span></span><span class="line"><span class="cl">      kubiame&#39;
-</span></span><span class="line"><span class="cl">  creationTimestamp: &#34;2020-03-16T13:35:38Z&#34;
-</span></span><span class="line"><span class="cl">  generateName: kubiame-
-</span></span><span class="line"><span class="cl">  labels:
-</span></span><span class="line"><span class="cl">    run: kubiame
-</span></span><span class="line"><span class="cl">  name: kubiame-8wt8x
-</span></span><span class="line"><span class="cl">  namespace: default
-</span></span><span class="line"><span class="cl">  ownerReferences:
-</span></span><span class="line"><span class="cl">  - apiVersion: v1
-</span></span><span class="line"><span class="cl">    blockOwnerDeletion: true
-</span></span><span class="line"><span class="cl">    controller: true
-</span></span><span class="line"><span class="cl">    kind: ReplicationController
-</span></span><span class="line"><span class="cl">    name: kubiame
-</span></span><span class="line"><span class="cl">    uid: bd10842d-6602-11ea-93a6-42010a8c003a
-</span></span><span class="line"><span class="cl">  resourceVersion: &#34;591803&#34;
-</span></span><span class="line"><span class="cl">  selfLink: /api/v1/namespaces/default/pods/kubiame-8wt8x
-</span></span><span class="line"><span class="cl">  uid: 05e120ae-678b-11ea-baaa-42010a8c0091
-</span></span><span class="line"><span class="cl">spec:
-</span></span><span class="line"><span class="cl">  containers:
-</span></span><span class="line"><span class="cl">  - image: bwangel/kubia:v0.1
-</span></span><span class="line"><span class="cl">    imagePullPolicy: IfNotPresent
-</span></span><span class="line"><span class="cl">    name: kubiame
-</span></span><span class="line"><span class="cl">    ports:
-</span></span><span class="line"><span class="cl">    - containerPort: 8080
-</span></span><span class="line"><span class="cl">      protocol: TCP
-</span></span><span class="line"><span class="cl">    resources:
-</span></span><span class="line"><span class="cl">      requests:
-</span></span><span class="line"><span class="cl">        cpu: 100m
-</span></span><span class="line"><span class="cl">    terminationMessagePath: /dev/termination-log
-</span></span><span class="line"><span class="cl">    terminationMessagePolicy: File
-</span></span><span class="line"><span class="cl">    volumeMounts:
-</span></span><span class="line"><span class="cl">    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
-</span></span><span class="line"><span class="cl">      name: default-token-hbl2l
-</span></span><span class="line"><span class="cl">      readOnly: true
-</span></span><span class="line"><span class="cl">  dnsPolicy: ClusterFirst
-</span></span><span class="line"><span class="cl">  enableServiceLinks: true
-</span></span><span class="line"><span class="cl">  nodeName: gke-demo-default-pool-ade08258-vqx4
-</span></span><span class="line"><span class="cl">  priority: 0
-</span></span><span class="line"><span class="cl">  restartPolicy: Always
-</span></span><span class="line"><span class="cl">  schedulerName: default-scheduler
-</span></span><span class="line"><span class="cl">  securityContext: {}
-</span></span><span class="line"><span class="cl">  serviceAccount: default
-</span></span><span class="line"><span class="cl">  serviceAccountName: default
-</span></span><span class="line"><span class="cl">  terminationGracePeriodSeconds: 30
-</span></span><span class="line"><span class="cl">  tolerations:
-</span></span><span class="line"><span class="cl">  - effect: NoExecute
-</span></span><span class="line"><span class="cl">    key: node.kubernetes.io/not-ready
-</span></span><span class="line"><span class="cl">    operator: Exists
-</span></span><span class="line"><span class="cl">    tolerationSeconds: 300
-</span></span><span class="line"><span class="cl">  - effect: NoExecute
-</span></span><span class="line"><span class="cl">    key: node.kubernetes.io/unreachable
-</span></span><span class="line"><span class="cl">    operator: Exists
-</span></span><span class="line"><span class="cl">    tolerationSeconds: 300
-</span></span><span class="line"><span class="cl">  volumes:
-</span></span><span class="line"><span class="cl">  - name: default-token-hbl2l
-</span></span><span class="line"><span class="cl">    secret:
-</span></span><span class="line"><span class="cl">      defaultMode: 420
-</span></span><span class="line"><span class="cl">      secretName: default-token-hbl2l
-</span></span><span class="line"><span class="cl">status:
-</span></span><span class="line"><span class="cl">  conditions:
-</span></span><span class="line"><span class="cl">  - lastProbeTime: null
-</span></span><span class="line"><span class="cl">    lastTransitionTime: &#34;2020-03-16T13:35:38Z&#34;
-</span></span><span class="line"><span class="cl">    status: &#34;True&#34;
-</span></span><span class="line"><span class="cl">    type: Initialized
-</span></span><span class="line"><span class="cl">  - lastProbeTime: null
-</span></span><span class="line"><span class="cl">    lastTransitionTime: &#34;2020-03-16T13:36:18Z&#34;
-</span></span><span class="line"><span class="cl">    status: &#34;True&#34;
-</span></span><span class="line"><span class="cl">    type: Ready
-</span></span><span class="line"><span class="cl">  - lastProbeTime: null
-</span></span><span class="line"><span class="cl">    lastTransitionTime: &#34;2020-03-16T13:36:18Z&#34;
-</span></span><span class="line"><span class="cl">    status: &#34;True&#34;
-</span></span><span class="line"><span class="cl">    type: ContainersReady
-</span></span><span class="line"><span class="cl">  - lastProbeTime: null
-</span></span><span class="line"><span class="cl">    lastTransitionTime: &#34;2020-03-16T13:35:38Z&#34;
-</span></span><span class="line"><span class="cl">    status: &#34;True&#34;
-</span></span><span class="line"><span class="cl">    type: PodScheduled
-</span></span><span class="line"><span class="cl">  containerStatuses:
-</span></span><span class="line"><span class="cl">  - containerID: docker://59a3d4a8f8778b7fa6424f91246180a82435cda5867915008250004b2171562a
-</span></span><span class="line"><span class="cl">    image: bwangel/kubia:v0.1
-</span></span><span class="line"><span class="cl">    imageID: docker-pullable://bwangel/kubia@sha256:16a200e2b44a2e9b28fe9c40338d3766f376130f806e263193dba02fb6d40c7c
-</span></span><span class="line"><span class="cl">    lastState: {}
-</span></span><span class="line"><span class="cl">    name: kubiame
-</span></span><span class="line"><span class="cl">    ready: true
-</span></span><span class="line"><span class="cl">    restartCount: 0
-</span></span><span class="line"><span class="cl">    state:
-</span></span><span class="line"><span class="cl">      running:
-</span></span><span class="line"><span class="cl">        startedAt: &#34;2020-03-16T13:36:17Z&#34;
-</span></span><span class="line"><span class="cl">  hostIP: 10.140.0.2
-</span></span><span class="line"><span class="cl">  phase: Running
-</span></span><span class="line"><span class="cl">  podIP: 10.0.0.6
-</span></span><span class="line"><span class="cl">  qosClass: Burstable
-</span></span><span class="line"><span class="cl">  startTime: &#34;2020-03-16T13:35:38Z&#34;
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kubernetes.io/limit-ranger: &#39;LimitRanger plugin set: cpu request for container
+      kubiame&#39;
+  creationTimestamp: &#34;2020-03-16T13:35:38Z&#34;
+  generateName: kubiame-
+  labels:
+    run: kubiame
+  name: kubiame-8wt8x
+  namespace: default
+  ownerReferences:
+  - apiVersion: v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicationController
+    name: kubiame
+    uid: bd10842d-6602-11ea-93a6-42010a8c003a
+  resourceVersion: &#34;591803&#34;
+  selfLink: /api/v1/namespaces/default/pods/kubiame-8wt8x
+  uid: 05e120ae-678b-11ea-baaa-42010a8c0091
+spec:
+  containers:
+  - image: bwangel/kubia:v0.1
+    imagePullPolicy: IfNotPresent
+    name: kubiame
+    ports:
+    - containerPort: 8080
+      protocol: TCP
+    resources:
+      requests:
+        cpu: 100m
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: default-token-hbl2l
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: gke-demo-default-pool-ade08258-vqx4
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: default-token-hbl2l
+    secret:
+      defaultMode: 420
+      secretName: default-token-hbl2l
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: &#34;2020-03-16T13:35:38Z&#34;
+    status: &#34;True&#34;
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: &#34;2020-03-16T13:36:18Z&#34;
+    status: &#34;True&#34;
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: &#34;2020-03-16T13:36:18Z&#34;
+    status: &#34;True&#34;
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: &#34;2020-03-16T13:35:38Z&#34;
+    status: &#34;True&#34;
+    type: PodScheduled
+  containerStatuses:
+  - containerID: docker://59a3d4a8f8778b7fa6424f91246180a82435cda5867915008250004b2171562a
+    image: bwangel/kubia:v0.1
+    imageID: docker-pullable://bwangel/kubia@sha256:16a200e2b44a2e9b28fe9c40338d3766f376130f806e263193dba02fb6d40c7c
+    lastState: {}
+    name: kubiame
+    ready: true
+    restartCount: 0
+    state:
+      running:
+        startedAt: &#34;2020-03-16T13:36:17Z&#34;
+  hostIP: 10.140.0.2
+  phase: Running
+  podIP: 10.0.0.6
+  qosClass: Burstable
+  startTime: &#34;2020-03-16T13:35:38Z&#34;
+</code></pre></td></tr></table>
 </div>
 </div><p>上面是通过 <code>kubectl get pod -o=yaml</code> 获取的完整的配置文件，一个 Pod 的YAML配置文件主要包括这么几部分:</p>
 <table>
@@ -501,18 +501,18 @@ Pod - 运行于 Kubernetes 中的容器
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-manual</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">bwangel/kubia:v0.1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubiame</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">ports</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-manual</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">bwangel/kubia:v0.1</span><span class="w">
+</span><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubiame</span><span class="w">
+</span><span class="w">      </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">        </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>需要注意的是, <code>ports</code> 部分是信息式的，即使 Manifest 中未声明 <code>ports</code>，只要应用监听了<code>0.0.0.0:8080</code>，其他 Pod 仍然能够访问这个 Pod 的 8080 端口。采用这样的声明可以让其他用户方便地了解到这个 Pod 暴露了哪些端口。</p>
 <h2 id="端口转发--查看日志">端口转发 &amp; 查看日志</h2>
@@ -522,8 +522,8 @@ Pod - 运行于 Kubernetes 中的容器
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">kubectl port-forward kubia-manual &lt;本地端口&gt;:&lt;Pod 暴露的端口&gt;
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">kubectl port-forward kubia-manual &lt;本地端口&gt;:&lt;Pod 暴露的端口&gt;
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -531,9 +531,9 @@ Pod - 运行于 Kubernetes 中的容器
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 查看日志</span>
-</span></span><span class="line"><span class="cl">kubectl logs -f &lt;Pod 名称&gt; -c &lt;容器的名称&gt;
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 查看日志</span>
+kubectl logs -f &lt;Pod 名称&gt; -c &lt;容器的名称&gt;
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="使用标签组织-pod">使用标签组织 Pod</h2>
 <p>标签是可以附加到资源的任意键值对，用以选择具有该确切标签的资源(这是通过标签选择器完成的)。</p>
@@ -558,23 +558,23 @@ Pod - 运行于 Kubernetes 中的容器
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 查看所有标签</span>
-</span></span><span class="line"><span class="cl">ø&gt; kubectl get pod --show-labels
-</span></span><span class="line"><span class="cl">NAME              READY   STATUS    RESTARTS   AGE     LABELS
-</span></span><span class="line"><span class="cl">kubia-manual      1/1     Running   <span class="m">0</span>          6d      &lt;none&gt;
-</span></span><span class="line"><span class="cl">kubia-manual-v2   1/1     Running   <span class="m">0</span>          59s     <span class="nv">creation_method</span><span class="o">=</span>manual,env<span class="o">=</span>prod
-</span></span><span class="line"><span class="cl">kubiame-fvh8x     1/1     Running   <span class="m">0</span>          5d22h   <span class="nv">run</span><span class="o">=</span>kubiame
-</span></span><span class="line"><span class="cl">kubiame-hcjkf     1/1     Running   <span class="m">0</span>          5d22h   <span class="nv">run</span><span class="o">=</span>kubiame
-</span></span><span class="line"><span class="cl">kubiame-qvw7w     1/1     Running   <span class="m">0</span>          5d22h   <span class="nv">run</span><span class="o">=</span>kubiame
-</span></span><span class="line"><span class="cl"><span class="c1"># 查看指定标签</span>
-</span></span><span class="line"><span class="cl">ø&gt; kubectl get pod -L creation_method,env
-</span></span><span class="line"><span class="cl">NAME              READY   STATUS    RESTARTS   AGE     CREATION_METHOD   ENV
-</span></span><span class="line"><span class="cl">kubia-manual      1/1     Running   <span class="m">0</span>          6d
-</span></span><span class="line"><span class="cl">kubia-manual-v2   1/1     Running   <span class="m">0</span>          63s     manual            prod
-</span></span><span class="line"><span class="cl">kubiame-fvh8x     1/1     Running   <span class="m">0</span>          5d22h
-</span></span><span class="line"><span class="cl">kubiame-hcjkf     1/1     Running   <span class="m">0</span>          5d22h
-</span></span><span class="line"><span class="cl">kubiame-qvw7w     1/1     Running   <span class="m">0</span>          5d22h
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 查看所有标签</span>
+ø&gt; kubectl get pod --show-labels
+NAME              READY   STATUS    RESTARTS   AGE     LABELS
+kubia-manual      1/1     Running   <span class="m">0</span>          6d      &lt;none&gt;
+kubia-manual-v2   1/1     Running   <span class="m">0</span>          59s     <span class="nv">creation_method</span><span class="o">=</span>manual,env<span class="o">=</span>prod
+kubiame-fvh8x     1/1     Running   <span class="m">0</span>          5d22h   <span class="nv">run</span><span class="o">=</span>kubiame
+kubiame-hcjkf     1/1     Running   <span class="m">0</span>          5d22h   <span class="nv">run</span><span class="o">=</span>kubiame
+kubiame-qvw7w     1/1     Running   <span class="m">0</span>          5d22h   <span class="nv">run</span><span class="o">=</span>kubiame
+<span class="c1"># 查看指定标签</span>
+ø&gt; kubectl get pod -L creation_method,env
+NAME              READY   STATUS    RESTARTS   AGE     CREATION_METHOD   ENV
+kubia-manual      1/1     Running   <span class="m">0</span>          6d
+kubia-manual-v2   1/1     Running   <span class="m">0</span>          63s     manual            prod
+kubiame-fvh8x     1/1     Running   <span class="m">0</span>          5d22h
+kubiame-hcjkf     1/1     Running   <span class="m">0</span>          5d22h
+kubiame-qvw7w     1/1     Running   <span class="m">0</span>          5d22h
+</code></pre></td></tr></table>
 </div>
 </div><h3 id="修改-pod-的标签">修改 Pod 的标签</h3>
 <div class="highlight"><div class="chroma">
@@ -591,17 +591,17 @@ Pod - 运行于 Kubernetes 中的容器
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 为 Pod 新增标签</span>
-</span></span><span class="line"><span class="cl">ø&gt; kubectl label pod kubia-manual <span class="nv">creation_method</span><span class="o">=</span>manual
-</span></span><span class="line"><span class="cl">pod/kubia-manual labeled
-</span></span><span class="line"><span class="cl"><span class="c1"># 修改 Pod 的已有标签</span>
-</span></span><span class="line"><span class="cl">ø&gt; kubectl label pod kubia-manual-v2 <span class="nv">env</span><span class="o">=</span>debug --overwrite
-</span></span><span class="line"><span class="cl">pod/kubia-manual-v2 labeled
-</span></span><span class="line"><span class="cl">ø&gt; kubectl get pod -L creation_method,env
-</span></span><span class="line"><span class="cl">NAME              READY   STATUS    RESTARTS   AGE     CREATION_METHOD   ENV
-</span></span><span class="line"><span class="cl">kubia-manual      1/1     Running   <span class="m">0</span>          6d      manual
-</span></span><span class="line"><span class="cl">kubia-manual-v2   1/1     Running   <span class="m">0</span>          2m52s   manual            debug
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 为 Pod 新增标签</span>
+ø&gt; kubectl label pod kubia-manual <span class="nv">creation_method</span><span class="o">=</span>manual
+pod/kubia-manual labeled
+<span class="c1"># 修改 Pod 的已有标签</span>
+ø&gt; kubectl label pod kubia-manual-v2 <span class="nv">env</span><span class="o">=</span>debug --overwrite
+pod/kubia-manual-v2 labeled
+ø&gt; kubectl get pod -L creation_method,env
+NAME              READY   STATUS    RESTARTS   AGE     CREATION_METHOD   ENV
+kubia-manual      1/1     Running   <span class="m">0</span>          6d      manual
+kubia-manual-v2   1/1     Running   <span class="m">0</span>          2m52s   manual            debug
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="通过标签选择器列出-pod-子集">通过标签选择器列出 Pod 子集</h2>
 <p>标签选择器可以根据资源的以下条件来选择资源:</p>
@@ -641,39 +641,39 @@ Pod - 运行于 Kubernetes 中的容器
 </span><span class="lnt">32
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 包含(或者不包含)使用特定建的标签</span>
-</span></span><span class="line"><span class="cl">ø&gt; kubectl get pod -l creation_method
-</span></span><span class="line"><span class="cl">NAME              READY   STATUS    RESTARTS   AGE
-</span></span><span class="line"><span class="cl">kubia-manual      1/1     Running   <span class="m">0</span>          6d
-</span></span><span class="line"><span class="cl">kubia-manual-v2   1/1     Running   <span class="m">0</span>          17m
-</span></span><span class="line"><span class="cl">ø&gt; kubectl get pod -l <span class="s1">&#39;!creation_method&#39;</span>
-</span></span><span class="line"><span class="cl">NAME            READY   STATUS    RESTARTS   AGE
-</span></span><span class="line"><span class="cl">kubiame-fvh8x   1/1     Running   <span class="m">0</span>          5d22h
-</span></span><span class="line"><span class="cl">kubiame-hcjkf   1/1     Running   <span class="m">0</span>          5d22h
-</span></span><span class="line"><span class="cl">kubiame-qvw7w   1/1     Running   <span class="m">0</span>          5d22h
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 包含具有特定建和值的标签</span>
-</span></span><span class="line"><span class="cl">ø&gt; kubectl get pod -l <span class="nv">creation_method</span><span class="o">=</span>manual
-</span></span><span class="line"><span class="cl">NAME              READY   STATUS    RESTARTS   AGE
-</span></span><span class="line"><span class="cl">kubia-manual      1/1     Running   <span class="m">0</span>          6d
-</span></span><span class="line"><span class="cl">kubia-manual-v2   1/1     Running   <span class="m">0</span>          18m
-</span></span><span class="line"><span class="cl">ø&gt; kubectl get pod -l <span class="s1">&#39;env in (debug,prod)&#39;</span>
-</span></span><span class="line"><span class="cl">NAME              READY   STATUS    RESTARTS   AGE
-</span></span><span class="line"><span class="cl">kubia-manual-v2   1/1     Running   <span class="m">0</span>          20m
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 键的值值不是我们指定的值</span>
-</span></span><span class="line"><span class="cl">ø&gt; kubectl get pod -l <span class="s1">&#39;creation_method!=manual&#39;</span>
-</span></span><span class="line"><span class="cl">NAME            READY   STATUS    RESTARTS   AGE
-</span></span><span class="line"><span class="cl">kubiame-fvh8x   1/1     Running   <span class="m">0</span>          5d22h
-</span></span><span class="line"><span class="cl">kubiame-hcjkf   1/1     Running   <span class="m">0</span>          5d22h
-</span></span><span class="line"><span class="cl">kubiame-qvw7w   1/1     Running   <span class="m">0</span>          5d22h
-</span></span><span class="line"><span class="cl">ø&gt; kubectl get pod -l <span class="s1">&#39;env notin (debug,prod)&#39;</span> --show-labels
-</span></span><span class="line"><span class="cl">NAME            READY   STATUS    RESTARTS   AGE     LABELS
-</span></span><span class="line"><span class="cl">kubia-manual    1/1     Running   <span class="m">0</span>          6d1h    <span class="nv">creation_method</span><span class="o">=</span>manual
-</span></span><span class="line"><span class="cl">kubiame-fvh8x   1/1     Running   <span class="m">0</span>          5d22h   <span class="nv">run</span><span class="o">=</span>kubiame
-</span></span><span class="line"><span class="cl">kubiame-hcjkf   1/1     Running   <span class="m">0</span>          5d22h   <span class="nv">run</span><span class="o">=</span>kubiame
-</span></span><span class="line"><span class="cl">kubiame-qvw7w   1/1     Running   <span class="m">0</span>          5d22h   <span class="nv">run</span><span class="o">=</span>kubiame
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 包含(或者不包含)使用特定建的标签</span>
+ø&gt; kubectl get pod -l creation_method
+NAME              READY   STATUS    RESTARTS   AGE
+kubia-manual      1/1     Running   <span class="m">0</span>          6d
+kubia-manual-v2   1/1     Running   <span class="m">0</span>          17m
+ø&gt; kubectl get pod -l <span class="s1">&#39;!creation_method&#39;</span>
+NAME            READY   STATUS    RESTARTS   AGE
+kubiame-fvh8x   1/1     Running   <span class="m">0</span>          5d22h
+kubiame-hcjkf   1/1     Running   <span class="m">0</span>          5d22h
+kubiame-qvw7w   1/1     Running   <span class="m">0</span>          5d22h
+
+<span class="c1"># 包含具有特定建和值的标签</span>
+ø&gt; kubectl get pod -l <span class="nv">creation_method</span><span class="o">=</span>manual
+NAME              READY   STATUS    RESTARTS   AGE
+kubia-manual      1/1     Running   <span class="m">0</span>          6d
+kubia-manual-v2   1/1     Running   <span class="m">0</span>          18m
+ø&gt; kubectl get pod -l <span class="s1">&#39;env in (debug,prod)&#39;</span>
+NAME              READY   STATUS    RESTARTS   AGE
+kubia-manual-v2   1/1     Running   <span class="m">0</span>          20m
+
+<span class="c1"># 键的值值不是我们指定的值</span>
+ø&gt; kubectl get pod -l <span class="s1">&#39;creation_method!=manual&#39;</span>
+NAME            READY   STATUS    RESTARTS   AGE
+kubiame-fvh8x   1/1     Running   <span class="m">0</span>          5d22h
+kubiame-hcjkf   1/1     Running   <span class="m">0</span>          5d22h
+kubiame-qvw7w   1/1     Running   <span class="m">0</span>          5d22h
+ø&gt; kubectl get pod -l <span class="s1">&#39;env notin (debug,prod)&#39;</span> --show-labels
+NAME            READY   STATUS    RESTARTS   AGE     LABELS
+kubia-manual    1/1     Running   <span class="m">0</span>          6d1h    <span class="nv">creation_method</span><span class="o">=</span>manual
+kubiame-fvh8x   1/1     Running   <span class="m">0</span>          5d22h   <span class="nv">run</span><span class="o">=</span>kubiame
+kubiame-hcjkf   1/1     Running   <span class="m">0</span>          5d22h   <span class="nv">run</span><span class="o">=</span>kubiame
+kubiame-qvw7w   1/1     Running   <span class="m">0</span>          5d22h   <span class="nv">run</span><span class="o">=</span>kubiame
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>当条件有多个时，他们是<code>and</code>的关系</li>
@@ -685,10 +685,10 @@ Pod - 运行于 Kubernetes 中的容器
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ø&gt; kubectl get pod -l <span class="s1">&#39;creation_method=manual,env=debug&#39;</span> --show-labels
-</span></span><span class="line"><span class="cl">NAME              READY   STATUS    RESTARTS   AGE   LABELS
-</span></span><span class="line"><span class="cl">kubia-manual-v2   1/1     Running   <span class="m">0</span>          25m   <span class="nv">creation_method</span><span class="o">=</span>manual,env<span class="o">=</span>debug
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ø&gt; kubectl get pod -l <span class="s1">&#39;creation_method=manual,env=debug&#39;</span> --show-labels
+NAME              READY   STATUS    RESTARTS   AGE   LABELS
+kubia-manual-v2   1/1     Running   <span class="m">0</span>          25m   <span class="nv">creation_method</span><span class="o">=</span>manual,env<span class="o">=</span>debug
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="使用标签和选择器来约束-pod-调度">使用标签和选择器来约束 Pod 调度</h2>
 <div class="highlight"><div class="chroma">
@@ -698,10 +698,10 @@ Pod - 运行于 Kubernetes 中的容器
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 为节点添加标签</span>
-</span></span><span class="line"><span class="cl">ø&gt; kubectl label node gke-demo-default-pool-ade08258-g3rl <span class="nv">gpu</span><span class="o">=</span><span class="nb">true</span>
-</span></span><span class="line"><span class="cl">node/gke-demo-default-pool-ade08258-g3rl labeled
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 为节点添加标签</span>
+ø&gt; kubectl label node gke-demo-default-pool-ade08258-g3rl <span class="nv">gpu</span><span class="o">=</span><span class="nb">true</span>
+node/gke-demo-default-pool-ade08258-g3rl labeled
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -720,20 +720,20 @@ Pod - 运行于 Kubernetes 中的容器
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-gpu</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">gpu</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;true&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">bwangel/kubia:v0.1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubiame</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">ports</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-gpu</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">gpu</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;true&#34;</span><span class="w">
+</span><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">bwangel/kubia:v0.1</span><span class="w">
+</span><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubiame</span><span class="w">
+</span><span class="w">      </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">8080</span><span class="w">
+</span><span class="w">        </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>通过 <code>spec.NodeSelector</code> 可以约束这个 Pod 只在 <code>gpu=true</code> 的节点上调度。</p>
 <p>每个节点都有一个默认标签: <code>kubernetes.io/hostname={节点的主机名}</code>，可以通过这个标签来让某个 Pod 只在一个节点上调度。</p>
@@ -752,16 +752,16 @@ Pod - 运行于 Kubernetes 中的容器
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 添加注解</span>
-</span></span><span class="line"><span class="cl">ø&gt; kubectl annotate pod kubia-gpu bwangel.me/someannotation<span class="o">=</span><span class="s2">&#34;foo bar&#34;</span>
-</span></span><span class="line"><span class="cl">pod/kubia-gpu annotated
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 查看注解</span>
-</span></span><span class="line"><span class="cl">ø&gt; kubectl describe pod kubia-gpu
-</span></span><span class="line"><span class="cl">Name:         kubia-gpu
-</span></span><span class="line"><span class="cl">Annotations:  bwangel.me/someannotation: foo bar
-</span></span><span class="line"><span class="cl">              kubernetes.io/limit-ranger: LimitRanger plugin set: cpu request <span class="k">for</span> container kubiame
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 添加注解</span>
+ø&gt; kubectl annotate pod kubia-gpu bwangel.me/someannotation<span class="o">=</span><span class="s2">&#34;foo bar&#34;</span>
+pod/kubia-gpu annotated
+
+<span class="c1"># 查看注解</span>
+ø&gt; kubectl describe pod kubia-gpu
+Name:         kubia-gpu
+Annotations:  bwangel.me/someannotation: foo bar
+              kubernetes.io/limit-ranger: LimitRanger plugin set: cpu request <span class="k">for</span> container kubiame
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="使用命名空间对资源进行分组">使用命名空间对资源进行分组</h2>
 <h3 id="命名空间介绍">命名空间介绍</h3>
@@ -788,22 +788,22 @@ Pod - 运行于 Kubernetes 中的容器
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 获取所有命名空间</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">ø&gt; kubectl get ns
-</span></span><span class="line"><span class="cl">NAME                   STATUS   AGE
-</span></span><span class="line"><span class="cl">default                Active   11d
-</span></span><span class="line"><span class="cl">kube-node-lease        Active   11d
-</span></span><span class="line"><span class="cl">kube-public            Active   11d
-</span></span><span class="line"><span class="cl">kube-system            Active   11d
-</span></span><span class="line"><span class="cl">kubernetes-dashboard   Active   9d
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 列出只属于某个 NS 的 Pod</span>
-</span></span><span class="line"><span class="cl">ø&gt; kubectl get pod -n kubernetes-dashboard
-</span></span><span class="line"><span class="cl">NAME                                          READY   STATUS    RESTARTS   AGE
-</span></span><span class="line"><span class="cl">kubernetes-dashboard-6f89577b77-fhbfb         1/1     Running   <span class="m">0</span>          6d8h
-</span></span><span class="line"><span class="cl">kubernetes-metrics-scraper-79c9985bc6-bx59z   1/1     Running   <span class="m">0</span>          6d8h
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 获取所有命名空间</span>
+
+ø&gt; kubectl get ns
+NAME                   STATUS   AGE
+default                Active   11d
+kube-node-lease        Active   11d
+kube-public            Active   11d
+kube-system            Active   11d
+kubernetes-dashboard   Active   9d
+
+<span class="c1"># 列出只属于某个 NS 的 Pod</span>
+ø&gt; kubectl get pod -n kubernetes-dashboard
+NAME                                          READY   STATUS    RESTARTS   AGE
+kubernetes-dashboard-6f89577b77-fhbfb         1/1     Running   <span class="m">0</span>          6d8h
+kubernetes-metrics-scraper-79c9985bc6-bx59z   1/1     Running   <span class="m">0</span>          6d8h
+</code></pre></td></tr></table>
 </div>
 </div><h3 id="创建命名空间">创建命名空间</h3>
 <p>可以通过以下 yaml 文件创建命名空间，也可以通过 <code>k create namespace {namespace}</code> 命令来创建命名空间。</p>
@@ -816,11 +816,11 @@ Pod - 运行于 Kubernetes 中的容器
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Namespace</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">bwangel</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Namespace</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">bwangel</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><h3 id="为资源指定命名空间">为资源指定命名空间</h3>
 <p>可以在 Pod 的创建文件中设置 <code>metadata.namespace</code> 字段，为资源指定命名空间，也可以通过 <code>k create -f pod.yaml -n {namespace}</code> 命令指定资源的命名空间。</p>
@@ -831,10 +831,10 @@ Pod - 运行于 Kubernetes 中的容器
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-manual</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">bwangel</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubia-manual</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">bwangel</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><h3 id="切换命名空间">切换命名空间</h3>
 <div class="highlight"><div class="chroma">
@@ -850,16 +850,16 @@ Pod - 运行于 Kubernetes 中的容器
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 切换当前 kubectl 的默认命名空间到 bwangel</span>
-</span></span><span class="line"><span class="cl">kubectl config set-context <span class="k">$(</span>kubectl config current-context<span class="k">)</span> --namespace bwangel
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 创建 kcd 命名，快速地切换命名空间</span>
-</span></span><span class="line"><span class="cl"><span class="o">((</span> $+commands<span class="o">[</span>kubectl<span class="o">]</span> <span class="o">))</span> <span class="o">&amp;&amp;</span> <span class="nb">alias</span> <span class="nv">kcd</span><span class="o">=</span><span class="s1">&#39;kubectl config set-context $(kubectl config current-context) --namespace&#39;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 查看当前命名空间</span>
-</span></span><span class="line"><span class="cl">ø&gt; kubectl config view<span class="p">|</span> grep namespace:
-</span></span><span class="line"><span class="cl">    namespace: default
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 切换当前 kubectl 的默认命名空间到 bwangel</span>
+kubectl config set-context <span class="k">$(</span>kubectl config current-context<span class="k">)</span> --namespace bwangel
+
+<span class="c1"># 创建 kcd 命名，快速地切换命名空间</span>
+<span class="o">((</span> $+commands<span class="o">[</span>kubectl<span class="o">]</span> <span class="o">))</span> <span class="o">&amp;&amp;</span> <span class="nb">alias</span> <span class="nv">kcd</span><span class="o">=</span><span class="s1">&#39;kubectl config set-context $(kubectl config current-context) --namespace&#39;</span>
+
+<span class="c1"># 查看当前命名空间</span>
+ø&gt; kubectl config view<span class="p">|</span> grep namespace:
+    namespace: default
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="停止和移除-pod">停止和移除 Pod</h2>
 <p>k8s 在终止容器时，首先会向进程发送 <code>SIGTERM</code> 信号，并等待30秒。如果没有关闭的话，则继续发送 <code>SIGKILL</code> 信号。</p>
@@ -886,25 +886,25 @@ Pod - 运行于 Kubernetes 中的容器
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 通过标签删除容器</span>
-</span></span><span class="line"><span class="cl">ø&gt; kubectl delete pod -l <span class="nv">creation_method</span><span class="o">=</span>manual
-</span></span><span class="line"><span class="cl">pod <span class="s2">&#34;kubia-manual&#34;</span> deleted
-</span></span><span class="line"><span class="cl">pod <span class="s2">&#34;kubia-manual-v2&#34;</span> deleted
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 删除所有资源(注：删除的是当前命名空间下的)</span>
-</span></span><span class="line"><span class="cl">ø&gt; kubectl delete all --all
-</span></span><span class="line"><span class="cl">pod <span class="s2">&#34;kubia-gpu&#34;</span> deleted
-</span></span><span class="line"><span class="cl">pod <span class="s2">&#34;kubiame-fvh8x&#34;</span> deleted
-</span></span><span class="line"><span class="cl">pod <span class="s2">&#34;kubiame-hcjkf&#34;</span> deleted
-</span></span><span class="line"><span class="cl">pod <span class="s2">&#34;kubiame-qvw7w&#34;</span> deleted
-</span></span><span class="line"><span class="cl">replicationcontroller <span class="s2">&#34;kubiame&#34;</span> deleted
-</span></span><span class="line"><span class="cl">service <span class="s2">&#34;kubernetes&#34;</span> deleted
-</span></span><span class="line"><span class="cl">service <span class="s2">&#34;kubia-http&#34;</span> deleted
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 删除命名空间</span>
-</span></span><span class="line"><span class="cl">ø&gt; kubectl delete ns bwangel
-</span></span><span class="line"><span class="cl">namespace <span class="s2">&#34;bwangel&#34;</span> deleted
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 通过标签删除容器</span>
+ø&gt; kubectl delete pod -l <span class="nv">creation_method</span><span class="o">=</span>manual
+pod <span class="s2">&#34;kubia-manual&#34;</span> deleted
+pod <span class="s2">&#34;kubia-manual-v2&#34;</span> deleted
+
+<span class="c1"># 删除所有资源(注：删除的是当前命名空间下的)</span>
+ø&gt; kubectl delete all --all
+pod <span class="s2">&#34;kubia-gpu&#34;</span> deleted
+pod <span class="s2">&#34;kubiame-fvh8x&#34;</span> deleted
+pod <span class="s2">&#34;kubiame-hcjkf&#34;</span> deleted
+pod <span class="s2">&#34;kubiame-qvw7w&#34;</span> deleted
+replicationcontroller <span class="s2">&#34;kubiame&#34;</span> deleted
+service <span class="s2">&#34;kubernetes&#34;</span> deleted
+service <span class="s2">&#34;kubia-http&#34;</span> deleted
+
+<span class="c1"># 删除命名空间</span>
+ø&gt; kubectl delete ns bwangel
+namespace <span class="s2">&#34;bwangel&#34;</span> deleted
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -1014,7 +1014,7 @@ Pod - 运行于 Kubernetes 中的容器
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

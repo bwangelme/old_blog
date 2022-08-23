@@ -17,14 +17,14 @@
 
 
 <meta name="author" content="bwangel" /><meta name="description" content="摘要:
-通过resize2fs调整文件系统大小 通过parted调整磁盘分区大小 " /><meta name="keywords" content="Hugo, blog, bwangel" />
+  通过resize2fs调整文件系统大小 通过parted调整磁盘分区大小  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2016/07/17/ubuntu%E7%BC%A9%E5%B0%8F%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA%E5%A4%A7%E5%B0%8F/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -62,7 +62,7 @@
 
 "><meta itemprop="datePublished" content="2016-07-17T16:38:06+00:00" />
 <meta itemprop="dateModified" content="2016-07-17T16:38:06+00:00" />
-<meta itemprop="wordCount" content="1613">
+<meta itemprop="wordCount" content="1614">
 <meta itemprop="keywords" content="Ubuntu,文件系统," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Ubuntu缩小磁盘分区大小"/>
 <meta name="twitter:description" content="摘要:
@@ -161,7 +161,7 @@
       <div class="post-meta">
         <span class="post-time"> 2016-07-17 </span>
         
-          <span class="more-meta"> 约 1613 字 </span>
+          <span class="more-meta"> 约 1614 字 </span>
           <span class="more-meta"> 预计阅读 4 分钟 </span>
         
       </div>
@@ -208,16 +208,16 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">michale@vv2x:~$ lsblk
-</span></span><span class="line"><span class="cl">NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
-</span></span><span class="line"><span class="cl">sda      8:0    <span class="m">0</span>   32G  <span class="m">0</span> disk
-</span></span><span class="line"><span class="cl">├─sda1   8:1    <span class="m">0</span>  190M  <span class="m">0</span> part /boot
-</span></span><span class="line"><span class="cl">├─sda2   8:2    <span class="m">0</span>    1K  <span class="m">0</span> part
-</span></span><span class="line"><span class="cl">├─sda5   8:5    <span class="m">0</span>  7.6G  <span class="m">0</span> part /home
-</span></span><span class="line"><span class="cl">├─sda6   8:6    <span class="m">0</span>  487M  <span class="m">0</span> part <span class="o">[</span>SWAP<span class="o">]</span>
-</span></span><span class="line"><span class="cl">└─sda7   8:7    <span class="m">0</span> 23.7G  <span class="m">0</span> part /
-</span></span><span class="line"><span class="cl">sr0     11:0    <span class="m">1</span> 1024M  <span class="m">0</span> rom
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">michale@vv2x:~$ lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    <span class="m">0</span>   32G  <span class="m">0</span> disk
+├─sda1   8:1    <span class="m">0</span>  190M  <span class="m">0</span> part /boot
+├─sda2   8:2    <span class="m">0</span>    1K  <span class="m">0</span> part
+├─sda5   8:5    <span class="m">0</span>  7.6G  <span class="m">0</span> part /home
+├─sda6   8:6    <span class="m">0</span>  487M  <span class="m">0</span> part <span class="o">[</span>SWAP<span class="o">]</span>
+└─sda7   8:7    <span class="m">0</span> 23.7G  <span class="m">0</span> part /
+sr0     11:0    <span class="m">1</span> 1024M  <span class="m">0</span> rom
+</code></pre></td></tr></table>
 </div>
 </div><p>这个虚拟机上只有一块硬盘sda，sda分成了5个分区，其中sda2是扩展分区，现在，我想将/home分区的大小缩小为4G，这样可以多出一部分空间来新建一个分区，那该如何做呢，且听我慢慢道来。</p>
 <h2 id="卸载home分区">卸载/home分区</h2>
@@ -240,22 +240,24 @@
 </span><span class="lnt">11
 </span><span class="lnt">12
 </span><span class="lnt">13
+</span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@vv2x:~# e2fsck -f /dev/sda5
-</span></span><span class="line"><span class="cl"><span class="c1"># 上面这条命令强制对/dev/sda5的文件系统进行了检查</span>
-</span></span><span class="line"><span class="cl">e2fsck 1.42.13 <span class="o">(</span>17-May-2015<span class="o">)</span>
-</span></span><span class="line"><span class="cl">Pass 1: Checking inodes, blocks, and sizes
-</span></span><span class="line"><span class="cl">Pass 2: Checking directory structure
-</span></span><span class="line"><span class="cl">Pass 3: Checking directory connectivity
-</span></span><span class="line"><span class="cl">Pass 4: Checking reference counts
-</span></span><span class="line"><span class="cl">Pass 5: Checking group summary information
-</span></span><span class="line"><span class="cl">/dev/sda5: 220/499968 files <span class="o">(</span>3.6% non-contiguous<span class="o">)</span>, 69132/1999872 blocks
-</span></span><span class="line"><span class="cl">root@vv2x:~# resize2fs /dev/sda5 4G
-</span></span><span class="line"><span class="cl">resize2fs 1.42.13 <span class="o">(</span>17-May-2015<span class="o">)</span>
-</span></span><span class="line"><span class="cl">Resizing the filesystem on /dev/sda5 to <span class="m">1048576</span> <span class="o">(</span>4k<span class="o">)</span> blocks.
-</span></span><span class="line"><span class="cl">The filesystem on /dev/sda5 is now <span class="m">1048576</span> <span class="o">(</span>4k<span class="o">)</span> blocks long.
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">root@vv2x:~# e2fsck -f /dev/sda5
+<span class="c1"># 上面这条命令强制对/dev/sda5的文件系统进行了检查</span>
+e2fsck 1.42.13 <span class="o">(</span>17-May-2015<span class="o">)</span>
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+/dev/sda5: 220/499968 files <span class="o">(</span>3.6% non-contiguous<span class="o">)</span>, 69132/1999872 blocks
+root@vv2x:~# resize2fs /dev/sda5 4G
+resize2fs 1.42.13 <span class="o">(</span>17-May-2015<span class="o">)</span>
+Resizing the filesystem on /dev/sda5 to <span class="m">1048576</span> <span class="o">(</span>4k<span class="o">)</span> blocks.
+The filesystem on /dev/sda5 is now <span class="m">1048576</span> <span class="o">(</span>4k<span class="o">)</span> blocks long.
+
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="缩小home分区的磁盘分区大小">缩小/home分区的磁盘分区大小</h2>
 <p>调整好文件系统大小以后，我们就需要来调整磁盘分区大小了，这里我们通过<code>parted</code>命令中的<code>resizepart</code>命令来调整分区大小。用法如下：</p>
@@ -271,15 +273,15 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">(</span>parted<span class="o">)</span> <span class="nb">help</span> resizepart
-</span></span><span class="line"><span class="cl">  resizepart NUMBER END                    resize partition NUMBER
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">NUMBER is the partition number used by Linux.  On MS-DOS disk labels, the primary
-</span></span><span class="line"><span class="cl">partitions number from <span class="m">1</span> to 4, logical partitions from <span class="m">5</span> onwards.
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">END is disk location, such as 4GB or 10%.  Negative value counts from the end of the
-</span></span><span class="line"><span class="cl">disk.  For example, -1s specifies exactly the last sector.
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="o">(</span>parted<span class="o">)</span> <span class="nb">help</span> resizepart
+  resizepart NUMBER END                    resize partition NUMBER
+
+NUMBER is the partition number used by Linux.  On MS-DOS disk labels, the primary
+partitions number from <span class="m">1</span> to 4, logical partitions from <span class="m">5</span> onwards.
+
+END is disk location, such as 4GB or 10%.  Negative value counts from the end of the
+disk.  For example, -1s specifies exactly the last sector.
+</code></pre></td></tr></table>
 </div>
 </div><p>其中NUMBER代表的是分区号，这里我们的/home分区为5，END代表的是结束的位置，我们可以用4GB来表示。（注意：<strong>parted的分区大小计算方式和lsblk不同</strong>，所以我们多留一些空间，防止数据丢失）</p>
 <p>运行结果如下：</p>
@@ -296,16 +298,16 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@vv2x:~# parted /dev/sda
-</span></span><span class="line"><span class="cl">GNU Parted 3.2
-</span></span><span class="line"><span class="cl">Using /dev/sda
-</span></span><span class="line"><span class="cl">Welcome to GNU Parted! Type <span class="s1">&#39;help&#39;</span> to view a list of commands.
-</span></span><span class="line"><span class="cl"><span class="o">(</span>parted<span class="o">)</span> resizepart <span class="m">5</span> 5G
-</span></span><span class="line"><span class="cl">Warning: Shrinking a partition can cause data loss, are you sure you want to <span class="k">continue</span>?
-</span></span><span class="line"><span class="cl">Yes/No? Yes
-</span></span><span class="line"><span class="cl"><span class="o">(</span>parted<span class="o">)</span>
-</span></span><span class="line"><span class="cl">Information: You may need to update /etc/fstab.
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">root@vv2x:~# parted /dev/sda
+GNU Parted 3.2
+Using /dev/sda
+Welcome to GNU Parted! Type <span class="s1">&#39;help&#39;</span> to view a list of commands.
+<span class="o">(</span>parted<span class="o">)</span> resizepart <span class="m">5</span> 5G
+Warning: Shrinking a partition can cause data loss, are you sure you want to <span class="k">continue</span>?
+Yes/No? Yes
+<span class="o">(</span>parted<span class="o">)</span>
+Information: You may need to update /etc/fstab.
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="调整home分区的文件系统大小并重新挂载">调整/home分区的文件系统大小并重新挂载</h2>
 <p>在第三步中，为了防止数据丢失，我们多留出了一些空间。在这里我们需要相应地调整文件系统大小，让其和磁盘空间大小匹配，这里我们通过<code>resize2fs</code>命令来完成这一步。</p>
@@ -318,12 +320,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@vv2x:~# resize2fs /dev/sda7
-</span></span><span class="line"><span class="cl"><span class="c1"># resize2fs如果没有指定大小，那么/dev/sda7的文件系统大小默认和磁盘分区大小相同</span>
-</span></span><span class="line"><span class="cl">resize2fs 1.42.13 <span class="o">(</span>17-May-2015<span class="o">)</span>
-</span></span><span class="line"><span class="cl">Resizing the filesystem on /dev/sda7 to <span class="m">1171295</span> <span class="o">(</span>4k<span class="o">)</span> blocks.
-</span></span><span class="line"><span class="cl">The filesystem on /dev/sda7 is now <span class="m">1171295</span> <span class="o">(</span>4k<span class="o">)</span> blocks long.
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">root@vv2x:~# resize2fs /dev/sda7
+<span class="c1"># resize2fs如果没有指定大小，那么/dev/sda7的文件系统大小默认和磁盘分区大小相同</span>
+resize2fs 1.42.13 <span class="o">(</span>17-May-2015<span class="o">)</span>
+Resizing the filesystem on /dev/sda7 to <span class="m">1171295</span> <span class="o">(</span>4k<span class="o">)</span> blocks.
+The filesystem on /dev/sda7 is now <span class="m">1171295</span> <span class="o">(</span>4k<span class="o">)</span> blocks long.
+</code></pre></td></tr></table>
 </div>
 </div><p>最后我们重新把/home分区挂载上就可以了。</p>
 <div class="highlight"><div class="chroma">
@@ -340,17 +342,17 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@vv2x:~# mount -a
-</span></span><span class="line"><span class="cl"><span class="c1"># 这条命令默认挂载/etc/fstab文件中所有指定的分区</span>
-</span></span><span class="line"><span class="cl">root@vv2x:~# lsblk
-</span></span><span class="line"><span class="cl">NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
-</span></span><span class="line"><span class="cl">sda      8:0    <span class="m">0</span>   32G  <span class="m">0</span> disk
-</span></span><span class="line"><span class="cl">├─sda1   8:1    <span class="m">0</span>  190M  <span class="m">0</span> part /boot
-</span></span><span class="line"><span class="cl">├─sda5   8:5    <span class="m">0</span>  487M  <span class="m">0</span> part <span class="o">[</span>SWAP<span class="o">]</span>
-</span></span><span class="line"><span class="cl">├─sda6   8:6    <span class="m">0</span> 23.7G  <span class="m">0</span> part /
-</span></span><span class="line"><span class="cl">└─sda7   8:7    <span class="m">0</span>  4.5G  <span class="m">0</span> part /home
-</span></span><span class="line"><span class="cl">sr0     11:0    <span class="m">1</span> 1024M  <span class="m">0</span> rom
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">root@vv2x:~# mount -a
+<span class="c1"># 这条命令默认挂载/etc/fstab文件中所有指定的分区</span>
+root@vv2x:~# lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    <span class="m">0</span>   32G  <span class="m">0</span> disk
+├─sda1   8:1    <span class="m">0</span>  190M  <span class="m">0</span> part /boot
+├─sda5   8:5    <span class="m">0</span>  487M  <span class="m">0</span> part <span class="o">[</span>SWAP<span class="o">]</span>
+├─sda6   8:6    <span class="m">0</span> 23.7G  <span class="m">0</span> part /
+└─sda7   8:7    <span class="m">0</span>  4.5G  <span class="m">0</span> part /home
+sr0     11:0    <span class="m">1</span> 1024M  <span class="m">0</span> rom
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="注意">注意</h2>
 <p>最后需要注意的是调整磁盘分区大小以后，磁盘分区的UUID可能会改变，<code>mount -a</code>命令可能会失败，此时我们需要通过<code>blkid</code>命令来查看/home分区的大小，并相应地更改<code>/etc/fstab</code>配置文件中指定的/home分区的UUID。</p>
@@ -461,7 +463,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

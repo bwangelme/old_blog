@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2019/11/30/intro-servemux/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -54,7 +54,7 @@
 简单介绍了一下 Golang 中 ServeMux 的功能以及路由方式。
 "><meta itemprop="datePublished" content="2019-11-30T18:35:05+08:00" />
 <meta itemprop="dateModified" content="2019-11-30T18:35:05+08:00" />
-<meta itemprop="wordCount" content="1707">
+<meta itemprop="wordCount" content="1708">
 <meta itemprop="keywords" content="Go,HTTP," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Golang 中的 ServeMux 路由简介"/>
 <meta name="twitter:description" content="
@@ -149,7 +149,7 @@
       <div class="post-meta">
         <span class="post-time"> 2019-11-30 </span>
         
-          <span class="more-meta"> 约 1707 字 </span>
+          <span class="more-meta"> 约 1708 字 </span>
           <span class="more-meta"> 预计阅读 4 分钟 </span>
         
       </div>
@@ -215,24 +215,24 @@
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;fmt&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;log&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;net/http&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/a&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;/a&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl">	<span class="p">})</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;default&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl">	<span class="p">})</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;log&#34;</span>
+	<span class="s">&#34;net/http&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/a&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;/a&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
+	<span class="p">})</span>
+	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;default&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
+	<span class="p">})</span>
+	<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -243,12 +243,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">&gt;&gt;&gt; curl <span class="s1">&#39;localhost:8080/a&#39;</span>
-</span></span><span class="line"><span class="cl">/a /a
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; curl <span class="s1">&#39;localhost:8080/abc&#39;</span>
-</span></span><span class="line"><span class="cl">default /abc
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">&gt;&gt;&gt; curl <span class="s1">&#39;localhost:8080/a&#39;</span>
+/a /a
+
+&gt;&gt;&gt; curl <span class="s1">&#39;localhost:8080/abc&#39;</span>
+default /abc
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="注册根路径子树">注册根路径子树</h2>
 <p><code>注册根路径子树</code>就是注册一个子路径，所有以这个子路径开头的请求都会转发到对应的 handler 中。注意子路径__必须__以 <code>/</code> 结尾。</p>
@@ -271,21 +271,21 @@
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;fmt&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;log&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;net/http&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/user/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;user&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl">	<span class="p">})</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;log&#34;</span>
+	<span class="s">&#34;net/http&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/user/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;user&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
+	<span class="p">})</span>
+	<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -295,11 +295,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">&gt;&gt;&gt; curl <span class="s1">&#39;0.0.0.0:8080/user/1&#39;</span>
-</span></span><span class="line"><span class="cl">user /user/1
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; curl <span class="s1">&#39;0.0.0.0:8080/user/2&#39;</span>
-</span></span><span class="line"><span class="cl">user /user/2
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">&gt;&gt;&gt; curl <span class="s1">&#39;0.0.0.0:8080/user/1&#39;</span>
+user /user/1
+&gt;&gt;&gt; curl <span class="s1">&#39;0.0.0.0:8080/user/2&#39;</span>
+user /user/2
+</code></pre></td></tr></table>
 </div>
 </div><h3 id="最长匹配">最长匹配</h3>
 <p><code>注册根路径子树</code>是符合最长路径匹配的原则的，例如我们注册了两个子路径，<code>/image/gif/</code>和<code>/image/</code>，URL 为<code>/image/gif/</code>的请求会优先匹配第一个路由模式。</p>
@@ -325,25 +325,25 @@
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;fmt&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;log&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;net/http&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="c1">// 注意我把 /image/ 写在了前面
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/image/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;image&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl">	<span class="p">})</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/image/gif/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;gif&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl">	<span class="p">})</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;log&#34;</span>
+	<span class="s">&#34;net/http&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 注意我把 /image/ 写在了前面
+</span><span class="c1"></span>	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/image/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;image&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
+	<span class="p">})</span>
+	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/image/gif/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;gif&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
+	<span class="p">})</span>
+	<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -351,9 +351,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">&gt;&gt;&gt; curl <span class="s1">&#39;0.0.0.0:8080/image/gif/&#39;</span>
-</span></span><span class="line"><span class="cl">gif /image/gif/
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">&gt;&gt;&gt; curl <span class="s1">&#39;0.0.0.0:8080/image/gif/&#39;</span>
+gif /image/gif/
+</code></pre></td></tr></table>
 </div>
 </div><h3 id="append_slash"><code>APPEND_SLASH</code></h3>
 <p><code>APPEND_SLASH</code>是 Django 中的一个配置，是指如果我们注册了一个路由模式<code>/something/</code>，且<code>APPEND_SLASH=True</code>的话，那么 URL 为 <code>/something</code> 的请求会自动重定向为<code>/something/</code>。</p>
@@ -376,21 +376,21 @@
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;fmt&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;log&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;net/http&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/image/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;image&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl">	<span class="p">})</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;log&#34;</span>
+	<span class="s">&#34;net/http&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/image/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;image&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
+	<span class="p">})</span>
+	<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -409,20 +409,20 @@
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">&gt;&gt;&gt; curl -v <span class="s1">&#39;0.0.0.0:8080/image&#39;</span>
-</span></span><span class="line"><span class="cl">&gt; GET /image HTTP/1.1
-</span></span><span class="line"><span class="cl">&gt; Host: 0.0.0.0:8080
-</span></span><span class="line"><span class="cl">&gt; User-Agent: curl/7.64.1
-</span></span><span class="line"><span class="cl">&gt; Accept: */*
-</span></span><span class="line"><span class="cl">&gt;
-</span></span><span class="line"><span class="cl">&lt; HTTP/1.1 <span class="m">301</span> Moved Permanently
-</span></span><span class="line"><span class="cl">&lt; Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
-</span></span><span class="line"><span class="cl">&lt; Location: /image/
-</span></span><span class="line"><span class="cl">&lt; Date: Sat, <span class="m">30</span> Nov <span class="m">2019</span> 11:30:14 GMT
-</span></span><span class="line"><span class="cl">&lt; Content-Length: <span class="m">42</span>
-</span></span><span class="line"><span class="cl">&lt;
-</span></span><span class="line"><span class="cl">&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&#34;/image/&#34;</span>&gt;Moved Permanently&lt;/a&gt;.
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">&gt;&gt;&gt; curl -v <span class="s1">&#39;0.0.0.0:8080/image&#39;</span>
+&gt; GET /image HTTP/1.1
+&gt; Host: 0.0.0.0:8080
+&gt; User-Agent: curl/7.64.1
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 <span class="m">301</span> Moved Permanently
+&lt; Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+&lt; Location: /image/
+&lt; Date: Sat, <span class="m">30</span> Nov <span class="m">2019</span> 11:30:14 GMT
+&lt; Content-Length: <span class="m">42</span>
+&lt;
+&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&#34;/image/&#34;</span>&gt;Moved Permanently&lt;/a&gt;.
+</code></pre></td></tr></table>
 </div>
 </div><p>我们注册了子路径<code>/image/</code>，服务器会自动将<code>/image</code>请求重定向为<code>/image/</code>。</p>
 <p>如果我们不想让服务器自动重定向的话，只需要添加一个<code>/image</code>模式就好了。</p>
@@ -447,24 +447,24 @@
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;fmt&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;log&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;net/http&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/image/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;sub image&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl">	<span class="p">})</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/image&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;image&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl">	<span class="p">})</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;log&#34;</span>
+	<span class="s">&#34;net/http&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/image/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;sub image&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
+	<span class="p">})</span>
+	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/image&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;image&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
+	<span class="p">})</span>
+	<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -476,13 +476,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">&gt;&gt;&gt; curl <span class="s1">&#39;0.0.0.0:8080/image&#39;</span>
-</span></span><span class="line"><span class="cl">image /image
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; curl <span class="s1">&#39;0.0.0.0:8080/image/&#39;</span>
-</span></span><span class="line"><span class="cl">sub image /image/
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; curl <span class="s1">&#39;0.0.0.0:8080/image/gif&#39;</span>
-</span></span><span class="line"><span class="cl">sub image /image/gif
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">&gt;&gt;&gt; curl <span class="s1">&#39;0.0.0.0:8080/image&#39;</span>
+image /image
+&gt;&gt;&gt; curl <span class="s1">&#39;0.0.0.0:8080/image/&#39;</span>
+sub image /image/
+&gt;&gt;&gt; curl <span class="s1">&#39;0.0.0.0:8080/image/gif&#39;</span>
+sub image /image/gif
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="使用域名匹配">使用域名匹配</h2>
 <p>ServeMux 还支持根据主机名精确匹配，没有指定主机名的路径<code>/</code>路由模式将会是所有未匹配请求的缺省值。</p>
@@ -508,24 +508,24 @@
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;fmt&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;log&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;net/http&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;localhost/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;localhost&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl">	<span class="p">})</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;default&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl">	<span class="p">})</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;log&#34;</span>
+	<span class="s">&#34;net/http&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;localhost/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;localhost&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
+	<span class="p">})</span>
+	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;default&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
+	<span class="p">})</span>
+	<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -580,60 +580,62 @@
 </span><span class="lnt">49
 </span><span class="lnt">50
 </span><span class="lnt">51
+</span><span class="lnt">52
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">&gt;&gt;&gt; curl -v <span class="s1">&#39;127.0.0.1:8080/&#39;</span>
-</span></span><span class="line"><span class="cl">&gt; GET / HTTP/1.1
-</span></span><span class="line"><span class="cl">&gt; Host: 127.0.0.1:8080
-</span></span><span class="line"><span class="cl">&gt; User-Agent: curl/7.64.1
-</span></span><span class="line"><span class="cl">&gt; Accept: */*
-</span></span><span class="line"><span class="cl">&gt;
-</span></span><span class="line"><span class="cl">&lt; HTTP/1.1 <span class="m">200</span> OK
-</span></span><span class="line"><span class="cl">&lt; Date: Sat, <span class="m">30</span> Nov <span class="m">2019</span> 11:39:04 GMT
-</span></span><span class="line"><span class="cl">&lt; Content-Length: <span class="m">10</span>
-</span></span><span class="line"><span class="cl">&lt; Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
-</span></span><span class="line"><span class="cl">&lt;
-</span></span><span class="line"><span class="cl">default /
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; curl -v <span class="s1">&#39;0.0.0.0:8080/&#39;</span>
-</span></span><span class="line"><span class="cl">&gt; GET / HTTP/1.1
-</span></span><span class="line"><span class="cl">&gt; Host: 0.0.0.0:8080
-</span></span><span class="line"><span class="cl">&gt; User-Agent: curl/7.64.1
-</span></span><span class="line"><span class="cl">&gt; Accept: */*
-</span></span><span class="line"><span class="cl">&gt;
-</span></span><span class="line"><span class="cl">&lt; HTTP/1.1 <span class="m">200</span> OK
-</span></span><span class="line"><span class="cl">&lt; Date: Sat, <span class="m">30</span> Nov <span class="m">2019</span> 11:39:14 GMT
-</span></span><span class="line"><span class="cl">&lt; Content-Length: <span class="m">10</span>
-</span></span><span class="line"><span class="cl">&lt; Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
-</span></span><span class="line"><span class="cl">&lt;
-</span></span><span class="line"><span class="cl">default /
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; curl -v <span class="s1">&#39;localhost:8080/&#39;</span>
-</span></span><span class="line"><span class="cl">&gt; GET / HTTP/1.1
-</span></span><span class="line"><span class="cl">&gt; Host: localhost:8080
-</span></span><span class="line"><span class="cl">&gt; User-Agent: curl/7.64.1
-</span></span><span class="line"><span class="cl">&gt; Accept: */*
-</span></span><span class="line"><span class="cl">&gt;
-</span></span><span class="line"><span class="cl">&lt; HTTP/1.1 <span class="m">200</span> OK
-</span></span><span class="line"><span class="cl">&lt; Date: Sat, <span class="m">30</span> Nov <span class="m">2019</span> 11:39:19 GMT
-</span></span><span class="line"><span class="cl">&lt; Content-Length: <span class="m">12</span>
-</span></span><span class="line"><span class="cl">&lt; Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
-</span></span><span class="line"><span class="cl">&lt;
-</span></span><span class="line"><span class="cl">localhost /
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; curl -v <span class="s1">&#39;localhost:8080/abc&#39;</span>
-</span></span><span class="line"><span class="cl">&gt; GET /abc HTTP/1.1
-</span></span><span class="line"><span class="cl">&gt; Host: localhost:8080
-</span></span><span class="line"><span class="cl">&gt; User-Agent: curl/7.64.1
-</span></span><span class="line"><span class="cl">&gt; Accept: */*
-</span></span><span class="line"><span class="cl">&gt;
-</span></span><span class="line"><span class="cl">&lt; HTTP/1.1 <span class="m">200</span> OK
-</span></span><span class="line"><span class="cl">&lt; Date: Sat, <span class="m">30</span> Nov <span class="m">2019</span> 12:01:47 GMT
-</span></span><span class="line"><span class="cl">&lt; Content-Length: <span class="m">15</span>
-</span></span><span class="line"><span class="cl">&lt; Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
-</span></span><span class="line"><span class="cl">&lt;
-</span></span><span class="line"><span class="cl">localhost /abc
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">&gt;&gt;&gt; curl -v <span class="s1">&#39;127.0.0.1:8080/&#39;</span>
+&gt; GET / HTTP/1.1
+&gt; Host: 127.0.0.1:8080
+&gt; User-Agent: curl/7.64.1
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 <span class="m">200</span> OK
+&lt; Date: Sat, <span class="m">30</span> Nov <span class="m">2019</span> 11:39:04 GMT
+&lt; Content-Length: <span class="m">10</span>
+&lt; Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+&lt;
+default /
+
+&gt;&gt;&gt; curl -v <span class="s1">&#39;0.0.0.0:8080/&#39;</span>
+&gt; GET / HTTP/1.1
+&gt; Host: 0.0.0.0:8080
+&gt; User-Agent: curl/7.64.1
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 <span class="m">200</span> OK
+&lt; Date: Sat, <span class="m">30</span> Nov <span class="m">2019</span> 11:39:14 GMT
+&lt; Content-Length: <span class="m">10</span>
+&lt; Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+&lt;
+default /
+
+&gt;&gt;&gt; curl -v <span class="s1">&#39;localhost:8080/&#39;</span>
+&gt; GET / HTTP/1.1
+&gt; Host: localhost:8080
+&gt; User-Agent: curl/7.64.1
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 <span class="m">200</span> OK
+&lt; Date: Sat, <span class="m">30</span> Nov <span class="m">2019</span> 11:39:19 GMT
+&lt; Content-Length: <span class="m">12</span>
+&lt; Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+&lt;
+localhost /
+
+&gt;&gt;&gt; curl -v <span class="s1">&#39;localhost:8080/abc&#39;</span>
+&gt; GET /abc HTTP/1.1
+&gt; Host: localhost:8080
+&gt; User-Agent: curl/7.64.1
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 <span class="m">200</span> OK
+&lt; Date: Sat, <span class="m">30</span> Nov <span class="m">2019</span> 12:01:47 GMT
+&lt; Content-Length: <span class="m">15</span>
+&lt; Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+&lt;
+localhost /abc
+
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="处理冗余的-url">处理冗余的 URL</h2>
 <ul>
@@ -658,21 +660,21 @@
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;fmt&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;log&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;net/http&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/image/png/1&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;default&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl">	<span class="p">})</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;log&#34;</span>
+	<span class="s">&#34;net/http&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">http</span><span class="p">.</span><span class="nf">HandleFunc</span><span class="p">(</span><span class="s">&#34;/image/png/1&#34;</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">writer</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">request</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintln</span><span class="p">(</span><span class="nx">writer</span><span class="p">,</span> <span class="s">&#34;default&#34;</span><span class="p">,</span> <span class="nx">request</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nf">EscapedPath</span><span class="p">())</span>
+	<span class="p">})</span>
+	<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -718,47 +720,47 @@
 </span><span class="lnt">40
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">&gt;&gt;&gt; curl -v <span class="s1">&#39;localhost:8080/image/gif/../png/1&#39;</span>
-</span></span><span class="line"><span class="cl">&gt; GET /image/png/1 HTTP/1.1
-</span></span><span class="line"><span class="cl">&gt; Host: localhost:8080
-</span></span><span class="line"><span class="cl">&gt; User-Agent: curl/7.64.1
-</span></span><span class="line"><span class="cl">&gt; Accept: */*
-</span></span><span class="line"><span class="cl">&gt;
-</span></span><span class="line"><span class="cl">&lt; HTTP/1.1 <span class="m">200</span> OK
-</span></span><span class="line"><span class="cl">&lt; Date: Sat, <span class="m">30</span> Nov <span class="m">2019</span> 11:42:00 GMT
-</span></span><span class="line"><span class="cl">&lt; Content-Length: <span class="m">23</span>
-</span></span><span class="line"><span class="cl">&lt; Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
-</span></span><span class="line"><span class="cl">&lt;
-</span></span><span class="line"><span class="cl">localhost /image/png/1
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; curl -v <span class="s1">&#39;localhost:8080/image/gif/../png//1&#39;</span>
-</span></span><span class="line"><span class="cl">&gt; GET /image/png//1 HTTP/1.1
-</span></span><span class="line"><span class="cl">&gt; Host: localhost:8080
-</span></span><span class="line"><span class="cl">&gt; User-Agent: curl/7.64.1
-</span></span><span class="line"><span class="cl">&gt; Accept: */*
-</span></span><span class="line"><span class="cl">&gt;
-</span></span><span class="line"><span class="cl">&lt; HTTP/1.1 <span class="m">301</span> Moved Permanently
-</span></span><span class="line"><span class="cl">&lt; Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
-</span></span><span class="line"><span class="cl">&lt; Location: /image/png/1
-</span></span><span class="line"><span class="cl">&lt; Date: Sat, <span class="m">30</span> Nov <span class="m">2019</span> 11:42:14 GMT
-</span></span><span class="line"><span class="cl">&lt; Content-Length: <span class="m">47</span>
-</span></span><span class="line"><span class="cl">&lt;
-</span></span><span class="line"><span class="cl">&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&#34;/image/png/1&#34;</span>&gt;Moved Permanently&lt;/a&gt;.
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; curl -v <span class="s1">&#39;localhost:8080/image/png//1&#39;</span>
-</span></span><span class="line"><span class="cl">&gt; GET /image/png//1 HTTP/1.1
-</span></span><span class="line"><span class="cl">&gt; Host: localhost:8080
-</span></span><span class="line"><span class="cl">&gt; User-Agent: curl/7.64.1
-</span></span><span class="line"><span class="cl">&gt; Accept: */*
-</span></span><span class="line"><span class="cl">&gt;
-</span></span><span class="line"><span class="cl">&lt; HTTP/1.1 <span class="m">301</span> Moved Permanently
-</span></span><span class="line"><span class="cl">&lt; Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
-</span></span><span class="line"><span class="cl">&lt; Location: /image/png/1
-</span></span><span class="line"><span class="cl">&lt; Date: Sat, <span class="m">30</span> Nov <span class="m">2019</span> 11:45:18 GMT
-</span></span><span class="line"><span class="cl">&lt; Content-Length: <span class="m">47</span>
-</span></span><span class="line"><span class="cl">&lt;
-</span></span><span class="line"><span class="cl">&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&#34;/image/png/1&#34;</span>&gt;Moved Permanently&lt;/a&gt;.
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">&gt;&gt;&gt; curl -v <span class="s1">&#39;localhost:8080/image/gif/../png/1&#39;</span>
+&gt; GET /image/png/1 HTTP/1.1
+&gt; Host: localhost:8080
+&gt; User-Agent: curl/7.64.1
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 <span class="m">200</span> OK
+&lt; Date: Sat, <span class="m">30</span> Nov <span class="m">2019</span> 11:42:00 GMT
+&lt; Content-Length: <span class="m">23</span>
+&lt; Content-Type: text/plain<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+&lt;
+localhost /image/png/1
+
+&gt;&gt;&gt; curl -v <span class="s1">&#39;localhost:8080/image/gif/../png//1&#39;</span>
+&gt; GET /image/png//1 HTTP/1.1
+&gt; Host: localhost:8080
+&gt; User-Agent: curl/7.64.1
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 <span class="m">301</span> Moved Permanently
+&lt; Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+&lt; Location: /image/png/1
+&lt; Date: Sat, <span class="m">30</span> Nov <span class="m">2019</span> 11:42:14 GMT
+&lt; Content-Length: <span class="m">47</span>
+&lt;
+&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&#34;/image/png/1&#34;</span>&gt;Moved Permanently&lt;/a&gt;.
+
+&gt;&gt;&gt; curl -v <span class="s1">&#39;localhost:8080/image/png//1&#39;</span>
+&gt; GET /image/png//1 HTTP/1.1
+&gt; Host: localhost:8080
+&gt; User-Agent: curl/7.64.1
+&gt; Accept: */*
+&gt;
+&lt; HTTP/1.1 <span class="m">301</span> Moved Permanently
+&lt; Content-Type: text/html<span class="p">;</span> <span class="nv">charset</span><span class="o">=</span>utf-8
+&lt; Location: /image/png/1
+&lt; Date: Sat, <span class="m">30</span> Nov <span class="m">2019</span> 11:45:18 GMT
+&lt; Content-Length: <span class="m">47</span>
+&lt;
+&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&#34;/image/png/1&#34;</span>&gt;Moved Permanently&lt;/a&gt;.
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -868,7 +870,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
