@@ -17,14 +17,14 @@
 
 
 <meta name="author" content="bwangel" /><meta name="description" content="摘要:
-Python3.5的新特性，原文地址 用async和await等新语法来进行协程编程 " /><meta name="keywords" content="Hugo, blog, bwangel" />
+  Python3.5的新特性，原文地址 用async和await等新语法来进行协程编程  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2016/05/08/python3-5%E6%96%B0%E7%89%B9%E6%80%A7/" />
@@ -36,7 +36,7 @@ Python3.5的新特性，原文地址 用async和await等新语法来进行协程
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -72,17 +72,6 @@ Python3.5的新特性，原文地址
 用async和await等新语法来进行协程编程
 
 "/>
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
-
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -217,9 +206,9 @@ Python3.5的新特性，原文地址
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">async</span> <span class="k">def</span> <span class="nf">coro</span><span class="p">():</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s1">&#39;span&#39;</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">async</span> <span class="k">def</span> <span class="nf">coro</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s1">&#39;span&#39;</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>在一个协程函数内部，新的<code>await</code>表达式可以用来暂停协程的执行，直到新的结果可用，任何对象都可以被await化，只要这个对象通过定义<code>__await__</code>函数实现了<code>awaitabel</code>协议</p>
 <p>PEP492 也添加了<code>async for</code>语句来方便进行异步迭代器的迭代。</p>
@@ -250,29 +239,29 @@ Python3.5的新特性，原文地址
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">asyncio</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">async</span> <span class="k">def</span> <span class="nf">http_get</span><span class="p">(</span><span class="n">domain</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">    <span class="n">reader</span><span class="p">,</span> <span class="n">writer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">open_connection</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
-</span></span><span class="line"><span class="cl">        <span class="sa">b</span><span class="s1">&#39;GET / HTTP/1.1&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">        <span class="sa">b</span><span class="s1">&#39;Host: %b&#39;</span> <span class="o">%</span> <span class="n">domain</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;latin-1&#39;</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">        <span class="sa">b</span><span class="s1">&#39;Connection: close&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">        <span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">]))</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="k">async</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt;&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="k">try</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">http_get</span><span class="p">(</span><span class="s1">&#39;baidu.com&#39;</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="k">finally</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">http_get</span><span class="p">(</span><span class="n">domain</span><span class="p">):</span>
+    <span class="n">reader</span><span class="p">,</span> <span class="n">writer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">open_connection</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
+
+    <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+        <span class="sa">b</span><span class="s1">&#39;GET / HTTP/1.1&#39;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s1">&#39;Host: %b&#39;</span> <span class="o">%</span> <span class="n">domain</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;latin-1&#39;</span><span class="p">),</span>
+        <span class="sa">b</span><span class="s1">&#39;Connection: close&#39;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+    <span class="p">]))</span>
+
+    <span class="k">async</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt;&#39;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+
+    <span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">http_get</span><span class="p">(</span><span class="s1">&#39;baidu.com&#39;</span><span class="p">))</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>在上面的程序中，首先定义了一个事件循环和一个协程函数，协程函数跑在事件循环上，在协程函数内部，异步地去请求服务端的连接，连接成功建立以后，再向服务端发出Http请求，返回的Http相应被存储在reader这个异步迭代器中，然后再来通过<code>async for</code>来遍历出这个异步迭代器的所有结果。</p>
 <p>程序的输入如下:</p>
@@ -295,22 +284,22 @@ Python3.5的新特性，原文地址
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt;&gt;&gt; b&#39;HTTP/1.1 200 OK\r\n&#39;
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; b&#39;Date: Sun, 08 May 2016 07:33:29 GMT\r\n&#39;
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; b&#39;Server: Apache\r\n&#39;
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; b&#39;Last-Modified: Tue, 12 Jan 2010 13:48:00 GMT\r\n&#39;
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; b&#39;ETag: &#34;51-47cf7e6ee8400&#34;\r\n&#39;
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; b&#39;Accept-Ranges: bytes\r\n&#39;
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; b&#39;Content-Length: 81\r\n&#39;
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; b&#39;Cache-Control: max-age=86400\r\n&#39;
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; b&#39;Expires: Mon, 09 May 2016 07:33:29 GMT\r\n&#39;
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; b&#39;Connection: Close\r\n&#39;
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; b&#39;Content-Type: text/html\r\n&#39;
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; b&#39;\r\n&#39;
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; b&#39;&lt;html&gt;\n&#39;
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; b&#39;&lt;meta http-equiv=&#34;refresh&#34; content=&#34;0;url=http://www.baidu.com/&#34;&gt;\n&#39;
-</span></span><span class="line"><span class="cl">&gt;&gt;&gt; b&#39;&lt;/meta&gt;html&gt;\n&#39;
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&gt;&gt;&gt; b&#39;HTTP/1.1 200 OK\r\n&#39;
+&gt;&gt;&gt; b&#39;Date: Sun, 08 May 2016 07:33:29 GMT\r\n&#39;
+&gt;&gt;&gt; b&#39;Server: Apache\r\n&#39;
+&gt;&gt;&gt; b&#39;Last-Modified: Tue, 12 Jan 2010 13:48:00 GMT\r\n&#39;
+&gt;&gt;&gt; b&#39;ETag: &#34;51-47cf7e6ee8400&#34;\r\n&#39;
+&gt;&gt;&gt; b&#39;Accept-Ranges: bytes\r\n&#39;
+&gt;&gt;&gt; b&#39;Content-Length: 81\r\n&#39;
+&gt;&gt;&gt; b&#39;Cache-Control: max-age=86400\r\n&#39;
+&gt;&gt;&gt; b&#39;Expires: Mon, 09 May 2016 07:33:29 GMT\r\n&#39;
+&gt;&gt;&gt; b&#39;Connection: Close\r\n&#39;
+&gt;&gt;&gt; b&#39;Content-Type: text/html\r\n&#39;
+&gt;&gt;&gt; b&#39;\r\n&#39;
+&gt;&gt;&gt; b&#39;&lt;html&gt;\n&#39;
+&gt;&gt;&gt; b&#39;&lt;meta http-equiv=&#34;refresh&#34; content=&#34;0;url=http://www.baidu.com/&#34;&gt;\n&#39;
+&gt;&gt;&gt; b&#39;&lt;/meta&gt;html&gt;\n&#39;
+</code></pre></td></tr></table>
 </div>
 </div><h3 id="示例-上下文管理器">示例: 上下文管理器</h3>
 <p>除了异步迭代器之外，还有新的语法支持异步的上下文管理器(关于上下文管理器可以参考我的这篇文章<a href="http://www.bwangel.win/2016/04/25/Python%E7%9A%84with%E8%AF%AD%E5%8F%A5/">Python的with语句</a>)，示例程序如下:</p>
@@ -334,23 +323,23 @@ Python3.5的新特性，原文地址
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">asyncio</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">async</span> <span class="k">def</span> <span class="nf">coro</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;coro </span><span class="si">{}</span><span class="s1">: waiting for lock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">    <span class="k">async</span> <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;coro </span><span class="si">{}</span><span class="s1">: holding the lock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;coro </span><span class="si">{}</span><span class="s1">: releasing the lock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="n">lock</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="n">coros</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">coro</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">lock</span><span class="p">),</span> <span class="n">coro</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">lock</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="k">try</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">coros</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="k">finally</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">coro</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">lock</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;coro </span><span class="si">{}</span><span class="s1">: waiting for lock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;coro </span><span class="si">{}</span><span class="s1">: holding the lock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;coro </span><span class="si">{}</span><span class="s1">: releasing the lock&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="n">lock</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+<span class="n">coros</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">coro</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">lock</span><span class="p">),</span> <span class="n">coro</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">lock</span><span class="p">))</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">coros</span><span class="p">)</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>在上面的程序中，通过<code>asyncio.gather</code>函数将两个协程函数定义的协程对象生成一个future对象，然后通过一个事件循环去运行这个future对象。
 在协程函数内部，主要就是异步的获取锁，并且和with语句结合，可以在获取以后自动释放锁。</p>
@@ -365,13 +354,13 @@ Python3.5的新特性，原文地址
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">coro 1: waiting for lock
-</span></span><span class="line"><span class="cl">coro 1: holding the lock
-</span></span><span class="line"><span class="cl">coro 2: waiting for lock
-</span></span><span class="line"><span class="cl">coro 1: releasing the lock
-</span></span><span class="line"><span class="cl">coro 2: holding the lock
-</span></span><span class="line"><span class="cl">coro 2: releasing the lock
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">coro 1: waiting for lock
+coro 1: holding the lock
+coro 2: waiting for lock
+coro 1: releasing the lock
+coro 2: holding the lock
+coro 2: releasing the lock
+</code></pre></td></tr></table>
 </div>
 </div><p>需要注意的是<code>async with</code>和<code>async for</code>必须运行在<code>async def</code>定义的协程函数内部。
 协程函数必须运行在一个兼容的事件循环之上，例如<code>asyncio loop</code></p>
@@ -482,7 +471,7 @@ Python3.5的新特性，原文地址
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

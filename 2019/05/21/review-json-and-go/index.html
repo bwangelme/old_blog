@@ -16,14 +16,14 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content=" 原文地址: https://blog.golang.org/json-and-go " /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content="  原文地址: https://blog.golang.org/json-and-go  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2019/05/21/review-json-and-go/" />
@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -65,17 +65,6 @@
 原文地址: https://blog.golang.org/json-and-go
 
 "/>
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
-
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -211,8 +200,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">Marshal</span><span class="p">(</span><span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Marshal</span><span class="p">(</span><span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>给定一个 Go 数据结构 <code>Message</code>，</p>
 <div class="highlight"><div class="chroma">
@@ -224,12 +213,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Message</span> <span class="kd">struct</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">Name</span> <span class="kt">string</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">Body</span> <span class="kt">string</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">Time</span> <span class="kt">int64</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Message</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">Name</span> <span class="kt">string</span>
+    <span class="nx">Body</span> <span class="kt">string</span>
+    <span class="nx">Time</span> <span class="kt">int64</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>同时创建一个 <code>Message</code> 的实例，</p>
 <div class="highlight"><div class="chroma">
@@ -237,8 +226,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">m</span> <span class="o">:=</span> <span class="nx">Message</span><span class="p">{</span><span class="s">&#34;Alice&#34;</span><span class="p">,</span> <span class="s">&#34;Hello&#34;</span><span class="p">,</span> <span class="mi">1294706395881547000</span><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">m</span> <span class="o">:=</span> <span class="nx">Message</span><span class="p">{</span><span class="s">&#34;Alice&#34;</span><span class="p">,</span> <span class="s">&#34;Hello&#34;</span><span class="p">,</span> <span class="mi">1294706395881547000</span><span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>我们可以使用 <code>json.Marshal</code> 来生成一个 JSON 编码版本的<code>m</code></p>
 <div class="highlight"><div class="chroma">
@@ -246,8 +235,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">b</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">b</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>在执行了上述操作后，<code>err</code>应该是<code>nil</code>，<code>b</code>应该是一个包含如下数据的<code>[]byte</code>变量，</p>
 <div class="highlight"><div class="chroma">
@@ -255,8 +244,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">b == []byte(`{&#34;Name&#34;:&#34;Alice&#34;,&#34;Body&#34;:&#34;Hello&#34;,&#34;Time&#34;:1294706395881547000}`)
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">b == []byte(`{&#34;Name&#34;:&#34;Alice&#34;,&#34;Body&#34;:&#34;Hello&#34;,&#34;Time&#34;:1294706395881547000}`)
+</code></pre></td></tr></table>
 </div>
 </div><p>只有被表示为有效 JSON 的数据数据结构才能被编码：</p>
 <ul>
@@ -273,8 +262,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">data</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">,</span> <span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">error</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">data</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">,</span> <span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">error</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>首先我们应该创建一个存储解码数据的变量，</p>
 <div class="highlight"><div class="chroma">
@@ -282,8 +271,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">m</span> <span class="nx">Message</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">m</span> <span class="nx">Message</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>然后调用 <code>json.Unmarshal</code> 函数，将<code>[]byte</code>类型的 JSON 数据和指向m的指针传递进去。</p>
 <div class="highlight"><div class="chroma">
@@ -291,8 +280,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">m</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">m</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>如果<code>b</code>包含了适合<code>m</code>的有效 JSON 数据，上述函数返回的<code>err</code>应该是<code>nil</code>，b中所存储的数据也应该被存储到了结构体变量<code>m</code>中。变量<code>m</code>中的值如下所示:</p>
 <div class="highlight"><div class="chroma">
@@ -304,12 +293,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">m</span> <span class="p">=</span> <span class="nx">Message</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;Alice&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">Body</span><span class="p">:</span> <span class="s">&#34;Hello&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">Time</span><span class="p">:</span> <span class="mi">1294706395881547000</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">m</span> <span class="p">=</span> <span class="nx">Message</span><span class="p">{</span>
+    <span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;Alice&#34;</span><span class="p">,</span>
+    <span class="nx">Body</span><span class="p">:</span> <span class="s">&#34;Hello&#34;</span><span class="p">,</span>
+    <span class="nx">Time</span><span class="p">:</span> <span class="mi">1294706395881547000</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p><code>Unmarshal</code>是如何从结构体中找到存储被解码数据的字段的呢？对于一个给定的 Key &ldquo;Foo&rdquo;，<code>Unmarshal</code>将会通过以下的顺序从目的结构体中寻找合适的字段：</p>
 <ol>
@@ -355,38 +344,38 @@
 </span><span class="lnt">31
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;encoding/json&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;testing&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/stretchr/testify/assert&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">TestUnmarshalOrder</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">data</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`{&#34;Name1&#34;:&#34;Alice&#34;,&#34;Body&#34;:&#34;Hello&#34;,&#34;Time&#34;:1294706395881547000}`</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">m</span> <span class="kd">struct</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Name</span> <span class="kt">string</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">NAME1</span> <span class="kt">string</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">m</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m</span><span class="p">.</span><span class="nx">NAME1</span><span class="p">,</span> <span class="s">&#34;Alice&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">m1</span> <span class="kd">struct</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;Name1&#34;`</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">NAME1</span> <span class="kt">string</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">err</span> <span class="p">=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">m1</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m1</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span> <span class="s">&#34;Alice&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m1</span><span class="p">.</span><span class="nx">NAME1</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;encoding/json&#34;</span>
+	<span class="s">&#34;testing&#34;</span>
+
+	<span class="s">&#34;github.com/stretchr/testify/assert&#34;</span>
+<span class="p">)</span>
+
+
+<span class="kd">func</span> <span class="nf">TestUnmarshalOrder</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">data</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`{&#34;Name1&#34;:&#34;Alice&#34;,&#34;Body&#34;:&#34;Hello&#34;,&#34;Time&#34;:1294706395881547000}`</span><span class="p">)</span>
+	<span class="kd">var</span> <span class="nx">m</span> <span class="kd">struct</span><span class="p">{</span>
+		<span class="nx">Name</span> <span class="kt">string</span>
+		<span class="nx">NAME1</span> <span class="kt">string</span>
+	<span class="p">}</span>
+
+	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">m</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m</span><span class="p">.</span><span class="nx">NAME1</span><span class="p">,</span> <span class="s">&#34;Alice&#34;</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
+
+
+	<span class="kd">var</span> <span class="nx">m1</span> <span class="kd">struct</span><span class="p">{</span>
+		<span class="nx">Name</span> <span class="kt">string</span> <span class="s">`json:&#34;Name1&#34;`</span>
+		<span class="nx">NAME1</span> <span class="kt">string</span>
+	<span class="p">}</span>
+
+	<span class="nx">err</span> <span class="p">=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">m1</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m1</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span> <span class="s">&#34;Alice&#34;</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m1</span><span class="p">.</span><span class="nx">NAME1</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>当JSON字节中的数据不完全符合 Go 的类型的时候将会发生什么呢？</p>
 <div class="highlight"><div class="chroma">
@@ -396,10 +385,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`{&#34;Name&#34;:&#34;Bob&#34;,&#34;Food&#34;:&#34;Pickle&#34;}`</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">m</span> <span class="nx">Message</span>
-</span></span><span class="line"><span class="cl"><span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">m</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`{&#34;Name&#34;:&#34;Bob&#34;,&#34;Food&#34;:&#34;Pickle&#34;}`</span><span class="p">)</span>
+<span class="kd">var</span> <span class="nx">m</span> <span class="nx">Message</span>
+<span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">m</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p><code>Unmarshal</code>仅仅会解码那些在目标变量中能够找到的字段。在上述的代码例子中，只有符合<code>m</code>的字段名才会被解码出来，<code>Food</code>字段将会被忽略。
 这个特性可以让你在处理大的 JSON 对象的时候，仅仅解析出想要的字段。同时，这也意味着目标结构体变量中 <strong>未导出字段</strong> 的值将不会受到<code>Unmarshal</code>的影响</p>
@@ -415,11 +404,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">i</span> <span class="kd">interface</span><span class="p">{}</span>
-</span></span><span class="line"><span class="cl"><span class="nx">i</span> <span class="p">=</span> <span class="s">&#34;a string&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="nx">i</span> <span class="p">=</span> <span class="mi">2011</span>
-</span></span><span class="line"><span class="cl"><span class="nx">i</span> <span class="p">=</span> <span class="mf">2.777</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">i</span> <span class="kd">interface</span><span class="p">{}</span>
+<span class="nx">i</span> <span class="p">=</span> <span class="s">&#34;a string&#34;</span>
+<span class="nx">i</span> <span class="p">=</span> <span class="mi">2011</span>
+<span class="nx">i</span> <span class="p">=</span> <span class="mf">2.777</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>使用类型断言可以访问底层的类型:</p>
 <div class="highlight"><div class="chroma">
@@ -428,9 +417,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">r</span> <span class="o">:=</span> <span class="nx">i</span><span class="p">.(</span><span class="kt">float64</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;the circle&#39;s area&#34;</span><span class="p">,</span> <span class="nx">math</span><span class="p">.</span><span class="nx">Pi</span><span class="o">*</span><span class="nx">r</span><span class="o">*</span><span class="nx">r</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">r</span> <span class="o">:=</span> <span class="nx">i</span><span class="p">.(</span><span class="kt">float64</span><span class="p">)</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;the circle&#39;s area&#34;</span><span class="p">,</span> <span class="nx">math</span><span class="p">.</span><span class="nx">Pi</span><span class="o">*</span><span class="nx">r</span><span class="o">*</span><span class="nx">r</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>如果底层的类型是未知的，可以使用 <code>Type-Switch</code> 来检测底层类型:</p>
 <div class="highlight"><div class="chroma">
@@ -448,18 +437,18 @@
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="k">switch</span> <span class="nx">v</span> <span class="o">:=</span> <span class="nx">i</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="kt">int</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;twice i is&#34;</span><span class="p">,</span> <span class="nx">v</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="kt">float64</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;the reciprocal of i is&#34;</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="nx">v</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="kt">string</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">h</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;i swapped by halves is&#34;</span><span class="p">,</span> <span class="nx">v</span><span class="p">[</span><span class="nx">h</span><span class="p">:]</span><span class="o">+</span><span class="nx">v</span><span class="p">[:</span><span class="nx">h</span><span class="p">])</span>
-</span></span><span class="line"><span class="cl"><span class="k">default</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// i isn&#39;t one of the types above
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">switch</span> <span class="nx">v</span> <span class="o">:=</span> <span class="nx">i</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">case</span> <span class="kt">int</span><span class="p">:</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;twice i is&#34;</span><span class="p">,</span> <span class="nx">v</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">case</span> <span class="kt">float64</span><span class="p">:</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;the reciprocal of i is&#34;</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="nx">v</span><span class="p">)</span>
+<span class="k">case</span> <span class="kt">string</span><span class="p">:</span>
+    <span class="nx">h</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;i swapped by halves is&#34;</span><span class="p">,</span> <span class="nx">v</span><span class="p">[</span><span class="nx">h</span><span class="p">:]</span><span class="o">+</span><span class="nx">v</span><span class="p">[:</span><span class="nx">h</span><span class="p">])</span>
+<span class="k">default</span><span class="p">:</span>
+    <span class="c1">// i isn&#39;t one of the types above
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p><code>json</code> 包将会使用<code>map[string]interface{}</code>和<code>[]interface{}</code>值来存储任意类型的 JSON 对象和数组。
 它将会正确地解析有效的 JSON 数据到 <code>interface {}</code> 类型变量中。默认的具体 Go 类型是：</p>
@@ -476,8 +465,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`{&#34;Name&#34;:&#34;Wednesday&#34;,&#34;Age&#34;:6,&#34;Parents&#34;:[&#34;Gomez&#34;,&#34;Morticia&#34;]}`</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">b</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`{&#34;Name&#34;:&#34;Wednesday&#34;,&#34;Age&#34;:6,&#34;Parents&#34;:[&#34;Gomez&#34;,&#34;Morticia&#34;]}`</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>不需要知道它的具体结构，我们可以通过<code>Unmarshal</code>函数将它解码成一个空接口类型。</p>
 <div class="highlight"><div class="chroma">
@@ -486,9 +475,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">f</span> <span class="kd">interface</span><span class="p">{}</span>
-</span></span><span class="line"><span class="cl"><span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">f</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">f</span> <span class="kd">interface</span><span class="p">{}</span>
+<span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">f</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>此时，变量<code>f</code>中存储的Go的值应该是一个字典，它的键是字符串，值是存储着值的空接口变量</p>
 <div class="highlight"><div class="chroma">
@@ -503,15 +492,15 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">f</span> <span class="p">=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}{</span>
-</span></span><span class="line"><span class="cl">    <span class="s">&#34;Name&#34;</span><span class="p">:</span> <span class="kd">interface</span><span class="p">{}(</span><span class="s">&#34;Wednesday&#34;</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">    <span class="s">&#34;Age&#34;</span><span class="p">:</span>  <span class="kd">interface</span><span class="p">{}(</span><span class="nb">float64</span><span class="p">(</span><span class="mi">6</span><span class="p">)),</span>
-</span></span><span class="line"><span class="cl">    <span class="s">&#34;Parents&#34;</span><span class="p">:</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span>
-</span></span><span class="line"><span class="cl">        <span class="kd">interface</span><span class="p">{}(</span><span class="s">&#34;Gomez&#34;</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">        <span class="kd">interface</span><span class="p">{}(</span><span class="s">&#34;Morticia&#34;</span><span class="p">),</span>
-</span></span><span class="line"><span class="cl">    <span class="p">},</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">f</span> <span class="p">=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}{</span>
+    <span class="s">&#34;Name&#34;</span><span class="p">:</span> <span class="kd">interface</span><span class="p">{}(</span><span class="s">&#34;Wednesday&#34;</span><span class="p">),</span>
+    <span class="s">&#34;Age&#34;</span><span class="p">:</span>  <span class="kd">interface</span><span class="p">{}(</span><span class="nb">float64</span><span class="p">(</span><span class="mi">6</span><span class="p">)),</span>
+    <span class="s">&#34;Parents&#34;</span><span class="p">:</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}{</span>
+        <span class="kd">interface</span><span class="p">{}(</span><span class="s">&#34;Gomez&#34;</span><span class="p">),</span>
+        <span class="kd">interface</span><span class="p">{}(</span><span class="s">&#34;Morticia&#34;</span><span class="p">),</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>我们可以使用类型断言去访问<code>f</code>底层的<code>map[string]interface{}</code>变量。</p>
 <div class="highlight"><div class="chroma">
@@ -519,8 +508,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">m</span> <span class="o">:=</span> <span class="nx">f</span><span class="p">.(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">m</span> <span class="o">:=</span> <span class="nx">f</span><span class="p">.(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{})</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>然后我们可以使用<code>range</code>语句来迭代这个map，然后使用<code>Type-Switch</code>去访问空接口类型变量底层确切类型的值:</p>
 <div class="highlight"><div class="chroma">
@@ -547,27 +536,27 @@
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="k">for</span> <span class="nx">k</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">m</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">switch</span> <span class="nx">vv</span> <span class="o">:=</span> <span class="nx">v</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="kt">string</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="s">&#34;is string&#34;</span><span class="p">,</span> <span class="nx">vv</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="kt">float64</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="s">&#34;is float64&#34;</span><span class="p">,</span> <span class="nx">vv</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}:</span>
-</span></span><span class="line"><span class="cl">        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="s">&#34;is an array:&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">u</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">vv</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">switch</span> <span class="nx">vv</span> <span class="o">:=</span> <span class="nx">u</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">case</span> <span class="kt">string</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">                <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="s">&#34;is string&#34;</span><span class="p">,</span> <span class="nx">vv</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="k">case</span> <span class="kt">float64</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">                <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="s">&#34;is float64&#34;</span><span class="p">,</span> <span class="nx">vv</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="k">default</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="s">&#34;is of type I don&#39;t know how to handle&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">for</span> <span class="nx">k</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">m</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="nx">vv</span> <span class="o">:=</span> <span class="nx">v</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="kt">string</span><span class="p">:</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="s">&#34;is string&#34;</span><span class="p">,</span> <span class="nx">vv</span><span class="p">)</span>
+    <span class="k">case</span> <span class="kt">float64</span><span class="p">:</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="s">&#34;is float64&#34;</span><span class="p">,</span> <span class="nx">vv</span><span class="p">)</span>
+    <span class="k">case</span> <span class="p">[]</span><span class="kd">interface</span><span class="p">{}:</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="s">&#34;is an array:&#34;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">u</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">vv</span> <span class="p">{</span>
+            <span class="k">switch</span> <span class="nx">vv</span> <span class="o">:=</span> <span class="nx">u</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">case</span> <span class="kt">string</span><span class="p">:</span>
+                <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="s">&#34;is string&#34;</span><span class="p">,</span> <span class="nx">vv</span><span class="p">)</span>
+            <span class="k">case</span> <span class="kt">float64</span><span class="p">:</span>
+                <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="s">&#34;is float64&#34;</span><span class="p">,</span> <span class="nx">vv</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="k">default</span><span class="p">:</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">k</span><span class="p">,</span> <span class="s">&#34;is of type I don&#39;t know how to handle&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>通过这种方式，可以方便地解析出未知内部结构的 JSON 数据，且仍然能享受到类型安全的好处。</p>
 <h2 id="引用类型">引用类型</h2>
@@ -593,24 +582,24 @@
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">TestUnmarshalReferenceTypes</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="kd">type</span> <span class="nx">FamilyMember</span> <span class="kd">struct</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Name</span>    <span class="kt">string</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Age</span>     <span class="kt">int</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Parents</span> <span class="p">[]</span><span class="kt">string</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">m</span> <span class="nx">FamilyMember</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">data</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`{&#34;Name&#34;:&#34;Wednesday&#34;,&#34;Age&#34;:6,&#34;Parents&#34;:[&#34;Gomez&#34;,&#34;Morticia&#34;]}`</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">m</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span> <span class="s">&#34;Wednesday&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Age</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Parents</span><span class="p">,</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;Gomez&#34;</span><span class="p">,</span> <span class="s">&#34;Morticia&#34;</span><span class="p">})</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestUnmarshalReferenceTypes</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">type</span> <span class="nx">FamilyMember</span> <span class="kd">struct</span> <span class="p">{</span>
+		<span class="nx">Name</span>    <span class="kt">string</span>
+		<span class="nx">Age</span>     <span class="kt">int</span>
+		<span class="nx">Parents</span> <span class="p">[]</span><span class="kt">string</span>
+	<span class="p">}</span>
+
+	<span class="kd">var</span> <span class="nx">m</span> <span class="nx">FamilyMember</span>
+
+	<span class="nx">data</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`{&#34;Name&#34;:&#34;Wednesday&#34;,&#34;Age&#34;:6,&#34;Parents&#34;:[&#34;Gomez&#34;,&#34;Morticia&#34;]}`</span><span class="p">)</span>
+	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">m</span><span class="p">)</span>
+
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span> <span class="s">&#34;Wednesday&#34;</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Age</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Parents</span><span class="p">,</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;Gomez&#34;</span><span class="p">,</span> <span class="s">&#34;Morticia&#34;</span><span class="p">})</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p><code>Unmarshal</code>函数将数据解码到<code>FamilyMember</code>类型变量中，一切就像我们预期的那样。但如果我们仔细地观察上述代码，可以看到一个重要的细节。我们使用<code>var</code>语句创建了一个<code>FamilyMember</code>类型的变量，然后将这个变量的指针提供给了<code>Unmarshal</code>函数，但同时，这个变量中的<code>Parents</code>字段是<code>nil</code>切片。为了去填充<code>Parents</code>字段，<code>Unmarshal</code>在幕后分配了一个新的切片。这就是典型的<code>Unmarshal</code>函数对引用类型的支持（指针，切片和 map ）。</p>
 <p>考虑要解码如下的数据结构:</p>
@@ -621,10 +610,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Foo</span> <span class="kd">struct</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">Bar</span> <span class="o">*</span><span class="nx">Bar</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Foo</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">Bar</span> <span class="o">*</span><span class="nx">Bar</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>如果在JSON数据中有一个<code>Bar</code>字段，<code>Unmarshal</code>将会分配一个新的<code>Bar</code>变量并将JSON数据填充到其中。如果没有的话，<code>Bar</code>将会是一个空指针。</p>
 <p>此时一个重要的开发模式就浮现出来了: 如果你有一个应用程序，接收几种不同类型的消息，你可以用如下方式定义一个<code>receiver</code>，</p>
@@ -636,11 +625,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">IncomingMessage</span> <span class="kd">struct</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">Cmd</span> <span class="o">*</span><span class="nx">Command</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">Msg</span> <span class="o">*</span><span class="nx">Message</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">IncomingMessage</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">Cmd</span> <span class="o">*</span><span class="nx">Command</span>
+    <span class="nx">Msg</span> <span class="o">*</span><span class="nx">Message</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>发送端可以在顶层JSON对象中填充一个<code>Cmd</code>对象或者<code>Msg</code>对象，这个完全由发送端自己来决定。<code>Unmarsha</code>将会将JSON数据解码到<code>IncommingMessage</code>对象中，它仅会为 JSON 对象中检测出来的数据分配数据结构。
 接收者如果想要知道应该去处理哪个消息，它可以简单地测试一下<code>Cmd</code>或者<code>Msg</code>是否为<code>nil</code>。</p>
@@ -652,9 +641,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">NewDecoder</span><span class="p">(</span><span class="nx">r</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span><span class="p">)</span> <span class="o">*</span><span class="nx">Decoder</span>
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">NewEncoder</span><span class="p">(</span><span class="nx">w</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span><span class="p">)</span> <span class="o">*</span><span class="nx">Encoder</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">NewDecoder</span><span class="p">(</span><span class="nx">r</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span><span class="p">)</span> <span class="o">*</span><span class="nx">Decoder</span>
+<span class="kd">func</span> <span class="nf">NewEncoder</span><span class="p">(</span><span class="nx">w</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span><span class="p">)</span> <span class="o">*</span><span class="nx">Encoder</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>下面是一个示例程序，它将会从<code>stdin</code>中读取 JSON 数据，将其解析出来后，移除掉其中的冗余字段，只留下<code>Name</code>，然后将这部分数据再写入到<code>stdout</code>中。</p>
 <div class="highlight"><div class="chroma">
@@ -689,35 +678,35 @@
 </span><span class="lnt">28
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;encoding/json&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;log&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;os&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">dec</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">NewDecoder</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdin</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">enc</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">NewEncoder</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="kd">var</span> <span class="nx">v</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}</span>
-</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">dec</span><span class="p">.</span><span class="nf">Decode</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">v</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">			<span class="k">return</span>
-</span></span><span class="line"><span class="cl">		<span class="p">}</span>
-</span></span><span class="line"><span class="cl">		<span class="k">for</span> <span class="nx">k</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">v</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="nx">k</span> <span class="o">!=</span> <span class="s">&#34;Name&#34;</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">				<span class="nb">delete</span><span class="p">(</span><span class="nx">v</span><span class="p">,</span> <span class="nx">k</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">			<span class="p">}</span>
-</span></span><span class="line"><span class="cl">		<span class="p">}</span>
-</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">enc</span><span class="p">.</span><span class="nf">Encode</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">v</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">		<span class="p">}</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;encoding/json&#34;</span>
+	<span class="s">&#34;log&#34;</span>
+	<span class="s">&#34;os&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">dec</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">NewDecoder</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdin</span><span class="p">)</span>
+	<span class="nx">enc</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">NewEncoder</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">)</span>
+
+	<span class="k">for</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">v</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">dec</span><span class="p">.</span><span class="nf">Decode</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">v</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="k">for</span> <span class="nx">k</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">v</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="nx">k</span> <span class="o">!=</span> <span class="s">&#34;Name&#34;</span> <span class="p">{</span>
+				<span class="nb">delete</span><span class="p">(</span><span class="nx">v</span><span class="p">,</span> <span class="nx">k</span><span class="p">)</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">enc</span><span class="p">.</span><span class="nf">Encode</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">v</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>由于<code>io.Reader</code>和<code>io.Writer</code>无处不在，这些<code>Encoder</code>和<code>Decoder</code>能够在广泛的场景中使用，例如读写 HTTP 连接，Websocket 连接，读写文件等。</p>
 <h2 id="参考">参考</h2>
@@ -734,8 +723,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">Marshal</span><span class="p">(</span><span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">Marshal</span><span class="p">(</span><span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p><code>Marshal</code>函数返回<code>v</code>的 JSON 编码。</p>
 <p><code>Marshal</code>将会递归地遍历<code>v</code>的值。如果遇到了一个值实现了<code>Marshaler</code>接口，且它不是空指针。那么<code>Marshal</code>将会调用它的<code>MarshalJSON</code>方法来输出 JSON 数据。
@@ -787,38 +776,38 @@
 </span><span class="lnt">31
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;bytes&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;encoding/json&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;testing&#34;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/stretchr/testify/assert&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">TestMarshalEscapeHTML</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">val</span> <span class="p">=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="s">&#34;string&#34;</span><span class="p">:</span> <span class="s">&#34;&lt;p&gt;文本&amp;文本&lt;/p&gt;&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">data</span> <span class="p">=</span> <span class="nx">bytes</span><span class="p">.</span><span class="nf">NewBuffer</span><span class="p">([]</span><span class="kt">byte</span><span class="p">{})</span>
-</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">enc</span> <span class="p">=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">NewEncoder</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">enc</span><span class="p">.</span><span class="nf">Encode</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="c1">// 注意 JSON 输出最后有个换行，所以 Expected 值中也应该加上换行
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nf">Bytes</span><span class="p">(),</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`{&#34;string&#34;:&#34;\u003cp\u003e文本\u0026文本\u003c/p\u003e&#34;}
-</span></span></span><span class="line"><span class="cl"><span class="s">`</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">data</span><span class="p">.</span><span class="nf">Reset</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">enc</span><span class="p">.</span><span class="nf">SetEscapeHTML</span><span class="p">(</span><span class="kc">false</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">err</span> <span class="p">=</span> <span class="nx">enc</span><span class="p">.</span><span class="nf">Encode</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nf">Bytes</span><span class="p">(),</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`{&#34;string&#34;:&#34;&lt;p&gt;文本&amp;文本&lt;/p&gt;&#34;}
-</span></span></span><span class="line"><span class="cl"><span class="s">`</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;bytes&#34;</span>
+	<span class="s">&#34;encoding/json&#34;</span>
+	<span class="s">&#34;testing&#34;</span>
+
+	<span class="s">&#34;github.com/stretchr/testify/assert&#34;</span>
+<span class="p">)</span>
+
+
+<span class="kd">func</span> <span class="nf">TestMarshalEscapeHTML</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">val</span> <span class="p">=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
+		<span class="s">&#34;string&#34;</span><span class="p">:</span> <span class="s">&#34;&lt;p&gt;文本&amp;文本&lt;/p&gt;&#34;</span><span class="p">,</span>
+	<span class="p">}</span>
+
+	<span class="kd">var</span> <span class="nx">data</span> <span class="p">=</span> <span class="nx">bytes</span><span class="p">.</span><span class="nf">NewBuffer</span><span class="p">([]</span><span class="kt">byte</span><span class="p">{})</span>
+	<span class="kd">var</span> <span class="nx">enc</span> <span class="p">=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">NewEncoder</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+
+	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">enc</span><span class="p">.</span><span class="nf">Encode</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+	<span class="c1">// 注意 JSON 输出最后有个换行，所以 Expected 值中也应该加上换行
+</span><span class="c1"></span>	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nf">Bytes</span><span class="p">(),</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`{&#34;string&#34;:&#34;\u003cp\u003e文本\u0026文本\u003c/p\u003e&#34;}
+</span><span class="s">`</span><span class="p">))</span>
+
+	<span class="nx">data</span><span class="p">.</span><span class="nf">Reset</span><span class="p">()</span>
+	<span class="nx">enc</span><span class="p">.</span><span class="nf">SetEscapeHTML</span><span class="p">(</span><span class="kc">false</span><span class="p">)</span>
+	<span class="nx">err</span> <span class="p">=</span> <span class="nx">enc</span><span class="p">.</span><span class="nf">Encode</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nf">Bytes</span><span class="p">(),</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`{&#34;string&#34;:&#34;&lt;p&gt;文本&amp;文本&lt;/p&gt;&#34;}
+</span><span class="s">`</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>数组和切片值将会被编码成 JSON 数组，但<code>[]byte</code>类型值将会被编码成 base64 编码过的字符串。<code>nil</code>的切片值将会被编码成 JSON 空值。</p>
 <ul>
@@ -841,20 +830,20 @@
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">TestMarshalByteArr</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">content</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;窗前莺并语，窗外燕双飞&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">val</span> <span class="p">=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="s">&#34;data&#34;</span><span class="p">:</span> <span class="nx">content</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">		<span class="s">&#34;b&#34;</span><span class="p">:</span> <span class="sc">&#39;A&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">b64Content</span> <span class="o">:=</span> <span class="nx">base64</span><span class="p">.</span><span class="nx">StdEncoding</span><span class="p">.</span><span class="nf">EncodeToString</span><span class="p">(</span><span class="nx">content</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">data</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">`{&#34;b&#34;:65,&#34;data&#34;:&#34;%s&#34;}`</span><span class="p">,</span> <span class="nx">b64Content</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestMarshalByteArr</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">content</span> <span class="o">:=</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;窗前莺并语，窗外燕双飞&#34;</span><span class="p">)</span>
+	<span class="kd">var</span> <span class="nx">val</span> <span class="p">=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}</span> <span class="p">{</span>
+		<span class="s">&#34;data&#34;</span><span class="p">:</span> <span class="nx">content</span><span class="p">,</span>
+		<span class="s">&#34;b&#34;</span><span class="p">:</span> <span class="sc">&#39;A&#39;</span><span class="p">,</span>
+	<span class="p">}</span>
+
+	<span class="nx">b64Content</span> <span class="o">:=</span> <span class="nx">base64</span><span class="p">.</span><span class="nx">StdEncoding</span><span class="p">.</span><span class="nf">EncodeToString</span><span class="p">(</span><span class="nx">content</span><span class="p">)</span>
+
+	<span class="nx">data</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">`{&#34;b&#34;:65,&#34;data&#34;:&#34;%s&#34;}`</span><span class="p">,</span> <span class="nx">b64Content</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>结构体值将会变成编码后的 JSON 对象，每个导出的结构体字段都会变成对象的一个成员，使用字段名作为对象的 key ，除非字段由于以下的某个原因被省略了。</p>
 <p>结构体字段的编码可以使用存储在结构体字段标签下的&quot;json&quot;键格式化字符串来自定义。格式化字符串给定了字段的名称，可选的由逗号分隔的编码选项。为了指定选项，不覆盖默认的名字，格式化字符串的名字可能是空的。</p>
@@ -897,37 +886,37 @@
 </span><span class="lnt">30
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">TestMarshalStructFieldTag</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="c1">// 注意，首先要让字段名称为导出名称（即以大写字母开头，struct field tag 才会生效）
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="kd">var</span> <span class="nx">val</span> <span class="p">=</span> <span class="kd">struct</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="c1">// 指定 JSON 对象中的 key 为 myName1
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">F1</span> <span class="kt">int</span> <span class="s">`json:&#34;myName1&#34;`</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">		<span class="c1">// 指定 JSON 对象中的 key 为 myName2，且为空值时会被忽略
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">F2</span> <span class="kt">int</span> <span class="s">`json:&#34;myName2,omitempty&#34;`</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">		<span class="c1">// 未指定 JSON 对象的 key 名称，所以它是 F3,指定编码选项，为空值时将会被忽略
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">F3</span> <span class="kt">int</span> <span class="s">`json:&#34;,omitempty&#34;`</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">		<span class="c1">// 这个字段将会被忽略
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">F4</span> <span class="kt">int</span> <span class="s">`json:&#34;-&#34;`</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">		<span class="c1">// 将字段名指定成 -
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">F5</span> <span class="kt">int</span> <span class="s">`json:&#34;-,&#34;`</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">F1</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">F2</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">F3</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">F4</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">F5</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">data</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="s">`{&#34;myName1&#34;:0,&#34;F3&#34;:3,&#34;-&#34;:5}`</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestMarshalStructFieldTag</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 注意，首先要让字段名称为导出名称（即以大写字母开头，struct field tag 才会生效）
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">val</span> <span class="p">=</span> <span class="kd">struct</span> <span class="p">{</span>
+		<span class="c1">// 指定 JSON 对象中的 key 为 myName1
+</span><span class="c1"></span>		<span class="nx">F1</span> <span class="kt">int</span> <span class="s">`json:&#34;myName1&#34;`</span>
+
+		<span class="c1">// 指定 JSON 对象中的 key 为 myName2，且为空值时会被忽略
+</span><span class="c1"></span>		<span class="nx">F2</span> <span class="kt">int</span> <span class="s">`json:&#34;myName2,omitempty&#34;`</span>
+
+		<span class="c1">// 未指定 JSON 对象的 key 名称，所以它是 F3,指定编码选项，为空值时将会被忽略
+</span><span class="c1"></span>		<span class="nx">F3</span> <span class="kt">int</span> <span class="s">`json:&#34;,omitempty&#34;`</span>
+
+		<span class="c1">// 这个字段将会被忽略
+</span><span class="c1"></span>		<span class="nx">F4</span> <span class="kt">int</span> <span class="s">`json:&#34;-&#34;`</span>
+
+		<span class="c1">// 将字段名指定成 -
+</span><span class="c1"></span>		<span class="nx">F5</span> <span class="kt">int</span> <span class="s">`json:&#34;-,&#34;`</span>
+	<span class="p">}{</span>
+		<span class="nx">F1</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+		<span class="nx">F2</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+		<span class="nx">F3</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+		<span class="nx">F4</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+		<span class="nx">F5</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+	<span class="p">}</span>
+
+	<span class="nx">data</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="s">`{&#34;myName1&#34;:0,&#34;F3&#34;:3,&#34;-&#34;:5}`</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>&ldquo;string&quot;选项可以让该字段在 JSON 对象中是以字符串的形式存储的。这个选项仅会在字符串，浮点数，整数和布尔值类型的字段上生效。
 在和 JavaScript 程序通信的时候，有时候会用这种扩展等级的通讯。</p>
@@ -953,30 +942,30 @@
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">TestMarshalStringTag</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="c1">// 注意 struct field tag 定义出错的时候(例如字段名称重复)，Marshal 的 err 返回的仍然是空值，但data为`{}`
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="kd">var</span> <span class="nx">val</span> <span class="p">=</span> <span class="kd">struct</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">B1</span> <span class="kt">bool</span> <span class="s">`json:&#34;boolVal1,string&#34;`</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">B2</span> <span class="kt">bool</span> <span class="s">`json:&#34;boolVal2&#34;`</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">B1</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">B2</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">data</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="s">`{&#34;boolVal1&#34;:&#34;false&#34;,&#34;boolVal2&#34;:false}`</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestMarshalStringTag</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// 注意 struct field tag 定义出错的时候(例如字段名称重复)，Marshal 的 err 返回的仍然是空值，但data为`{}`
+</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">val</span> <span class="p">=</span> <span class="kd">struct</span> <span class="p">{</span>
+		<span class="nx">B1</span> <span class="kt">bool</span> <span class="s">`json:&#34;boolVal1,string&#34;`</span>
+		<span class="nx">B2</span> <span class="kt">bool</span> <span class="s">`json:&#34;boolVal2&#34;`</span>
+	<span class="p">}{</span>
+		<span class="nx">B1</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+		<span class="nx">B2</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+	<span class="p">}</span>
+
+	<span class="nx">data</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="s">`{&#34;boolVal1&#34;:&#34;false&#34;,&#34;boolVal2&#34;:false}`</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">Int64String</span> <span class="kt">int64</span> <span class="s">`json:&#34;,string&#34;`</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">Int64String</span> <span class="kt">int64</span> <span class="s">`json:&#34;,string&#34;`</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>如果键的名称是非空字符串，且其仅包含Unicode字母，数字和 ASCII 标点符号（引号，反斜杠和逗号除外），那么就会使用这个键的名称。</p>
 <p>匿名结构体字段在编码的时候，通常会将其内部的导出字段名放到外部结构体中，这个收到下一段描述的 Go 的可见性规则的约束。
@@ -1016,34 +1005,34 @@
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">TestMarshalAnonymousStruct</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="kd">type</span> <span class="nx">Engine</span> <span class="kd">struct</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Power</span> <span class="kt">int</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Code</span>  <span class="kt">int</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="kd">type</span> <span class="nx">Tires</span> <span class="kd">struct</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Number</span> <span class="kt">int</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="kd">type</span> <span class="nx">Bar</span> <span class="kd">interface</span> <span class="p">{}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">val</span> <span class="p">=</span> <span class="kd">struct</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Engine</span> <span class="c1">// 匿名结构体字段的名称会被忽略，将其内部的导出字段放到外部结构体中
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">Tires</span> <span class="s">`json:&#34;Tires&#34;`</span>  <span class="c1">// 通过 JSON tag 指定了名称的匿名结构体字段，在编码时会使用其名称，不再按匿名来处理
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">Bar</span>  <span class="c1">// 空接口类型的匿名结构体字段，会使用类型名当做其名称，而不是当做匿名结构体字段来处理
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="p">}{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Engine</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Tires</span><span class="p">{</span><span class="mi">2</span><span class="p">},</span>
-</span></span><span class="line"><span class="cl">		<span class="mi">233</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">data</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="s">`{&#34;Power&#34;:1,&#34;Code&#34;:2,&#34;Tires&#34;:{&#34;Number&#34;:2},&#34;Bar&#34;:233}`</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestMarshalAnonymousStruct</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">type</span> <span class="nx">Engine</span> <span class="kd">struct</span> <span class="p">{</span>
+		<span class="nx">Power</span> <span class="kt">int</span>
+		<span class="nx">Code</span>  <span class="kt">int</span>
+	<span class="p">}</span>
+
+	<span class="kd">type</span> <span class="nx">Tires</span> <span class="kd">struct</span> <span class="p">{</span>
+		<span class="nx">Number</span> <span class="kt">int</span>
+	<span class="p">}</span>
+
+	<span class="kd">type</span> <span class="nx">Bar</span> <span class="kd">interface</span> <span class="p">{}</span>
+
+	<span class="kd">var</span> <span class="nx">val</span> <span class="p">=</span> <span class="kd">struct</span> <span class="p">{</span>
+		<span class="nx">Engine</span> <span class="c1">// 匿名结构体字段的名称会被忽略，将其内部的导出字段放到外部结构体中
+</span><span class="c1"></span>		<span class="nx">Tires</span> <span class="s">`json:&#34;Tires&#34;`</span>  <span class="c1">// 通过 JSON tag 指定了名称的匿名结构体字段，在编码时会使用其名称，不再按匿名来处理
+</span><span class="c1"></span>		<span class="nx">Bar</span>  <span class="c1">// 空接口类型的匿名结构体字段，会使用类型名当做其名称，而不是当做匿名结构体字段来处理
+</span><span class="c1"></span>	<span class="p">}{</span>
+		<span class="nx">Engine</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span>
+		<span class="nx">Tires</span><span class="p">{</span><span class="mi">2</span><span class="p">},</span>
+		<span class="mi">233</span><span class="p">,</span>
+	<span class="p">}</span>
+
+	<span class="nx">data</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="s">`{&#34;Power&#34;:1,&#34;Code&#34;:2,&#34;Tires&#34;:{&#34;Number&#34;:2},&#34;Bar&#34;:233}`</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>在选择结构体中哪些字段会被编码或者解码的时候，Go 的结构体字段可见性规则会针对 JSON 做一些修改。如果在同一级别有多个字段名，且那个级别是最少嵌套的(因此将会是通常 Go 规则选择的级别),如下的规则将会被应用:</p>
 <ol>
@@ -1127,62 +1116,62 @@
 </span><span class="lnt">55
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">TestMarshalCyclicStruct</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="kd">type</span> <span class="nx">Engine</span> <span class="kd">struct</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Power</span> <span class="kt">int</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Code</span>  <span class="kt">int</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Tires</span> <span class="kd">struct</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">Number</span> <span class="kt">int</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">Engine</span>
-</span></span><span class="line"><span class="cl">		<span class="p">}</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">val</span> <span class="p">=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">Engine</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">data</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="s">``</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="c1">// &gt;&gt;&gt; go test json_example
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// # json_example [json_example.test]
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">//panic: runtime error: invalid memory address or nil pointer dereference
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// [signal SIGSEGV: segmentation violation code=0x1 addr=0x70 pc=0x17e3d29]
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">//
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// goroutine 1 [running]:
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.dowidth(0xc0004cf920)
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:175 +0xa9
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.widstruct(0xc0004cf860, 0xc0004cf860, 0x0, 0x1, 0x3)
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:95 +0xc6
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.dowidth(0xc0004cf860)
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:340 +0x5e9
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.widstruct(0xc0004cf920, 0xc0004cf920, 0x0, 0x1, 0xc000448d01)
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:95 +0xc6
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.dowidth(0xc0004cf920)
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:340 +0x5e9
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.widstruct(0xc0004cf8c0, 0xc0004cf8c0, 0x0, 0x1, 0xc0004cf8c0)
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:95 +0xc6
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.dowidth(0xc0004cf8c0)
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:340 +0x5e9
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.resumecheckwidth()
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:450 +0x51
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheckdef(0xc00042fe00)
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:3927 +0x8e3
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheck1(0xc00042fe00, 0x4, 0x0)
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:376 +0xc387
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheck(0xc00042fe00, 0x4, 0x0)
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:299 +0x6f2
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheck1(0xc000437480, 0x1, 0x0)
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:2204 +0x5446
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheck(0xc000437480, 0x1, 0x0)
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:299 +0x6f2
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheckslice(0xc000424480, 0x6, 0x8, 0x1)
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:117 +0x50
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.Main(0x1a73428)
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/main.go:545 +0x29a5
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// main.main()
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/main.go:51 +0xad
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// FAIL    json_example [build failed]
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">TestMarshalCyclicStruct</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">type</span> <span class="nx">Engine</span> <span class="kd">struct</span> <span class="p">{</span>
+		<span class="nx">Power</span> <span class="kt">int</span>
+		<span class="nx">Code</span>  <span class="kt">int</span>
+		<span class="nx">Tires</span> <span class="kd">struct</span> <span class="p">{</span>
+			<span class="nx">Number</span> <span class="kt">int</span>
+			<span class="nx">Engine</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="kd">var</span> <span class="nx">val</span> <span class="p">=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">Engine</span><span class="p">)</span>
+
+	<span class="nx">data</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Nil</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+	<span class="nx">assert</span><span class="p">.</span><span class="nf">Equal</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="s">``</span><span class="p">)</span>
+	<span class="c1">// &gt;&gt;&gt; go test json_example
+</span><span class="c1"></span>	<span class="c1">// # json_example [json_example.test]
+</span><span class="c1"></span>	<span class="c1">//panic: runtime error: invalid memory address or nil pointer dereference
+</span><span class="c1"></span>	<span class="c1">// [signal SIGSEGV: segmentation violation code=0x1 addr=0x70 pc=0x17e3d29]
+</span><span class="c1"></span>	<span class="c1">//
+</span><span class="c1"></span>	<span class="c1">// goroutine 1 [running]:
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.dowidth(0xc0004cf920)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:175 +0xa9
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.widstruct(0xc0004cf860, 0xc0004cf860, 0x0, 0x1, 0x3)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:95 +0xc6
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.dowidth(0xc0004cf860)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:340 +0x5e9
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.widstruct(0xc0004cf920, 0xc0004cf920, 0x0, 0x1, 0xc000448d01)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:95 +0xc6
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.dowidth(0xc0004cf920)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:340 +0x5e9
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.widstruct(0xc0004cf8c0, 0xc0004cf8c0, 0x0, 0x1, 0xc0004cf8c0)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:95 +0xc6
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.dowidth(0xc0004cf8c0)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:340 +0x5e9
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.resumecheckwidth()
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/align.go:450 +0x51
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheckdef(0xc00042fe00)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:3927 +0x8e3
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheck1(0xc00042fe00, 0x4, 0x0)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:376 +0xc387
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheck(0xc00042fe00, 0x4, 0x0)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:299 +0x6f2
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheck1(0xc000437480, 0x1, 0x0)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:2204 +0x5446
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheck(0xc000437480, 0x1, 0x0)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:299 +0x6f2
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.typecheckslice(0xc000424480, 0x6, 0x8, 0x1)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/typecheck.go:117 +0x50
+</span><span class="c1"></span>	<span class="c1">// cmd/compile/internal/gc.Main(0x1a73428)
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/internal/gc/main.go:545 +0x29a5
+</span><span class="c1"></span>	<span class="c1">// main.main()
+</span><span class="c1"></span>	<span class="c1">// /usr/local/Cellar/go/1.12.4/libexec/src/cmd/compile/main.go:51 +0xad
+</span><span class="c1"></span>	<span class="c1">// FAIL    json_example [build failed]
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>Marshal的示例代码:</p>
 <div class="highlight"><div class="chroma">
@@ -1214,32 +1203,32 @@
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;encoding/json&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;fmt&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;os&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="kd">type</span> <span class="nx">ColorGroup</span> <span class="kd">struct</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">ID</span>     <span class="kt">int</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Name</span>   <span class="kt">string</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Colors</span> <span class="p">[]</span><span class="kt">string</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">group</span> <span class="o">:=</span> <span class="nx">ColorGroup</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">ID</span><span class="p">:</span>     <span class="mi">1</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Name</span><span class="p">:</span>   <span class="s">&#34;Reds&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">Colors</span><span class="p">:</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;Crimson&#34;</span><span class="p">,</span> <span class="s">&#34;Red&#34;</span><span class="p">,</span> <span class="s">&#34;Ruby&#34;</span><span class="p">,</span> <span class="s">&#34;Maroon&#34;</span><span class="p">},</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">b</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">group</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;error:&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;encoding/json&#34;</span>
+	<span class="s">&#34;fmt&#34;</span>
+	<span class="s">&#34;os&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">type</span> <span class="nx">ColorGroup</span> <span class="kd">struct</span> <span class="p">{</span>
+		<span class="nx">ID</span>     <span class="kt">int</span>
+		<span class="nx">Name</span>   <span class="kt">string</span>
+		<span class="nx">Colors</span> <span class="p">[]</span><span class="kt">string</span>
+	<span class="p">}</span>
+	<span class="nx">group</span> <span class="o">:=</span> <span class="nx">ColorGroup</span><span class="p">{</span>
+		<span class="nx">ID</span><span class="p">:</span>     <span class="mi">1</span><span class="p">,</span>
+		<span class="nx">Name</span><span class="p">:</span>   <span class="s">&#34;Reds&#34;</span><span class="p">,</span>
+		<span class="nx">Colors</span><span class="p">:</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;Crimson&#34;</span><span class="p">,</span> <span class="s">&#34;Red&#34;</span><span class="p">,</span> <span class="s">&#34;Ruby&#34;</span><span class="p">,</span> <span class="s">&#34;Maroon&#34;</span><span class="p">},</span>
+	<span class="p">}</span>
+	<span class="nx">b</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Marshal</span><span class="p">(</span><span class="nx">group</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;error:&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -1350,7 +1339,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

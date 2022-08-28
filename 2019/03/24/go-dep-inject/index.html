@@ -16,14 +16,14 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content=" 原文地址: https://stein.wtf/posts/2019-03-12/inject/ 相关代码: https://github.com/steinfletcher/func-dependency-injection-go " /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content="  原文地址: https://stein.wtf/posts/2019-03-12/inject/ 相关代码: https://github.com/steinfletcher/func-dependency-injection-go  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2019/03/24/go-dep-inject/" />
@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -68,17 +68,6 @@
 相关代码: https://github.com/steinfletcher/func-dependency-injection-go
 
 "/>
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
-
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -211,24 +200,24 @@
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">interface</span> <span class="nc">DB</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">  <span class="n">User</span> <span class="nf">SelectUser</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserService</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">  <span class="kd">private</span> <span class="kd">final</span> <span class="n">DB</span> <span class="n">db</span><span class="o">;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="kd">public</span> <span class="nf">UserService</span><span class="o">(</span><span class="n">DB</span> <span class="n">db</span><span class="o">)</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="o">.</span><span class="na">DB</span> <span class="o">=</span> <span class="n">db</span><span class="o">;</span>
-</span></span><span class="line"><span class="cl">  <span class="o">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="kd">public</span> <span class="n">UserProfile</span> <span class="nf">getUserProfile</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">DB</span><span class="o">.</span><span class="na">SelectUser</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
-</span></span><span class="line"><span class="cl">    <span class="o">...</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">UserProfile</span><span class="o">;</span>
-</span></span><span class="line"><span class="cl">  <span class="o">}</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">interface</span> <span class="nc">DB</span> <span class="o">{</span>
+  <span class="n">User</span> <span class="nf">SelectUser</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">)</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserService</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="kd">final</span> <span class="n">DB</span> <span class="n">db</span><span class="o">;</span>
+
+  <span class="kd">public</span> <span class="nf">UserService</span><span class="o">(</span><span class="n">DB</span> <span class="n">db</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">DB</span> <span class="o">=</span> <span class="n">db</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="n">UserProfile</span> <span class="nf">getUserProfile</span><span class="o">(</span><span class="n">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">DB</span><span class="o">.</span><span class="na">SelectUser</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="n">UserProfile</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -247,20 +236,20 @@
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">DB</span> <span class="kd">interface</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">SelectUser</span><span class="p">(</span><span class="nx">id</span> <span class="kt">string</span><span class="p">)</span> <span class="nx">User</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">getUserProfile</span> <span class="kd">func</span><span class="p">(</span><span class="nx">id</span> <span class="kt">string</span><span class="p">)</span> <span class="nx">UserProfile</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">newGetUserProfile</span><span class="p">(</span><span class="nx">db</span> <span class="nx">DB</span><span class="p">)</span> <span class="nx">getUserProfile</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">id</span> <span class="kt">string</span><span class="p">)</span> <span class="nx">UserProfile</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">user</span> <span class="o">:=</span> <span class="nx">db</span><span class="p">.</span><span class="nf">SelectUser</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="o">...</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">userProfile</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">DB</span> <span class="kd">interface</span> <span class="p">{</span>
+  <span class="nf">SelectUser</span><span class="p">(</span><span class="nx">id</span> <span class="kt">string</span><span class="p">)</span> <span class="nx">User</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">getUserProfile</span> <span class="kd">func</span><span class="p">(</span><span class="nx">id</span> <span class="kt">string</span><span class="p">)</span> <span class="nx">UserProfile</span>
+
+<span class="kd">func</span> <span class="nf">newGetUserProfile</span><span class="p">(</span><span class="nx">db</span> <span class="nx">DB</span><span class="p">)</span> <span class="nx">getUserProfile</span><span class="p">{</span>
+  <span class="k">return</span> <span class="kd">func</span> <span class="p">(</span><span class="nx">id</span> <span class="kt">string</span><span class="p">)</span> <span class="nx">UserProfile</span> <span class="p">{</span>
+    <span class="nx">user</span> <span class="o">:=</span> <span class="nx">db</span><span class="p">.</span><span class="nf">SelectUser</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="nx">userProfile</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>从以上的代码可以看出，Go 的实现中没有刻意去创建对象，而是实现了一个工厂函数，所以整体的实现更精简一些。</li>
@@ -372,7 +361,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

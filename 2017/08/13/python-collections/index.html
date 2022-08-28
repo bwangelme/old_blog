@@ -17,14 +17,14 @@
 
 
 <meta name="author" content="bwangel" /><meta name="description" content=" 摘要:
-本文章的目标是逐步总结Python中collection模块的用法，会不定期进行更新。 目前总结了Counter类的用法 " /><meta name="keywords" content="Hugo, blog, bwangel" />
+   本文章的目标是逐步总结Python中collection模块的用法，会不定期进行更新。 目前总结了Counter类的用法  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2017/08/13/python-collections/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -78,17 +78,6 @@
 目前总结了Counter类的用法
 
 "/>
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
-
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -238,17 +227,17 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">})</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># elements()函数返回的是一个可迭代对象</span>
-</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">c</span><span class="o">.</span><span class="n">elements</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span> <span class="n">at</span> <span class="mh">0x106063b70</span><span class="o">&gt;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="nb">list</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">elements</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">]</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">})</span>
+
+<span class="c1"># elements()函数返回的是一个可迭代对象</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">c</span><span class="o">.</span><span class="n">elements</span><span class="p">()</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span> <span class="n">at</span> <span class="mh">0x106063b70</span><span class="o">&gt;</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="nb">list</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">elements</span><span class="p">())</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">]</span>
+</code></pre></td></tr></table>
 </div>
 </div><h4 id="most_commonn">most_common([n])</h4>
 <p><code>most_common</code>函数返回<code>Counter</code>中次数最多的N个元素，如果N没有提供或者是<code>None</code>，那么就会返回所有元素。</p>
@@ -262,13 +251,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">})</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">most_common</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="p">[(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)]</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">[(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">})</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">most_common</span><span class="p">()</span>
+<span class="p">[(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="p">[(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+</code></pre></td></tr></table>
 </div>
 </div><h4 id="subtractiterable-or-mapping">subtract([iterable-or-mapping])</h4>
 <p><code>substract</code>方法接收一个可迭代或者可映射的对象，针对每个元素减去参数中的元素对应的次数。</p>
@@ -285,16 +274,16 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">subtract</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">])</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span>
-</span></span><span class="line"><span class="cl"><span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">})</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 注意这里减去一个负的次数相当于加上一个正的次数</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">subtract</span><span class="p">({</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">3</span><span class="p">})</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span>
-</span></span><span class="line"><span class="cl"><span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">})</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">subtract</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">])</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span>
+<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">})</span>
+<span class="c1"># 注意这里减去一个负的次数相当于加上一个正的次数</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">subtract</span><span class="p">({</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">3</span><span class="p">})</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span>
+<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">})</span>
+</code></pre></td></tr></table>
 </div>
 </div><h4 id="updateiterable-or-mapping">update([iterable-or-mapping])</h4>
 <p><code>update</code>方法的功能和<code>substract</code>方法的功能正好相反，它接收一个可迭代或者可映射的对象，针对每个元素加上参数中的元素对应的次数。</p>
@@ -307,12 +296,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span>
-</span></span><span class="line"><span class="cl"><span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span>
+<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
+</code></pre></td></tr></table>
 </div>
 </div><h3 id="counter的其他工作模式">Counter的其他工作模式</h3>
 <p>除了上面提到的方法外，<code>Counter</code>类还提供了一些其他的通用模式，让我们可以更方面地进行操作。</p>
@@ -327,10 +316,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="nb">sum</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl"><span class="mi">6</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">sum</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="mi">6</span>
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>清除所有元素的统计次数</li>
@@ -344,12 +333,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span>
-</span></span><span class="line"><span class="cl"><span class="n">Counter</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span>
+<span class="n">Counter</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>列出所有元素</li>
@@ -363,12 +352,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="nb">list</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="nb">set</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>  <span class="c1"># 这里将所有元素以集合的方式来展现</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">list</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">set</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>  <span class="c1"># 这里将所有元素以集合的方式来展现</span>
+<span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>获取Counter中(元素，次数)的元祖</li>
@@ -385,15 +374,15 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="nb">dict</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>  <span class="c1"># 将Counter转换成一个字典</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>  <span class="c1"># 获取Counter中(元素，次数)的元祖</span>
-</span></span><span class="line"><span class="cl"><span class="n">dict_items</span><span class="p">([(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 将一个(元素，次数)元祖列表转换成Counter</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">Counter</span><span class="p">(</span><span class="nb">dict</span><span class="p">([(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]))</span>
-</span></span><span class="line"><span class="cl"><span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">dict</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>  <span class="c1"># 将Counter转换成一个字典</span>
+<span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>  <span class="c1"># 获取Counter中(元素，次数)的元祖</span>
+<span class="n">dict_items</span><span class="p">([(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
+<span class="c1"># 将一个(元素，次数)元祖列表转换成Counter</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Counter</span><span class="p">(</span><span class="nb">dict</span><span class="p">([(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]))</span>
+<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>获取N个次数最少的元素</li>
@@ -405,10 +394,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">most_common</span><span class="p">()[:</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl"><span class="p">[(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">most_common</span><span class="p">()[:</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="p">[(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>删除掉所有次数小于等于0的元素</li>
@@ -420,10 +409,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="o">+</span><span class="n">c</span>
-</span></span><span class="line"><span class="cl"><span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">+</span><span class="n">c</span>
+<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+</code></pre></td></tr></table>
 </div>
 </div><h3 id="counter上的数学运算">Counter上的数学运算</h3>
 <p>Counter之间还能进行数学运算，<strong>在数学运算的结果中，次数小于等于0的元素将会被删除掉</strong>。</p>
@@ -442,18 +431,18 @@
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">d</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">+</span> <span class="n">d</span>  <span class="c1"># 将元素的次数进行相加</span>
-</span></span><span class="line"><span class="cl"><span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">-</span> <span class="n">d</span>  <span class="c1"># 将元素的次数进行相减</span>
-</span></span><span class="line"><span class="cl"><span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">&amp;</span> <span class="n">f</span>  <span class="c1"># 两个Counter的元素取交集，并且元素的次数取较小的那个</span>
-</span></span><span class="line"><span class="cl"><span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">|</span> <span class="n">f</span>  <span class="c1"># 两个Counter的元素取并集，并且元素的次数取较大的那个</span>
-</span></span><span class="line"><span class="cl"><span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">d</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">+</span> <span class="n">d</span>  <span class="c1"># 将元素的次数进行相加</span>
+<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">})</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">-</span> <span class="n">d</span>  <span class="c1"># 将元素的次数进行相减</span>
+<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">&amp;</span> <span class="n">f</span>  <span class="c1"># 两个Counter的元素取交集，并且元素的次数取较小的那个</span>
+<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">|</span> <span class="n">f</span>  <span class="c1"># 两个Counter的元素取并集，并且元素的次数取较大的那个</span>
+<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>单目运算符<code>+</code>或者<code>-</code></li>
@@ -467,12 +456,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">4</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="o">+</span><span class="n">c</span>
-</span></span><span class="line"><span class="cl"><span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
-</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="o">-</span><span class="n">c</span>
-</span></span><span class="line"><span class="cl"><span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">})</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="o">&gt;&gt;&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mi">4</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">+</span><span class="n">c</span>
+<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="o">-</span><span class="n">c</span>
+<span class="n">Counter</span><span class="p">({</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">})</span>
+</code></pre></td></tr></table>
 </div>
 </div><h3 id="注意事项">注意事项</h3>
 <ul>
@@ -599,7 +588,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

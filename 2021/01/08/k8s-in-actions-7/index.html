@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2021/01/08/k8s-in-actions-7/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -54,23 +54,12 @@ ConfigMap 和 Secret 配置应用程序
 ConfigMap 和 Secret 配置应用程序
 "><meta itemprop="datePublished" content="2021-01-08T07:51:51+08:00" />
 <meta itemprop="dateModified" content="2021-01-08T07:51:51+08:00" />
-<meta itemprop="wordCount" content="1412">
+<meta itemprop="wordCount" content="1449">
 <meta itemprop="keywords" content="kubernetes,杂记," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="《K8s in Actions》第七章学习笔记"/>
 <meta name="twitter:description" content="
 ConfigMap 和 Secret 配置应用程序
 "/>
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
-
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -160,7 +149,7 @@ ConfigMap 和 Secret 配置应用程序
       <div class="post-meta">
         <span class="post-time"> 2021-01-08 </span>
         
-          <span class="more-meta"> 约 1412 字 </span>
+          <span class="more-meta"> 约 1449 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
@@ -225,22 +214,22 @@ ConfigMap 和 Secret 配置应用程序
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 使用默认的命令行参数</span>
-</span></span><span class="line"><span class="cl">ø&gt; docker run -it bwangel/fortune:args
-</span></span><span class="line"><span class="cl">Configured to generate new fortune every <span class="m">10</span> seconds
-</span></span><span class="line"><span class="cl">Sat Feb <span class="m">13</span> 01:54:01 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
-</span></span><span class="line"><span class="cl">Sat Feb <span class="m">13</span> 01:54:11 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
-</span></span><span class="line"><span class="cl">^C
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 传递命令行参数给容器，覆盖默认的值</span>
-</span></span><span class="line"><span class="cl">ø&gt; docker run -it bwangel/fortune:args <span class="m">5</span>
-</span></span><span class="line"><span class="cl">Configured to generate new fortune every <span class="m">5</span> seconds
-</span></span><span class="line"><span class="cl">Sat Feb <span class="m">13</span> 01:54:23 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
-</span></span><span class="line"><span class="cl">Sat Feb <span class="m">13</span> 01:54:28 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
-</span></span><span class="line"><span class="cl">Sat Feb <span class="m">13</span> 01:54:33 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
-</span></span><span class="line"><span class="cl">Sat Feb <span class="m">13</span> 01:54:38 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
-</span></span><span class="line"><span class="cl">^C
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 使用默认的命令行参数</span>
+ø&gt; docker run -it bwangel/fortune:args
+Configured to generate new fortune every <span class="m">10</span> seconds
+Sat Feb <span class="m">13</span> 01:54:01 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
+Sat Feb <span class="m">13</span> 01:54:11 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
+^C
+
+<span class="c1"># 传递命令行参数给容器，覆盖默认的值</span>
+ø&gt; docker run -it bwangel/fortune:args <span class="m">5</span>
+Configured to generate new fortune every <span class="m">5</span> seconds
+Sat Feb <span class="m">13</span> 01:54:23 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
+Sat Feb <span class="m">13</span> 01:54:28 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
+Sat Feb <span class="m">13</span> 01:54:33 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
+Sat Feb <span class="m">13</span> 01:54:38 UTC <span class="m">2021</span> Writing fortune to /var/htdocs/index.html
+^C
+</code></pre></td></tr></table>
 </div>
 </div><p>k8s 配置中的 <code>cmd</code> 和 <code>args</code> 选项可以覆盖镜像的 <code>entrypoint</code> 和 <code>cmd</code> 设置。</p>
 <p>注意: 字符串值无需使用引号包裹，数值需要。</p>
@@ -252,11 +241,11 @@ ConfigMap 和 Secret 配置应用程序
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">args</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="l">foo</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="l">bar</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="s2">&#34;15&#34;</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">args</span><span class="p">:</span><span class="w">
+</span><span class="w"></span>- <span class="l">foo</span><span class="w">
+</span><span class="w"></span>- <span class="l">bar</span><span class="w">
+</span><span class="w"></span>- <span class="s2">&#34;15&#34;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><h2 id="为容器设置环境变量">为容器设置环境变量</h2>
 <p>环境变量被设置在 pod 的容器定义中，并非是 pod 级别。k8s 在 pod 中会自动暴露相同命名空间下 Service 的环境变量。所以环境变量可以被看作是注入的配置。</p>
@@ -269,8 +258,8 @@ ConfigMap 和 Secret 配置应用程序
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">k create configmap my-config --from-file<span class="o">=</span>foo.json --from-file<span class="o">=</span><span class="nv">bar</span><span class="o">=</span>foobar.conf --from-file<span class="o">=</span>config-opts/ --from-literal<span class="o">=</span><span class="nv">some</span><span class="o">=</span>thing
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">k create configmap my-config --from-file<span class="o">=</span>foo.json --from-file<span class="o">=</span><span class="nv">bar</span><span class="o">=</span>foobar.conf --from-file<span class="o">=</span>config-opts/ --from-literal<span class="o">=</span><span class="nv">some</span><span class="o">=</span>thing
+</code></pre></td></tr></table>
 </div>
 </div><p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com//2021-02-13-112953.png" alt=""></p>
 <p>如果创建的 Pod 中引用的 configMap 不存在，那么引用 configmap 的容器会启动失败，其他容器能够正常启动。
@@ -287,10 +276,10 @@ ConfigMap 和 Secret 配置应用程序
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># configmap-files 是本地的一个文件夹</span>
-</span></span><span class="line"><span class="cl">ø&gt; k create configmap fortune-config --from-file<span class="o">=</span>configmap-files
-</span></span><span class="line"><span class="cl">configmap/fortune-config created
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># configmap-files 是本地的一个文件夹</span>
+ø&gt; k create configmap fortune-config --from-file<span class="o">=</span>configmap-files
+configmap/fortune-config created
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>检查创建的 configmap 的配置项</li>
@@ -326,34 +315,34 @@ ConfigMap 和 Secret 配置应用程序
 </span><span class="lnt">27
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ø&gt; k get configmap fortune-config -o<span class="o">=</span>yaml
-</span></span><span class="line"><span class="cl">apiVersion: v1
-</span></span><span class="line"><span class="cl"><span class="c1"># 注意，配置项中的管道符号`|`表示配置项的值是一个多行字面量</span>
-</span></span><span class="line"><span class="cl">data:
-</span></span><span class="line"><span class="cl">  my-nginx-config.conf: <span class="p">|</span>
-</span></span><span class="line"><span class="cl">    server <span class="o">{</span>
-</span></span><span class="line"><span class="cl">        listen 80<span class="p">;</span>
-</span></span><span class="line"><span class="cl">        server_name kubia.example.com<span class="p">;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        gzip on<span class="p">;</span>
-</span></span><span class="line"><span class="cl">        gzip_types text/plain application/xml<span class="p">;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        location / <span class="o">{</span>
-</span></span><span class="line"><span class="cl">            root /usr/share/nginx/html<span class="p">;</span>
-</span></span><span class="line"><span class="cl">            index index.html index.htm<span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="o">}</span>
-</span></span><span class="line"><span class="cl">    <span class="o">}</span>
-</span></span><span class="line"><span class="cl">  sleep-interval: <span class="p">|</span>
-</span></span><span class="line"><span class="cl">    <span class="m">25</span>
-</span></span><span class="line"><span class="cl">kind: ConfigMap
-</span></span><span class="line"><span class="cl">metadata:
-</span></span><span class="line"><span class="cl">  creationTimestamp: <span class="s2">&#34;2021-02-14T07:09:19Z&#34;</span>
-</span></span><span class="line"><span class="cl">  name: fortune-config
-</span></span><span class="line"><span class="cl">  namespace: default
-</span></span><span class="line"><span class="cl">  resourceVersion: <span class="s2">&#34;15400246&#34;</span>
-</span></span><span class="line"><span class="cl">  selfLink: /api/v1/namespaces/default/configmaps/fortune-config
-</span></span><span class="line"><span class="cl">  uid: a0925cca-bf39-4e67-9cd9-c5a6ea1eae83
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ø&gt; k get configmap fortune-config -o<span class="o">=</span>yaml
+apiVersion: v1
+<span class="c1"># 注意，配置项中的管道符号`|`表示配置项的值是一个多行字面量</span>
+data:
+  my-nginx-config.conf: <span class="p">|</span>
+    server <span class="o">{</span>
+        listen 80<span class="p">;</span>
+        server_name kubia.example.com<span class="p">;</span>
+
+        gzip on<span class="p">;</span>
+        gzip_types text/plain application/xml<span class="p">;</span>
+
+        location / <span class="o">{</span>
+            root /usr/share/nginx/html<span class="p">;</span>
+            index index.html index.htm<span class="p">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+  sleep-interval: <span class="p">|</span>
+    <span class="m">25</span>
+kind: ConfigMap
+metadata:
+  creationTimestamp: <span class="s2">&#34;2021-02-14T07:09:19Z&#34;</span>
+  name: fortune-config
+  namespace: default
+  resourceVersion: <span class="s2">&#34;15400246&#34;</span>
+  selfLink: /api/v1/namespaces/default/configmaps/fortune-config
+  uid: a0925cca-bf39-4e67-9cd9-c5a6ea1eae83
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>配置卷是通过挂载的方式加入到容器上的，挂载某一文件夹会隐藏该文件夹中已存在的文件。</li>
@@ -371,15 +360,15 @@ ConfigMap 和 Secret 配置应用程序
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">some/image</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">myvolume</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># 只挂载某个文件，而不是挂载一个文件夹</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/someconfig.conf</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="l">myconfig.conf</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">some/image</span><span class="w">
+</span><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">myvolume</span><span class="w">
+</span><span class="w">      </span><span class="c"># 只挂载某个文件，而不是挂载一个文件夹</span><span class="w">
+</span><span class="w">      </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/someconfig.conf</span><span class="w">
+</span><span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="l">myconfig.conf</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>更新配置且不重启容器</li>
@@ -397,16 +386,16 @@ ConfigMap 和 Secret 配置应用程序
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># edit 命令可以修改 configmap 中的配置文件</span>
-</span></span><span class="line"><span class="cl">ø&gt; k edit configmap fortune-config
-</span></span><span class="line"><span class="cl">configmap/fortune-config edited
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 修改完配置后，再通知 nginx 重启应用</span>
-</span></span><span class="line"><span class="cl">ø&gt; k <span class="nb">exec</span> -it -c web-server fortune-configmap-volume -- nginx -s reload
-</span></span><span class="line"><span class="cl">2021/02/16 03:39:49 <span class="o">[</span>notice<span class="o">]</span> 43#43: signal process started
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 这样我们就达到了不重启容器更新配置的目的</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># edit 命令可以修改 configmap 中的配置文件</span>
+ø&gt; k edit configmap fortune-config
+configmap/fortune-config edited
+
+<span class="c1"># 修改完配置后，再通知 nginx 重启应用</span>
+ø&gt; k <span class="nb">exec</span> -it -c web-server fortune-configmap-volume -- nginx -s reload
+2021/02/16 03:39:49 <span class="o">[</span>notice<span class="o">]</span> 43#43: signal process started
+
+<span class="c1"># 这样我们就达到了不重启容器更新配置的目的</span>
+</code></pre></td></tr></table>
 </div>
 </div><p><strong>注意</strong>: configmap 更新时，不同的容器同步配置文件的时间是不同的，因此有可能出现容器间配置文件不一致的情况。</p>
 <p>我们可以看到，被挂载的文件链接到了 <code>..data</code> 文件夹中，而 <code>..data</code> 文件夹又是一个软连接。</p>
@@ -420,12 +409,12 @@ ConfigMap 和 Secret 配置应用程序
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">ø&gt; k <span class="nb">exec</span> -it -c web-server fortune-configmap-volume -- ls -lA /etc/nginx/conf.d/               11:42:58 <span class="o">(</span>02-16<span class="o">)</span>
-</span></span><span class="line"><span class="cl">total <span class="m">4</span>
-</span></span><span class="line"><span class="cl">drwxr-xr-x    <span class="m">2</span> root     root          <span class="m">4096</span> Feb <span class="m">16</span> 03:39 ..2021_02_16_03_39_25.637552423
-</span></span><span class="line"><span class="cl">lrwxrwxrwx    <span class="m">1</span> root     root            <span class="m">31</span> Feb <span class="m">16</span> 03:39 ..data -&gt; ..2021_02_16_03_39_25.637552423
-</span></span><span class="line"><span class="cl">lrwxrwxrwx    <span class="m">1</span> root     root            <span class="m">16</span> Feb <span class="m">16</span> 03:30 gzip.conf -&gt; ..data/gzip.conf
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">ø&gt; k <span class="nb">exec</span> -it -c web-server fortune-configmap-volume -- ls -lA /etc/nginx/conf.d/               11:42:58 <span class="o">(</span>02-16<span class="o">)</span>
+total <span class="m">4</span>
+drwxr-xr-x    <span class="m">2</span> root     root          <span class="m">4096</span> Feb <span class="m">16</span> 03:39 ..2021_02_16_03_39_25.637552423
+lrwxrwxrwx    <span class="m">1</span> root     root            <span class="m">31</span> Feb <span class="m">16</span> 03:39 ..data -&gt; ..2021_02_16_03_39_25.637552423
+lrwxrwxrwx    <span class="m">1</span> root     root            <span class="m">16</span> Feb <span class="m">16</span> 03:30 gzip.conf -&gt; ..data/gzip.conf
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="使用-secret-给容器传递敏感数据">使用 Secret 给容器传递敏感数据</h2>
 <p>Secret 是一种类似与 Configmap 的资源，它存储的也是键值对的映射，它支持:</p>
@@ -541,7 +530,7 @@ ConfigMap 和 Secret 配置应用程序
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

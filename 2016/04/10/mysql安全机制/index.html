@@ -17,7 +17,7 @@
 
 
 <meta name="author" content="bwangel" /><meta name="description" content="摘要:
-这是一篇关于MySQL的文章，主要介绍 MySQL 安全机制
+ 这是一篇关于MySQL的文章，主要介绍 MySQL 安全机制
 " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2016/04/10/mysql%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6/" />
@@ -37,7 +37,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -57,24 +57,13 @@
 这是一篇关于MySQL的文章，主要介绍 MySQL 安全机制
 "><meta itemprop="datePublished" content="2016-04-10T10:56:54+00:00" />
 <meta itemprop="dateModified" content="2016-04-10T10:56:54+00:00" />
-<meta itemprop="wordCount" content="1052">
+<meta itemprop="wordCount" content="910">
 <meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySQL安全机制"/>
 <meta name="twitter:description" content="摘要:
 
 这是一篇关于MySQL的文章，主要介绍 MySQL 安全机制
 "/>
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
-
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -164,8 +153,8 @@
       <div class="post-meta">
         <span class="post-time"> 2016-04-10 </span>
         
-          <span class="more-meta"> 约 1052 字 </span>
-          <span class="more-meta"> 预计阅读 3 分钟 </span>
+          <span class="more-meta"> 约 910 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
     </header>
@@ -235,8 +224,8 @@ mysql.db  # 数据库级别授权
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">mysql</span><span class="w"> </span><span class="o">-</span><span class="n">h</span><span class="w"> </span><span class="k">host</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="n">port</span><span class="w"> </span><span class="o">-</span><span class="n">u</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="o">-</span><span class="n">ppassword</span><span class="w"> </span><span class="o">-</span><span class="n">e</span><span class="w"> </span><span class="s1">&#39;SQL语句&#39;</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="w"> </span><span class="o">-</span><span class="n">h</span><span class="w"> </span><span class="k">host</span><span class="w"> </span><span class="o">-</span><span class="n">p</span><span class="w"> </span><span class="n">port</span><span class="w"> </span><span class="o">-</span><span class="n">u</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="o">-</span><span class="n">ppassword</span><span class="w"> </span><span class="o">-</span><span class="n">e</span><span class="w"> </span><span class="s1">&#39;SQL语句&#39;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>mysql.user表中授权什么主机的什么用户可以登陆</p>
 <h3 id="22-创建用户">2.2 创建用户</h3>
@@ -246,9 +235,9 @@ mysql.db  # 数据库级别授权
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 刷新授权表
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="n">flush</span><span class="w"> </span><span class="k">privileges</span><span class="p">;</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 刷新授权表
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="n">flush</span><span class="w"> </span><span class="k">privileges</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>创建用户</li>
@@ -307,57 +296,57 @@ mysql.db  # 数据库级别授权
 </span><span class="lnt">50
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="n">xff</span><span class="o">@</span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="n">identified</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="s1">&#39;123456&#39;</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">affected</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">-- 查看权限基本为空
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">user</span><span class="o">=</span><span class="s1">&#39;xff&#39;</span><span class="err">\</span><span class="k">G</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">***************************</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="o">***************************</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">                  </span><span class="k">Host</span><span class="p">:</span><span class="w"> </span><span class="o">%</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">                  </span><span class="k">User</span><span class="p">:</span><span class="w"> </span><span class="n">xff</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="n">Password</span><span class="p">:</span><span class="w"> </span><span class="o">*</span><span class="mi">6</span><span class="n">BB4837EB74329105EE4568DDA7DC67ED2CA2AD9</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">           </span><span class="n">Select_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">           </span><span class="n">Insert_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">           </span><span class="n">Update_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">           </span><span class="n">Delete_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">           </span><span class="n">Create_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">             </span><span class="n">Drop_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">           </span><span class="n">Reload_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">         </span><span class="n">Shutdown_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="n">Process_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">             </span><span class="n">File_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">Grant_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">References_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">Index_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">Alter_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="n">Show_db_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">Super_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">Create_tmp_table_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">Lock_tables_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="n">Execute_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">Repl_slave_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">Repl_client_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">Create_view_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Show_view_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="n">Create_routine_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Alter_routine_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">Create_user_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">Event_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="n">Trigger_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">Create_tablespace_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="n">ssl_type</span><span class="p">:</span><span class="w"> 
-</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">ssl_cipher</span><span class="p">:</span><span class="w"> 
-</span></span></span><span class="line"><span class="cl"><span class="w">           </span><span class="n">x509_issuer</span><span class="p">:</span><span class="w"> 
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="n">x509_subject</span><span class="p">:</span><span class="w"> 
-</span></span></span><span class="line"><span class="cl"><span class="w">         </span><span class="n">max_questions</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">           </span><span class="n">max_updates</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">       </span><span class="n">max_connections</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">max_user_connections</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">plugin</span><span class="p">:</span><span class="w"> </span><span class="n">mysql_native_password</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">authentication_string</span><span class="p">:</span><span class="w"> 
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">password_expired</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="n">xff</span><span class="o">@</span><span class="s1">&#39;%&#39;</span><span class="w"> </span><span class="n">identified</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="s1">&#39;123456&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">affected</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c1">-- 查看权限基本为空
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">user</span><span class="o">=</span><span class="s1">&#39;xff&#39;</span><span class="err">\</span><span class="k">G</span><span class="w">
+</span><span class="w"></span><span class="o">***************************</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="o">***************************</span><span class="w">
+</span><span class="w">                  </span><span class="k">Host</span><span class="p">:</span><span class="w"> </span><span class="o">%</span><span class="w">
+</span><span class="w">                  </span><span class="k">User</span><span class="p">:</span><span class="w"> </span><span class="n">xff</span><span class="w">
+</span><span class="w">              </span><span class="n">Password</span><span class="p">:</span><span class="w"> </span><span class="o">*</span><span class="mi">6</span><span class="n">BB4837EB74329105EE4568DDA7DC67ED2CA2AD9</span><span class="w">
+</span><span class="w">           </span><span class="n">Select_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">           </span><span class="n">Insert_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">           </span><span class="n">Update_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">           </span><span class="n">Delete_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">           </span><span class="n">Create_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">             </span><span class="n">Drop_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">           </span><span class="n">Reload_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">         </span><span class="n">Shutdown_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">          </span><span class="n">Process_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">             </span><span class="n">File_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">            </span><span class="n">Grant_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">       </span><span class="n">References_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">            </span><span class="n">Index_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">            </span><span class="n">Alter_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">          </span><span class="n">Show_db_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">            </span><span class="n">Super_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w"> </span><span class="n">Create_tmp_table_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">      </span><span class="n">Lock_tables_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">          </span><span class="n">Execute_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">       </span><span class="n">Repl_slave_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">      </span><span class="n">Repl_client_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">      </span><span class="n">Create_view_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">        </span><span class="n">Show_view_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">   </span><span class="n">Create_routine_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">    </span><span class="n">Alter_routine_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">      </span><span class="n">Create_user_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">            </span><span class="n">Event_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">          </span><span class="n">Trigger_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w"></span><span class="n">Create_tablespace_priv</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w">              </span><span class="n">ssl_type</span><span class="p">:</span><span class="w"> 
+</span><span class="w">            </span><span class="n">ssl_cipher</span><span class="p">:</span><span class="w"> 
+</span><span class="w">           </span><span class="n">x509_issuer</span><span class="p">:</span><span class="w"> 
+</span><span class="w">          </span><span class="n">x509_subject</span><span class="p">:</span><span class="w"> 
+</span><span class="w">         </span><span class="n">max_questions</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w">           </span><span class="n">max_updates</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w">       </span><span class="n">max_connections</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w">  </span><span class="n">max_user_connections</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="w">                </span><span class="n">plugin</span><span class="p">:</span><span class="w"> </span><span class="n">mysql_native_password</span><span class="w">
+</span><span class="w"> </span><span class="n">authentication_string</span><span class="p">:</span><span class="w"> 
+</span><span class="w">      </span><span class="n">password_expired</span><span class="p">:</span><span class="w"> </span><span class="n">N</span><span class="w">
+</span><span class="w"></span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -365,9 +354,9 @@ mysql.db  # 数据库级别授权
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 创建用户并且授权
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">grant</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="o">*</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">user3</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="w"> </span><span class="n">identified</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="s1">&#39;123456&#39;</span><span class="p">;</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 创建用户并且授权
+</span><span class="c1"></span><span class="k">grant</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="o">*</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">user3</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="w"> </span><span class="n">identified</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="s1">&#39;123456&#39;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>删除用户</li>
@@ -378,9 +367,9 @@ mysql.db  # 数据库级别授权
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">drop</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="n">xff</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">affected</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">drop</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="n">xff</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">affected</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -391,12 +380,12 @@ mysql.db  # 数据库级别授权
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">user</span><span class="o">=</span><span class="s1">&#39;user3&#39;</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="n">affected</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="n">flush</span><span class="w"> </span><span class="k">privileges</span><span class="p">;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">affected</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">user</span><span class="o">=</span><span class="s1">&#39;user3&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="n">affected</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="n">flush</span><span class="w"> </span><span class="k">privileges</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">affected</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>
@@ -413,7 +402,7 @@ mysql.db  # 数据库级别授权
 </div></li>
 </ol>
 <p>&ndash; 普通用户对于user表没有权限的话，只能修改自己的密码
-mysql&gt; set password for username@&rsquo;localhost&rsquo;=password(&lsquo;mysql123&rsquo;);
+mysql&gt; set password for username@&lsquo;localhost&rsquo;=password(&lsquo;mysql123&rsquo;);
 Query OK, 0 rows affected (0.00 sec)</p>
 <p>mysql&gt; flush privileges;
 Query OK, 0 rows affected (0.00 sec)</p>
@@ -428,14 +417,14 @@ Query OK, 0 rows affected (0.00 sec)</p>
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">3.
-</span></span><span class="line"><span class="cl">```sql
-</span></span><span class="line"><span class="cl">mysql&gt; update user set password = password(&#39;passwd&#39;) where user=&#39;root&#39;;
-</span></span><span class="line"><span class="cl">Query OK, 1 row affected (0.01 sec)
-</span></span><span class="line"><span class="cl">Rows matched: 1  Changed: 1  Warnings: 0
-</span></span><span class="line"><span class="cl">mysql&gt; flush privileges;
-</span></span><span class="line"><span class="cl">Query OK, 0 rows affected (0.01 sec)
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">3.
+```sql
+mysql&gt; update user set password = password(&#39;passwd&#39;) where user=&#39;root&#39;;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+mysql&gt; flush privileges;
+Query OK, 0 rows affected (0.01 sec)
+</code></pre></td></tr></table>
 </div>
 </div></li>
 </ul>
@@ -537,12 +526,12 @@ select(列1, 列2, &hellip;), update</p>
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 查看当前用户所有授权
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">show</span><span class="w"> </span><span class="n">grants</span><span class="err">\</span><span class="k">G</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">-- 管理员查看其它用户权限
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">show</span><span class="w"> </span><span class="n">grants</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">username</span><span class="err">\</span><span class="k">G</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 查看当前用户所有授权
+</span><span class="c1"></span><span class="k">show</span><span class="w"> </span><span class="n">grants</span><span class="err">\</span><span class="k">G</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c1">-- 管理员查看其它用户权限
+</span><span class="c1"></span><span class="k">show</span><span class="w"> </span><span class="n">grants</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">username</span><span class="err">\</span><span class="k">G</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><h3 id="34-权限的回收">3.4 权限的回收</h3>
 <div class="highlight"><div class="chroma">
@@ -551,9 +540,9 @@ select(列1, 列2, &hellip;), update</p>
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 不会删除用户
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">revoke</span><span class="w"> </span><span class="err">权限列表</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="err">数据库名</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="err">用户名</span><span class="o">@</span><span class="s1">&#39;客户端主机&#39;</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 不会删除用户
+</span><span class="c1"></span><span class="k">revoke</span><span class="w"> </span><span class="err">权限列表</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="err">数据库名</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="err">用户名</span><span class="o">@</span><span class="s1">&#39;客户端主机&#39;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -564,12 +553,12 @@ select(列1, 列2, &hellip;), update</p>
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">revoke</span><span class="w"> </span><span class="k">delete</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="o">*</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">admin1</span><span class="o">@</span><span class="s1">&#39;%&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">-- 回收删除权限
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">revoke</span><span class="w"> </span><span class="k">grant</span><span class="w"> </span><span class="k">option</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="o">*</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">admin1</span><span class="o">@</span><span class="s1">&#39;%&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">-- 取消授权权限
-</span></span></span><span class="line"><span class="cl"><span class="c1">-- 删除用户
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">user</span><span class="o">=</span><span class="s1">&#39;admin1&#39;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">flush</span><span class="w"> </span><span class="k">privileges</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">revoke</span><span class="w"> </span><span class="k">delete</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="o">*</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">admin1</span><span class="o">@</span><span class="s1">&#39;%&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">-- 回收删除权限
+</span><span class="c1"></span><span class="k">revoke</span><span class="w"> </span><span class="k">grant</span><span class="w"> </span><span class="k">option</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="o">*</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">admin1</span><span class="o">@</span><span class="s1">&#39;%&#39;</span><span class="p">;</span><span class="w"> </span><span class="c1">-- 取消授权权限
+</span><span class="c1">-- 删除用户
+</span><span class="c1"></span><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">user</span><span class="o">=</span><span class="s1">&#39;admin1&#39;</span><span class="w">
+</span><span class="w"></span><span class="n">flush</span><span class="w"> </span><span class="k">privileges</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -597,13 +586,13 @@ select(列1, 列2, &hellip;), update</p>
           <a href="/tags/mysql/">MySQL</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/2016/04/10/mongodb%E7%B4%A2%E5%BC%95/">
+        <a class="prev" href="/2016/04/10/mysql%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/">
             <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">MongoDB索引</span>
+            <span class="prev-text nav-default">MySQL存储过程</span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
-        <a class="next" href="/2016/04/10/mysql%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85/">
-            <span class="next-text nav-default">MySQL编译安装</span>
+        <a class="next" href="/2016/04/10/mysql%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/">
+            <span class="next-text nav-default">MySQL常用函数</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
@@ -678,7 +667,7 @@ select(列1, 列2, &hellip;), update</p>
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

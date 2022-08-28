@@ -16,14 +16,14 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content=" 使用 Unix 域套接字传输文件描述符 原文地址: https://copyconstruct.medium.com/file-descriptor-transfer-over-unix-domain-sockets-dcbbf5b3b6ec " /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content="  使用 Unix 域套接字传输文件描述符 原文地址: https://copyconstruct.medium.com/file-descriptor-transfer-over-unix-domain-sockets-dcbbf5b3b6ec  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2021/11/30/file-descriptor-transfer-over-unix-domain-sockets/" />
@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -68,17 +68,6 @@
 原文地址: https://copyconstruct.medium.com/file-descriptor-transfer-over-unix-domain-sockets-dcbbf5b3b6ec
 
 "/>
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
-
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -272,38 +261,38 @@
 </span><span class="lnt">31
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;io&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;log&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;net&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="s">&#34;syscall&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="kd">const</span> <span class="nx">addr</span> <span class="p">=</span> <span class="s">&#34;/tmp/uds.sock&#34;</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">syscall</span><span class="p">.</span><span class="nf">Unlink</span><span class="p">(</span><span class="nx">addr</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">l</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Listen</span><span class="p">(</span><span class="s">&#34;unix&#34;</span><span class="p">,</span> <span class="nx">addr</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl">	<span class="k">defer</span> <span class="nx">l</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">c</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">l</span><span class="p">.</span><span class="nf">Accept</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">		<span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">		<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">c</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Conn</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">io</span><span class="p">.</span><span class="nf">Copy</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">c</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">			<span class="nx">c</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">		<span class="p">}(</span><span class="nx">c</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+	<span class="s">&#34;io&#34;</span>
+	<span class="s">&#34;log&#34;</span>
+	<span class="s">&#34;net&#34;</span>
+	<span class="s">&#34;syscall&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kd">const</span> <span class="nx">addr</span> <span class="p">=</span> <span class="s">&#34;/tmp/uds.sock&#34;</span>
+	<span class="nx">syscall</span><span class="p">.</span><span class="nf">Unlink</span><span class="p">(</span><span class="nx">addr</span><span class="p">)</span>
+
+	<span class="nx">l</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Listen</span><span class="p">(</span><span class="s">&#34;unix&#34;</span><span class="p">,</span> <span class="nx">addr</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="k">defer</span> <span class="nx">l</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+
+	<span class="k">for</span> <span class="p">{</span>
+		<span class="nx">c</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">l</span><span class="p">.</span><span class="nf">Accept</span><span class="p">()</span>
+		<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+			<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+		<span class="p">}</span>
+
+		<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">c</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Conn</span><span class="p">)</span> <span class="p">{</span>
+			<span class="nx">io</span><span class="p">.</span><span class="nf">Copy</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span> <span class="nx">c</span><span class="p">)</span>
+			<span class="nx">c</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+		<span class="p">}(</span><span class="nx">c</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>如果你建立并运行这个程序，可以观察到几个有趣的事实。</p>
 <h3 id="socket-文件--普通文件">Socket 文件 != 普通文件</h3>
@@ -332,26 +321,26 @@
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">root@1fd53621847b:~/uds# ./uds
-</span></span><span class="line"><span class="cl">^C
-</span></span><span class="line"><span class="cl">root@1fd53621847b:~/uds# ls -ls /tmp
-</span></span><span class="line"><span class="cl">total 0
-</span></span><span class="line"><span class="cl">0 srwxr-xr-x 1 root root 0 Aug  5 01:45 uds.sock
-</span></span><span class="line"><span class="cl">root@1fd53621847b:~/uds# stat /tmp/uds.sock
-</span></span><span class="line"><span class="cl">File: /tmp/uds.sock
-</span></span><span class="line"><span class="cl">Size: 0          Blocks: 0          IO Block: 4096   socket
-</span></span><span class="line"><span class="cl">Device: 71h/113d Inode: 1835567     Links: 1
-</span></span><span class="line"><span class="cl">Access: (0755/srwxr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
-</span></span><span class="line"><span class="cl">Access: 2020-08-05 01:45:41.650709000 +0000
-</span></span><span class="line"><span class="cl">Modify: 2020-08-05 01:45:41.650709000 +0000
-</span></span><span class="line"><span class="cl">Change: 2020-08-05 01:45:41.650709000 +0000
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Birth: -
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">root@5247072fc542:~/uds# ls -F /tmp
-</span></span><span class="line"><span class="cl">uds.sock=
-</span></span><span class="line"><span class="cl">root@5247072fc542:~/uds#
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">root@1fd53621847b:~/uds# ./uds
+^C
+root@1fd53621847b:~/uds# ls -ls /tmp
+total 0
+0 srwxr-xr-x 1 root root 0 Aug  5 01:45 uds.sock
+root@1fd53621847b:~/uds# stat /tmp/uds.sock
+File: /tmp/uds.sock
+Size: 0          Blocks: 0          IO Block: 4096   socket
+Device: 71h/113d Inode: 1835567     Links: 1
+Access: (0755/srwxr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2020-08-05 01:45:41.650709000 +0000
+Modify: 2020-08-05 01:45:41.650709000 +0000
+Change: 2020-08-05 01:45:41.650709000 +0000
+
+Birth: -
+
+root@5247072fc542:~/uds# ls -F /tmp
+uds.sock=
+root@5247072fc542:~/uds#
+</code></pre></td></tr></table>
 </div>
 </div><p>对文件起作用的普通系统调用在套接字文件上不起作用：这意味着像 <code>open()</code> 、<code>close()</code> 、<code>read()</code> 这样的系统调用不能用于套接字文件。相反，像 <code>socket()</code> 、<code>bind()</code> 、<code>recv()</code> 、<code>sendmsg()</code> 、<code>recvmsg()</code> 等套接字相关的系统调用可以在 Unix域套接字上工作。</p>
 <p>另一个关于套接字的有趣事实是，它不是在套接字被关闭的时候删除，而是通过系统调用来删除</p>
@@ -368,11 +357,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">struct sockaddr_un {
-</span></span><span class="line"><span class="cl">      sa_family_t sun_family; /* Always AF_UNIX */
-</span></span><span class="line"><span class="cl">      char sun_path[108]; /* Pathname */
-</span></span><span class="line"><span class="cl">};
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">struct sockaddr_un {
+      sa_family_t sun_family; /* Always AF_UNIX */
+      char sun_path[108]; /* Pathname */
+};
+</code></pre></td></tr></table>
 </div>
 </div><p>在 MacOS 上，地址通过如下的结构表示:</p>
 <div class="highlight"><div class="chroma">
@@ -384,12 +373,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">struct sockaddr_un {
-</span></span><span class="line"><span class="cl">     u_char  sun_len;
-</span></span><span class="line"><span class="cl">     u_char  sun_family;
-</span></span><span class="line"><span class="cl">     char    sun_path[104];
-</span></span><span class="line"><span class="cl">};
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">struct sockaddr_un {
+     u_char  sun_len;
+     u_char  sun_family;
+     char    sun_path[104];
+};
+</code></pre></td></tr></table>
 </div>
 </div><h3 id="使用-bind2-绑定一个已经存在的路径将会失败">使用 bind(2) 绑定一个已经存在的路径将会失败</h3>
 <p><code>SO_REUSEPORT</code> 选项允许任何指定主机上的多个网络套接字连接到同一地址和端口。第一个试图绑定给定端口的套接字需要设置 <code>SO_REUSEPORT</code> 选项，任何后续的套接字都可以绑定到同一端口。</p>
@@ -402,11 +391,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">socktype</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">optval</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="n">setsockopt</span><span class="p">(</span><span class="n">sfd</span><span class="p">,</span> <span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">SO_REUSEPORT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">optval</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">optval</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl"><span class="n">bind</span><span class="p">(</span><span class="n">sfd</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">addr</span><span class="p">,</span> <span class="n">addrlen</span><span class="p">);</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">socktype</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="kt">int</span> <span class="n">optval</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">setsockopt</span><span class="p">(</span><span class="n">sfd</span><span class="p">,</span> <span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">SO_REUSEPORT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">optval</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">optval</span><span class="p">));</span>
+<span class="n">bind</span><span class="p">(</span><span class="n">sfd</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">addr</span><span class="p">,</span> <span class="n">addrlen</span><span class="p">);</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>然而，两个 Unix 域套接字无法绑定相同的路径。</p>
 <h2 id="socketpair">SOCKETPAIR</h2>
@@ -437,12 +426,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">ssize_t</span> <span class="nf">sendmsg</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">socket</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="n">message</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">flags</span>
-</span></span><span class="line"><span class="cl"><span class="p">);</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="n">ssize_t</span> <span class="nf">sendmsg</span><span class="p">(</span>
+    <span class="kt">int</span> <span class="n">socket</span><span class="p">,</span>
+    <span class="k">const</span> <span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="n">message</span><span class="p">,</span>
+    <span class="kt">int</span> <span class="n">flags</span>
+<span class="p">);</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>与 <code>sendmsg</code> 对应的是 <code>recvmsg</code>:</p>
 <div class="highlight"><div class="chroma">
@@ -454,12 +443,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">ssize_t</span> <span class="nf">recvmsg</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">     <span class="kt">int</span> <span class="n">sockfd</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">     <span class="k">const</span> <span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="n">msg</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">     <span class="kt">int</span> <span class="n">flags</span>
-</span></span><span class="line"><span class="cl"><span class="p">);</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="n">ssize_t</span> <span class="nf">recvmsg</span><span class="p">(</span>
+     <span class="kt">int</span> <span class="n">sockfd</span><span class="p">,</span>
+     <span class="k">const</span> <span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="n">msg</span><span class="p">,</span>
+     <span class="kt">int</span> <span class="n">flags</span>
+<span class="p">);</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>人们可以用 <code>sendmsg</code> 在 Unix 域套接字上传输的特殊消息是由 <code>msghdr</code> 指定的。希望将文件描述发送给另一个进程的进程创建一个 <code>msghdr</code> 结构，其中包含要传递的描述。</p>
 <div class="highlight"><div class="chroma">
@@ -475,16 +464,16 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">msghdr</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">void</span>            <span class="o">*</span><span class="n">msg_name</span><span class="p">;</span>      <span class="cm">/* optional address */</span>
-</span></span><span class="line"><span class="cl">    <span class="n">socklen_t</span>       <span class="n">msg_namelen</span><span class="p">;</span>    <span class="cm">/* size of address */</span>
-</span></span><span class="line"><span class="cl">    <span class="k">struct</span>          <span class="n">iovec</span> <span class="o">*</span><span class="n">msg_iov</span><span class="p">;</span> <span class="cm">/* scatter/gather array */</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span>             <span class="n">msg_iovlen</span><span class="p">;</span>     <span class="cm">/* # elements in msg_iov */</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">void</span>            <span class="o">*</span><span class="n">msg_control</span><span class="p">;</span>   <span class="cm">/* ancillary data, see below */</span>
-</span></span><span class="line"><span class="cl">    <span class="n">socklen_t</span>       <span class="n">msg_controllen</span><span class="p">;</span> <span class="cm">/* ancillary data buffer len */</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span>             <span class="n">msg_flags</span><span class="p">;</span>      <span class="cm">/* flags on received message */</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">msghdr</span> <span class="p">{</span>
+    <span class="kt">void</span>            <span class="o">*</span><span class="n">msg_name</span><span class="p">;</span>      <span class="cm">/* optional address */</span>
+    <span class="n">socklen_t</span>       <span class="n">msg_namelen</span><span class="p">;</span>    <span class="cm">/* size of address */</span>
+    <span class="k">struct</span>          <span class="n">iovec</span> <span class="o">*</span><span class="n">msg_iov</span><span class="p">;</span> <span class="cm">/* scatter/gather array */</span>
+    <span class="kt">int</span>             <span class="n">msg_iovlen</span><span class="p">;</span>     <span class="cm">/* # elements in msg_iov */</span>
+    <span class="kt">void</span>            <span class="o">*</span><span class="n">msg_control</span><span class="p">;</span>   <span class="cm">/* ancillary data, see below */</span>
+    <span class="n">socklen_t</span>       <span class="n">msg_controllen</span><span class="p">;</span> <span class="cm">/* ancillary data buffer len */</span>
+    <span class="kt">int</span>             <span class="n">msg_flags</span><span class="p">;</span>      <span class="cm">/* flags on received message */</span>
+<span class="p">};</span>
+</code></pre></td></tr></table>
 </div>
 </div><p><code>msghdr</code> 结构的 <code>msg_control</code> 成员，其长度为 <code>msg_controllen</code> ，指向一个如下形式的消息缓冲区:</p>
 <div class="highlight"><div class="chroma">
@@ -498,14 +487,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">cmsghdr</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">socklen_t</span> <span class="n">cmsg_len</span><span class="p">;</span>    <span class="cm">/* data byte count, including header */</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span>       <span class="n">cmsg_level</span><span class="p">;</span>  <span class="cm">/* originating protocol */</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span>       <span class="n">cmsg_type</span><span class="p">;</span>   <span class="cm">/* protocol-specific type */</span>
-</span></span><span class="line"><span class="cl">    <span class="cm">/* followed by */</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">cmsg_data</span><span class="p">[];</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">cmsghdr</span> <span class="p">{</span>
+    <span class="n">socklen_t</span> <span class="n">cmsg_len</span><span class="p">;</span>    <span class="cm">/* data byte count, including header */</span>
+    <span class="kt">int</span>       <span class="n">cmsg_level</span><span class="p">;</span>  <span class="cm">/* originating protocol */</span>
+    <span class="kt">int</span>       <span class="n">cmsg_type</span><span class="p">;</span>   <span class="cm">/* protocol-specific type */</span>
+    <span class="cm">/* followed by */</span>
+    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">cmsg_data</span><span class="p">[];</span>
+<span class="p">};</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>在 POSIX 中，带有附加数据的 <code>cmsghdr</code> 结构的缓冲区被称为辅助数据(ancillary data)。在 Linux 上，每个套接字允许的最大缓冲区大小可以通过修改 <code>/proc/sys/net/core/optmem_max</code> 来设置。</p>
 <h2 id="辅助数据传输">辅助数据传输</h2>
@@ -527,13 +516,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">cmsghdr</span> <span class="o">*</span><span class="nf">CMSG_FIRSTHDR</span><span class="p">(</span><span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="n">msgh</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">cmsghdr</span> <span class="o">*</span><span class="nf">CMSG_NXTHDR</span><span class="p">(</span><span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="n">msgh</span><span class="p">,</span> <span class="k">struct</span> <span class="n">cmsghdr</span> <span class="o">*</span><span class="n">cmsg</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="n">size_t</span> <span class="nf">CMSG_ALIGN</span><span class="p">(</span><span class="n">size_t</span> <span class="n">length</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="n">size_t</span> <span class="nf">CMSG_SPACE</span><span class="p">(</span><span class="n">size_t</span> <span class="n">length</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="n">size_t</span> <span class="nf">CMSG_LEN</span><span class="p">(</span><span class="n">size_t</span> <span class="n">length</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="nf">CMSG_DATA</span><span class="p">(</span><span class="k">struct</span> <span class="n">cmsghdr</span> <span class="o">*</span><span class="n">cmsg</span><span class="p">);</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">cmsghdr</span> <span class="o">*</span><span class="nf">CMSG_FIRSTHDR</span><span class="p">(</span><span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="n">msgh</span><span class="p">);</span>
+<span class="k">struct</span> <span class="n">cmsghdr</span> <span class="o">*</span><span class="nf">CMSG_NXTHDR</span><span class="p">(</span><span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="n">msgh</span><span class="p">,</span> <span class="k">struct</span> <span class="n">cmsghdr</span> <span class="o">*</span><span class="n">cmsg</span><span class="p">);</span>
+<span class="n">size_t</span> <span class="nf">CMSG_ALIGN</span><span class="p">(</span><span class="n">size_t</span> <span class="n">length</span><span class="p">);</span>
+<span class="n">size_t</span> <span class="nf">CMSG_SPACE</span><span class="p">(</span><span class="n">size_t</span> <span class="n">length</span><span class="p">);</span>
+<span class="n">size_t</span> <span class="nf">CMSG_LEN</span><span class="p">(</span><span class="n">size_t</span> <span class="n">length</span><span class="p">);</span>
+<span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="nf">CMSG_DATA</span><span class="p">(</span><span class="k">struct</span> <span class="n">cmsghdr</span> <span class="o">*</span><span class="n">cmsg</span><span class="p">);</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>我从来没有使用后两者的需要，<code>SCM_RIGHTS</code> 是我希望在这篇文章中进一步探讨的。</p>
 <h3 id="scm_rights">SCM_RIGHTS</h3>
@@ -550,14 +539,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">struct cmsghdr {
-</span></span><span class="line"><span class="cl">    socklen_t cmsg_len;    /* data byte count, including header */
-</span></span><span class="line"><span class="cl">    int       cmsg_level;  /* originating protocol */
-</span></span><span class="line"><span class="cl">    int       cmsg_type;   /* protocol-specific type */
-</span></span><span class="line"><span class="cl">    /* followed by */
-</span></span><span class="line"><span class="cl">    unsigned char cmsg_data[];
-</span></span><span class="line"><span class="cl">};
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">struct cmsghdr {
+    socklen_t cmsg_len;    /* data byte count, including header */
+    int       cmsg_level;  /* originating protocol */
+    int       cmsg_type;   /* protocol-specific type */
+    /* followed by */
+    unsigned char cmsg_data[];
+};
+</code></pre></td></tr></table>
 </div>
 </div><p>接收进程使用 <code>recvmsg</code> 接收数据。</p>
 <p>《Linux Programming Interface》有一个使用 <code>sendmsg</code> 和 <code>recvmsg</code> 函数的<a href="https://man7.org/tlpi/code/online/dist/sockets/scm_rights_send.c.html">良好示例</a>。</p>
@@ -710,7 +699,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

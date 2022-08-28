@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2019/12/15/flex/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -60,17 +60,6 @@
 <meta name="twitter:description" content="
 结合例子简单介绍了Lex 程序和 Lex 工具的用法
 "/>
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
-
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -228,12 +217,12 @@ Lex 程序的输入方法称为 Lex 语言，而 Lex 程序本身被称为 Lex �
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">声明部分
-</span></span><span class="line"><span class="cl">%%
-</span></span><span class="line"><span class="cl">转换规则
-</span></span><span class="line"><span class="cl">%%
-</span></span><span class="line"><span class="cl">辅助函数
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">声明部分
+%%
+转换规则
+%%
+辅助函数
+</code></pre></td></tr></table>
 </div>
 </div><h3 id="声明部分">声明部分</h3>
 <p>声明部分通常包括<code>变量</code>，<code>明示常量</code>和正则表达式的定义，<code>明示常量</code>是一个值为数字的标识符，用来表示词法单元的类型。</p>
@@ -256,9 +245,9 @@ Lex 程序的输入方法称为 Lex 语言，而 Lex 程序本身被称为 Lex �
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">while a &gt;= -1.2E-2
-</span></span><span class="line"><span class="cl">do b&lt;=2
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">while a &gt;= -1.2E-2
+do b&lt;=2
+</code></pre></td></tr></table>
 </div>
 </div><h3 id="声明部分-1">声明部分</h3>
 <p>首先定义的是声明部分，其中包含词法单元的类型，和一些正则表达式的定义</p>
@@ -285,26 +274,26 @@ Lex 程序的输入方法称为 Lex 语言，而 Lex 程序本身被称为 Lex �
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/* 明示常量的定义 */
-</span></span><span class="line"><span class="cl">#define IF 1
-</span></span><span class="line"><span class="cl">#define THEN 2
-</span></span><span class="line"><span class="cl">#define ELSE 3
-</span></span><span class="line"><span class="cl">#define ID 4
-</span></span><span class="line"><span class="cl">#define NUMBER 5
-</span></span><span class="line"><span class="cl">#define RELOP 6
-</span></span><span class="line"><span class="cl">#define DO 7
-</span></span><span class="line"><span class="cl">#define WHILE 8
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">%}
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/* 正则表达式的定义 */
-</span></span><span class="line"><span class="cl">delim       [ \t\n]
-</span></span><span class="line"><span class="cl">ws          {delim}+
-</span></span><span class="line"><span class="cl">letter      [A-Za-z]
-</span></span><span class="line"><span class="cl">digit       [0-9]
-</span></span><span class="line"><span class="cl">id          {letter}({letter}|{digit})*
-</span></span><span class="line"><span class="cl">number      [+-]?{digit}+(\.{digit}+)?(E[+-]?{digit}+)?
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">/* 明示常量的定义 */
+#define IF 1
+#define THEN 2
+#define ELSE 3
+#define ID 4
+#define NUMBER 5
+#define RELOP 6
+#define DO 7
+#define WHILE 8
+
+%}
+
+/* 正则表达式的定义 */
+delim       [ \t\n]
+ws          {delim}+
+letter      [A-Za-z]
+digit       [0-9]
+id          {letter}({letter}|{digit})*
+number      [+-]?{digit}+(\.{digit}+)?(E[+-]?{digit}+)?
+</code></pre></td></tr></table>
 </div>
 </div><p>需要注意的是，正则表达式中使用大括号包裹起来的内容表示嵌入另外一个正则表达式，例如<code>ws</code>的定义<code>{delim}+</code>就表示将之前定义的正则表达式<code>delim</code>嵌入进来。</p>
 <h3 id="转换部分">转换部分</h3>
@@ -327,21 +316,21 @@ Lex 程序的输入方法称为 Lex 语言，而 Lex 程序本身被称为 Lex �
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">{ws}        {  }
-</span></span><span class="line"><span class="cl">if          { return(IF); }
-</span></span><span class="line"><span class="cl">then        { return(THEN); }
-</span></span><span class="line"><span class="cl">while       { return(WHILE); }
-</span></span><span class="line"><span class="cl">do          { return(DO); }
-</span></span><span class="line"><span class="cl">else        { return(ELSE); }
-</span></span><span class="line"><span class="cl">{id}        { return(ID); }
-</span></span><span class="line"><span class="cl">{number}    { return(NUMBER); }
-</span></span><span class="line"><span class="cl">&#34;&lt;&#34;         { return(RELOP); }
-</span></span><span class="line"><span class="cl">&#34;&lt;=&#34;        { return(RELOP); }
-</span></span><span class="line"><span class="cl">&#34;&lt;&gt;&#34;        { return(RELOP); }
-</span></span><span class="line"><span class="cl">&#34;&gt;&#34;         { return(RELOP); }
-</span></span><span class="line"><span class="cl">&#34;&gt;=&#34;        { return(RELOP); }
-</span></span><span class="line"><span class="cl">&#34;=&#34;         { return(RELOP); }
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">{ws}        {  }
+if          { return(IF); }
+then        { return(THEN); }
+while       { return(WHILE); }
+do          { return(DO); }
+else        { return(ELSE); }
+{id}        { return(ID); }
+{number}    { return(NUMBER); }
+&#34;&lt;&#34;         { return(RELOP); }
+&#34;&lt;=&#34;        { return(RELOP); }
+&#34;&lt;&gt;&#34;        { return(RELOP); }
+&#34;&gt;&#34;         { return(RELOP); }
+&#34;&gt;=&#34;        { return(RELOP); }
+&#34;=&#34;         { return(RELOP); }
+</code></pre></td></tr></table>
 </div>
 </div><p>这里的规则对应的动作都很简单，直接返回词法单元对应的类型。</p>
 <h3 id="辅助函数-1">辅助函数</h3>
@@ -388,45 +377,45 @@ Lex 程序的输入方法称为 Lex 语言，而 Lex 程序本身被称为 Lex �
 </span><span class="lnt">38
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">writeout</span><span class="p">(</span><span class="kt">int</span> <span class="n">c</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">    <span class="k">switch</span><span class="p">(</span><span class="n">c</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">        <span class="k">case</span> <span class="nl">RELOP</span><span class="p">:</span> <span class="n">fprintf</span><span class="p">(</span><span class="n">yyout</span><span class="p">,</span> <span class="s">&#34;(RELOP, </span><span class="se">\&#34;</span><span class="s">%s</span><span class="se">\&#34;</span><span class="s">)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">yytext</span><span class="p">);</span><span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">case</span> <span class="nl">WHILE</span><span class="p">:</span> <span class="n">fprintf</span><span class="p">(</span><span class="n">yyout</span><span class="p">,</span> <span class="s">&#34;(WHILE, </span><span class="se">\&#34;</span><span class="s">%s</span><span class="se">\&#34;</span><span class="s">)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">yytext</span><span class="p">);</span><span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">case</span> <span class="nl">DO</span><span class="p">:</span> <span class="n">fprintf</span><span class="p">(</span><span class="n">yyout</span><span class="p">,</span> <span class="s">&#34;(DO, </span><span class="se">\&#34;</span><span class="s">%s</span><span class="se">\&#34;</span><span class="s">)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">yytext</span><span class="p">);</span><span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">case</span> <span class="nl">NUMBER</span><span class="p">:</span> <span class="n">fprintf</span><span class="p">(</span><span class="n">yyout</span><span class="p">,</span> <span class="s">&#34;(NUM, </span><span class="se">\&#34;</span><span class="s">%s</span><span class="se">\&#34;</span><span class="s">)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">yytext</span><span class="p">);</span><span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">case</span> <span class="nl">ID</span><span class="p">:</span> <span class="n">fprintf</span><span class="p">(</span><span class="n">yyout</span><span class="p">,</span> <span class="s">&#34;(ID, </span><span class="se">\&#34;</span><span class="s">%s</span><span class="se">\&#34;</span><span class="s">)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">yytext</span><span class="p">);</span><span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">default</span><span class="o">:</span><span class="k">break</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span> <span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">c</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">argc</span><span class="o">&gt;=</span><span class="mi">2</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">((</span><span class="n">yyin</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&#34;r&#34;</span><span class="p">))</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">            <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Can&#39;t open file %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">argc</span><span class="o">&gt;=</span><span class="mi">3</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">            <span class="n">yyout</span><span class="o">=</span><span class="n">fopen</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&#34;w&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="cm">/* yyin和yyout是lex中定义的输入输出文件指针，它们指明了
-</span></span></span><span class="line"><span class="cl"><span class="cm">     * lex生成的词法分析器从哪里获得输入和输出到哪里。
-</span></span></span><span class="line"><span class="cl"><span class="cm">     * 默认：stdin，stdout。
-</span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
-</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">((</span><span class="n">c</span> <span class="o">=</span> <span class="n">yylex</span><span class="p">())</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">writeout</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">argc</span><span class="o">&gt;=</span><span class="mi">2</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">        <span class="n">fclose</span><span class="p">(</span><span class="n">yyin</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">argc</span><span class="o">&gt;=</span><span class="mi">3</span><span class="p">)</span> <span class="n">fclose</span><span class="p">(</span><span class="n">yyout</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="kt">void</span> <span class="nf">writeout</span><span class="p">(</span><span class="kt">int</span> <span class="n">c</span><span class="p">){</span>
+    <span class="k">switch</span><span class="p">(</span><span class="n">c</span><span class="p">){</span>
+        <span class="k">case</span> <span class="nl">RELOP</span><span class="p">:</span> <span class="n">fprintf</span><span class="p">(</span><span class="n">yyout</span><span class="p">,</span> <span class="s">&#34;(RELOP, </span><span class="se">\&#34;</span><span class="s">%s</span><span class="se">\&#34;</span><span class="s">)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">yytext</span><span class="p">);</span><span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">WHILE</span><span class="p">:</span> <span class="n">fprintf</span><span class="p">(</span><span class="n">yyout</span><span class="p">,</span> <span class="s">&#34;(WHILE, </span><span class="se">\&#34;</span><span class="s">%s</span><span class="se">\&#34;</span><span class="s">)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">yytext</span><span class="p">);</span><span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">DO</span><span class="p">:</span> <span class="n">fprintf</span><span class="p">(</span><span class="n">yyout</span><span class="p">,</span> <span class="s">&#34;(DO, </span><span class="se">\&#34;</span><span class="s">%s</span><span class="se">\&#34;</span><span class="s">)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">yytext</span><span class="p">);</span><span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">NUMBER</span><span class="p">:</span> <span class="n">fprintf</span><span class="p">(</span><span class="n">yyout</span><span class="p">,</span> <span class="s">&#34;(NUM, </span><span class="se">\&#34;</span><span class="s">%s</span><span class="se">\&#34;</span><span class="s">)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">yytext</span><span class="p">);</span><span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="nl">ID</span><span class="p">:</span> <span class="n">fprintf</span><span class="p">(</span><span class="n">yyout</span><span class="p">,</span> <span class="s">&#34;(ID, </span><span class="se">\&#34;</span><span class="s">%s</span><span class="se">\&#34;</span><span class="s">)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">yytext</span><span class="p">);</span><span class="k">break</span><span class="p">;</span>
+        <span class="k">default</span><span class="o">:</span><span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span> <span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">c</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">argc</span><span class="o">&gt;=</span><span class="mi">2</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">yyin</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&#34;r&#34;</span><span class="p">))</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">){</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Can&#39;t open file %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">argc</span><span class="o">&gt;=</span><span class="mi">3</span><span class="p">){</span>
+            <span class="n">yyout</span><span class="o">=</span><span class="n">fopen</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&#34;w&#34;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="cm">/* yyin和yyout是lex中定义的输入输出文件指针，它们指明了
+</span><span class="cm">     * lex生成的词法分析器从哪里获得输入和输出到哪里。
+</span><span class="cm">     * 默认：stdin，stdout。
+</span><span class="cm">     */</span>
+    <span class="k">while</span> <span class="p">((</span><span class="n">c</span> <span class="o">=</span> <span class="n">yylex</span><span class="p">())</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">writeout</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">argc</span><span class="o">&gt;=</span><span class="mi">2</span><span class="p">){</span>
+        <span class="n">fclose</span><span class="p">(</span><span class="n">yyin</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">argc</span><span class="o">&gt;=</span><span class="mi">3</span><span class="p">)</span> <span class="n">fclose</span><span class="p">(</span><span class="n">yyout</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>我们在 main 函数中调用<code>yylex</code>函数获取到一个词法单元，然后调用<code>writeout</code>函数，将这个词法单元及其类型，输出到<code>stdout</code>中。</p>
 <h3 id="程序的编译执行">程序的编译执行</h3>
@@ -438,10 +427,10 @@ Lex 程序的输入方法称为 Lex 语言，而 Lex 程序本身被称为 Lex �
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">// flex 可以通过 brew install flex 安装
-</span></span><span class="line"><span class="cl">flex lex.l
-</span></span><span class="line"><span class="cl">cc lex.yy.c -o lex -ll
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">// flex 可以通过 brew install flex 安装
+flex lex.l
+cc lex.yy.c -o lex -ll
+</code></pre></td></tr></table>
 </div>
 </div><p>上述程序会生成可执行文件<code>lex</code>，然后我们执行 <code>./lex test1.p</code>，就可以看到程序输出了词法单元及其类型。</p>
 <div class="highlight"><div class="chroma">
@@ -457,16 +446,16 @@ Lex 程序的输入方法称为 Lex 语言，而 Lex 程序本身被称为 Lex �
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">&gt;&gt;&gt; ./lex test1.p
-</span></span><span class="line"><span class="cl"><span class="o">(</span>WHILE, <span class="s2">&#34;while&#34;</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">(</span>ID, <span class="s2">&#34;a&#34;</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">(</span>RELOP, <span class="s2">&#34;&gt;=&#34;</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">(</span>NUM, <span class="s2">&#34;-1.2E-2&#34;</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">(</span>DO, <span class="s2">&#34;do&#34;</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">(</span>ID, <span class="s2">&#34;b&#34;</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">(</span>RELOP, <span class="s2">&#34;&lt;=&#34;</span><span class="o">)</span>
-</span></span><span class="line"><span class="cl"><span class="o">(</span>NUM, <span class="s2">&#34;2&#34;</span><span class="o">)</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">&gt;&gt;&gt; ./lex test1.p
+<span class="o">(</span>WHILE, <span class="s2">&#34;while&#34;</span><span class="o">)</span>
+<span class="o">(</span>ID, <span class="s2">&#34;a&#34;</span><span class="o">)</span>
+<span class="o">(</span>RELOP, <span class="s2">&#34;&gt;=&#34;</span><span class="o">)</span>
+<span class="o">(</span>NUM, <span class="s2">&#34;-1.2E-2&#34;</span><span class="o">)</span>
+<span class="o">(</span>DO, <span class="s2">&#34;do&#34;</span><span class="o">)</span>
+<span class="o">(</span>ID, <span class="s2">&#34;b&#34;</span><span class="o">)</span>
+<span class="o">(</span>RELOP, <span class="s2">&#34;&lt;=&#34;</span><span class="o">)</span>
+<span class="o">(</span>NUM, <span class="s2">&#34;2&#34;</span><span class="o">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>上述例子的完整代码可以在 <a href="https://github.com/bwangelme/simple_calc/tree/896cc28/lex_tutorial">Github@896cc28</a> 中找到。</p>
 <h2 id="lex-中的冲突解决">Lex 中的冲突解决</h2>
@@ -587,7 +576,7 @@ Lex 程序的输入方法称为 Lex 语言，而 Lex 程序本身被称为 Lex �
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

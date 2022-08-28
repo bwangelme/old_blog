@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2022/08/23/install-containerd/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -60,17 +60,6 @@
 <meta name="twitter:description" content="
 介绍了安装 containerd 的方法
 "/>
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
-
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -205,10 +194,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">apt-get remove -y containerd docker.io
-</span></span><span class="line"><span class="cl">rm -vf /etc/systemd/system/containerd.service
-</span></span><span class="line"><span class="cl">rm -rvf /etc/systemd/system/containerd.service.d
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">apt-get remove -y containerd docker.io
+rm -vf /etc/systemd/system/containerd.service
+rm -rvf /etc/systemd/system/containerd.service.d
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>安装 containerd 二进制文件</li>
@@ -223,9 +212,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 我下载的是 1.6.8 版本</span>
-</span></span><span class="line"><span class="cl">tar Cxzvf /usr/local containerd-1.6.8-linux-amd64.tar.gz
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 我下载的是 1.6.8 版本</span>
+tar Cxzvf /usr/local containerd-1.6.8-linux-amd64.tar.gz
+</code></pre></td></tr></table>
 </div>
 </div><ol start="3">
 <li>从 <a href="https://github.com/containerd/containerd/blob/main/containerd.service">containerd 仓库</a> 中下载 systemd 配置文件, 并将其复制到 <code>/usr/local/lib/systemd/system/containerd.service</code> 中</li>
@@ -237,9 +226,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">systemctl daemon-reload
-</span></span><span class="line"><span class="cl">systemctl enable --now containerd
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">systemctl daemon-reload
+systemctl enable --now containerd
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>安装 runc</li>
@@ -253,8 +242,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">install -m 755 runc.amd64 /usr/local/sbin/runc
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">install -m 755 runc.amd64 /usr/local/sbin/runc
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>安装 CNI 插件</li>
@@ -269,9 +258,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mkdir -p /opt/cni/bin
-</span></span><span class="line"><span class="cl">tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.1.1.tgz
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">mkdir -p /opt/cni/bin
+tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.1.1.tgz
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="containerd-客户端的说明">containerd 客户端的说明</h2>
 <table>
@@ -319,8 +308,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">containerd config default <span class="p">|</span> sudo tee /etc/containerd/config.toml
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">containerd config default <span class="p">|</span> sudo tee /etc/containerd/config.toml
+</code></pre></td></tr></table>
 </div>
 </div><p>执行以上命令可以生成 containerd 的默认配置文件, 我们可以做一些自定义的修改, 例如修改 <code>[plugins.&quot;io.containerd.grpc.v1.cri&quot;.containerd.runtimes.runc.options]</code>, 令 <code>SystemdCgroup = true</code>, 让 containerd 和 systemd 使用同一个 cgroups 控制器</p>
 <p>crictl 默认连接的 service socket是 <code>unix:///var/run/dockershim.sock</code>, 我们可以在 <code>/etc/crictl.yaml</code> 中写入以下配置</p>
@@ -329,8 +318,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">runtime-endpoint: unix:///run/containerd/containerd.sock
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">runtime-endpoint: unix:///run/containerd/containerd.sock
+</code></pre></td></tr></table>
 </div>
 </div><p>让它默认连接 containerd 的 socket 接口</p>
 <h2 id="设置拉取镜像的-http-代理">设置拉取镜像的 http 代理</h2>
@@ -352,11 +341,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># 设置拉取镜像的代理
-</span></span><span class="line"><span class="cl">Environment=HTTP_PROXY=127.0.0.1:8118
-</span></span><span class="line"><span class="cl">Environment=HTTPS_PROXY=127.0.0.1:8118
-</span></span><span class="line"><span class="cl">Environment=NO_PROXY=localhost,127.0.0.1,172.17.0.0/16,192.168.56.0/24,10.96.0.0/16
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># 设置拉取镜像的代理
+Environment=HTTP_PROXY=127.0.0.1:8118
+Environment=HTTPS_PROXY=127.0.0.1:8118
+Environment=NO_PROXY=localhost,127.0.0.1,172.17.0.0/16,192.168.56.0/24,10.96.0.0/16
+</code></pre></td></tr></table>
 </div>
 </div><p>修改完以上配置后, 重启 containerd , 环境变量就生效了</p>
 <div class="highlight"><div class="chroma">
@@ -365,9 +354,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">systemctl daemon-reload
-</span></span><span class="line"><span class="cl">systemctl restart containerd
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">systemctl daemon-reload
+systemctl restart containerd
+</code></pre></td></tr></table>
 </div>
 </div><p>此时再执行 <code>sudo crictl pull k8s.gcr.io/kube-controller-manager:v1.24.4</code> 就可以成功拉取到 k8s 相关的镜像了, 也能够正常地和 <code>kubeadm</code> 交互了</p>
 <h3 id="设置-client-侧的环境变量">设置 client 侧的环境变量</h3>
@@ -377,8 +366,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo <span class="nv">HTTP_PROXY</span><span class="o">=</span>127.0.0.1:8118 <span class="nv">HTTPS_PROXY</span><span class="o">=</span>127.0.0.1:8118 ctr i pull k8s.gcr.io/kube-apiserver:v1.24.4
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo <span class="nv">HTTP_PROXY</span><span class="o">=</span>127.0.0.1:8118 <span class="nv">HTTPS_PROXY</span><span class="o">=</span>127.0.0.1:8118 ctr i pull k8s.gcr.io/kube-apiserver:v1.24.4
+</code></pre></td></tr></table>
 </div>
 </div><p>这样也能正常拉取镜像</p>
 <h2 id="参考链接">参考链接</h2>
@@ -489,7 +478,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {

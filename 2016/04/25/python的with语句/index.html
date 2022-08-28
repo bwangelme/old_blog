@@ -17,14 +17,14 @@
 
 
 <meta name="author" content="bwangel" /><meta name="description" content="摘要:
-Python的with语句用法以及相关的上下文管理协议 如何自己写一个上下文管理器对象，如何利用contextlib来写一个上下文管理器对象 原文地址: PEP 343: The &amp;lsquo;with&amp;rsquo; statement " /><meta name="keywords" content="Hugo, blog, bwangel" />
+  Python的with语句用法以及相关的上下文管理协议 如何自己写一个上下文管理器对象，如何利用contextlib来写一个上下文管理器对象 原文地址: PEP 343: The &amp;lsquo;with&amp;rsquo; statement  " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
 
 
 
-<meta name="generator" content="Hugo 0.101.0 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2016/04/25/python%E7%9A%84with%E8%AF%AD%E5%8F%A5/" />
@@ -36,7 +36,7 @@ Python的with语句用法以及相关的上下文管理协议 如何自己写一
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -75,17 +75,6 @@ Python的with语句用法以及相关的上下文管理协议
 原文地址: PEP 343: The &lsquo;with&rsquo; statement
 
 "/>
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
-
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -215,9 +204,9 @@ Python的with语句用法以及相关的上下文管理协议
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="k">with</span> <span class="n">expression</span> <span class="p">[</span><span class="k">as</span> <span class="n">variable</span><span class="p">]:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">with</span><span class="o">-</span><span class="n">block</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="k">with</span> <span class="n">expression</span> <span class="p">[</span><span class="k">as</span> <span class="n">variable</span><span class="p">]:</span>
+    <span class="k">with</span><span class="o">-</span><span class="n">block</span>
+</code></pre></td></tr></table>
 </div>
 </div><p><code>expression</code>应该是可求值的，而且它的求值结果应该是一个支持上下文管理协议的对象。</p>
 <p>这个对象可能返回一个值，这个值可以绑定到一个命名变量variable（注意variable并不是表达式结果的赋值）。</p>
@@ -231,11 +220,11 @@ Python的with语句用法以及相关的上下文管理协议
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/etc/passwd&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="nb">print</span> <span class="n">line</span>
-</span></span><span class="line"><span class="cl">        <span class="o">...</span> <span class="n">more</span> <span class="n">processing</span> <span class="n">code</span> <span class="o">...</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/etc/passwd&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="n">line</span>
+        <span class="o">...</span> <span class="n">more</span> <span class="n">processing</span> <span class="n">code</span> <span class="o">...</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>在这个语句执行后，文件对象f将会是关闭状态，就算for循环抛出了一个一场，只是部分执行了<code>with-block</code>的代码。</p>
 <p><code>threading</code>模块的锁和条件变量也支持<code>with</code>语句:</p>
@@ -247,11 +236,11 @@ Python的with语句用法以及相关的上下文管理协议
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># 原子操作的代码</span>
-</span></span><span class="line"><span class="cl">    <span class="o">...</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+    <span class="c1"># 原子操作的代码</span>
+    <span class="o">...</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>这个锁在<code>with-block</code>代码执行之前被锁定，而且在<code>with-block</code>语句执行完以后总是被释放。</p>
 <p><code>decimal</code>中新的<code>localcontext()</code>函数使保存和重置当前十进制环境变得很容易，它封装了计算所需的精度和圆整度:</p>
@@ -269,17 +258,17 @@ Python的with语句用法以及相关的上下文管理协议
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">Context</span><span class="p">,</span> <span class="n">localcontext</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 显示默认的28位精度</span>
-</span></span><span class="line"><span class="cl"><span class="n">v</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;578&#39;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">sqrt</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="n">localcontext</span><span class="p">(</span><span class="n">Context</span><span class="p">(</span><span class="n">prec</span><span class="o">=</span><span class="mi">16</span><span class="p">)):</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># 这个块中的所有代码都会是16位的精度</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># 在这个代码块结束以后，原始的精度将会被重置回来</span>
-</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">sqrt</span><span class="p">())</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">Context</span><span class="p">,</span> <span class="n">localcontext</span>
+
+<span class="c1"># 显示默认的28位精度</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;578&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">sqrt</span><span class="p">())</span>
+
+<span class="k">with</span> <span class="n">localcontext</span><span class="p">(</span><span class="n">Context</span><span class="p">(</span><span class="n">prec</span><span class="o">=</span><span class="mi">16</span><span class="p">)):</span>
+    <span class="c1"># 这个块中的所有代码都会是16位的精度</span>
+    <span class="c1"># 在这个代码块结束以后，原始的精度将会被重置回来</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">sqrt</span><span class="p">())</span>
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="自己动手写一个上下文管理器">自己动手写一个上下文管理器</h2>
 <p>在底层实现上, <code>with</code>语句还是相当复杂的，大多数人仅仅在公司中和已存在的对象一起使用<code>with</code>语句, 且不需要知道这些实际细节。
@@ -305,12 +294,12 @@ Python的with语句用法以及相关的上下文管理协议
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="n">db_connection</span> <span class="o">=</span> <span class="n">DatabaseConnection</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="n">db_connection</span> <span class="k">as</span> <span class="n">cursor</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;insert into ...&#39;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;delete from&#39;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># ... more operations ...</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="n">db_connection</span> <span class="o">=</span> <span class="n">DatabaseConnection</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">db_connection</span> <span class="k">as</span> <span class="n">cursor</span><span class="p">:</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;insert into ...&#39;</span><span class="p">)</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;delete from&#39;</span><span class="p">)</span>
+    <span class="c1"># ... more operations ...</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>如果with块中的代码被完美地执行了的话，事务应该被提交，否则如果with块中的代码抛出异常的话，事务应该被回滚。</p>
 <p>我假设<code>DatabaseConnection</code>对象应该有如下的基础接口。</p>
@@ -329,18 +318,18 @@ Python的with语句用法以及相关的上下文管理协议
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">DatabaseConnection</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># Database interface</span>
-</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">cursor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="s2">&#34;&#34;&#34;返回一个cursor对象，而且开启一个新的事务
-</span></span></span><span class="line"><span class="cl"><span class="s2">        &#34;&#34;&#34;</span>
-</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="s2">&#34;&#34;&#34;提交当前事务
-</span></span></span><span class="line"><span class="cl"><span class="s2">        &#34;&#34;&#34;</span>
-</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">rollback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="s2">&#34;&#34;&#34;回滚当前事务
-</span></span></span><span class="line"><span class="cl"><span class="s2">        &#34;&#34;&#34;</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="k">class</span> <span class="nc">DatabaseConnection</span><span class="p">:</span>
+    <span class="c1"># Database interface</span>
+    <span class="k">def</span> <span class="nf">cursor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;返回一个cursor对象，而且开启一个新的事务
+</span><span class="s2">        &#34;&#34;&#34;</span>
+    <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;提交当前事务
+</span><span class="s2">        &#34;&#34;&#34;</span>
+    <span class="k">def</span> <span class="nf">rollback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;回滚当前事务
+</span><span class="s2">        &#34;&#34;&#34;</span>
+</code></pre></td></tr></table>
 </div>
 </div><p><code>__enter__()</code>方法是很容易写的，仅仅需要开启一个新的事物。对于这个应用程序游标结果对象应该是一个有用的接口，所以这个方法应该返回它，用户能够增加一个游标到with语句块中，并绑定到一个变量上。</p>
 <div class="highlight"><div class="chroma">
@@ -353,13 +342,13 @@ Python的with语句用法以及相关的上下文管理协议
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">DatabaseConnection</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="o">...</span>
-</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="c1"># code to start a new transaction</span>
-</span></span><span class="line"><span class="cl">        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">cursor</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="k">class</span> <span class="nc">DatabaseConnection</span><span class="p">:</span>
+    <span class="o">...</span>
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># code to start a new transaction</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">cursor</span>
+</code></pre></td></tr></table>
 </div>
 </div><p><code>__exit__()</code>方法是最复杂的，因为这里需要做大部分的工作。这个方法必须去检查是否有异常发生。如果没有异常的话，事务被提交，如果有异常的话，事务被回滚。</p>
 <p>在如下的代码中，异常将会放在函数的末尾，返回默认值<code>None</code>. <code>None</code>就是<code>False</code>,所以异常就会被自动重新抛出。如果你希望的话，你可以做的更精确，在标记的位置添加一条return语句。</p>
@@ -377,17 +366,17 @@ Python的with语句用法以及相关的上下文管理协议
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">DatabaseConnection</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="o">...</span>
-</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">tb</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">            <span class="c1"># No execption, so commit</span>
-</span></span><span class="line"><span class="cl">            <span class="bp">self</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">            <span class="c1"># Exception occurred, so rollback</span>
-</span></span><span class="line"><span class="cl">            <span class="bp">self</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">            <span class="c1"># return False</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="k">class</span> <span class="nc">DatabaseConnection</span><span class="p">:</span>
+    <span class="o">...</span>
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tb</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># No execption, so commit</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Exception occurred, so rollback</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+            <span class="c1"># return False</span>
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="contextlib模块">contextlib模块</h2>
 <p>新的<code>contextlib</code>模块提供了一些有用的方法和修饰器去写能够和<code>with</code>语句一起使用的对象。</p>
@@ -413,23 +402,23 @@ Python的with语句用法以及相关的上下文管理协议
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nd">@contextmanager</span>
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">db_transaction</span><span class="p">(</span><span class="n">connection</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">    <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">    <span class="k">try</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="k">yield</span> <span class="n">cursor</span>
-</span></span><span class="line"><span class="cl">    <span class="k">except</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="n">connection</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">        <span class="k">raise</span>
-</span></span><span class="line"><span class="cl">    <span class="k">else</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">db</span> <span class="o">=</span> <span class="n">DatabaseConnection</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="n">db_transaction</span><span class="p">(</span><span class="n">db</span><span class="p">)</span> <span class="k">as</span> <span class="n">cursor</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="o">...</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">db_transaction</span><span class="p">(</span><span class="n">connection</span><span class="p">):</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">cursor</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">connection</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">raise</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="n">db</span> <span class="o">=</span> <span class="n">DatabaseConnection</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">db_transaction</span><span class="p">(</span><span class="n">db</span><span class="p">)</span> <span class="k">as</span> <span class="n">cursor</span><span class="p">:</span>
+    <span class="o">...</span>
+</code></pre></td></tr></table>
 </div>
 </div><p><code>contextlib</code>模块也有一个<code>nested(mgr1, mgr2, ...)</code>函数来绑定许多个上下文管理器，这样的话你就不需要写嵌套的<code>with</code>语句了。在下面这个例子中，单个with语句获得了线程锁，并且开启了一个事务。</p>
 <div class="highlight"><div class="chroma">
@@ -438,9 +427,9 @@ Python的with语句用法以及相关的上下文管理协议
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="n">nested</span> <span class="p">(</span><span class="n">db_transaction</span><span class="p">(</span><span class="n">db</span><span class="p">),</span> <span class="n">lock</span><span class="p">)</span> <span class="k">as</span> <span class="p">(</span><span class="n">cursor</span><span class="p">,</span> <span class="n">locked</span><span class="p">):</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">nested</span> <span class="p">(</span><span class="n">db_transaction</span><span class="p">(</span><span class="n">db</span><span class="p">),</span> <span class="n">lock</span><span class="p">)</span> <span class="k">as</span> <span class="p">(</span><span class="n">cursor</span><span class="p">,</span> <span class="n">locked</span><span class="p">):</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>最后，closing函数返回了一个对象，它能够绑定到一个变量上，在函数块的末尾，自动调用<code>object.close()</code>方法</p>
 <div class="highlight"><div class="chroma">
@@ -453,13 +442,13 @@ Python的with语句用法以及相关的上下文管理协议
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">urllib</span><span class="o">,</span> <span class="nn">sys</span>
-</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">closing</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s1">&#39;http://www.baidu.com&#39;</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="kn">import</span> <span class="nn">urllib</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">closing</span>
+
+<span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s1">&#39;http://www.baidu.com&#39;</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="参考">参考</h2>
 <p><a href="http://www.python.org/peps/pep-0343.html">PEP 343, The &lsquo;with&rsquo; statement</a>
@@ -567,7 +556,7 @@ Python的with语句用法以及相关的上下文管理协议
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
