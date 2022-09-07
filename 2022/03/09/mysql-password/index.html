@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Mariadb 修改 root 密码 - 大白的碎碎念</title>
+  <title>MySQL 修改 root 密码 - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -26,7 +26,7 @@
 <meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
-<link rel="canonical" href="/2022/03/09/mariadb-password/" />
+<link rel="canonical" href="/2022/03/09/mysql-password/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -39,19 +39,19 @@
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
-<meta property="og:title" content="Mariadb 修改 root 密码" />
+<meta property="og:title" content="MySQL 修改 root 密码" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2022/03/09/mariadb-password/" /><meta property="article:section" content="tips" />
+<meta property="og:url" content="/2022/03/09/mysql-password/" /><meta property="article:section" content="tips" />
 <meta property="article:published_time" content="2022-03-09T14:26:24+08:00" />
 <meta property="article:modified_time" content="2022-03-09T14:26:24+08:00" />
 
-<meta itemprop="name" content="Mariadb 修改 root 密码">
+<meta itemprop="name" content="MySQL 修改 root 密码">
 <meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-03-09T14:26:24+08:00" />
 <meta itemprop="dateModified" content="2022-03-09T14:26:24+08:00" />
-<meta itemprop="wordCount" content="37">
+<meta itemprop="wordCount" content="184">
 <meta itemprop="keywords" content="tips,mariadb," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Mariadb 修改 root 密码"/>
+<meta name="twitter:title" content="MySQL 修改 root 密码"/>
 <meta name="twitter:description" content=""/>
 
 <!--[if lte IE 9]>
@@ -137,12 +137,12 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Mariadb 修改 root 密码</h1>
+      <h1 class="post-title">MySQL 修改 root 密码</h1>
 
       <div class="post-meta">
         <span class="post-time"> 2022-03-09 </span>
         
-          <span class="more-meta"> 约 37 字 </span>
+          <span class="more-meta"> 约 184 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -155,7 +155,8 @@
   <ul>
     <li>
       <ul>
-        <li><a href="#tips">Tips</a></li>
+        <li><a href="#旧版本修改-root-密码">旧版本修改 root 密码</a></li>
+        <li><a href="#ubuntu-下-mysql-80-以上版本修改-root-密码">Ubuntu 下 MySQL 8.0 以上版本修改 root 密码</a></li>
         <li><a href="#参考链接">参考链接</a></li>
       </ul>
     </li>
@@ -165,7 +166,7 @@
 </div>
     <div class="post-content">
       <hr>
-<h2 id="tips">Tips</h2>
+<h2 id="旧版本修改-root-密码">旧版本修改 root 密码</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -188,8 +189,29 @@
 </span><span class="c1"></span><span class="k">SET</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">&#39;root&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PASSWORD</span><span class="p">(</span><span class="s1">&#39;new_password&#39;</span><span class="p">);</span><span class="w">
 </span></code></pre></td></tr></table>
 </div>
-</div><h2 id="参考链接">参考链接</h2>
-<p><a href="https://www.digitalocean.com/community/tutorials/how-to-reset-your-mysql-or-mariadb-root-password">https://www.digitalocean.com/community/tutorials/how-to-reset-your-mysql-or-mariadb-root-password</a></p>
+</div><h2 id="ubuntu-下-mysql-80-以上版本修改-root-密码">Ubuntu 下 MySQL 8.0 以上版本修改 root 密码</h2>
+<ul>
+<li>MySQL 8 默认不开启 root 用户，默认用户是 <code>debian-sys-maint</code>，其默认密码存储在 <code>/etc/mysql/debian.conf</code> 中</li>
+<li>MySQL 8 已经抛弃了 <code>PASSWORD()</code> 函数。</li>
+<li>MySQL 8 的 user 表已经没有 password 字段了，使用 <code>authentication_string</code> 存储密码 hash</li>
+</ul>
+<p>在 <code>/etc/mysql/debian.conf</code> 中查看 MySQL <code>debian-sys-maint</code> 用户的密码，登录上之后，修改 root 的密码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">alter user &#39;root&#39;@&#39;localhost&#39; identified with mysql_native_password by &#39;passwd&#39;;
+flush privileges;
+</code></pre></td></tr></table>
+</div>
+</div><p>然后就可以用 root 用户登录了。</p>
+<h2 id="参考链接">参考链接</h2>
+<ul>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-reset-your-mysql-or-mariadb-root-password">https://www.digitalocean.com/community/tutorials/how-to-reset-your-mysql-or-mariadb-root-password</a></li>
+<li><a href="https://blog.csdn.net/qq285744011/article/details/120743369">https://blog.csdn.net/qq285744011/article/details/120743369</a></li>
+</ul>
     </div>
 
     <div class="post-copyright">

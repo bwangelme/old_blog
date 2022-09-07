@@ -54,7 +54,7 @@
 解释了一下观察 CPU Throttling 情况的指标
 "><meta itemprop="datePublished" content="2022-08-16T23:14:25+08:00" />
 <meta itemprop="dateModified" content="2022-08-16T23:14:25+08:00" />
-<meta itemprop="wordCount" content="891">
+<meta itemprop="wordCount" content="1050">
 <meta itemprop="keywords" content="kubernetes,prom," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="K8S 中观察 CPU Throttling 情况的指标"/>
 <meta name="twitter:description" content="
@@ -149,8 +149,8 @@
       <div class="post-meta">
         <span class="post-time"> 2022-08-16 </span>
         
-          <span class="more-meta"> 约 891 字 </span>
-          <span class="more-meta"> 预计阅读 2 分钟 </span>
+          <span class="more-meta"> 约 1050 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
     </header>
@@ -241,7 +241,8 @@ $$</p>
 }
 </code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
+</div><p><code>instance</code> label 表示 kube-state-metrics 的 IP 地址。</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -272,6 +273,12 @@ kube_pod_labels{namespace=&#34;default&#34;, pod=&#34;http-bin-867bc77ld45d&#34;
 </code></pre></td></tr></table>
 </div>
 </div></li>
+<li>正常情况下，<code>kube_pod_label</code> 针对同一个 pod 只有一个，但是当 kube-state-metrics 重启的时候，由于 kube-state-metrics 的 IP 地址变了，<code>kube_pod_label</code> 就会出现 pod 相同，但是 <code>instance</code> 不同的指标。所以，最好还是要保证和 <code>kube_pod_labels</code> 相乘的指标针对同一个 pod 只有一个，否则当 kube-state-metrics 重启时，相乘的计算公式就会出现以下两种错误。
+<ul>
+<li>many * many 的错误</li>
+<li>one * group_left() many 的错误</li>
+</ul>
+</li>
 </ul>
 <p>为 cpu throttled 指标加上 pod label 后，我们再根据 k8s app sum 一下，就得到我们最终想要的结果了</p>
 <div class="highlight"><div class="chroma">
