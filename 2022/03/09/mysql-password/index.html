@@ -49,7 +49,7 @@
 <meta itemprop="name" content="MySQL 修改 root 密码">
 <meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-03-09T14:26:24+08:00" />
 <meta itemprop="dateModified" content="2022-03-09T14:26:24+08:00" />
-<meta itemprop="wordCount" content="184">
+<meta itemprop="wordCount" content="172">
 <meta itemprop="keywords" content="tips,mariadb," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySQL 修改 root 密码"/>
 <meta name="twitter:description" content=""/>
@@ -142,7 +142,7 @@
       <div class="post-meta">
         <span class="post-time"> 2022-03-09 </span>
         
-          <span class="more-meta"> 约 184 字 </span>
+          <span class="more-meta"> 约 172 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -167,26 +167,30 @@
     <div class="post-content">
       <hr>
 <h2 id="旧版本修改-root-密码">旧版本修改 root 密码</h2>
+<ul>
+<li>MySQL 5.7.6 and newer as well as MariaDB 10.1.20 and newer</li>
+</ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">FLUSH</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="p">;</span><span class="w">
-</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="c1">-- MySQL 5.7.6 and newer as well as MariaDB 10.1.20 and newer
-</span><span class="c1"></span><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">&#39;root&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;new_password&#39;</span><span class="p">;</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="c1">-- MySQL 5.7.5 and older as well as MariaDB 10.1.20
-</span><span class="c1"></span><span class="k">SET</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">&#39;root&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PASSWORD</span><span class="p">(</span><span class="s1">&#39;new_password&#39;</span><span class="p">);</span><span class="w">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">ALTER</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s1">&#39;root&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="w"> </span><span class="n">IDENTIFIED</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="s1">&#39;new_password&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">FLUSH</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>MySQL 5.7.5 and older as well as MariaDB 10.1.20 and older</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SET</span><span class="w"> </span><span class="n">PASSWORD</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="s1">&#39;root&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PASSWORD</span><span class="p">(</span><span class="s1">&#39;new_password&#39;</span><span class="p">);</span><span class="w">
+</span><span class="w"></span><span class="n">FLUSH</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="p">;</span><span class="w">
 </span></code></pre></td></tr></table>
 </div>
 </div><h2 id="ubuntu-下-mysql-80-以上版本修改-root-密码">Ubuntu 下 MySQL 8.0 以上版本修改 root 密码</h2>
@@ -202,9 +206,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">alter user &#39;root&#39;@&#39;localhost&#39; identified with mysql_native_password by &#39;passwd&#39;;
-flush privileges;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">alter</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="s1">&#39;root&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="w"> </span><span class="n">identified</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">mysql_native_password</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="s1">&#39;passwd&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">flush</span><span class="w"> </span><span class="k">privileges</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
 </div>
 </div><p>然后就可以用 root 用户登录了。</p>
 <h2 id="参考链接">参考链接</h2>
