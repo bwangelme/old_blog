@@ -49,7 +49,7 @@
 <meta itemprop="name" content="Ubuntu 将 capslock 映射成 esc">
 <meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-02-24T20:45:00+08:00" />
 <meta itemprop="dateModified" content="2022-02-24T20:45:00+08:00" />
-<meta itemprop="wordCount" content="42">
+<meta itemprop="wordCount" content="844">
 <meta itemprop="keywords" content="tips,ubuntu," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Ubuntu 将 capslock 映射成 esc"/>
 <meta name="twitter:description" content=""/>
@@ -142,8 +142,8 @@
       <div class="post-meta">
         <span class="post-time"> 2022-02-24 </span>
         
-          <span class="more-meta"> 约 42 字 </span>
-          <span class="more-meta"> 预计阅读 1 分钟 </span>
+          <span class="more-meta"> 约 844 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
     </header>
@@ -166,30 +166,82 @@
     <div class="post-content">
       <hr>
 <h2 id="tips">Tips</h2>
-<p>ubuntu 20.04</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">sudo apt-get install dconf-tools
-dconf write /org/gnome/desktop/input-sources/xkb-options &#34;[&#39;caps:escape&#39;]&#34;
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">sudo apt-get install dconf-tools
+<span class="c1"># 使 caps 成为 esc 按键</span>
+dconf write /org/gnome/desktop/input-sources/xkb-options <span class="s2">&#34;[&#39;caps:escape&#39;]&#34;</span>
+<span class="c1"># 交换 caps 和 esc 按键</span>
+dconf write <span class="s2">&#34;/org/gnome/desktop/input-sources/xkb-options&#34;</span> <span class="s2">&#34;[&#39;caps:swapescape&#39;]&#34;</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>ubuntu 22.04</p>
+</div><ul>
+<li>caps 配置的说明</li>
+</ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">dconf write &#34;/org/gnome/desktop/input-sources/xkb-options&#34; &#34;[&#39;caps:swapescape&#39;]&#34;
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Caps Lock behavior
+
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│Option                         Description                                                                          │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│caps:internal                  Caps Lock uses internal capitalization; Shift &#34;pauses&#34; Caps Lock                     │
+│caps:internal_nocancel         Caps Lock uses internal capitalization; Shift does not affect Caps Lock              │
+│caps:shift                     Caps Lock acts as Shift with locking; Shift &#34;pauses&#34; Caps Lock                       │
+│caps:shift_nocancel            Caps Lock acts as Shift with locking; Shift does not affect Caps Lock                │
+│caps:capslock                  Caps Lock toggles normal capitalization of alphabetic characters                     │
+│caps:shiftlock                 Caps Lock toggles Shift Lock (affects all keys)                                      │
+│caps:swapescape                Swap Esc and Caps Lock                                                               │
+│caps:escape                    Make Caps Lock an additional Esc                                                     │
+│caps:escape_shifted_capslock   Make Caps Lock an additional Esc, but Shift + Caps Lock is the regular Caps Lock     │
+│caps:backspace                 Make Caps Lock an additional Backspace                                               │
+│caps:super                     Make Caps Lock an additional Super                                                   │
+│caps:hyper                     Make Caps Lock an additional Hyper                                                   │
+│caps:menu                      Make Caps Lock an additional Menu key                                                │
+│caps:numlock                   Make Caps Lock an additional Num Lock                                                │
+│caps:ctrl_modifier             Make Caps Lock an additional Ctrl                                                    │
+│caps:none                      Caps Lock is disabled                                                                │
+│                                                                                                                    │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="参考链接">参考链接</h2>
 <ul>
 <li><a href="https://askubuntu.com/a/365701/581894">How to permanently switch Caps Lock and Esc</a></li>
 <li><a href="https://askubuntu.com/a/1415659/581894">jammy 22.04: how to map Capslock to ctrl and esc</a></li>
+<li>man 7 xkeyboard-config</li>
 </ul>
     </div>
 
