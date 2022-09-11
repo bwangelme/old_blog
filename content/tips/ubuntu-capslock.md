@@ -14,11 +14,20 @@ comment: true
 
 ## Tips
 
+ubuntu 20.04
+
 ```
 sudo apt-get install dconf-tools
 dconf write /org/gnome/desktop/input-sources/xkb-options "['caps:escape']"
 ```
 
+ubuntu 22.04
+
+```
+dconf write "/org/gnome/desktop/input-sources/xkb-options" "['caps:swapescape']"
+```
+
 ## 参考链接
 
 - [How to permanently switch Caps Lock and Esc](https://askubuntu.com/a/365701/581894)
+- [jammy 22.04: how to map Capslock to ctrl and esc](https://askubuntu.com/a/1415659/581894)

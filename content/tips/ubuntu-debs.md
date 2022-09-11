@@ -15,13 +15,12 @@ comment: true
 ## Tips
 
 ```sh
-# vagrant
-
-curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"\n
-sudo apt-get update && sudo apt-get install vagrant
+sed -i 's/http:\/\/cn.archive.ubuntu.com/https:\/\/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
+sudo apt update
+sudo apt install zsh git ripgrep vim curl build-essential
 ```
 
-## 参考链接
-
-- [Vagrant](https://www.vagrantup.com/downloads)
+- [github cli](https://github.com/cli/cli/blob/trunk/docs/install_linux.md)
+- [vagrant](https://www.vagrantup.com/downloads)
+- [google chrome](https://www.google.com/chrome/)
+- [chrome download](https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb)
