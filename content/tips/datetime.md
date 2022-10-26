@@ -24,7 +24,7 @@ comment: true
 - W3 规范规定 TZD 可以有两种形式
     1. 表示一个 UTC 时间，TZD 可以写成一个 `Z`, 例如 `1994-11-05T13:15:30Z` 表示 utc 时间
     2. 表示本地时间, TZD 写成 `+HH:MM` 或 `-HH:MM`，表示当地时间相对 utc 时间的偏移量, 例如 `1994-11-05T13:15:30+08:00` 表示东八区时间，即北京时间
-- 协调世界时的缩写为UTC。国际电信联盟希望协调世界时能够在所有语言有单一的缩写。英语和法语区的人同时希望各自的语言缩写－CUT (Coordinated Universal Time) 和 TUC (Temps Universel Coordonné) 能够成为国际标准，结果最后妥协使用UTC。
+- 协调世界时的缩写为UTC。国际电信联盟希望协调世界时能够在所有语言有单一的缩写。英语和法语区的人同时希望各自的语言缩写－CUT (Coordinated Universal Time) 和 TUC (Temps Universel Coordonné) 能够成为国际标准，最后妥协使用UTC。
 
 
 ## 参考链接
