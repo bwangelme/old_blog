@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Ubuntu 下 alacritty 终端中安装 nvim-tree 插件 - 大白的碎碎念</title>
+  <title>日期和时间格式 - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -26,7 +26,7 @@
 <meta name="generator" content="Hugo 0.104.3 with theme even" />
 
 
-<link rel="canonical" href="/2022/10/21/nvim-web-devicons/" />
+<link rel="canonical" href="/2022/10/26/datetime/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -39,19 +39,19 @@
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
-<meta property="og:title" content="Ubuntu 下 alacritty 终端中安装 nvim-tree 插件" />
+<meta property="og:title" content="日期和时间格式" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2022/10/21/nvim-web-devicons/" /><meta property="article:section" content="tips" />
-<meta property="article:published_time" content="2022-10-21T15:43:43+08:00" />
-<meta property="article:modified_time" content="2022-10-21T15:43:43+08:00" />
+<meta property="og:url" content="/2022/10/26/datetime/" /><meta property="article:section" content="tips" />
+<meta property="article:published_time" content="2022-10-26T11:32:14+08:00" />
+<meta property="article:modified_time" content="2022-10-26T11:32:14+08:00" />
 
-<meta itemprop="name" content="Ubuntu 下 alacritty 终端中安装 nvim-tree 插件">
-<meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-10-21T15:43:43+08:00" />
-<meta itemprop="dateModified" content="2022-10-21T15:43:43+08:00" />
-<meta itemprop="wordCount" content="157">
-<meta itemprop="keywords" content="tips,nvim," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Ubuntu 下 alacritty 终端中安装 nvim-tree 插件"/>
+<meta itemprop="name" content="日期和时间格式">
+<meta itemprop="description" content=""><meta itemprop="datePublished" content="2022-10-26T11:32:14+08:00" />
+<meta itemprop="dateModified" content="2022-10-26T11:32:14+08:00" />
+<meta itemprop="wordCount" content="318">
+<meta itemprop="keywords" content="tips,datetime," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="日期和时间格式"/>
 <meta name="twitter:description" content=""/>
 <script id="baidu_analytics">
   var _hmt = _hmt || [];
@@ -148,12 +148,12 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Ubuntu 下 alacritty 终端中安装 nvim-tree 插件</h1>
+      <h1 class="post-title">日期和时间格式</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2022-10-21 </span>
+        <span class="post-time"> 2022-10-26 </span>
         
-          <span class="more-meta"> 约 157 字 </span>
+          <span class="more-meta"> 约 318 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -177,36 +177,33 @@
     <div class="post-content">
       <hr>
 <h2 id="tips">Tips</h2>
-<p>使用 packer 安装 nvim-tree 的步骤比较简单，这里不再赘述。</p>
 <ul>
-<li>从 <a href="https://www.nerdfonts.com/font-downloads">nerdfonts</a> 选择一个你喜欢的字体并下载下来，我下载的是 DejaVuSansMono.zip</li>
-<li>安装 nerd 字体</li>
-</ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">unzip -d ~/.fonts/DejaVuSansMono DejaVuSansMono.zip
-</span></span><span class="line"><span class="cl"><span class="c1"># 刷新字体缓存</span>
-</span></span><span class="line"><span class="cl">fc-cache -fv
-</span></span></code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>获取字体名称，打开终端，在 <strong>配置文件首选项</strong> 中查看字体名称</li>
-</ul>
-<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2022-10-21-155055.png" alt=""></p>
-<p>可以看到字体名称是: <strong>DejaVuSansMono Nerd Font Mono</strong></p>
+<li>ISO 8601 定义了大量的日期/时间格式，为了简化开发 &amp; 减少 bug, <a href="https://www.w3.org/TR/NOTE-datetime">w3 规范</a>定义了一个通用的时间格式
 <ul>
-<li>修改 <code>~/.alacritty.yml</code> 文件，将 <code>font -&gt; normal -&gt; family</code> 改成对应的字体名称</li>
-<li>最终，我们就能够在终端里看到，图标被正确显示了</li>
+<li><code>YYYY-MM-DDThh:mm:ss.STZD</code>
+<ul>
+<li>YYYY/MM/DD 四位数年份/月/日</li>
+<li>T 表示后面跟了一个时间</li>
+<li>hh:mm:ss 两位数的时分秒</li>
+<li>S 一位或多位小数表示秒的一部分，最小是1, 最大不限制</li>
+<li>TZD 时区指示符</li>
 </ul>
-<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2022-10-21-155427.png" alt=""></p>
+</li>
+</ul>
+</li>
+<li>W3 规范规定 TZD 可以有两种形式
+<ol>
+<li>表示一个 UTC 时间，TZD 可以写成一个 <code>Z</code>, 例如 <code>1994-11-05T13:15:30Z</code> 表示 utc 时间</li>
+<li>表示本地时间, TZD 写成 <code>+HH:MM</code> 或 <code>-HH:MM</code>，表示当地时间相对 utc 时间的偏移量, 例如 <code>1994-11-05T13:15:30+08:00</code> 表示东八区时间，即北京时间</li>
+</ol>
+</li>
+<li>协调世界时的缩写为UTC。国际电信联盟希望协调世界时能够在所有语言有单一的缩写。英语和法语区的人同时希望各自的语言缩写－CUT (Coordinated Universal Time) 和 TUC (Temps Universel Coordonné) 能够成为国际标准，最后妥协使用UTC。</li>
+</ul>
 <h2 id="参考链接">参考链接</h2>
 <ul>
-<li><a href="https://www.nerdfonts.com/font-downloads">www.nerdfonts.com</a></li>
+<li><a href="https://www.w3.org/TR/NOTE-datetime">Date and Time Formats</a></li>
+<li><a href="https://blog.csdn.net/hsany330/article/details/70332483">关于时间格式 2016-08-9T10:01:54.123Z 20160809100154.123Z 处理方法</a></li>
+<li><a href="https://zh.m.wikipedia.org/zh-hans/%E5%8D%8F%E8%B0%83%E4%B8%96%E7%95%8C%E6%97%B6#cite_ref-29">协调世界时</a></li>
 </ul>
     </div>
 
@@ -218,7 +215,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2022-10-21
+        2022-10-26
         
     </span>
   </p>
@@ -231,16 +228,12 @@
 <footer class="post-footer">
       <div class="post-tags">
           <a href="/tags/tips/">tips</a>
-          <a href="/tags/nvim/">nvim</a>
+          <a href="/tags/datetime/">datetime</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/2022/10/26/datetime/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">日期和时间格式</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
-        <a class="next" href="/2022/09/15/k8s-debug-deploy/">
-            <span class="next-text nav-default">K8s 查询 Deployment 的错误</span>
+        
+        <a class="next" href="/2022/10/21/nvim-web-devicons/">
+            <span class="next-text nav-default">Ubuntu 下 alacritty 终端中安装 nvim-tree 插件</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
