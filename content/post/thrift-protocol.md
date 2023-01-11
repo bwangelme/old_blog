@@ -31,7 +31,7 @@ Binary 协议和 Compact 协议都假定底层的 transport 层会提供一个�
 
 # Binary 协议
 
-## Message 格式解析
+## Message 格式
 
 ### 编码格式
 
@@ -72,19 +72,19 @@ Value|Binary|说明
 
 因为 old encoding 中，`name length` 是使用32位有符号数存储的，因为 `name length` 不能为负数，所以 old encoding 的第一位始终是0 (`name length` 在最前面)。strict encoding 中，将第一位设置成了1, 以此来区分 old encoding 和 strict encoding。
 
-## Struct 格式解析
+## struct 格式
 
-Struct 类型由两部分组成: Normal Field + Stop Field
+Struct 类型由两部分组成: Field + StopField
 
 ```
-Struct := Normal Field + Stop Field
-Normal Field := Field Header + Field Value
+Struct := Field + StopField
+Field := Field Header + Field Value
 Field Header := field id + field value
 ```
 
 ![](https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-130322.png)
 
-Stop Field 长度一个字节，全都置0，表示 Struct 或 Request/Response Body 的结束
+StopField 长度一个字节，全都置0，表示 Struct 或 Request/Response Body 的结束
 
 ![](https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-130230.png)
 
@@ -116,16 +116,102 @@ list|15
 
 上图是一个 thrift 请求的抓包，可以看到此请求的 struct 中，共有三个 Field，分别存储了 1, 0, 4 这三个 I32 整数。
 
-## 基础类型如何编码
+## list 和 set 的格式
+
+list 和 set 类型使用的是相同的格式，如下图所示:
+
+![](https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-145100.png)
+
+- tttttttt 表示集合元素类型，被编码成了 i8
+- size 表示集合中元素的格式，被编码成了 i32 (32位有符号整数)，且只允许是正数
+- elements 表示元素
+
+集合中元素的类型和 struct 中 field-types 使用相同的定义。
+
+可以配置 list/set 最大的长度，默认没有设置，即是 i32 的最大值，(2^31-1, 2147483647)
+
+## binary/string 格式
+
+![](https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-170954.png)
+
+binary 类型的格式如上图所示，4个字节的长度 + values。长度是 32位的有符号整数，这意味着 binary 数据的最大长度是 2^32-1, 2147483647
+
+string 类型被 encode 成 utf-8 编码，然后使用 binary 的格式传输。
+
+## map 格式
+
+map 的格式如下:
+
+![](https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-145643.png)
+
+- kkkkkkkk 表示 map 中 key 的元素类型，被编码成了 i8
+- vvvvvvvv 表示 map 中 value 的元素类型，被编码成了 i8
+- size 表示 map 的大小，被编码成了 i32，只允许是正数
+- key value pairs 表示被编码后的 key-value 对。
+
+可以配置 map 最大的长度，默认没有设置，即是 i32 的最大值，(2^31-1, 2147483647)
 
 ## request 格式
 
+thrift Request 由两部分组成, Message + Data
+
+1. Message 的格式参考上文
+2. Data 使用 struct 格式序列化的方法的参数
+
+![](https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-150009.png)
+
+上图是用 wireshark 抓到的 thrift 请求:
+
+1. 它是一个 Call 消息，方法名是 `calculate`, seq id 是 0
+2. 它有两个参数，第一个参数是 i32 整数，第二个参数是一个结构体，这两个参数被用 struct 的方式序列化起来，变成了 Data
+
 ## response 格式
 
-field id = 1 表示返回的是 exception
-field id = 0 便是返回的是正常的结果
+thrift Response 由两部分组成，Message + Data
+
+1. Message 的格式参考上文
+2. Data 是函数的返回值，它以 struct 的方式序列化，
+   - 返回值的 field id == 0 时，表示这是一个正常的响应
+   - 返回值的 field id == 1 时，表示这个响应是 server 抛出了一个 thrift idl 文件中定义的异常
+
+![](https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-151113.png)
+
+上图抓到的 thrift 响应的包:
+
+- Message 部分表示它是一个 Reply 类型的消息。
+- Data 部分，由于 field id == 1, 表示它返回了一个异常。
+- 整个 Data 部分是一个 struct 格式的响应体，异常又是一个 struct 格式的数据
+- 响应的异常包含了 i32 数字和 string 两个字段。
+
+![](https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-151113.png)
 
 ## exception 格式
+
+thrift exception 响应表示 thrift server 出现了某种错误，无法正确地处理请求
+
+它由两部分组成: Message + Exception
+
+1. Message 的格式参考上文
+2. Exception 的 Data 也是按照 struct 格式来编码的
+
+下图是 thrift exception 响应抓取的包:
+
+![](https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-173446.png)
+
+- `00 00 00 2e` 是 frame 的长度
+- `80 01 ... 6b 00 00 00 00` 这是 Message 的定义
+- `0b` 表示第一个 field 是一个 string
+- `00 01` 表示 field id == 1
+- `00 00 00 0e` 表示 string 的长度是 14
+- `49 6e 74 65 72 6e 61 6c 20 65 72 72 6f 72` 表示 `Internal error` 这个字符串
+- `08` 表示第二个 field 是一个 i32
+- `00 02` 表示 field id == 2
+- `00 00 00 06` 表示 i32 的 值是6
+- `00` 表示 StopField，代表这个 Struct 结束了
+
+thrift exception 中数字的含义如下:
+
+![](https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-173956.png)
 
 # Compact 协议
 
@@ -157,13 +243,12 @@ name|方法名, utf-8 编码的字符串
 
 # framed vs unframed
 
-unframed 会将数据直接写入到 socket
+- unframed 会将数据直接写入到 socket
 
-framed 格式，client/server 先将 request/response 写入到一个 buffer 中，最后先向 socket 中写入一个四字节的数据长度，再写入数据。
+- 使用 framed 格式，client/server 先将 request/response 写入到一个 buffer 中。最后向 socket 写入时，先写入一个四字节的 request/response 长度，再写入 request/response。
 
-framed 格式下，请求的最大长度是 16384000 (16M)
-
-引入 framed 格式的目的是为了方便异步处理器的实现。
+- framed 格式下，请求的最大长度是 16384000 (16M)
+- thrift 引入 framed 格式的目的是为了方便异步处理器的实现。
 
 # 参考链接
 
