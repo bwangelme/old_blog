@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Thrift 协议学习笔记 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="本文主要讲了 thrift 的协议格式
+" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
+
+
+<link rel="canonical" href="/2023/01/11/thrift-protocol/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+<meta property="og:title" content="Thrift 协议学习笔记" />
+<meta property="og:description" content="本文主要讲了 thrift 的协议格式" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2023/01/11/thrift-protocol/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-01-11T11:03:19+08:00" />
+<meta property="article:modified_time" content="2023-01-11T11:03:19+08:00" />
+
+<meta itemprop="name" content="Thrift 协议学习笔记">
+<meta itemprop="description" content="本文主要讲了 thrift 的协议格式"><meta itemprop="datePublished" content="2023-01-11T11:03:19+08:00" />
+<meta itemprop="dateModified" content="2023-01-11T11:03:19+08:00" />
+<meta itemprop="wordCount" content="2329">
+<meta itemprop="keywords" content="thrift," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Thrift 协议学习笔记"/>
+<meta name="twitter:description" content="本文主要讲了 thrift 的协议格式"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/tips/">
+        <li class="mobile-menu-item">Tips</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tips/">Tips</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Thrift 协议学习笔记</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-01-11 </span>
+        
+          <span class="more-meta"> 约 2329 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#thrift-请求响应模型">Thrift 请求响应模型</a></li>
+    <li><a href="#binary-协议">Binary 协议</a>
+      <ul>
+        <li><a href="#message-格式">Message 格式</a>
+          <ul>
+            <li><a href="#编码格式">编码格式</a></li>
+            <li><a href="#消息类型">消息类型</a></li>
+            <li><a href="#序列号">序列号</a></li>
+            <li><a href="#old-encoding">old encoding</a></li>
+          </ul>
+        </li>
+        <li><a href="#struct-格式">struct 格式</a></li>
+        <li><a href="#list-和-set-的格式">list 和 set 的格式</a></li>
+        <li><a href="#binarystring-格式">binary/string 格式</a></li>
+        <li><a href="#map-格式">map 格式</a></li>
+        <li><a href="#request-格式">request 格式</a></li>
+        <li><a href="#response-格式">response 格式</a></li>
+        <li><a href="#exception-格式">exception 格式</a></li>
+      </ul>
+    </li>
+    <li><a href="#compact-协议">Compact 协议</a>
+      <ul>
+        <li><a href="#var-int">var int</a></li>
+        <li><a href="#message-如何编码">Message 如何编码</a></li>
+      </ul>
+    </li>
+    <li><a href="#framed-vs-unframed">framed vs unframed</a></li>
+    <li><a href="#参考链接">参考链接</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>本文主要讲了 thrift 的协议格式</p>
+<hr>
+<p>Thrift 是一个集序列化和服务通信功能于一身的 RPC 框架，主要包含三大部分，代码生成，序列化框架，RPC 框架。</p>
+<p>Thrift 支持多种序列化协议，主要有 Binary, Compact, JSON, 本文主要讲解了 Binary 和 Compact 序列化协议。</p>
+<h1 id="thrift-请求响应模型">Thrift 请求响应模型</h1>
+<p>Binary 协议和 Compact 协议都假定底层的 transport 层会提供一个允许双向通信的字节流信道(例如 TCP 套接字)。它们都使用了如下的通信模式:</p>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-113200.png" alt=""></p>
+<ol>
+<li>Client 发送 Message 给 Server, Message 主要包括方法名，参数以及一些元信息</li>
+<li>Client 将方法参数当作一个 Struct 发给 Server</li>
+<li>Server 处理完后，发送 Message 给 Client。Message 主要包括方法名，消息类型和一些元信息</li>
+<li>Server 发送 Struct 给 Client, 这个 Struct 包括响应或异常 body</li>
+</ol>
+<h1 id="binary-协议">Binary 协议</h1>
+<h2 id="message-格式">Message 格式</h2>
+<h3 id="编码格式">编码格式</h3>
+<p>Binary 协议中, Message 的格式如下 (strict encoding)</p>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-121420.png" alt=""></p>
+<table>
+<thead>
+<tr>
+<th>字节索引</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>第1字节的第一位固定是1, 表示使用 strict encoding</td>
+</tr>
+<tr>
+<td>1-2</td>
+<td><code>vvv</code> 前两个字节的后15位表示版本号, 固定是 1 (二进制格式是 <code>000 0000 0000 0001</code>)</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>unused</code> 第三个字节 unused 表示它不使用</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>mmm</code> 第四个字节格式为 00000mmm，后三位表示消息的类型</td>
+</tr>
+<tr>
+<td>4-8</td>
+<td><code>name length</code> 4-8 字节存储方法名的长度，它是一个32位有符号整数，使用大端序存储，这意味着方法名最长是 2^31-1</td>
+</tr>
+<tr>
+<td>8..</td>
+<td><code>name</code> 8字节后存储变长的方法名字符串，它使用 utf-8 编码</td>
+</tr>
+<tr>
+<td>&hellip;4-end</td>
+<td><code>seq id</code> 最后四个字节存储序列号</td>
+</tr>
+</tbody>
+</table>
+<h3 id="消息类型">消息类型</h3>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Binary</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>001</td>
+<td><code>Call</code>: thrift 调用</td>
+</tr>
+<tr>
+<td>2</td>
+<td>010</td>
+<td><code>Reply</code>: thrift 响应</td>
+</tr>
+<tr>
+<td>3</td>
+<td>011</td>
+<td><code>Exception</code>: thrift server 返回了异常</td>
+</tr>
+<tr>
+<td>4</td>
+<td>100</td>
+<td><code>Oneway</code>: thrift oneway 调用</td>
+</tr>
+</tbody>
+</table>
+<h3 id="序列号">序列号</h3>
+<p>序列号是有符号的四字节整数，在一个传输层的连接上所有未完成的请求必须有唯一的序列号，客户端用序列号来处理响应的失序到达，实现请求和响应的匹配。服务端不需要检查序列号，也不应该在实现中对序列号有任何的依赖，只需要在响应的时候将其原样返回。</p>
+<h3 id="old-encoding">old encoding</h3>
+<p>上述讲的 binary 协议中的 strict encoding, 在 thrift 早期版本中，使用的是 old encoding 编码方式。old encoding 的编码方式如下</p>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-123231.png" alt=""></p>
+<p>它没有版本号等信息，直接传输了方法名，类型以及 seq id</p>
+<p>因为 old encoding 中，<code>name length</code> 是使用32位有符号数存储的，因为 <code>name length</code> 不能为负数，所以 old encoding 的第一位始终是0 (<code>name length</code> 在最前面)。strict encoding 中，将第一位设置成了1, 以此来区分 old encoding 和 strict encoding。</p>
+<h2 id="struct-格式">struct 格式</h2>
+<p>Struct 类型由两部分组成: Field + StopField</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Struct := Field + StopField
+Field := Field Header + Field Value
+Field Header := field id + field value
+</code></pre></td></tr></table>
+</div>
+</div><p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-130322.png" alt=""></p>
+<p>StopField 长度一个字节，全都置0，表示 Struct 或 Request/Response Body 的结束</p>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-130230.png" alt=""></p>
+<p>Normal Field 的格式如上图所示，字段说明如下</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tttttttt</td>
+<td>field 类型，一个8位的有符号整数</td>
+</tr>
+<tr>
+<td>field id</td>
+<td>16位的有符号整数，使用大端字节序存储</td>
+</tr>
+<tr>
+<td>field value</td>
+<td>编码后的 field value</td>
+</tr>
+</tbody>
+</table>
+<p>field 类型的定义表</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>field type number</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bool</td>
+<td>2</td>
+</tr>
+<tr>
+<td>byte</td>
+<td>3</td>
+</tr>
+<tr>
+<td>double</td>
+<td>4</td>
+</tr>
+<tr>
+<td>i16</td>
+<td>6</td>
+</tr>
+<tr>
+<td>i32</td>
+<td>8</td>
+</tr>
+<tr>
+<td>i64</td>
+<td>10</td>
+</tr>
+<tr>
+<td>string</td>
+<td>11, used for binary and string fields</td>
+</tr>
+<tr>
+<td>struct</td>
+<td>12, used for struct and union fields</td>
+</tr>
+<tr>
+<td>map</td>
+<td>13</td>
+</tr>
+<tr>
+<td>set</td>
+<td>14</td>
+</tr>
+<tr>
+<td>list</td>
+<td>15</td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-130956.png" alt=""></p>
+<p>上图是一个 thrift 请求的抓包，可以看到此请求的 struct 中，共有三个 Field，分别存储了 1, 0, 4 这三个 I32 整数。</p>
+<h2 id="list-和-set-的格式">list 和 set 的格式</h2>
+<p>list 和 set 类型使用的是相同的格式，如下图所示:</p>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-145100.png" alt=""></p>
+<ul>
+<li>tttttttt 表示集合元素类型，被编码成了 i8</li>
+<li>size 表示集合中元素的格式，被编码成了 i32 (32位有符号整数)，且只允许是正数</li>
+<li>elements 表示元素</li>
+</ul>
+<p>集合中元素的类型和 struct 中 field-types 使用相同的定义。</p>
+<p>可以配置 list/set 最大的长度，默认没有设置，即是 i32 的最大值，(2^31-1, 2147483647)</p>
+<h2 id="binarystring-格式">binary/string 格式</h2>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-170954.png" alt=""></p>
+<p>binary 类型的格式如上图所示，4个字节的长度 + values。长度是 32位的有符号整数，这意味着 binary 数据的最大长度是 2^32-1, 2147483647</p>
+<p>string 类型被 encode 成 utf-8 编码，然后使用 binary 的格式传输。</p>
+<h2 id="map-格式">map 格式</h2>
+<p>map 的格式如下:</p>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-145643.png" alt=""></p>
+<ul>
+<li>kkkkkkkk 表示 map 中 key 的元素类型，被编码成了 i8</li>
+<li>vvvvvvvv 表示 map 中 value 的元素类型，被编码成了 i8</li>
+<li>size 表示 map 的大小，被编码成了 i32，只允许是正数</li>
+<li>key value pairs 表示被编码后的 key-value 对。</li>
+</ul>
+<p>可以配置 map 最大的长度，默认没有设置，即是 i32 的最大值，(2^31-1, 2147483647)</p>
+<h2 id="request-格式">request 格式</h2>
+<p>thrift Request 由两部分组成, Message + Data</p>
+<ol>
+<li>Message 的格式参考上文</li>
+<li>Data 使用 struct 格式序列化的方法的参数</li>
+</ol>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-150009.png" alt=""></p>
+<p>上图是用 wireshark 抓到的 thrift 请求:</p>
+<ol>
+<li>它是一个 Call 消息，方法名是 <code>calculate</code>, seq id 是 0</li>
+<li>它有两个参数，第一个参数是 i32 整数，第二个参数是一个结构体，这两个参数被用 struct 的方式序列化起来，变成了 Data</li>
+</ol>
+<h2 id="response-格式">response 格式</h2>
+<p>thrift Response 由两部分组成，Message + Data</p>
+<ol>
+<li>Message 的格式参考上文</li>
+<li>Data 是函数的返回值，它以 struct 的方式序列化，
+<ul>
+<li>返回值的 field id == 0 时，表示这是一个正常的响应</li>
+<li>返回值的 field id == 1 时，表示这个响应是 server 抛出了一个 thrift idl 文件中定义的异常</li>
+</ul>
+</li>
+</ol>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-151113.png" alt=""></p>
+<p>上图抓到的 thrift 响应的包:</p>
+<ul>
+<li>Message 部分表示它是一个 Reply 类型的消息。</li>
+<li>Data 部分，由于 field id == 1, 表示它返回了一个异常。</li>
+<li>整个 Data 部分是一个 struct 格式的响应体，异常又是一个 struct 格式的数据</li>
+<li>响应的异常包含了 i32 数字和 string 两个字段。</li>
+</ul>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-151113.png" alt=""></p>
+<h2 id="exception-格式">exception 格式</h2>
+<p>thrift exception 响应表示 thrift server 出现了某种错误，无法正确地处理请求</p>
+<p>它由两部分组成: Message + Exception</p>
+<ol>
+<li>Message 的格式参考上文</li>
+<li>Exception 的 Data 也是按照 struct 格式来编码的</li>
+</ol>
+<p>下图是 thrift exception 响应抓取的包:</p>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-173446.png" alt=""></p>
+<ul>
+<li><code>00 00 00 2e</code> 是 frame 的长度</li>
+<li><code>80 01 ... 6b 00 00 00 00</code> 这是 Message 的定义</li>
+<li><code>0b</code> 表示第一个 field 是一个 string</li>
+<li><code>00 01</code> 表示 field id == 1</li>
+<li><code>00 00 00 0e</code> 表示 string 的长度是 14</li>
+<li><code>49 6e 74 65 72 6e 61 6c 20 65 72 72 6f 72</code> 表示 <code>Internal error</code> 这个字符串</li>
+<li><code>08</code> 表示第二个 field 是一个 i32</li>
+<li><code>00 02</code> 表示 field id == 2</li>
+<li><code>00 00 00 06</code> 表示 i32 的 值是6</li>
+<li><code>00</code> 表示 StopField，代表这个 Struct 结束了</li>
+</ul>
+<p>thrift exception 中数字的含义如下:</p>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-173956.png" alt=""></p>
+<h1 id="compact-协议">Compact 协议</h1>
+<h2 id="var-int">var int</h2>
+<p>Compact 协议中，使用 var int + zigzag int 的方式来将整数进行编码</p>
+<ol>
+<li>i32, i64 格式的整数被转换成 zigzag 格式的整数，这样所有整数都使用非负整数的格式存储</li>
+<li>zigzag 整数被编码成了 var int 变长整数。i32 整数消耗 1-5 个字节，i64 整数消耗 1-10 个字节。</li>
+</ol>
+<ul>
+<li>i16 首先被转换成 i32 之后，再进行 zigzag + var int 编码, i8 数字不会进行编码，直接进行传输。</li>
+</ul>
+<p>关于 zigzag 以及变长整数编码，可以参考我的另一篇文章: <a href="/2022/03/01/variant_zigzag/">ZigZag 变长整数编码</a></p>
+<h2 id="message-如何编码">Message 如何编码</h2>
+<p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-01-11-125326.png" alt=""></p>
+<p>Compact 协议中，Message 的编码格式如上图</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pppppppp</td>
+<td>协议 ID, 固定是 0x82, 1000 0010</td>
+</tr>
+<tr>
+<td>mmm</td>
+<td>消息类型，和 binary 协议中的消息类型定义相同</td>
+</tr>
+<tr>
+<td>vvvvv</td>
+<td>协议版本，无符号5位整数，固定是 00001</td>
+</tr>
+<tr>
+<td>seq id</td>
+<td>序列号 ID, 一个32位有符号整数被编码成了 var int</td>
+</tr>
+<tr>
+<td>name length</td>
+<td>方法名长度，一个有符号32位整数被编码成了 var int (name length &gt;= 0)</td>
+</tr>
+<tr>
+<td>name</td>
+<td>方法名, utf-8 编码的字符串</td>
+</tr>
+</tbody>
+</table>
+<h1 id="framed-vs-unframed">framed vs unframed</h1>
+<ul>
+<li>
+<p>unframed 会将数据直接写入到 socket</p>
+</li>
+<li>
+<p>使用 framed 格式，client/server 先将 request/response 写入到一个 buffer 中。最后向 socket 写入时，先写入一个四字节的 request/response 长度，再写入 request/response。</p>
+</li>
+<li>
+<p>framed 格式下，请求的最大长度是 16384000 (16M)</p>
+</li>
+<li>
+<p>thrift 引入 framed 格式的目的是为了方便异步处理器的实现。</p>
+</li>
+</ul>
+<h1 id="参考链接">参考链接</h1>
+<ul>
+<li><a href="https://andrewpqc.github.io/2019/02/24/thrift/">Thrift序列化协议浅析</a></li>
+<li><a href="https://erikvanoosten.github.io/thrift-missing-specification/">Thrift specification - Remote Procedure Call</a></li>
+<li><a href="https://www.bwangel.me/2022/03/01/variant_zigzag/">ZigZag 变长整数编码</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2023-01-11
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/thrift/">thrift</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/2022/09/11/leetcode-142/">
+            <span class="next-text nav-default">Leetcode 142: 环形链表 II(TODO)</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+  
+  <script src="https://giscus.app/client.js"
+        data-repo="anotherbwangel/blog-comment"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkxNDUyNzQwMDQ="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOCKi0lM4CBFyL"
+        data-mapping="pathname"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+  </script>
+    <noscript>Please enable JavaScript to view the <a href="https://giscus.app/zh-CN">comments powered by giscus.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
+    };
+  </script>
+  <script type="text/javascript" async src="/lib/MathJax@3.2.0/es5/tex-mml-chtml.js"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>
