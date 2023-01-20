@@ -44,8 +44,8 @@ ip link add <p1-name> type veth peer name <p2-name>
 
 Veth 设备对用于以有趣的方式将内核的网络设施组合在一起。
 
-一个特别有趣的用例是将 veth 对的一端放在一个网络名称空间中，
-另一端放在另一个网络名称空间中，从而允许网络名称空间之间进行通信。
+一个特别有趣的用例是将 veth 对的一端放在一个网络 namespace 中，
+另一端放在另一个网络 namepsace 中，从而允许网络 namespace 之间进行通信。
 
 为此，可以在创建接口时提供 netns 参数:
 
@@ -63,11 +63,11 @@ ip link set <p2-name> netns <p2-ns>
 
 
 ```shell
-# ip link add ve_A type veth peer name ve_B   # 创建一对 veth 设备
-# ethtool -S ve_A         # 查找 ve_A 接口对端接口的索引
+$ ip link add ve_A type veth peer name ve_B   # 创建一对 veth 设备
+$ ethtool -S ve_A         # 查找 ve_A 接口对端接口的索引
 NIC statistics:
     peer_ifindex: 16
-# ip link | grep '^16:'   # 查找索引是 16 的设备
+$ ip link | grep '^16:'   # 查找索引是 16 的设备
 16: ve_B@ve_A: <BROADCAST,MULTICAST,M-DOWN> mtu 1500 qdisc ...
 ```
 
@@ -131,7 +131,7 @@ inet 127.0.0.1/8 scope host lo
 valid_lft forever preferred_lft forever
 ```
 
-- 软链接 $pid 的网络 ns 到 /var/run/netns/ 中, 创建 ip netns 可以操作的网络 ns
+- 软链接 $pid 的网络 ns 到 /var/run/netns/ 中, 使 ip netns 可以操作它
 
 ```shell
 root@Macmini:~# ln -s "/proc/$pid/ns/net" /var/run/netns/$pid
@@ -141,7 +141,7 @@ root@Macmini:~# ip netns list
 119320
 ```
 
-- 使用 `lsns -t net` 查看当前系统的 network namespace, 可以看到已经多出来 nginx 容器的 network namespace 了
+- 使用 `lsns -t net` 查看当前系统的 network namespace, 可以看到已经有 nginx 容器的 network namespace 了
 
 ```shell
 root@Macmini:~# lsns -t net | head -n 3
@@ -177,7 +177,7 @@ lrwxrwxrwx 1 root root 0  1月 20 11:01 uts -> 'uts:[4026532280]'
 root@Macmini:~# ip link add A type veth peer name B
 root@Macmini:~# brctl addif docker0 A
 root@Macmini:~# ip link set A up
-# A 处于 UP 状态，但因为 A 没有完全连通，所以还是 M-DOWN 的状态
+# A 处于 UP 状态，但因为 A 没有完全连通，所以还是有 M-DOWN 的状态
 root@Macmini:~# ip a
 23: B@A: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
     link/ether 16:81:96:a3:bf:27 brd ff:ff:ff:ff:ff:ff
@@ -216,7 +216,7 @@ root@Macmini:~# ip netns exec $pid ip a
 ```
 
 - 启动 eth0
-- 因为 A 已经连接到了网桥上，所以直接启动成功，出现了 LOWER_UP 的状态
+- 因为 A 已经连接到了网桥上，所以直接启动成功，出现了 `LOWER_UP` 的状态
 
 ```shell
 root@Macmini:~# ip netns exec $pid ip link set eth0 up
@@ -261,7 +261,7 @@ default via 172.17.0.1 dev eth0
 172.17.0.0/16 dev eth0 proto kernel scope link src 172.17.0.10
 ```
 
-- 查看宿主机上的网络设备，可以看到 veth A 的名字变成了 A@if23, 并且状态已经由 M-DOWN 变成了 `LOWER_UP`
+- 查看宿主机上的网络设备，可以看到 veth A 的名字变成了 A@if23, 并且状态已经由 `M-DOWN` 变成了 `LOWER_UP`
 
 ```shell
 root@Macmini:~# ip a
