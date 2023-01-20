@@ -50,7 +50,7 @@
 <meta itemprop="name" content="从 none 开始，用网桥模式启动容器的网络">
 <meta itemprop="description" content="用 none 网络模式启动的容器，创建一个可以对外通信的网络"><meta itemprop="datePublished" content="2023-01-20T10:15:48+08:00" />
 <meta itemprop="dateModified" content="2023-01-20T10:15:48+08:00" />
-<meta itemprop="wordCount" content="2069">
+<meta itemprop="wordCount" content="2055">
 <meta itemprop="keywords" content="docker,network," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="从 none 开始，用网桥模式启动容器的网络"/>
 <meta name="twitter:description" content="用 none 网络模式启动的容器，创建一个可以对外通信的网络"/>
@@ -143,7 +143,7 @@
       <div class="post-meta">
         <span class="post-time"> 2023-01-20 </span>
         
-          <span class="more-meta"> 约 2069 字 </span>
+          <span class="more-meta"> 约 2055 字 </span>
           <span class="more-meta"> 预计阅读 5 分钟 </span>
         
       </div>
@@ -197,8 +197,8 @@
 </div><p>在上面的代码中，p1-name 和 p2-name 是分配给两个连接的端点的名称。</p>
 <p>对一个设备上传输的数据包会立即在另一个设备上接收。当任何一个设备关闭时，veth 对的链路状态就会关闭。</p>
 <p>Veth 设备对用于以有趣的方式将内核的网络设施组合在一起。</p>
-<p>一个特别有趣的用例是将 veth 对的一端放在一个网络名称空间中，
-另一端放在另一个网络名称空间中，从而允许网络名称空间之间进行通信。</p>
+<p>一个特别有趣的用例是将 veth 对的一端放在一个网络 namespace 中，
+另一端放在另一个网络 namepsace 中，从而允许网络 namespace 之间进行通信。</p>
 <p>为此，可以在创建接口时提供 netns 参数:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -228,11 +228,11 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># ip link add ve_A type veth peer name ve_B   # 创建一对 veth 设备</span>
-<span class="c1"># ethtool -S ve_A         # 查找 ve_A 接口对端接口的索引</span>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ ip link add ve_A <span class="nb">type</span> veth peer name ve_B   <span class="c1"># 创建一对 veth 设备</span>
+$ ethtool -S ve_A         <span class="c1"># 查找 ve_A 接口对端接口的索引</span>
 NIC statistics:
     peer_ifindex: <span class="m">16</span>
-<span class="c1"># ip link | grep &#39;^16:&#39;   # 查找索引是 16 的设备</span>
+$ ip link <span class="p">|</span> grep <span class="s1">&#39;^16:&#39;</span>   <span class="c1"># 查找索引是 16 的设备</span>
 16: ve_B@ve_A: &lt;BROADCAST,MULTICAST,M-DOWN&gt; mtu <span class="m">1500</span> qdisc ...
 </code></pre></td></tr></table>
 </div>
@@ -344,7 +344,7 @@ valid_lft forever preferred_lft forever
 </code></pre></td></tr></table>
 </div>
 </div><ul>
-<li>软链接 $pid 的网络 ns 到 /var/run/netns/ 中, 创建 ip netns 可以操作的网络 ns</li>
+<li>软链接 $pid 的网络 ns 到 /var/run/netns/ 中, 使 ip netns 可以操作它</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -363,7 +363,7 @@ root@Macmini:~# ip netns list
 </code></pre></td></tr></table>
 </div>
 </div><ul>
-<li>使用 <code>lsns -t net</code> 查看当前系统的 network namespace, 可以看到已经多出来 nginx 容器的 network namespace 了</li>
+<li>使用 <code>lsns -t net</code> 查看当前系统的 network namespace, 可以看到已经有 nginx 容器的 network namespace 了</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -434,7 +434,7 @@ lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <sp
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">root@Macmini:~# ip link add A <span class="nb">type</span> veth peer name B
 root@Macmini:~# brctl addif docker0 A
 root@Macmini:~# ip link <span class="nb">set</span> A up
-<span class="c1"># A 处于 UP 状态，但因为 A 没有完全连通，所以还是 M-DOWN 的状态</span>
+<span class="c1"># A 处于 UP 状态，但因为 A 没有完全连通，所以还是有 M-DOWN 的状态</span>
 root@Macmini:~# ip a
 23: B@A: &lt;BROADCAST,MULTICAST&gt; mtu <span class="m">1500</span> qdisc noop state DOWN group default qlen <span class="m">1000</span>
     link/ether 16:81:96:a3:bf:27 brd ff:ff:ff:ff:ff:ff
@@ -497,7 +497,7 @@ root@Macmini:~# ip netns exec $pid ip link set dev B name eth0
 </div>
 </div><ul>
 <li>启动 eth0</li>
-<li>因为 A 已经连接到了网桥上，所以直接启动成功，出现了 LOWER_UP 的状态</li>
+<li>因为 A 已经连接到了网桥上，所以直接启动成功，出现了 <code>LOWER_UP</code> 的状态</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -583,7 +583,7 @@ default via 172.17.0.1 dev eth0
 </code></pre></td></tr></table>
 </div>
 </div><ul>
-<li>查看宿主机上的网络设备，可以看到 veth A 的名字变成了 A@if23, 并且状态已经由 M-DOWN 变成了 <code>LOWER_UP</code></li>
+<li>查看宿主机上的网络设备，可以看到 veth A 的名字变成了 A@if23, 并且状态已经由 <code>M-DOWN</code> 变成了 <code>LOWER_UP</code></li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
