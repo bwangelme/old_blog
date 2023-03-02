@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Pod 状态计算细节 - 大白的碎碎念</title>
+  <title>Pod 状态笔记 - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="bwangel" /><meta name="description" content="Tips" /><meta name="keywords" content="Hugo, blog, bwangel" />
+<meta name="author" content="bwangel" /><meta name="description" content="Pod 状态计算细节 Pod 的 QoS 分类 request 是最低资源需求，limit 是最高资源需求 QoS 类别 描述 Guaranteed(确保) Pod 的资源 request 和 limit 相同 Burstable" /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
 
@@ -39,20 +39,20 @@
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
-<meta property="og:title" content="Pod 状态计算细节" />
-<meta property="og:description" content="Tips" />
+<meta property="og:title" content="Pod 状态笔记" />
+<meta property="og:description" content="Pod 状态计算细节 Pod 的 QoS 分类 request 是最低资源需求，limit 是最高资源需求 QoS 类别 描述 Guaranteed(确保) Pod 的资源 request 和 limit 相同 Burstable" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/2023/03/02/pod-status/" /><meta property="article:section" content="tips" />
 <meta property="article:published_time" content="2023-03-02T09:31:14+08:00" />
 <meta property="article:modified_time" content="2023-03-02T09:31:14+08:00" />
 
-<meta itemprop="name" content="Pod 状态计算细节">
-<meta itemprop="description" content="Tips"><meta itemprop="datePublished" content="2023-03-02T09:31:14+08:00" />
+<meta itemprop="name" content="Pod 状态笔记">
+<meta itemprop="description" content="Pod 状态计算细节 Pod 的 QoS 分类 request 是最低资源需求，limit 是最高资源需求 QoS 类别 描述 Guaranteed(确保) Pod 的资源 request 和 limit 相同 Burstable"><meta itemprop="datePublished" content="2023-03-02T09:31:14+08:00" />
 <meta itemprop="dateModified" content="2023-03-02T09:31:14+08:00" />
-<meta itemprop="wordCount" content="1">
+<meta itemprop="wordCount" content="225">
 <meta itemprop="keywords" content="tips,k8s," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Pod 状态计算细节"/>
-<meta name="twitter:description" content="Tips"/>
+<meta name="twitter:title" content="Pod 状态笔记"/>
+<meta name="twitter:description" content="Pod 状态计算细节 Pod 的 QoS 分类 request 是最低资源需求，limit 是最高资源需求 QoS 类别 描述 Guaranteed(确保) Pod 的资源 request 和 limit 相同 Burstable"/>
 <script id="baidu_analytics">
   var _hmt = _hmt || [];
   (function() {
@@ -148,12 +148,12 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Pod 状态计算细节</h1>
+      <h1 class="post-title">Pod 状态笔记</h1>
 
       <div class="post-meta">
         <span class="post-time"> 2023-03-02 </span>
         
-          <span class="more-meta"> 约 1 字 </span>
+          <span class="more-meta"> 约 225 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -166,7 +166,8 @@
   <ul>
     <li>
       <ul>
-        <li><a href="#tips">Tips</a></li>
+        <li><a href="#pod-状态计算细节">Pod 状态计算细节</a></li>
+        <li><a href="#pod-的-qos-分类">Pod 的 QoS 分类</a></li>
       </ul>
     </li>
   </ul>
@@ -175,8 +176,37 @@
 </div>
     <div class="post-content">
       <hr>
-<h2 id="tips">Tips</h2>
+<h2 id="pod-状态计算细节">Pod 状态计算细节</h2>
 <p><img src="https://passage-1253400711.cos.ap-beijing.myqcloud.com/2023-03-02-093104.png" alt=""></p>
+<h2 id="pod-的-qos-分类">Pod 的 QoS 分类</h2>
+<blockquote>
+<p>request 是最低资源需求，limit 是最高资源需求</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>QoS 类别</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Guaranteed(确保)</td>
+<td>Pod 的资源 request 和 limit 相同</td>
+</tr>
+<tr>
+<td>Burstable(可破裂)</td>
+<td>Pod 的资源 request 小于 limit</td>
+</tr>
+<tr>
+<td>BestEffort(尽力而为)</td>
+<td>Pod 的资源没有设置任何 request 和 limit</td>
+</tr>
+</tbody>
+</table>
+<p>当计算节点上存在内存/磁盘压力时，k8s 会按照 <code>BestEffort -&gt; Burstable -&gt; Guaranteed</code> 的顺序一次驱逐 pod.</p>
+<p>CPU 是可以压缩的资源，当 CPU 存在压力时，k8s 不会驱逐 pod.</p>
+<p>通常情况下，Burstable 是最好的 QoS 策略，对于一些重要的核心 pod，可以设置为 Guaranteed, 确保它最后被驱逐。</p>
 
     </div>
 
