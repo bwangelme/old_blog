@@ -54,7 +54,7 @@ lsof 常用命令汇总
 lsof 常用命令汇总
 "><meta itemprop="datePublished" content="2023-03-02T12:43:09+08:00" />
 <meta itemprop="dateModified" content="2023-03-02T12:43:09+08:00" />
-<meta itemprop="wordCount" content="657">
+<meta itemprop="wordCount" content="668">
 <meta itemprop="keywords" content="Tag1,Tag2," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="lsof 常用命令汇总"/>
 <meta name="twitter:description" content="
@@ -149,7 +149,7 @@ lsof 常用命令汇总
       <div class="post-meta">
         <span class="post-time"> 2023-03-02 </span>
         
-          <span class="more-meta"> 约 657 字 </span>
+          <span class="more-meta"> 约 668 字 </span>
           <span class="more-meta"> 预计阅读 2 分钟 </span>
         
       </div>
@@ -165,6 +165,7 @@ lsof 常用命令汇总
         <li><a href="#按照网络状态筛选进程的-fd">按照网络状态筛选进程的 fd</a></li>
         <li><a href="#按照-fd-number-查找进程的-fd">按照 fd number 查找进程的 fd</a></li>
         <li><a href="#查看端口占用">查看端口占用</a></li>
+        <li><a href="#参考链接">参考链接</a></li>
       </ul>
     </li>
   </ul>
@@ -193,7 +194,7 @@ lsof 常用命令汇总
 <p><code>-i</code> 和 <code>-s</code> 一起用，表示可以按照 TCP/UDP 状态来筛选 fd</p>
 </li>
 <li>
-<p>列出进程 <!-- raw HTML omitted --> 建立的所有 TCP 连接</p>
+<p>列出进程 <code>&lt;pid&gt;</code> 建立的所有 TCP 连接</p>
 </li>
 </ul>
 <div class="highlight"><div class="chroma">
@@ -205,7 +206,7 @@ lsof 常用命令汇总
 </code></pre></td></tr></table>
 </div>
 </div><ul>
-<li>列出进程 <!-- raw HTML omitted --> 所有 IDLE 状态的 UDP 连接</li>
+<li>列出进程 <code>&lt;pid&gt;</code> 所有 IDLE 状态的 UDP 连接</li>
 </ul>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -241,7 +242,7 @@ read(5405, &#34;# Kubernetes-managed hosts file &#34;..., 4096) = 4096
 <pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">sudo lsof -d &lt;fd_number&gt; -a -p &lt;pid&gt;
 </code></pre></td></tr></table>
 </div>
-</div><p>例如我利用 strace 查看 feishu app 的系统调用，看到以下的信息</p>
+</div><p>例如我利用 strace 查看飞书 app 的系统调用，看到以下的信息</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -288,7 +289,7 @@ openat(AT_FDCWD, &#34;/proc/self/status&#34;, O_RDONLY) = 4
 read(4, &#34;Name:\tfeishu\nUmask:\t0002\nState:\t&#34;..., 1024) = 1024
 </code></pre></td></tr></table>
 </div>
-</div><p>我想知道 fd 4 代表了什么，执行 <code>sudo lsof -d 4 -a -p 8261</code>，可以看到它是我的电脑和 <code>220.181.131.241</code> 建立的一个 TCP 连接。</p>
+</div><p>我想知道 fd 4 代表了什么，执行 <code>sudo lsof -d 4 -a -p 8261</code>，可以看到它是我的电脑和 <code>220.181.131.241</code> 建立的一个 https 连接。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -302,7 +303,7 @@ feishu  8261 xuyundong    4u  IPv4 2613086      0t0  TCP 192.168.252.88:35810-&g
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="查看端口占用">查看端口占用</h2>
-<p>有时候我们启动程序的时候，发现端口被占用了，可以用 <code>lsof -i:xxx</code> 来查看被哪个进程占用了，例如:</p>
+<p>有时候我们启动程序的时候，发现端口被占用了，可以用 <code>lsof -i:xxx</code> 来查看端口被哪个进程占用了，例如:</p>
 <p>下面这条命令显示 3306 端口被 <code>360702</code> 和 <code>360709</code> 两个进程占用了。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -318,7 +319,10 @@ docker-pr 360702 root    4u  IPv4 1842886      0t0  TCP *:mysql (LISTEN)
 docker-pr 360709 root    4u  IPv6 1842889      0t0  TCP *:mysql (LISTEN)
 </code></pre></td></tr></table>
 </div>
-</div>
+</div><h2 id="参考链接">参考链接</h2>
+<ul>
+<li><a href="https://linux.die.net/man/8/lsof">man lsof</a></li>
+</ul>
     </div>
 
     <div class="post-copyright">
