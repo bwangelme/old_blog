@@ -22,13 +22,13 @@ sudo lsof -i -sTCP:LISTEN -a -p <pid>
 - `-a` 表示 and, 前后两个条件要一起生效
 - `-i` 和 `-s` 一起用，表示可以按照 TCP/UDP 状态来筛选 fd
 
-- 列出进程 <pid> 建立的所有 TCP 连接
+- 列出进程 `<pid>` 建立的所有 TCP 连接
 
 ```
 sudo lsof -i -sTCP:ESTABLISHED -a -p <pid>
 ```
 
-- 列出进程 <pid> 所有 IDLE 状态的 UDP 连接
+- 列出进程 `<pid>` 所有 IDLE 状态的 UDP 连接
 
 ```
 sudo lsof -i -sUDP:IDLE -a -p <pid>
@@ -54,7 +54,7 @@ read(5405, "# Kubernetes-managed hosts file "..., 4096) = 4096
 sudo lsof -d <fd_number> -a -p <pid>
 ```
 
-例如我利用 strace 查看 feishu app 的系统调用，看到以下的信息
+例如我利用 strace 查看飞书 app 的系统调用，看到以下的信息
 
 ```
 ø> sudo strace -p
@@ -79,7 +79,7 @@ openat(AT_FDCWD, "/proc/self/status", O_RDONLY) = 4
 read(4, "Name:\tfeishu\nUmask:\t0002\nState:\t"..., 1024) = 1024
 ```
 
-我想知道 fd 4 代表了什么，执行 `sudo lsof -d 4 -a -p 8261`，可以看到它是我的电脑和 `220.181.131.241` 建立的一个 TCP 连接。
+我想知道 fd 4 代表了什么，执行 `sudo lsof -d 4 -a -p 8261`，可以看到它是我的电脑和 `220.181.131.241` 建立的一个 https 连接。
 
 ```
 ø> sudo lsof -d 4 -a -p
@@ -89,7 +89,7 @@ feishu  8261 xuyundong    4u  IPv4 2613086      0t0  TCP 192.168.252.88:35810->2
 
 ## 查看端口占用
 
-有时候我们启动程序的时候，发现端口被占用了，可以用 `lsof -i:xxx` 来查看被哪个进程占用了，例如:
+有时候我们启动程序的时候，发现端口被占用了，可以用 `lsof -i:xxx` 来查看端口被哪个进程占用了，例如:
 
 下面这条命令显示 3306 端口被 `360702` 和 `360709` 两个进程占用了。
 
@@ -99,3 +99,7 @@ COMMAND      PID USER   FD   TYPE  DEVICE SIZE/OFF NODE NAME
 docker-pr 360702 root    4u  IPv4 1842886      0t0  TCP *:mysql (LISTEN)
 docker-pr 360709 root    4u  IPv6 1842889      0t0  TCP *:mysql (LISTEN)
 ```
+
+## 参考链接
+
+- [man lsof](https://linux.die.net/man/8/lsof)
