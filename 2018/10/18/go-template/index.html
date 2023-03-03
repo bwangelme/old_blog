@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.2 with theme even" />
+<meta name="generator" content="Hugo 0.104.3 with theme even" />
 
 
 <link rel="canonical" href="/2018/10/18/go-template/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -50,10 +50,21 @@
 <meta itemprop="name" content="Go 模板">
 <meta itemprop="description" content="关于 Go 模板的笔记"><meta itemprop="datePublished" content="2018-10-18T23:24:24+08:00" />
 <meta itemprop="dateModified" content="2018-10-18T23:24:24+08:00" />
-<meta itemprop="wordCount" content="1215">
+<meta itemprop="wordCount" content="1247">
 <meta itemprop="keywords" content="Template,Go," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go 模板"/>
 <meta name="twitter:description" content="关于 Go 模板的笔记"/>
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -143,7 +154,7 @@
       <div class="post-meta">
         <span class="post-time"> 2018-10-18 </span>
         
-          <span class="more-meta"> 约 1215 字 </span>
+          <span class="more-meta"> 约 1247 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
@@ -179,8 +190,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">template</span><span class="p">:</span> <span class="nx">header</span><span class="p">.</span><span class="nx">html</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span> <span class="nx">executing</span> <span class="s">&#34;header.html&#34;</span> <span class="nx">at</span> <span class="p">&lt;.</span><span class="nx">title</span><span class="p">&gt;:</span> <span class="nx">title</span> <span class="nx">is</span> <span class="nx">an</span> <span class="nx">unexported</span> <span class="nx">field</span> <span class="nx">of</span> <span class="kd">struct</span> <span class="kd">type</span> <span class="kd">struct</span> <span class="p">{</span> <span class="nx">Env</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">;</span> <span class="nx">title</span> <span class="kt">string</span> <span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">template</span><span class="p">:</span> <span class="nx">header</span><span class="p">.</span><span class="nx">html</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span><span class="mi">14</span><span class="p">:</span> <span class="nx">executing</span> <span class="s">&#34;header.html&#34;</span> <span class="nx">at</span> <span class="p">&lt;.</span><span class="nx">title</span><span class="p">&gt;:</span> <span class="nx">title</span> <span class="nx">is</span> <span class="nx">an</span> <span class="nx">unexported</span> <span class="nx">field</span> <span class="nx">of</span> <span class="kd">struct</span> <span class="kd">type</span> <span class="kd">struct</span> <span class="p">{</span> <span class="nx">Env</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">;</span> <span class="nx">title</span> <span class="kt">string</span> <span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>可以用下面这种形式输出字符串变量<code>string</code></li>
@@ -190,8 +201,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="p">{{</span> <span class="s">`string`</span> <span class="p">}}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="p">{{</span> <span class="s">`string`</span> <span class="p">}}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="输出嵌套内容">输出嵌套内容</h2>
 <p><code>with</code>操作可以更改当前<code>{{ . }}</code>所指向的对象。</p>
@@ -213,21 +224,21 @@
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">t</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;test_with&#34;</span><span class="p">)</span>
-    <span class="nx">t</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="s">`</span><span class="cp">{{</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="na">.Env</span><span class="w"> </span><span class="cp">}}{{</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">$key</span><span class="o">,</span><span class="w"> </span><span class="nx">$val</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="na">.</span><span class="w"> </span><span class="cp">}}</span><span class="s">
-</span><span class="s">    </span><span class="cp">{{</span><span class="w"> </span><span class="nx">$key</span><span class="w"> </span><span class="cp">}}</span><span class="s">: </span><span class="cp">{{</span><span class="w"> </span><span class="nx">$val</span><span class="w"> </span><span class="cp">}}</span><span class="s">
-</span><span class="s">    </span><span class="cp">{{</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="cp">}}{{</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="cp">}}</span><span class="s">`</span><span class="p">)</span>
-    <span class="nx">t</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="kd">struct</span> <span class="p">{</span>
-        <span class="nx">Env</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span>
-    <span class="p">}{</span>
-        <span class="nx">Env</span><span class="p">:</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
-            <span class="s">&#34;Home&#34;</span><span class="p">:</span>  <span class="s">&#34;jc&#34;</span><span class="p">,</span>
-            <span class="s">&#34;Lover&#34;</span><span class="p">:</span> <span class="s">&#34;xff&#34;</span><span class="p">,</span>
-        <span class="p">},</span>
-    <span class="p">})</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">t</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;test_with&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">t</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="s">`</span><span class="cp">{{</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="na">.Env</span><span class="w"> </span><span class="cp">}}{{</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">$key</span><span class="o">,</span><span class="w"> </span><span class="nx">$val</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="na">.</span><span class="w"> </span><span class="cp">}}</span><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">    </span><span class="cp">{{</span><span class="w"> </span><span class="nx">$key</span><span class="w"> </span><span class="cp">}}</span><span class="s">: </span><span class="cp">{{</span><span class="w"> </span><span class="nx">$val</span><span class="w"> </span><span class="cp">}}</span><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">    </span><span class="cp">{{</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="cp">}}{{</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="cp">}}</span><span class="s">`</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">t</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Env</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Env</span><span class="p">:</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;Home&#34;</span><span class="p">:</span>  <span class="s">&#34;jc&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;Lover&#34;</span><span class="p">:</span> <span class="s">&#34;xff&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="pipelines">pipelines</h2>
 <ul>
@@ -314,82 +325,82 @@
 </span><span class="lnt">75
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
-
-<span class="kn">import</span> <span class="p">(</span>
-    <span class="s">&#34;fmt&#34;</span>
-    <span class="s">&#34;html/template&#34;</span>
-    <span class="s">&#34;os&#34;</span>
-    <span class="s">&#34;strings&#34;</span>
-<span class="p">)</span>
-
-<span class="kd">type</span> <span class="nx">Friend</span> <span class="kd">struct</span> <span class="p">{</span>
-    <span class="nx">Fname</span> <span class="kt">string</span>
-<span class="p">}</span>
-
-<span class="kd">type</span> <span class="nx">Person</span> <span class="kd">struct</span> <span class="p">{</span>
-    <span class="nx">UserName</span> <span class="kt">string</span>
-    <span class="nx">Emails</span>   <span class="p">[]</span><span class="kt">string</span>
-    <span class="nx">Friends</span>  <span class="p">[]</span><span class="o">*</span><span class="nx">Friend</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="nf">EmailDealWith</span><span class="p">(</span><span class="nx">args</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="kt">string</span> <span class="p">{</span>
-    <span class="nx">ok</span> <span class="o">:=</span> <span class="kc">false</span>
-    <span class="kd">var</span> <span class="nx">s</span> <span class="kt">string</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
-        <span class="nx">s</span><span class="p">,</span> <span class="nx">ok</span> <span class="p">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">].(</span><span class="kt">string</span><span class="p">)</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
-        <span class="nx">s</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprint</span><span class="p">(</span><span class="nx">args</span><span class="o">...</span><span class="p">)</span>
-    <span class="p">}</span>
-    <span class="c1">// find the @ symbol
-</span><span class="c1"></span>    <span class="nx">substrs</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="s">&#34;@&#34;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">substrs</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">s</span>
-    <span class="p">}</span>
-    <span class="c1">// replace the @ by &#34; at &#34;
-</span><span class="c1"></span>    <span class="k">return</span> <span class="p">(</span><span class="nx">substrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#34; at &#34;</span> <span class="o">+</span> <span class="nx">substrs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="nf">Upper</span><span class="p">(</span><span class="nx">args</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="kt">string</span> <span class="p">{</span>
-    <span class="nx">ok</span> <span class="o">:=</span> <span class="kc">false</span>
-    <span class="kd">var</span> <span class="nx">s</span> <span class="kt">string</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
-        <span class="nx">s</span><span class="p">,</span> <span class="nx">ok</span> <span class="p">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">].(</span><span class="kt">string</span><span class="p">)</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
-        <span class="nx">s</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprint</span><span class="p">(</span><span class="nx">args</span><span class="o">...</span><span class="p">)</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">ToUpper</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nf">EmailDealWith</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">,</span> <span class="s">&#34;@&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">))</span>
-
-    <span class="nx">f1</span> <span class="o">:=</span> <span class="nx">Friend</span><span class="p">{</span><span class="nx">Fname</span><span class="p">:</span> <span class="s">&#34;minux.ma&#34;</span><span class="p">}</span>
-    <span class="nx">f2</span> <span class="o">:=</span> <span class="nx">Friend</span><span class="p">{</span><span class="nx">Fname</span><span class="p">:</span> <span class="s">&#34;xushiwei&#34;</span><span class="p">}</span>
-    <span class="nx">t</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;fieldname example&#34;</span><span class="p">)</span>
-    <span class="nx">t</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nf">Funcs</span><span class="p">(</span><span class="nx">template</span><span class="p">.</span><span class="nx">FuncMap</span><span class="p">{</span>
-        <span class="s">&#34;emailDeal&#34;</span><span class="p">:</span> <span class="nx">EmailDealWith</span><span class="p">,</span>
-        <span class="s">&#34;upper&#34;</span><span class="p">:</span>     <span class="nx">Upper</span><span class="p">,</span>
-    <span class="p">})</span>
-    <span class="nx">t</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="s">`hello </span><span class="cp">{{</span><span class="na">.UserName</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">upper</span><span class="cp">}}</span><span class="s">!
-</span><span class="s">                </span><span class="cp">{{</span><span class="k">range</span><span class="w"> </span><span class="na">.Emails</span><span class="cp">}}</span><span class="s">
-</span><span class="s">                    an emails </span><span class="cp">{{</span><span class="na">.</span><span class="o">|</span><span class="nx">emailDeal</span><span class="cp">}}</span><span class="s">
-</span><span class="s">                </span><span class="cp">{{</span><span class="k">end</span><span class="cp">}}</span><span class="s">
-</span><span class="s">                </span><span class="cp">{{</span><span class="k">with</span><span class="w"> </span><span class="na">.Friends</span><span class="cp">}}</span><span class="s">
-</span><span class="s">                </span><span class="cp">{{</span><span class="k">range</span><span class="w"> </span><span class="na">.</span><span class="cp">}}</span><span class="s">
-</span><span class="s">                    my friend name is </span><span class="cp">{{</span><span class="na">.Fname</span><span class="cp">}}</span><span class="s">
-</span><span class="s">                </span><span class="cp">{{</span><span class="k">end</span><span class="cp">}}</span><span class="s">
-</span><span class="s">                </span><span class="cp">{{</span><span class="k">end</span><span class="cp">}}</span><span class="s">
-</span><span class="s">                `</span><span class="p">)</span>
-    <span class="nx">p</span> <span class="o">:=</span> <span class="nx">Person</span><span class="p">{</span><span class="nx">UserName</span><span class="p">:</span> <span class="s">&#34;Astaxie&#34;</span><span class="p">,</span>
-        <span class="nx">Emails</span><span class="p">:</span>  <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;astaxie@beego.me&#34;</span><span class="p">,</span> <span class="s">&#34;astaxie@gmail.com&#34;</span><span class="p">},</span>
-        <span class="nx">Friends</span><span class="p">:</span> <span class="p">[]</span><span class="o">*</span><span class="nx">Friend</span><span class="p">{</span><span class="o">&amp;</span><span class="nx">f1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">f2</span><span class="p">}}</span>
-    <span class="nx">t</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="nx">p</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="s">&#34;fmt&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="s">&#34;html/template&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="s">&#34;os&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="s">&#34;strings&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Friend</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Fname</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Person</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">UserName</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Emails</span>   <span class="p">[]</span><span class="kt">string</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Friends</span>  <span class="p">[]</span><span class="o">*</span><span class="nx">Friend</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">EmailDealWith</span><span class="p">(</span><span class="nx">args</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="kt">string</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">ok</span> <span class="o">:=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nx">s</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">s</span><span class="p">,</span> <span class="nx">ok</span> <span class="p">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">].(</span><span class="kt">string</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">s</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprint</span><span class="p">(</span><span class="nx">args</span><span class="o">...</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// find the @ symbol
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">substrs</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="s">&#34;@&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">substrs</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">s</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// replace the @ by &#34; at &#34;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="p">(</span><span class="nx">substrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#34; at &#34;</span> <span class="o">+</span> <span class="nx">substrs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">Upper</span><span class="p">(</span><span class="nx">args</span> <span class="o">...</span><span class="kd">interface</span><span class="p">{})</span> <span class="kt">string</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">ok</span> <span class="o">:=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nx">s</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">s</span><span class="p">,</span> <span class="nx">ok</span> <span class="p">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">].(</span><span class="kt">string</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">s</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprint</span><span class="p">(</span><span class="nx">args</span><span class="o">...</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">ToUpper</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nf">EmailDealWith</span><span class="p">(</span><span class="s">&#34;a&#34;</span><span class="p">,</span> <span class="s">&#34;b&#34;</span><span class="p">,</span> <span class="s">&#34;@&#34;</span><span class="p">,</span> <span class="s">&#34;c&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nx">f1</span> <span class="o">:=</span> <span class="nx">Friend</span><span class="p">{</span><span class="nx">Fname</span><span class="p">:</span> <span class="s">&#34;minux.ma&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">f2</span> <span class="o">:=</span> <span class="nx">Friend</span><span class="p">{</span><span class="nx">Fname</span><span class="p">:</span> <span class="s">&#34;xushiwei&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">t</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;fieldname example&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">t</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nf">Funcs</span><span class="p">(</span><span class="nx">template</span><span class="p">.</span><span class="nx">FuncMap</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;emailDeal&#34;</span><span class="p">:</span> <span class="nx">EmailDealWith</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;upper&#34;</span><span class="p">:</span>     <span class="nx">Upper</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">t</span><span class="p">,</span> <span class="nx">_</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="s">`hello </span><span class="cp">{{</span><span class="na">.UserName</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">upper</span><span class="cp">}}</span><span class="s">!
+</span></span></span><span class="line"><span class="cl"><span class="s">                </span><span class="cp">{{</span><span class="k">range</span><span class="w"> </span><span class="na">.Emails</span><span class="cp">}}</span><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">                    an emails </span><span class="cp">{{</span><span class="na">.</span><span class="o">|</span><span class="nx">emailDeal</span><span class="cp">}}</span><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">                </span><span class="cp">{{</span><span class="k">end</span><span class="cp">}}</span><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">                </span><span class="cp">{{</span><span class="k">with</span><span class="w"> </span><span class="na">.Friends</span><span class="cp">}}</span><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">                </span><span class="cp">{{</span><span class="k">range</span><span class="w"> </span><span class="na">.</span><span class="cp">}}</span><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">                    my friend name is </span><span class="cp">{{</span><span class="na">.Fname</span><span class="cp">}}</span><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">                </span><span class="cp">{{</span><span class="k">end</span><span class="cp">}}</span><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">                </span><span class="cp">{{</span><span class="k">end</span><span class="cp">}}</span><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">                `</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">p</span> <span class="o">:=</span> <span class="nx">Person</span><span class="p">{</span><span class="nx">UserName</span><span class="p">:</span> <span class="s">&#34;Astaxie&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Emails</span><span class="p">:</span>  <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;astaxie@beego.me&#34;</span><span class="p">,</span> <span class="s">&#34;astaxie@gmail.com&#34;</span><span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Friends</span><span class="p">:</span> <span class="p">[]</span><span class="o">*</span><span class="nx">Friend</span><span class="p">{</span><span class="o">&amp;</span><span class="nx">f1</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">f2</span><span class="p">}}</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">t</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="nx">p</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>Go 模板包中还提供了许多自定义函数，<a href="https://golang.org/pkg/text/template/#hdr-Functions">相关文档</a></li>
@@ -405,12 +416,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">tErr</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;terr&#34;</span><span class="p">)</span>
-	<span class="nx">template</span><span class="p">.</span><span class="nf">Must</span><span class="p">(</span><span class="nx">tErr</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="s">`some error </span><span class="cp">{{</span><span class="nx">text</span><span class="err">}</span><span class="s">`</span><span class="p">))</span>
-<span class="p">}</span>
-<span class="c1">// panic: template: terr:1: function &#34;text&#34; not defined
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">tErr</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="s">&#34;terr&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">template</span><span class="p">.</span><span class="nf">Must</span><span class="p">(</span><span class="nx">tErr</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="s">`some error </span><span class="cp">{{</span><span class="nx">text</span><span class="err">}</span><span class="s">`</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// panic: template: terr:1: function &#34;text&#34; not defined
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="模板嵌套">模板嵌套</h2>
 <div class="highlight"><div class="chroma">
@@ -442,32 +453,32 @@
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html">// header.html
-<span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;en&#34;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&#34;UTF-8&#34;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>{{ .Title }}<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-    {{ template &#34;body&#34; . }}
-    {{ with .Env }}
-        {{ range $key, $val := . }}
-        <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>{{ $key }} -- {{ $val }}<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
-        {{ end }}
-    {{ end }}
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
-
-// body.html
-{{ define &#34;body&#34; }}
-<span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
-    {{ range $key, $val := .Env }}
-    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>{{ $key }} -- {{ $val }}<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
-    {{ end }}
-<span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
-{{ end }}
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl">// header.html
+</span></span><span class="line"><span class="cl"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;en&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&#34;UTF-8&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>{{ .Title }}<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    {{ template &#34;body&#34; . }}
+</span></span><span class="line"><span class="cl">    {{ with .Env }}
+</span></span><span class="line"><span class="cl">        {{ range $key, $val := . }}
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>{{ $key }} -- {{ $val }}<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        {{ end }}
+</span></span><span class="line"><span class="cl">    {{ end }}
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">// body.html
+</span></span><span class="line"><span class="cl">{{ define &#34;body&#34; }}
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    {{ range $key, $val := .Env }}
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>{{ $key }} -- {{ $val }}<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    {{ end }}
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">{{ end }}
+</span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -504,38 +515,38 @@
 </span><span class="lnt">31
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// main.go
-</span><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
-
-<span class="kn">import</span> <span class="p">(</span>
-	<span class="s">&#34;log&#34;</span>
-	<span class="s">&#34;os&#34;</span>
-	<span class="s">&#34;text/template&#34;</span>
-<span class="p">)</span>
-
-<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">t</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nf">ParseFiles</span><span class="p">(</span><span class="s">&#34;header.html&#34;</span><span class="p">,</span> <span class="s">&#34;body.html&#34;</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
-
-	<span class="nx">env</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
-		<span class="s">&#34;Home&#34;</span><span class="p">:</span>  <span class="s">&#34;/Users/michaletsui&#34;</span><span class="p">,</span>
-		<span class="s">&#34;Shell&#34;</span><span class="p">:</span> <span class="s">&#34;/bin/bash&#34;</span><span class="p">,</span>
-	<span class="p">}</span>
-	<span class="nx">err</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="kd">struct</span> <span class="p">{</span>
-		<span class="nx">Env</span>   <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span>
-		<span class="nx">Title</span> <span class="kt">string</span>
-	<span class="p">}{</span>
-		<span class="nx">Env</span><span class="p">:</span>   <span class="nx">env</span><span class="p">,</span>
-		<span class="nx">Title</span><span class="p">:</span> <span class="s">&#34;Go 模板&#34;</span><span class="p">,</span>
-	<span class="p">})</span>
-
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// main.go
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">package</span> <span class="nx">main</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;log&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;os&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;text/template&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">t</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nf">ParseFiles</span><span class="p">(</span><span class="s">&#34;header.html&#34;</span><span class="p">,</span> <span class="s">&#34;body.html&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">env</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="s">&#34;Home&#34;</span><span class="p">:</span>  <span class="s">&#34;/Users/michaletsui&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="s">&#34;Shell&#34;</span><span class="p">:</span> <span class="s">&#34;/bin/bash&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">err</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Env</span>   <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Title</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Env</span><span class="p">:</span>   <span class="nx">env</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Title</span><span class="p">:</span> <span class="s">&#34;Go 模板&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li><code>{{ define &quot;blockname&quot; }}...{{ end }}</code>可以定义一个 block</li>
@@ -579,37 +590,37 @@
 </span><span class="lnt">30
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">t</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nf">ParseFiles</span><span class="p">(</span><span class="s">&#34;body.html&#34;</span><span class="p">,</span> <span class="s">&#34;header.html&#34;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-    <span class="p">}</span>
-
-    <span class="nx">env</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
-        <span class="s">&#34;Home&#34;</span><span class="p">:</span>  <span class="s">&#34;/Users/michaletsui&#34;</span><span class="p">,</span>
-        <span class="s">&#34;Shell&#34;</span><span class="p">:</span> <span class="s">&#34;/bin/bash&#34;</span><span class="p">,</span>
-    <span class="p">}</span>
-
-    <span class="nx">data</span> <span class="o">:=</span> <span class="kd">struct</span> <span class="p">{</span>
-        <span class="nx">Env</span>   <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span>
-        <span class="nx">Title</span> <span class="kt">string</span>
-    <span class="p">}{</span>
-        <span class="nx">Env</span><span class="p">:</span>   <span class="nx">env</span><span class="p">,</span>
-        <span class="nx">Title</span><span class="p">:</span> <span class="s">&#34;Go 模板&#34;</span><span class="p">,</span>
-    <span class="p">}</span>
-
-    <span class="c1">// 因为 body.html 作为主模板除了定义的block外没有其它内容，所以`t.Execute`没有不会输出任何内容
-</span><span class="c1"></span>    <span class="c1">// 故这里通过 `t.ExecuteTemplate` 来指定主模板
-</span><span class="c1"></span>    <span class="c1">// 也可以通过下面的方式
-</span><span class="c1"></span>    <span class="c1">// t = t.Lookup(&#34;header.html&#34;)
-</span><span class="c1"></span>    <span class="c1">// err = t.Execute(os.Stdout, data)
-</span><span class="c1"></span>    <span class="nx">err</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nf">ExecuteTemplate</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="s">&#34;header.html&#34;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">t</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">template</span><span class="p">.</span><span class="nf">ParseFiles</span><span class="p">(</span><span class="s">&#34;body.html&#34;</span><span class="p">,</span> <span class="s">&#34;header.html&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nx">env</span> <span class="o">:=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;Home&#34;</span><span class="p">:</span>  <span class="s">&#34;/Users/michaletsui&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;Shell&#34;</span><span class="p">:</span> <span class="s">&#34;/bin/bash&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nx">data</span> <span class="o">:=</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Env</span>   <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Title</span> <span class="kt">string</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Env</span><span class="p">:</span>   <span class="nx">env</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Title</span><span class="p">:</span> <span class="s">&#34;Go 模板&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 因为 body.html 作为主模板除了定义的block外没有其它内容，所以`t.Execute`没有不会输出任何内容
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 故这里通过 `t.ExecuteTemplate` 来指定主模板
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 也可以通过下面的方式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// t = t.Lookup(&#34;header.html&#34;)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// err = t.Execute(os.Stdout, data)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">err</span> <span class="p">=</span> <span class="nx">t</span><span class="p">.</span><span class="nf">ExecuteTemplate</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="s">&#34;header.html&#34;</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="参考链接">参考链接</h2>
 <ul>
@@ -728,7 +739,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
@@ -738,17 +749,6 @@
     };
   </script>
   <script type="text/javascript" async src="/lib/MathJax@3.2.0/es5/tex-mml-chtml.js"></script>
-
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
 
 
 

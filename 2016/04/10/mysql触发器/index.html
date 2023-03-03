@@ -17,7 +17,7 @@
 
 
 <meta name="author" content="bwangel" /><meta name="description" content="摘要:
- 这是一篇关于MySQL的文章，主要介绍9. MySQL触发器
+这是一篇关于MySQL的文章，主要介绍9. MySQL触发器
 " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.2 with theme even" />
+<meta name="generator" content="Hugo 0.104.3 with theme even" />
 
 
 <link rel="canonical" href="/2016/04/10/mysql%E8%A7%A6%E5%8F%91%E5%99%A8/" />
@@ -37,7 +37,7 @@
 
 
 
-<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -57,13 +57,24 @@
 这是一篇关于MySQL的文章，主要介绍9. MySQL触发器
 "><meta itemprop="datePublished" content="2016-04-10T10:56:54+00:00" />
 <meta itemprop="dateModified" content="2016-04-10T10:56:54+00:00" />
-<meta itemprop="wordCount" content="821">
+<meta itemprop="wordCount" content="1145">
 <meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySQL触发器"/>
 <meta name="twitter:description" content="摘要:
 
 这是一篇关于MySQL的文章，主要介绍9. MySQL触发器
 "/>
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -153,8 +164,8 @@
       <div class="post-meta">
         <span class="post-time"> 2016-04-10 </span>
         
-          <span class="more-meta"> 约 821 字 </span>
-          <span class="more-meta"> 预计阅读 2 分钟 </span>
+          <span class="more-meta"> 约 1145 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
         
       </div>
     </header>
@@ -194,18 +205,18 @@
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="err">触发器名称</span><span class="w"> </span><span class="k">BEFORE</span><span class="o">|</span><span class="k">AFTER</span><span class="w"> </span><span class="err">触发事件</span><span class="w">
-</span><span class="w">  </span><span class="k">ON</span><span class="w"> </span><span class="err">表名</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span><span class="w">
-</span><span class="w">  </span><span class="k">BEGIN</span><span class="w">
-</span><span class="w">    </span><span class="err">触发器程序体</span><span class="w">
-</span><span class="w">  </span><span class="k">END</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="c1">-- 触发器名称，它和MySQL中其他对象的命名方式
-</span><span class="c1">-- {BEFORE|AFTER} 触发器触发的时机
-</span><span class="c1">-- {INSERT|UPDATE|DELETE} 触发器事件
-</span><span class="c1">-- FOR EACH ROW 子句通知触发器每隔一行执行一次动作，而不是对整个表执行一次。
-</span><span class="c1">--   (针对insert和delete语句，每一行都触发)
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">TRIGGER</span><span class="w"> </span><span class="err">触发器名称</span><span class="w"> </span><span class="k">BEFORE</span><span class="o">|</span><span class="k">AFTER</span><span class="w"> </span><span class="err">触发事件</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">ON</span><span class="w"> </span><span class="err">表名</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="k">EACH</span><span class="w"> </span><span class="k">ROW</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">BEGIN</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="err">触发器程序体</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">END</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">-- 触发器名称，它和MySQL中其他对象的命名方式
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- {BEFORE|AFTER} 触发器触发的时机
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- {INSERT|UPDATE|DELETE} 触发器事件
+</span></span></span><span class="line"><span class="cl"><span class="c1">-- FOR EACH ROW 子句通知触发器每隔一行执行一次动作，而不是对整个表执行一次。
+</span></span></span><span class="line"><span class="cl"><span class="c1">--   (针对insert和delete语句，每一行都触发)
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -235,31 +246,31 @@
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">desc</span><span class="w"> </span><span class="n">student</span><span class="p">;</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">-------+------------------+------+-----+---------+----------------+
-</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">Field</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Type</span><span class="w">             </span><span class="o">|</span><span class="w"> </span><span class="k">Null</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Key</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Default</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Extra</span><span class="w">          </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">-------+------------------+------+-----+---------+----------------+
-</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">id</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">NO</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="n">PRI</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">auto_increment</span><span class="w"> </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">name</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="n">YES</span><span class="w">  </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w">                </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">-------+------------------+------+-----+---------+----------------+
-</span><span class="c1"></span><span class="mi">2</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">02</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">desc</span><span class="w"> </span><span class="n">student_total</span><span class="p">;</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">-------+---------+------+-----+---------+-------+
-</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">Field</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Type</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="k">Null</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Key</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Default</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Extra</span><span class="w"> </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">-------+---------+------+-----+---------+-------+
-</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">YES</span><span class="w">  </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w">       </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">-------+---------+------+-----+---------+-------+
-</span><span class="c1"></span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">delimiter</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w">
-</span><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">trigger</span><span class="w"> </span><span class="n">student_insert_trigger</span><span class="w"> </span><span class="k">after</span><span class="w"> </span><span class="k">insert</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">student</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="k">row</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">BEGIN</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w">   </span><span class="k">update</span><span class="w"> </span><span class="n">student_total</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">END</span><span class="o">&amp;&amp;</span><span class="w">
-</span><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">delimiter</span><span class="w"> </span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">desc</span><span class="w"> </span><span class="n">student</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">-------+------------------+------+-----+---------+----------------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">Field</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Type</span><span class="w">             </span><span class="o">|</span><span class="w"> </span><span class="k">Null</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Key</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Default</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Extra</span><span class="w">          </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">-------+------------------+------+-----+---------+----------------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">id</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">NO</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="n">PRI</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">auto_increment</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">name</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="n">YES</span><span class="w">  </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w">                </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">-------+------------------+------+-----+---------+----------------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">2</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">02</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">desc</span><span class="w"> </span><span class="n">student_total</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">-------+---------+------+-----+---------+-------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">Field</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Type</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="k">Null</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Key</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Default</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Extra</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">-------+---------+------+-----+---------+-------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">YES</span><span class="w">  </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w">       </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">-------+---------+------+-----+---------+-------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">delimiter</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">trigger</span><span class="w"> </span><span class="n">student_insert_trigger</span><span class="w"> </span><span class="k">after</span><span class="w"> </span><span class="k">insert</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">student</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="k">row</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">BEGIN</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w">   </span><span class="k">update</span><span class="w"> </span><span class="n">student_total</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">END</span><span class="o">&amp;&amp;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">delimiter</span><span class="w"> </span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>##3. 查看触发器</p>
 <p>通过show语句查看</p>
@@ -268,8 +279,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span><span class="w"> </span><span class="n">triggers</span><span class="err">\</span><span class="k">G</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">show</span><span class="w"> </span><span class="n">triggers</span><span class="err">\</span><span class="k">G</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过系统表查看</p>
 <div class="highlight"><div class="chroma">
@@ -279,10 +290,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">use</span><span class="w"> </span><span class="n">information_shcema</span><span class="p">;</span><span class="w">
-</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">tirggers</span><span class="err">\</span><span class="k">G</span><span class="w">
-</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">triggers</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">TRIGGER_NAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;触发器名称&#39;</span><span class="err">\</span><span class="k">G</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">use</span><span class="w"> </span><span class="n">information_shcema</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">tirggers</span><span class="err">\</span><span class="k">G</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">triggers</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">TRIGGER_NAME</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;触发器名称&#39;</span><span class="err">\</span><span class="k">G</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>##4. 删除触发器</p>
 <div class="highlight"><div class="chroma">
@@ -290,8 +301,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">drop</span><span class="w"> </span><span class="k">trigger</span><span class="w"> </span><span class="err">触发器名称</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">drop</span><span class="w"> </span><span class="k">trigger</span><span class="w"> </span><span class="err">触发器名称</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>##5. 触发器示例</p>
 <div class="highlight"><div class="chroma">
@@ -301,10 +312,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">--安全地删除表
-</span><span class="c1"></span><span class="w">
-</span><span class="w"></span><span class="k">drop</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">tab1</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">--安全地删除表
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">drop</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">tab1</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>###5.1 增加tab1表记录后自动将记录添加到tab2中</p>
 <p>####5.1.1表结构</p>
@@ -327,22 +338,22 @@
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">desc</span><span class="w"> </span><span class="n">tab1</span><span class="p">;</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
-</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">Field</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="k">Type</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="k">Null</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Key</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Default</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Extra</span><span class="w"> </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
-</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">tab1_id</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">YES</span><span class="w">  </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w">       </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
-</span><span class="c1"></span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">02</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">desc</span><span class="w"> </span><span class="n">tab2</span><span class="p">;</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
-</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">Field</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="k">Type</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="k">Null</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Key</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Default</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Extra</span><span class="w"> </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
-</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">tab2_id</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">YES</span><span class="w">  </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w">       </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
-</span><span class="c1"></span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">desc</span><span class="w"> </span><span class="n">tab1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">Field</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="k">Type</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="k">Null</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Key</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Default</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Extra</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">tab1_id</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">YES</span><span class="w">  </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w">       </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">02</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">desc</span><span class="w"> </span><span class="n">tab2</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">Field</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="k">Type</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="k">Null</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Key</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Default</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Extra</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">tab2_id</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">YES</span><span class="w">  </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w">       </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">---------+-------------+------+-----+---------+-------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">1</span><span class="w"> </span><span class="k">row</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>####5.1.2 创建触发器</p>
 <p>触发器中<code>new</code>和<code>old</code>的作用</p>
@@ -368,18 +379,18 @@
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 插入触发器
-</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">delimiter</span><span class="w"> </span><span class="err">$$</span><span class="w">
-</span><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">trigger</span><span class="w"> </span><span class="n">tab1_after_insert</span><span class="w"> </span><span class="k">after</span><span class="w"> </span><span class="k">insert</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">tab1</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="k">row</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">BEGIN</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w">   </span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">tab2</span><span class="p">(</span><span class="n">tab2_id</span><span class="p">)</span><span class="w"> </span><span class="k">values</span><span class="p">(</span><span class="k">new</span><span class="p">.</span><span class="n">tab1_id</span><span class="p">);</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">END</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="err">$$</span><span class="w">
-</span><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">affected</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">02</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">delimiter</span><span class="w"> </span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 插入触发器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">delimiter</span><span class="w"> </span><span class="err">$$</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">trigger</span><span class="w"> </span><span class="n">tab1_after_insert</span><span class="w"> </span><span class="k">after</span><span class="w"> </span><span class="k">insert</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">tab1</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="k">row</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">BEGIN</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w">   </span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">tab2</span><span class="p">(</span><span class="n">tab2_id</span><span class="p">)</span><span class="w"> </span><span class="k">values</span><span class="p">(</span><span class="k">new</span><span class="p">.</span><span class="n">tab1_id</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">END</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="err">$$</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">affected</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">02</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">delimiter</span><span class="w"> </span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -394,22 +405,20 @@
 </span><span class="lnt"> 9
 </span><span class="lnt">10
 </span><span class="lnt">11
-</span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 删除触发器
-</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">delimiter</span><span class="w"> </span><span class="err">$$</span><span class="w">
-</span><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">trigger</span><span class="w"> </span><span class="n">tab1_delete_after</span><span class="w"> </span><span class="k">after</span><span class="w"> </span><span class="k">delete</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">tab1</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="k">rows</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">BEGIN</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w">   </span><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">tab2</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">tab2_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">old</span><span class="p">.</span><span class="n">tab1_id</span><span class="p">;</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">END</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="err">$$</span><span class="w">
-</span><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">affected</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">delimiter</span><span class="w"> </span><span class="p">;</span><span class="w">
-</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 删除触发器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">delimiter</span><span class="w"> </span><span class="err">$$</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">trigger</span><span class="w"> </span><span class="n">tab1_delete_after</span><span class="w"> </span><span class="k">after</span><span class="w"> </span><span class="k">delete</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">tab1</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="k">rows</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">BEGIN</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w">   </span><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">tab2</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">tab2_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">old</span><span class="p">.</span><span class="n">tab1_id</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">END</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="err">$$</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">Query</span><span class="w"> </span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="n">affected</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">01</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">delimiter</span><span class="w"> </span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>###5.2 记录学生表的更新</p>
 <p>####5.2.1 表结构</p>
@@ -438,28 +447,28 @@
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 学生表
-</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">desc</span><span class="w"> </span><span class="n">student1</span><span class="p">;</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">--------------+-----------------------+------+-----+---------+----------------+
-</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">Field</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="k">Type</span><span class="w">                  </span><span class="o">|</span><span class="w"> </span><span class="k">Null</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Key</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Default</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Extra</span><span class="w">          </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">--------------+-----------------------+------+-----+---------+----------------+
-</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">student_id</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w">               </span><span class="o">|</span><span class="w"> </span><span class="k">NO</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="n">PRI</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">auto_increment</span><span class="w"> </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">student_name</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="w">           </span><span class="o">|</span><span class="w"> </span><span class="k">NO</span><span class="w">   </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w">                </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">student_sex</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="n">enum</span><span class="p">(</span><span class="s1">&#39;male&#39;</span><span class="p">,</span><span class="s1">&#39;female&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">YES</span><span class="w">  </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="n">male</span><span class="w">    </span><span class="o">|</span><span class="w">                </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">--------------+-----------------------+------+-----+---------+----------------+
-</span><span class="c1"></span><span class="mi">3</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="c1">-- 更新记录表
-</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">desc</span><span class="w"> </span><span class="n">update_student1</span><span class="p">;</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">---------------+---------+------+-----+---------+----------------+
-</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">Field</span><span class="w">         </span><span class="o">|</span><span class="w"> </span><span class="k">Type</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="k">Null</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Key</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Default</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Extra</span><span class="w">          </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">---------------+---------+------+-----+---------+----------------+
-</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">update_record</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">NO</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="n">PRI</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">auto_increment</span><span class="w"> </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">student_id</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">NO</span><span class="w">   </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w">                </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">update_date</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="nb">date</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">YES</span><span class="w">  </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w">                </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">---------------+---------+------+-----+---------+----------------+
-</span><span class="c1"></span><span class="mi">3</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 学生表
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">desc</span><span class="w"> </span><span class="n">student1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">--------------+-----------------------+------+-----+---------+----------------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">Field</span><span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="k">Type</span><span class="w">                  </span><span class="o">|</span><span class="w"> </span><span class="k">Null</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Key</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Default</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Extra</span><span class="w">          </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">--------------+-----------------------+------+-----+---------+----------------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">student_id</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w">               </span><span class="o">|</span><span class="w"> </span><span class="k">NO</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="n">PRI</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">auto_increment</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">student_name</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span><span class="w">           </span><span class="o">|</span><span class="w"> </span><span class="k">NO</span><span class="w">   </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w">                </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">student_sex</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="n">enum</span><span class="p">(</span><span class="s1">&#39;male&#39;</span><span class="p">,</span><span class="s1">&#39;female&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">YES</span><span class="w">  </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="n">male</span><span class="w">    </span><span class="o">|</span><span class="w">                </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">--------------+-----------------------+------+-----+---------+----------------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">3</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">-- 更新记录表
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">desc</span><span class="w"> </span><span class="n">update_student1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">---------------+---------+------+-----+---------+----------------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">Field</span><span class="w">         </span><span class="o">|</span><span class="w"> </span><span class="k">Type</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="k">Null</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Key</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">Default</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Extra</span><span class="w">          </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">---------------+---------+------+-----+---------+----------------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">update_record</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">NO</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="n">PRI</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">auto_increment</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">student_id</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="k">NO</span><span class="w">   </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w">                </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">update_date</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="nb">date</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">YES</span><span class="w">  </span><span class="o">|</span><span class="w">     </span><span class="o">|</span><span class="w"> </span><span class="k">NULL</span><span class="w">    </span><span class="o">|</span><span class="w">                </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">---------------+---------+------+-----+---------+----------------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="mi">3</span><span class="w"> </span><span class="k">rows</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="w"> </span><span class="n">sec</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>####5.2.2 创建触发器</p>
 <div class="highlight"><div class="chroma">
@@ -478,19 +487,19 @@
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 更新学生表的同时也更新记录表
-</span><span class="c1"></span><span class="k">delimiter</span><span class="w"> </span><span class="err">$$</span><span class="w">
-</span><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">trigger</span><span class="w"> </span><span class="n">student1_update_after</span><span class="w"> </span><span class="k">after</span><span class="w"> </span><span class="k">update</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">student1</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="k">row</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">BEGIN</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">student_id</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">old</span><span class="p">.</span><span class="n">student_id</span><span class="w"> </span><span class="k">then</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w">   </span><span class="k">update</span><span class="w"> </span><span class="n">update_student1</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">student_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">student_id</span><span class="p">,</span><span class="w"> </span><span class="n">update_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="p">()</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w">   </span><span class="k">where</span><span class="w"> </span><span class="n">student_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">old</span><span class="p">.</span><span class="n">student_id</span><span class="p">;</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w">  </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">END</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="err">$$</span><span class="w">
-</span><span class="w"></span><span class="k">delimiter</span><span class="w"> </span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 更新学生表的同时也更新记录表
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">delimiter</span><span class="w"> </span><span class="err">$$</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">trigger</span><span class="w"> </span><span class="n">student1_update_after</span><span class="w"> </span><span class="k">after</span><span class="w"> </span><span class="k">update</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">student1</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="k">row</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">BEGIN</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">student_id</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">old</span><span class="p">.</span><span class="n">student_id</span><span class="w"> </span><span class="k">then</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w">   </span><span class="k">update</span><span class="w"> </span><span class="n">update_student1</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">student_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="p">.</span><span class="n">student_id</span><span class="p">,</span><span class="w"> </span><span class="n">update_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w">   </span><span class="k">where</span><span class="w"> </span><span class="n">student_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">old</span><span class="p">.</span><span class="n">student_id</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w">  </span><span class="k">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">END</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="err">$$</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">delimiter</span><span class="w"> </span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -506,17 +515,17 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 删除学生表的时候也删除记录表
-</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">delimiter</span><span class="w"> </span><span class="err">$$</span><span class="w">
-</span><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">trigger</span><span class="w"> </span><span class="n">student1_delete_before</span><span class="w"> </span><span class="k">before</span><span class="w"> </span><span class="k">delete</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">student1</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="k">row</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">BEGIN</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w">  </span><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">update_student1</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">student_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">old</span><span class="p">.</span><span class="n">student_id</span><span class="p">;</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">END</span><span class="w">
-</span><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="err">$$</span><span class="w">
-</span><span class="w"></span><span class="k">delimiter</span><span class="w"> </span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 删除学生表的时候也删除记录表
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">delimiter</span><span class="w"> </span><span class="err">$$</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">create</span><span class="w"> </span><span class="k">trigger</span><span class="w"> </span><span class="n">student1_delete_before</span><span class="w"> </span><span class="k">before</span><span class="w"> </span><span class="k">delete</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">student1</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="k">each</span><span class="w"> </span><span class="k">row</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">BEGIN</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w">  </span><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">update_student1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w">  </span><span class="k">where</span><span class="w"> </span><span class="n">student_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">old</span><span class="p">.</span><span class="n">student_id</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="k">END</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">-&gt;</span><span class="w"> </span><span class="err">$$</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">delimiter</span><span class="w"> </span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -544,13 +553,13 @@
           <a href="/tags/mysql/">MySQL</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/2016/04/10/mysql%E8%A7%86%E5%9B%BE/">
+        <a class="prev" href="/2016/04/10/mysql%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/">
             <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">MySQL视图</span>
+            <span class="prev-text nav-default">MySQL常用函数</span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
-        <a class="next" href="/2016/04/10/mysql%E8%BF%90%E7%AE%97%E7%AC%A6%E7%9A%84%E4%BD%BF%E7%94%A8/">
-            <span class="next-text nav-default">MySQL运算符的使用</span>
+        <a class="next" href="/2016/04/10/mysql%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/">
+            <span class="next-text nav-default">MySQL存储过程</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
@@ -625,7 +634,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
@@ -635,17 +644,6 @@
     };
   </script>
   <script type="text/javascript" async src="/lib/MathJax@3.2.0/es5/tex-mml-chtml.js"></script>
-
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
 
 
 
