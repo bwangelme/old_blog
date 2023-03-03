@@ -57,7 +57,7 @@ sudo lsof -d <fd_number> -a -p <pid>
 例如我利用 strace 查看飞书 app 的系统调用，看到以下的信息
 
 ```
-ø> sudo strace -p
+ø> sudo strace -p 8261
 strace: Process 8261 attached
 restart_syscall(<... resuming interrupted read ...>) = 0
 openat(AT_FDCWD, "/proc/self/status", O_RDONLY) = 4
@@ -82,7 +82,7 @@ read(4, "Name:\tfeishu\nUmask:\t0002\nState:\t"..., 1024) = 1024
 我想知道 fd 4 代表了什么，执行 `sudo lsof -d 4 -a -p 8261`，可以看到它是我的电脑和 `220.181.131.241` 建立的一个 https 连接。
 
 ```
-ø> sudo lsof -d 4 -a -p
+ø> sudo lsof -d 4 -a -p 8261
 COMMAND  PID      USER   FD   TYPE  DEVICE SIZE/OFF NODE NAME
 feishu  8261 xuyundong    4u  IPv4 2613086      0t0  TCP 192.168.252.88:35810->220.181.131.241:https (ESTABLISHED)
 ```
