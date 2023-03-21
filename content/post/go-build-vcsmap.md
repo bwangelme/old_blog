@@ -188,3 +188,9 @@ WORKDIR /go/src/
 RUN git config --global --add safe.directory /go/src
 RUN go build .
 ```
+
+## 参考链接
+
+- [go 1.18 release note](https://tip.golang.org/doc/go1.18)
+- [Git detect dubious ownership in repository](https://medium.com/@thecodinganalyst/git-detect-dubious-ownership-in-repository-e7f33037a8f)
+- [解决 Golang 升级到 1.18+ 版本后在容器中构建时出现 error obtaining VCS status: exit status 128 的问题](https://idushu.com/%E8%A7%A3%E5%86%B3-golang-%E5%8D%87%E7%BA%A7%E5%88%B0-1-18-%E7%89%88%E6%9C%AC%E5%90%8E%E5%9C%A8%E5%AE%B9%E5%99%A8%E4%B8%AD%E6%9E%84%E5%BB%BA%E6%97%B6%E5%87%BA%E7%8E%B0-error-obtaining-vcs-status-exi/)
