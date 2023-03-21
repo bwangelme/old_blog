@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Golang Build 出错: error obtaining VCS status: exit status 128 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
+
+
+<link rel="canonical" href="/2023/03/21/go-build-vcsmap/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+<meta property="og:title" content="Golang Build 出错: error obtaining VCS status: exit status 128" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2023/03/21/go-build-vcsmap/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-03-21T12:07:05+08:00" />
+<meta property="article:modified_time" content="2023-03-21T12:07:05+08:00" />
+
+<meta itemprop="name" content="Golang Build 出错: error obtaining VCS status: exit status 128">
+<meta itemprop="description" content=""><meta itemprop="datePublished" content="2023-03-21T12:07:05+08:00" />
+<meta itemprop="dateModified" content="2023-03-21T12:07:05+08:00" />
+<meta itemprop="wordCount" content="1365">
+<meta itemprop="keywords" content="Golang,git," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Golang Build 出错: error obtaining VCS status: exit status 128"/>
+<meta name="twitter:description" content=""/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/tips/">
+        <li class="mobile-menu-item">Tips</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tips/">Tips</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Golang Build 出错: error obtaining VCS status: exit status 128</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-03-21 </span>
+        
+          <span class="more-meta"> 约 1365 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#go-build-时遇到了-error-obtaining-vcs-status-错误">Go build 时遇到了 error obtaining VCS status 错误</a></li>
+        <li><a href="#获取-vcs-信息的时候为什么会出错">获取 vcs 信息的时候为什么会出错</a></li>
+        <li><a href="#git-为什么要检查-git-目录的-owner">Git 为什么要检查 .git 目录的 owner</a></li>
+        <li><a href="#解决-docker-build-失败的方案">解决 docker build 失败的方案</a>
+          <ul>
+            <li><a href="#添加--buildvcsfalse-选项">添加 -buildvcs=false 选项</a></li>
+            <li><a href="#修改执行-go-build-的用户">修改执行 go build 的用户</a></li>
+            <li><a href="#git-中添加-safe-directory-的配置">Git 中添加 safe directory 的配置</a></li>
+          </ul>
+        </li>
+        <li><a href="#参考链接">参考链接</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <hr>
+<h2 id="go-build-时遇到了-error-obtaining-vcs-status-错误">Go build 时遇到了 error obtaining VCS status 错误</h2>
+<p>我们的 Golang 项目都是在 docker 中 build 的，最近在 build 的时，遇到了以下的错误:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">error obtaining VCS status: exit status 128
+        Use -buildvcs=false to disable VCS stamping.
+</code></pre></td></tr></table>
+</div>
+</div><p>build golang 项目的 dockerfile 如下，我们会先把代码目录的所有者变成 bwangel, 再执行 go build:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">FROM golang:1.18-buster
+
+RUN sed -i &#39;s/deb.debian.org/mirrors.ustc.edu.cn/g&#39; /etc/apt/sources.list
+RUN apt-get update &amp;&amp; apt-get -yq install sudo &amp;&amp; rm -rf /var/lib/apt/lists/*;
+
+RUN git clone https://github.com/bwangelme/rdcdemo.git /go/src/
+RUN /usr/sbin/useradd \
+        --user-group \
+        --create-home \
+        --uid 1001 --shell &#39;/bin/bash&#39; \
+        bwangel &amp;&amp; \
+    chown bwangel:bwangel -R /go/src
+
+WORKDIR /go/src/
+RUN go build .
+</code></pre></td></tr></table>
+</div>
+</div><p>根据 buildvcs 这个关键字，我找到了 Go 1.18 的 <a href="https://tip.golang.org/doc/go1.18">release notes</a>，其中关于 buildvcs 的描述是这样的</p>
+<blockquote>
+<p>The go command now embeds version control information in binaries. It includes the currently checked-out revision, commit time, and a flag indicating whether edited or untracked files are present. Version control information is embedded if the go command is invoked in a directory within a Git, Mercurial, Fossil, or Bazaar repository, and the main package and its containing main module are in the same repository. This information may be omitted using the flag -buildvcs=false.</p>
+</blockquote>
+<blockquote>
+<p>Additionally, the go command embeds information about the build, including build and tool tags (set with -tags), compiler, assembler, and linker flags (like -gcflags), whether cgo was enabled, and if it was, the values of the cgo environment variables (like CGO_CFLAGS). Both VCS and build information may be read together with module information using go version -m file or runtime/debug.ReadBuildInfo (for the currently running binary) or the new debug/buildinfo package.</p>
+</blockquote>
+<p>从 1.18 开始，Golang 在执行 build 时，会将 Git Commit Revision, Commit 时间，和是否有文件 Untracked 的标记写入到二进制中，使用 <code>go version -m &lt;file&gt;</code> 能够查看这些信息。</p>
+<p>例如下面的代码中我们查看了 rdcdemo 文件的信息，可以看到执行 build 时 git commit revision 是 <code>8157a03bdfd846437cd0acdc1a7391ad9a13f6b3</code>, 这个 Commit 的创建时间是 <code>2021-09-26</code>, <code>vcs.modified=true</code> 表示有修改尚未提交到 git 中。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">ø&gt; go version -m rdcdemo
+rdcdemo: go1.18.9
+        path    rdcdemo
+        mod     rdcdemo <span class="o">(</span>devel<span class="o">)</span>
+        dep     github.com/cespare/xxhash/v2    v2.1.1  h1:6MnRN8NT7+YBpUIWxHtefFZOKTAPgGjpQSxqLNn0+qY<span class="o">=</span>
+        dep     github.com/dgryski/go-rendezvous        v0.0.0-20200823014737-9f7001d12a5f      h1:lO4WD4F/rVNCu3HqELle0jiPLLBs70cWOduZpkS1E78<span class="o">=</span>
+        dep     github.com/go-redis/redis/v8    v8.11.3 h1:GCjoYp8c+yQTJfc0n69iwSiHjvuAdruxl7elnZCxgt8<span class="o">=</span>
+        build   -compiler<span class="o">=</span>gc
+        build   <span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">1</span>
+        build   <span class="nv">CGO_CFLAGS</span><span class="o">=</span>
+        build   <span class="nv">CGO_CPPFLAGS</span><span class="o">=</span>
+        build   <span class="nv">CGO_CXXFLAGS</span><span class="o">=</span>
+        build   <span class="nv">CGO_LDFLAGS</span><span class="o">=</span>
+        build   <span class="nv">GOARCH</span><span class="o">=</span>amd64
+        build   <span class="nv">GOOS</span><span class="o">=</span>linux
+        build   <span class="nv">GOAMD64</span><span class="o">=</span>v1
+        build   <span class="nv">vcs</span><span class="o">=</span>git
+        build   vcs.revision<span class="o">=</span>8157a03bdfd846437cd0acdc1a7391ad9a13f6b3
+        build   vcs.time<span class="o">=</span>2021-09-26T11:45:50Z
+        build   vcs.modified<span class="o">=</span><span class="nb">true</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在 build 时加上 <code>-buildvcs=false</code> 可以不添加这些信息。</p>
+<h2 id="获取-vcs-信息的时候为什么会出错">获取 vcs 信息的时候为什么会出错</h2>
+<p>报错 <code>error obtaining VCS status</code> 表示 Golang 获取 vcs 信息时出错了，但我还想往下深究一下，具体出了什么错误。此时就可以给 go build 加上 <code>-x -v</code> 选项，这样 go build 就会输出每一步执行的操作:</p>
+<p>修改上述 dockerfile, 添加 build 选项 <code>-x -v</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">FROM golang:1.18-buster
+
+RUN sed -i &#39;s/deb.debian.org/mirrors.ustc.edu.cn/g&#39; /etc/apt/sources.list
+RUN apt-get update &amp;&amp; apt-get -yq install sudo &amp;&amp; rm -rf /var/lib/apt/lists/*;
+
+RUN git clone https://github.com/bwangelme/rdcdemo.git /go/src/
+RUN /usr/sbin/useradd \
+        --user-group \
+        --create-home \
+        --uid 1001 --shell &#39;/bin/bash&#39; \
+        bwangel &amp;&amp; \
+    chown bwangel:bwangel -R /go/src
+
+WORKDIR /go/src/
+RUN go build -x -v .
+</code></pre></td></tr></table>
+</div>
+</div><p>此时出错信息变多了，可以看到，是 Go build 在执行 <code>git status --porcelain</code> 的时候出错了，错误信息是 <code>detected dubious ownership in repository</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">WORK=/tmp/go-build975996823
+cd /go/src
+git status --porcelain
+# cd /go/src; git status --porcelain
+fatal: detected dubious ownership in repository at &#39;/go/src&#39;
+To add an exception for this directory, call:
+
+        git config --global --add safe.directory /go/src
+error obtaining VCS status: exit status 128
+        Use -buildvcs=false to disable VCS stamping.
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="git-为什么要检查-git-目录的-owner">Git 为什么要检查 .git 目录的 owner</h2>
+<p>根据关键字 <code>detected dubious ownership in repository</code>, 我找到了一篇文章: <a href="https://medium.com/@thecodinganalyst/git-detect-dubious-ownership-in-repository-e7f33037a8f">Git detect dubious ownership in repository</a></p>
+<p>这篇文章说，Git 命令在执行时，会执行 <code>.git/</code> 目录中的文件，如果 <code>.git/</code> 目录中的文件被恶意篡改了，那么就会造成安全漏洞。</p>
+<p>例如 <code>/go/src</code> 这个目录是 bwangel 用户所有的，它修改了 <code>/go/src/.git/</code> 中的文件，添加了一个窃取信息的木马。root 用户在 <code>/go/src</code> 中执行 git status 时，就会以 root 用户执行这个木马，造成信息泄漏。</p>
+<p>所以 Git 在 <a href="https://github.com/git/git/commit/8959555cee7ec045958f9b6dd62e541affb7e7d9">895955</a> 中添加了安全检查，确保执行 git 命令的用户和 <code>.git/</code> 目录的 owner 是同一个人。</p>
+<p>如果用户信任某个目录，不想添加这种检查，可以修改配置 <code>safe.directory</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">git config --global --add safe.directory /some/repo
+</code></pre></td></tr></table>
+</div>
+</div><p>那么在 <code>/some/repo</code> 中执行 git 命令时，就不会检查文件 owner 了。</p>
+<h2 id="解决-docker-build-失败的方案">解决 docker build 失败的方案</h2>
+<h3 id="添加--buildvcsfalse-选项">添加 -buildvcs=false 选项</h3>
+<p>修改 build 命令，加上 <code>-buildvcs=false</code> 选项，这样 go 不会收集 vcs 信息，也就不会遇到 git 的错误了</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">RUN go build -buildvcs=false .
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="修改执行-go-build-的用户">修改执行 go build 的用户</h3>
+<p>修改执行 build 命令的用户，这样也可以 build 成功</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">FROM golang:1.18-buster
+
+RUN sed -i &#39;s/deb.debian.org/mirrors.ustc.edu.cn/g&#39; /etc/apt/sources.list
+RUN apt-get update &amp;&amp; apt-get -yq install sudo &amp;&amp; rm -rf /var/lib/apt/lists/*;
+
+RUN git clone https://github.com/bwangelme/rdcdemo.git /go/src/
+RUN /usr/sbin/useradd \
+        --user-group \
+        --create-home \
+        --uid 1001 --shell &#39;/bin/bash&#39; \
+        bwangel &amp;&amp; \
+    chown bwangel:bwangel -R /go/src
+
+WORKDIR /go/src/
+RUN su - bwangel bash -c &#34;cd /go/src; /usr/local/go/bin/go env; /usr/local/go/bin/go build -v .&#34;
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="git-中添加-safe-directory-的配置">Git 中添加 safe directory 的配置</h3>
+<p>将代码所在目录 <code>/go/src</code> 设置成 <code>safe.directory</code>, 这样 git 执行时就不会出错了，也可以 build 成功。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">FROM golang:1.18-buster
+
+RUN sed -i &#39;s/deb.debian.org/mirrors.ustc.edu.cn/g&#39; /etc/apt/sources.list
+RUN apt-get update &amp;&amp; apt-get -yq install sudo &amp;&amp; rm -rf /var/lib/apt/lists/*;
+
+RUN git clone https://github.com/bwangelme/rdcdemo.git /go/src/
+RUN /usr/sbin/useradd \
+        --user-group \
+        --create-home \
+        --uid 1001 --shell &#39;/bin/bash&#39; \
+        bwangel &amp;&amp; \
+    chown bwangel:bwangel -R /go/src
+
+WORKDIR /go/src/
+RUN git config --global --add safe.directory /go/src
+RUN go build .
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="参考链接">参考链接</h2>
+<ul>
+<li><a href="https://tip.golang.org/doc/go1.18">go 1.18 release note</a></li>
+<li><a href="https://medium.com/@thecodinganalyst/git-detect-dubious-ownership-in-repository-e7f33037a8f">Git detect dubious ownership in repository</a></li>
+<li><a href="https://idushu.com/%E8%A7%A3%E5%86%B3-golang-%E5%8D%87%E7%BA%A7%E5%88%B0-1-18-%E7%89%88%E6%9C%AC%E5%90%8E%E5%9C%A8%E5%AE%B9%E5%99%A8%E4%B8%AD%E6%9E%84%E5%BB%BA%E6%97%B6%E5%87%BA%E7%8E%B0-error-obtaining-vcs-status-exi/">解决 Golang 升级到 1.18+ 版本后在容器中构建时出现 error obtaining VCS status: exit status 128 的问题</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2023-03-21
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/golang/">Golang</a>
+          <a href="/tags/git/">git</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/2023/03/02/lsof-command/">
+            <span class="next-text nav-default">lsof 常用命令汇总</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+  
+  <script src="https://giscus.app/client.js"
+        data-repo="anotherbwangel/blog-comment"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkxNDUyNzQwMDQ="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOCKi0lM4CBFyL"
+        data-mapping="pathname"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+  </script>
+    <noscript>Please enable JavaScript to view the <a href="https://giscus.app/zh-CN">comments powered by giscus.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
+    };
+  </script>
+  <script type="text/javascript" async src="/lib/MathJax@3.2.0/es5/tex-mml-chtml.js"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+
+
+
+</body>
+</html>
