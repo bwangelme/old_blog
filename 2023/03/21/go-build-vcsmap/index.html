@@ -49,7 +49,7 @@
 <meta itemprop="name" content="Golang Build 出错: error obtaining VCS status: exit status 128">
 <meta itemprop="description" content=""><meta itemprop="datePublished" content="2023-03-21T12:07:05+08:00" />
 <meta itemprop="dateModified" content="2023-03-21T12:07:05+08:00" />
-<meta itemprop="wordCount" content="1365">
+<meta itemprop="wordCount" content="1929">
 <meta itemprop="keywords" content="Golang,git," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Golang Build 出错: error obtaining VCS status: exit status 128"/>
 <meta name="twitter:description" content=""/>
@@ -142,8 +142,8 @@
       <div class="post-meta">
         <span class="post-time"> 2023-03-21 </span>
         
-          <span class="more-meta"> 约 1365 字 </span>
-          <span class="more-meta"> 预计阅读 3 分钟 </span>
+          <span class="more-meta"> 约 1929 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
         
       </div>
     </header>
@@ -165,6 +165,7 @@
             <li><a href="#git-中添加-safe-directory-的配置">Git 中添加 safe directory 的配置</a></li>
           </ul>
         </li>
+        <li><a href="#go-install-时遇到的相似问题">go install 时遇到的相似问题</a></li>
         <li><a href="#参考链接">参考链接</a></li>
       </ul>
     </li>
@@ -449,7 +450,93 @@ RUN git config --global --add safe.directory /go/src
 RUN go build .
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="参考链接">参考链接</h2>
+</div><ul>
+<li>safe.directory 只负责一个目录，不会关心子目录中的 git 仓库</li>
+<li>使用 <code>*</code> 可以让所有仓库忽略 safe.directory 的检查</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">git config --global --add safe.directory &#39;*&#39;
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="go-install-时遇到的相似问题">go install 时遇到的相似问题</h2>
+<p>当 GOPATH 目录的 owner 是 bwangel， 使用 root 用户运行 <code>go install</code> 安装私有仓库的命令时，也会遇到相同的问题。</p>
+<p>比较有迷惑性的是，<code>go install</code>显示的错误是 <code>fatal: 'origin' does not appear to be a git repository</code></p>
+<p>表面上看起来，这是下载的 git 仓库找不到 origin 这个 remote。但我们加上 <code>-x -v</code> 参数，输出一下详细的步骤，就能找到原因了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">root@551114e99eea:/go# go install -x -v github.private.repo/org/repo/cmd/dag@latest
+# get https://github.private.repo/?go-get=1
+# get https://github.private.repo/org?go-get=1
+# get https://github.private.repo/org/repo/cmd?go-get=1
+# get https://github.private.repo/org/repo/cmd/dag?go-get=1
+# get https://github.private.repo/org/repo?go-get=1
+# get https://github.private.repo/org/repo/cmd?go-get=1: 200 OK (0.103s)
+# get https://github.private.repo/org/repo?go-get=1: 200 OK (0.103s)
+# get https://github.private.repo/org/repo/cmd/dag?go-get=1: 200 OK (0.103s)
+get &#34;github.private.repo/org/repo/cmd&#34;: found meta tag vcs.metaImport{Prefix:&#34;github.private.repo/org/repo&#34;, VCS:&#34;git&#34;, RepoRoot:&#34;https://github.private.repo/org/repo.git&#34;} at //github.private.repo/org/repo/cmd?go-get=1
+get &#34;github.private.repo/org/repo/cmd&#34;: verifying non-authoritative meta tag
+get &#34;github.private.repo/org/repo/cmd/dag&#34;: found meta tag vcs.metaImport{Prefix:&#34;github.private.repo/org/repo&#34;, VCS:&#34;git&#34;, RepoRoot:&#34;https://github.private.repo/org/repo.git&#34;} at //github.private.repo/org/repo/cmd/dag?go-get=1
+get &#34;github.private.repo/org/repo/cmd/dag&#34;: verifying non-authoritative meta tag
+# get https://github.private.repo/org/repo?go-get=1
+get &#34;github.private.repo/org/repo&#34;: found meta tag vcs.metaImport{Prefix:&#34;github.private.repo/org/repo&#34;, VCS:&#34;git&#34;, RepoRoot:&#34;https://github.private.repo/org/repo.git&#34;} at //github.private.repo/org/repo?go-get=1
+mkdir -p /go/pkg/mod/cache/vcs # git3 https://github.private.repo/org/repo.git
+# lock /go/pkg/mod/cache/vcs/a1b9ef7e71cba11b98501177ca2d4f9fd012c258b967f915f68ee79a228ddf92.lock# /go/pkg/mod/cache/vcs/a1b9ef7e71cba11b98501177ca2d4f9fd012c258b967f915f68ee79a228ddf92 for git3 https://github.private.repo/org/repo.git
+cd /go/pkg/mod/cache/vcs/a1b9ef7e71cba11b98501177ca2d4f9fd012c258b967f915f68ee79a228ddf92; git ls-remote -q origin
+0.003s # cd /go/pkg/mod/cache/vcs/a1b9ef7e71cba11b98501177ca2d4f9fd012c258b967f915f68ee79a228ddf92; git ls-remote -q origin
+# get https://github.private.repo/org/repo.git
+# get https://github.private.repo/org/repo?go-get=1: 200 OK (0.040s)
+# get https://github.private.repo/?go-get=1: 200 OK (0.154s)
+# get https://github.private.repo/org?go-get=1: 200 OK (0.276s)
+# get https://github.private.repo/org/repo.git: 200 OK (0.171s)
+go: github.private.repo/org/repo/cmd/dag@latest: module github.private.repo/org/repo/cmd/dag: git ls-remote -q origin in /go/pkg/mod/cache/vcs/a1b9ef7e71cba11b98501177ca2d4f9fd012c258b967f915f68ee79a228ddf92: exit status 128:
+        fatal: &#39;origin&#39; does not appear to be a git repository
+        fatal: Could not read from remote repository.
+
+        Please make sure you have the correct access rights
+        and the repository exists.
+</code></pre></td></tr></table>
+</div>
+</div><p>在 go install 执行过程中，会首先下载仓库到 <code>/go/pkg/mod/cache/vcs/a1b9ef7e71cba11b98501177ca2d4f9fd012c258b967f915f68ee79a228ddf92</code> 目录中</p>
+<p>然后在该目录执行 <code>git ls-remote -q origin</code> 获取 tag 列表，并得到最新的 repo tag.</p>
+<p>因为 <code>safe.directory</code> 的检查，导致 <code>git ls-remote -q origin</code> 执行失败，git 认为 origin remote 不存在，才会显示异常 <code>fatal: 'origin' does not appear to be a git repository</code></p>
+<p>go install 安装 github 上的仓库时，就不会遇到上述问题，因为安装 github 的仓库是从 GOPROXY 上获取的缓存文件，不需要经过 git 来查询 tag 了，不执行 git 命令，也就不会遇到上述问题了。</p>
+<h2 id="参考链接">参考链接</h2>
 <ul>
 <li><a href="https://tip.golang.org/doc/go1.18">go 1.18 release note</a></li>
 <li><a href="https://medium.com/@thecodinganalyst/git-detect-dubious-ownership-in-repository-e7f33037a8f">Git detect dubious ownership in repository</a></li>
