@@ -47,7 +47,7 @@ server {
     listen 80;
     server_name "www.qae.com";
 
-    # 使用 curl 请求后端，后端能收到的 "HTTP_HH2" "HTTP_HH3", 无法收到 HTTP_HH1 header
+    # 使用 curl 请求后端，后端能收到的 "HH2" "HH3", 无法收到 HH0, HH1 header
     proxy_set_header HH0 "value";
     proxy_set_header HH1 "value";
 
