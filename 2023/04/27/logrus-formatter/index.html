@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Ubuntu 中 Docker 设置容器中 DNS 服务器的地址 - 大白的碎碎念</title>
+  <title>Logrus 添加预设字段 - 大白的碎碎念</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -26,7 +26,7 @@
 <meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
-<link rel="canonical" href="/2023/03/20/docker-dns/" />
+<link rel="canonical" href="/2023/04/27/logrus-formatter/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -39,19 +39,19 @@
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
-<meta property="og:title" content="Ubuntu 中 Docker 设置容器中 DNS 服务器的地址" />
+<meta property="og:title" content="Logrus 添加预设字段" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/2023/03/20/docker-dns/" /><meta property="article:section" content="tips" />
-<meta property="article:published_time" content="2023-03-20T18:28:08+08:00" />
-<meta property="article:modified_time" content="2023-03-20T18:28:08+08:00" />
+<meta property="og:url" content="/2023/04/27/logrus-formatter/" /><meta property="article:section" content="tips" />
+<meta property="article:published_time" content="2023-04-27T14:55:12+08:00" />
+<meta property="article:modified_time" content="2023-04-27T14:55:12+08:00" />
 
-<meta itemprop="name" content="Ubuntu 中 Docker 设置容器中 DNS 服务器的地址">
-<meta itemprop="description" content=""><meta itemprop="datePublished" content="2023-03-20T18:28:08+08:00" />
-<meta itemprop="dateModified" content="2023-03-20T18:28:08+08:00" />
-<meta itemprop="wordCount" content="68">
+<meta itemprop="name" content="Logrus 添加预设字段">
+<meta itemprop="description" content=""><meta itemprop="datePublished" content="2023-04-27T14:55:12+08:00" />
+<meta itemprop="dateModified" content="2023-04-27T14:55:12+08:00" />
+<meta itemprop="wordCount" content="95">
 <meta itemprop="keywords" content="tips,go," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Ubuntu 中 Docker 设置容器中 DNS 服务器的地址"/>
+<meta name="twitter:title" content="Logrus 添加预设字段"/>
 <meta name="twitter:description" content=""/>
 
 <!--[if lte IE 9]>
@@ -137,12 +137,12 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Ubuntu 中 Docker 设置容器中 DNS 服务器的地址</h1>
+      <h1 class="post-title">Logrus 添加预设字段</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2023-03-20 </span>
+        <span class="post-time"> 2023-04-27 </span>
         
-          <span class="more-meta"> 约 68 字 </span>
+          <span class="more-meta"> 约 95 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -166,44 +166,72 @@
     <div class="post-content">
       <hr>
 <h2 id="tips">Tips</h2>
-<p>修改 <code>/etc/docker/daemon.json</code> 文件，写入以下配置:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">{
-  &#34;dns&#34;: [
-    &#34;10.8.0.1&#34;,
-    &#34;192.168.45.155&#34;,
-  ]
-  &#34;dns-opts&#34;: [ &#34;ndots:1&#34; ]
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>这样相当于在 <code>/etc/resolv.conf</code> 设置了</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">nameserver 10.8.0.1
-nameserver 192.168.45.155
-options ndots:15
-</code></pre></td></tr></table>
-</div>
-</div><p>修改完成后重启 docker daemon 生效</p>
-<h2 id="参考链接">参考链接</h2>
 <ul>
-<li><a href="https://github.com/moby/moby/issues/32093">ndots:0 #32093</a></li>
+<li>logrus 设置自定义 formatter, 添加预设字段</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">import</span> <span class="s">&#34;github.com/sirupsen/logrus&#34;</span>
+
+<span class="kd">var</span> <span class="p">(</span>
+	<span class="nx">L</span> <span class="o">*</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Logger</span>
+<span class="p">)</span>
+
+<span class="kd">type</span> <span class="nx">customLogger</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">formatter</span> <span class="nx">logrus</span><span class="p">.</span><span class="nx">Formatter</span>
+	<span class="nx">domain</span>    <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">l</span> <span class="o">*</span><span class="nx">customLogger</span><span class="p">)</span> <span class="nf">Format</span><span class="p">(</span><span class="nx">entry</span> <span class="o">*</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">Entry</span><span class="p">)</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">entry</span><span class="p">.</span><span class="nx">Data</span><span class="p">[</span><span class="s">&#34;domain&#34;</span><span class="p">]</span> <span class="p">=</span> <span class="nx">l</span><span class="p">.</span><span class="nx">domain</span>
+	<span class="k">return</span> <span class="nx">l</span><span class="p">.</span><span class="nx">formatter</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="nx">entry</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">L</span> <span class="p">=</span> <span class="nx">logrus</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
+	<span class="nx">L</span><span class="p">.</span><span class="nf">SetLevel</span><span class="p">(</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">InfoLevel</span><span class="p">)</span>
+	<span class="nx">L</span><span class="p">.</span><span class="nf">SetFormatter</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">customLogger</span><span class="p">{</span>
+		<span class="nx">formatter</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">logrus</span><span class="p">.</span><span class="nx">JSONFormatter</span><span class="p">{},</span>
+		<span class="nx">domain</span><span class="p">:</span>    <span class="s">&#34;custom domain&#34;</span><span class="p">,</span>
+	<span class="p">})</span>
+
+    <span class="nx">L</span><span class="p">.</span><span class="nf">Info</span><span class="p">(</span><span class="s">&#34;this msg&#34;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">//{&#34;domain&#34;:&#34;custom-domain&#34;,&#34;level&#34;:&#34;info&#34;,&#34;msg&#34;:&#34;this msg&#34;,&#34;time&#34;:&#34;2023-04-27T14:59:45+08:00&#34;}
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="参考链接">参考链接</h2>
+<ul>
+<li><a href="https://github.com/sirupsen/logrus/issues/444#issuecomment-831093226">logrus#444</a></li>
 </ul>
     </div>
 
@@ -215,7 +243,7 @@ options ndots:15
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2023-03-20
+        2023-04-27
         
     </span>
   </p>
@@ -231,13 +259,13 @@ options ndots:15
           <a href="/tags/go/">go</a>
           </div>
       <nav class="post-nav">
-        <a class="prev" href="/2023/04/27/logrus-formatter/">
+        <a class="prev" href="/2023/04/27/nginx-proxy-set-header/">
             <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">Logrus 添加预设字段</span>
+            <span class="prev-text nav-default">Nginx proxy_set_header 默认会覆盖上一层的设置</span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
-        <a class="next" href="/2023/03/02/pod-status/">
-            <span class="next-text nav-default">Pod 状态笔记</span>
+        <a class="next" href="/2023/03/20/docker-dns/">
+            <span class="next-text nav-default">Ubuntu 中 Docker 设置容器中 DNS 服务器的地址</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
