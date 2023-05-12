@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.2 with theme even" />
+<meta name="generator" content="Hugo 0.104.3 with theme even" />
 
 
 <link rel="canonical" href="/2023/03/02/lsof-command/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -60,6 +60,17 @@ lsof 常用命令汇总
 <meta name="twitter:description" content="
 lsof 常用命令汇总
 "/>
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -183,8 +194,8 @@ lsof 常用命令汇总
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">sudo lsof -i -sTCP:LISTEN -a -p &lt;pid&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo lsof -i -sTCP:LISTEN -a -p &lt;pid&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>
@@ -202,8 +213,8 @@ lsof 常用命令汇总
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">sudo lsof -i -sTCP:ESTABLISHED -a -p &lt;pid&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo lsof -i -sTCP:ESTABLISHED -a -p &lt;pid&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>列出进程 <code>&lt;pid&gt;</code> 所有 IDLE 状态的 UDP 连接</li>
@@ -213,8 +224,8 @@ lsof 常用命令汇总
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">sudo lsof -i -sUDP:IDLE -a -p &lt;pid&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo lsof -i -sUDP:IDLE -a -p &lt;pid&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>根据 Unix 发行版本的不同，TCP/UDP 状态也会有不同的名字:</p>
 <ul>
@@ -229,9 +240,9 @@ lsof 常用命令汇总
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">write(267, &#34;\1\0\0\0\0\0\0\0&#34;, 8)       = 8
-read(5405, &#34;# Kubernetes-managed hosts file &#34;..., 4096) = 4096
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">write(267, &#34;\1\0\0\0\0\0\0\0&#34;, 8)       = 8
+</span></span><span class="line"><span class="cl">read(5405, &#34;# Kubernetes-managed hosts file &#34;..., 4096) = 4096
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>我们想要查一下这个 267 和 5405 具体代表了什么连接，可以用</p>
 <div class="highlight"><div class="chroma">
@@ -239,8 +250,8 @@ read(5405, &#34;# Kubernetes-managed hosts file &#34;..., 4096) = 4096
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">sudo lsof -d &lt;fd_number&gt; -a -p &lt;pid&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo lsof -d &lt;fd_number&gt; -a -p &lt;pid&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>例如我利用 strace 查看飞书 app 的系统调用，看到以下的信息</p>
 <div class="highlight"><div class="chroma">
@@ -267,27 +278,27 @@ read(5405, &#34;# Kubernetes-managed hosts file &#34;..., 4096) = 4096
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">ø&gt; sudo strace -p 8261
-strace: Process 8261 attached
-restart_syscall(&lt;... resuming interrupted read ...&gt;) = 0
-openat(AT_FDCWD, &#34;/proc/self/status&#34;, O_RDONLY) = 4
-read(4, &#34;Name:\tfeishu\nUmask:\t0002\nState:\t&#34;..., 1024) = 1024
-close(4)                                = 0
-futex(0x7ff0a7ffead8, FUTEX_WAKE_PRIVATE, 2147483647) = 1
-futex(0x7ff0a7ffea88, FUTEX_WAKE_PRIVATE, 1) = 1
-recvmsg(23, {msg_namelen=0}, 0)         = -1 EAGAIN (资源暂时不可用)
-recvmsg(23, {msg_namelen=0}, 0)         = -1 EAGAIN (资源暂时不可用)
-poll([{fd=9, events=POLLIN}, {fd=10, events=POLLIN}, {fd=22, events=POLLIN}, {fd=23, events=POLLIN}, {fd=67, events=POLLIN}], 5, 0) = 0 (Timeout)
-recvmsg(23, {msg_namelen=0}, 0)         = -1 EAGAIN (资源暂时不可用)
-recvmsg(23, {msg_namelen=0}, 0)         = -1 EAGAIN (资源暂时不可用)
-poll([{fd=9, events=POLLIN}, {fd=10, events=POLLIN}, {fd=22, events=POLLIN}, {fd=23, events=POLLIN}, {fd=67, events=POLLIN}], 5, 200) = 1 ([{fd=10, revents=POLLIN}])
-read(10, &#34;!&#34;, 2)                        = 1
-futex(0x7ff0a7ffead8, FUTEX_WAKE_PRIVATE, 2147483647) = 1
-futex(0x7ff0a7ffea88, FUTEX_WAKE_PRIVATE, 1) = 1
-futex(0x7ff0a0001eb8, FUTEX_WAKE_PRIVATE, 1) = 1
-openat(AT_FDCWD, &#34;/proc/self/status&#34;, O_RDONLY) = 4
-read(4, &#34;Name:\tfeishu\nUmask:\t0002\nState:\t&#34;..., 1024) = 1024
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ø&gt; sudo strace -p 8261
+</span></span><span class="line"><span class="cl">strace: Process 8261 attached
+</span></span><span class="line"><span class="cl">restart_syscall(&lt;... resuming interrupted read ...&gt;) = 0
+</span></span><span class="line"><span class="cl">openat(AT_FDCWD, &#34;/proc/self/status&#34;, O_RDONLY) = 4
+</span></span><span class="line"><span class="cl">read(4, &#34;Name:\tfeishu\nUmask:\t0002\nState:\t&#34;..., 1024) = 1024
+</span></span><span class="line"><span class="cl">close(4)                                = 0
+</span></span><span class="line"><span class="cl">futex(0x7ff0a7ffead8, FUTEX_WAKE_PRIVATE, 2147483647) = 1
+</span></span><span class="line"><span class="cl">futex(0x7ff0a7ffea88, FUTEX_WAKE_PRIVATE, 1) = 1
+</span></span><span class="line"><span class="cl">recvmsg(23, {msg_namelen=0}, 0)         = -1 EAGAIN (资源暂时不可用)
+</span></span><span class="line"><span class="cl">recvmsg(23, {msg_namelen=0}, 0)         = -1 EAGAIN (资源暂时不可用)
+</span></span><span class="line"><span class="cl">poll([{fd=9, events=POLLIN}, {fd=10, events=POLLIN}, {fd=22, events=POLLIN}, {fd=23, events=POLLIN}, {fd=67, events=POLLIN}], 5, 0) = 0 (Timeout)
+</span></span><span class="line"><span class="cl">recvmsg(23, {msg_namelen=0}, 0)         = -1 EAGAIN (资源暂时不可用)
+</span></span><span class="line"><span class="cl">recvmsg(23, {msg_namelen=0}, 0)         = -1 EAGAIN (资源暂时不可用)
+</span></span><span class="line"><span class="cl">poll([{fd=9, events=POLLIN}, {fd=10, events=POLLIN}, {fd=22, events=POLLIN}, {fd=23, events=POLLIN}, {fd=67, events=POLLIN}], 5, 200) = 1 ([{fd=10, revents=POLLIN}])
+</span></span><span class="line"><span class="cl">read(10, &#34;!&#34;, 2)                        = 1
+</span></span><span class="line"><span class="cl">futex(0x7ff0a7ffead8, FUTEX_WAKE_PRIVATE, 2147483647) = 1
+</span></span><span class="line"><span class="cl">futex(0x7ff0a7ffea88, FUTEX_WAKE_PRIVATE, 1) = 1
+</span></span><span class="line"><span class="cl">futex(0x7ff0a0001eb8, FUTEX_WAKE_PRIVATE, 1) = 1
+</span></span><span class="line"><span class="cl">openat(AT_FDCWD, &#34;/proc/self/status&#34;, O_RDONLY) = 4
+</span></span><span class="line"><span class="cl">read(4, &#34;Name:\tfeishu\nUmask:\t0002\nState:\t&#34;..., 1024) = 1024
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>我想知道 fd 4 代表了什么，执行 <code>sudo lsof -d 4 -a -p 8261</code>，可以看到它是我的电脑和 <code>220.181.131.241</code> 建立的一个 https 连接。</p>
 <div class="highlight"><div class="chroma">
@@ -297,10 +308,10 @@ read(4, &#34;Name:\tfeishu\nUmask:\t0002\nState:\t&#34;..., 1024) = 1024
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">ø&gt; sudo lsof -d 4 -a -p 8261
-COMMAND  PID      USER   FD   TYPE  DEVICE SIZE/OFF NODE NAME
-feishu  8261 xuyundong    4u  IPv4 2613086      0t0  TCP 192.168.252.88:35810-&gt;220.181.131.241:https (ESTABLISHED)
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ø&gt; sudo lsof -d 4 -a -p 8261
+</span></span><span class="line"><span class="cl">COMMAND  PID      USER   FD   TYPE  DEVICE SIZE/OFF NODE NAME
+</span></span><span class="line"><span class="cl">feishu  8261 xuyundong    4u  IPv4 2613086      0t0  TCP 192.168.252.88:35810-&gt;220.181.131.241:https (ESTABLISHED)
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="查看端口占用">查看端口占用</h2>
 <p>有时候我们启动程序的时候，发现端口被占用了，可以用 <code>lsof -i:xxx</code> 来查看端口被哪个进程占用了，例如:</p>
@@ -313,11 +324,11 @@ feishu  8261 xuyundong    4u  IPv4 2613086      0t0  TCP 192.168.252.88:35810-&g
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">ø&gt; sudo lsof -i:3306
-COMMAND      PID USER   FD   TYPE  DEVICE SIZE/OFF NODE NAME
-docker-pr 360702 root    4u  IPv4 1842886      0t0  TCP *:mysql (LISTEN)
-docker-pr 360709 root    4u  IPv6 1842889      0t0  TCP *:mysql (LISTEN)
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ø&gt; sudo lsof -i:3306
+</span></span><span class="line"><span class="cl">COMMAND      PID USER   FD   TYPE  DEVICE SIZE/OFF NODE NAME
+</span></span><span class="line"><span class="cl">docker-pr 360702 root    4u  IPv4 1842886      0t0  TCP *:mysql (LISTEN)
+</span></span><span class="line"><span class="cl">docker-pr 360709 root    4u  IPv6 1842889      0t0  TCP *:mysql (LISTEN)
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="参考链接">参考链接</h2>
 <ul>
@@ -430,7 +441,7 @@ docker-pr 360709 root    4u  IPv6 1842889      0t0  TCP *:mysql (LISTEN)
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
@@ -440,17 +451,6 @@ docker-pr 360709 root    4u  IPv6 1842889      0t0  TCP *:mysql (LISTEN)
     };
   </script>
   <script type="text/javascript" async src="/lib/MathJax@3.2.0/es5/tex-mml-chtml.js"></script>
-
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
 
 
 

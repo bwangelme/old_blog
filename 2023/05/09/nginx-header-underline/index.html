@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Nginx underscores_in_headers 配置说明 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.104.3 with theme even" />
+
+
+<link rel="canonical" href="/2023/05/09/nginx-header-underline/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+<meta property="og:title" content="Nginx underscores_in_headers 配置说明" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2023/05/09/nginx-header-underline/" /><meta property="article:section" content="tips" />
+<meta property="article:published_time" content="2023-05-09T22:40:29+08:00" />
+<meta property="article:modified_time" content="2023-05-09T22:40:29+08:00" />
+
+<meta itemprop="name" content="Nginx underscores_in_headers 配置说明">
+<meta itemprop="description" content=""><meta itemprop="datePublished" content="2023-05-09T22:40:29+08:00" />
+<meta itemprop="dateModified" content="2023-05-09T22:40:29+08:00" />
+<meta itemprop="wordCount" content="787">
+<meta itemprop="keywords" content="tips,go," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Nginx underscores_in_headers 配置说明"/>
+<meta name="twitter:description" content=""/>
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/tips/">
+        <li class="mobile-menu-item">Tips</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tips/">Tips</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Nginx underscores_in_headers 配置说明</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-05-09 </span>
+        
+          <span class="more-meta"> 约 787 字 </span>
+          <span class="more-meta"> 预计阅读 2 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#http-header-名字的规范">HTTP Header 名字的规范</a></li>
+        <li><a href="#如何让-nginx-允许-header-名中带下划线">如何让 Nginx 允许 Header 名中带下划线</a></li>
+        <li><a href="#实验">实验</a>
+          <ul>
+            <li><a href="#使用-nc-启动一个-http-server">使用 nc 启动一个 http server</a></li>
+            <li><a href="#默认不会传输带下划线的-header">默认不会传输带下划线的 Header</a></li>
+            <li><a href="#关闭-ignore_invalid_headers">关闭 ignore_invalid_headers</a></li>
+            <li><a href="#开启-underscores_in_headers">开启 underscores_in_headers</a></li>
+          </ul>
+        </li>
+        <li><a href="#参考链接">参考链接</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <hr>
+<h2 id="http-header-名字的规范">HTTP Header 名字的规范</h2>
+<p><a href="https://www.rfc-editor.org/rfc/rfc9110.html#fields.registry">RFC9110</a> 中说，Field Name <strong>应该</strong> 仅包含字母数字，连字符(<code>-</code>), 第一个字符是字母，不区分大小写。</p>
+<blockquote>
+<p>The requested field name. It MUST conform to the field-name syntax defined in Section 5.1, and it SHOULD be restricted to just letters, digits, and hyphen (&rsquo;-&rsquo;) characters, with the first character being a letter.</p>
+</blockquote>
+<p>自定义专用的标头之前可以与 <code>X-</code> 前缀一起使用，但是这种用法被 IETF 在 2012 年 6 月发布的 <a href="https://datatracker.ietf.org/doc/html/rfc6648">RFC 6648</a> 明确弃用，原因是其会在非标准字段成为标准时造成不便；</p>
+<p>一个标准的 HTTP Header 诞生要经历漫长的过程，而且我们的 Header 中如果有业务前缀的话，基本不会和标准 HTTP Header 冲突，所以很多文章说使用 <code>X-</code> 前缀也没有什么问题。</p>
+<p>Nginx 的 <a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#ignore_invalid_headers">ignore_invalid_headers</a> 配置文档中说，Http Header 名称由字母数字，连字符组成，<code>underscores_in_headers</code> 开启时可以包含下划线。</p>
+<p>当在 Nginx 中设置了 <code>ignore_invalid_headers on;</code> 时， Nginx 会自动丢弃名称无效的 Header 。</p>
+<h2 id="如何让-nginx-允许-header-名中带下划线">如何让 Nginx 允许 Header 名中带下划线</h2>
+<p>Nginx 的选项 <a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#underscores_in_headers">underscores_in_headers</a> 可以允许我们在 HTTP Header 的名字中带上下划线。</p>
+<blockquote>
+<p>Enables or disables the use of underscores in client request header fields. When the use of underscores is disabled, request header fields whose names contain underscores are marked as invalid and become subject to the ignore_invalid_headers directive.</p>
+</blockquote>
+<h2 id="实验">实验</h2>
+<h3 id="使用-nc-启动一个-http-server">使用 nc 启动一个 http server</h3>
+<ul>
+<li>/tmp/index.http</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">HTTP/1.1 200 OK
+</span></span><span class="line"><span class="cl">Content-Type: text/html; charset=UTF-8
+</span></span><span class="line"><span class="cl">Content-Length: 77
+</span></span><span class="line"><span class="cl">Server: netcat!
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;!doctype html&gt;
+</span></span><span class="line"><span class="cl">&lt;html&gt;&lt;body&gt;&lt;h1&gt;A webpage served by netcat&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>使用 nc 启动 web server</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">while true;do cat /tmp/index.http| nc -l -p 8090 ;done
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><strong>注意</strong>: 不能使用 flask 作为后端</p>
+<p>Python 的 wsgi 解析器或 Flask 中会自动丢掉名字中带下划线的 header, 使用 flask 作为后端，就算 Nginx 传了下划线 Header 我们也看不到。</p>
+<p>使用 nc 作为后端 Web Server, 它会原样输出 nginx 传输给它的内容。</p>
+</blockquote>
+<p>我们使用 curl 命令给 Nginx Server 发送带下划线的 Header</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">curl -H &#39;Some_Header: V1&#39; -s flask.bwangel.me
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="默认不会传输带下划线的-header">默认不会传输带下划线的 Header</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nginx" data-lang="nginx"><span class="line"><span class="cl"><span class="k">server</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kn">server_name</span> <span class="s">flask.bwangel.me</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kn">proxy_set_header</span> <span class="s">Nginx-Host</span> <span class="s">&#34;flask&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kn">proxy_pass</span> <span class="s">http://127.0.0.1:8090</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="https://github.com/bwangelme/bwangelme.github.io/assets/11701497/419ee40b-ffc6-4c69-9955-4358d6e8ac36" alt="image"></p>
+<p>图中上半部分是 nc web server 输出的内容，可以看到 <code>Some_Header</code> 没有被 Nginx 传输给后端.</p>
+<h3 id="关闭-ignore_invalid_headers">关闭 ignore_invalid_headers</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-nginx" data-lang="nginx"><span class="line"><span class="cl"><span class="k">server</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kn">server_name</span> <span class="s">flask.bwangel.me</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kn">ignore_invalid_headers</span> <span class="no">off</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kn">proxy_set_header</span> <span class="s">Nginx-Host</span> <span class="s">&#34;flask&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kn">proxy_pass</span> <span class="s">http://127.0.0.1:8090</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>关闭了 <code>ignore_invalid_headers</code> 之后，无效的 header 也会被 Nginx 传输给后端了</p>
+<p><img src="https://github.com/bwangelme/bwangelme.github.io/assets/11701497/95b9f397-c1d7-4782-afd2-9971b45fa402" alt="image"></p>
+<p>上图中，可以看到 <code>Some_Header</code> 被 Nginx 传输给了后端</p>
+<h3 id="开启-underscores_in_headers">开启 underscores_in_headers</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">server {
+</span></span><span class="line"><span class="cl">    listen 80;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    server_name flask.bwangel.me;
+</span></span><span class="line"><span class="cl">    underscores_in_headers on;
+</span></span><span class="line"><span class="cl">    ignore_invalid_headers on;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    location / {
+</span></span><span class="line"><span class="cl">        proxy_set_header Nginx-Host &#34;flask&#34;;
+</span></span><span class="line"><span class="cl">        proxy_pass http://127.0.0.1:8090;
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="https://github.com/bwangelme/bwangelme.github.io/assets/11701497/2bfeda6c-0c4e-4bc9-a1d7-9eb00a15fa3c" alt="image"></p>
+<p>可以看到，开启了 <code>underscores_in_headers</code> 之后，带下划线的 header 就是有效的 header 了，就算开着 <code>ignore_invalid_headers</code>, nginx 也会将 <code>Some_Header</code> 传输给后端。</p>
+<h2 id="参考链接">参考链接</h2>
+<ul>
+<li><a href="https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/?highlight=underscores#missing-disappearing-http-headers">Missing (disappearing) HTTP Headers</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#ignore_invalid_headers">ignore_invalid_headers</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#underscores_in_headers">underscores_in_headers</a></li>
+<li><a href="https://trac.nginx.org/nginx/ticket/2251">#2251 closed defect (worksforme) &ldquo;underscores_in_headers on&rdquo; didn&rsquo;t work</a></li>
+<li><a href="https://www.rfc-editor.org/rfc/rfc9110.html#fields.registry">rfc9110.html</a></li>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc6648">RFC 6648</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers">MDN HTTP 标头（header）</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2023-05-09
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/tips/">tips</a>
+          <a href="/tags/go/">go</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/2023/04/27/nginx-proxy-set-header/">
+            <span class="next-text nav-default">Nginx proxy_set_header 默认会覆盖上一层的设置</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+  
+  <script src="https://giscus.app/client.js"
+        data-repo="anotherbwangel/blog-comment"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkxNDUyNzQwMDQ="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOCKi0lM4CBFyL"
+        data-mapping="pathname"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+  </script>
+    <noscript>Please enable JavaScript to view the <a href="https://giscus.app/zh-CN">comments powered by giscus.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
+    };
+  </script>
+  <script type="text/javascript" async src="/lib/MathJax@3.2.0/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+</body>
+</html>

@@ -23,7 +23,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.92.2 with theme even" />
+<meta name="generator" content="Hugo 0.104.3 with theme even" />
 
 
 <link rel="canonical" href="/2023/04/27/nginx-proxy-set-header/" />
@@ -35,7 +35,7 @@
 
 
 
-<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -49,10 +49,21 @@
 <meta itemprop="name" content="Nginx proxy_set_header 默认会覆盖上一层的设置">
 <meta itemprop="description" content=""><meta itemprop="datePublished" content="2023-04-27T15:02:39+08:00" />
 <meta itemprop="dateModified" content="2023-04-27T15:02:39+08:00" />
-<meta itemprop="wordCount" content="496">
+<meta itemprop="wordCount" content="495">
 <meta itemprop="keywords" content="tips,nginx," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Nginx proxy_set_header 默认会覆盖上一层的设置"/>
 <meta name="twitter:description" content=""/>
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -142,7 +153,7 @@
       <div class="post-meta">
         <span class="post-time"> 2023-04-27 </span>
         
-          <span class="more-meta"> 约 496 字 </span>
+          <span class="more-meta"> 约 495 字 </span>
           <span class="more-meta"> 预计阅读 1 分钟 </span>
         
       </div>
@@ -185,18 +196,18 @@
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="ch">#!/usr/bin/env python</span>
-
-<span class="kn">import</span> <span class="nn">json</span>
-
-<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">))</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-py" data-lang="py"><span class="line"><span class="cl"><span class="ch">#!/usr/bin/env python</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">json</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">))</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>Start the flask server:</p>
 <div class="highlight"><div class="chroma">
@@ -204,8 +215,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">FLASK_RUN_PORT=&#34;8060&#34; ~/.pyenv/versions/3.11.1/bin/flask run
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">FLASK_RUN_PORT=&#34;8060&#34; ~/.pyenv/versions/3.11.1/bin/flask run
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li><code>/etc/nginx/conf.d/flask.conf</code></li>
@@ -235,28 +246,28 @@
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-nginx" data-lang="nginx"><span class="k">upstream</span> <span class="s">flask</span> <span class="p">{</span>
-    <span class="kn">server</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">8060</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="k">server</span> <span class="p">{</span>
-    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
-    <span class="kn">server_name</span> <span class="s">&#34;www.qae.com&#34;</span><span class="p">;</span>
-
-    <span class="c1"># 使用 curl 请求后端，后端能收到的 &#34;HH2&#34; &#34;HH3&#34;, 无法收到 HH0, HH1 header
-</span><span class="c1"></span>    <span class="kn">proxy_set_header</span> <span class="s">HH0</span> <span class="s">&#34;value&#34;</span><span class="p">;</span>
-    <span class="kn">proxy_set_header</span> <span class="s">HH1</span> <span class="s">&#34;value&#34;</span><span class="p">;</span>
-
-    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
-        <span class="c1"># 当子块中有 proxy_set_header 指令时，父块中所有的 proxy_set_header 的值都会被丢弃
-</span><span class="c1"></span>        <span class="c1"># include 不会创建新的块，所以 include 的配置文件中的 proxy_set_header 还能会正常使用的
-</span><span class="c1"></span>        <span class="kn">proxy_set_header</span> <span class="s">HH2</span> <span class="s">&#34;value&#34;</span><span class="p">;</span>
-        <span class="kn">proxy_set_header</span> <span class="s">HHCOMMON</span> <span class="s">&#34;value2&#34;</span><span class="p">;</span>
-        <span class="kn">include</span> <span class="s">conf.d/flask-component.conf</span><span class="p">;</span>
-        <span class="kn">proxy_pass</span> <span class="s">http://flask</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-nginx" data-lang="nginx"><span class="line"><span class="cl"><span class="k">upstream</span> <span class="s">flask</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kn">server</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">8060</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">server</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kn">server_name</span> <span class="s">&#34;www.qae.com&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># 使用 curl 请求后端，后端能收到的 &#34;HH2&#34; &#34;HH3&#34;, 无法收到 HH0, HH1 header
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kn">proxy_set_header</span> <span class="s">HH0</span> <span class="s">&#34;value&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kn">proxy_set_header</span> <span class="s">HH1</span> <span class="s">&#34;value&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 当子块中有 proxy_set_header 指令时，父块中所有的 proxy_set_header 的值都会被丢弃
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1"># include 不会创建新的块，所以 include 的配置文件中的 proxy_set_header 还能会正常使用的
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kn">proxy_set_header</span> <span class="s">HH2</span> <span class="s">&#34;value&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kn">proxy_set_header</span> <span class="s">HHCOMMON</span> <span class="s">&#34;value2&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kn">include</span> <span class="s">conf.d/flask-component.conf</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kn">proxy_pass</span> <span class="s">http://flask</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li><code>/etc/nginx/conf.d/flask-component.conf</code></li>
@@ -268,10 +279,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-nginx" data-lang="nginx"><span class="k">proxy_set_header</span> <span class="s">HH3</span> <span class="s">&#34;value&#34;</span><span class="p">;</span>
-<span class="c1"># 同一个块中多次使用 proxy_set_header 定义 HHCOMMON, 他们的值会用 `,` join 到一起
-</span><span class="c1"></span><span class="k">proxy_set_header</span> <span class="s">HHCOMMON</span> <span class="s">&#34;value3&#34;</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-nginx" data-lang="nginx"><span class="line"><span class="cl"><span class="k">proxy_set_header</span> <span class="s">HH3</span> <span class="s">&#34;value&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 同一个块中多次使用 proxy_set_header 定义 HHCOMMON, 他们的值会用 `,` join 到一起
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">proxy_set_header</span> <span class="s">HHCOMMON</span> <span class="s">&#34;value3&#34;</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="问题说明">问题说明</h2>
 <p>以上是一个 nginx + flask 后端的配置，<code>proxy_set_header</code> 用来向后端传递 header ，我们使用 curl 来请求后端</p>
@@ -287,21 +298,19 @@
 </span><span class="lnt"> 8
 </span><span class="lnt"> 9
 </span><span class="lnt">10
-</span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">ø&gt; curl -s www.qae.com <span class="p">|</span> jq
-<span class="o">{</span>
-  <span class="s2">&#34;Hh3&#34;</span>: <span class="s2">&#34;value&#34;</span>,
-  <span class="s2">&#34;Hhcommon&#34;</span>: <span class="s2">&#34;value3,value2&#34;</span>,
-  <span class="s2">&#34;Hh2&#34;</span>: <span class="s2">&#34;value&#34;</span>,
-  <span class="s2">&#34;Host&#34;</span>: <span class="s2">&#34;flask&#34;</span>,
-  <span class="s2">&#34;Connection&#34;</span>: <span class="s2">&#34;close&#34;</span>,
-  <span class="s2">&#34;User-Agent&#34;</span>: <span class="s2">&#34;curl/7.81.0&#34;</span>,
-  <span class="s2">&#34;Accept&#34;</span>: <span class="s2">&#34;*/*&#34;</span>
-<span class="o">}</span>
-
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ø&gt; curl -s www.qae.com <span class="p">|</span> jq
+</span></span><span class="line"><span class="cl"><span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;Hh3&#34;</span>: <span class="s2">&#34;value&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;Hhcommon&#34;</span>: <span class="s2">&#34;value3,value2&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;Hh2&#34;</span>: <span class="s2">&#34;value&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;Host&#34;</span>: <span class="s2">&#34;flask&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;Connection&#34;</span>: <span class="s2">&#34;close&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;User-Agent&#34;</span>: <span class="s2">&#34;curl/7.81.0&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;Accept&#34;</span>: <span class="s2">&#34;*/*&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>可以看到后端仅收到 HH2 和 HH3, 但是 HH0 和 HH1 却消失了。这是为什么呢？</p>
 <p>我翻了翻 nginx 的文档，里面这样写到</p>
@@ -358,7 +367,11 @@
           <a href="/tags/nginx/">nginx</a>
           </div>
       <nav class="post-nav">
-        
+        <a class="prev" href="/2023/05/09/nginx-header-underline/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Nginx underscores_in_headers 配置说明</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
         <a class="next" href="/2023/04/27/logrus-formatter/">
             <span class="next-text nav-default">Logrus 添加预设字段</span>
             <span class="next-text nav-mobile">下一篇</span>
@@ -435,7 +448,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
@@ -445,17 +458,6 @@
     };
   </script>
   <script type="text/javascript" async src="/lib/MathJax@3.2.0/es5/tex-mml-chtml.js"></script>
-
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
 
 
 
