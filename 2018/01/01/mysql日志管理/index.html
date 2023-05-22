@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.104.3 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2018/01/01/mysql%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -54,17 +54,6 @@
 <meta itemprop="keywords" content="MySQL," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="MySQL 日志管理"/>
 <meta name="twitter:description" content="简介: 讲述了MySQL中的日志及配置方式"/>
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
-
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -247,12 +236,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 编辑 MySQL 配置文件，添加以下的选项</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="o">[</span>mysqld<span class="o">]</span>
-</span></span><span class="line"><span class="cl">server-id <span class="o">=</span> <span class="m">1</span>
-</span></span><span class="line"><span class="cl">log-bin<span class="o">[=</span>base_name<span class="o">]</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 编辑 MySQL 配置文件，添加以下的选项</span>
+
+<span class="o">[</span>mysqld<span class="o">]</span>
+server-id <span class="o">=</span> <span class="m">1</span>
+log-bin<span class="o">[=</span>base_name<span class="o">]</span>
+</code></pre></td></tr></table>
 </div>
 </div><p><code>base_name</code>是二进制日志文件的文件名，如果不指定<code>base_name</code>，默认会使用主机名作文二进制日志的文件名，后缀名是二进制日志的序列号，所在目录为数据库所在目录(<code>datadir</code>)。</p>
 <p>开启了二进制日志后，会产生如下文件:</p>
@@ -263,10 +252,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">&gt;&gt;&gt; ls /var/log/mysql/mysql-bin.*
-</span></span><span class="line"><span class="cl">/var/log/mysql/mysql-bin.000001  /var/log/mysql/mysql-bin.index
-</span></span><span class="line"><span class="cl">/var/log/mysql/mysql-bin.000002
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh">&gt;&gt;&gt; ls /var/log/mysql/mysql-bin.*
+/var/log/mysql/mysql-bin.000001  /var/log/mysql/mysql-bin.index
+/var/log/mysql/mysql-bin.000002
+</code></pre></td></tr></table>
 </div>
 </div><p><code>mysql-bin.index</code>为二进制日志的索引文件，用来存储过往产生的二进制日志序号。</p>
 <p><code>mysql-bin.000001</code>和<code>mysql-bin.000002</code>为实际存储数据的文件，每次重启MySQL，都会产生一个新的mysql-bin的日志。</p>
@@ -280,12 +269,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 暂停</span>
-</span></span><span class="line"><span class="cl">mysql&gt; SET <span class="nv">SQL_LOG_BIN</span><span class="o">=</span>0<span class="p">;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 启用</span>
-</span></span><span class="line"><span class="cl">mysql&gt; SET <span class="nv">SQL_LOG_BIN</span><span class="o">=</span>1<span class="p">;</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 暂停</span>
+mysql&gt; SET <span class="nv">SQL_LOG_BIN</span><span class="o">=</span>0<span class="p">;</span>
+
+<span class="c1"># 启用</span>
+mysql&gt; SET <span class="nv">SQL_LOG_BIN</span><span class="o">=</span>1<span class="p">;</span>
+</code></pre></td></tr></table>
 </div>
 </div><h3 id="26-查看二进制日志">2.6 查看二进制日志</h3>
 <div class="highlight"><div class="chroma">
@@ -314,29 +303,29 @@
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 查看MySQL二进制的日志</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">&gt; <span class="nb">pwd</span>
-</span></span><span class="line"><span class="cl">/usr/local/mysql/data
-</span></span><span class="line"><span class="cl">&gt; mysqlbinlog mysql-bin.000002
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># at 120 # 表明从第120个字节开始</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 下面这句表明了执行时间(年月日 时分秒)和服务器id</span>
-</span></span><span class="line"><span class="cl"><span class="c1">#160314  2:07:47 server id 1  end_log_pos 214 CRC32 0xa10bdfa4 	Query	thread_id=1	exec_time=0	error_code=0</span>
-</span></span><span class="line"><span class="cl">SET <span class="nv">TIMESTAMP</span><span class="o">=</span>1457892467/*!*/<span class="p">;</span>
-</span></span><span class="line"><span class="cl">SET @@session.pseudo_thread_id<span class="o">=</span>1/*!*/<span class="p">;</span>
-</span></span><span class="line"><span class="cl">SET @@session.foreign_key_checks<span class="o">=</span>1, @@session.sql_auto_is_null<span class="o">=</span>0, @@session.unique_checks<span class="o">=</span>1, @@session.autocommit<span class="o">=</span>1/*!*/<span class="p">;</span>
-</span></span><span class="line"><span class="cl">SET @@session.sql_mode<span class="o">=</span>1075838976/*!*/<span class="p">;</span>
-</span></span><span class="line"><span class="cl">SET @@session.auto_increment_increment<span class="o">=</span>1, @@session.auto_increment_offset<span class="o">=</span>1/*!*/<span class="p">;</span>
-</span></span><span class="line"><span class="cl">/*!<span class="se">\C</span> utf8 *//*!*/<span class="p">;</span>
-</span></span><span class="line"><span class="cl">SET @@session.character_set_client<span class="o">=</span>33,@@session.collation_connection<span class="o">=</span>33,@@session.collation_server<span class="o">=</span>33/*!*/<span class="p">;</span>
-</span></span><span class="line"><span class="cl">SET @@session.lc_time_names<span class="o">=</span>0/*!*/<span class="p">;</span>
-</span></span><span class="line"><span class="cl">SET @@session.collation_database<span class="o">=</span>DEFAULT/*!*/<span class="p">;</span>
-</span></span><span class="line"><span class="cl">create database xff1  <span class="c1"># 这里是创建数据库的语句</span>
-</span></span><span class="line"><span class="cl">/*!*/<span class="p">;</span>
-</span></span><span class="line"><span class="cl">DELIMITER <span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># End of log file</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 查看MySQL二进制的日志</span>
+
+&gt; <span class="nb">pwd</span>
+/usr/local/mysql/data
+&gt; mysqlbinlog mysql-bin.000002
+
+<span class="c1"># at 120 # 表明从第120个字节开始</span>
+<span class="c1"># 下面这句表明了执行时间(年月日 时分秒)和服务器id</span>
+<span class="c1">#160314  2:07:47 server id 1  end_log_pos 214 CRC32 0xa10bdfa4 	Query	thread_id=1	exec_time=0	error_code=0</span>
+SET <span class="nv">TIMESTAMP</span><span class="o">=</span>1457892467/*!*/<span class="p">;</span>
+SET @@session.pseudo_thread_id<span class="o">=</span>1/*!*/<span class="p">;</span>
+SET @@session.foreign_key_checks<span class="o">=</span>1, @@session.sql_auto_is_null<span class="o">=</span>0, @@session.unique_checks<span class="o">=</span>1, @@session.autocommit<span class="o">=</span>1/*!*/<span class="p">;</span>
+SET @@session.sql_mode<span class="o">=</span>1075838976/*!*/<span class="p">;</span>
+SET @@session.auto_increment_increment<span class="o">=</span>1, @@session.auto_increment_offset<span class="o">=</span>1/*!*/<span class="p">;</span>
+/*!<span class="se">\C</span> utf8 *//*!*/<span class="p">;</span>
+SET @@session.character_set_client<span class="o">=</span>33,@@session.collation_connection<span class="o">=</span>33,@@session.collation_server<span class="o">=</span>33/*!*/<span class="p">;</span>
+SET @@session.lc_time_names<span class="o">=</span>0/*!*/<span class="p">;</span>
+SET @@session.collation_database<span class="o">=</span>DEFAULT/*!*/<span class="p">;</span>
+create database xff1  <span class="c1"># 这里是创建数据库的语句</span>
+/*!*/<span class="p">;</span>
+DELIMITER <span class="p">;</span>
+<span class="c1"># End of log file</span>
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="3-慢查询日志">3 慢查询日志</h2>
 <p>和慢查询日志相关的配置有如下几个:</p>
@@ -452,7 +441,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
@@ -462,6 +451,17 @@
     };
   </script>
   <script type="text/javascript" async src="/lib/MathJax@3.2.0/es5/tex-mml-chtml.js"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
 
 
 

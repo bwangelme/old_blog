@@ -24,7 +24,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.104.3 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2023/01/20/docker-none-network/" />
@@ -36,7 +36,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -54,17 +54,6 @@
 <meta itemprop="keywords" content="docker,network," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="从 none 开始，用网桥模式启动容器的网络"/>
 <meta name="twitter:description" content="用 none 网络模式启动的容器，创建一个可以对外通信的网络"/>
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
-
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -202,8 +191,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ip link add &lt;p1-name&gt; type veth peer name &lt;p2-name&gt;
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">ip link add &lt;p1-name&gt; type veth peer name &lt;p2-name&gt;
+</code></pre></td></tr></table>
 </div>
 </div><p>在上面的代码中，p1-name 和 p2-name 是分配给两个连接的端点的名称。</p>
 <p>对一个设备上传输的数据包会立即在另一个设备上接收。当任何一个设备关闭时，veth 对的链路状态就会关闭。</p>
@@ -216,8 +205,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ip link add &lt;p1-name&gt; netns &lt;p1-ns&gt; type veth peer &lt;p2-name&gt; netns &lt;p2-ns&gt;
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">ip link add &lt;p1-name&gt; netns &lt;p1-ns&gt; type veth peer &lt;p2-name&gt; netns &lt;p2-ns&gt;
+</code></pre></td></tr></table>
 </div>
 </div><p>或者，对于现有的 veth 对，可以将一端移动到另一个名称空间:</p>
 <div class="highlight"><div class="chroma">
@@ -225,8 +214,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ip link set &lt;p2-name&gt; netns &lt;p2-ns&gt;
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">ip link set &lt;p2-name&gt; netns &lt;p2-ns&gt;
+</code></pre></td></tr></table>
 </div>
 </div><p><a href="https://man7.org/linux/man-pages/man8/ethtool.8.html">ethtool(8)</a> 可用于查找 veth 网络接口的对等点，使用类似下面这样的命令:</p>
 <div class="highlight"><div class="chroma">
@@ -239,13 +228,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ ip link add ve_A <span class="nb">type</span> veth peer name ve_B   <span class="c1"># 创建一对 veth 设备</span>
-</span></span><span class="line"><span class="cl">$ ethtool -S ve_A         <span class="c1"># 查找 ve_A 接口对端接口的索引</span>
-</span></span><span class="line"><span class="cl">NIC statistics:
-</span></span><span class="line"><span class="cl">    peer_ifindex: <span class="m">16</span>
-</span></span><span class="line"><span class="cl">$ ip link <span class="p">|</span> grep <span class="s1">&#39;^16:&#39;</span>   <span class="c1"># 查找索引是 16 的设备</span>
-</span></span><span class="line"><span class="cl">16: ve_B@ve_A: &lt;BROADCAST,MULTICAST,M-DOWN&gt; mtu <span class="m">1500</span> qdisc ...
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ ip link add ve_A <span class="nb">type</span> veth peer name ve_B   <span class="c1"># 创建一对 veth 设备</span>
+$ ethtool -S ve_A         <span class="c1"># 查找 ve_A 接口对端接口的索引</span>
+NIC statistics:
+    peer_ifindex: <span class="m">16</span>
+$ ip link <span class="p">|</span> grep <span class="s1">&#39;^16:&#39;</span>   <span class="c1"># 查找索引是 16 的设备</span>
+16: ve_B@ve_A: &lt;BROADCAST,MULTICAST,M-DOWN&gt; mtu <span class="m">1500</span> qdisc ...
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li><strong>注意</strong>：如果 veth 的设备名太长，ethtool 会出错</li>
@@ -256,9 +245,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root@Macmini:~# ethtool -S veth550bfa1@if25
-</span></span><span class="line"><span class="cl">ioctl-only request, device name longer than <span class="m">15</span> not supported
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">root@Macmini:~# ethtool -S veth550bfa1@if25
+ioctl-only request, device name longer than <span class="m">15</span> not supported
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="准备工作">准备工作</h2>
 <ul>
@@ -271,10 +260,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root@dockervbox:~# brctl show
-</span></span><span class="line"><span class="cl">bridge name     bridge id               STP enabled     interfaces
-</span></span><span class="line"><span class="cl">docker0         8000.02421f335f1f       no
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">root@dockervbox:~# brctl show
+bridge name     bridge id               STP enabled     interfaces
+docker0         8000.02421f335f1f       no
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>创建 /var/run/netns 目录，ip netns 操作的就是此目录中的网络 namespace</li>
@@ -286,9 +275,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root@dockervbox:~# mkdir -p /var/run/netns
-</span></span><span class="line"><span class="cl">root@dockervbox:~# find -L /var/run/netns -type l -delete
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">root@dockervbox:~# mkdir -p /var/run/netns
+root@dockervbox:~# find -L /var/run/netns -type l -delete
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="启动容器">启动容器</h2>
 <ul>
@@ -304,13 +293,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ø&gt; docker run --rm -it --network<span class="o">=</span>none -d nginx
-</span></span><span class="line"><span class="cl">ebcf462cbb463d41dd677a501aee5a629f587141c27632d4954017784877b7c0
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">ø&gt; docker ps
-</span></span><span class="line"><span class="cl">CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS         PORTS     NAMES
-</span></span><span class="line"><span class="cl">ebcf462cbb46   nginx     <span class="s2">&#34;/docker-entrypoint.…&#34;</span>   <span class="m">6</span> minutes ago   Up <span class="m">6</span> minutes             exciting_torvalds
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">ø&gt; docker run --rm -it --network<span class="o">=</span>none -d nginx
+ebcf462cbb463d41dd677a501aee5a629f587141c27632d4954017784877b7c0
+
+ø&gt; docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS         PORTS     NAMES
+ebcf462cbb46   nginx     <span class="s2">&#34;/docker-entrypoint.…&#34;</span>   <span class="m">6</span> minutes ago   Up <span class="m">6</span> minutes             exciting_torvalds
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>启动成功后，记录此容器的 pid 到 $pid 环境变量</li>
@@ -326,14 +315,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ø&gt; docker inspect ebcf462cbb463d41dd677a501aee5a629f587141c27632d4954017784877b7c0 | grep -i pid
-</span></span><span class="line"><span class="cl">            &#34;Pid&#34;: 119320,
-</span></span><span class="line"><span class="cl">            &#34;PidMode&#34;: &#34;&#34;,
-</span></span><span class="line"><span class="cl">            &#34;PidsLimit&#34;: null,
-</span></span><span class="line"><span class="cl">ø&gt; export pid=119320
-</span></span><span class="line"><span class="cl">ø&gt; echo $pid
-</span></span><span class="line"><span class="cl">119320
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">ø&gt; docker inspect ebcf462cbb463d41dd677a501aee5a629f587141c27632d4954017784877b7c0 | grep -i pid
+            &#34;Pid&#34;: 119320,
+            &#34;PidMode&#34;: &#34;&#34;,
+            &#34;PidsLimit&#34;: null,
+ø&gt; export pid=119320
+ø&gt; echo $pid
+119320
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>进入 $pid 进程所在的网络 ns, 查看所有的网络设备，可以看到只有一个 lo 设备，没有其他的网络设备</li>
@@ -347,12 +336,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">root@Macmini:~# nsenter -t $pid -n ip a
-</span></span><span class="line"><span class="cl">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
-</span></span><span class="line"><span class="cl">link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-</span></span><span class="line"><span class="cl">inet 127.0.0.1/8 scope host lo
-</span></span><span class="line"><span class="cl">valid_lft forever preferred_lft forever
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">root@Macmini:~# nsenter -t $pid -n ip a
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+inet 127.0.0.1/8 scope host lo
+valid_lft forever preferred_lft forever
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>软链接 $pid 的网络 ns 到 /var/run/netns/ 中, 使 ip netns 可以操作它</li>
@@ -366,12 +355,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root@Macmini:~# ln -s <span class="s2">&#34;/proc/</span><span class="nv">$pid</span><span class="s2">/ns/net&#34;</span> /var/run/netns/<span class="nv">$pid</span>
-</span></span><span class="line"><span class="cl">root@Macmini:~# ls /var/run/netns/119320
-</span></span><span class="line"><span class="cl">/var/run/netns/119320
-</span></span><span class="line"><span class="cl">root@Macmini:~# ip netns list
-</span></span><span class="line"><span class="cl"><span class="m">119320</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">root@Macmini:~# ln -s <span class="s2">&#34;/proc/</span><span class="nv">$pid</span><span class="s2">/ns/net&#34;</span> /var/run/netns/<span class="nv">$pid</span>
+root@Macmini:~# ls /var/run/netns/119320
+/var/run/netns/119320
+root@Macmini:~# ip netns list
+<span class="m">119320</span>
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>使用 <code>lsns -t net</code> 查看当前系统的 network namespace, 可以看到已经有 nginx 容器的 network namespace 了</li>
@@ -384,11 +373,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root@Macmini:~# lsns -t net <span class="p">|</span> head -n <span class="m">3</span>
-</span></span><span class="line"><span class="cl">        NS TYPE NPROCS    PID USER         NETNSID NSFS                           COMMAND
-</span></span><span class="line"><span class="cl"><span class="m">4026531840</span> net     <span class="m">345</span>      <span class="m">1</span> root      unassigned                                /sbin/init
-</span></span><span class="line"><span class="cl"><span class="m">4026532348</span> net      <span class="m">13</span> <span class="m">119320</span> root      unassigned /run/docker/netns/2bdfbe67a978 nginx: master process nginx -g daemon off<span class="p">;</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">root@Macmini:~# lsns -t net <span class="p">|</span> head -n <span class="m">3</span>
+        NS TYPE NPROCS    PID USER         NETNSID NSFS                           COMMAND
+<span class="m">4026531840</span> net     <span class="m">345</span>      <span class="m">1</span> root      unassigned                                /sbin/init
+<span class="m">4026532348</span> net      <span class="m">13</span> <span class="m">119320</span> root      unassigned /run/docker/netns/2bdfbe67a978 nginx: master process nginx -g daemon off<span class="p">;</span>
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>查看 <code>/proc/$pid/ns</code> 目录中的 namespace id, 能够看到 net namespace id 和 lsns 列出的 id 相同</li>
@@ -409,19 +398,19 @@
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root@Macmini:~# ls -l /proc/<span class="nv">$pid</span>/ns
-</span></span><span class="line"><span class="cl">总用量 <span class="m">0</span>
-</span></span><span class="line"><span class="cl">lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 cgroup -&gt; <span class="s1">&#39;cgroup:[4026532904]&#39;</span>
-</span></span><span class="line"><span class="cl">lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 ipc -&gt; <span class="s1">&#39;ipc:[4026532307]&#39;</span>
-</span></span><span class="line"><span class="cl">lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 mnt -&gt; <span class="s1">&#39;mnt:[4026532278]&#39;</span>
-</span></span><span class="line"><span class="cl">lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 10:50 net -&gt; <span class="s1">&#39;net:[4026532348]&#39;</span>
-</span></span><span class="line"><span class="cl">lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 pid -&gt; <span class="s1">&#39;pid:[4026532312]&#39;</span>
-</span></span><span class="line"><span class="cl">lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 pid_for_children -&gt; <span class="s1">&#39;pid:[4026532312]&#39;</span>
-</span></span><span class="line"><span class="cl">lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 <span class="nb">time</span> -&gt; <span class="s1">&#39;time:[4026531834]&#39;</span>
-</span></span><span class="line"><span class="cl">lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 time_for_children -&gt; <span class="s1">&#39;time:[4026531834]&#39;</span>
-</span></span><span class="line"><span class="cl">lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 user -&gt; <span class="s1">&#39;user:[4026531837]&#39;</span>
-</span></span><span class="line"><span class="cl">lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 uts -&gt; <span class="s1">&#39;uts:[4026532280]&#39;</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">root@Macmini:~# ls -l /proc/<span class="nv">$pid</span>/ns
+总用量 <span class="m">0</span>
+lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 cgroup -&gt; <span class="s1">&#39;cgroup:[4026532904]&#39;</span>
+lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 ipc -&gt; <span class="s1">&#39;ipc:[4026532307]&#39;</span>
+lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 mnt -&gt; <span class="s1">&#39;mnt:[4026532278]&#39;</span>
+lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 10:50 net -&gt; <span class="s1">&#39;net:[4026532348]&#39;</span>
+lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 pid -&gt; <span class="s1">&#39;pid:[4026532312]&#39;</span>
+lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 pid_for_children -&gt; <span class="s1">&#39;pid:[4026532312]&#39;</span>
+lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 <span class="nb">time</span> -&gt; <span class="s1">&#39;time:[4026531834]&#39;</span>
+lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 time_for_children -&gt; <span class="s1">&#39;time:[4026531834]&#39;</span>
+lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 user -&gt; <span class="s1">&#39;user:[4026531837]&#39;</span>
+lrwxrwxrwx <span class="m">1</span> root root <span class="m">0</span>  1月 <span class="m">20</span> 11:01 uts -&gt; <span class="s1">&#39;uts:[4026532280]&#39;</span>
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="创建-veth-设备">创建 veth 设备</h2>
 <ul>
@@ -442,16 +431,16 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root@Macmini:~# ip link add A <span class="nb">type</span> veth peer name B
-</span></span><span class="line"><span class="cl">root@Macmini:~# brctl addif docker0 A
-</span></span><span class="line"><span class="cl">root@Macmini:~# ip link <span class="nb">set</span> A up
-</span></span><span class="line"><span class="cl"><span class="c1"># A 处于 UP 状态，但因为 A 没有完全连通，所以还是有 M-DOWN 的状态</span>
-</span></span><span class="line"><span class="cl">root@Macmini:~# ip a
-</span></span><span class="line"><span class="cl">23: B@A: &lt;BROADCAST,MULTICAST&gt; mtu <span class="m">1500</span> qdisc noop state DOWN group default qlen <span class="m">1000</span>
-</span></span><span class="line"><span class="cl">    link/ether 16:81:96:a3:bf:27 brd ff:ff:ff:ff:ff:ff
-</span></span><span class="line"><span class="cl">24: A@B: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP,M-DOWN&gt; mtu <span class="m">1500</span> qdisc noqueue master docker0 state LOWERLAYERDOWN group default qlen <span class="m">1000</span>
-</span></span><span class="line"><span class="cl">    link/ether 76:8b:1a:65:f5:57 brd ff:ff:ff:ff:ff:ff
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">root@Macmini:~# ip link add A <span class="nb">type</span> veth peer name B
+root@Macmini:~# brctl addif docker0 A
+root@Macmini:~# ip link <span class="nb">set</span> A up
+<span class="c1"># A 处于 UP 状态，但因为 A 没有完全连通，所以还是有 M-DOWN 的状态</span>
+root@Macmini:~# ip a
+23: B@A: &lt;BROADCAST,MULTICAST&gt; mtu <span class="m">1500</span> qdisc noop state DOWN group default qlen <span class="m">1000</span>
+    link/ether 16:81:96:a3:bf:27 brd ff:ff:ff:ff:ff:ff
+24: A@B: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP,M-DOWN&gt; mtu <span class="m">1500</span> qdisc noqueue master docker0 state LOWERLAYERDOWN group default qlen <span class="m">1000</span>
+    link/ether 76:8b:1a:65:f5:57 brd ff:ff:ff:ff:ff:ff
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="设置-veth-设备">设置 veth 设备</h2>
 <ul>
@@ -464,10 +453,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root@Macmini:~# <span class="nv">SETIP</span><span class="o">=</span>172.17.0.10
-</span></span><span class="line"><span class="cl">root@Macmini:~# <span class="nv">SETMASK</span><span class="o">=</span><span class="m">16</span>
-</span></span><span class="line"><span class="cl">root@Macmini:~# <span class="nv">GATEWAY</span><span class="o">=</span>172.17.0.1
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">root@Macmini:~# <span class="nv">SETIP</span><span class="o">=</span>172.17.0.10
+root@Macmini:~# <span class="nv">SETMASK</span><span class="o">=</span><span class="m">16</span>
+root@Macmini:~# <span class="nv">GATEWAY</span><span class="o">=</span>172.17.0.1
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>将 veth 设备 B 加入到 $pid 所在的 network namespace 中</li>
@@ -479,9 +468,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">root@Macmini:~# ip link set B netns $pid
-</span></span><span class="line"><span class="cl">root@Macmini:~# ip netns exec $pid ip link set dev B name eth0
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">root@Macmini:~# ip link set B netns $pid
+root@Macmini:~# ip netns exec $pid ip link set dev B name eth0
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>此时查看 $pid network namespace 中的网络设备，可以看到 eth0 已经存在了</li>
@@ -497,14 +486,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root@Macmini:~# ip netns <span class="nb">exec</span> <span class="nv">$pid</span> ip a
-</span></span><span class="line"><span class="cl">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="m">65536</span> qdisc noqueue state UNKNOWN group default qlen <span class="m">1000</span>
-</span></span><span class="line"><span class="cl">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-</span></span><span class="line"><span class="cl">    inet 127.0.0.1/8 scope host lo
-</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
-</span></span><span class="line"><span class="cl">23: eth0@if24: &lt;BROADCAST,MULTICAST&gt; mtu <span class="m">1500</span> qdisc noop state DOWN group default qlen <span class="m">1000</span>
-</span></span><span class="line"><span class="cl">    link/ether 16:81:96:a3:bf:27 brd ff:ff:ff:ff:ff:ff link-netnsid <span class="m">0</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">root@Macmini:~# ip netns <span class="nb">exec</span> <span class="nv">$pid</span> ip a
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="m">65536</span> qdisc noqueue state UNKNOWN group default qlen <span class="m">1000</span>
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+23: eth0@if24: &lt;BROADCAST,MULTICAST&gt; mtu <span class="m">1500</span> qdisc noop state DOWN group default qlen <span class="m">1000</span>
+    link/ether 16:81:96:a3:bf:27 brd ff:ff:ff:ff:ff:ff link-netnsid <span class="m">0</span>
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>启动 eth0</li>
@@ -522,15 +511,15 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root@Macmini:~# ip netns <span class="nb">exec</span> <span class="nv">$pid</span> ip link <span class="nb">set</span> eth0 up
-</span></span><span class="line"><span class="cl">root@Macmini:~# ip netns <span class="nb">exec</span> <span class="nv">$pid</span> ip a
-</span></span><span class="line"><span class="cl">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="m">65536</span> qdisc noqueue state UNKNOWN group default qlen <span class="m">1000</span>
-</span></span><span class="line"><span class="cl">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-</span></span><span class="line"><span class="cl">    inet 127.0.0.1/8 scope host lo
-</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
-</span></span><span class="line"><span class="cl">23: eth0@if24: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc noqueue state UP group default qlen <span class="m">1000</span>
-</span></span><span class="line"><span class="cl">    link/ether 16:81:96:a3:bf:27 brd ff:ff:ff:ff:ff:ff link-netnsid <span class="m">0</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">root@Macmini:~# ip netns <span class="nb">exec</span> <span class="nv">$pid</span> ip link <span class="nb">set</span> eth0 up
+root@Macmini:~# ip netns <span class="nb">exec</span> <span class="nv">$pid</span> ip a
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="m">65536</span> qdisc noqueue state UNKNOWN group default qlen <span class="m">1000</span>
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+23: eth0@if24: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc noqueue state UP group default qlen <span class="m">1000</span>
+    link/ether 16:81:96:a3:bf:27 brd ff:ff:ff:ff:ff:ff link-netnsid <span class="m">0</span>
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>设置 IP 和路由</li>
@@ -543,11 +532,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 设置 $pid ns 中的 eth0 设备的 ip 和 掩码</span>
-</span></span><span class="line"><span class="cl">root@dockervbox:~# ip netns <span class="nb">exec</span> <span class="nv">$pid</span> ip addr add <span class="nv">$SETIP</span>/<span class="nv">$SETMASK</span> dev eth0
-</span></span><span class="line"><span class="cl"><span class="c1"># 设置 $pid ns 中的 eth0 设备的默认路由网关</span>
-</span></span><span class="line"><span class="cl">root@dockervbox:~# ip netns <span class="nb">exec</span> <span class="nv">$pid</span> ip route add default via <span class="nv">$GATEWAY</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 设置 $pid ns 中的 eth0 设备的 ip 和 掩码</span>
+root@dockervbox:~# ip netns <span class="nb">exec</span> <span class="nv">$pid</span> ip addr add <span class="nv">$SETIP</span>/<span class="nv">$SETMASK</span> dev eth0
+<span class="c1"># 设置 $pid ns 中的 eth0 设备的默认路由网关</span>
+root@dockervbox:~# ip netns <span class="nb">exec</span> <span class="nv">$pid</span> ip route add default via <span class="nv">$GATEWAY</span>
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>查看 IP 和路由</li>
@@ -566,17 +555,17 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 查看 $pid ns 中的所有设备，可以看到 eth0 已经启动成功，并且有了 ip 和子网掩码</span>
-</span></span><span class="line"><span class="cl">root@Macmini:~# nsenter -t <span class="nv">$pid</span> -n ip a
-</span></span><span class="line"><span class="cl">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="m">65536</span> qdisc noqueue state UNKNOWN group default qlen <span class="m">1000</span>
-</span></span><span class="line"><span class="cl">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-</span></span><span class="line"><span class="cl">    inet 127.0.0.1/8 scope host lo
-</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
-</span></span><span class="line"><span class="cl">23: eth0@if24: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc noqueue state UP group default qlen <span class="m">1000</span>
-</span></span><span class="line"><span class="cl">    link/ether 16:81:96:a3:bf:27 brd ff:ff:ff:ff:ff:ff link-netnsid <span class="m">0</span>
-</span></span><span class="line"><span class="cl">    inet 172.17.0.10/16 scope global eth0
-</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 查看 $pid ns 中的所有设备，可以看到 eth0 已经启动成功，并且有了 ip 和子网掩码</span>
+root@Macmini:~# nsenter -t <span class="nv">$pid</span> -n ip a
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class="m">65536</span> qdisc noqueue state UNKNOWN group default qlen <span class="m">1000</span>
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+23: eth0@if24: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc noqueue state UP group default qlen <span class="m">1000</span>
+    link/ether 16:81:96:a3:bf:27 brd ff:ff:ff:ff:ff:ff link-netnsid <span class="m">0</span>
+    inet 172.17.0.10/16 scope global eth0
+       valid_lft forever preferred_lft forever
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>查看 $pid ns 中的路由表，可以看到 eth0 默认的路由地址是 172.17.0.1</li>
@@ -588,10 +577,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root@Macmini:~# nsenter -t <span class="nv">$pid</span> -n ip route
-</span></span><span class="line"><span class="cl">default via 172.17.0.1 dev eth0
-</span></span><span class="line"><span class="cl">172.17.0.0/16 dev eth0 proto kernel scope link src 172.17.0.10
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">root@Macmini:~# nsenter -t <span class="nv">$pid</span> -n ip route
+default via 172.17.0.1 dev eth0
+172.17.0.0/16 dev eth0 proto kernel scope link src 172.17.0.10
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>查看宿主机上的网络设备，可以看到 veth A 的名字变成了 A@if23, 并且状态已经由 <code>M-DOWN</code> 变成了 <code>LOWER_UP</code></li>
@@ -605,12 +594,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root@Macmini:~# ip a
-</span></span><span class="line"><span class="cl">24: A@if23: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc noqueue master docker0 state UP group default qlen <span class="m">1000</span>
-</span></span><span class="line"><span class="cl">    link/ether 76:8b:1a:65:f5:57 brd ff:ff:ff:ff:ff:ff link-netns <span class="m">119320</span>
-</span></span><span class="line"><span class="cl">    inet6 fe80::748b:1aff:fe65:f557/64 scope link
-</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">root@Macmini:~# ip a
+24: A@if23: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc noqueue master docker0 state UP group default qlen <span class="m">1000</span>
+    link/ether 76:8b:1a:65:f5:57 brd ff:ff:ff:ff:ff:ff link-netns <span class="m">119320</span>
+    inet6 fe80::748b:1aff:fe65:f557/64 scope link
+       valid_lft forever preferred_lft forever
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="容器网络启动成功">容器网络启动成功</h2>
 <ul>
@@ -635,22 +624,22 @@
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root@Macmini:~# docker <span class="nb">exec</span> ebcf462cbb46 curl -I www.baidu.com
-</span></span><span class="line"><span class="cl">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-</span></span><span class="line"><span class="cl">                                 Dload  Upload   Total   Spent    Left  Speed
-</span></span><span class="line"><span class="cl">  <span class="m">0</span>   <span class="m">277</span>    <span class="m">0</span>     <span class="m">0</span>    <span class="m">0</span>     <span class="m">0</span>      <span class="m">0</span>      <span class="m">0</span> --:--:-- --:--:-- --:--:--     <span class="m">0</span>
-</span></span><span class="line"><span class="cl">HTTP/1.1 <span class="m">200</span> OK
-</span></span><span class="line"><span class="cl">Accept-Ranges: bytes
-</span></span><span class="line"><span class="cl">Cache-Control: private, no-cache, no-store, proxy-revalidate, no-transform
-</span></span><span class="line"><span class="cl">Connection: keep-alive
-</span></span><span class="line"><span class="cl">Content-Length: <span class="m">277</span>
-</span></span><span class="line"><span class="cl">Content-Type: text/html
-</span></span><span class="line"><span class="cl">Date: Fri, <span class="m">20</span> Jan <span class="m">2023</span> 03:33:01 GMT
-</span></span><span class="line"><span class="cl">Etag: <span class="s2">&#34;575e1f60-115&#34;</span>
-</span></span><span class="line"><span class="cl">Last-Modified: Mon, <span class="m">13</span> Jun <span class="m">2016</span> 02:50:08 GMT
-</span></span><span class="line"><span class="cl">Pragma: no-cache
-</span></span><span class="line"><span class="cl">Server: bfe/1.0.8.18
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">root@Macmini:~# docker <span class="nb">exec</span> ebcf462cbb46 curl -I www.baidu.com
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  <span class="m">0</span>   <span class="m">277</span>    <span class="m">0</span>     <span class="m">0</span>    <span class="m">0</span>     <span class="m">0</span>      <span class="m">0</span>      <span class="m">0</span> --:--:-- --:--:-- --:--:--     <span class="m">0</span>
+HTTP/1.1 <span class="m">200</span> OK
+Accept-Ranges: bytes
+Cache-Control: private, no-cache, no-store, proxy-revalidate, no-transform
+Connection: keep-alive
+Content-Length: <span class="m">277</span>
+Content-Type: text/html
+Date: Fri, <span class="m">20</span> Jan <span class="m">2023</span> 03:33:01 GMT
+Etag: <span class="s2">&#34;575e1f60-115&#34;</span>
+Last-Modified: Mon, <span class="m">13</span> Jun <span class="m">2016</span> 02:50:08 GMT
+Pragma: no-cache
+Server: bfe/1.0.8.18
+</code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>在宿主机上访问 nginx 容器的 ip, 也能够正常访问</li>
@@ -669,17 +658,17 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">root@Macmini:~# curl -I <span class="nv">$SETIP</span>
-</span></span><span class="line"><span class="cl">HTTP/1.1 <span class="m">200</span> OK
-</span></span><span class="line"><span class="cl">Server: nginx/1.23.3
-</span></span><span class="line"><span class="cl">Date: Fri, <span class="m">20</span> Jan <span class="m">2023</span> 03:28:12 GMT
-</span></span><span class="line"><span class="cl">Content-Type: text/html
-</span></span><span class="line"><span class="cl">Content-Length: <span class="m">615</span>
-</span></span><span class="line"><span class="cl">Last-Modified: Tue, <span class="m">13</span> Dec <span class="m">2022</span> 15:53:53 GMT
-</span></span><span class="line"><span class="cl">Connection: keep-alive
-</span></span><span class="line"><span class="cl">ETag: <span class="s2">&#34;6398a011-267&#34;</span>
-</span></span><span class="line"><span class="cl">Accept-Ranges: bytes
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">root@Macmini:~# curl -I <span class="nv">$SETIP</span>
+HTTP/1.1 <span class="m">200</span> OK
+Server: nginx/1.23.3
+Date: Fri, <span class="m">20</span> Jan <span class="m">2023</span> 03:28:12 GMT
+Content-Type: text/html
+Content-Length: <span class="m">615</span>
+Last-Modified: Tue, <span class="m">13</span> Dec <span class="m">2022</span> 15:53:53 GMT
+Connection: keep-alive
+ETag: <span class="s2">&#34;6398a011-267&#34;</span>
+Accept-Ranges: bytes
+</code></pre></td></tr></table>
 </div>
 </div>
     </div>
@@ -789,7 +778,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
@@ -799,6 +788,17 @@
     };
   </script>
   <script type="text/javascript" async src="/lib/MathJax@3.2.0/es5/tex-mml-chtml.js"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
 
 
 

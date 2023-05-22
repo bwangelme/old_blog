@@ -17,7 +17,7 @@
 
 
 <meta name="author" content="bwangel" /><meta name="description" content="摘要:
-记录一次解决问题的过程。
+ 记录一次解决问题的过程。
 " /><meta name="keywords" content="Hugo, blog, bwangel" />
 
 
@@ -25,7 +25,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.104.3 with theme even" />
+<meta name="generator" content="Hugo 0.92.2 with theme even" />
 
 
 <link rel="canonical" href="/2016/09/11/python_unittesting_run_tests_in_another_module/" />
@@ -37,7 +37,7 @@
 
 
 
-<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
 <link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
 
 
@@ -57,24 +57,13 @@
 记录一次解决问题的过程。
 "><meta itemprop="datePublished" content="2016-09-11T11:46:43+00:00" />
 <meta itemprop="dateModified" content="2016-09-11T11:46:43+00:00" />
-<meta itemprop="wordCount" content="3051">
+<meta itemprop="wordCount" content="3059">
 <meta itemprop="keywords" content="Python,unittest," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python unittesting: run tests in another module"/>
 <meta name="twitter:description" content="摘要:
 
 记录一次解决问题的过程。
 "/>
-<script id="baidu_analytics">
-  var _hmt = _hmt || [];
-  (function() {
-    if (window.location.hostname === 'localhost') return;
-    var hm = document.createElement("script"); hm.async = true;
-    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
-
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -164,7 +153,7 @@
       <div class="post-meta">
         <span class="post-time"> 2016-09-11 </span>
         
-          <span class="more-meta"> 约 3051 字 </span>
+          <span class="more-meta"> 约 3059 字 </span>
           <span class="more-meta"> 预计阅读 7 分钟 </span>
         
       </div>
@@ -223,20 +212,20 @@
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># 下面这条语句用来判定第二个位置参数是不是run</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;run&#39;</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="n">console</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Starting Web Server at port </span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">        <span class="n">start_tornado_server</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># 下面这条语句用来判定第二个位置参数是不是test</span>
-</span></span><span class="line"><span class="cl">    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="n">console</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Run the unit tests&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="kn">import</span> <span class="nn">unittest</span>
-</span></span><span class="line"><span class="cl">        <span class="kn">import</span> <span class="nn">sys</span>
-</span></span><span class="line"><span class="cl">        <span class="kn">from</span> <span class="nn">tree.tests</span> <span class="kn">import</span> <span class="n">TestTreeApp</span>
-</span></span><span class="line"><span class="cl">        <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="c1"># 下面这条语句用来判定第二个位置参数是不是run</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;run&#39;</span><span class="p">):</span>
+        <span class="n">console</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Starting Web Server at port </span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
+        <span class="n">start_tornado_server</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+    <span class="c1"># 下面这条语句用来判定第二个位置参数是不是test</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">):</span>
+        <span class="n">console</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Run the unit tests&#34;</span><span class="p">)</span>
+        <span class="kn">import</span> <span class="nn">unittest</span>
+        <span class="kn">import</span> <span class="nn">sys</span>
+        <span class="kn">from</span> <span class="nn">tree.tests</span> <span class="kn">import</span> <span class="n">TestTreeApp</span>
+        <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="遇到新的错误">遇到新的错误</h2>
 <p>但是照着上面的代码编写了以后，发现程序并不能正确地执行，它报出了以下的错误：</p>
@@ -254,17 +243,17 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nv">E</span>
-</span></span><span class="line"><span class="cl"><span class="o">======================================================================</span>
-</span></span><span class="line"><span class="cl">ERROR: <span class="nb">test</span> <span class="o">(</span>unittest.loader._FailedTest<span class="o">)</span>
-</span></span><span class="line"><span class="cl">----------------------------------------------------------------------
-</span></span><span class="line"><span class="cl">AttributeError: module <span class="s1">&#39;__main__&#39;</span> has no attribute <span class="s1">&#39;test&#39;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">----------------------------------------------------------------------
-</span></span><span class="line"><span class="cl">Ran <span class="m">1</span> <span class="nb">test</span> in 0.000s
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">FAILED <span class="o">(</span><span class="nv">errors</span><span class="o">=</span>1<span class="o">)</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="nv">E</span>
+<span class="o">======================================================================</span>
+ERROR: <span class="nb">test</span> <span class="o">(</span>unittest.loader._FailedTest<span class="o">)</span>
+----------------------------------------------------------------------
+AttributeError: module <span class="s1">&#39;__main__&#39;</span> has no attribute <span class="s1">&#39;test&#39;</span>
+
+----------------------------------------------------------------------
+Ran <span class="m">1</span> <span class="nb">test</span> in 0.000s
+
+FAILED <span class="o">(</span><span class="nv">errors</span><span class="o">=</span>1<span class="o">)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>这里错误是<code>unittest.loader._FailedTest</code>中抛出的<code>AttributeErro</code>，说在模块<code>__main__</code>中找不到属性<code>test</code>,到了这里我又不知道该咋办了，然后继续去网上搜索原因，也没发现相应的答案。</p>
 <h2 id="查看调用代码">查看调用代码</h2>
@@ -281,14 +270,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="mi">6</span> <span class="n">unittest</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">_FailedTest</span>
-</span></span><span class="line"><span class="cl"><span class="mi">5</span> <span class="n">unittest</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">_make_failed_test</span>
-</span></span><span class="line"><span class="cl"><span class="mi">4</span> <span class="n">unittest</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">TestLoader</span><span class="o">.</span><span class="n">loadTestFromName</span>
-</span></span><span class="line"><span class="cl"><span class="mi">3</span> <span class="n">unittest</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">TestLoader</span><span class="o">.</span><span class="n">loadTestFromNames</span>
-</span></span><span class="line"><span class="cl"><span class="mi">2</span> <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">TestProgram</span><span class="o">.</span><span class="n">createTests</span>
-</span></span><span class="line"><span class="cl"><span class="mi">1</span> <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">TestProgram</span><span class="o">.</span><span class="n">parseArgs</span>
-</span></span><span class="line"><span class="cl"><span class="mi">0</span> <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="mi">6</span> <span class="n">unittest</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">_FailedTest</span>
+<span class="mi">5</span> <span class="n">unittest</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">_make_failed_test</span>
+<span class="mi">4</span> <span class="n">unittest</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">TestLoader</span><span class="o">.</span><span class="n">loadTestFromName</span>
+<span class="mi">3</span> <span class="n">unittest</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">TestLoader</span><span class="o">.</span><span class="n">loadTestFromNames</span>
+<span class="mi">2</span> <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">TestProgram</span><span class="o">.</span><span class="n">createTests</span>
+<span class="mi">1</span> <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">TestProgram</span><span class="o">.</span><span class="n">parseArgs</span>
+<span class="mi">0</span> <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>通过查看这个函数调用栈，最终发现错误的原因就出在<code>unittest.main.TestProgram.createTests</code>中。</p>
 <h2 id="找到错误原因">找到错误原因</h2>
@@ -305,15 +294,15 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">createTests</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">testNames</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLoader</span><span class="o">.</span><span class="n">loadTestsFromModule</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="c1"># loadTestsFromModule函数的作用是从self.module这个模块中寻找测试样例，即unittest.TestCase的子类</span>
-</span></span><span class="line"><span class="cl">    <span class="k">else</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLoader</span><span class="o">.</span><span class="n">loadTestsFromNames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testNames</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">                                                       <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="c1"># loadTestsFromName函数的作用是从self.module这个模块中寻找名字为self.testNames的测试样例(unittest.TestCase的子类)</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">createTests</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">testNames</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLoader</span><span class="o">.</span><span class="n">loadTestsFromModule</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">)</span>
+        <span class="c1"># loadTestsFromModule函数的作用是从self.module这个模块中寻找测试样例，即unittest.TestCase的子类</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">testLoader</span><span class="o">.</span><span class="n">loadTestsFromNames</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">testNames</span><span class="p">,</span>
+                                                       <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">)</span>
+        <span class="c1"># loadTestsFromName函数的作用是从self.module这个模块中寻找名字为self.testNames的测试样例(unittest.TestCase的子类)</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>这里调用的是loadTestFromNames函数，传入的<code>self.testNames</code>为<code>test</code>，就是这个<code>test</code>，再后面无法找到，被抛出为异常。</p>
 <p>然后我又去找了一下这个<code>self.testNames</code>中从何而来，发现是在<code>unittest.main.TestProgram.parseArgs</code>函数中从<code>unittest.main.TestProgram.argv</code>中解析出来的，而<code>unittest.main.TestProgram.argv</code>又来自于<code>sys.argv</code>。</p>
@@ -324,8 +313,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">python</span> <span class="n">exam</span><span class="o">.</span><span class="n">py</span> <span class="n">TestStringMethods</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">python</span> <span class="n">exam</span><span class="o">.</span><span class="n">py</span> <span class="n">TestStringMethods</span>
+</code></pre></td></tr></table>
 </div>
 </div><p>其中<code>examp.py</code>是<a href="https://docs.python.org/3/library/unittest.html#basic-example">Python官方文档给出的例子</a>，在这个例子中有一个测试样例<code>TestStringMethods</code>类。上面的调用语句的意思就是说去<code>exam.py</code>模块中寻找<code>TestStringMethods</code>测试样例，并运行这个测试样例。其实上面的测试方法就是将<code>TestStringMethods</code>存放在<code>sys.argv</code>中，而unittest.main会根据<code>sys.argv</code>中的名字来查找相应的测试样例。</p>
 <p>而我调用的方式是<code>python manage.py test</code>，这里在<code>sys.argv</code>中添加了一个参数<code>test</code>，而<code>unittest</code>认为这个<code>test</code>是一个测试样例，会去执行的模块中寻找这个<code>test</code>属性，但是又找不到，最终就会抛出一开始的属性异常：<code>module '__main__' has no attribute 'test'</code></p>
@@ -348,20 +337,20 @@
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># 下面这条语句用来判定第二个位置参数是不是run</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;run&#39;</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="n">console</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Starting Web Server at port </span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">        <span class="n">start_tornado_server</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="c1"># 下面这条语句用来判定第二个位置参数是不是test</span>
-</span></span><span class="line"><span class="cl">    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="n">console</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Run the unit tests&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="kn">import</span> <span class="nn">unittest</span>
-</span></span><span class="line"><span class="cl">        <span class="kn">import</span> <span class="nn">sys</span>
-</span></span><span class="line"><span class="cl">        <span class="kn">from</span> <span class="nn">tree.tests</span> <span class="kn">import</span> <span class="n">TestTreeApp</span>
-</span></span><span class="line"><span class="cl">        <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[:</span><span class="mi">1</span><span class="p">])</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="c1"># 下面这条语句用来判定第二个位置参数是不是run</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;run&#39;</span><span class="p">):</span>
+        <span class="n">console</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Starting Web Server at port </span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
+        <span class="n">start_tornado_server</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+    <span class="c1"># 下面这条语句用来判定第二个位置参数是不是test</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">):</span>
+        <span class="n">console</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Run the unit tests&#34;</span><span class="p">)</span>
+        <span class="kn">import</span> <span class="nn">unittest</span>
+        <span class="kn">import</span> <span class="nn">sys</span>
+        <span class="kn">from</span> <span class="nn">tree.tests</span> <span class="kn">import</span> <span class="n">TestTreeApp</span>
+        <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[:</span><span class="mi">1</span><span class="p">])</span>
+</code></pre></td></tr></table>
 </div>
 </div><h2 id="感言">感言</h2>
 <h3 id="多余的废话">多余的废话</h3>
@@ -492,7 +481,7 @@
 
 
 
-<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+<script type="text/javascript" src="/js/main.min.c99b103c33d1539acf3025e1913697534542c4a5aa5af0ccc20475ed2863603b.js"></script>
   <script type="text/javascript">
     window.MathJax = {
       tex: {
@@ -502,6 +491,17 @@
     };
   </script>
   <script type="text/javascript" async src="/lib/MathJax@3.2.0/es5/tex-mml-chtml.js"></script>
+
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
 
 
 
