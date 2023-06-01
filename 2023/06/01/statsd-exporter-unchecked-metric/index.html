@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Statsd Exporter 如何跳过 prom 的指标检查 - 大白的碎碎念</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="bwangel" /><meta name="description" content="" /><meta name="keywords" content="Hugo, blog, bwangel" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.104.3 with theme even" />
+
+
+<link rel="canonical" href="/2023/06/01/statsd-exporter-unchecked-metric/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+<meta property="og:title" content="Statsd Exporter 如何跳过 prom 的指标检查" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2023/06/01/statsd-exporter-unchecked-metric/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-06-01T07:29:34+08:00" />
+<meta property="article:modified_time" content="2023-06-01T07:29:34+08:00" />
+
+<meta itemprop="name" content="Statsd Exporter 如何跳过 prom 的指标检查">
+<meta itemprop="description" content=""><meta itemprop="datePublished" content="2023-06-01T07:29:34+08:00" />
+<meta itemprop="dateModified" content="2023-06-01T07:29:34+08:00" />
+<meta itemprop="wordCount" content="1765">
+<meta itemprop="keywords" content="prometheus,go," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Statsd Exporter 如何跳过 prom 的指标检查"/>
+<meta name="twitter:description" content=""/>
+<script id="baidu_analytics">
+  var _hmt = _hmt || [];
+  (function() {
+    if (window.location.hostname === 'localhost') return;
+    var hm = document.createElement("script"); hm.async = true;
+    hm.src = "https://hm.baidu.com/hm.js?f22fe9c7aece3dedec2af9976b092478";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Keep Foolish</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/tips/">
+        <li class="mobile-menu-item">Tips</li>
+      </a><a href="/leetcode/">
+        <li class="mobile-menu-item">LeetCode</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/translate/">
+        <li class="mobile-menu-item">翻译</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Keep Foolish</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tips/">Tips</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/leetcode/">LeetCode</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/translate/">翻译</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Statsd Exporter 如何跳过 prom 的指标检查</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-06-01 </span>
+        
+          <span class="more-meta"> 约 1765 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#statsd-exporter-中构造一些特殊的指标">statsd exporter 中构造一些特殊的指标</a>
+          <ul>
+            <li><a href="#准备-statsd-exporter-的配置文件">准备 statsd exporter 的配置文件</a></li>
+            <li><a href="#启动-statsd-exporter">启动 statsd exporter</a></li>
+            <li><a href="#使用-statsd-client-向-statsd-exporter-发送指标">使用 statsd client 向 statsd exporter 发送指标</a></li>
+            <li><a href="#检查-statsd-exporter-的-prom-指标">检查 statsd exporter 的 prom 指标</a></li>
+          </ul>
+        </li>
+        <li><a href="#使用-prometheus-client_golang-构造同样的指标就会报错">使用 prometheus client_golang 构造同样的指标就会报错</a></li>
+        <li><a href="#prometheus-client_golang-的检查逻辑">Prometheus client_golang 的检查逻辑</a></li>
+        <li><a href="#statsd-exporter-中跳过检查的方法">statsd exporter 中跳过检查的方法</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <hr>
+<h2 id="statsd-exporter-中构造一些特殊的指标">statsd exporter 中构造一些特殊的指标</h2>
+<p>statsd exporter 是 prometheus 官方提供的，将 statsd 指标转换成 prom 指标的 exporter。</p>
+<p>statsd exporter 中，可以创建名字相同但 label 不同的同名指标。例如下面的这种序列，</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">qae_app_request_latencies_count{app=&#34;mrpink&#34;,role=&#34;web&#34;,task=&#34;default&#34;} 1
+</span></span><span class="line"><span class="cl">qae_app_request_latencies_count{app=&#34;mrpink&#34;,itf=&#34;count_by_item&#34;,role=&#34;service&#34;,service_type=&#34;thrift&#34;,task=&#34;ThriftSvcInstance&#34;} 1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们用个简单例子来说明一下:</p>
+<h3 id="准备-statsd-exporter-的配置文件">准备 statsd exporter 的配置文件</h3>
+<ul>
+<li>exporter_config.yaml</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">defaults</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 所有指标使用 glob 匹配的模式</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">match_type</span><span class="p">:</span><span class="w"> </span><span class="l">glob</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">glob_disable_ordering</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ttl</span><span class="p">:</span><span class="w"> </span><span class="l">5m</span><span class="w"> </span><span class="c">#</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">mappings</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;qae.*.web.*.req_time&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;qae_app_request_latencies&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">match_metric_type</span><span class="p">:</span><span class="w"> </span><span class="l">timer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">timer_type</span><span class="p">:</span><span class="w"> </span><span class="l">histogram</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;$1&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;web&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">task</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;$2&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># labels 中的 $1, $2 等是从 match 中捕获的匹配组</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;qae.*.service.*.*.*.req_time&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;qae_app_request_latencies&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">match_metric_type</span><span class="p">:</span><span class="w"> </span><span class="l">timer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">timer_type</span><span class="p">:</span><span class="w"> </span><span class="l">histogram</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;$1&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;service&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">task</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;$2&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">itf</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;$4&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">service_type</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;thrift&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 其他不符合规范的指标都会被丢弃掉</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;.&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">match_type</span><span class="p">:</span><span class="w"> </span><span class="l">regex</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l">drop</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;dropped&#34;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="启动-statsd-exporter">启动 statsd exporter</h3>
+<p>在 statsd_exporter 的代码目录下执行 go build 命令，并启动它:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ go build -o /tmp/exporter . <span class="o">&amp;&amp;</span> /tmp/exporter --statsd.mapping-config<span class="o">=</span>exporter_config.yaml --log.level<span class="o">=</span>debug
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">ts</span><span class="o">=</span>2023-05-31T23:42:11.802Z <span class="nv">caller</span><span class="o">=</span>main.go:292 <span class="nv">level</span><span class="o">=</span>info <span class="nv">msg</span><span class="o">=</span><span class="s2">&#34;Starting StatsD -&gt; Prometheus Exporter&#34;</span> <span class="nv">version</span><span class="o">=</span><span class="s2">&#34;(version=, branch=, revision=f40cab3899c8effd25a5daee6f69e30eea796a96-modified)&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">ts</span><span class="o">=</span>2023-05-31T23:42:11.802Z <span class="nv">caller</span><span class="o">=</span>main.go:293 <span class="nv">level</span><span class="o">=</span>info <span class="nv">msg</span><span class="o">=</span><span class="s2">&#34;Build context&#34;</span> <span class="nv">context</span><span class="o">=</span><span class="s2">&#34;(go=go1.18.8, platform=linux/amd64, user=, date=, tags=unknown)&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">ts</span><span class="o">=</span>2023-05-31T23:42:11.803Z <span class="nv">caller</span><span class="o">=</span>main.go:342 <span class="nv">level</span><span class="o">=</span>info <span class="nv">msg</span><span class="o">=</span><span class="s2">&#34;Accepting StatsD Traffic&#34;</span> <span class="nv">udp</span><span class="o">=</span>:9125 <span class="nv">tcp</span><span class="o">=</span>:9125 <span class="nv">unixgram</span><span class="o">=</span>
+</span></span><span class="line"><span class="cl"><span class="nv">ts</span><span class="o">=</span>2023-05-31T23:42:11.803Z <span class="nv">caller</span><span class="o">=</span>main.go:343 <span class="nv">level</span><span class="o">=</span>info <span class="nv">msg</span><span class="o">=</span><span class="s2">&#34;Accepting Prometheus Requests&#34;</span> <span class="nv">addr</span><span class="o">=</span>:9102
+</span></span><span class="line"><span class="cl"><span class="c1"># 可以看到，statsd server 运行在 9125 端口，prom server 运行在 9102 端口</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="使用-statsd-client-向-statsd-exporter-发送指标">使用 statsd client 向 statsd exporter 发送指标</h3>
+<ul>
+<li>发送指标的代码</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/cactus/go-statsd-client/v5/statsd&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;log&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;time&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">sendMetrics</span><span class="p">(</span><span class="nx">client</span> <span class="nx">statsd</span><span class="p">.</span><span class="nx">Statter</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">TimingDuration</span><span class="p">(</span><span class="s">&#34;web.default.req_time&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="o">*</span><span class="mi">500</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">err</span> <span class="p">=</span> <span class="nx">client</span><span class="p">.</span><span class="nf">TimingDuration</span><span class="p">(</span><span class="s">&#34;service.ThriftSvcInstance.ThriftSvcInstance.count_by_item.req_time&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="o">*</span><span class="mi">300</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalln</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">config</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">statsd</span><span class="p">.</span><span class="nx">ClientConfig</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Address</span><span class="p">:</span> <span class="s">&#34;127.0.0.1:9125&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Prefix</span><span class="p">:</span>  <span class="s">&#34;qae.mrpink&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">client</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">statsd</span><span class="p">.</span><span class="nf">NewClientWithConfig</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">defer</span> <span class="nx">client</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nf">sendMetrics</span><span class="p">(</span><span class="nx">client</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>执行上述代码，就会向 statsd exporter 发送两个 timer 指标</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">qae.mrpink.web.default.req_time:500|ms
+</span></span><span class="line"><span class="cl">qae.mrpink.service.ThriftSvcInstance.ThriftSvcInstance.count_by_item.req_time:300|ms
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="检查-statsd-exporter-的-prom-指标">检查 statsd exporter 的 prom 指标</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ curl -s localhost:9102/metrics <span class="p">|</span> rg qae_app_request_latencies_count
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">qae_app_request_latencies_count<span class="o">{</span><span class="nv">app</span><span class="o">=</span><span class="s2">&#34;mrpink&#34;</span>,role<span class="o">=</span><span class="s2">&#34;web&#34;</span>,task<span class="o">=</span><span class="s2">&#34;default&#34;</span><span class="o">}</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">qae_app_request_latencies_count<span class="o">{</span><span class="nv">app</span><span class="o">=</span><span class="s2">&#34;mrpink&#34;</span>,itf<span class="o">=</span><span class="s2">&#34;count_by_item&#34;</span>,role<span class="o">=</span><span class="s2">&#34;service&#34;</span>,service_type<span class="o">=</span><span class="s2">&#34;thrift&#34;</span>,task<span class="o">=</span><span class="s2">&#34;ThriftSvcInstance&#34;</span><span class="o">}</span> <span class="m">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以看到，statsd exporter 中存储了两个同名的指标序列 <code>qae_app_request_latencies_count</code>, 但是他们的 label 却不同。</p>
+<h2 id="使用-prometheus-client_golang-构造同样的指标就会报错">使用 prometheus client_golang 构造同样的指标就会报错</h2>
+<p>如果我们想要使用 prometheus 提供的的官方客户端 <a href="https://github.com/prometheus/client_golang/">client_golang</a>, 发送同样的指标，就会遇到错误</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/prometheus/client_golang/prometheus&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/prometheus/client_golang/prometheus/promauto&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/prometheus/client_golang/prometheus/promhttp&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;log&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;net/http&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;time&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">var</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">AppRequestLatencies</span> <span class="p">=</span> <span class="nx">promauto</span><span class="p">.</span><span class="nf">NewHistogramVec</span><span class="p">(</span><span class="nx">prometheus</span><span class="p">.</span><span class="nx">HistogramOpts</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;qae_app_request_latencies&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Help</span><span class="p">:</span> <span class="s">&#34;web request count and req time latency&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="p">},</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;app&#34;</span><span class="p">,</span> <span class="s">&#34;role&#34;</span><span class="p">,</span> <span class="s">&#34;task&#34;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ThriftAppRequestLatencies</span> <span class="p">=</span> <span class="nx">promauto</span><span class="p">.</span><span class="nf">NewHistogramVec</span><span class="p">(</span><span class="nx">prometheus</span><span class="p">.</span><span class="nx">HistogramOpts</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;qae_app_request_latencies&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Help</span><span class="p">:</span> <span class="s">&#34;service request count and req time latency&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="p">},</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;app&#34;</span><span class="p">,</span> <span class="s">&#34;role&#34;</span><span class="p">,</span> <span class="s">&#34;task&#34;</span><span class="p">,</span> <span class="s">&#34;itf&#34;</span><span class="p">,</span> <span class="s">&#34;service_type&#34;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">SendMetrics</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">dur1</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Duration</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">AppRequestLatencies</span><span class="p">.</span><span class="nf">With</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="s">&#34;app&#34;</span><span class="p">:</span>  <span class="s">&#34;mrpink&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="s">&#34;role&#34;</span><span class="p">:</span> <span class="s">&#34;web&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="s">&#34;task&#34;</span><span class="p">:</span> <span class="s">&#34;default&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}).</span><span class="nf">Observe</span><span class="p">(</span><span class="nx">dur1</span><span class="p">.</span><span class="nf">Seconds</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">dur2</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Duration</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ThriftAppRequestLatencies</span><span class="p">.</span><span class="nf">With</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="s">&#34;app&#34;</span><span class="p">:</span>          <span class="s">&#34;mrpink&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="s">&#34;role&#34;</span><span class="p">:</span>         <span class="s">&#34;service&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="s">&#34;task&#34;</span><span class="p">:</span>         <span class="s">&#34;ThriftSvcInstance&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="s">&#34;service_type&#34;</span><span class="p">:</span> <span class="s">&#34;thrift&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="s">&#34;itf&#34;</span><span class="p">:</span>          <span class="s">&#34;count_by_item&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}).</span><span class="nf">Observe</span><span class="p">(</span><span class="nx">dur2</span><span class="p">.</span><span class="nf">Seconds</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">log</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;Send metrics done&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">addr</span> <span class="o">:=</span> <span class="s">&#34;0.0.0.0:8090&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">promMux</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">NewServeMux</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">promMux</span><span class="p">.</span><span class="nf">Handle</span><span class="p">(</span><span class="s">&#34;/metrics&#34;</span><span class="p">,</span> <span class="nx">promhttp</span><span class="p">.</span><span class="nf">Handler</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">SendMetrics</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">ListenAndServe</span><span class="p">(</span><span class="nx">addr</span><span class="p">,</span> <span class="nx">promMux</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">log</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Start prom server on %v\n&#34;</span><span class="p">,</span> <span class="nx">addr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">log</span><span class="p">.</span><span class="nf">Fatalf</span><span class="p">(</span><span class="s">&#34;Starting the http server %v failed: %v\n&#34;</span><span class="p">,</span> <span class="nx">addr</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>执行以上代码，会抛出 panic 异常</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">$ go run prom_client/main.go
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">panic: a previously registered descriptor with the same fully-qualified name as Desc<span class="o">{</span>fqName: <span class="s2">&#34;qae_app_request_latencies&#34;</span>, help: <span class="s2">&#34;service request count and req time latency&#34;</span>, constLabels: <span class="o">{}</span>, variableLabels: <span class="o">[{</span>app &lt;nil&gt;<span class="o">}</span> <span class="o">{</span>role &lt;nil&gt;<span class="o">}</span> <span class="o">{</span>task &lt;nil&gt;<span class="o">}</span> <span class="o">{</span>itf &lt;nil&gt;<span class="o">}</span> <span class="o">{</span>service_type &lt;nil&gt;<span class="o">}]}</span> has different label names or a different <span class="nb">help</span> string
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">goroutine <span class="m">1</span> <span class="o">[</span>running<span class="o">]</span>:
+</span></span><span class="line"><span class="cl">github.com/prometheus/client_golang/prometheus.<span class="o">(</span>*Registry<span class="o">)</span>.MustRegister<span class="o">(</span>0x0?, <span class="o">{</span>0xc000118010?, 0x1, 0x0?<span class="o">})</span>
+</span></span><span class="line"><span class="cl">        /home/xuyundong/.gvm/pkgsets/go1.18.8/global/pkg/mod/github.com/prometheus/client_golang@v1.15.1/prometheus/registry.go:405 +0x7f
+</span></span><span class="line"><span class="cl">github.com/prometheus/client_golang/prometheus/promauto.Factory.NewHistogramVec<span class="o">({{</span>0x922410?, 0xc0000a2960?<span class="o">}}</span>, <span class="o">{{</span>0x0, 0x0<span class="o">}</span>, <span class="o">{</span>0x0, 0x0<span class="o">}</span>, <span class="o">{</span>0x87e012, 0x19<span class="o">}</span>, <span class="o">{</span>0x88794e, 0x2a<span class="o">}</span>, ...<span class="o">}</span>, ...<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        /home/xuyundong/.gvm/pkgsets/go1.18.8/global/pkg/mod/github.com/prometheus/client_golang@v1.15.1/prometheus/promauto/auto.go:362 +0x1cc
+</span></span><span class="line"><span class="cl">github.com/prometheus/client_golang/prometheus/promauto.NewHistogramVec<span class="o">(</span>...<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        /home/xuyundong/.gvm/pkgsets/go1.18.8/global/pkg/mod/github.com/prometheus/client_golang@v1.15.1/prometheus/promauto/auto.go:235
+</span></span><span class="line"><span class="cl">main.init<span class="o">()</span>
+</span></span><span class="line"><span class="cl">        /home/xuyundong/Github/Golang/statsd_client/prom_client/main.go:17 +0x269
+</span></span><span class="line"><span class="cl"><span class="nb">exit</span> status <span class="m">2</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="prometheus-client_golang-的检查逻辑">Prometheus client_golang 的检查逻辑</h2>
+<p>于是我有些好奇，statsd exporter 是如何做到，可以发送同名不同 label 的指标的。
+简单的阅读了 client_golang 和 statsd_exporter 的指标之后，我找到了答案。</p>
+<p>我阅读的代码的版本是</p>
+<ul>
+<li><a href="https://github.com/prometheus/client_golang/tree/release-1.15">client_golang - release-1.15</a></li>
+<li><a href="https://github.com/prometheus/statsd_exporter/tree/v0.23.1">statsd_exporter - 0.23.1</a></li>
+</ul>
+<p>client_golang 中定义了两个接口</p>
+<ul>
+<li><a href="https://github.com/prometheus/client_golang/blob/release-1.15/prometheus/collector.go#L27">prometheus.Collector</a></li>
+<li><a href="https://github.com/prometheus/client_golang/blob/release-1.15/prometheus/registry.go#L96">prometheus.Registerer</a></li>
+</ul>
+<p>client_golang 中每种指标都实现了 <code>prometheus.Collector</code>, 所有的指标会注册到一个实现了 <code>prometheus.Registerer</code> 接口的实例中，再由此实例收集并输出指标。</p>
+<p>我们在代码中定义指标的代码是:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">opts</span> <span class="o">:=</span> <span class="nx">prometheus</span><span class="p">.</span><span class="nx">HistogramOpts</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;qae_app_request_latencies&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">Help</span><span class="p">:</span> <span class="s">&#34;web request count and req time latency&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nx">labels</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&#34;app&#34;</span><span class="p">,</span> <span class="s">&#34;role&#34;</span><span class="p">,</span> <span class="s">&#34;task&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nx">AppRequestLatencies</span> <span class="p">=</span> <span class="nx">promauto</span><span class="p">.</span><span class="nf">NewHistogramVec</span><span class="p">(</span><span class="nx">opts</span><span class="p">,</span> <span class="nx">labels</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>client_golang 实际执行的代码如下, 它会注册一个 Histogram 指标，并将其注册到 <code>DefaultRegisterer</code> 中。<code>DefaultRegisterer</code> 就是一个实现了 <code>prometheus.Registerer</code> 接口的实例。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">h</span> <span class="o">:=</span> <span class="nx">prometheus</span><span class="p">.</span><span class="nf">NewHistogramVec</span><span class="p">(</span><span class="nx">opts</span><span class="p">,</span> <span class="nx">labelNames</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">prometheus</span><span class="p">.</span><span class="nx">DefaultRegisterer</span><span class="p">.</span><span class="nf">MustRegister</span><span class="p">(</span><span class="nx">h</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// MustRegister 底层调用了 Register 方法，在 Register 返回 err 时会 panic
+</span></span></span><span class="line"><span class="cl"><span class="c1">// prometheus.DefaultRegisterer.Register(h)
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>prometheus.Collector</code> 接口有一个 <code>Describe</code> 方法，它用于获取指标的信息。具体做法是传入一个 channel 参数，指标将 Desc 信息写入到 channel 中。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Collector</span> <span class="kd">interface</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="err">#</span> <span class="nx">Desc</span> <span class="nx">包含指标名</span><span class="p">,</span> <span class="nx">label</span><span class="p">,</span> <span class="nx">help</span> <span class="nx">等信息</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">Describe</span><span class="p">(</span><span class="kd">chan</span><span class="o">&lt;-</span> <span class="o">*</span><span class="nx">Desc</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">...</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>接着我们来看一下 <code>DefaultRegisterer</code> 的 <a href="https://github.com/prometheus/client_golang/blob/release-1.15/prometheus/registry.go#L270">Register</a> 函数的实现，</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 以下代码中我省略了一些无关的内容
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">r</span> <span class="o">*</span><span class="nx">Registry</span><span class="p">)</span> <span class="nf">Register</span><span class="p">(</span><span class="nx">c</span> <span class="nx">Collector</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// c 是 Collector 对象
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="kd">var</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">descChan</span>           <span class="p">=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="o">*</span><span class="nx">Desc</span><span class="p">,</span> <span class="nx">capDescChan</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">c</span><span class="p">.</span><span class="nf">Describe</span><span class="p">(</span><span class="nx">descChan</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="nb">close</span><span class="p">(</span><span class="nx">descChan</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}()</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">r</span><span class="p">.</span><span class="nx">mtx</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="c1">// 为了防止 goroutine 泄漏，descChan 必须被消费完
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="k">for</span> <span class="k">range</span> <span class="nx">descChan</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">r</span><span class="p">.</span><span class="nx">mtx</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">...</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="nx">desc</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">descChan</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="c1">// desc.id 是根据指标名和固定 label 名算出来的 hash,
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="c1">// 如果注册的两个指标 name 和固定 label 名完全相同，则返回错误 duplicateDescErr
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="k">if</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">exists</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">descIDs</span><span class="p">[</span><span class="nx">desc</span><span class="p">.</span><span class="nx">id</span><span class="p">];</span> <span class="nx">exists</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">duplicateDescErr</span> <span class="p">=</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;descriptor %s already exists with the same fully-qualified name and const label values&#34;</span><span class="p">,</span> <span class="nx">desc</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="c1">// fqName 是指标名
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="c1">// dimHash 是 根据指标 label 名 + help 算出来的 hash
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="c1">// 如果注册了两个同名的指标，但是它们的 label 或者 help 信息不同的话，则会返回错误
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="k">if</span> <span class="nx">dimHash</span><span class="p">,</span> <span class="nx">exists</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">dimHashesByName</span><span class="p">[</span><span class="nx">desc</span><span class="p">.</span><span class="nx">fqName</span><span class="p">];</span> <span class="nx">exists</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="nx">dimHash</span> <span class="o">!=</span> <span class="nx">desc</span><span class="p">.</span><span class="nx">dimHash</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;a previously registered descriptor with the same fully-qualified name as %s has different label names or a different help string&#34;</span><span class="p">,</span> <span class="nx">desc</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="o">...</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>从以上代码可以看出，<code>Register</code> 中会通过 <code>Describe</code> 方法拿到指标的信息，并进行若干检查。如果两个同名指标的 label 名不同，则会返回错误 <code>a previously registered descriptor with the same fully-qualified name as Desc... has different label names or a different help string</code>。</p>
+<h2 id="statsd-exporter-中跳过检查的方法">statsd exporter 中跳过检查的方法</h2>
+<p>那么 statsd exporter 是如何跳过上述检查的呢，很简单，让 <code>Describe</code> 返回空就好。statsd exporter 中的每个指标都用 <a href="https://github.com/prometheus/statsd_exporter/blob/v0.23.1/pkg/registry/registry.go#L33-L42">uncheckedCollector</a> 包裹了一下。</p>
+<p><code>uncheckedCollector</code> 的定义如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">uncheckedCollector</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">c</span> <span class="nx">prometheus</span><span class="p">.</span><span class="nx">Collector</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">u</span> <span class="nx">uncheckedCollector</span><span class="p">)</span> <span class="nf">Describe</span><span class="p">(</span><span class="nx">_</span> <span class="kd">chan</span><span class="o">&lt;-</span> <span class="o">*</span><span class="nx">prometheus</span><span class="p">.</span><span class="nx">Desc</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">u</span> <span class="nx">uncheckedCollector</span><span class="p">)</span> <span class="nf">Collect</span><span class="p">(</span><span class="nx">c</span> <span class="kd">chan</span><span class="o">&lt;-</span> <span class="nx">prometheus</span><span class="p">.</span><span class="nx">Metric</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">u</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nf">Collect</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>它的 <code>Describe</code> 方法什么也不返回，那么 <code>Register</code> 中的检查也会被跳过了。</p>
+<p>这样最终实现了注册同名不同 label 指标的目的。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">bwangel</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2023-06-01
+        
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本博客所有文章除特别声明外，均采用 <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/cn/' rel='external nofollow' target='_blank'>CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处</span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/prometheus/">prometheus</a>
+          <a href="/tags/go/">go</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/2023/05/09/nginx-header-underline/">
+            <span class="next-text nav-default">HTTP 协议中带下划线的 header 说明</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+  
+  <script src="https://giscus.app/client.js"
+        data-repo="anotherbwangel/blog-comment"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkxNDUyNzQwMDQ="
+        data-category="Announcements"
+        data-category-id="DIC_kwDOCKi0lM4CBFyL"
+        data-mapping="pathname"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+  </script>
+    <noscript>Please enable JavaScript to view the <a href="https://giscus.app/zh-CN">comments powered by giscus.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:bwangel.me@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/5161084/bwangel" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/bwangel23" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/bwangelme" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.douban.com/people/bwangel/" class="iconfont icon-douban" title="douban"></a>
+  <a href="/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2016 - 
+    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span><a href='https://bwangel.me/about'>bwangel</a></span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        tags: 'ams',
+        }
+    };
+  </script>
+  <script type="text/javascript" async src="/lib/MathJax@3.2.0/es5/tex-mml-chtml.js"></script>
+
+
+
+
+
+
+</body>
+</html>
