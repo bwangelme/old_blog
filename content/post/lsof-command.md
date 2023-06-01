@@ -3,7 +3,7 @@ title: "lsof 常用命令汇总"
 date: 2023-03-02T12:43:09+08:00
 lastmod: 2023-03-02T12:43:09+08:00
 draft: false
-tags: [Tag1, Tag2]
+tags: [lsof, linux]
 author: "bwangel"
 comment: true
 

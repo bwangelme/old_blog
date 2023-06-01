@@ -3,7 +3,7 @@ title: "Golang Build 出错: error obtaining VCS status: exit status 128"
 date: 2023-03-21T12:07:05+08:00
 lastmod: 2023-03-21T12:07:05+08:00
 draft: false
-tags: [Golang, git]
+tags: [go, git]
 author: "bwangel"
 comment: true
 
